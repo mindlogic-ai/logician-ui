@@ -1,0 +1,21 @@
+/* MDXEditor popup container overrides */
+[class*='_popupContainer_'] {
+  z-index: 9999 !important;
+}
+
+.mdxeditor-popup-container {
+  z-index: 9999 !important;
+}
+
+/* MDXEditor select content overrides */
+[class*='_selectContent_'] {
+  z-index: 9999 !important;
+}
+
+.mdxeditor-select-content {
+  z-index: 9999 !important;
+}
+
+[data-radix-select-content] {
+  z-index: 9999 !important;
+}

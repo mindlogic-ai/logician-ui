@@ -1,0 +1,50 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": false,
+    "outDir": "dist",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./components/*"],
+      "@/utils/*": ["./utils/*"],
+      "@/store/*": ["./store/*"],
+      "@/hooks/*": ["./hooks/*"],
+      "@/theme/*": ["./theme/*"]
+    }
+  },
+  "include": [
+    "components/**/*",
+    "index.ts",
+    "utils/**/*",
+    "store/**/*",
+    "hooks/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.stories.tsx",
+    "**/*.test.tsx",
+    "components/Tabs/TabsContext.tsx",
+    "components/SelectDate/**/*",
+    "components/ToggleableInput/**/*",
+    "components/Skeleton/SkeletonGrid/**/*",
+    "components/Skeleton/SkeletonTable/**/*",
+    "theme/**/*"
+  ]
+}

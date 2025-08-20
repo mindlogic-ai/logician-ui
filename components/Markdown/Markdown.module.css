@@ -1,0 +1,30 @@
+.markdownStyles {
+  color: black;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2em; /* Intended for longer form content like update modals */
+}
+
+.markdownStyles > h1,
+.markdownStyles > h2,
+.markdownStyles > h3,
+.markdownStyles > h4 {
+  margin-bottom: 0.5em !important;
+}
+.markdownStyles > h1:not(:first-child),
+.markdownStyles > h2:not(:first-child),
+.markdownStyles > h3:not(:first-child),
+.markdownStyles > h4:not(:first-child) {
+  margin-top: 1em !important;
+}
+
+.markdownStyles ol,
+.markdownStyles ul {
+  margin-top: 8px;
+  padding-inline-start: 16px;
+}
+.markdownStyles li {
+  /* 1.5x standard line height */
+  line-height: calc(16px * 1.5);
+  margin-bottom: 8px;
+}

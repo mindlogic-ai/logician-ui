@@ -1,0 +1,1 @@
+export { InfoSprinkle } from './InfoSprinkle';

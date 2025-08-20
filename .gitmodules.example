@@ -1,0 +1,7 @@
+# Example .gitmodules configuration for your main project
+# Copy this to your main project's .gitmodules file and update the paths/URLs
+
+[submodule "src/design-system"]
+	path = src/design-system
+	url = https://github.com/yourusername/logician-design-system.git
+	branch = main 
