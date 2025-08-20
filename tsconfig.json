@@ -24,10 +24,11 @@
       "@/*": ["./src/components/*"],
       "@/utils/*": ["./src/utils/*"],
       "@/hooks/*": ["./src/hooks/*"],
-      "@/theme/*": ["./src/theme/*"]
+      "@/theme/*": ["./src/theme/*"],
+      "@/translations/*": ["./src/translations/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/types/**/*"],
   "exclude": [
     "node_modules",
     "dist",

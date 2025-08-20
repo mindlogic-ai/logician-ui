@@ -1,19 +1,19 @@
-import React from 'react';
-import { Meta, StoryFn } from '@storybook/react';
-import { CopyIcon } from '@chakra-ui/icons';
-import { IconButtonProps } from './IconButton.types';
-import { IconButton } from './IconButton';
-import { variantStyles as buttonVariantStyles } from '../Button/Button.styles';
+import React from "react";
+import { Meta, StoryFn } from "@storybook/react";
+import { IconButtonProps, IconButtonVariant } from "./IconButton.types";
+import { IconButton } from "./IconButton";
+import { variantStyles as buttonVariantStyles } from "../Button/Button.styles";
+import { Icon } from "../Icon/Icon";
 
 const meta: Meta<typeof IconButton> = {
-  title: 'Components/IconButton',
+  title: "Components/IconButton",
   component: IconButton,
   args: {
-    icon: <CopyIcon />,
+    icon: <Icon icon="FaUniversity" />,
   },
   argTypes: {
     variant: {
-      control: 'select',
+      control: "select",
       options: Object.keys(buttonVariantStyles),
     },
   },
@@ -27,7 +27,7 @@ const Template: StoryFn<IconButtonProps> = (args: IconButtonProps) => (
 
 export const Basic: StoryFn<IconButtonProps> = Template.bind({});
 Basic.args = {
-  variant: 'primary',
+  variant: "primary",
 };
 
 export const Round: StoryFn<IconButtonProps> = Template.bind({});
@@ -35,14 +35,14 @@ Round.args = {
   isRound: true,
 };
 
-export const AllIconButtonVariants: StoryFn<IconButtonProps> = args => {
+export const AllIconButtonVariants: StoryFn<IconButtonProps> = (args) => {
   const variants = Object.keys(buttonVariantStyles);
   return (
     <div>
-      {variants.map(variant => (
+      {variants.map((variant) => (
         <div key={variant}>
           <p>{variant}</p>
-          <IconButton {...args} variant={variant} />
+          <IconButton {...args} variant={variant as IconButtonVariant} />
         </div>
       ))}
     </div>

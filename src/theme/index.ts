@@ -1,43 +1,47 @@
 import { extendTheme } from "@chakra-ui/react";
+import { colors } from "./colors";
+import { global } from "./global";
 
 const theme = extendTheme({
-  colors: {
-    primary: {
-      50: "#E6F7FF",
-      100: "#B3EDFF",
-      200: "#80E0FF",
-      300: "#4DD4FF",
-      400: "#1AC7FF",
-      500: "#00B8E6",
-      600: "#0091B3",
-      700: "#006B80",
-      800: "#00454D",
-      900: "#001F1A",
-      main: "#00B8E6",
-    },
-    secondary: {
-      50: "#F7FAFC",
-      100: "#EDF2F7",
-      200: "#E2E8F0",
-      300: "#CBD5E0",
-      400: "#A0AEC0",
-      500: "#718096",
-      600: "#4A5568",
-      700: "#2D3748",
-      800: "#1A202C",
-      900: "#171923",
-    },
-  },
-  fonts: {
-    heading: `'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
-    body: `'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
-  },
+  colors,
   semanticTokens: {
     colors: {
-      primary: {
-        main: "primary.500",
-      },
+      ...colors,
+      "chakra-body-text": "gray.1500",
+      "chakra-body-bg": "white",
+      "chakra-body-text-secondary": "gray.1200",
     },
+  },
+  styles: {
+    global,
+  },
+
+  fonts: {
+    body: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif',
+    heading: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif',
+  },
+
+  // 반응형 폰트 사이즈 - 모바일에서는 더 작은 폰트 크기, 데스크톱에서는 기존 크기 유지
+  fontSizes: {
+    // 커스텀 폰트 크기 토큰 (em 단위 사용)
+    // xs: { base: '0.7em', md: '0.7em' },
+    subtitle: { base: "0.8em", md: "0.92em" },
+    subtext: { base: "0.8em", md: "0.92em" },
+    p: { base: "0.9em", md: "1em" },
+    h5: { base: "1.1em", md: "1.2em" },
+    h4: { base: "1.25em", md: "1.44em" },
+    h3: { base: "1.5em", md: "1.75em" },
+    h2: { base: "2em", md: "2.5em" },
+    h1: { base: "2.4em", md: "3em" },
+  },
+
+  radii: {
+    none: "0",
+    sm: "6px",
+    md: "8px",
+    lg: "12px",
+    xl: "32px",
+    full: "9999px",
   },
 });
 

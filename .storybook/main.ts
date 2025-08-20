@@ -22,8 +22,14 @@ const config: StorybookConfig = {
   },
   async viteFinal(config) {
     const { mergeConfig } = await import("vite");
+    const svgr = await import("vite-plugin-svgr");
 
     return mergeConfig(config, {
+      plugins: [
+        svgr.default({
+          include: "**/*.svg",
+        }),
+      ],
       resolve: {
         alias: {
           "@": path.resolve(__dirname, "../src"),

@@ -1,7 +1,7 @@
 "use client";
 import { useCallback } from "react";
 
-import defaultTranslations from "../public/translations/Defaults.translations.json";
+import defaultTranslations from "../translations/Defaults.translations.json";
 import { formatForMarkdown } from "../utils/formatTextForMarkdown";
 
 const DEFAULT_LOCALE = "ko";
