@@ -21,21 +21,21 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./components/*"],
-      "@/utils/*": ["./utils/*"],
-      "@/hooks/*": ["./hooks/*"],
-      "@/theme/*": ["./theme/*"]
+      "@/*": ["./src/components/*"],
+      "@/utils/*": ["./src/utils/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/theme/*": ["./src/theme/*"]
     }
   },
-  "include": ["components/**/*", "index.ts", "utils/**/*", "hooks/**/*"],
+  "include": ["src/**/*"],
   "exclude": [
     "node_modules",
     "dist",
     "**/*.stories.tsx",
     "**/*.test.tsx",
-    "components/Tabs/TabsContext.tsx",
-    "components/Skeleton/SkeletonGrid/**/*",
-    "components/Skeleton/SkeletonTable/**/*",
-    "theme/**/*"
+    "src/components/Tabs/TabsContext.tsx",
+    "src/components/Skeleton/SkeletonGrid/**/*",
+    "src/components/Skeleton/SkeletonTable/**/*",
+    "src/theme/**/*"
   ]
 }

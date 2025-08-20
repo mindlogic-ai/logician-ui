@@ -33,5 +33,11 @@ module.exports = {
       version: "detect",
     },
   },
-  ignorePatterns: ["dist/", "node_modules/", "*.js"],
+  ignorePatterns: [
+    "dist/",
+    "node_modules/",
+    "*.js",
+    ".storybook/",
+    "storybook-static/",
+  ],
 };

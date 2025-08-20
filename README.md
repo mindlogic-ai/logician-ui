@@ -169,18 +169,19 @@ yarn changeset:publish
 ├── .storybook/          # Storybook configuration
 │   ├── main.ts          # Main configuration
 │   └── preview.tsx      # Global decorators and parameters
-├── components/          # All UI components
-│   ├── Button/
-│   │   ├── Button.tsx
-│   │   ├── Button.types.ts
-│   │   ├── Button.styles.ts
-│   │   ├── Button.stories.tsx
-│   │   └── index.tsx
-│   └── ...
-├── utils/               # Utility functions
-├── hooks/               # React hooks
-├── theme/               # Chakra UI theme
-├── index.ts             # Main export file
+├── src/                 # Source code
+│   ├── components/      # All UI components
+│   │   ├── Button/
+│   │   │   ├── Button.tsx
+│   │   │   ├── Button.types.ts
+│   │   │   ├── Button.styles.ts
+│   │   │   ├── Button.stories.tsx
+│   │   │   └── index.tsx
+│   │   └── ...
+│   ├── utils/           # Utility functions
+│   ├── hooks/           # React hooks
+│   ├── theme/           # Chakra UI theme
+│   └── index.ts         # Main export file
 ├── package.json
 ├── tsconfig.json
 ├── vite.config.ts

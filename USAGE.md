@@ -21,7 +21,7 @@ git submodule update --init --recursive
 import { Button, Input, Card } from "../design-system";
 
 // Or import from specific component directories
-import { Button } from "../design-system/components/Button";
+import { Button } from "../design-system/src/components/Button";
 ```
 
 ### Updating the Submodule
@@ -179,7 +179,7 @@ If you want to use path aliases in your main project, update your `tsconfig.json
     "baseUrl": ".",
     "paths": {
       "@/design-system/*": ["src/design-system/*"],
-      "@/components/*": ["src/design-system/components/*"]
+      "@/components/*": ["src/design-system/src/components/*"]
     }
   }
 }

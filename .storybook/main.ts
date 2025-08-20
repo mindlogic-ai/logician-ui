@@ -1,7 +1,8 @@
 import type { StorybookConfig } from "@storybook/react-vite";
+import path from "path";
 
 const config: StorybookConfig = {
-  stories: ["../components/**/*.stories.@(js|jsx|ts|tsx|mdx)"],
+  stories: ["../src/components/**/*.stories.@(js|jsx|ts|tsx|mdx)"],
   addons: ["@storybook/addon-essentials", "@storybook/addon-docs"],
   framework: {
     name: "@storybook/react-vite",
@@ -18,6 +19,17 @@ const config: StorybookConfig = {
   },
   docs: {
     autodocs: "tag",
+  },
+  async viteFinal(config) {
+    const { mergeConfig } = await import("vite");
+
+    return mergeConfig(config, {
+      resolve: {
+        alias: {
+          "@": path.resolve(__dirname, "../src"),
+        },
+      },
+    });
   },
 };
 
