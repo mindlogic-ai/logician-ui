@@ -10,7 +10,7 @@ A comprehensive React design system built on Chakra UI, providing a complete set
 - 🎭 **Built on Chakra UI** - Leverages the power and flexibility of Chakra UI
 - 📱 **Responsive Design** - All components are mobile-first and responsive
 - 🦾 **TypeScript First** - Full TypeScript support with comprehensive type definitions
-- 🧪 **Storybook Ready** - Complete Storybook documentation and examples
+- 📚 **Storybook 8.6** - Interactive component documentation and development
 - 🎯 **Accessible** - WAI-ARIA compliant components
 - ⚡ **Performance Optimized** - Tree-shakable exports and optimized bundle size
 
@@ -131,6 +131,20 @@ yarn lint
 yarn lint:fix
 ```
 
+### Storybook Development
+
+Run Storybook for interactive component development and documentation:
+
+```bash
+# Start Storybook development server
+yarn storybook
+
+# Build Storybook for deployment
+yarn build-storybook
+```
+
+Storybook will be available at [http://localhost:6006](http://localhost:6006) and provides an interactive environment to develop, test, and document your components.
+
 ### Versioning & Releases
 
 This project uses [Changesets](https://github.com/changesets/changesets) for version management:
@@ -152,7 +166,10 @@ yarn changeset:publish
 ### Project Structure
 
 ```
-├── components/           # All UI components
+├── .storybook/          # Storybook configuration
+│   ├── main.ts          # Main configuration
+│   └── preview.tsx      # Global decorators and parameters
+├── components/          # All UI components
 │   ├── Button/
 │   │   ├── Button.tsx
 │   │   ├── Button.types.ts
@@ -161,10 +178,12 @@ yarn changeset:publish
 │   │   └── index.tsx
 │   └── ...
 ├── utils/               # Utility functions
-├── store/               # State management
+├── hooks/               # React hooks
+├── theme/               # Chakra UI theme
 ├── index.ts             # Main export file
 ├── package.json
 ├── tsconfig.json
+├── vite.config.ts
 └── README.md
 ```
 
