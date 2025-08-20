@@ -2,7 +2,6 @@
 export * from "./components/Accordion";
 export * from "./components/Alert";
 export * from "./components/Avatar";
-export * from "./components/AvatarInput";
 export * from "./components/AutowidthInput";
 export * from "./components/Badge";
 export * from "./components/Banner";
