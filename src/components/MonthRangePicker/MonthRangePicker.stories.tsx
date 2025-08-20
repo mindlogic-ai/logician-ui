@@ -1,21 +1,20 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { useEffect, useState } from 'react';
-import { Box, VStack } from '@chakra-ui/react';
+import type { Meta, StoryObj } from "@storybook/react";
+import { useEffect, useState } from "react";
+import { Box, VStack } from "@chakra-ui/react";
 
-import { Text } from '@/components/Typography';
-import { subMonths, addMonths } from 'date-fns';
-import useUserStore from '@/store/user';
+import { Text } from "@/components/Typography";
+import { subMonths, addMonths } from "date-fns";
 
-import { MonthRangePicker } from './MonthRangePicker';
-import { MonthRange } from './MonthRangePicker.types';
+import { MonthRangePicker } from "./MonthRangePicker";
+import { MonthRange } from "./MonthRangePicker.types";
 
 const meta: Meta<typeof MonthRangePicker> = {
-  title: 'Components/MonthRangePicker',
+  title: "Components/MonthRangePicker",
   component: MonthRangePicker,
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
     selectedRange: {
       control: false,
@@ -27,7 +26,7 @@ const meta: Meta<typeof MonthRangePicker> = {
   decorators: [
     (Story, context) => {
       const [selectedRange, setSelectedRange] = useState<MonthRange | null>(
-        context.parameters?.initialRange || null,
+        context.parameters?.initialRange || null
       );
 
       return (
@@ -57,7 +56,7 @@ const meta: Meta<typeof MonthRangePicker> = {
                 {selectedRange.endMonth ? (
                   <> - {selectedRange.endMonth.toLocaleDateString()}</>
                 ) : (
-                  ' - (selecting...)'
+                  " - (selecting...)"
                 )}
               </Text>
             </Box>
@@ -121,8 +120,8 @@ export const Disabled: Story = {
 
 export const CustomFormat: Story = {
   args: {
-    format: 'MMMM yyyy',
-    placeholder: 'Select month range (full month names)',
+    format: "MMMM yyyy",
+    placeholder: "Select month range (full month names)",
   },
   parameters: {
     additionalContent: (
@@ -161,62 +160,5 @@ export const CrossYearSelection: Story = {
         </Box>
       </Box>
     ),
-  },
-};
-
-export const KoreanLocale: Story = {
-  render: args => {
-    const [selectedRange, setSelectedRange] = useState<MonthRange | null>(null);
-    const { setLanguage } = useUserStore();
-
-    // Temporarily set Korean locale for this story
-    useEffect(() => {
-      setLanguage('ko');
-    }, []);
-
-    return (
-      <VStack spacing={4} align="start" width="400px">
-        <Box>
-          <Text fontSize="md" fontWeight="semibold" mb={2}>
-            Korean Localization (한국어)
-          </Text>
-          <Text fontSize="sm" color="gray.600" mb={4}>
-            Month names, UI text, and date format are automatically localized to
-            Korean. No format prop needed - it automatically uses "yyyy년 MMM"
-            format.
-          </Text>
-        </Box>
-
-        <MonthRangePicker
-          {...args}
-          selectedRange={selectedRange}
-          onChange={setSelectedRange}
-          // Note: No format prop specified - uses Korean default automatically
-        />
-
-        {selectedRange && (
-          <Box
-            p={3}
-            bg="green.50"
-            borderRadius="md"
-            width="100%"
-            border="1px solid"
-            borderColor="green.200"
-          >
-            <Text fontSize="sm" fontWeight="semibold" color="green.700">
-              ✓ 선택된 범위:
-            </Text>
-            <Text fontSize="sm" color="green.600">
-              {selectedRange.startMonth.toLocaleDateString('ko-KR')}
-              {selectedRange.endMonth ? (
-                <> - {selectedRange.endMonth.toLocaleDateString('ko-KR')}</>
-              ) : (
-                ' - (선택 중...)'
-              )}
-            </Text>
-          </Box>
-        )}
-      </VStack>
-    );
   },
 };

@@ -15,7 +15,6 @@ export * from "./components/Chip";
 export * from "./components/ChipButton";
 export * from "./components/Code";
 export * from "./components/CodeTabs";
-export * from "./components/ColorPicker";
 export * from "./components/Container";
 export * from "./components/CopyableCode";
 export * from "./components/CrossPageToasts";

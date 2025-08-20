@@ -34,7 +34,7 @@
     "dist",
     "**/*.stories.tsx",
     "**/*.test.tsx",
-    "src/components/Tabs/TabsContext.tsx",
+
     "src/components/Skeleton/SkeletonGrid/**/*",
     "src/components/Skeleton/SkeletonTable/**/*",
     "src/theme/**/*"

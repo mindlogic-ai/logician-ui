@@ -1,24 +1,24 @@
-import { useRef, useState } from 'react';
-import { CopyIcon, EditIcon } from '@chakra-ui/icons';
+import { useRef, useState } from "react";
 import {
   Box,
   Editable,
   EditableInput,
   EditablePreview,
   Tooltip,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
 
-import { AutowidthInput } from '@/components/AutowidthInput';
+import { AutowidthInput } from "@/components/AutowidthInput";
 import {
   editablePreviewStyles,
   editableStyles,
   inputStyles,
   previewWrapperStyles,
-} from '@/components/DataField/DataField.styles';
-import { DataFieldProps } from '@/components/DataField/DataField.types';
-import { IconButton } from '@/components/IconButton';
-import { Text } from '@/components/Typography';
-import theme from '@/theme/index';
+} from "@/components/DataField/DataField.styles";
+import { DataFieldProps } from "@/components/DataField/DataField.types";
+import { IconButton } from "@/components/IconButton";
+import { Text } from "@/components/Typography";
+import theme from "@/theme/index";
+import { Icon } from "../Icon";
 
 const TOOLTIP_DISPLAY_TIME = 3000;
 
@@ -52,7 +52,7 @@ export const DataField = ({
     previewRef.current.focus();
   };
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     onChange?.(e.target.value);
   };
 
@@ -67,11 +67,11 @@ export const DataField = ({
     }
   };
 
-  const handleSubmit = val => {
+  const handleSubmit = (val) => {
     actIfAllowed(editableProps?.onSubmit, val);
   };
 
-  const PreviewComponent = as ? as : props => <span {...props} />;
+  const PreviewComponent = as ? as : (props) => <span {...props} />;
 
   return (
     <Box>
@@ -105,14 +105,14 @@ export const DataField = ({
             />
             <IconButton
               aria-label={`Edit ${label}`}
-              icon={<EditIcon color={theme.colors.gray[400]} />}
+              icon={<Icon icon="Edit" color="gray.400" boxSize="sm" />}
               onClick={handleEditButtonClick}
             />
             {isCopyable && (
               <Tooltip label="Copied!" isOpen={hasOpenCopyTooltip}>
                 <IconButton
                   aria-label={`Copy ${label}`}
-                  icon={<CopyIcon color={theme.colors.gray[400]} />}
+                  icon={<Icon icon="FaRegCopy" color="gray.400" boxSize="sm" />}
                   onClick={handleCopyButtonClick}
                 />
               </Tooltip>
@@ -120,12 +120,12 @@ export const DataField = ({
           </Editable>
         ) : (
           <Box>
-            {value}{' '}
+            {value}{" "}
             {isCopyable && (
               <Tooltip label="Copied!" isOpen={hasOpenCopyTooltip}>
                 <IconButton
                   aria-label={`Copy ${label}`}
-                  icon={<CopyIcon color={theme.colors.gray[400]} />}
+                  icon={<Icon icon="FaRegCopy" color="gray.400" boxSize="sm" />}
                   onClick={handleCopyButtonClick}
                 />
               </Tooltip>

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, {
   createContext,
@@ -7,13 +7,36 @@ import React, {
   useContext,
   useLayoutEffect,
   useState,
-} from 'react';
-import { TabsProps as ChakraTabsProps } from '@chakra-ui/react';
-import { usePathname, useRouter } from 'next/navigation';
-import PropTypes from 'prop-types';
+} from "react";
+import { TabsProps as ChakraTabsProps } from "@chakra-ui/react";
+import PropTypes from "prop-types";
+
+// Optional Next.js navigation hooks with fallbacks
+let useRouter:
+  | (() => { replace: (url: string, options?: any) => void })
+  | null = null;
+let usePathname: (() => string) | null = null;
+
+try {
+  // Try to import Next.js navigation hooks
+  const nextNavigation = require("next/navigation");
+  useRouter = nextNavigation.useRouter;
+  usePathname = nextNavigation.usePathname;
+} catch (error) {
+  // Next.js not available - create fallback implementations
+  useRouter = () => ({
+    replace: (url: string, options?: any) => {
+      if (typeof window !== "undefined") {
+        window.history.replaceState(null, "", url);
+      }
+    },
+  });
+  usePathname = () =>
+    typeof window !== "undefined" ? window.location.pathname : "/";
+}
 
 interface TabsContextProps {
-  orientation: ChakraTabsProps['orientation'];
+  orientation: ChakraTabsProps["orientation"];
   urlParam?: string;
   tabNames: string[];
   setTabNames: React.Dispatch<React.SetStateAction<string[]>>;
@@ -39,17 +62,17 @@ export function TabsProvider({
   orientation,
   urlParam,
 }: PropsWithChildren<{
-  orientation: ChakraTabsProps['orientation'];
+  orientation: ChakraTabsProps["orientation"];
   urlParam?: string;
 }>) {
   const [tabNames, setTabNames] = useState<string[]>([]);
   const [selectedIndex, setSelectedIndexState] = useState(0);
-  const router = useRouter();
-  const pathname = usePathname();
+  const router = useRouter?.() || { replace: () => {} };
+  const pathname = usePathname?.() || "/";
 
   // A function to register a tab name at a specific index
   const registerTabName = useCallback((index: number, name: string) => {
-    setTabNames(prev => {
+    setTabNames((prev) => {
       const newNames = [...prev];
       newNames[index] = name;
       return newNames;
@@ -58,8 +81,11 @@ export function TabsProvider({
 
   // On mount and when search parameters or tab names change, check URL for the tab parameter
   useLayoutEffect(() => {
+    // Only sync from URL if Next.js navigation is available and urlParam is provided
+    if (!useRouter || !urlParam || tabNames.length === 0) return;
+
     const searchParams = new URLSearchParams(window.location.search);
-    if (!urlParam || tabNames.length === 0 || !searchParams) return;
+    if (!searchParams) return;
 
     const tabParam = searchParams.get(urlParam);
 
@@ -84,11 +110,14 @@ export function TabsProvider({
 
       setSelectedIndexState(index);
 
+      // Only sync with URL if Next.js navigation is available and urlParam is provided
       if (
-        typeof window !== 'undefined' &&
+        typeof window !== "undefined" &&
         urlParam &&
         tabNames.length > index &&
-        tabNames[index]
+        tabNames[index] &&
+        useRouter && // Check if Next.js navigation is available
+        router.replace !== (() => {}) // Check if we have real router, not fallback
       ) {
         const searchParams = new URLSearchParams(window.location.search);
         // Create a new URLSearchParams based on the current search params
@@ -105,7 +134,7 @@ export function TabsProvider({
         router.replace(newUrl, { scroll: false });
       }
     },
-    [urlParam, tabNames, router, pathname, selectedIndex],
+    [urlParam, tabNames, router, pathname, selectedIndex]
   );
 
   return (
@@ -125,7 +154,7 @@ export function TabsProvider({
   );
 }
 
-TabsProvider.displayName = 'TabsProvider';
+TabsProvider.displayName = "TabsProvider";
 
 TabsProvider.propTypes = {
   children: PropTypes.node,

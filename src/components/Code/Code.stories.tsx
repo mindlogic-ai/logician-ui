@@ -1,11 +1,10 @@
-import React from 'react';
-import { Meta, StoryFn } from '@storybook/react';
-import { CopyIcon } from '@chakra-ui/icons';
-import { Code } from './Code';
-import { CodeProps } from './Code.types';
+import React from "react";
+import { Meta, StoryFn } from "@storybook/react";
+import { Code } from "./Code";
+import { CodeProps } from "./Code.types";
 
 const meta: Meta<typeof Code> = {
-  title: 'Components/Code',
+  title: "Components/Code",
   component: Code,
   args: {
     children: `const t = 'test';`,
@@ -21,7 +20,7 @@ Basic.args = {};
 
 export const Copyable: StoryFn<CodeProps> = Template.bind({});
 Copyable.args = {
-  onCopy: str => {
+  onCopy: (str) => {
     navigator.clipboard.writeText(str);
     console.log(str);
   },

@@ -1,27 +1,29 @@
-import { ChangeEventHandler, forwardRef } from 'react';
-import { Box, Flex, Input, useTheme } from '@chakra-ui/react';
+import { ChangeEventHandler, forwardRef } from "react";
+import { Box, Flex, Input, useTheme } from "@chakra-ui/react";
 
-import { Icon, IconTypes } from '@/components/Icon';
-import { Spinner } from '@/components/Spinner';
-import { Text } from '@/components/Typography';
+import { Icon, IconTypes } from "@/components/Icon";
+import { Spinner } from "@/components/Spinner";
+import { Text } from "@/components/Typography";
 
-import { FileInputProps } from './FileInput.types';
+import { FileInputProps } from "./FileInput.types";
+import { useTranslate } from "@/hooks/useTranslate";
 
 export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
   (
     {
-      fileInputLabel = 'upload_your_file',
+      fileInputLabel,
       containerStyle = {},
       bgImage,
       onChange,
       isLoading,
       ...rest
     },
-    ref,
+    ref
   ) => {
     const theme = useTheme();
+    const translate = useTranslate();
 
-    const handleChange: ChangeEventHandler<HTMLInputElement> = event => {
+    const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
       onChange(event.currentTarget.files);
     };
 
@@ -43,7 +45,7 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
       >
         <label
           role="group"
-          style={{ width: '100%', height: '100%', cursor: 'pointer' }}
+          style={{ width: "100%", height: "100%", cursor: "pointer" }}
         >
           {bgImage && (
             <Box
@@ -84,7 +86,7 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
               <Flex w="100%" flexDir="column" align="center" justify="center">
                 <Box
                   borderRadius="lg"
-                  bgColor={bgImage ? 'transparent' : 'gray.50'}
+                  bgColor={bgImage ? "transparent" : "gray.50"}
                   p={3}
                   mb={1}
                   w="fit-content"
@@ -101,7 +103,7 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
                     bgImage ? theme.colors.gray[1200] : theme.colors.gray[800]
                   }
                 >
-                  {fileInputLabel}
+                  {fileInputLabel || translate("upload_your_file")}
                 </Text>
               </Flex>
             )}
@@ -109,7 +111,7 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
         </label>
       </Flex>
     );
-  },
+  }
 );
 
-FileInput.displayName = 'FileInput';
+FileInput.displayName = "FileInput";
