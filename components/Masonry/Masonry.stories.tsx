@@ -1,18 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Meta, StoryFn } from '@storybook/react';
-import {
-  Box,
-  Text,
-  SimpleGrid,
-  useColorModeValue,
-  useBreakpointValue,
-} from '@chakra-ui/react';
+import React, { useState, useEffect } from "react";
+import { Meta, StoryFn } from "@storybook/react";
+import { Box, Text, SimpleGrid, useBreakpointValue } from "@chakra-ui/react";
 
-import { Masonry } from './Masonry';
-import { MasonryProps } from './Masonry.types';
+import { Masonry } from "./Masonry";
+import { MasonryProps } from "./Masonry.types";
 
 const meta: Meta<typeof Masonry> = {
-  title: 'Components/Masonry',
+  title: "Components/Masonry",
   component: Masonry,
   args: {
     numCols: 3,
@@ -21,19 +15,19 @@ const meta: Meta<typeof Masonry> = {
   },
   argTypes: {
     numCols: {
-      control: 'number',
-      description: 'Number of columns in the masonry layout',
+      control: "number",
+      description: "Number of columns in the masonry layout",
       defaultValue: 3,
     },
     gap: {
-      control: 'number',
-      description: 'Gap between items',
+      control: "number",
+      description: "Gap between items",
       defaultValue: 4,
     },
     horizontalArrangement: {
-      control: 'boolean',
+      control: "boolean",
       description:
-        'Whether to arrange items horizontally (true) or balance column heights (false)',
+        "Whether to arrange items horizontally (true) or balance column heights (false)",
       defaultValue: false,
     },
   },
@@ -41,7 +35,7 @@ const meta: Meta<typeof Masonry> = {
     docs: {
       description: {
         component:
-          'A responsive masonry layout component that arranges items in optimal position based on available vertical space.',
+          "A responsive masonry layout component that arranges items in optimal position based on available vertical space.",
       },
     },
   },
@@ -55,18 +49,18 @@ const generateItems = (count: number) => {
   return Array.from({ length: count }).map((_, index) => ({
     id: index,
     height: 100 + Math.floor(Math.random() * 200), // Random heights between 100-300px
-    color: index % 2 === 0 ? 'blue.50' : 'purple.50',
+    color: index % 2 === 0 ? "blue.50" : "purple.50",
     title: `Item ${index + 1}`,
   }));
 };
 
 // Basic usage example
-export const Basic: Story = args => {
+export const Basic: Story = (args) => {
   const items = generateItems(12);
 
   return (
     <Masonry {...args}>
-      {items.map(item => (
+      {items.map((item) => (
         <Box
           key={item.id}
           bg={item.color}
@@ -84,36 +78,36 @@ export const Basic: Story = args => {
 };
 
 // Example with realistic content
-export const WithRealContent: Story = args => {
-  const bgColor = useColorModeValue('gray.50', 'gray.700');
+export const WithRealContent: Story = (args) => {
+  const bgColor = "gray.50"; // Light mode only
   const categories = [
     {
-      name: 'Social Media',
-      items: ['Facebook', 'Twitter', 'Instagram', 'LinkedIn', 'TikTok'],
+      name: "Social Media",
+      items: ["Facebook", "Twitter", "Instagram", "LinkedIn", "TikTok"],
     },
-    { name: 'Messaging', items: ['WhatsApp', 'Telegram', 'Signal'] },
-    { name: 'Video', items: ['YouTube', 'Vimeo', 'TikTok', 'Twitch'] },
+    { name: "Messaging", items: ["WhatsApp", "Telegram", "Signal"] },
+    { name: "Video", items: ["YouTube", "Vimeo", "TikTok", "Twitch"] },
     {
-      name: 'Productivity',
+      name: "Productivity",
       items: [
-        'Notion',
-        'Slack',
-        'Microsoft Teams',
-        'Asana',
-        'Trello',
-        'Monday',
+        "Notion",
+        "Slack",
+        "Microsoft Teams",
+        "Asana",
+        "Trello",
+        "Monday",
       ],
     },
-    { name: 'Design', items: ['Figma', 'Adobe XD', 'Sketch', 'Canva'] },
+    { name: "Design", items: ["Figma", "Adobe XD", "Sketch", "Canva"] },
     {
-      name: 'Development',
-      items: ['GitHub', 'GitLab', 'Bitbucket', 'Stack Overflow'],
+      name: "Development",
+      items: ["GitHub", "GitLab", "Bitbucket", "Stack Overflow"],
     },
   ];
 
   return (
     <Masonry {...args}>
-      {categories.map(category => (
+      {categories.map((category) => (
         <Box
           key={category.name}
           bg={bgColor}
@@ -125,11 +119,11 @@ export const WithRealContent: Story = args => {
           <Text fontWeight="bold" fontSize="lg" mb={2} color="blue.500">
             {category.name}
           </Text>
-          {category.items.map(item => (
+          {category.items.map((item) => (
             <Box
               key={item}
               p={2}
-              _hover={{ bg: 'gray.100' }}
+              _hover={{ bg: "gray.100" }}
               borderRadius="md"
               transition="background 0.2s"
               cursor="pointer"
@@ -147,7 +141,7 @@ export const WithRealContent: Story = args => {
 };
 
 // Responsive example
-export const Responsive: Story = args => {
+export const Responsive: Story = (args) => {
   // Use Chakra's breakpoint system for responsive columns
   const responsiveColumns =
     useBreakpointValue({
@@ -162,7 +156,7 @@ export const Responsive: Story = args => {
     <Box>
       <Text mb={4}>Resize the viewport to see the columns adjust:</Text>
       <Masonry {...args} numCols={responsiveColumns}>
-        {generateItems(20).map(item => (
+        {generateItems(20).map((item) => (
           <Box
             key={item.id}
             bg={item.color}
@@ -180,12 +174,12 @@ export const Responsive: Story = args => {
 };
 
 // Example with controls for column count
-export const CustomizableColumns: Story = args => {
+export const CustomizableColumns: Story = (args) => {
   const items = generateItems(16);
 
   return (
     <Masonry {...args}>
-      {items.map(item => (
+      {items.map((item) => (
         <Box
           key={item.id}
           bg={item.color}
@@ -205,7 +199,7 @@ CustomizableColumns.args = {
 };
 
 // Horizontal arrangement example
-export const HorizontalArrangement: Story = args => {
+export const HorizontalArrangement: Story = (args) => {
   const items = generateItems(12);
 
   return (
@@ -214,7 +208,7 @@ export const HorizontalArrangement: Story = args => {
         Horizontal Arrangement (row by row)
       </Text>
       <Masonry numCols={3} horizontalArrangement={true} gap={4}>
-        {items.map(item => (
+        {items.map((item) => (
           <Box
             key={item.id}
             bg={item.color}
@@ -232,7 +226,7 @@ export const HorizontalArrangement: Story = args => {
         Height-Balanced Arrangement (default)
       </Text>
       <Masonry numCols={3} horizontalArrangement={false} gap={4}>
-        {items.map(item => (
+        {items.map((item) => (
           <Box
             key={item.id}
             bg={item.color}
@@ -250,7 +244,7 @@ export const HorizontalArrangement: Story = args => {
 };
 
 // Comparison with regular grid
-export const ComparisonWithGrid: Story = args => {
+export const ComparisonWithGrid: Story = (args) => {
   const items = generateItems(12);
 
   return (
@@ -259,7 +253,7 @@ export const ComparisonWithGrid: Story = args => {
         Masonry Layout
       </Text>
       <Masonry {...args}>
-        {items.map(item => (
+        {items.map((item) => (
           <Box
             key={item.id}
             bg={item.color}
@@ -277,7 +271,7 @@ export const ComparisonWithGrid: Story = args => {
         Regular Grid Layout
       </Text>
       <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={4}>
-        {items.map(item => (
+        {items.map((item) => (
           <Box
             key={item.id}
             bg={item.color}

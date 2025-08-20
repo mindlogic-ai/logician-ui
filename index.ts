@@ -22,7 +22,7 @@ export * from "./components/CopyableCode";
 export * from "./components/CrossPageToasts";
 export * from "./components/DataField";
 export * from "./components/DatePicker";
-export * from "./components/ErrorBoundary";
+// ErrorBoundary removed
 
 // File Components
 export * from "./components/FileCard";

@@ -23,18 +23,11 @@
     "paths": {
       "@/*": ["./components/*"],
       "@/utils/*": ["./utils/*"],
-      "@/store/*": ["./store/*"],
       "@/hooks/*": ["./hooks/*"],
       "@/theme/*": ["./theme/*"]
     }
   },
-  "include": [
-    "components/**/*",
-    "index.ts",
-    "utils/**/*",
-    "store/**/*",
-    "hooks/**/*"
-  ],
+  "include": ["components/**/*", "index.ts", "utils/**/*", "hooks/**/*"],
   "exclude": [
     "node_modules",
     "dist",
