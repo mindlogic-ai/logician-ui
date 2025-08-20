@@ -22,7 +22,6 @@ export * from "./components/CopyableCode";
 export * from "./components/CrossPageToasts";
 export * from "./components/DataField";
 export * from "./components/DatePicker";
-export * from "./components/EditableImage";
 export * from "./components/ErrorBoundary";
 
 // File Components
@@ -83,7 +82,6 @@ export * from "./components/SeeMoreButton";
 export * from "./components/SegmentedControl";
 export * from "./components/SegmentedProgressBar";
 export * from "./components/Select";
-// export * from "./components/SelectDate"; // Excluded due to external dependencies
 export * from "./components/Skeleton";
 export * from "./components/Slider";
 export * from "./components/Spinner";
@@ -95,7 +93,6 @@ export * from "./components/Tabs";
 export * from "./components/Tag";
 export * from "./components/Textarea";
 export * from "./components/Toast";
-// export * from "./components/ToggleableInput"; // Excluded due to external dependencies
 export * from "./components/Tooltip";
 // Typography Components (excluding Link to avoid conflict with Link component)
 export {

@@ -124,14 +124,29 @@ function App() {
 # Install dependencies
 yarn install
 
-# Start development mode
-yarn dev
+# Lint code
+yarn lint
 
-# Build the library
-yarn build
+# Fix linting issues
+yarn lint:fix
+```
 
-# Run Storybook
-yarn storybook
+### Versioning & Releases
+
+This project uses [Changesets](https://github.com/changesets/changesets) for version management:
+
+```bash
+# Add a changeset for your changes
+yarn changeset
+
+# Version packages (updates CHANGELOG and package.json)
+yarn changeset:version
+
+# Check changeset status
+yarn changeset:status
+
+# Publish to npm (if configured)
+yarn changeset:publish
 ```
 
 ### Project Structure
@@ -168,9 +183,30 @@ yarn storybook
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+3. Make your changes and ensure they pass linting (`yarn lint`)
+4. Add a changeset describing your changes (`yarn changeset`)
+5. Commit your changes (`git commit -m 'Add some amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
+
+### Changeset Guidelines
+
+When adding changesets, follow these guidelines:
+
+- **Major**: Breaking changes, component API changes, removing components
+- **Minor**: New components, new features, new props (non-breaking)
+- **Patch**: Bug fixes, internal improvements, documentation updates
+
+Example changeset workflow:
+
+```bash
+# After making changes
+yarn changeset
+
+# Select change type (major/minor/patch)
+# Write a clear description of your changes
+# Commit the changeset file along with your code changes
+```
 
 ## License
 

@@ -41,8 +41,6 @@
     "**/*.stories.tsx",
     "**/*.test.tsx",
     "components/Tabs/TabsContext.tsx",
-    "components/SelectDate/**/*",
-    "components/ToggleableInput/**/*",
     "components/Skeleton/SkeletonGrid/**/*",
     "components/Skeleton/SkeletonTable/**/*",
     "theme/**/*"

@@ -40,4 +40,7 @@ storybook-static/
 
 # Temporary files
 .tmp/
-.cache/ 
+.cache/
+
+# Changeset - don't ignore .changeset folder
+!.changeset/ 
