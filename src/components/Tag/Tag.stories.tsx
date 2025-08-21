@@ -1,5 +1,6 @@
-import { Meta, StoryFn } from '@storybook/react';
 import React from 'react';
+import { Meta, StoryFn } from '@storybook/react';
+
 import { Tag } from './Tag';
 import { TagCloseButton } from './TagCloseButton';
 
@@ -11,7 +12,7 @@ export default {
   },
 } as Meta<typeof Tag>;
 
-const Template: StoryFn<typeof Tag> = args => <Tag {...args} />;
+const Template: StoryFn<typeof Tag> = (args) => <Tag {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {};

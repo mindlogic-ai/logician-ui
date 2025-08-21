@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Meta, StoryFn } from '@storybook/react';
 import { Box, Stack, VStack } from '@chakra-ui/react';
+import { Meta, StoryFn } from '@storybook/react';
 
 import { Radio, RadioGroup } from '.';
 import { RadioOption } from './Radio.types';
@@ -50,14 +50,14 @@ const meta: Meta<typeof Radio> = {
 export default meta;
 type Story = StoryFn<typeof Radio>;
 
-export const Default: Story = args => <Radio {...args} />;
+export const Default: Story = (args) => <Radio {...args} />;
 
-export const Checked: Story = args => <Radio {...args} isChecked />;
+export const Checked: Story = (args) => <Radio {...args} isChecked />;
 Checked.args = {
   children: 'Selected option',
 };
 
-export const Disabled: Story = args => (
+export const Disabled: Story = (args) => (
   <Stack spacing={3}>
     <Radio {...args} isDisabled>
       Disabled unchecked
@@ -68,7 +68,7 @@ export const Disabled: Story = args => (
   </Stack>
 );
 
-export const Sizes: Story = args => (
+export const Sizes: Story = (args) => (
   <Stack spacing={4}>
     <Radio {...args} size="sm">
       Small radio
@@ -82,7 +82,7 @@ export const Sizes: Story = args => (
   </Stack>
 );
 
-export const States: Story = args => (
+export const States: Story = (args) => (
   <Stack spacing={3}>
     <Radio {...args}>Default state</Radio>
     <Radio {...args} isChecked>

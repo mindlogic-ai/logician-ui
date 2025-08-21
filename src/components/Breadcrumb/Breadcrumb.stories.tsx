@@ -1,9 +1,10 @@
-import React from "react";
-import { Breadcrumb } from "./Breadcrumb";
-import { Meta, StoryFn } from "@storybook/react";
+import React from 'react';
+import { Meta, StoryFn } from '@storybook/react';
+
+import { Breadcrumb } from './Breadcrumb';
 
 export default {
-  title: "Components/Breadcrumb",
+  title: 'Components/Breadcrumb',
   component: Breadcrumb,
 } as Meta<typeof Breadcrumb>;
 

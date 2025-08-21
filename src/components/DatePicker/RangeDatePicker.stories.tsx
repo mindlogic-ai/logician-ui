@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import { Box } from '@chakra-ui/react';
 import { Meta, StoryFn } from '@storybook/react';
 
-import { RangeDatePicker } from './RangeDatePicker';
 import { formatDateByLocale } from '@/utils/formatDateByLocale';
+
 import { Text } from '../Typography';
-import { Box } from '@chakra-ui/react';
+import { RangeDatePicker } from './RangeDatePicker';
 
 const meta: Meta<typeof RangeDatePicker> = {
   title: 'Components/DatePicker/RangeDatePicker',

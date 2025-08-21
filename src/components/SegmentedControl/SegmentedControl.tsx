@@ -18,10 +18,12 @@ export const SegmentedControl = ({
 
   // Use the controlled value if provided, otherwise use the internal state
   const activeValue = value !== undefined ? value : internalValue;
-  const activeIndex = options.findIndex(option => option.value === activeValue);
+  const activeIndex = options.findIndex(
+    (option) => option.value === activeValue
+  );
 
   const getControlPadding: (
-    size: SegmentedControlProps['size'],
+    size: SegmentedControlProps['size']
   ) => SegmentedControlProps['padding'] = (size = 'md') => {
     const paddings = {
       xs: theme.space[1],
@@ -66,7 +68,7 @@ export const SegmentedControl = ({
         }}
       />
 
-      {options.map(option => (
+      {options.map((option) => (
         <Button
           key={option.value}
           flex={1}

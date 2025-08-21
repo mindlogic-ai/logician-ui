@@ -20,4 +20,4 @@ const meta: Meta<typeof Badge> = {
 export default meta;
 type Story = StoryFn<typeof Badge>;
 
-export const Basic: Story = args => <Badge {...args} />;
+export const Basic: Story = (args) => <Badge {...args} />;

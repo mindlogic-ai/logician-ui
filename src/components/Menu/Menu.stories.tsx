@@ -1,31 +1,32 @@
-import React, { useState } from "react";
-import { Meta, StoryFn } from "@storybook/react";
-import { Button } from "@chakra-ui/react";
-import { Menu, MenuButton, MenuList, MenuItem } from ".";
-import { Icon, IconType } from "../Icon";
-import { MenuItemProps } from "./MenuItem.types";
-import { IconButton } from "../IconButton";
+import React, { useState } from 'react';
+import { Button } from '@chakra-ui/react';
+import { Meta, StoryFn } from '@storybook/react';
+
+import { Icon } from '../Icon';
+import { IconButton } from '../IconButton';
+import { Menu, MenuButton, MenuItem, MenuList } from '.';
+import { MenuItemProps } from './MenuItem.types';
 
 // Interface for story-specific menu item data
 interface StoryMenuItemProps {
   label: string;
   onClick?: () => void;
   itemIcon?: React.ReactElement;
-  variant?: MenuItemProps["variant"];
+  variant?: MenuItemProps['variant'];
 }
 
 const meta: Meta = {
-  title: "Components/Menu",
+  title: 'Components/Menu',
   component: Menu,
   args: {
-    label: "Trigger",
+    label: 'Trigger',
     menuItems: [
-      { label: "Profile", onClick: () => alert("Profile clicked") },
-      { label: "Settings", onClick: () => alert("Settings clicked") },
+      { label: 'Profile', onClick: () => alert('Profile clicked') },
+      { label: 'Settings', onClick: () => alert('Settings clicked') },
     ],
   },
   argTypes: {
-    menuItems: { control: "object" },
+    menuItems: { control: 'object' },
   },
 };
 
@@ -36,7 +37,7 @@ type Story = StoryFn<{ label: string; menuItems: StoryMenuItemProps[] }>;
 const Template: Story = ({ label, menuItems, ...args }) => (
   <Menu>
     <MenuButton
-      aria-label={"storybook button menu"}
+      aria-label={'storybook button menu'}
       as={Button}
       rightIcon={<Icon icon="IoChevronDownOutline" />}
       {...args}
@@ -61,10 +62,10 @@ const Template: Story = ({ label, menuItems, ...args }) => (
 export const DefaultMenu = Template.bind({});
 DefaultMenu.args = {
   menuItems: [
-    { label: "Profile", onClick: () => alert("Profile clicked") },
+    { label: 'Profile', onClick: () => alert('Profile clicked') },
     {
-      label: "Settings",
-      onClick: () => alert("Settings clicked"),
+      label: 'Settings',
+      onClick: () => alert('Settings clicked'),
     },
   ],
 };
@@ -73,13 +74,13 @@ export const IconMenu = Template.bind({});
 IconMenu.args = {
   menuItems: [
     {
-      label: "Profile",
-      onClick: () => alert("Profile clicked"),
+      label: 'Profile',
+      onClick: () => alert('Profile clicked'),
       itemIcon: <Icon icon="SlSettings" />,
     },
     {
-      label: "Settings",
-      onClick: () => alert("Settings clicked"),
+      label: 'Settings',
+      onClick: () => alert('Settings clicked'),
       itemIcon: <Icon icon="SlSettings" />,
     },
   ],
@@ -88,12 +89,12 @@ IconMenu.args = {
 export const DangerMenu = Template.bind({});
 DangerMenu.args = {
   menuItems: [
-    { label: "Profile", onClick: () => alert("Profile clicked") },
+    { label: 'Profile', onClick: () => alert('Profile clicked') },
     {
-      label: "Settings",
-      onClick: () => alert("Settings clicked"),
+      label: 'Settings',
+      onClick: () => alert('Settings clicked'),
       itemIcon: <Icon icon="SlSettings" />,
-      variant: "danger",
+      variant: 'danger',
     },
   ],
 };
@@ -124,10 +125,10 @@ const IconButtonTemplate: Story = ({ menuItems, ...args }) => (
 export const IconButtonTriggerMenu = IconButtonTemplate.bind({});
 IconButtonTriggerMenu.args = {
   menuItems: [
-    { label: "Profile", onClick: () => alert("Profile clicked") },
+    { label: 'Profile', onClick: () => alert('Profile clicked') },
     {
-      label: "Settings",
-      onClick: () => alert("Settings clicked"),
+      label: 'Settings',
+      onClick: () => alert('Settings clicked'),
       itemIcon: <Icon icon="SlSettings" />,
     },
   ],
@@ -149,7 +150,7 @@ const SelectiveIconTemplate: Story = ({ label, menuItems, ...args }) => {
   return (
     <Menu>
       <MenuButton
-        aria-label={"storybook button menu"}
+        aria-label={'storybook button menu'}
         as={Button}
         rightIcon={<Icon icon="IoChevronDownOutline" />}
         {...args}
@@ -178,8 +179,8 @@ const SelectiveIconTemplate: Story = ({ label, menuItems, ...args }) => {
 export const SelectiveIconMenu = SelectiveIconTemplate.bind({});
 SelectiveIconMenu.args = {
   menuItems: [
-    { label: "Profile", onClick: () => alert("Profile clicked") },
-    { label: "Settings", onClick: () => alert("Settings clicked") },
-    { label: "Logout", onClick: () => alert("Logout clicked") },
+    { label: 'Profile', onClick: () => alert('Profile clicked') },
+    { label: 'Settings', onClick: () => alert('Settings clicked') },
+    { label: 'Logout', onClick: () => alert('Logout clicked') },
   ],
 };

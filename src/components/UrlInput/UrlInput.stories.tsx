@@ -23,7 +23,7 @@ const meta: Meta<typeof UrlInput> = {
 
 export default meta;
 
-const Template: StoryFn<UrlInputProps> = args => <UrlInput {...args} />;
+const Template: StoryFn<UrlInputProps> = (args) => <UrlInput {...args} />;
 
 export const Basic: StoryFn<UrlInputProps> = Template.bind({});
 Basic.args = {

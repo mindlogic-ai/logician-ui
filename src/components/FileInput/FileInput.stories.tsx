@@ -1,6 +1,7 @@
-import { Meta, StoryFn } from '@storybook/react';
-import { FileInput, FileInputProps } from '.';
 import { useState } from 'react';
+import { Meta, StoryFn } from '@storybook/react';
+
+import { FileInput, FileInputProps } from '.';
 
 const meta: Meta = {
   title: 'Components/FileInput',

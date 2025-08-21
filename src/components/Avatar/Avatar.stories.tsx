@@ -1,5 +1,6 @@
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
+
 import { Avatar } from '.';
 const meta: Meta<typeof Avatar> = {
   title: 'Components/Avatar',
@@ -19,4 +20,4 @@ const meta: Meta<typeof Avatar> = {
 
 export default meta;
 type Story = StoryFn<typeof Avatar>;
-export const Basic: Story = args => <Avatar {...args} />;
+export const Basic: Story = (args) => <Avatar {...args} />;

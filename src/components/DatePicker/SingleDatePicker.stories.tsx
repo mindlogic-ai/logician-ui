@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import { Box } from '@chakra-ui/react';
 import { Meta, StoryFn } from '@storybook/react';
 
-import { SingleDatePicker } from './SingleDatePicker';
 import { formatDateByLocale } from '@/utils/formatDateByLocale';
+
 import { Text } from '../Typography';
-import { Box } from '@chakra-ui/react';
+import { SingleDatePicker } from './SingleDatePicker';
 
 const meta: Meta<typeof SingleDatePicker> = {
   title: 'Components/DatePicker/SingleDatePicker',

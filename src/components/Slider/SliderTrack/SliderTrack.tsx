@@ -6,7 +6,7 @@ import { SliderTrackProps } from './SliderTrack.types';
 export const SliderTrack = forwardRef(
   ({ ...rest }: SliderTrackProps, ref?: ForwardedRef<HTMLDivElement>) => {
     return <ChakraSliderTrack {...rest} ref={ref} />;
-  },
+  }
 );
 
 SliderTrack.displayName = 'SliderTrack';

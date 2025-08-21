@@ -1,20 +1,20 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { useEffect, useState } from "react";
-import { Box, VStack } from "@chakra-ui/react";
+import { useState } from 'react';
+import { Box, VStack } from '@chakra-ui/react';
+import type { Meta, StoryObj } from '@storybook/react';
+import { addMonths, subMonths } from 'date-fns';
 
-import { Text } from "@/components/Typography";
-import { subMonths, addMonths } from "date-fns";
+import { Text } from '@/components/Typography';
 
-import { MonthRangePicker } from "./MonthRangePicker";
-import { MonthRange } from "./MonthRangePicker.types";
+import { MonthRangePicker } from './MonthRangePicker';
+import { MonthRange } from './MonthRangePicker.types';
 
 const meta: Meta<typeof MonthRangePicker> = {
-  title: "Components/MonthRangePicker",
+  title: 'Components/MonthRangePicker',
   component: MonthRangePicker,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
     selectedRange: {
       control: false,
@@ -56,7 +56,7 @@ const meta: Meta<typeof MonthRangePicker> = {
                 {selectedRange.endMonth ? (
                   <> - {selectedRange.endMonth.toLocaleDateString()}</>
                 ) : (
-                  " - (selecting...)"
+                  ' - (selecting...)'
                 )}
               </Text>
             </Box>
@@ -120,8 +120,8 @@ export const Disabled: Story = {
 
 export const CustomFormat: Story = {
   args: {
-    format: "MMMM yyyy",
-    placeholder: "Select month range (full month names)",
+    format: 'MMMM yyyy',
+    placeholder: 'Select month range (full month names)',
   },
   parameters: {
     additionalContent: (

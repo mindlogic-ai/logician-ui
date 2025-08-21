@@ -1,10 +1,10 @@
-"use client";
-import { useCallback } from "react";
+'use client';
+import { useCallback } from 'react';
 
-import defaultTranslations from "../translations/Defaults.translations.json";
-import { formatForMarkdown } from "../utils/formatTextForMarkdown";
+import defaultTranslations from '../translations/Defaults.translations.json';
+import { formatForMarkdown } from '../utils/formatTextForMarkdown';
 
-const DEFAULT_LOCALE = "ko";
+const DEFAULT_LOCALE = 'ko';
 
 // Given a block of text and variables, replaces instances of the provided variables in the text
 const replaceVariables = (text: string, variables?: { [key: string]: any }) => {
@@ -33,13 +33,13 @@ const replaceVariables = (text: string, variables?: { [key: string]: any }) => {
       formatForMarkdown(partText)
   );
 
-  return parts.every((part) => typeof part === "string")
-    ? parts.join("")
+  return parts.every((part) => typeof part === 'string')
+    ? parts.join('')
     : parts;
 };
 
 const getLanguage = () => {
-  return "ko";
+  return 'ko';
 };
 
 export const useTranslate = (translations = {}) => {

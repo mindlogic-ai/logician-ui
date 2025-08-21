@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react';
 import { Box } from '@chakra-ui/react';
+import type { Meta, StoryObj } from '@storybook/react';
+
 import RadialProgress from './RadialProgress';
 
 const meta = {
@@ -34,7 +35,7 @@ const meta = {
     },
   },
   decorators: [
-    Story => (
+    (Story) => (
       <Box p={8} bg="white" borderRadius="md">
         <Story />
       </Box>

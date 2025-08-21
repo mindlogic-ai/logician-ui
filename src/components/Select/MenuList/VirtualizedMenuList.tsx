@@ -32,7 +32,7 @@ export const VirtualizedMenuList = <
     getScrollElement: () => menuListRef.current,
     estimateSize: () => optionHeight,
     overscan: 5,
-    getItemKey: index => childrenArray[index].key, // Use stable keys
+    getItemKey: (index) => childrenArray[index].key, // Use stable keys
     measureElement: (_, entry, instance) => {
       if (entry) {
         instance.measure();
@@ -102,7 +102,7 @@ export const VirtualizedMenuList = <
           position: 'relative',
         }}
       >
-        {virtualizer.getVirtualItems().map(virtualRow => (
+        {virtualizer.getVirtualItems().map((virtualRow) => (
           <div
             key={virtualRow.index}
             data-index={virtualRow.index}

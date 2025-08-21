@@ -1,8 +1,8 @@
-import { useToken } from "@chakra-ui/react";
+import { useToken } from '@chakra-ui/react';
 
-import theme from "@/theme/index";
+import theme from '@/theme/index';
 
-import { SelectVariant } from "./Select.types";
+import { SelectVariant } from './Select.types';
 
 export const placeholderStyles = {
   color: theme.colors.gray[800],
@@ -11,13 +11,13 @@ export const placeholderStyles = {
 };
 
 export const menuStyles = {
-  width: "max-content",
-  minWidth: "100%",
+  width: 'max-content',
+  minWidth: '100%',
   backgroundColor: theme.colors.white,
   borderRadius: theme.radii.md,
   border: `1px solid ${theme.colors.gray[400]}`,
   marginTop: 3,
-  boxShadow: "0px 5px 20px 0px rgba(0, 0, 0, 0.10)",
+  boxShadow: '0px 5px 20px 0px rgba(0, 0, 0, 0.10)',
   zIndex: 9,
 };
 
@@ -30,9 +30,9 @@ export const optionStyles = ({
   isFocused: boolean;
   isSelected: boolean;
 }) => ({
-  cursor: isDisabled ? "not-allowed" : "pointer",
+  cursor: isDisabled ? 'not-allowed' : 'pointer',
   height: theme.sizes[10],
-  margin: "16px 0", // Use direct spacing value instead of theme.spacing[4]
+  margin: '16px 0', // Use direct spacing value instead of theme.spacing[4]
   borderRadius: theme.radii.sm,
   fontSize: theme.fontSizes.p,
   backgroundColor:
@@ -42,41 +42,41 @@ export const optionStyles = ({
   color: isSelected
     ? theme.colors.gray[1500]
     : isDisabled
-    ? theme.colors.gray[800]
-    : theme.colors.gray[1200],
+      ? theme.colors.gray[800]
+      : theme.colors.gray[1200],
   fontWeight: isSelected
     ? theme.fontWeights.semibold
     : theme.fontWeights.normal,
-  "&:hover": {
+  '&:hover': {
     backgroundColor: theme.colors.gray[50],
   },
 });
 
 export const controlStyles = {
   borderRadius: theme.radii.md,
-  cursor: "pointer",
-  maxWidth: "100%",
-  height: "100%",
+  cursor: 'pointer',
+  maxWidth: '100%',
+  height: '100%',
   color: theme.colors.gray[1200],
   fontSize: theme.fontSizes.p,
   fontWeight: theme.fontWeights.semibold,
   paddingLeft: 4,
   paddingRight: 3,
   border: `1px solid ${theme.colors.gray[400]}`,
-  boxShadow: "none",
+  boxShadow: 'none',
 };
 
 export const getControlVariantStyles = (state: any, variant: SelectVariant) => {
   const primaryColor = useToken(
-    "colors",
+    'colors',
     theme.semanticTokens.colors.primary.main
   );
   const dangerColor = useToken(
-    "colors",
+    'colors',
     theme.semanticTokens.colors.danger.main
   );
   switch (variant) {
-    case "danger":
+    case 'danger':
       return {
         border: `1px solid ${dangerColor}`,
         boxShadow: `0 0 0 1px ${dangerColor}`,
@@ -89,13 +89,13 @@ export const getControlVariantStyles = (state: any, variant: SelectVariant) => {
         }`,
         boxShadow: state.isFocused
           ? `0 0 0 1px ${primaryColor} !important`
-          : "none",
-        "&:hover": state.isFocused
+          : 'none',
+        '&:hover': state.isFocused
           ? {
               borderColor: primaryColor,
             }
           : {
-              borderColor: useToken("colors", "gray.600"),
+              borderColor: useToken('colors', 'gray.600'),
             },
       };
   }

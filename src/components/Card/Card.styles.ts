@@ -1,4 +1,4 @@
-import theme from "@/theme/index";
+import theme from '@/theme/index';
 
 // Light mode styles only
 export const cardStyles = {
@@ -8,14 +8,14 @@ export const cardStyles = {
 };
 
 export const clickableStyles = {
-  cursor: "pointer",
+  cursor: 'pointer',
   _hover: {
-    boxShadow: "lg",
-    [".card-image"]: {
+    boxShadow: 'lg',
+    ['.card-image']: {
       // TODO: define in theme
-      transition: "0.3s all",
-      transform: "scale(1.05)",
-      backgroundSize: "105%",
+      transition: '0.3s all',
+      transform: 'scale(1.05)',
+      backgroundSize: '105%',
     },
   },
 };
@@ -25,6 +25,6 @@ export const variantStyles = {
   gradient: {
     bg: `linear-gradient(180deg, #F5F8FD 0%, #FFFFFF 100%)`,
     border: `1px solid`,
-    borderColor: "blue.600",
+    borderColor: 'blue.600',
   },
 };

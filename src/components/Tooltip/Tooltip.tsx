@@ -16,7 +16,7 @@ export const Tooltip = forwardRef(
         ref={ref}
       />
     );
-  },
+  }
 );
 
 Tooltip.displayName = 'Tooltip';

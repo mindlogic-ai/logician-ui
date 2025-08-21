@@ -1,5 +1,6 @@
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
+
 import { CopyableCode } from './CopyableCode';
 import { CopyableCodeProps } from './CopyableCode.types';
 

@@ -3,7 +3,7 @@ import { isSameMonth } from 'date-fns';
 export const isSelectionStart = (
   month: number,
   year: number,
-  selectionStart?: Date | null,
+  selectionStart?: Date | null
 ): boolean => {
   if (!selectionStart) return false;
 

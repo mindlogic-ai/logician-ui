@@ -6,12 +6,12 @@
  */
 export const formatNumber = (
   value: number | string,
-  locale: string = "en-US"
+  locale: string = 'en-US'
 ): string => {
-  const numericValue = typeof value === "string" ? parseFloat(value) : value;
+  const numericValue = typeof value === 'string' ? parseFloat(value) : value;
 
   if (isNaN(numericValue)) {
-    return "";
+    return '';
   }
 
   return new Intl.NumberFormat(locale).format(numericValue);
@@ -24,6 +24,6 @@ export const formatNumber = (
  */
 export const parseFormattedNumber = (formattedValue: string): number => {
   // Remove all non-digit characters except decimal point and negative sign
-  const cleanedValue = formattedValue.replace(/[^\d.-]/g, "");
+  const cleanedValue = formattedValue.replace(/[^\d.-]/g, '');
   return parseFloat(cleanedValue);
 };

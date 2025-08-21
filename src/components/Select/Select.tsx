@@ -83,7 +83,7 @@ export const Select = <
                   height: '100%',
                 },
                 styles?.container,
-                state,
+                state
               ),
             }),
             placeholder: (base, state) => ({
@@ -93,7 +93,7 @@ export const Select = <
                   ...placeholderStyles,
                 },
                 styles?.placeholder,
-                state,
+                state
               ),
             }),
             valueContainer: (base, state) => ({
@@ -103,7 +103,7 @@ export const Select = <
                   textAlign: 'left',
                 },
                 styles?.valueContainer,
-                state,
+                state
               ),
             }),
             singleValue: (base, state) => ({
@@ -114,7 +114,7 @@ export const Select = <
                   color: theme.colors.gray[1000],
                 },
                 styles?.singleValue,
-                state,
+                state
               ),
             }),
             menu: (base, state) => ({
@@ -124,7 +124,7 @@ export const Select = <
                   ...menuStyles,
                 },
                 styles?.menu,
-                state,
+                state
               ),
             }),
             menuList: (base, state) => ({
@@ -136,7 +136,7 @@ export const Select = <
                   // as we need the default 'auto' from react-select for scrolling to work
                 },
                 styles?.menuList,
-                state,
+                state
               ),
             }),
             option: (base, state) => ({
@@ -148,7 +148,7 @@ export const Select = <
                   ...optionStyles(state),
                 },
                 styles?.option,
-                state,
+                state
               ),
             }),
             menuPortal: (base, state) => ({
@@ -158,7 +158,7 @@ export const Select = <
                   zIndex: 9999,
                 },
                 styles?.menuPortal,
-                state,
+                state
               ),
             }),
             control: (base, state) => ({
@@ -172,7 +172,7 @@ export const Select = <
                   }),
                 },
                 styles?.control,
-                state,
+                state
               ),
             }),
             indicatorSeparator: (base, state) => ({
@@ -182,7 +182,7 @@ export const Select = <
                   display: 'none',
                 },
                 styles?.indicatorSeparator,
-                state,
+                state
               ),
             }),
             dropdownIndicator: (base, state) => ({
@@ -192,7 +192,7 @@ export const Select = <
                   color: theme.colors.gray[800],
                 },
                 styles?.dropdownIndicator,
-                state,
+                state
               ),
             }),
           }}

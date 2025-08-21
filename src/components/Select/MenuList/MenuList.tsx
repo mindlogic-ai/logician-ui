@@ -7,10 +7,10 @@ const { MenuList: DefaultMenuList } = components;
 
 // Utility to merge refs
 const mergeRefs = <T extends HTMLElement>(
-  refs: Array<React.Ref<T> | null | undefined>,
+  refs: Array<React.Ref<T> | null | undefined>
 ) => {
   return (value: T) => {
-    refs.forEach(ref => {
+    refs.forEach((ref) => {
       if (!ref) return;
 
       if (typeof ref === 'function') {
@@ -49,7 +49,7 @@ export const MenuList = <
       // Check if scrolled to bottom (with small buffer for browser precision)
       const scrolledToBottom =
         Math.abs(
-          element.scrollHeight - element.scrollTop - element.clientHeight,
+          element.scrollHeight - element.scrollTop - element.clientHeight
         ) < 2;
 
       // Only trigger if scrolling down AND reached the bottom
@@ -65,17 +65,17 @@ export const MenuList = <
     menuListElement.addEventListener('scroll', handleScroll as EventListener);
     menuListElement.addEventListener(
       'touchmove',
-      handleScroll as EventListener,
+      handleScroll as EventListener
     );
 
     return () => {
       menuListElement.removeEventListener(
         'scroll',
-        handleScroll as EventListener,
+        handleScroll as EventListener
       );
       menuListElement.removeEventListener(
         'touchmove',
-        handleScroll as EventListener,
+        handleScroll as EventListener
       );
     };
   }, [onMenuScrollToBottom]);
