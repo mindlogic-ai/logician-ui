@@ -1,5 +1,5 @@
 ---
-"logician-design-system": minor
+"logician-ui": minor
 ---
 
 Remove ColorPicker component

@@ -1,10 +1,18 @@
+import React, { useState } from "react";
 import { Meta, StoryFn } from "@storybook/react";
 import { Button } from "@chakra-ui/react";
 import { Menu, MenuButton, MenuList, MenuItem } from ".";
-import { Icon, IconTypes } from "@/components/Icon";
-import { MenuItemProps } from "@/components/Menu/MenuItem.types";
-import { IconButton } from "@/components/IconButton";
-import { useState } from "react";
+import { Icon, IconType } from "../Icon";
+import { MenuItemProps } from "./MenuItem.types";
+import { IconButton } from "../IconButton";
+
+// Interface for story-specific menu item data
+interface StoryMenuItemProps {
+  label: string;
+  onClick?: () => void;
+  itemIcon?: React.ReactElement;
+  variant?: MenuItemProps["variant"];
+}
 
 const meta: Meta = {
   title: "Components/Menu",
@@ -23,7 +31,7 @@ const meta: Meta = {
 
 export default meta;
 
-type Story = StoryFn<{ label: string; menuItems: MenuItemProps[] }>;
+type Story = StoryFn<{ label: string; menuItems: StoryMenuItemProps[] }>;
 
 const Template: Story = ({ label, menuItems, ...args }) => (
   <Menu>
@@ -40,10 +48,11 @@ const Template: Story = ({ label, menuItems, ...args }) => (
         <MenuItem
           key={item.label}
           variant={item.variant}
-          itemIcon={item.itemIcon}
+          icon={item.itemIcon}
           onClick={item.onClick}
-          label={item.label}
-        />
+        >
+          {item.label}
+        </MenuItem>
       ))}
     </MenuList>
   </Menu>
@@ -66,12 +75,12 @@ IconMenu.args = {
     {
       label: "Profile",
       onClick: () => alert("Profile clicked"),
-      itemIcon: <Icon icon={IconTypes.SlSettings} />,
+      itemIcon: <Icon icon="SlSettings" />,
     },
     {
       label: "Settings",
       onClick: () => alert("Settings clicked"),
-      itemIcon: <Icon icon={IconTypes.SlSettings} />,
+      itemIcon: <Icon icon="SlSettings" />,
     },
   ],
 };
@@ -83,7 +92,7 @@ DangerMenu.args = {
     {
       label: "Settings",
       onClick: () => alert("Settings clicked"),
-      itemIcon: <Icon icon={IconTypes.SlSettings} />,
+      itemIcon: <Icon icon="SlSettings" />,
       variant: "danger",
     },
   ],
@@ -102,10 +111,11 @@ const IconButtonTemplate: Story = ({ menuItems, ...args }) => (
         <MenuItem
           key={item.label}
           variant={item.variant}
-          itemIcon={item.itemIcon}
+          icon={item.itemIcon}
           onClick={item.onClick}
-          label={item.label}
-        />
+        >
+          {item.label}
+        </MenuItem>
       ))}
     </MenuList>
   </Menu>
@@ -118,7 +128,7 @@ IconButtonTriggerMenu.args = {
     {
       label: "Settings",
       onClick: () => alert("Settings clicked"),
-      itemIcon: <Icon icon={IconTypes.SlSettings} />,
+      itemIcon: <Icon icon="SlSettings" />,
     },
   ],
 };
@@ -151,15 +161,14 @@ const SelectiveIconTemplate: Story = ({ label, menuItems, ...args }) => {
           <MenuItem
             key={item.label}
             onClick={() => handleItemClick(item.label, item.onClick)}
-            label={item.label}
-            itemIcon={
+            icon={
               selectedLabel === item.label ? (
-                <Icon icon={IconTypes.SlSettings} />
-              ) : (
-                <></>
-              )
+                <Icon icon="SlSettings" />
+              ) : undefined
             }
-          />
+          >
+            {item.label}
+          </MenuItem>
         ))}
       </MenuList>
     </Menu>

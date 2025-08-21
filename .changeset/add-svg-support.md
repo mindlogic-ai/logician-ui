@@ -1,5 +1,5 @@
 ---
-"logician-design-system": minor
+"logician-ui": minor
 ---
 
 Add comprehensive SVG support and fix translation paths

@@ -1,5 +1,5 @@
 ---
-"logician-design-system": minor
+"logician-ui": minor
 ---
 
 Reorganize project structure with src directory for better organization

@@ -2,37 +2,29 @@
 
 This document provides detailed examples of how to use the Logician Design System in your projects.
 
-## Using as a Git Submodule
+## Installation & Setup
 
-### Adding the Submodule
+### NPM Package Installation
 
 ```bash
-# Add as a submodule in your project
-git submodule add https://github.com/yourusername/logician-design-system.git src/design-system
+# Install the package
+yarn add logician-ui
+# or
+npm install logician-ui
 
-# Initialize the submodule
-git submodule update --init --recursive
+# Install required peer dependencies
+yarn add react react-dom @chakra-ui/react @emotion/react @emotion/styled framer-motion
 ```
 
-### Importing Components
+### Basic Setup
 
 ```tsx
-// Import specific components
-import { Button, Input, Card } from "../design-system";
+import { ChakraProvider } from "@chakra-ui/react";
+import { Button, Input, Card } from "logician-ui";
 
-// Or import from specific component directories
-import { Button } from "../design-system/src/components/Button";
-```
-
-### Updating the Submodule
-
-```bash
-# Update to latest version
-git submodule update --remote
-
-# Commit the submodule update
-git add .
-git commit -m "Update design system to latest version"
+function App() {
+  return <ChakraProvider>{/* Your app content */}</ChakraProvider>;
+}
 ```
 
 ## Example Implementations
@@ -42,7 +34,7 @@ git commit -m "Update design system to latest version"
 ```tsx
 import React from "react";
 import { ChakraProvider } from "@chakra-ui/react";
-import { Button, Input, FormLabel, Card } from "logician-design-system";
+import { Button, Input, FormLabel, Card } from "logician-ui";
 
 function LoginForm() {
   return (
@@ -72,14 +64,7 @@ function LoginForm() {
 ```tsx
 import React from "react";
 import { ChakraProvider, Box, Grid, GridItem } from "@chakra-ui/react";
-import {
-  Button,
-  Card,
-  Badge,
-  Table,
-  Avatar,
-  Typography,
-} from "logician-design-system";
+import { Button, Card, Badge, Table, Avatar, Typography } from "logician-ui";
 
 function Dashboard() {
   return (
@@ -137,7 +122,7 @@ function Dashboard() {
 
 ```tsx
 import React, { useState } from "react";
-import { Button, Modal, Input, FormLabel } from "logician-design-system";
+import { Button, Modal, Input, FormLabel } from "logician-ui";
 
 function UserSettingsModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -169,9 +154,67 @@ function UserSettingsModal() {
 }
 ```
 
-## Path Aliases in Your Project
+## TypeScript Configuration
 
-If you want to use path aliases in your main project, update your `tsconfig.json`:
+### Path Aliases (Optional)
+
+If you want to use shorter import paths, you can set up TypeScript path aliases in your `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/ui/*": ["node_modules/logician-ui/src/*"]
+    }
+  }
+}
+```
+
+Then import like this:
+
+```tsx
+import { Button, Input } from "@/ui/components";
+```
+
+## Legacy: Git Submodule Usage
+
+> **⚠️ Deprecated**: The following instructions are for legacy submodule usage. We recommend using the NPM package instead.
+
+### Adding the Submodule
+
+```bash
+# Add as a submodule in your project
+git submodule add https://github.com/yourusername/logician-ui.git src/design-system
+
+# Initialize the submodule
+git submodule update --init --recursive
+```
+
+### Importing Components (Submodule)
+
+```tsx
+// Import specific components (submodule)
+import { Button, Input, Card } from "../design-system";
+
+// Or import from specific component directories (submodule)
+import { Button } from "../design-system/src/components/Button";
+```
+
+### Updating the Submodule
+
+```bash
+# Update to latest version
+git submodule update --remote
+
+# Commit the submodule update
+git add .
+git commit -m "Update design system to latest version"
+```
+
+### Path Aliases for Submodules
+
+If using submodules, update your `tsconfig.json`:
 
 ```json
 {

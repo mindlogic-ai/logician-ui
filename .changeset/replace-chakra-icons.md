@@ -1,5 +1,5 @@
 ---
-"logician-design-system": patch
+"logician-ui": patch
 ---
 
 Replace @chakra-ui/icons usage with custom Icon component equivalents

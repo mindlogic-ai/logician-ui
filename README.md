@@ -2,8 +2,6 @@
 
 A comprehensive React design system built on Chakra UI, providing a complete set of reusable UI components for building modern web applications.
 
-> **Note**: This is a source-only design system intended to be used as a Git submodule. Components are compiled and type-checked in your host project alongside your app code.
-
 ## Features
 
 - 🎨 **70+ Components** - Comprehensive set of UI components
@@ -16,31 +14,15 @@ A comprehensive React design system built on Chakra UI, providing a complete set
 
 ## Installation
 
-### As a Git Submodule
+### As an NPM Package
 
-This design system is designed to be used as a Git submodule in your projects:
-
-```bash
-# Add as submodule
-git submodule add https://github.com/yourusername/logician-design-system.git src/components/design-system
-
-# Initialize and update
-git submodule update --init --recursive
-```
-
-### As an NPM Package (Optional)
-
-While this design system is primarily intended for submodule use, it can also be published as an npm package:
+Install the design system as an NPM package in your project:
 
 ```bash
-yarn add logician-design-system
+yarn add logician-ui
 # or
-npm install logician-design-system
+npm install logician-ui
 ```
-
-Note: When using as an npm package, you'll import the source TypeScript files directly.
-
-## Usage
 
 ### Prerequisites
 
@@ -50,13 +32,29 @@ Make sure you have the required peer dependencies installed:
 yarn add react react-dom @chakra-ui/react @emotion/react @emotion/styled framer-motion
 ```
 
+### As a Git Submodule (Legacy)
+
+> **Note**: Submodule usage is legacy. We recommend using the NPM package for better dependency management and easier updates.
+
+If you need to use as a submodule:
+
+```bash
+# Add as submodule
+git submodule add https://github.com/yourusername/logician-ui.git src/components/design-system
+
+# Initialize and update
+git submodule update --init --recursive
+```
+
+## Usage
+
 ### Basic Setup
 
 Wrap your application with Chakra UI's `ChakraProvider`:
 
 ```tsx
 import { ChakraProvider } from "@chakra-ui/react";
-import { Button, Input, Card } from "logician-design-system";
+import { Button, Input, Card } from "logician-ui";
 
 function App() {
   return (

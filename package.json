@@ -1,18 +1,23 @@
 {
-  "name": "logician-design-system",
+  "name": "logician-ui",
   "version": "1.0.0",
   "description": "A comprehensive React design system built on Chakra UI",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
   "files": [
+    "dist",
     "src",
     "README.md",
     "USAGE.md"
   ],
   "scripts": {
+    "build": "tsc && tsc-alias",
+    "build:watch": "tsc --watch",
+    "prepublishOnly": "yarn build",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
-    "type-check": "echo 'Type checking skipped - components are built in host project'",
+    "type-check": "tsc --noEmit",
     "test": "echo 'No tests specified'",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
@@ -103,12 +108,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/logician-design-system.git"
+    "url": "git+https://github.com/yourusername/logician-ui.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/logician-design-system/issues"
+    "url": "https://github.com/yourusername/logician-ui/issues"
   },
-  "homepage": "https://github.com/yourusername/logician-design-system#readme",
+  "homepage": "https://github.com/yourusername/logician-ui#readme",
   "engines": {
     "node": ">=16.0.0",
     "yarn": ">=1.22.0"

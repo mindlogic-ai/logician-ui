@@ -1,5 +1,5 @@
 ---
-"logician-design-system": major
+"logician-ui": major
 ---
 
 Remove color mode functionality and simplify to light mode only

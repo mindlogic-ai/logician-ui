@@ -1,5 +1,5 @@
 ---
-"logician-design-system": minor
+"logician-ui": minor
 ---
 
 Add Storybook 8.6 for interactive component development and documentation

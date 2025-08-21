@@ -1,5 +1,5 @@
 ---
-"logician-design-system": major
+"logician-ui": major
 ---
 
 Clean up dependencies and remove unused components
