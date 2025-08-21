@@ -1,4 +1,4 @@
-import theme from "@/theme/index";
+import theme from '@/theme/index';
 
 // Light mode styles only
 export const iconStyles = {

@@ -1,2 +1,2 @@
-export { CopyableCode } from "./CopyableCode";
-export type { CopyableCodeProps } from "./CopyableCode.types";
+export { CopyableCode } from './CopyableCode';
+export type { CopyableCodeProps } from './CopyableCode.types';

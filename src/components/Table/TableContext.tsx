@@ -24,7 +24,7 @@ interface TableContextValue extends TableScrollState {
   registerStickyColumn: (
     direction: 'left' | 'right',
     index: number,
-    width: number,
+    width: number
   ) => void;
   getStickyOffset: (direction: 'left' | 'right', index: number) => number;
   isLastStickyColumn: (direction: 'left' | 'right', index: number) => boolean;
@@ -67,7 +67,7 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children }) => {
     const isScrollStart = scrollLeft <= 1;
     const isScrollEnd = Math.abs(scrollWidth - clientWidth - scrollLeft) <= 1;
 
-    setScrollState(prevState => {
+    setScrollState((prevState) => {
       // 상태가 변경된 경우에만 업데이트 (불필요한 리렌더링 방지)
       if (
         prevState.isScrollStart !== isScrollStart ||
@@ -92,7 +92,7 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children }) => {
         updateScrollState();
       }
     },
-    [updateScrollState],
+    [updateScrollState]
   );
 
   // Register a sticky column with its width
@@ -104,7 +104,7 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children }) => {
         stickyColumnsRef.current.rightColumnWidths.set(index, width);
       }
     },
-    [],
+    []
   );
 
   // Get the offset for a sticky column based on its index and direction
@@ -124,7 +124,7 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children }) => {
 
       return offset;
     },
-    [],
+    []
   );
 
   // Check if a column is the last sticky column on its side
@@ -143,7 +143,7 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children }) => {
 
       return index === maxIndex;
     },
-    [],
+    []
   );
 
   // 단일 useEffect에서 모든 이벤트 리스너 관리

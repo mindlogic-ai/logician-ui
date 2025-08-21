@@ -9,7 +9,7 @@ import { baseStyles } from './Badge.styles';
 export const Badge = forwardRef(
   (
     { textTransform = 'none', ...rest }: ChakraBadgeProps,
-    ref?: ForwardedRef<HTMLButtonElement>,
+    ref?: ForwardedRef<HTMLButtonElement>
   ) => {
     return (
       <ChakraBadge
@@ -20,7 +20,7 @@ export const Badge = forwardRef(
         ref={ref}
       />
     );
-  },
+  }
 );
 
 Badge.displayName = 'Badge';

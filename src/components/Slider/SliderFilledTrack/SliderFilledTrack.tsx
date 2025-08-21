@@ -8,7 +8,7 @@ export const SliderFilledTrack = forwardRef(
     return (
       <ChakraSliderFilledTrack bgColor="primary.main" {...rest} ref={ref} />
     );
-  },
+  }
 );
 
 SliderFilledTrack.displayName = 'SliderFilledTrack';

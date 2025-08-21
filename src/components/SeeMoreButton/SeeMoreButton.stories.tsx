@@ -1,5 +1,6 @@
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
+
 import { SeeMoreButton } from './SeeMoreButton';
 import { SeeMoreButtonProps } from './SeeMoreButton.types';
 
@@ -25,11 +26,11 @@ export default {
   },
 } as Meta<typeof SeeMoreButton>;
 
-export const Default: StoryFn<SeeMoreButtonProps> = args => {
+export const Default: StoryFn<SeeMoreButtonProps> = (args) => {
   const [currentCount, setCurrentCount] = React.useState(args.currentCount);
 
   const handleClick = () => {
-    setCurrentCount(prev => Math.min(prev + 1, args.maxCount));
+    setCurrentCount((prev) => Math.min(prev + 1, args.maxCount));
   };
 
   return (

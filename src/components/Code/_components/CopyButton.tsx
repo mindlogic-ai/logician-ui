@@ -12,15 +12,15 @@ export const CopyButton = ({
 }: Omit<IconButtonProps, 'aria-label'>) => {
   const translate = useTranslate();
   const [labelText, setLabelText] = useState<string>(
-    translate('copy') as string,
+    translate('copy') as string
   );
 
   //   Allow both boolean and undefined to toggle back and forth between controlled and uncontrolled states fluidly
   const [isTooltipOpen, setIsTooltipOpen] = useState<boolean | undefined>(
-    undefined,
+    undefined
   );
 
-  const handleClick: MouseEventHandler = e => {
+  const handleClick: MouseEventHandler = (e) => {
     // Set it to 'Copied'
     setLabelText(translate('copied') as string);
     onClick?.(e);

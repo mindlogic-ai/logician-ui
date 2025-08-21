@@ -1,23 +1,24 @@
 // src/components/Carousel.stories.tsx
 
 import React, { useState } from 'react';
-import { Meta, StoryFn } from '@storybook/react';
-import { Carousel } from './Carousel';
 import {
-  Image,
   Box,
-  Heading,
-  Text,
   Button,
   ChakraProvider,
+  Heading,
+  Image,
+  Text,
 } from '@chakra-ui/react';
+import { Meta, StoryFn } from '@storybook/react';
+
+import { Carousel } from './Carousel';
 
 // Define the metadata for the Carousel component
 const meta: Meta<typeof Carousel> = {
   title: 'Components/Carousel',
   component: Carousel,
   decorators: [
-    Story => (
+    (Story) => (
       <ChakraProvider>
         <Story />
       </ChakraProvider>
@@ -51,7 +52,7 @@ export default meta;
 type StoryType = StoryFn<typeof Carousel>;
 
 // Template for creating stories
-const Template: StoryType = args => <Carousel {...args} />;
+const Template: StoryType = (args) => <Carousel {...args} />;
 
 export const ImageCarousel: StoryType = Template.bind({});
 ImageCarousel.storyName = 'Carousel with Images';
@@ -150,7 +151,7 @@ export const ControlledCarouselExample = () => {
           Slide 3
         </Box>
       </Carousel>
-      <Button onClick={() => setCurrentSlide(prev => (prev + 1) % 3)}>
+      <Button onClick={() => setCurrentSlide((prev) => (prev + 1) % 3)}>
         Next Slide
       </Button>
     </div>

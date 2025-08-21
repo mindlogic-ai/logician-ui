@@ -1,20 +1,20 @@
-import { useState, lazy, Suspense } from "react";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { a11yDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { Box, Flex, Spinner } from "@chakra-ui/react";
+import { lazy, Suspense, useState } from 'react';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { Box, Flex, Spinner } from '@chakra-ui/react';
 
-import { useTranslate } from "@/hooks/useTranslate";
+import { useTranslate } from '@/hooks/useTranslate';
 
-import { Card } from "../Card";
-import { InlineCode } from "../InlineCode";
-import { SegmentedControl } from "../SegmentedControl";
-import { Subtext } from "../Typography";
-import { CopyButton } from "./_components/CopyButton";
-import { CodeProps } from "./Code.types";
+import { Card } from '../Card';
+import { InlineCode } from '../InlineCode';
+import { SegmentedControl } from '../SegmentedControl';
+import { Subtext } from '../Typography';
+import { CopyButton } from './_components/CopyButton';
+import { CodeProps } from './Code.types';
 
 // Use dynamic import to break circular dependency
 const Markdown = lazy(() =>
-  import("../Markdown").then((module) => ({ default: module.Markdown }))
+  import('../Markdown').then((module) => ({ default: module.Markdown }))
 );
 
 export const Code = ({
@@ -27,7 +27,7 @@ export const Code = ({
   containerProps,
   ...rest
 }: CodeProps) => {
-  const language = languageProp === "js" ? "javascript" : languageProp;
+  const language = languageProp === 'js' ? 'javascript' : languageProp;
 
   const translate = useTranslate();
 
@@ -39,7 +39,7 @@ export const Code = ({
   };
 
   const handleMarkdownModeChange = (selectedValue: string) => {
-    setIsMarkdownPreviewMode(selectedValue === "preview");
+    setIsMarkdownPreviewMode(selectedValue === 'preview');
   };
 
   // On click (not drag), select the code content
@@ -47,13 +47,13 @@ export const Code = ({
     e: React.MouseEvent<HTMLPreElement>
   ) => {
     // Skip selection on double-click or if user is already selecting text
-    if (e.detail > 1 || window.getSelection()?.toString() !== "") {
+    if (e.detail > 1 || window.getSelection()?.toString() !== '') {
       return;
     }
 
     try {
       // Find the first child element that contains the code text
-      const codeElement = e.currentTarget.querySelector("code");
+      const codeElement = e.currentTarget.querySelector('code');
 
       if (codeElement) {
         const range = document.createRange();
@@ -66,7 +66,7 @@ export const Code = ({
         }
       }
     } catch (error) {
-      console.error("Error selecting code content:", error);
+      console.error('Error selecting code content:', error);
     }
   };
 
@@ -75,7 +75,7 @@ export const Code = ({
       p={0}
       borderRadius="none"
       {...containerProps}
-      className={["ml-code", containerProps?.className].join(" ")}
+      className={['ml-code', containerProps?.className].join(' ')}
     >
       {!hideHeader && language && (
         <Flex
@@ -94,17 +94,17 @@ export const Code = ({
             <pre>{language}</pre>
           </Subtext>
           <Flex align="center" justify="flex-end" gap={2}>
-            {language === "markdown" && (
+            {language === 'markdown' && (
               <SegmentedControl
                 size="sm"
                 options={[
                   {
-                    label: translate("code_markdown_raw") as string,
-                    value: "raw",
+                    label: translate('code_markdown_raw') as string,
+                    value: 'raw',
                   },
                   {
-                    label: translate("code_markdown_preview") as string,
-                    value: "preview",
+                    label: translate('code_markdown_preview') as string,
+                    value: 'preview',
                   },
                 ]}
                 onSelect={handleMarkdownModeChange}
@@ -142,7 +142,7 @@ export const Code = ({
               wrapLongLines
               {...rest}
               customStyle={{
-                maxWidth: "100%",
+                maxWidth: '100%',
                 margin: 0,
                 borderRadius: 0,
                 ...customStyle,

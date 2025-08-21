@@ -12,12 +12,12 @@ export const Button = forwardRef(
       size,
       ...rest
     }: ButtonProps,
-    ref,
+    ref
   ) => {
     const theme = useTheme();
     const primaryMainColor = useToken(
       'colors',
-      theme.semanticTokens.colors.primary.main,
+      theme.semanticTokens.colors.primary.main
     );
     return (
       <ChakraButton
@@ -37,7 +37,7 @@ export const Button = forwardRef(
         {...rest}
       />
     );
-  },
+  }
 );
 
 Button.displayName = 'Button';

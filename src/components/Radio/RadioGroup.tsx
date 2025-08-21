@@ -7,7 +7,7 @@ import { RadioGroupProps, RadioOption } from './Radio.types';
 export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
   (
     { options, value, onChange, direction = 'column', spacing = 3, ...rest },
-    ref,
+    ref
   ) => {
     return (
       <ChakraRadioGroup value={value} onChange={onChange} {...rest}>
@@ -20,7 +20,7 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
         </Stack>
       </ChakraRadioGroup>
     );
-  },
+  }
 );
 
 RadioGroup.displayName = 'RadioGroup';

@@ -2,7 +2,7 @@ import React from 'react';
 import { TextProps } from '@chakra-ui/react';
 import { Meta, StoryFn } from '@storybook/react';
 
-import { H1, H2, H3, H4, H5, Subtitle, Subtext, Text, Link } from '.';
+import { H1, H2, H3, H4, H5, Link, Subtext, Subtitle, Text } from '.';
 
 const meta: Meta<typeof Text> = {
   title: 'Components/Typography',

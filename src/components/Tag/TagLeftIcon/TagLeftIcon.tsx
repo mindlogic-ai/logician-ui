@@ -1,7 +1,7 @@
-import { ForwardedRef, forwardRef } from "react";
-import { TagLeftIcon as ChakraTagLeftIcon } from "@chakra-ui/react";
+import { ForwardedRef, forwardRef } from 'react';
+import { TagLeftIcon as ChakraTagLeftIcon } from '@chakra-ui/react';
 
-import { TagLeftIconProps } from "./TagLeftIcon.types";
+import { TagLeftIconProps } from './TagLeftIcon.types';
 
 export const TagLeftIcon = forwardRef(
   ({ ...rest }: TagLeftIconProps, ref?: ForwardedRef<SVGSVGElement>) => {
@@ -9,4 +9,4 @@ export const TagLeftIcon = forwardRef(
   }
 );
 
-TagLeftIcon.displayName = "TagLeftIcon";
+TagLeftIcon.displayName = 'TagLeftIcon';

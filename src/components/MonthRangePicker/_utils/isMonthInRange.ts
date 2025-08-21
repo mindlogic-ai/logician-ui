@@ -5,7 +5,7 @@ import { MonthRange } from '../MonthRangePicker.types';
 export const isMonthInRange = (
   month: number,
   year: number,
-  selectedRange?: MonthRange | null,
+  selectedRange?: MonthRange | null
 ): boolean => {
   if (!selectedRange || !selectedRange.endMonth) return false;
 

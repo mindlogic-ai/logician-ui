@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Box } from '@chakra-ui/react';
+
 import { MDXEditor } from './MDXEditor';
 
 const meta = {

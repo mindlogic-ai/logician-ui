@@ -47,7 +47,7 @@ export const GuideCueProvider = ({
   onComplete?: () => void;
 }) => {
   const [cueRefs, setCueRefs] = useState<React.RefObject<HTMLElement>[]>(
-    Array.from({ length: numSteps }, () => createRef<HTMLElement>()),
+    Array.from({ length: numSteps }, () => createRef<HTMLElement>())
   );
   const [currentIndex, setCurrentIndex] = useState(0);
 

@@ -6,7 +6,7 @@ import { TagCloseButtonProps } from './TagCloseButton.types';
 export const TagCloseButton = forwardRef(
   ({ ...rest }: TagCloseButtonProps, ref?: ForwardedRef<HTMLDivElement>) => {
     return <ChakraTagCloseButton {...rest} ref={ref} />;
-  },
+  }
 );
 
 TagCloseButton.displayName = 'TagCloseButton';

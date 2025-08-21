@@ -16,7 +16,7 @@ const meta: Meta<typeof Tabs> = {
 export default meta;
 type Story = StoryFn<typeof Tabs>;
 
-const RenderTemplate = props => {
+const RenderTemplate = (props) => {
   return (
     <Tabs {...props}>
       <TabList>

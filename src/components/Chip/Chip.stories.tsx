@@ -17,9 +17,9 @@ const meta: Meta<typeof Chip> = {
 export default meta;
 type Story = StoryFn<typeof Chip>;
 
-export const Basic: Story = args => <Chip {...args} />;
+export const Basic: Story = (args) => <Chip {...args} />;
 
-export const AllChipVariants: Story = args => {
+export const AllChipVariants: Story = (args) => {
   const useCases = Object.keys(useCaseStyles) as Array<ChipUseCase>;
   const variants = ['solid', 'outline', 'subtle'];
   return (
@@ -28,10 +28,10 @@ export const AllChipVariants: Story = args => {
         <p>default</p>
         <Chip {...args} />
       </Flex>
-      {useCases.map(useCase => (
+      {useCases.map((useCase) => (
         <Flex mb="16px" gap="16px" align="center">
           <p style={{ width: '100px' }}>{useCase}</p>
-          {variants.map(variant => (
+          {variants.map((variant) => (
             <div>
               <p>{variant}</p>
               <Chip {...args} useCase={useCase} variant={variant} />

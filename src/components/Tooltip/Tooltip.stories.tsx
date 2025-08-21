@@ -1,29 +1,23 @@
-import React, { useState } from "react";
-import { Tooltip } from "./Tooltip";
-import { Meta, StoryFn } from "@storybook/react";
-import {
-  Button,
-  IconButton,
-  Text,
-  Box,
-  VStack,
-  HStack,
-} from "@chakra-ui/react";
-import { Icon } from "../Icon";
+import React, { useState } from 'react';
+import { Box, Button, HStack, IconButton, VStack } from '@chakra-ui/react';
+import { Meta, StoryFn } from '@storybook/react';
+
+import { Icon } from '../Icon';
+import { Tooltip } from './Tooltip';
 
 export default {
-  title: "Components/Tooltip",
+  title: 'Components/Tooltip',
   component: Tooltip,
   args: {
-    label: "This is a tooltip",
+    label: 'This is a tooltip',
   },
   argTypes: {
     placement: {
-      control: { type: "select" },
-      options: ["top", "bottom", "left", "right", "auto"],
+      control: { type: 'select' },
+      options: ['top', 'bottom', 'left', 'right', 'auto'],
     },
     isOpen: {
-      control: { type: "boolean" },
+      control: { type: 'boolean' },
     },
   },
 } as Meta<typeof Tooltip>;
@@ -38,7 +32,7 @@ const Template: StoryFn<typeof Tooltip> = (args) => (
 
 export const Default = Template.bind({});
 Default.args = {
-  label: "This is a default tooltip",
+  label: 'This is a default tooltip',
 };
 
 export const DifferentPlacements: StoryFn<typeof Tooltip> = () => (
@@ -72,18 +66,18 @@ export const LongTooltipContent: StoryFn<typeof Tooltip> = () => (
 );
 
 export const CopyButtonExample: StoryFn<typeof Tooltip> = () => {
-  const [tooltipLabel, setTooltipLabel] = useState("Click to copy");
+  const [tooltipLabel, setTooltipLabel] = useState('Click to copy');
   const [isTooltipOpen, setIsTooltipOpen] = useState<boolean | undefined>(
     undefined
   );
 
   const handleCopy = () => {
-    navigator.clipboard.writeText("Hello World!");
-    setTooltipLabel("Copied!");
+    navigator.clipboard.writeText('Hello World!');
+    setTooltipLabel('Copied!');
     setIsTooltipOpen(true);
 
     setTimeout(() => {
-      setTooltipLabel("Click to copy");
+      setTooltipLabel('Click to copy');
       setIsTooltipOpen(undefined);
     }, 2000);
   };

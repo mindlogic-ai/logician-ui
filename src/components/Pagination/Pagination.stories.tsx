@@ -1,5 +1,6 @@
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
+
 import { Pagination } from './Pagination';
 import { PaginationProps } from './Pagination.types';
 
@@ -18,7 +19,7 @@ export default {
   },
 } as Meta<typeof Pagination>;
 
-export const Default: StoryFn<PaginationProps> = args => {
+export const Default: StoryFn<PaginationProps> = (args) => {
   const [currentPage, setCurrentPage] = React.useState(args.currentPage ?? 0);
   const [itemsPerPage, setItemsPerPage] = React.useState(args.itemsPerPage);
 
@@ -27,10 +28,10 @@ export const Default: StoryFn<PaginationProps> = args => {
       {...args}
       currentPage={currentPage}
       onCurrentPageChange={setCurrentPage}
-      onBack={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+      onBack={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
       onNext={() =>
-        setCurrentPage(prev =>
-          Math.min(prev + 1, Math.ceil(args.numTotalItems / itemsPerPage)),
+        setCurrentPage((prev) =>
+          Math.min(prev + 1, Math.ceil(args.numTotalItems / itemsPerPage))
         )
       }
       numTotalItems={args.numTotalItems}
@@ -41,7 +42,7 @@ export const Default: StoryFn<PaginationProps> = args => {
   );
 };
 
-export const NoItemsPerPageOptions: StoryFn<PaginationProps> = args => {
+export const NoItemsPerPageOptions: StoryFn<PaginationProps> = (args) => {
   return <Pagination {...args} />;
 };
 

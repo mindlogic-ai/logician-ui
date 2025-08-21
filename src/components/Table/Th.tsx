@@ -26,7 +26,7 @@ export const Th = forwardRef<
       onMouseLeave,
       ...rest
     },
-    forwardedRef,
+    forwardedRef
   ) => {
     const tableContext = useTableContext();
     const measureNodeRef = useRef<HTMLTableCellElement | null>(null);
@@ -57,7 +57,7 @@ export const Th = forwardRef<
             forwardedRef.current = node;
           }
         },
-        [forwardedRef],
+        [forwardedRef]
       );
 
       return (
@@ -107,7 +107,7 @@ export const Th = forwardRef<
           forwardedRef.current = node;
         }
       },
-      [forwardedRef],
+      [forwardedRef]
     );
 
     // Get the sticky offset based on the column's position
@@ -125,7 +125,7 @@ export const Th = forwardRef<
       stickyDirection,
       scrollState,
       stickyOffset,
-      isLastSticky,
+      isLastSticky
     );
 
     return (
@@ -148,7 +148,7 @@ export const Th = forwardRef<
         {children}
       </ChakraTh>
     );
-  },
+  }
 );
 
 Th.displayName = 'Th';

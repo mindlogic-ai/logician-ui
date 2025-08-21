@@ -14,7 +14,7 @@ import { BannerProps } from './Banner.types';
 export const Banner = forwardRef(
   (
     { children, variant = 'info', hideIcon = false, ...rest }: BannerProps,
-    ref?: ForwardedRef<HTMLDivElement>,
+    ref?: ForwardedRef<HTMLDivElement>
   ) => {
     return (
       <Box
@@ -61,7 +61,7 @@ export const Banner = forwardRef(
         </Flex>
       </Box>
     );
-  },
+  }
 );
 
 Banner.displayName = 'Banner';

@@ -1,7 +1,8 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { FileItem } from './FileItem';
 import { FileItemProps } from '@/components/FileItem/FileItem.types';
+
+import { FileItem } from './FileItem';
 
 const meta: Meta<typeof FileItem> = {
   title: 'Components/FileItem',

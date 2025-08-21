@@ -1,8 +1,8 @@
 import React from 'react';
+import { Box, Flex, Text, VStack } from '@chakra-ui/react';
 import { Meta, StoryFn } from '@storybook/react';
-import { Box, VStack, Text, Flex } from '@chakra-ui/react';
 
-import { SegmentedProgressBar, ProgressSegment } from './';
+import { ProgressSegment, SegmentedProgressBar } from './';
 
 const meta: Meta<typeof SegmentedProgressBar> = {
   title: 'Components/SegmentedProgressBar',
@@ -35,7 +35,7 @@ export default meta;
 
 type Story = StoryFn<typeof SegmentedProgressBar>;
 
-const Template: Story = args => (
+const Template: Story = (args) => (
   <Box width="400px">
     <SegmentedProgressBar {...args}>
       <ProgressSegment value={30} filledTrackColor="primary.main" />

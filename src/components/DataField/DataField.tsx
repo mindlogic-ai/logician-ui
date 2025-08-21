@@ -1,24 +1,24 @@
-import { useRef, useState } from "react";
+import { useRef, useState } from 'react';
 import {
   Box,
   Editable,
   EditableInput,
   EditablePreview,
   Tooltip,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
-import { AutowidthInput } from "@/components/AutowidthInput";
+import { AutowidthInput } from '@/components/AutowidthInput';
 import {
   editablePreviewStyles,
   editableStyles,
   inputStyles,
   previewWrapperStyles,
-} from "@/components/DataField/DataField.styles";
-import { DataFieldProps } from "@/components/DataField/DataField.types";
-import { IconButton } from "@/components/IconButton";
-import { Text } from "@/components/Typography";
-import theme from "@/theme/index";
-import { Icon } from "../Icon";
+} from '@/components/DataField/DataField.styles';
+import { DataFieldProps } from '@/components/DataField/DataField.types';
+import { IconButton } from '@/components/IconButton';
+import { Text } from '@/components/Typography';
+
+import { Icon } from '../Icon';
 
 const TOOLTIP_DISPLAY_TIME = 3000;
 
@@ -123,7 +123,7 @@ export const DataField = ({
           </Editable>
         ) : (
           <Box>
-            {value}{" "}
+            {value}{' '}
             {isCopyable && (
               <Tooltip label="Copied!" isOpen={hasOpenCopyTooltip}>
                 <IconButton

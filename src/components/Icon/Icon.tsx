@@ -1,37 +1,37 @@
-import React, { forwardRef } from "react";
-import { IconType as ReactIconType } from "react-icons/lib";
-import { chakra, useToken } from "@chakra-ui/react";
+import React, { forwardRef } from 'react';
+import { IconType as ReactIconType } from 'react-icons/lib';
+import { chakra, useToken } from '@chakra-ui/react';
 
-import { iconStyles } from "@/components/Icon/Icon.styles";
+import { iconStyles } from '@/components/Icon/Icon.styles';
 
-import { IconProps } from "./Icon.types";
-import { CUSTOM_ICON_MAP, REACT_ICONS_MAP } from "./IconMap";
+import { IconProps } from './Icon.types';
+import { CUSTOM_ICON_MAP, REACT_ICONS_MAP } from './IconMap';
 
 export const Icon = forwardRef<SVGSVGElement, IconProps>(
   (
     {
       icon,
       color,
-      boxSize = "md", // Default to 'md' size
+      boxSize = 'md', // Default to 'md' size
       ...rest
     }: IconProps,
     ref
   ) => {
     // Map `boxSize` to Chakra size tokens using `useToken`
     const sizeMapping = {
-      xs: "4",
-      sm: "5",
-      md: "6",
-      lg: "8",
-      xl: "10",
+      xs: '4',
+      sm: '5',
+      md: '6',
+      lg: '8',
+      xl: '10',
     };
 
     const mappedBoxSize =
       sizeMapping[boxSize as keyof typeof sizeMapping] || boxSize;
-    const [resolvedBoxSize] = useToken("sizes", [
+    const [resolvedBoxSize] = useToken('sizes', [
       mappedBoxSize as string | number,
     ]);
-    const [resolvedColor] = useToken("colors", [color || ""]);
+    const [resolvedColor] = useToken('colors', [color || '']);
 
     // Handle react-icons
     if (icon in REACT_ICONS_MAP) {
@@ -52,7 +52,7 @@ export const Icon = forwardRef<SVGSVGElement, IconProps>(
       console.warn(
         `No icon component found for ${icon}. Rendering fallback icon.`
       );
-      IconComponent = CUSTOM_ICON_MAP["VerticalEllipsis"];
+      IconComponent = CUSTOM_ICON_MAP['VerticalEllipsis'];
     }
 
     // Wrap the custom icon in Chakra's `chakra` for compatibility
@@ -70,4 +70,4 @@ export const Icon = forwardRef<SVGSVGElement, IconProps>(
   }
 );
 
-Icon.displayName = "Icon";
+Icon.displayName = 'Icon';
