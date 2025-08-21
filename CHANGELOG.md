@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Navigation components (Breadcrumb, Pagination, Menu, Tabs)
   - Feedback components (Alert, Toast, Modal, Tooltip)
   - Data display components (Table, Avatar, Typography, Code)
-  - Media components (Icon, Logo, Lottie animations)
+  - Media components (Icon, Logo)
 - Storybook documentation for all components
 - Built-in utilities and state management
 - Responsive design system

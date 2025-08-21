@@ -47,7 +47,6 @@ export * from "./components/LineGraph";
 
 // Loading Components
 export * from "./components/Loaders";
-export * from "./components/Lottie";
 export * from "./components/Markdown";
 export * from "./components/MDXEditor";
 export * from "./components/Masonry";
