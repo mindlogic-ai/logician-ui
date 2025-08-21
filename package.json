@@ -104,16 +104,16 @@
     "ui-library",
     "typescript"
   ],
-  "author": "Your Name",
+  "author": "Mindlogic AI",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/logician-ui.git"
+    "url": "git+https://github.com/mindlogic-ai/logician-ui.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/logician-ui/issues"
+    "url": "https://github.com/mindlogic-ai/logician-ui/issues"
   },
-  "homepage": "https://github.com/yourusername/logician-ui#readme",
+  "homepage": "https://github.com/mindlogic-ai/logician-ui#readme",
   "engines": {
     "node": ">=16.0.0",
     "yarn": ">=1.22.0"

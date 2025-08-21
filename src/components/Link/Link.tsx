@@ -1,10 +1,16 @@
 import {
   Link as ChakraLink,
   LinkProps as ChakraLinkProps,
-} from '@chakra-ui/react';
-import NextLink from 'next/link';
+} from "@chakra-ui/react";
+// Optional Next.js Link import
+let NextLink: any;
+try {
+  NextLink = require("next/link").default;
+} catch {
+  NextLink = null;
+}
 
-import { linkTextStyles } from '@/components/Link/Link.styles';
+import { linkTextStyles } from "@/components/Link/Link.styles";
 
 /**
  * Link component that combines Chakra UI Link with Next.js Link functionality.
@@ -63,14 +69,24 @@ interface LinkProps extends ChakraLinkProps {
  * @returns A styled link component with Next.js routing capabilities
  */
 export const Link = ({ href, children, ...rest }: LinkProps) => {
+  // Use Next.js Link if available, otherwise fall back to regular anchor
+  if (NextLink && href.startsWith("/")) {
+    return (
+      <ChakraLink
+        as={NextLink}
+        href={href}
+        passHref
+        {...linkTextStyles}
+        {...rest}
+      >
+        {children}
+      </ChakraLink>
+    );
+  }
+
+  // Regular link for external URLs or when Next.js is not available
   return (
-    <ChakraLink
-      as={NextLink}
-      href={href}
-      passHref
-      {...linkTextStyles}
-      {...rest}
-    >
+    <ChakraLink href={href} {...linkTextStyles} {...rest}>
       {children}
     </ChakraLink>
   );

@@ -34,7 +34,7 @@ export const DataField = ({
   isEditable = false,
   allowEmpty = false,
 }: DataFieldProps) => {
-  const previewRef = useRef(null);
+  const previewRef = useRef<HTMLDivElement>(null);
   const [hasOpenCopyTooltip, setOpenCopyTooltip] = useState<boolean>(false);
   const [initialValue, setInitialValue] = useState<string>(value);
   const { onBlur, ...inputProps } = inputPropsProp ?? {};
@@ -49,14 +49,17 @@ export const DataField = ({
   };
 
   const handleEditButtonClick = () => {
-    previewRef.current.focus();
+    previewRef.current?.focus();
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange?.(e.target.value);
   };
 
-  const actIfAllowed = (fn, newValue: string) => {
+  const actIfAllowed = (
+    fn: ((value: string) => void) | undefined,
+    newValue: string
+  ) => {
     if (!allowEmpty && newValue.length < 1) {
       // act with initial value if not allowed
       fn?.(initialValue);
@@ -67,11 +70,11 @@ export const DataField = ({
     }
   };
 
-  const handleSubmit = (val) => {
+  const handleSubmit = (val: string) => {
     actIfAllowed(editableProps?.onSubmit, val);
   };
 
-  const PreviewComponent = as ? as : (props) => <span {...props} />;
+  const PreviewComponent = as ? as : (props: any) => <span {...props} />;
 
   return (
     <Box>

@@ -23,7 +23,6 @@ export * from "./components/DatePicker";
 // ErrorBoundary removed
 
 // File Components
-export * from "./components/FileCard";
 export * from "./components/FileInput";
 export * from "./components/FileItem";
 export * from "./components/FileList";
@@ -38,7 +37,6 @@ export * from "./components/Icon";
 export * from "./components/IconButton";
 
 // Info Components
-export * from "./components/InfoBlock";
 export * from "./components/InfoSprinkle";
 export * from "./components/InlineCode";
 
@@ -49,11 +47,7 @@ export * from "./components/LineGraph";
 
 // Loading Components
 export * from "./components/Loaders";
-export * from "./components/LoadingManager";
 export * from "./components/Lottie";
-
-// Layout Components
-export * from "./components/Logo";
 export * from "./components/Markdown";
 export * from "./components/MDXEditor";
 export * from "./components/Masonry";
@@ -67,7 +61,6 @@ export * from "./components/Pagination";
 
 // Input Variants
 export * from "./components/PasswordInput";
-export * from "./components/PhoneNumberInput";
 export * from "./components/PinInput";
 
 // Progress Components
@@ -80,7 +73,6 @@ export * from "./components/SeeMoreButton";
 export * from "./components/SegmentedControl";
 export * from "./components/SegmentedProgressBar";
 export * from "./components/Select";
-export * from "./components/Skeleton";
 export * from "./components/Slider";
 export * from "./components/Spinner";
 export * from "./components/Switch";

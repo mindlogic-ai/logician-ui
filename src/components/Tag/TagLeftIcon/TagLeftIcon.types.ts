@@ -1,3 +1,3 @@
-import { TagLeftIconProps as ChakraTagLeftIconProps } from '@chakra-ui/react';
+import { IconProps } from "@chakra-ui/react";
 
-export interface TagLeftIconProps extends ChakraTagLeftIconProps {}
+export interface TagLeftIconProps extends IconProps {}

@@ -1,7 +1,7 @@
-import BounceLoader from 'react-spinners/BounceLoader';
-import { Box, Flex, FlexProps } from '@chakra-ui/react';
+import BounceLoader from "react-spinners/BounceLoader";
+import { Box, Flex, FlexProps } from "@chakra-ui/react";
 
-import theme from '@/theme';
+import theme from "../../theme";
 
 export const PageLoader = ({
   isLoading,

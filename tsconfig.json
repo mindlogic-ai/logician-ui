@@ -21,14 +21,14 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/components/*"],
+      "@/components/*": ["./src/components/*"],
       "@/utils/*": ["./src/utils/*"],
       "@/hooks/*": ["./src/hooks/*"],
       "@/theme/*": ["./src/theme/*"],
       "@/translations/*": ["./src/translations/*"]
     }
   },
-  "include": ["src/**/*", "src/types/**/*"],
+  "include": ["src/**/*", "src/types/**/*", "css-modules.d.ts"],
   "exclude": [
     "node_modules",
     "dist",
