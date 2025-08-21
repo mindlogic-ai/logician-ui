@@ -1,0 +1,28 @@
+name: Check Merge Conflicts
+
+on:
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  check-conflicts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch main branch
+        run: git fetch origin main
+
+      - name: Check for merge conflicts with main
+        run: |
+          git merge --no-commit --no-ff origin/main || {
+            echo "❌ Merge conflicts detected with main branch"
+            exit 1
+          }
+          git merge --abort || true
+          echo "✅ No merge conflicts detected"

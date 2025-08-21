@@ -1,5 +1,5 @@
 {
-  "name": "logician-ui",
+  "name": "@mindlogic-ai/logician-ui",
   "version": "1.0.0",
   "description": "A comprehensive React design system built on Chakra UI",
   "main": "dist/index.js",
@@ -117,5 +117,8 @@
   "engines": {
     "node": ">=16.0.0",
     "yarn": ">=1.22.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
