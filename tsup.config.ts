@@ -1,19 +1,30 @@
-import { defineConfig } from "tsup";
+import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ["src/index.ts"],
-  format: ["esm", "cjs"],
-  dts: false, // Disabled due to TS errors, can re-enable when errors are fixed
-  splitting: false,
-  sourcemap: true,
+  entry: ['src/index.ts'],
+  format: ['esm', 'cjs'],
+  dts: true, // ✅ Re-enabled now that TS errors are fixed!
+  splitting: true, // Enable code splitting for better memory usage
+  sourcemap: process.env.NODE_ENV !== 'production', // Only in dev
   clean: true,
   external: [
-    "react",
-    "react-dom",
-    "@chakra-ui/react",
-    "@emotion/react",
-    "@emotion/styled",
-    "framer-motion",
+    // Core React
+    'react',
+    'react-dom',
+    // Chakra UI ecosystem
+    '@chakra-ui/react',
+    '@emotion/react',
+    '@emotion/styled',
+    'framer-motion',
+    // Heavy dependencies - let consumers bundle them
+    '@mdxeditor/editor',
+    'react-syntax-highlighter',
+    'recharts',
+    'react-markdown',
+    'katex',
+    // Other large deps
+    'lodash',
+    'date-fns',
   ],
   banner: {
     js: '"use client"',

@@ -16,14 +16,17 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "yarn"
+          node-version: '20'
+          cache: 'yarn'
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
       - name: Build package
         run: yarn build
+        env:
+          NODE_ENV: production
+          NODE_OPTIONS: '--max-old-space-size=4096 --optimize-for-size'
 
       - name: Create pre-release version
         run: |
@@ -65,8 +68,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "v${{ steps.get_version.outputs.version }}"
-          release_name: "Pre-release v${{ steps.get_version.outputs.version }}"
+          tag_name: 'v${{ steps.get_version.outputs.version }}'
+          release_name: 'Pre-release v${{ steps.get_version.outputs.version }}'
           draft: false
           prerelease: true
 
