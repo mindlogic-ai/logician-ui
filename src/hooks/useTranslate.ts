@@ -12,10 +12,10 @@ const replaceVariables = (text: string, variables?: { [key: string]: any }) => {
 
   const regex = /({(.*?)})/gi;
 
-  const potentialKeys = text.match(regex) ?? [];
+  const potentialKeys: string[] = text.match(regex) ?? [];
   const textParts: Array<string> = [];
   let lastIndex = 0;
-  potentialKeys.forEach((potentialKey) => {
+  potentialKeys.forEach((potentialKey: string) => {
     const keyIndex = text.indexOf(potentialKey);
     // Push stuff up to potential key
     textParts.push(text.slice(lastIndex, keyIndex));

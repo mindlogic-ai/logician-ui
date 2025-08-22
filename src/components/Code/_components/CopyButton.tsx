@@ -23,6 +23,7 @@ export const CopyButton = ({
   const handleClick: MouseEventHandler = (e) => {
     // Set it to 'Copied'
     setLabelText(translate('copied') as string);
+    // @ts-expect-error - Event type mismatch between generic and specific button events
     onClick?.(e);
     setIsTooltipOpen(true);
     // Set it back to 'Copy' after 2s, and back to an uncontrolled tooltip

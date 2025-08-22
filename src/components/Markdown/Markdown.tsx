@@ -114,19 +114,20 @@ export const Markdown = ({
   const allComponents = { ...baseMarkdownComponents, ...components };
 
   return (
-    <ReactMarkdown
-      remarkPlugins={[
-        remarkGfm,
-        remarkFlexibleMarkers,
-        remarkBreaks,
-        remarkMath,
-      ]}
-      rehypePlugins={[rehypeRaw, rehypeKatex]}
-      className={[MarkdownStyles.markdownStyles, className].join(' ')}
-      components={allComponents}
-      {...rest}
-    >
-      {formatForMarkdown(children ?? '')}
-    </ReactMarkdown>
+    <div className={[MarkdownStyles.markdownStyles, className].join(' ')}>
+      <ReactMarkdown
+        remarkPlugins={[
+          remarkGfm,
+          remarkFlexibleMarkers,
+          remarkBreaks,
+          remarkMath,
+        ]}
+        rehypePlugins={[rehypeRaw, rehypeKatex]}
+        components={allComponents}
+        {...rest}
+      >
+        {formatForMarkdown(children ?? '')}
+      </ReactMarkdown>
+    </div>
   );
 };

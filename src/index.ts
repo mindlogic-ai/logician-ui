@@ -20,7 +20,6 @@ export * from './components/CopyableCode';
 export * from './components/CrossPageToasts';
 export * from './components/DataField';
 export * from './components/DatePicker';
-// ErrorBoundary removed
 
 // File Components
 export * from './components/FileInput';

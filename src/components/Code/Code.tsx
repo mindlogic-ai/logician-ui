@@ -135,6 +135,7 @@ export const Code = ({
               </Suspense>
             </Box>
           ) : (
+            // @ts-expect-error - SyntaxHighlighter type issues with React 18
             <SyntaxHighlighter
               language={language}
               style={style}

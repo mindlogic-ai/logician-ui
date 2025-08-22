@@ -46,6 +46,7 @@ export const Banner = forwardRef(
         <Flex align="stretch" gap={2}>
           {!hideIcon && (
             <Box>
+              {/* @ts-expect-error - Icon ref type incompatibility */}
               <Icon boxSize="md" mr={2} {...iconStyles[variant]} />
             </Box>
           )}

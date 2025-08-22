@@ -4,7 +4,7 @@ import { IconProps } from '../Icon';
 import { TypographyProps } from '../Typography';
 import { BannerProps } from './Banner.types';
 
-type VariantType = keyof BannerProps['variant'];
+type VariantType = NonNullable<BannerProps['variant']>;
 
 export const bannerStyles: Record<VariantType, BoxProps> = {
   info: {

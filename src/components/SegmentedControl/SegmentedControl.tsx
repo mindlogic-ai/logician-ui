@@ -58,7 +58,9 @@ export const SegmentedControl = ({
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         style={{
           position: 'absolute',
+          // @ts-expect-error - Chakra UI responsive values in Framer Motion styles
           top: getControlPadding(size),
+          // @ts-expect-error - Chakra UI responsive values in Framer Motion styles
           bottom: getControlPadding(size),
           left: `calc(${activeIndex * 2} * ${getControlPadding(size)})`,
           width: `calc(${100 / options.length}% - 2 * ${getControlPadding(size)})`,
