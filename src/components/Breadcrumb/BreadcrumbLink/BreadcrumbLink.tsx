@@ -1,14 +1,14 @@
-import { ForwardedRef, forwardRef } from "react";
-import { BreadcrumbLink as ChakraBreadcrumbLink } from "@chakra-ui/react";
+import { ForwardedRef, forwardRef } from 'react';
+import { BreadcrumbLink as ChakraBreadcrumbLink } from '@chakra-ui/react';
+
+import { BreadcrumbLinkProps } from './BreadcrumbLink.types';
 // Optional Next.js Link import
 let NextLink: any;
 try {
-  NextLink = require("next/link").default;
+  NextLink = require('next/link').default;
 } catch {
   NextLink = null;
 }
-
-import { BreadcrumbLinkProps } from "./BreadcrumbLink.types";
 
 export const BreadcrumbLink = forwardRef(
   (
@@ -18,7 +18,7 @@ export const BreadcrumbLink = forwardRef(
     return (
       <ChakraBreadcrumbLink
         color="primary.dark"
-        as={NextLink || "a"}
+        as={NextLink || 'a'}
         href={href}
         {...rest}
         ref={ref}
@@ -27,4 +27,4 @@ export const BreadcrumbLink = forwardRef(
   }
 );
 
-BreadcrumbLink.displayName = "BreadcrumbLink";
+BreadcrumbLink.displayName = 'BreadcrumbLink';

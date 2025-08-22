@@ -39,7 +39,7 @@ export const getDefaultDateFormat = (language: string = 'en'): string => {
  */
 export const getMonthNames = (
   language: string = 'en',
-  monthFormat: string = 'MMM',
+  monthFormat: string = 'MMM'
 ): string[] => {
   const locale =
     LOCALE_MAP[language as keyof typeof LOCALE_MAP] || LOCALE_MAP.en;

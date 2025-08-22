@@ -22,7 +22,7 @@ const TableContainerInner = forwardRef<HTMLDivElement, TableContainerProps>(
         // 내부 컨텍스트 ref 설정
         setContainerRef(node);
       },
-      [ref, setContainerRef],
+      [ref, setContainerRef]
     );
 
     return (
@@ -36,7 +36,7 @@ const TableContainerInner = forwardRef<HTMLDivElement, TableContainerProps>(
         {children}
       </ChakraTableContainer>
     );
-  },
+  }
 );
 
 TableContainerInner.displayName = 'TableContainerInner';
@@ -49,7 +49,7 @@ export const TableContainer = forwardRef<HTMLDivElement, TableContainerProps>(
         <TableContainerInner {...props} ref={ref} />
       </TableProvider>
     );
-  },
+  }
 );
 
 TableContainer.displayName = 'TableContainer';

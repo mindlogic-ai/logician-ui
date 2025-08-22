@@ -1,12 +1,11 @@
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 
+import { getChakraArgTypes } from '@/../.storybook/getChakraArgTypes';
 import { IconTypes } from '@/components/Icon/IconMap';
 
 import { Icon } from './Icon';
 import { IconProps } from './Icon.types';
-
-import { getChakraArgTypes } from '@/../.storybook/getChakraArgTypes';
 
 const meta: Meta<typeof Icon> = {
   title: 'Components/Icon',
@@ -33,7 +32,7 @@ export const Single: Story = ({ icon, ...rest }: IconProps) => {
 };
 
 export const AllIcons: StoryFn<IconProps> = (
-  args: Omit<IconProps, 'glyph'>,
+  args: Omit<IconProps, 'glyph'>
 ) => (
   <div
     style={{
@@ -42,7 +41,7 @@ export const AllIcons: StoryFn<IconProps> = (
       gridTemplateColumns: 'repeat(5, 1fr)',
     }}
   >
-    {Object.keys(IconTypes).map(iconName => {
+    {Object.keys(IconTypes).map((iconName) => {
       return (
         <div
           key={iconName}

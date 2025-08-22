@@ -112,7 +112,6 @@ function App() {
 
 - **Icon** - Comprehensive icon system
 - **Logo** - Brand logo components
-- **Lottie** - Animated Lottie components
 
 ## Development
 

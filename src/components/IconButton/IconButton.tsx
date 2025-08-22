@@ -7,7 +7,7 @@ import { IconButtonProps } from './IconButton.types';
 export const IconButton = forwardRef(
   (
     { variant = 'link', sx, ...rest }: IconButtonProps,
-    ref?: ForwardedRef<HTMLButtonElement>,
+    ref?: ForwardedRef<HTMLButtonElement>
   ) => {
     return (
       <ChakraIconButton
@@ -30,7 +30,7 @@ export const IconButton = forwardRef(
         }}
       />
     );
-  },
+  }
 );
 
 IconButton.displayName = 'IconButton';

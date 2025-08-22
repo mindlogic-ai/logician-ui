@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { Box, Input, InputProps } from "@chakra-ui/react";
+import { useEffect, useRef, useState } from 'react';
+import { Box, Input, InputProps } from '@chakra-ui/react';
 
 export const AutowidthInput = ({
   value,
@@ -22,11 +22,11 @@ export const AutowidthInput = ({
         ref={valueWidthMeasureRef}
         {...widthMeasureProps}
         style={{
-          position: "absolute",
+          position: 'absolute',
           opacity: 0,
-          pointerEvents: "none",
-          width: "fit-content",
-          display: "inline-flex",
+          pointerEvents: 'none',
+          width: 'fit-content',
+          display: 'inline-flex',
           ...widthMeasureProps?.style,
         }}
       >
@@ -38,7 +38,7 @@ export const AutowidthInput = ({
         {...rest}
         style={{
           width: inputWidth,
-          boxSizing: "content-box",
+          boxSizing: 'content-box',
           ...style,
         }}
       />

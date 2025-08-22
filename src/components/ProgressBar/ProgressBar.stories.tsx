@@ -1,5 +1,6 @@
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
+
 import { ProgressBar } from '.';
 
 const meta: Meta<typeof ProgressBar> = {
@@ -14,4 +15,4 @@ const meta: Meta<typeof ProgressBar> = {
 export default meta;
 type Story = StoryFn<typeof ProgressBar>;
 
-export const Basic: Story = args => <ProgressBar {...args} />;
+export const Basic: Story = (args) => <ProgressBar {...args} />;

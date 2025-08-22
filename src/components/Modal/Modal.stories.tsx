@@ -1,16 +1,16 @@
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
+
+import { Button } from '../Button';
+import { ButtonVariant } from '../Button/Button.types';
 import {
   Modal,
   ModalBody,
+  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
-  ModalCloseButton,
 } from '.';
-import { Button } from '../Button';
-import { ButtonVariant } from '../Button/Button.types';
 
 interface ModalArgs {
   headerTitle: string;
@@ -35,7 +35,7 @@ export default {
   },
 } as Meta<typeof Modal>;
 
-export const Default: StoryFn<ModalArgs> = args => {
+export const Default: StoryFn<ModalArgs> = (args) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (

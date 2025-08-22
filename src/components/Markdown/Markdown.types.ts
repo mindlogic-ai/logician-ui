@@ -1,3 +1,5 @@
 import { Options } from 'react-markdown';
 
-export type MarkdownProps = Options;
+export type MarkdownProps = Options & {
+  className?: string;
+};

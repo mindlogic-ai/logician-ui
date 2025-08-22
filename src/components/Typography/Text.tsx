@@ -16,7 +16,7 @@ export const Text = forwardRef<HTMLParagraphElement, TextProps>(
         {...props}
       />
     );
-  },
+  }
 );
 
 Text.displayName = 'Text';

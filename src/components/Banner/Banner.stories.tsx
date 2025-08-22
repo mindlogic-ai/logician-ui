@@ -1,6 +1,7 @@
 import React from 'react';
-import { Banner } from './Banner';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+
+import { Banner } from './Banner';
 
 export default {
   title: 'Components/Banner',
@@ -10,7 +11,7 @@ export default {
   },
 } as ComponentMeta<typeof Banner>;
 
-const Template: ComponentStory<typeof Banner> = args => <Banner {...args} />;
+const Template: ComponentStory<typeof Banner> = (args) => <Banner {...args} />;
 
 export const Info = Template.bind({});
 Info.args = {

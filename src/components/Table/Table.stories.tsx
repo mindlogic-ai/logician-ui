@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
+import { Flex } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
-import {
-  Table,
-  TableContainer,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  ExpandingTr,
-} from '.';
+
 import { Icon } from '../Icon';
 import { IconButton } from '../IconButton';
-import { Flex } from '@chakra-ui/react';
+import {
+  ExpandingTr,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from '.';
 
 const meta: Meta<typeof Table> = {
   title: 'Components/Table',
@@ -95,20 +96,20 @@ const data: Record<string, any>[] = [
 type Story = StoryObj<typeof Table>;
 
 export const Default: Story = {
-  render: args => (
+  render: (args) => (
     <TableContainer>
       <Table {...args}>
         <Thead>
           <Tr>
-            {columns.map(column => (
+            {columns.map((column) => (
               <Th key={column.key}>{column.label}</Th>
             ))}
           </Tr>
         </Thead>
         <Tbody>
-          {data.map(item => (
+          {data.map((item) => (
             <Tr>
-              {columns.map(column => (
+              {columns.map((column) => (
                 <Td key={column.key}>{item[column.key]}</Td>
               ))}
             </Tr>
@@ -122,18 +123,18 @@ export const Default: Story = {
 };
 
 export const ExpandedContent: Story = {
-  render: args => (
+  render: (args) => (
     <TableContainer maxW="100%">
       <Table {...args}>
         <Thead>
           <Tr>
-            {columns.map(column => (
+            {columns.map((column) => (
               <Th key={column.key}>{column.label}</Th>
             ))}
           </Tr>
         </Thead>
         <Tbody>
-          {data.map(item => {
+          {data.map((item) => {
             const [isExpanded, setIsExpanded] = useState<boolean>(false);
             return (
               <ExpandingTr
@@ -145,14 +146,14 @@ export const ExpandedContent: Story = {
                   </Flex>
                 }
               >
-                {columns.map(column => (
+                {columns.map((column) => (
                   <Td key={column.key}>{item[column.key]}</Td>
                 ))}
                 <Td w={2}>
                   <IconButton
                     aria-label="Expand"
                     icon={<Icon icon="IoChevronDownOutline" />}
-                    onClick={() => setIsExpanded(e => !e)}
+                    onClick={() => setIsExpanded((e) => !e)}
                   />
                 </Td>
               </ExpandingTr>
@@ -167,7 +168,7 @@ export const ExpandedContent: Story = {
 };
 
 export const WithLeftStickyColumn: Story = {
-  render: args => (
+  render: (args) => (
     <TableContainer>
       <Table {...args}>
         <Thead>
@@ -184,7 +185,7 @@ export const WithLeftStickyColumn: Story = {
           </Tr>
         </Thead>
         <Tbody>
-          {wideData.map(item => (
+          {wideData.map((item) => (
             <Tr key={item.id}>
               {wideColumns.map((column, index) => (
                 <Td
@@ -206,7 +207,7 @@ export const WithLeftStickyColumn: Story = {
 };
 
 export const WithRightStickyColumn: Story = {
-  render: args => (
+  render: (args) => (
     <TableContainer>
       <Table {...args}>
         <Thead>
@@ -223,7 +224,7 @@ export const WithRightStickyColumn: Story = {
           </Tr>
         </Thead>
         <Tbody>
-          {wideData.map(item => (
+          {wideData.map((item) => (
             <Tr key={item.id}>
               {wideColumns.map((column, index) => (
                 <Td
@@ -245,7 +246,7 @@ export const WithRightStickyColumn: Story = {
 };
 
 export const WithBothStickyColumns: Story = {
-  render: args => (
+  render: (args) => (
     <TableContainer>
       <Table {...args}>
         <Thead>
@@ -262,7 +263,7 @@ export const WithBothStickyColumns: Story = {
           </Tr>
         </Thead>
         <Tbody>
-          {wideData.map(item => (
+          {wideData.map((item) => (
             <Tr key={item.id}>
               {wideColumns.map((column, index) => (
                 <Td
@@ -284,7 +285,7 @@ export const WithBothStickyColumns: Story = {
 };
 
 export const WithTwoLeftStickyColumns: Story = {
-  render: args => (
+  render: (args) => (
     <TableContainer>
       <Table {...args}>
         <Thead>
@@ -302,7 +303,7 @@ export const WithTwoLeftStickyColumns: Story = {
           </Tr>
         </Thead>
         <Tbody>
-          {wideData.map(item => (
+          {wideData.map((item) => (
             <Tr key={item.id}>
               {wideColumns.map((column, index) => (
                 <Td

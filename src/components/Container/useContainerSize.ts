@@ -8,10 +8,12 @@ import theme from '@/theme/index';
 const GUTTER_RATIO = 0.1;
 
 // TODO: optimize this so this calculation only runs once per page
-export const getContainerWidth: (screenSize: number) => number = screenSize => {
+export const getContainerWidth: (screenSize: number) => number = (
+  screenSize
+) => {
   const largestBreakpoint = Object.values(theme.breakpoints).reduce(function (
     i: number,
-    j: string,
+    j: string
   ) {
     const breakpoint = parseInt(j, 10);
     const screenThreshold = screenSize * (1 - GUTTER_RATIO * 2);

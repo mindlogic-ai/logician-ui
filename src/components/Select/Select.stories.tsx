@@ -1,5 +1,6 @@
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
+
 import { Select } from '.';
 
 const meta: Meta<typeof Select> = {
@@ -22,13 +23,13 @@ const meta: Meta<typeof Select> = {
 export default meta;
 type Story = StoryFn<typeof Select>;
 
-export const Basic: Story = args => <Select {...args} />;
+export const Basic: Story = (args) => <Select {...args} />;
 
-export const Multiselect: Story = args => <Select {...args} isMulti={true} />;
-export const Combobox: Story = args => (
+export const Multiselect: Story = (args) => <Select {...args} isMulti={true} />;
+export const Combobox: Story = (args) => (
   <Select {...args} isMulti={true} isSearchable={true} />
 );
-export const OnScrollToBottom: Story = args => (
+export const OnScrollToBottom: Story = (args) => (
   <Select
     {...args}
     options={Array.from({ length: 50 }, (_, i) => ({
@@ -41,12 +42,12 @@ export const OnScrollToBottom: Story = args => (
   />
 );
 
-export const OnScrollToBottomNewItems: Story = args => {
+export const OnScrollToBottomNewItems: Story = (args) => {
   const [options, setOptions] = React.useState(
     Array.from({ length: 500 }, (_, i) => ({
       label: `Option ${i + 1}`,
       value: `option${i + 1}`,
-    })),
+    }))
   );
   return (
     <Select
@@ -56,7 +57,7 @@ export const OnScrollToBottomNewItems: Story = args => {
       isSearchable={true}
       onMenuScrollToBottom={() => {
         console.log('scrolled to bottom');
-        setOptions(prev => [
+        setOptions((prev) => [
           ...prev,
           ...Array.from({ length: 500 }, (_, i) => ({
             label: `Option ${prev.length + i + 1}`,

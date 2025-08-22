@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import { Stack, Switch, Text } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
-import { Switch, SwitchProps, Stack, Text } from '@chakra-ui/react';
 
 const meta: Meta<typeof Switch> = {
   title: 'Components/Switch',
@@ -29,7 +29,7 @@ export const Uncontrolled: Story = {
 
 // Controlled Story: Manage state externally
 export const Controlled: Story = {
-  render: args => {
+  render: (args) => {
     const [isChecked, setIsChecked] = useState(false);
 
     const handleToggle = () => {

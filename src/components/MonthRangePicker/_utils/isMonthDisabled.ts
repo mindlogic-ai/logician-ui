@@ -4,7 +4,7 @@ export const isMonthDisabled = (
   month: number,
   year: number,
   minMonth?: Date,
-  maxMonth?: Date,
+  maxMonth?: Date
 ): boolean => {
   const monthDate = new Date(year, month, 1);
 

@@ -6,6 +6,6 @@ export const tabListStyles = {
 };
 
 export const verticalStyles = {
-  borderInlineEnd: "1px solid",
-  borderInlineStart: "none",
+  borderInlineEnd: '1px solid',
+  borderInlineStart: 'none',
 };

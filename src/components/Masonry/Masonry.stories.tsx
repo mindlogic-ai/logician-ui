@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { Meta, StoryFn } from "@storybook/react";
-import { Box, Text, SimpleGrid, useBreakpointValue } from "@chakra-ui/react";
+import React from 'react';
+import { Box, SimpleGrid, Text, useBreakpointValue } from '@chakra-ui/react';
+import { Meta, StoryFn } from '@storybook/react';
 
-import { Masonry } from "./Masonry";
-import { MasonryProps } from "./Masonry.types";
+import { Masonry } from './Masonry';
 
 const meta: Meta<typeof Masonry> = {
-  title: "Components/Masonry",
+  title: 'Components/Masonry',
   component: Masonry,
   args: {
     numCols: 3,
@@ -15,19 +14,19 @@ const meta: Meta<typeof Masonry> = {
   },
   argTypes: {
     numCols: {
-      control: "number",
-      description: "Number of columns in the masonry layout",
+      control: 'number',
+      description: 'Number of columns in the masonry layout',
       defaultValue: 3,
     },
     gap: {
-      control: "number",
-      description: "Gap between items",
+      control: 'number',
+      description: 'Gap between items',
       defaultValue: 4,
     },
     horizontalArrangement: {
-      control: "boolean",
+      control: 'boolean',
       description:
-        "Whether to arrange items horizontally (true) or balance column heights (false)",
+        'Whether to arrange items horizontally (true) or balance column heights (false)',
       defaultValue: false,
     },
   },
@@ -35,7 +34,7 @@ const meta: Meta<typeof Masonry> = {
     docs: {
       description: {
         component:
-          "A responsive masonry layout component that arranges items in optimal position based on available vertical space.",
+          'A responsive masonry layout component that arranges items in optimal position based on available vertical space.',
       },
     },
   },
@@ -49,7 +48,7 @@ const generateItems = (count: number) => {
   return Array.from({ length: count }).map((_, index) => ({
     id: index,
     height: 100 + Math.floor(Math.random() * 200), // Random heights between 100-300px
-    color: index % 2 === 0 ? "blue.50" : "purple.50",
+    color: index % 2 === 0 ? 'blue.50' : 'purple.50',
     title: `Item ${index + 1}`,
   }));
 };
@@ -79,29 +78,29 @@ export const Basic: Story = (args) => {
 
 // Example with realistic content
 export const WithRealContent: Story = (args) => {
-  const bgColor = "gray.50"; // Light mode only
+  const bgColor = 'gray.50'; // Light mode only
   const categories = [
     {
-      name: "Social Media",
-      items: ["Facebook", "Twitter", "Instagram", "LinkedIn", "TikTok"],
+      name: 'Social Media',
+      items: ['Facebook', 'Twitter', 'Instagram', 'LinkedIn', 'TikTok'],
     },
-    { name: "Messaging", items: ["WhatsApp", "Telegram", "Signal"] },
-    { name: "Video", items: ["YouTube", "Vimeo", "TikTok", "Twitch"] },
+    { name: 'Messaging', items: ['WhatsApp', 'Telegram', 'Signal'] },
+    { name: 'Video', items: ['YouTube', 'Vimeo', 'TikTok', 'Twitch'] },
     {
-      name: "Productivity",
+      name: 'Productivity',
       items: [
-        "Notion",
-        "Slack",
-        "Microsoft Teams",
-        "Asana",
-        "Trello",
-        "Monday",
+        'Notion',
+        'Slack',
+        'Microsoft Teams',
+        'Asana',
+        'Trello',
+        'Monday',
       ],
     },
-    { name: "Design", items: ["Figma", "Adobe XD", "Sketch", "Canva"] },
+    { name: 'Design', items: ['Figma', 'Adobe XD', 'Sketch', 'Canva'] },
     {
-      name: "Development",
-      items: ["GitHub", "GitLab", "Bitbucket", "Stack Overflow"],
+      name: 'Development',
+      items: ['GitHub', 'GitLab', 'Bitbucket', 'Stack Overflow'],
     },
   ];
 
@@ -123,7 +122,7 @@ export const WithRealContent: Story = (args) => {
             <Box
               key={item}
               p={2}
-              _hover={{ bg: "gray.100" }}
+              _hover={{ bg: 'gray.100' }}
               borderRadius="md"
               transition="background 0.2s"
               cursor="pointer"

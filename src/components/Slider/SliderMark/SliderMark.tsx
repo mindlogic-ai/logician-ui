@@ -6,7 +6,7 @@ import { SliderMarkProps } from './SliderMark.types';
 export const SliderMark = forwardRef(
   ({ ...rest }: SliderMarkProps, ref?: ForwardedRef<HTMLDivElement>) => {
     return <ChakraSliderMark {...rest} ref={ref} />;
-  },
+  }
 );
 
 SliderMark.displayName = 'SliderMark';

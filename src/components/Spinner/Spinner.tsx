@@ -14,7 +14,7 @@ export const Spinner = forwardRef(
         ref={ref}
       />
     );
-  },
+  }
 );
 
 Spinner.displayName = 'Spinner';

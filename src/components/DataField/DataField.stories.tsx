@@ -22,9 +22,9 @@ export const EditableField: Story = {
   args: {
     ...Basic.args,
     isEditable: true,
-    onChange: val => console.log(val),
+    onChange: (val) => console.log(val),
     editableProps: {
-      onSubmit: e => console.log(e),
+      onSubmit: (e) => console.log(e),
     },
   },
 };
@@ -34,9 +34,9 @@ export const EditableHeaderField: Story = {
     ...Basic.args,
     isEditable: true,
     as: H1,
-    onChange: val => console.log(val),
+    onChange: (val) => console.log(val),
     editableProps: {
-      onSubmit: e => console.log(e),
+      onSubmit: (e) => console.log(e),
     },
   },
 };
@@ -52,9 +52,9 @@ export const EditableCopyableField: Story = {
   args: {
     ...Basic.args,
     isEditable: true,
-    onChange: val => console.log(val),
+    onChange: (val) => console.log(val),
     editableProps: {
-      onSubmit: val => console.log(val),
+      onSubmit: (val) => console.log(val),
     },
     isCopyable: true,
   },

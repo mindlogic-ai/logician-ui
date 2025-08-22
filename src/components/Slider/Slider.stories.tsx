@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+
 import {
   Slider,
-  SliderTrack,
   SliderFilledTrack,
   SliderThumb,
+  SliderTrack,
 } from '@/components/Slider';
 
 export default {
@@ -12,7 +13,7 @@ export default {
   component: Slider,
   subcomponents: { SliderTrack, SliderFilledTrack, SliderThumb },
   decorators: [
-    Story => {
+    (Story) => {
       const [value, setValue] = useState(50);
       return (
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -29,7 +30,7 @@ export default {
   ],
 } as ComponentMeta<typeof Slider>;
 
-const Template: ComponentStory<typeof Slider> = args => (
+const Template: ComponentStory<typeof Slider> = (args) => (
   <Slider {...args}>
     <SliderTrack>
       <SliderFilledTrack />

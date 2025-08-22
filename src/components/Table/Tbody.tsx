@@ -6,7 +6,7 @@ export const Tbody = forwardRef<HTMLTableSectionElement, TableBodyProps>(
     return (
       <ChakraTbody ref={ref} color="gray.1500" fontWeight="medium" {...props} />
     );
-  },
+  }
 );
 
 Tbody.displayName = 'Tbody';

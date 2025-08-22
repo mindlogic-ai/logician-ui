@@ -99,7 +99,7 @@ export const Td = ({
     stickyDirection,
     scrollState,
     stickyOffset,
-    isLastSticky,
+    isLastSticky
   );
 
   return (

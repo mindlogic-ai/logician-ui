@@ -8,7 +8,7 @@ import { PasswordInputProps } from './PasswordInput.types';
 export const PasswordInput = forwardRef(
   (
     { wrapperProps, rightElementProps, ...rest }: PasswordInputProps,
-    ref?: ForwardedRef<HTMLInputElement>,
+    ref?: ForwardedRef<HTMLInputElement>
   ) => {
     const [show, setShow] = useState<boolean>(false);
     const handleClick = () => setShow(!show);
@@ -36,7 +36,7 @@ export const PasswordInput = forwardRef(
         rightElementProps={{ ...rightElementProps }}
       />
     );
-  },
+  }
 );
 
 PasswordInput.displayName = 'PasswordInput';

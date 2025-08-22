@@ -1,6 +1,6 @@
-import { BiDetail, BiExpandAlt } from "react-icons/bi";
-import { BsTranslate } from "react-icons/bs";
-import { CiFileOn } from "react-icons/ci";
+import { BiDetail, BiExpandAlt } from 'react-icons/bi';
+import { BsTranslate } from 'react-icons/bs';
+import { CiFileOn } from 'react-icons/ci';
 import {
   FaArchive,
   FaBeer,
@@ -23,7 +23,7 @@ import {
   FaUserCheck,
   FaUserPlus,
   FaUsers,
-} from "react-icons/fa";
+} from 'react-icons/fa';
 import {
   FaCheck,
   FaCode,
@@ -32,11 +32,11 @@ import {
   FaRegCopy,
   FaRotateRight,
   FaUserClock,
-} from "react-icons/fa6";
-import { GiTwoCoins } from "react-icons/gi";
-import { GoArrowDownRight, GoArrowUpRight } from "react-icons/go";
-import { GrUserAdmin } from "react-icons/gr";
-import { HiLightningBolt, HiRefresh, HiX } from "react-icons/hi";
+} from 'react-icons/fa6';
+import { GiTwoCoins } from 'react-icons/gi';
+import { GoArrowDownRight, GoArrowUpRight } from 'react-icons/go';
+import { GrUserAdmin } from 'react-icons/gr';
+import { HiLightningBolt, HiRefresh, HiX } from 'react-icons/hi';
 import {
   IoIosAddCircleOutline,
   IoIosArrowBack,
@@ -51,7 +51,7 @@ import {
   IoMdSettings,
   IoMdThumbsDown,
   IoMdThumbsUp,
-} from "react-icons/io";
+} from 'react-icons/io';
 import {
   IoAddCircleOutline,
   IoAddOutline,
@@ -70,9 +70,9 @@ import {
   IoSearch,
   IoWarning,
   IoWarningOutline,
-} from "react-icons/io5";
-import { LiaNewspaper } from "react-icons/lia";
-import { IconType as ReactIconType } from "react-icons/lib";
+} from 'react-icons/io5';
+import { LiaNewspaper } from 'react-icons/lia';
+import { IconType as ReactIconType } from 'react-icons/lib';
 import {
   LuBookOpenText,
   LuDownload,
@@ -83,7 +83,7 @@ import {
   LuReceipt,
   LuSendHorizontal,
   LuUpload,
-} from "react-icons/lu";
+} from 'react-icons/lu';
 import {
   MdAnnouncement,
   MdCardMembership,
@@ -96,10 +96,10 @@ import {
   MdPreview,
   MdSpaceDashboard,
   MdThumbsUpDown,
-} from "react-icons/md";
-import { PiChatSlashBold, PiExam, PiGlobe, PiGlobeX } from "react-icons/pi";
-import { RxDotsHorizontal } from "react-icons/rx";
-import { SlSettings } from "react-icons/sl";
+} from 'react-icons/md';
+import { PiChatSlashBold, PiExam, PiGlobe, PiGlobeX } from 'react-icons/pi';
+import { RxDotsHorizontal } from 'react-icons/rx';
+import { SlSettings } from 'react-icons/sl';
 import {
   TbAppWindowFilled,
   TbInfinity,
@@ -108,29 +108,29 @@ import {
   TbMessageChatbotFilled,
   TbSum,
   TbWorldSearch,
-} from "react-icons/tb";
+} from 'react-icons/tb';
 
-import AnalyticsIcon from "./icons/analytics.svg";
-import BulbIcon from "./icons/bulb.svg";
-import ChatIcon from "./icons/chat.svg";
-import EditIcon from "./icons/edit.svg";
-import FaceIcon from "./icons/face.svg";
-import FilledAnalyticsIcon from "./icons/filled-analytics.svg";
-import FilledBulbIcon from "./icons/filled-bulb.svg";
-import FilledChatIcon from "./icons/filled-chat.svg";
-import FilledEditIcon from "./icons/filled-edit.svg";
-import FilledFaceIcon from "./icons/filled-face.svg";
-import FilledLayoutIcon from "./icons/filled-layout.svg";
-import LanguageIcon from "./icons/language.svg";
-import LayoutIcon from "./icons/layout.svg";
-import PendingIcon from "./icons/pending.svg";
-import ReceiptIcon from "./icons/receipt.svg";
-import SparklesIcon from "./icons/sparkles.svg";
-import StoreIcon from "./icons/store.svg";
-import StoreActiveIcon from "./icons/store_active.svg";
-import StudioIcon from "./icons/studio.svg";
-import StudioActiveIcon from "./icons/studio_active.svg";
-import VerticalEllipsisIcon from "./icons/vertical-ellipsis.svg";
+import AnalyticsIcon from './icons/analytics.svg';
+import BulbIcon from './icons/bulb.svg';
+import ChatIcon from './icons/chat.svg';
+import EditIcon from './icons/edit.svg';
+import FaceIcon from './icons/face.svg';
+import FilledAnalyticsIcon from './icons/filled-analytics.svg';
+import FilledBulbIcon from './icons/filled-bulb.svg';
+import FilledChatIcon from './icons/filled-chat.svg';
+import FilledEditIcon from './icons/filled-edit.svg';
+import FilledFaceIcon from './icons/filled-face.svg';
+import FilledLayoutIcon from './icons/filled-layout.svg';
+import LanguageIcon from './icons/language.svg';
+import LayoutIcon from './icons/layout.svg';
+import PendingIcon from './icons/pending.svg';
+import ReceiptIcon from './icons/receipt.svg';
+import SparklesIcon from './icons/sparkles.svg';
+import StoreIcon from './icons/store.svg';
+import StoreActiveIcon from './icons/store_active.svg';
+import StudioIcon from './icons/studio.svg';
+import StudioActiveIcon from './icons/studio_active.svg';
+import VerticalEllipsisIcon from './icons/vertical-ellipsis.svg';
 
 export const REACT_ICONS_MAP: { [key: string]: ReactIconType } = {
   BiDetail,
@@ -281,7 +281,10 @@ export type IconType =
 export const IconTypes: { [K in IconType]: IconType } = Object.keys({
   ...CUSTOM_ICON_MAP,
   ...REACT_ICONS_MAP,
-}).reduce((prevVal, currVal) => {
-  prevVal[currVal] = currVal;
-  return prevVal;
-}, {} as { [K in IconType]: IconType });
+}).reduce(
+  (prevVal, currVal) => {
+    prevVal[currVal] = currVal;
+    return prevVal;
+  },
+  {} as { [K in IconType]: IconType }
+);

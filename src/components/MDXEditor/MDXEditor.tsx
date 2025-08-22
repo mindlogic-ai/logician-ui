@@ -156,6 +156,7 @@ export function MDXEditor({
         <Editor
           ref={editorRef}
           contentEditableClassName="content-editable"
+          // @ts-expect-error - overlayContainer prop may not be available in this version
           overlayContainer={
             typeof document !== 'undefined' ? document.body : undefined
           }

@@ -6,7 +6,7 @@ import { ChipButtonPropsTypes } from './Chip.types';
 export const ChipButton = forwardRef(
   (
     { rightIcon, leftIcon, ...rest }: ChipButtonPropsTypes & ButtonProps,
-    ref?: ForwardedRef<HTMLButtonElement>,
+    ref?: ForwardedRef<HTMLButtonElement>
   ) => {
     return (
       <ChakraButton
@@ -19,7 +19,7 @@ export const ChipButton = forwardRef(
         ref={ref}
       />
     );
-  },
+  }
 );
 
 ChipButton.displayName = 'ChipButton';
