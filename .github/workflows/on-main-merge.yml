@@ -45,7 +45,7 @@ jobs:
         run: yarn build
         env:
           NODE_ENV: production
-          NODE_OPTIONS: '--max-old-space-size=4096 --optimize-for-size'
+          NODE_OPTIONS: '--max-old-space-size=4096'
 
       - name: Publish to NPM
         continue-on-error: true
