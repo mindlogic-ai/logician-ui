@@ -35,6 +35,7 @@ import { MonthRange, MonthRangePickerProps } from './MonthRangePicker.types';
 
 export const MonthRangePicker: React.FC<MonthRangePickerProps> = ({
   selectedRange,
+  singleMonth = false,
   onChange,
   minMonth,
   maxMonth,
@@ -83,20 +84,27 @@ export const MonthRangePicker: React.FC<MonthRangePickerProps> = ({
       return `${start} - ${end}`;
     }
 
-    // If we have a partial range (selectedRange with only startMonth) or selection start, show just the start date
+    // If we have a partial range (selectedRange with only startMonth) or selection start
     if (selectedRange?.startMonth || selectionStart) {
       const startDate = selectedRange?.startMonth || selectionStart;
       if (startDate) {
         const start = format(startDate, effectiveDateFormat, {
           locale: dateFnsLocale,
         });
-        return `${start} -`;
+        // In single month mode, show just the month without dash
+        return singleMonth ? start : `${start} -`;
       }
     }
 
     // No selection at all
     return '';
-  }, [selectedRange, selectionStart, effectiveDateFormat, dateFnsLocale]);
+  }, [
+    selectedRange,
+    selectionStart,
+    effectiveDateFormat,
+    dateFnsLocale,
+    singleMonth,
+  ]);
 
   // Check if navigation to previous/next year is possible
   const canNavigateToPrevYear = useMemo(() => {
@@ -127,6 +135,18 @@ export const MonthRangePicker: React.FC<MonthRangePickerProps> = ({
 
       const clickedMonth = new Date(year, month, 1);
 
+      // Single month mode: immediate selection and close
+      if (singleMonth) {
+        onChange?.({
+          startMonth: clickedMonth,
+          endMonth: null,
+        });
+        setSelectionStart(null);
+        onClose();
+        return;
+      }
+
+      // Range mode: existing logic
       if (!selectionStart) {
         // If there's an existing complete range, clear it and start fresh
         if (selectedRange) {
@@ -160,7 +180,15 @@ export const MonthRangePicker: React.FC<MonthRangePickerProps> = ({
         onClose();
       }
     },
-    [selectionStart, selectedRange, onChange, onClose, minMonth, maxMonth],
+    [
+      singleMonth,
+      selectionStart,
+      selectedRange,
+      onChange,
+      onClose,
+      minMonth,
+      maxMonth,
+    ],
   );
 
   const handleMonthHover = useCallback((month: number, year: number) => {
