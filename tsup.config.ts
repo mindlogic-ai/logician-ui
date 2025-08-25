@@ -1,4 +1,5 @@
 import { defineConfig } from 'tsup';
+import esbuildSvgr from 'esbuild-plugin-svgr';
 
 export default defineConfig({
   entry: ['src/index.ts'],
@@ -7,6 +8,7 @@ export default defineConfig({
   splitting: true, // Enable code splitting for better memory usage
   sourcemap: process.env.NODE_ENV !== 'production', // Only in dev
   clean: true,
+  esbuildPlugins: [esbuildSvgr()], // Handle SVG files as React components
   external: [
     // Core React
     'react',
