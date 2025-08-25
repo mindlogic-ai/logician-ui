@@ -1,5 +1,6 @@
 import { BiDetail, BiExpandAlt } from "react-icons/bi";
 import { BsTranslate } from "react-icons/bs";
+import { CgProfile } from "react-icons/cg";
 import { CiFileOn } from "react-icons/ci";
 import {
   FaArchive,
@@ -55,7 +56,6 @@ import {
 import {
   IoAddCircleOutline,
   IoAddOutline,
-  IoCall,
   IoChatbubbleEllipses,
   IoChevronDownOutline,
   IoChevronForward,
@@ -97,7 +97,7 @@ import {
   MdSpaceDashboard,
   MdThumbsUpDown,
 } from "react-icons/md";
-import { PiChatSlashBold, PiExam, PiGlobe, PiGlobeX } from "react-icons/pi";
+import { PiExam, PiGlobe, PiGlobeX } from "react-icons/pi";
 import { RxDotsHorizontal } from "react-icons/rx";
 import { SlSettings } from "react-icons/sl";
 import {
@@ -110,27 +110,43 @@ import {
   TbWorldSearch,
 } from "react-icons/tb";
 
+import AmountUsageIcon from "./icons/amount-usage.svg";
 import AnalyticsIcon from "./icons/analytics.svg";
 import BulbIcon from "./icons/bulb.svg";
 import ChatIcon from "./icons/chat.svg";
+import ChatListIcon from "./icons/chatlist.svg";
+import DashboardIcon from "./icons/dashboard.svg";
 import EditIcon from "./icons/edit.svg";
 import FaceIcon from "./icons/face.svg";
+import FaqIcon from "./icons/faq.svg";
+import FilledAmountUsageIcon from "./icons/filled-amount-usage.svg";
 import FilledAnalyticsIcon from "./icons/filled-analytics.svg";
 import FilledBulbIcon from "./icons/filled-bulb.svg";
 import FilledChatIcon from "./icons/filled-chat.svg";
+import FilledChatListIcon from "./icons/filled-chatlist.svg";
+import FilledDashboardIcon from "./icons/filled-dashboard.svg";
 import FilledEditIcon from "./icons/filled-edit.svg";
 import FilledFaceIcon from "./icons/filled-face.svg";
+import FilledFaqIcon from "./icons/filled-faq.svg";
 import FilledLayoutIcon from "./icons/filled-layout.svg";
+import FilledMembersIcon from "./icons/filled-members.svg";
+import FilledProfileIcon from "./icons/filled-profile.svg";
+import FilledUsageIcon from "./icons/filled-usage.svg";
 import LanguageIcon from "./icons/language.svg";
 import LayoutIcon from "./icons/layout.svg";
+import MembersIcon from "./icons/members.svg";
+import MessageIcon from "./icons/message.svg";
 import PendingIcon from "./icons/pending.svg";
+import ProfileIcon from "./icons/profile.svg";
 import ReceiptIcon from "./icons/receipt.svg";
 import SparklesIcon from "./icons/sparkles.svg";
 import StoreIcon from "./icons/store.svg";
 import StoreActiveIcon from "./icons/store_active.svg";
 import StudioIcon from "./icons/studio.svg";
 import StudioActiveIcon from "./icons/studio_active.svg";
+import UsageIcon from "./icons/usage.svg";
 import VerticalEllipsisIcon from "./icons/vertical-ellipsis.svg";
+import WindowIcon from "./icons/window.svg";
 
 export const REACT_ICONS_MAP: { [key: string]: ReactIconType } = {
   BiDetail,
@@ -174,11 +190,11 @@ export const REACT_ICONS_MAP: { [key: string]: ReactIconType } = {
   HiRefresh,
   IoAddCircleOutline,
   IoAddOutline,
-  IoCall,
   IoChatbubbleEllipses,
   IoChevronDownOutline,
   IoChevronForward,
   IoCodeSlash,
+  GoPlus,
   IoClose,
   IoCloseOutline,
   IoDocumentTextSharp,
@@ -223,7 +239,6 @@ export const REACT_ICONS_MAP: { [key: string]: ReactIconType } = {
   MdPreview,
   MdSpaceDashboard,
   MdThumbsUpDown,
-  PiChatSlashBold,
   PiExam,
   PiGlobe,
   PiGlobeX,
@@ -236,6 +251,7 @@ export const REACT_ICONS_MAP: { [key: string]: ReactIconType } = {
   TbMessageChatbotFilled,
   TbSum,
   TbWorldSearch,
+  CgProfile,
 };
 
 /**
@@ -269,6 +285,22 @@ export const CUSTOM_ICON_MAP: {
   StoreActive: StoreActiveIcon,
   Receipt: ReceiptIcon,
   VerticalEllipsis: VerticalEllipsisIcon,
+  Dashboard: DashboardIcon,
+  ChatList: ChatListIcon,
+  Faq: FaqIcon,
+  Members: MembersIcon,
+  Usage: UsageIcon,
+  Profile: ProfileIcon,
+  FilledDashboard: FilledDashboardIcon,
+  FilledChatList: FilledChatListIcon,
+  FilledFaq: FilledFaqIcon,
+  FilledMembers: FilledMembersIcon,
+  FilledUsage: FilledUsageIcon,
+  FilledProfile: FilledProfileIcon,
+  FilledAmountUsage: FilledAmountUsageIcon,
+  AmountUsage: AmountUsageIcon,
+  Message: MessageIcon,
+  Window: WindowIcon,
 } as const;
 
 export type IconType =
@@ -281,7 +313,10 @@ export type IconType =
 export const IconTypes: { [K in IconType]: IconType } = Object.keys({
   ...CUSTOM_ICON_MAP,
   ...REACT_ICONS_MAP,
-}).reduce((prevVal, currVal) => {
-  prevVal[currVal] = currVal;
-  return prevVal;
-}, {} as { [K in IconType]: IconType });
+}).reduce(
+  (prevVal, currVal) => {
+    prevVal[currVal] = currVal;
+    return prevVal;
+  },
+  {} as { [K in IconType]: IconType },
+);
