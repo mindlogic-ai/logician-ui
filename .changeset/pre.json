@@ -1,0 +1,17 @@
+{
+  "mode": "exit",
+  "tag": "alpha",
+  "initialVersions": {
+    "@mindlogic-ai/logician-ui": "1.0.0"
+  },
+  "changesets": [
+    "add-storybook",
+    "add-svg-support",
+    "cleanup-dependencies",
+    "remove-avatar-input",
+    "remove-color-mode",
+    "remove-color-picker",
+    "reorganize-src-structure",
+    "replace-chakra-icons"
+  ]
+}
