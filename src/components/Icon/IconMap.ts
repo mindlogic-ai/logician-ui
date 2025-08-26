@@ -127,7 +127,6 @@ import FilledFaceIcon from "./icons/filled-face.svg";
 import FilledFaqIcon from "./icons/filled-faq.svg";
 import FilledLayoutIcon from "./icons/filled-layout.svg";
 import FilledMembersIcon from "./icons/filled-members.svg";
-import FilledProfileIcon from "./icons/filled-profile.svg";
 import FilledUsageIcon from "./icons/filled-usage.svg";
 import LanguageIcon from "./icons/language.svg";
 import LayoutIcon from "./icons/layout.svg";
@@ -290,7 +289,6 @@ export const CUSTOM_ICON_MAP: {
   FilledFaq: FilledFaqIcon,
   FilledMembers: FilledMembersIcon,
   FilledUsage: FilledUsageIcon,
-  FilledProfile: FilledProfileIcon,
   FilledAmountUsage: FilledAmountUsageIcon,
   AmountUsage: AmountUsageIcon,
   Message: MessageIcon,
