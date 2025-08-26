@@ -1,9 +1,10 @@
+import { useRef } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
+import { StoryFn } from '@storybook/react';
+
 import { Button } from '../Button';
 import { GuideCue } from './GuideCue';
 import { GuideCueProvider } from './GuideCueContext';
-import { StoryFn } from '@storybook/react';
-import { useRef } from 'react';
 export default {
   title: 'Components/GuideCue',
   component: GuideCue,
@@ -15,7 +16,7 @@ export default {
   },
 };
 
-const Template: StoryFn<typeof GuideCue> = args => {
+const Template: StoryFn<typeof GuideCue> = (args) => {
   const containerRef = useRef<HTMLButtonElement>(null);
   return (
     <GuideCueProvider page="storybook" numSteps={1}>
@@ -31,7 +32,7 @@ const Template: StoryFn<typeof GuideCue> = args => {
 
 export const Default = Template.bind({});
 
-export const MultipleSteps: StoryFn<typeof GuideCue> = args => {
+export const MultipleSteps: StoryFn<typeof GuideCue> = (args) => {
   const step1Ref = useRef<HTMLButtonElement>(null);
   const step2Ref = useRef<HTMLButtonElement>(null);
   return (

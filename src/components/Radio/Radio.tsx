@@ -29,7 +29,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
         {children}
       </ChakraRadio>
     );
-  },
+  }
 );
 
 Radio.displayName = 'Radio';

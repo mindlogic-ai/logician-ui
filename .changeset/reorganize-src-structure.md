@@ -1,5 +1,5 @@
 ---
-"logician-ui": minor
+"@mindlogic-ai/logician-ui": minor
 ---
 
 Reorganize project structure with src directory for better organization

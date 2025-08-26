@@ -20,7 +20,7 @@ export const Textarea = forwardRef(
       _focusVisible,
       ...props
     }: TextareaProps,
-    ref?: ForwardedRef<HTMLTextAreaElement>,
+    ref?: ForwardedRef<HTMLTextAreaElement>
   ) => {
     const theme = useTheme();
     const [currentValue, setCurrentValue] = useState<
@@ -50,7 +50,7 @@ export const Textarea = forwardRef(
         {...props}
       />
     );
-  },
+  }
 );
 
 Textarea.displayName = 'Textarea';

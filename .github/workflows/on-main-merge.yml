@@ -1,0 +1,140 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Apply changeset version updates
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          yarn changeset version
+          git add .
+          git commit -m "Apply changeset version updates" || exit 0
+          git push origin HEAD:main
+
+      - name: Get current version from package.json
+        id: get_version
+        shell: bash
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build package
+        run: yarn build
+        env:
+          NODE_ENV: production
+          NODE_OPTIONS: '--max-old-space-size=4096'
+
+      - name: Publish to NPM
+        continue-on-error: true
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+          yarn changeset publish
+
+      - name: Create GitHub Release
+        continue-on-error: true
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: 'v${{ steps.get_version.outputs.version }}'
+          release_name: 'Release v${{ steps.get_version.outputs.version }}'
+          draft: false
+          prerelease: false
+
+      - name: Notify Success
+        if: success()
+        uses: 8398a7/action-slack@v3
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:
+          status: custom
+          custom_payload: |
+            {
+              "text": "✅ logician-ui v${{ steps.get_version.outputs.version }} successfully released!",
+              "attachments": [
+                {
+                  "color": "good",
+                  "fields": [
+                    {
+                      "title": "Package",
+                      "value": "logician-ui",
+                      "short": true
+                    },
+                    {
+                      "title": "Version",
+                      "value": "v${{ steps.get_version.outputs.version }}",
+                      "short": true
+                    },
+                    {
+                      "title": "NPM",
+                      "value": "<https://www.npmjs.com/package/logician-ui|View on NPM>",
+                      "short": true
+                    },
+                    {
+                      "title": "GitHub",
+                      "value": "<https://github.com/${{ github.repository }}/releases/tag/v${{ steps.get_version.outputs.version }}|View Release>",
+                      "short": true
+                    }
+                  ]
+                }
+              ]
+            }
+
+      - name: Notify Failure
+        if: failure()
+        uses: 8398a7/action-slack@v3
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:
+          status: custom
+          custom_payload: |
+            {
+              "text": "❌ logician-ui v${{ steps.get_version.outputs.version }} release failed!",
+              "attachments": [
+                {
+                  "color": "danger",
+                  "fields": [
+                    {
+                      "title": "Package",
+                      "value": "logician-ui",
+                      "short": true
+                    },
+                    {
+                      "title": "Version",
+                      "value": "v${{ steps.get_version.outputs.version }}",
+                      "short": true
+                    },
+                    {
+                      "title": "Workflow",
+                      "value": "<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Workflow>",
+                      "short": true
+                    }
+                  ]
+                }
+              ]
+            }

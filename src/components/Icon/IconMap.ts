@@ -24,7 +24,7 @@ import {
   FaUserCheck,
   FaUserPlus,
   FaUsers,
-} from "react-icons/fa";
+} from 'react-icons/fa';
 import {
   FaCheck,
   FaCode,
@@ -53,7 +53,7 @@ import {
   IoMdSettings,
   IoMdThumbsDown,
   IoMdThumbsUp,
-} from "react-icons/io";
+} from 'react-icons/io';
 import {
   IoAddCircleOutline,
   IoAddOutline,
@@ -71,9 +71,9 @@ import {
   IoSearch,
   IoWarning,
   IoWarningOutline,
-} from "react-icons/io5";
-import { LiaNewspaper } from "react-icons/lia";
-import { IconType as ReactIconType } from "react-icons/lib";
+} from 'react-icons/io5';
+import { LiaNewspaper } from 'react-icons/lia';
+import { IconType as ReactIconType } from 'react-icons/lib';
 import {
   LuBookOpenText,
   LuDownload,
@@ -84,7 +84,7 @@ import {
   LuReceipt,
   LuSendHorizontal,
   LuUpload,
-} from "react-icons/lu";
+} from 'react-icons/lu';
 import {
   MdAnnouncement,
   MdCardMembership,
@@ -97,10 +97,10 @@ import {
   MdPreview,
   MdSpaceDashboard,
   MdThumbsUpDown,
-} from "react-icons/md";
-import { PiExam, PiGlobe, PiGlobeX } from "react-icons/pi";
-import { RxDotsHorizontal } from "react-icons/rx";
-import { SlSettings } from "react-icons/sl";
+} from 'react-icons/md';
+import { PiChatSlashBold, PiExam, PiGlobe, PiGlobeX } from 'react-icons/pi';
+import { RxDotsHorizontal } from 'react-icons/rx';
+import { SlSettings } from 'react-icons/sl';
 import {
   TbAppWindowFilled,
   TbInfinity,
@@ -109,7 +109,7 @@ import {
   TbMessageChatbotFilled,
   TbSum,
   TbWorldSearch,
-} from "react-icons/tb";
+} from 'react-icons/tb';
 
 import AmountUsageIcon from "./icons/amount-usage.svg";
 import AnalyticsIcon from "./icons/analytics.svg";

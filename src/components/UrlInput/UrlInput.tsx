@@ -11,7 +11,7 @@ export interface UrlInputProps extends InputProps {
 export const UrlInput = forwardRef(
   (
     { leftAddon = 'https://', value, onChange, ...rest }: UrlInputProps,
-    ref?: ForwardedRef<HTMLInputElement>,
+    ref?: ForwardedRef<HTMLInputElement>
   ) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const inputValue = e.target.value;
@@ -41,7 +41,7 @@ export const UrlInput = forwardRef(
         />
       </InputGroup>
     );
-  },
+  }
 );
 
 UrlInput.displayName = 'UrlInput';

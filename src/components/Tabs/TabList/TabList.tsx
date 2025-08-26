@@ -1,8 +1,8 @@
-import { TabList as ChakraTabList, TabListProps } from "@chakra-ui/react";
+import { TabList as ChakraTabList, TabListProps } from '@chakra-ui/react';
 
-import { useTabsContext } from "@/components/Tabs/TabsContext";
+import { useTabsContext } from '@/components/Tabs/TabsContext';
 
-import { tabListStyles, verticalStyles } from "./TabList.styles";
+import { tabListStyles, verticalStyles } from './TabList.styles';
 
 export const TabList = (props: TabListProps) => {
   const { orientation } = useTabsContext();
@@ -12,7 +12,7 @@ export const TabList = (props: TabListProps) => {
       borderBottom="1px solid"
       borderColor="gray.100"
       {...tabListStyles}
-      {...(orientation === "vertical" && verticalStyles)}
+      {...(orientation === 'vertical' && verticalStyles)}
       {...props}
     />
   );

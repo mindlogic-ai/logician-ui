@@ -52,7 +52,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
   const translate = useTranslate();
 
   const [currentYear, setCurrentYear] = useState(() =>
-    new Date().getFullYear(),
+    new Date().getFullYear()
   );
   const [selectionStart, setSelectionStart] = useState<Date | null>(null);
   const [hoveredMonth, setHoveredMonth] = useState<{
@@ -65,7 +65,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
   const dateFnsLocale = useMemo(() => getDateFnsLocale(locale), [locale]);
   const effectiveDateFormat = useMemo(
     () => dateFormat || getDefaultDateFormat(locale),
-    [dateFormat, locale],
+    [dateFormat, locale]
   );
 
   // Use translated placeholder if not provided
@@ -126,7 +126,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
         // Keep selectionStart to allow cross-year range selection
       }
     },
-    [currentYear, minMonth, maxMonth],
+    [currentYear, minMonth, maxMonth]
   );
 
   const handleMonthClick = useCallback(

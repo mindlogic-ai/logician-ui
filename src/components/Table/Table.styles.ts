@@ -7,7 +7,7 @@ export const getStickyStyles = (
   stickyDirection: StickyDirection = 'left',
   scrollState: TableScrollState,
   stickyOffset = 0,
-  isLastSticky = false,
+  isLastSticky = false
 ) => {
   if (!isSticky || !scrollState) return {};
   const { isScrollStart, isScrollEnd, isScrolling } = scrollState;

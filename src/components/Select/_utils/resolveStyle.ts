@@ -4,7 +4,7 @@ type StyleFunction = (base: StyleObject, state: any) => StyleObject;
 export const resolveStyle = (
   base: StyleObject,
   style?: StyleObject | StyleFunction,
-  state: any = {},
+  state: any = {}
 ): StyleObject => {
   if (!style) {
     return base;

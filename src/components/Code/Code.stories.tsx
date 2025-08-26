@@ -1,10 +1,11 @@
-import React from "react";
-import { Meta, StoryFn } from "@storybook/react";
-import { Code } from "./Code";
-import { CodeProps } from "./Code.types";
+import React from 'react';
+import { Meta, StoryFn } from '@storybook/react';
+
+import { Code } from './Code';
+import { CodeProps } from './Code.types';
 
 const meta: Meta<typeof Code> = {
-  title: "Components/Code",
+  title: 'Components/Code',
   component: Code,
   args: {
     children: `const t = 'test';`,

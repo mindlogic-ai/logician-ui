@@ -38,7 +38,7 @@ export const PinInput = ({
       inputFocusStyle={{
         borderColor: useToken(
           'colors',
-          theme.semanticTokens.colors.primary.main,
+          theme.semanticTokens.colors.primary.main
         ),
         boxShadow: `0 0 0 1px ${useToken('colors', theme.semanticTokens.colors.primary.main)}`,
       }}

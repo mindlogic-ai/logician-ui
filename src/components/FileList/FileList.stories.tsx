@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { Meta, StoryFn } from '@storybook/react';
+
+import {
+  FileGroupProps,
+  FileItemData,
+} from '@/components/FileList/FileList.types';
+
 import { FileList } from './FileList';
-import { FileItemData } from '@/components/FileList/FileList.types';
-import { FileGroupProps } from '@/components/FileList/FileList.types';
 
 export default {
   title: 'Components/FileList',
@@ -14,7 +18,9 @@ const Template: StoryFn<FileGroupProps> = ({ ...args }) => {
   const [visibleCount, setVisibleCount] = useState(3);
 
   const handleFileDelete = (currentFile: FileItemData) => {
-    setFiles(prevFiles => prevFiles.filter(file => file.id !== currentFile.id));
+    setFiles((prevFiles) =>
+      prevFiles.filter((file) => file.id !== currentFile.id)
+    );
   };
 
   return (

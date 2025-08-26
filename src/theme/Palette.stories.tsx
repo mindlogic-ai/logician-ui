@@ -1,12 +1,13 @@
-import React, { MouseEventHandler, useState } from "react";
-import { Meta, StoryFn } from "@storybook/react";
-import { Box, Flex, useTheme, useToken, VStack } from "@chakra-ui/react";
-import { H4, Text } from "../components/Typography";
-import { Tooltip } from "../components/Tooltip";
-import { lighten, readableColor } from "polished";
+import React, { MouseEventHandler, useState } from 'react';
+import { Box, Flex, useTheme, useToken, VStack } from '@chakra-ui/react';
+import { Meta, StoryFn } from '@storybook/react';
+import { lighten, readableColor } from 'polished';
+
+import { Tooltip } from '../components/Tooltip';
+import { H4, Text } from '../components/Typography';
 
 const meta: Meta = {
-  title: "Setup/Theme",
+  title: 'Setup/Theme',
 };
 
 export default meta;
@@ -27,17 +28,17 @@ const ColorCard = ({
   // Function to resolve nested color tokens to final hex values
   const resolveColorToken = (tokenValue: string): string => {
     // If it's already a hex color, return it
-    if (tokenValue.startsWith("#")) {
+    if (tokenValue.startsWith('#')) {
       return tokenValue;
     }
 
     // If it's a token reference like "blue.900", resolve it
-    if (tokenValue.includes(".")) {
-      const [colorName, shade] = tokenValue.split(".");
+    if (tokenValue.includes('.')) {
+      const [colorName, shade] = tokenValue.split('.');
       const resolvedColor = theme.colors?.[colorName]?.[shade];
 
       // If the resolved color is still a token reference, resolve it recursively
-      if (resolvedColor && typeof resolvedColor === "string") {
+      if (resolvedColor && typeof resolvedColor === 'string') {
         return resolveColorToken(resolvedColor);
       }
 
@@ -45,7 +46,7 @@ const ColorCard = ({
     }
 
     // Try to get it from useToken as fallback
-    return useToken("colors", tokenValue) || tokenValue;
+    return useToken('colors', tokenValue) || tokenValue;
   };
 
   const hexCode = resolveColorToken(shadeValue);
@@ -63,7 +64,7 @@ const ColorCard = ({
     try {
       return readableColor(bgColor);
     } catch {
-      return "white"; // fallback
+      return 'white'; // fallback
     }
   };
 
@@ -91,7 +92,7 @@ const ColorCard = ({
           // @ts-expect-error as prop
           onClick={handleClick}
           _hover={{
-            transform: "scale(1.05)",
+            transform: 'scale(1.05)',
           }}
         >
           {wasCopied ? (
@@ -134,14 +135,14 @@ export const Default: Story = (args) => {
   return (
     <VStack gap={4} align="flex-start">
       {Object.entries(theme.semanticTokens?.colors || {})
-        .filter(([color]) => !color.startsWith("chakra"))
+        .filter(([color]) => !color.startsWith('chakra'))
         .map(([color, shades]) => (
           <Flex key={color} gap={4} align="center">
             <H4 mb={2} w="100px" textTransform="capitalize" color="gray.1200">
               {color}
             </H4>
             <Flex gap={2}>
-              {typeof shades === "string" ? (
+              {typeof shades === 'string' ? (
                 // Handle simple string values (e.g., "white", "black")
                 <ColorCard
                   key={color}

@@ -28,7 +28,7 @@ export const Carousel: React.FC<CarouselProps> = ({
 
   // Internal state for uncontrolled usage
   const [internalCurrentSlide, setInternalCurrentSlide] = useState<number>(
-    defaultSlide >= 0 && defaultSlide < slidesCount ? defaultSlide : 0,
+    defaultSlide >= 0 && defaultSlide < slidesCount ? defaultSlide : 0
   );
 
   // Determine the current slide

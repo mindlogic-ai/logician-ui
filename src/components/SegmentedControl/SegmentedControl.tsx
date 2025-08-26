@@ -18,10 +18,12 @@ export const SegmentedControl = ({
 
   // Use the controlled value if provided, otherwise use the internal state
   const activeValue = value !== undefined ? value : internalValue;
-  const activeIndex = options.findIndex(option => option.value === activeValue);
+  const activeIndex = options.findIndex(
+    (option) => option.value === activeValue
+  );
 
   const getControlPadding: (
-    size: SegmentedControlProps['size'],
+    size: SegmentedControlProps['size']
   ) => SegmentedControlProps['padding'] = (size = 'md') => {
     const paddings = {
       xs: theme.space[1],
@@ -56,7 +58,9 @@ export const SegmentedControl = ({
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         style={{
           position: 'absolute',
+          // @ts-expect-error - Chakra UI responsive values in Framer Motion styles
           top: getControlPadding(size),
+          // @ts-expect-error - Chakra UI responsive values in Framer Motion styles
           bottom: getControlPadding(size),
           left: `calc(${activeIndex * 2} * ${getControlPadding(size)})`,
           width: `calc(${100 / options.length}% - 2 * ${getControlPadding(size)})`,
@@ -66,7 +70,7 @@ export const SegmentedControl = ({
         }}
       />
 
-      {options.map(option => (
+      {options.map((option) => (
         <Button
           key={option.value}
           flex={1}

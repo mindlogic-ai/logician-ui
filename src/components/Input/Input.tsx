@@ -29,7 +29,7 @@ const unformatNumber = (value: string) => {
 const calculateCursorPosition = (
   oldValue: string,
   newValue: string,
-  oldCursorPos: number,
+  oldCursorPos: number
 ): number => {
   // Count commas before cursor in old value
   const commasBeforeCursorOld = (
@@ -80,7 +80,7 @@ export const Input = forwardRef(
       noSpaces = false,
       ...rest
     }: InputProps,
-    ref?: ForwardedRef<HTMLInputElement>,
+    ref?: ForwardedRef<HTMLInputElement>
   ) => {
     const rightElementRef = useRef<HTMLDivElement>(null);
     const [rightElementWidth, setRightElementWidth] = useState(0);
@@ -107,7 +107,7 @@ export const Input = forwardRef(
         if (inputElement) {
           inputElement.setSelectionRange(
             cursorPosition.current,
-            cursorPosition.current,
+            cursorPosition.current
           );
           cursorPosition.current = null;
           setShouldRestoreCursor(false);
@@ -177,7 +177,7 @@ export const Input = forwardRef(
     // Helper function to create synthetic event with filtered value
     const createSyntheticEvent = (
       originalEvent: React.ChangeEvent<HTMLInputElement>,
-      newValue: string,
+      newValue: string
     ) => {
       // Create a new native event to ensure Formik properly updates
       const nativeEvent = Object.create(originalEvent.nativeEvent);
@@ -243,7 +243,7 @@ export const Input = forwardRef(
             cursorPosition.current = calculateCursorPosition(
               oldValue,
               newFormattedValue,
-              oldCursorPos,
+              oldCursorPos
             );
             setShouldRestoreCursor(true);
           } else {
@@ -352,7 +352,7 @@ export const Input = forwardRef(
         )}
       </InputGroup>
     );
-  },
+  }
 );
 
 Input.displayName = 'Input';

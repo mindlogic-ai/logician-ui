@@ -51,7 +51,7 @@ export const useToast = (props?: UseToastOptions) => {
       onCloseComplete: () => {
         // Remove the toast ID from the active list once closed
         activeToasts.current = activeToasts.current.filter(
-          id => id !== toastId,
+          (id) => id !== toastId
         );
       },
       ...rest,

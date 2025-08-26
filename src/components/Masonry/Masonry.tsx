@@ -24,7 +24,7 @@ export const Masonry = ({
 }: PropsWithChildren<MasonryProps>) => {
   const childrenArray = useMemo(
     () => Children.toArray(children).filter(isValidElement),
-    [children],
+    [children]
   );
 
   const [itemHeights, setItemHeights] = useState<Record<string, number>>({});
@@ -35,9 +35,9 @@ export const Masonry = ({
   // Clear refs for items that no longer exist
   const cleanupItemRefs = useCallback(() => {
     const currentKeys = childrenArray.map(
-      (_, index) => `masonry-item-${index}`,
+      (_, index) => `masonry-item-${index}`
     );
-    Object.keys(itemRefs.current).forEach(key => {
+    Object.keys(itemRefs.current).forEach((key) => {
       if (!currentKeys.includes(key)) {
         delete itemRefs.current[key];
       }
@@ -95,7 +95,7 @@ export const Masonry = ({
     resizeObserverRef.current = new ResizeObserver(handleResize);
 
     // Observe all current refs
-    Object.values(itemRefs.current).forEach(ref => {
+    Object.values(itemRefs.current).forEach((ref) => {
       if (ref) {
         resizeObserverRef.current?.observe(ref);
       }
@@ -111,7 +111,7 @@ export const Masonry = ({
   const columns = useMemo(() => {
     const colElements: ReactNode[][] = Array.from(
       { length: numCols },
-      () => [],
+      () => []
     );
 
     if (horizontalArrangement) {
@@ -123,14 +123,14 @@ export const Masonry = ({
         colElements[columnIndex].push(
           <Box
             key={itemKey}
-            ref={el => {
+            ref={(el) => {
               itemRefs.current[itemKey] = el;
             }}
             mb={gap}
             w="100%"
           >
             {cloneElement(child, { key: itemKey })}
-          </Box>,
+          </Box>
         );
       });
     } else {
@@ -140,14 +140,14 @@ export const Masonry = ({
       childrenArray.forEach((child, index) => {
         // Find column with the shortest height
         const shortestColumnIndex = columnHeights.indexOf(
-          Math.min(...columnHeights),
+          Math.min(...columnHeights)
         );
         const itemKey = `masonry-item-${index}`;
 
         colElements[shortestColumnIndex].push(
           <Box
             key={itemKey}
-            ref={el => {
+            ref={(el) => {
               itemRefs.current[itemKey] = el;
             }}
             _notLast={{
@@ -156,7 +156,7 @@ export const Masonry = ({
             w="100%"
           >
             {cloneElement(child, { key: itemKey })}
-          </Box>,
+          </Box>
         );
 
         // Update column height

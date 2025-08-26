@@ -1,9 +1,15 @@
 import { useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
 
 import { useTranslate } from '@/hooks/useTranslate';
 
 import { useToast } from '../Toast/useToast';
+// Optional Next.js navigation import
+let useSearchParams: any;
+try {
+  useSearchParams = require('next/navigation').useSearchParams;
+} catch {
+  useSearchParams = () => ({ get: () => null });
+}
 
 /**
  * Separate any cross-page toasts sent using the message query param to ensure these can be wrapped with Suspense tags.

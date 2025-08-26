@@ -17,7 +17,7 @@ const meta: Meta<typeof SectionLoader> = {
 export default meta;
 type Story = StoryFn<typeof SectionLoader>;
 
-export const Basic: Story = args => {
+export const Basic: Story = (args) => {
   return (
     <Box position="relative" p="128px" bg="red">
       <SectionLoader {...args} />

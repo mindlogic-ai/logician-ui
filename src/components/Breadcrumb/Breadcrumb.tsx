@@ -13,7 +13,7 @@ export const Breadcrumb = forwardRef(
         ref={ref}
       />
     );
-  },
+  }
 );
 
 Breadcrumb.displayName = 'Breadcrumb';

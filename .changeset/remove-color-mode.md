@@ -1,5 +1,5 @@
 ---
-"logician-ui": major
+"@mindlogic-ai/logician-ui": major
 ---
 
 Remove color mode functionality and simplify to light mode only

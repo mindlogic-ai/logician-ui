@@ -65,9 +65,9 @@ const meta: Meta<typeof LineGraph> = {
 export default meta;
 type Story = StoryFn<typeof LineGraph>;
 
-export const Basic: Story = args => <LineGraph {...args} />;
+export const Basic: Story = (args) => <LineGraph {...args} />;
 
-export const TwoSeries: Story = args => <LineGraph {...args} />;
+export const TwoSeries: Story = (args) => <LineGraph {...args} />;
 TwoSeries.args = {
   dataKeys: [
     {
@@ -81,7 +81,7 @@ TwoSeries.args = {
   ],
 };
 
-export const CustomColors: Story = args => <LineGraph {...args} />;
+export const CustomColors: Story = (args) => <LineGraph {...args} />;
 CustomColors.args = {
   dataKeys: [
     {

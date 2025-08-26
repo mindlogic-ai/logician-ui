@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { useEffect, useState } from "react";
-import { Box, VStack } from "@chakra-ui/react";
+import { useState } from 'react';
+import { Box, VStack } from '@chakra-ui/react';
+import type { Meta, StoryObj } from '@storybook/react';
+import { addMonths, subMonths } from 'date-fns';
 
-import { Text } from "@/components/Typography";
-import { subMonths, addMonths } from "date-fns";
+import { Text } from '@/components/Typography';
 
 import { MonthPicker } from "./MonthPicker";
 import { Month } from "./MonthPicker.types";
@@ -12,9 +12,9 @@ const meta: Meta<typeof MonthPicker> = {
   title: "Components/MonthPicker",
   component: MonthPicker,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
     selectedRange: {
       control: false,
@@ -56,7 +56,7 @@ const meta: Meta<typeof MonthPicker> = {
                 {selectedRange.endMonth ? (
                   <> - {selectedRange.endMonth.toLocaleDateString()}</>
                 ) : (
-                  " - (selecting...)"
+                  ' - (selecting...)'
                 )}
               </Text>
             </Box>
@@ -68,7 +68,7 @@ const meta: Meta<typeof MonthPicker> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof MonthRangePicker>;
+type Story = StoryObj<typeof MonthPicker>;
 
 export const Default: Story = {};
 
@@ -120,8 +120,8 @@ export const Disabled: Story = {
 
 export const CustomFormat: Story = {
   args: {
-    format: "MMMM yyyy",
-    placeholder: "Select month range (full month names)",
+    format: 'MMMM yyyy',
+    placeholder: 'Select month range (full month names)',
   },
   parameters: {
     additionalContent: (

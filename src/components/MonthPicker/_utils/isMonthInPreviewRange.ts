@@ -4,7 +4,7 @@ export const isMonthInPreviewRange = (
   month: number,
   year: number,
   selectionStart: Date | null,
-  hoveredMonth: { month: number; year: number } | null,
+  hoveredMonth: { month: number; year: number } | null
 ): boolean => {
   if (!selectionStart || !hoveredMonth) return false;
 

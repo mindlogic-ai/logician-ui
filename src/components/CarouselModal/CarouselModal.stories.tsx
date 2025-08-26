@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Meta, StoryObj } from '@storybook/react';
-import { CarouselModal } from './CarouselModal';
+import React from 'react';
 import { Box } from '@chakra-ui/react';
+import { Meta, StoryObj } from '@storybook/react';
+
 import { H4, Text } from '../Typography';
+import { CarouselModal } from './CarouselModal';
 
 const meta: Meta<typeof CarouselModal> = {
   title: 'Components/CarouselModal',

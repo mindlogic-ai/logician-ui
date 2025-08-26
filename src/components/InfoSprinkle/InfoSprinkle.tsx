@@ -34,7 +34,7 @@ export const InfoSprinkle = ({
             opacity: 1,
           }}
         >
-          {icon || <Icon icon={icon || IconTypes.LuInfo} boxSize="sm" />}
+          {icon || <Icon icon={IconTypes.LuInfo} boxSize="sm" />}
         </Box>
       </PopoverTrigger>
       <Portal>

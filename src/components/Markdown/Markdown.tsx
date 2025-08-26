@@ -1,22 +1,22 @@
-import ReactMarkdown from "react-markdown";
-import { Box } from "@chakra-ui/react";
-import rehypeKatex from "rehype-katex";
-import rehypeRaw from "rehype-raw";
-import remarkBreaks from "remark-breaks";
-import remarkFlexibleMarkers from "remark-flexible-markers";
-import remarkGfm from "remark-gfm";
-import remarkMath from "remark-math";
+import ReactMarkdown from 'react-markdown';
+import { Box } from '@chakra-ui/react';
+import rehypeKatex from 'rehype-katex';
+import rehypeRaw from 'rehype-raw';
+import remarkBreaks from 'remark-breaks';
+import remarkFlexibleMarkers from 'remark-flexible-markers';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
 
-import { formatForMarkdown } from "@/utils/formatTextForMarkdown";
+import { formatForMarkdown } from '@/utils/formatTextForMarkdown';
 
-import "katex/dist/katex.min.css"; // Import KaTeX CSS
+import 'katex/dist/katex.min.css'; // Import KaTeX CSS
 
-import { Code } from "../Code";
-import { InlineCode } from "../InlineCode";
-import { Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "../Table";
-import { H1, H2, H3, H4, H5, Link, Subtitle, Text } from "../Typography";
-import MarkdownStyles from "./Markdown.module.css";
-import { MarkdownProps } from "./Markdown.types";
+import { Code } from '../Code';
+import { InlineCode } from '../InlineCode';
+import { Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '../Table';
+import { H1, H2, H3, H4, H5, Link, Subtitle, Text } from '../Typography';
+import MarkdownStyles from './Markdown.module.css';
+import { MarkdownProps } from './Markdown.types';
 
 // Simple wrapper components to avoid type issues
 const H1Wrapper = (props: any) => <H1 {...props} />;
@@ -56,10 +56,10 @@ export const baseMarkdownComponents = {
           navigator.clipboard
             .writeText(textToCopy)
             .then(() => {
-              console.log("Text copied to clipboard");
+              console.log('Text copied to clipboard');
             })
             .catch((err) => {
-              console.error("Could not copy text to clipboard:", err);
+              console.error('Could not copy text to clipboard:', err);
             });
         }}
         containerProps={{ mb: 4, className }}
@@ -78,18 +78,18 @@ export const baseMarkdownComponents = {
   ),
   ol: ({ style, ...rest }: any) => (
     <ol
-      style={{ paddingInlineStart: "22px", color: "inherit", ...style }}
+      style={{ paddingInlineStart: '22px', color: 'inherit', ...style }}
       {...rest}
     />
   ),
   ul: ({ style, ...rest }: any) => (
     <ul
-      style={{ paddingInlineStart: "22px", color: "inherit", ...style }}
+      style={{ paddingInlineStart: '22px', color: 'inherit', ...style }}
       {...rest}
     />
   ),
   img: ({ style, ...rest }: any) => (
-    <img style={{ maxWidth: "100%", ...style }} alt="chat-image" {...rest} />
+    <img style={{ maxWidth: '100%', ...style }} alt="chat-image" {...rest} />
   ),
   table: (props: any) => (
     <TableContainer mt={4}>
@@ -114,19 +114,20 @@ export const Markdown = ({
   const allComponents = { ...baseMarkdownComponents, ...components };
 
   return (
-    <ReactMarkdown
-      remarkPlugins={[
-        remarkGfm,
-        remarkFlexibleMarkers,
-        remarkBreaks,
-        remarkMath,
-      ]}
-      rehypePlugins={[rehypeRaw, rehypeKatex]}
-      className={[MarkdownStyles.markdownStyles, className].join(" ")}
-      components={allComponents}
-      {...rest}
-    >
-      {formatForMarkdown(children ?? "")}
-    </ReactMarkdown>
+    <div className={[MarkdownStyles.markdownStyles, className].join(' ')}>
+      <ReactMarkdown
+        remarkPlugins={[
+          remarkGfm,
+          remarkFlexibleMarkers,
+          remarkBreaks,
+          remarkMath,
+        ]}
+        rehypePlugins={[rehypeRaw, rehypeKatex]}
+        components={allComponents}
+        {...rest}
+      >
+        {formatForMarkdown(children ?? '')}
+      </ReactMarkdown>
+    </div>
   );
 };

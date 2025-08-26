@@ -55,7 +55,7 @@ export const MonthButton: React.FC<MonthButtonProps> = memo(
       selectionStart?: Date | null,
       hoveredMonth?: { month: number; year: number } | null,
       minMonth?: Date,
-      maxMonth?: Date,
+      maxMonth?: Date
     ): ButtonVariant => {
       if (isMonthDisabled(month, year, minMonth, maxMonth)) return 'tertiary';
       if (isMonthSelected(month, year, selectedRange)) return 'primary';
@@ -68,7 +68,7 @@ export const MonthButton: React.FC<MonthButtonProps> = memo(
           month,
           year,
           selectionStart || null,
-          hoveredMonth || null,
+          hoveredMonth || null
         )
       ) {
         return 'secondary';
@@ -87,7 +87,7 @@ export const MonthButton: React.FC<MonthButtonProps> = memo(
           selectionStart,
           hoveredMonth,
           minMonth,
-          maxMonth,
+          maxMonth
         )}
         onClick={handleClick}
         onMouseEnter={handleMouseEnter}
@@ -99,7 +99,7 @@ export const MonthButton: React.FC<MonthButtonProps> = memo(
         {monthName}
       </Button>
     );
-  },
+  }
 );
 
 MonthButton.displayName = 'MonthButton';

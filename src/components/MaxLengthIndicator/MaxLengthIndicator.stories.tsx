@@ -23,4 +23,4 @@ const meta: Meta<typeof MaxLengthIndicator> = {
 export default meta;
 type Story = StoryFn<typeof MaxLengthIndicator>;
 
-export const Basic: Story = args => <MaxLengthIndicator {...args} />;
+export const Basic: Story = (args) => <MaxLengthIndicator {...args} />;

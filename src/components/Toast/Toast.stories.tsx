@@ -1,9 +1,8 @@
-import { useToast } from './useToast';
-
-import { Meta } from '@storybook/react';
-import { Toast } from './Toast';
 import { Flex } from '@chakra-ui/react';
+import { Meta } from '@storybook/react';
+
 import { Button } from '../Button';
+import { useToast } from './useToast';
 
 const meta: Meta<typeof Text> = {
   title: 'Components/Toast',

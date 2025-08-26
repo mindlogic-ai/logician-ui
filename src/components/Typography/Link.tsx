@@ -19,7 +19,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkCustomProps>(
     const linkColor =
       useToken(
         'colors',
-        variant === 'error' ? errorColor : color || defaultColor,
+        variant === 'error' ? errorColor : color || defaultColor
       ) ?? color;
 
     const getHoverColor = () => {
@@ -43,7 +43,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkCustomProps>(
         {...rest}
       />
     );
-  },
+  }
 );
 
 Link.displayName = 'Link';

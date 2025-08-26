@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 
-import { Accordion, AccordionItem, AccordionButton, AccordionPanel } from '.';
+import { Accordion, AccordionButton, AccordionItem, AccordionPanel } from '.';
 
 const meta: Meta<typeof Accordion> = {
   title: 'Components/Accordion',
@@ -14,7 +14,7 @@ const meta: Meta<typeof Accordion> = {
 export default meta;
 type Story = StoryFn<typeof Accordion>;
 
-export const Default: Story = args => {
+export const Default: Story = (args) => {
   return (
     <Accordion {...args}>
       <AccordionItem>
@@ -25,7 +25,7 @@ export const Default: Story = args => {
   );
 };
 
-export const TwoItems: Story = args => {
+export const TwoItems: Story = (args) => {
   return (
     <Accordion {...args}>
       <AccordionItem>
