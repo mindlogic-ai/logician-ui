@@ -114,7 +114,6 @@ import AmountUsageIcon from "./icons/amount-usage.svg";
 import AnalyticsIcon from "./icons/analytics.svg";
 import BulbIcon from "./icons/bulb.svg";
 import ChatIcon from "./icons/chat.svg";
-import ChatListIcon from "./icons/chatlist.svg";
 import DashboardIcon from "./icons/dashboard.svg";
 import EditIcon from "./icons/edit.svg";
 import FaceIcon from "./icons/face.svg";
@@ -123,8 +122,6 @@ import FilledAmountUsageIcon from "./icons/filled-amount-usage.svg";
 import FilledAnalyticsIcon from "./icons/filled-analytics.svg";
 import FilledBulbIcon from "./icons/filled-bulb.svg";
 import FilledChatIcon from "./icons/filled-chat.svg";
-import FilledChatListIcon from "./icons/filled-chatlist.svg";
-import FilledDashboardIcon from "./icons/filled-dashboard.svg";
 import FilledEditIcon from "./icons/filled-edit.svg";
 import FilledFaceIcon from "./icons/filled-face.svg";
 import FilledFaqIcon from "./icons/filled-faq.svg";
@@ -286,13 +283,10 @@ export const CUSTOM_ICON_MAP: {
   Receipt: ReceiptIcon,
   VerticalEllipsis: VerticalEllipsisIcon,
   Dashboard: DashboardIcon,
-  ChatList: ChatListIcon,
   Faq: FaqIcon,
   Members: MembersIcon,
   Usage: UsageIcon,
   Profile: ProfileIcon,
-  FilledDashboard: FilledDashboardIcon,
-  FilledChatList: FilledChatListIcon,
   FilledFaq: FilledFaqIcon,
   FilledMembers: FilledMembersIcon,
   FilledUsage: FilledUsageIcon,
