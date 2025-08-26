@@ -10,7 +10,7 @@ import {
   isMonthSelected,
   isSelectionStart,
 } from '../_utils';
-import { MonthRange } from '../MonthRangePicker.types';
+import { MonthRange } from '../MonthPicker.types';
 import { MonthButtonProps } from './MonthButton.types';
 
 export const MonthButton: React.FC<MonthButtonProps> = memo(

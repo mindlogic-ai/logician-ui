@@ -52,7 +52,7 @@ export * from './components/MaxLengthIndicator';
 export * from './components/MDXEditor';
 export * from './components/Menu';
 export * from './components/Modal';
-export * from './components/MonthRangePicker';
+export * from './components/MonthPicker';
 
 // Navigation Components
 export * from './components/Pagination';

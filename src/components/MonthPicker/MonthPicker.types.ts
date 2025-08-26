@@ -5,12 +5,15 @@ export interface MonthRange {
   endMonth: Date | null;
 }
 
-export interface MonthRangePickerProps extends Omit<BoxProps, 'onChange'> {
+export interface MonthPickerProps extends Omit<BoxProps, 'onChange'> {
   /** The selected month range */
   selectedRange?: MonthRange | null;
 
   /** Callback when the month range changes */
   onChange?: (range: MonthRange | null) => void;
+
+  /** Whether the picker is a range picker */
+  isRange?: boolean;
 
   /** Minimum selectable month */
   minMonth?: Date;

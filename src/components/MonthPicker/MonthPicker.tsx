@@ -31,11 +31,12 @@ import {
   getMonthNames,
 } from './constants';
 import { MonthButton } from './MonthButton/MonthButton';
-import { MonthRange, MonthRangePickerProps } from './MonthRangePicker.types';
+import { MonthPickerProps, MonthRange } from './MonthPicker.types';
 
-export const MonthRangePicker: React.FC<MonthRangePickerProps> = ({
+export const MonthPicker: React.FC<MonthPickerProps> = ({
   selectedRange,
   onChange,
+  isRange = true,
   minMonth,
   maxMonth,
   disabled = false,
@@ -90,13 +91,19 @@ export const MonthRangePicker: React.FC<MonthRangePickerProps> = ({
         const start = format(startDate, effectiveDateFormat, {
           locale: dateFnsLocale,
         });
-        return `${start} -`;
+        return isRange ? `${start} -` : start;
       }
     }
 
     // No selection at all
     return '';
-  }, [selectedRange, selectionStart, effectiveDateFormat, dateFnsLocale]);
+  }, [
+    selectedRange,
+    selectionStart,
+    effectiveDateFormat,
+    dateFnsLocale,
+    isRange,
+  ]);
 
   // Check if navigation to previous/next year is possible
   const canNavigateToPrevYear = useMemo(() => {
@@ -126,6 +133,16 @@ export const MonthRangePicker: React.FC<MonthRangePickerProps> = ({
       if (isMonthDisabled(month, year, minMonth, maxMonth)) return;
 
       const clickedMonth = new Date(year, month, 1);
+
+      if (!isRange) {
+        onChange?.({
+          startMonth: clickedMonth,
+          endMonth: null,
+        });
+        setSelectionStart(null);
+        onClose();
+        return;
+      }
 
       if (!selectionStart) {
         // If there's an existing complete range, clear it and start fresh
@@ -160,7 +177,15 @@ export const MonthRangePicker: React.FC<MonthRangePickerProps> = ({
         onClose();
       }
     },
-    [selectionStart, selectedRange, onChange, onClose, minMonth, maxMonth]
+    [
+      selectionStart,
+      selectedRange,
+      onChange,
+      onClose,
+      minMonth,
+      maxMonth,
+      isRange,
+    ]
   );
 
   const handleMonthHover = useCallback((month: number, year: number) => {

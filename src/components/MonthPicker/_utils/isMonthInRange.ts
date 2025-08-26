@@ -1,6 +1,6 @@
 import { startOfMonth } from 'date-fns';
 
-import { MonthRange } from '../MonthRangePicker.types';
+import { MonthRange } from '../MonthPicker.types';
 
 export const isMonthInRange = (
   month: number,
