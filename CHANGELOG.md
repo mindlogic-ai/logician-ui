@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0-alpha.2
+
+### Patch Changes
+
+- c32bd4d: Informe에서 사용하는 icon과 component를 수정하였습니다
+
 ## 2.0.0-alpha.1
 
 ### Patch Changes
