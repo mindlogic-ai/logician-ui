@@ -25,7 +25,7 @@ const meta: Meta<typeof MonthPicker> = {
   },
   decorators: [
     (Story, context) => {
-      const [selectedMonth, setSelectedMonth] = useState<Month | null>(
+      const [selectedRange, setSelectedRange] = useState<Month | null>(
         context.parameters?.initialMonth || null
       );
 

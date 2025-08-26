@@ -34,7 +34,7 @@ import { MonthButton } from './MonthButton/MonthButton';
 import { MonthPickerProps } from './MonthPicker.types';
 
 export const MonthPicker: React.FC<MonthPickerProps> = ({
-  selectedMonth,
+  selectedRange,
   isRange = true,
   onChange,
   minMonth,
