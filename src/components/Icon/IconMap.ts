@@ -127,20 +127,17 @@ import FilledFaceIcon from "./icons/filled-face.svg";
 import FilledFaqIcon from "./icons/filled-faq.svg";
 import FilledLayoutIcon from "./icons/filled-layout.svg";
 import FilledMembersIcon from "./icons/filled-members.svg";
-import FilledUsageIcon from "./icons/filled-usage.svg";
 import LanguageIcon from "./icons/language.svg";
 import LayoutIcon from "./icons/layout.svg";
 import MembersIcon from "./icons/members.svg";
 import MessageIcon from "./icons/message.svg";
 import PendingIcon from "./icons/pending.svg";
-import ProfileIcon from "./icons/profile.svg";
 import ReceiptIcon from "./icons/receipt.svg";
 import SparklesIcon from "./icons/sparkles.svg";
 import StoreIcon from "./icons/store.svg";
 import StoreActiveIcon from "./icons/store_active.svg";
 import StudioIcon from "./icons/studio.svg";
 import StudioActiveIcon from "./icons/studio_active.svg";
-import UsageIcon from "./icons/usage.svg";
 import VerticalEllipsisIcon from "./icons/vertical-ellipsis.svg";
 import WindowIcon from "./icons/window.svg";
 
@@ -285,7 +282,6 @@ export const CUSTOM_ICON_MAP: {
   Faq: FaqIcon,
   Members: MembersIcon,
   Usage: UsageIcon,
-  Profile: ProfileIcon,
   FilledFaq: FilledFaqIcon,
   FilledMembers: FilledMembersIcon,
   FilledUsage: FilledUsageIcon,
