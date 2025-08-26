@@ -33,6 +33,7 @@ import {
   FaRegCopy,
   FaRotateRight,
   FaUserClock,
+  FaFaceSmile,
 } from "react-icons/fa6";
 import { GiTwoCoins } from "react-icons/gi";
 import { GoArrowDownRight, GoArrowUpRight } from "react-icons/go";
@@ -175,6 +176,7 @@ export const REACT_ICONS_MAP: { [key: string]: ReactIconType } = {
   FaUserClock,
   FaUserPlus,
   FaUsers,
+  FaFaceSmile,
   GiTwoCoins,
   GoArrowUpRight,
   GoArrowDownRight,
