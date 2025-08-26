@@ -31,7 +31,7 @@ import {
   getMonthNames,
 } from './constants';
 import { MonthButton } from './MonthButton/MonthButton';
-import { MonthRange, MonthPickerProps } from './MonthPicker.types';
+import { MonthPickerProps, MonthRange } from './MonthPicker.types';
 
 export const MonthPicker: React.FC<MonthPickerProps> = ({
   selectedRange,
@@ -97,7 +97,13 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
 
     // No selection at all
     return '';
-  }, [selectedRange, selectionStart, effectiveDateFormat, dateFnsLocale, isRange]);
+  }, [
+    selectedRange,
+    selectionStart,
+    effectiveDateFormat,
+    dateFnsLocale,
+    isRange,
+  ]);
 
   // Check if navigation to previous/next year is possible
   const canNavigateToPrevYear = useMemo(() => {
@@ -171,7 +177,15 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
         onClose();
       }
     },
-    [selectionStart, selectedRange, onChange, onClose, minMonth, maxMonth, isRange]
+    [
+      selectionStart,
+      selectedRange,
+      onChange,
+      onClose,
+      minMonth,
+      maxMonth,
+      isRange,
+    ]
   );
 
   const handleMonthHover = useCallback((month: number, year: number) => {
