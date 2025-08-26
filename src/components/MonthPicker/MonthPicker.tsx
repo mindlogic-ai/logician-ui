@@ -91,7 +91,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
         const start = format(startDate, effectiveDateFormat, {
           locale: dateFnsLocale,
         });
-        return isRange ? `${start} -` : start ;
+        return isRange ? `${start} -` : start;
       }
     }
 
@@ -143,7 +143,6 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
         onClose();
         return;
       }
-
 
       if (!selectionStart) {
         // If there's an existing complete range, clear it and start fresh
