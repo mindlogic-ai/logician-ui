@@ -1,11 +1,11 @@
 import { startOfMonth } from 'date-fns';
 
-import { MonthRange } from '../MonthRangePicker.types';
+import { Month } from '../MonthPicker.types';
 
 export const isMonthInRange = (
   month: number,
   year: number,
-  selectedRange?: MonthRange | null,
+  selectedRange?: Month | null,
 ): boolean => {
   if (!selectedRange || !selectedRange.endMonth) return false;
 

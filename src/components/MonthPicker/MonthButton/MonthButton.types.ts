@@ -1,6 +1,6 @@
 import { ButtonProps } from '@/components/Button/Button.types';
 
-import { MonthRange } from '../MonthRangePicker.types';
+import { MonthRange } from '../MonthPicker.types';
 
 export interface MonthButtonProps
   extends Omit<

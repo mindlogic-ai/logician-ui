@@ -5,12 +5,12 @@ import { Box, VStack } from "@chakra-ui/react";
 import { Text } from "@/components/Typography";
 import { subMonths, addMonths } from "date-fns";
 
-import { MonthRangePicker } from "./MonthRangePicker";
-import { MonthRange } from "./MonthRangePicker.types";
+import { MonthPicker } from "./MonthPicker";
+import { Month } from "./MonthPicker.types";
 
-const meta: Meta<typeof MonthRangePicker> = {
-  title: "Components/MonthRangePicker",
-  component: MonthRangePicker,
+const meta: Meta<typeof MonthPicker> = {
+  title: "Components/MonthPicker",
+  component: MonthPicker,
   parameters: {
     layout: "centered",
   },
@@ -25,8 +25,8 @@ const meta: Meta<typeof MonthRangePicker> = {
   },
   decorators: [
     (Story, context) => {
-      const [selectedRange, setSelectedRange] = useState<MonthRange | null>(
-        context.parameters?.initialRange || null
+      const [selectedMonth, setSelectedMonth] = useState<Month | null>(
+        context.parameters?.initialMonth || null
       );
 
       return (

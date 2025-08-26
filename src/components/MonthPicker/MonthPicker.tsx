@@ -31,11 +31,11 @@ import {
   getMonthNames,
 } from './constants';
 import { MonthButton } from './MonthButton/MonthButton';
-import { MonthRange, MonthRangePickerProps } from './MonthRangePicker.types';
+import { MonthPickerProps } from './MonthPicker.types';
 
-export const MonthRangePicker: React.FC<MonthRangePickerProps> = ({
-  selectedRange,
-  singleMonth = false,
+export const MonthPicker: React.FC<MonthPickerProps> = ({
+  selectedMonth,
+  isRange = true,
   onChange,
   minMonth,
   maxMonth,
@@ -92,7 +92,7 @@ export const MonthRangePicker: React.FC<MonthRangePickerProps> = ({
           locale: dateFnsLocale,
         });
         // In single month mode, show just the month without dash
-        return singleMonth ? start : `${start} -`;
+        return isRange ? `${start} -` : start ;
       }
     }
 
@@ -103,7 +103,7 @@ export const MonthRangePicker: React.FC<MonthRangePickerProps> = ({
     selectionStart,
     effectiveDateFormat,
     dateFnsLocale,
-    singleMonth,
+    isRange,
   ]);
 
   // Check if navigation to previous/next year is possible
@@ -136,7 +136,7 @@ export const MonthRangePicker: React.FC<MonthRangePickerProps> = ({
       const clickedMonth = new Date(year, month, 1);
 
       // Single month mode: immediate selection and close
-      if (singleMonth) {
+      if (!isRange) {
         onChange?.({
           startMonth: clickedMonth,
           endMonth: null,
@@ -181,7 +181,7 @@ export const MonthRangePicker: React.FC<MonthRangePickerProps> = ({
       }
     },
     [
-      singleMonth,
+      isRange,
       selectionStart,
       selectedRange,
       onChange,

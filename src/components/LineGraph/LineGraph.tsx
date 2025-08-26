@@ -15,7 +15,7 @@ import { DatumBase, LineGraphProps } from './LineGraph.types';
 export const LineGraph = <T extends DatumBase>({
   data = [],
   dataKeys,
-  isLegend = true,
+  displayLegend = true,
   ...rest
 }: LineGraphProps<T>) => {
   const theme = useTheme();
@@ -64,7 +64,7 @@ export const LineGraph = <T extends DatumBase>({
               color: theme.colors.gray[1500],
             }}
           />
-          {isLegend && (
+          {displayLegend && (
             <Legend
               wrapperStyle={{
                 bottom: -16,

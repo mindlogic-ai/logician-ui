@@ -1,16 +1,16 @@
 import { BoxProps, PopoverProps } from '@chakra-ui/react';
 
-export interface MonthRange {
+export interface Month {
   startMonth: Date;
   endMonth: Date | null;
 }
 
-export interface MonthRangePickerProps extends Omit<BoxProps, 'onChange'> {
+export interface MonthPickerProps extends Omit<BoxProps, 'onChange'> {
   /** The selected month range */
-  selectedRange?: MonthRange | null;
+  selectedMonth?: Month | null;
 
   /** Callback when the month range changes */
-  onChange?: (range: MonthRange | null) => void;
+  onChange?: (month: Month | null) => void;
 
   /** Minimum selectable month */
   minMonth?: Date;
