@@ -5,12 +5,12 @@ import { addMonths, subMonths } from 'date-fns';
 
 import { Text } from '@/components/Typography';
 
-import { MonthRangePicker } from './MonthRangePicker';
-import { MonthRange } from './MonthRangePicker.types';
+import { MonthPicker } from './MonthPicker';
+import { MonthRange } from './MonthPicker.types';
 
-const meta: Meta<typeof MonthRangePicker> = {
-  title: 'Components/MonthRangePicker',
-  component: MonthRangePicker,
+const meta: Meta<typeof MonthPicker> = {
+  title: 'Components/MonthPicker',
+  component: MonthPicker,
   parameters: {
     layout: 'centered',
   },
@@ -68,7 +68,7 @@ const meta: Meta<typeof MonthRangePicker> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof MonthRangePicker>;
+type Story = StoryObj<typeof MonthPicker>;
 
 export const Default: Story = {};
 

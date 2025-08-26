@@ -1,6 +1,6 @@
 import { isSameMonth } from 'date-fns';
 
-import { MonthRange } from '../MonthRangePicker.types';
+import { MonthRange } from '../MonthPicker.types';
 
 export const isMonthSelected = (
   month: number,

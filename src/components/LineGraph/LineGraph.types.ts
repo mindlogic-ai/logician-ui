@@ -4,6 +4,7 @@ import { type DataKey as RechartsDataKey } from 'recharts/types/util/types.d';
 export interface LineGraphProps<T extends DatumBase> extends BoxProps {
   data: Array<Datum<T>>;
   dataKeys: Array<DataKey<T>>;
+  displayLegend?: boolean;
 }
 
 /**

@@ -110,27 +110,35 @@ import {
   TbWorldSearch,
 } from 'react-icons/tb';
 
-import AnalyticsIcon from './icons/analytics.svg';
-import BulbIcon from './icons/bulb.svg';
-import ChatIcon from './icons/chat.svg';
-import EditIcon from './icons/edit.svg';
-import FaceIcon from './icons/face.svg';
-import FilledAnalyticsIcon from './icons/filled-analytics.svg';
-import FilledBulbIcon from './icons/filled-bulb.svg';
-import FilledChatIcon from './icons/filled-chat.svg';
-import FilledEditIcon from './icons/filled-edit.svg';
-import FilledFaceIcon from './icons/filled-face.svg';
-import FilledLayoutIcon from './icons/filled-layout.svg';
-import LanguageIcon from './icons/language.svg';
-import LayoutIcon from './icons/layout.svg';
-import PendingIcon from './icons/pending.svg';
-import ReceiptIcon from './icons/receipt.svg';
-import SparklesIcon from './icons/sparkles.svg';
-import StoreIcon from './icons/store.svg';
-import StoreActiveIcon from './icons/store_active.svg';
-import StudioIcon from './icons/studio.svg';
-import StudioActiveIcon from './icons/studio_active.svg';
-import VerticalEllipsisIcon from './icons/vertical-ellipsis.svg';
+import AmountUsageIcon from "./icons/amount-usage.svg";
+import AnalyticsIcon from "./icons/analytics.svg";
+import BulbIcon from "./icons/bulb.svg";
+import ChatIcon from "./icons/chat.svg";
+import DashboardIcon from "./icons/dashboard.svg";
+import EditIcon from "./icons/edit.svg";
+import FaceIcon from "./icons/face.svg";
+import FaqIcon from "./icons/faq.svg";
+import FilledAmountUsageIcon from "./icons/filled-amount-usage.svg";
+import FilledAnalyticsIcon from "./icons/filled-analytics.svg";
+import FilledBulbIcon from "./icons/filled-bulb.svg";
+import FilledChatIcon from "./icons/filled-chat.svg";
+import FilledEditIcon from "./icons/filled-edit.svg";
+import FilledFaceIcon from "./icons/filled-face.svg";
+import FilledFaqIcon from "./icons/filled-faq.svg";
+import FilledLayoutIcon from "./icons/filled-layout.svg";
+import FilledMembersIcon from "./icons/filled-members.svg";
+import LanguageIcon from "./icons/language.svg";
+import LayoutIcon from "./icons/layout.svg";
+import MembersIcon from "./icons/members.svg";
+import PendingIcon from "./icons/pending.svg";
+import ReceiptIcon from "./icons/receipt.svg";
+import SparklesIcon from "./icons/sparkles.svg";
+import StoreIcon from "./icons/store.svg";
+import StoreActiveIcon from "./icons/store_active.svg";
+import StudioIcon from "./icons/studio.svg";
+import StudioActiveIcon from "./icons/studio_active.svg";
+import VerticalEllipsisIcon from "./icons/vertical-ellipsis.svg";
+import WindowIcon from "./icons/window.svg";
 
 export const REACT_ICONS_MAP: { [key: string]: ReactIconType } = {
   BiDetail,
@@ -269,6 +277,14 @@ export const CUSTOM_ICON_MAP: {
   StoreActive: StoreActiveIcon,
   Receipt: ReceiptIcon,
   VerticalEllipsis: VerticalEllipsisIcon,
+  Dashboard: DashboardIcon,
+  Faq: FaqIcon,
+  Members: MembersIcon,
+  FilledFaq: FilledFaqIcon,
+  FilledMembers: FilledMembersIcon,
+  FilledAmountUsage: FilledAmountUsageIcon,
+  AmountUsage: AmountUsageIcon,
+  Window: WindowIcon,
 } as const;
 
 export type IconType =
