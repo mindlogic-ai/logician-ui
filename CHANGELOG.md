@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0-alpha.3
+
+### Minor Changes
+
+- 485d869: Created the LogicianProvider component
+
 ## 2.0.0-alpha.2
 
 ### Patch Changes
