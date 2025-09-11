@@ -1,16 +1,17 @@
-import type { StorybookConfig } from "@storybook/react-vite";
-import path from "path";
+import type { StorybookConfig } from '@storybook/react-vite';
+import path from 'path';
 
 const config: StorybookConfig = {
-  stories: ["../src/components/**/*.stories.@(js|jsx|ts|tsx|mdx)"],
-  addons: ["@storybook/addon-essentials", "@storybook/addon-docs"],
+  stories: ['../src/components/**/*.stories.@(js|jsx|ts|tsx|mdx)'],
+  addons: ['@storybook/addon-essentials', '@storybook/addon-docs'],
+  staticDirs: ['../public'],
   framework: {
-    name: "@storybook/react-vite",
+    name: '@storybook/react-vite',
     options: {},
   },
   typescript: {
     check: false,
-    reactDocgen: "react-docgen-typescript",
+    reactDocgen: 'react-docgen-typescript',
     reactDocgenTypescriptOptions: {
       shouldExtractLiteralValuesFromEnum: true,
       propFilter: (prop) =>
@@ -18,21 +19,21 @@ const config: StorybookConfig = {
     },
   },
   docs: {
-    autodocs: "tag",
+    autodocs: 'tag',
   },
   async viteFinal(config) {
-    const { mergeConfig } = await import("vite");
-    const svgr = await import("vite-plugin-svgr");
+    const { mergeConfig } = await import('vite');
+    const svgr = await import('vite-plugin-svgr');
 
     return mergeConfig(config, {
       plugins: [
         svgr.default({
-          include: "**/*.svg",
+          include: '**/*.svg',
         }),
       ],
       resolve: {
         alias: {
-          "@": path.resolve(__dirname, "../src"),
+          '@': path.resolve(__dirname, '../src'),
         },
       },
     });
