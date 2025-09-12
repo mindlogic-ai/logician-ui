@@ -50,6 +50,7 @@
   },
   "dependencies": {
     "@mdxeditor/editor": "^1.0.0",
+    "@milkdown/crepe": "^7.15.5",
     "@tanstack/react-virtual": "^3.0.0",
     "@types/lodash": "^4.17.20",
     "@types/react-syntax-highlighter": "^15.5.13",
