@@ -182,6 +182,9 @@ export const MDXEditor = forwardRef<
       <Editor
         ref={editorRef}
         contentEditableClassName="content-editable"
+        overlayContainer={
+          typeof document !== 'undefined' ? document.body : undefined
+        }
         autoFocus={autoFocus}
         onError={({ error }) => {
           setError(error);
