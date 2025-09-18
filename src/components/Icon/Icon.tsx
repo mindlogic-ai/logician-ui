@@ -11,6 +11,7 @@ export const Icon = forwardRef<SVGSVGElement, IconProps>(
   (
     {
       icon,
+      iconComponent,
       color,
       boxSize = 'md', // Default to 'md' size
       ...rest
@@ -33,8 +34,21 @@ export const Icon = forwardRef<SVGSVGElement, IconProps>(
     ]);
     const [resolvedColor] = useToken('colors', [color || '']);
 
+    if (iconComponent) {
+      const IconComponent = chakra(iconComponent);
+      return (
+        <IconComponent
+          {...iconStyles}
+          color={resolvedColor || color}
+          boxSize={resolvedBoxSize}
+          ref={ref}
+          {...rest}
+        />
+      );
+    }
+
     // Handle react-icons
-    if (icon in REACT_ICONS_MAP) {
+    if (icon && icon in REACT_ICONS_MAP) {
       const IconComponent = chakra(REACT_ICONS_MAP[icon] as ReactIconType);
       return (
         <IconComponent
@@ -47,6 +61,22 @@ export const Icon = forwardRef<SVGSVGElement, IconProps>(
     }
 
     // Handle custom SVG icons
+    if (!icon) {
+      console.warn('No icon provided. Rendering fallback icon.');
+      const IconComponent = CUSTOM_ICON_MAP['VerticalEllipsis'];
+      const ChakraIcon = chakra(IconComponent);
+
+      return (
+        <ChakraIcon
+          {...iconStyles}
+          color={resolvedColor}
+          boxSize={resolvedBoxSize}
+          ref={ref}
+          {...rest}
+        />
+      );
+    }
+
     let IconComponent = CUSTOM_ICON_MAP[icon];
     if (!IconComponent) {
       console.warn(
