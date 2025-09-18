@@ -22,7 +22,6 @@ export function ErrorFallback({
   onErrorReset,
 }: ErrorFallbackProps) {
   const translate = useTranslate();
-  console.log(translate('support_information'));
   const showToast = useToast();
 
   const errorInfo = {
