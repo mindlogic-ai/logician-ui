@@ -16,11 +16,12 @@ export const Link = forwardRef<HTMLAnchorElement, LinkCustomProps>(
     const theme = useTheme();
     const defaultColor = theme.semanticTokens.colors.primary.main;
     const errorColor = theme.semanticTokens.colors.danger.main;
+
     const linkColor =
       useToken(
         'colors',
-        variant === 'error' ? errorColor : color || defaultColor
-      ) ?? color;
+        variant === 'error' ? errorColor : String(color) || defaultColor
+      ) ?? String(color);
 
     const getHoverColor = () => {
       let hoverColor;
