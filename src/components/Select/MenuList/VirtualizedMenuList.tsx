@@ -122,7 +122,7 @@ export const VirtualizedMenuList = <
               cursor: baseOptionStyle.cursor,
               borderRadius: baseOptionStyle.borderRadius,
               // Add some necessary styles for proper display
-              padding: `${theme.spacing[2]} ${theme.spacing[4]}`,
+              padding: `${theme.space[2]} ${theme.space[4]}`,
               userSelect: 'none',
               WebkitTapHighlightColor: 'rgba(0, 0, 0, 0)',
               display: 'block',
