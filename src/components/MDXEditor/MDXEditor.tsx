@@ -1,7 +1,7 @@
 'use client';
 
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
-import { Box, BoxProps, useTheme } from '@chakra-ui/react';
+import { Box, useTheme } from '@chakra-ui/react';
 import {
   BlockTypeSelect,
   BoldItalicUnderlineToggles,
@@ -30,10 +30,8 @@ import {
 import '@mdxeditor/editor/style.css';
 import './MDXEditor.css';
 
-export interface MDXEditorProps extends Omit<BaseEditorProps, 'onError'> {
-  containerProps?: BoxProps;
-  onError?: (error: string) => void;
-}
+import type { MDXEditorProps } from './MDXEditor.types';
+
 export const MDXEditor = forwardRef<
   BaseEditorProps & MDXEditorMethods,
   MDXEditorProps
