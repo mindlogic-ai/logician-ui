@@ -2,7 +2,7 @@
   "mode": "exit",
   "tag": "alpha",
   "initialVersions": {
-    "@mindlogic-ai/logician-ui": "2.0.0-alpha.2"
+    "@mindlogic-ai/logician-ui": "2.0.0-alpha.3"
   },
   "changesets": [
     "add-storybook",
@@ -10,6 +10,7 @@
     "cleanup-dependencies",
     "easy-swans-appear",
     "good-walls-poke",
+    "quick-nails-warn",
     "remove-avatar-input",
     "remove-color-mode",
     "remove-color-picker",

@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.0-alpha.4
+
+### Patch Changes
+
+- 0fdd011: Remove react-icons dependency.
+  Icons are now included directly in the logician-ui package.
+
 ## 2.0.0-alpha.3
 
 ### Minor Changes
