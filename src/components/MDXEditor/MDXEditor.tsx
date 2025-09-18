@@ -73,7 +73,7 @@ export const MDXEditor = forwardRef<
           width: '100%',
           minHeight: '300px',
           height: '100%',
-          bg: theme.colors.white,
+          bg: 'white',
           display: 'flex',
           flexDirection: 'column',
         },
@@ -82,7 +82,7 @@ export const MDXEditor = forwardRef<
           gap: theme.space[2],
           p: theme.space[2],
           borderBottomWidth: '1px',
-          bg: theme.colors.gray[50],
+          bg: 'gray.50',
           flexShrink: 0,
           cursor: 'default',
         },
@@ -109,7 +109,7 @@ export const MDXEditor = forwardRef<
         },
         '.content-editable': {
           padding: theme.space[4],
-          color: theme.colors.black,
+          color: 'black',
           display: 'flex',
           flexDirection: 'column',
           gap: theme.space[1.5],
@@ -154,24 +154,28 @@ export const MDXEditor = forwardRef<
 
           blockquote: {
             borderLeftWidth: '4px',
-            borderLeftColor: theme.colors.blue[200],
-            bg: theme.colors.blue[50],
+            borderLeftColor: 'primary.light',
+            bg: 'primary.lighter',
             pl: theme.space[4],
             py: theme.space[2],
             my: theme.space[4],
-            color: theme.colors.gray[700],
+            color: 'gray.800',
           },
 
           a: {
-            color: theme.colors.blue[500],
+            color: 'primary.main',
             textDecoration: 'underline',
           },
 
           code: {
             fontFamily: 'mono',
-            bg: theme.colors.gray[100],
+            bg: 'gray.100',
             px: theme.space[1],
             borderRadius: theme.radii.sm,
+
+            span: {
+              bg: 'transparent',
+            },
           },
         },
         '.mdxeditor-diff-source-wrapper': {
