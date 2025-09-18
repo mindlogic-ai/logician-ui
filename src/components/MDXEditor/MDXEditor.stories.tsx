@@ -25,6 +25,10 @@ This is a sample markdown text. You can:
 ### Try the editor out!
 `;
 
+const sampleMarkdownWithError = `
+Sample Link (<https://example.com>)
+`;
+
 export const Default: Story = {
   args: {
     markdown: sampleMarkdown,
@@ -41,5 +45,11 @@ export const WithPlaceholder: Story = {
   args: {
     markdown: '',
     placeholder: '마크다운을 입력해보세요...',
+  },
+};
+
+export const Error: Story = {
+  args: {
+    markdown: sampleMarkdownWithError,
   },
 };
