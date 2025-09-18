@@ -1,9 +1,13 @@
-import { extendTheme } from '@chakra-ui/react';
+import {
+  extendTheme,
+  Theme as ChakraTheme,
+  ThemeOverride,
+} from '@chakra-ui/react';
 
 import { colors } from './colors';
 import { global } from './global';
 
-const theme = extendTheme({
+export const theme = {
   colors,
   semanticTokens: {
     colors: {
@@ -11,7 +15,7 @@ const theme = extendTheme({
       'chakra-body-text': 'gray.1500',
       'chakra-body-bg': 'white',
       'chakra-body-text-secondary': 'gray.1200',
-    },
+    } as ThemeOverride['semanticTokens']['colors'] & typeof colors,
   },
   styles: {
     global,
@@ -44,6 +48,8 @@ const theme = extendTheme({
     xl: '32px',
     full: '9999px',
   },
-});
+} satisfies ThemeOverride;
 
-export default theme;
+export type Theme = typeof theme & ChakraTheme;
+
+export default extendTheme(theme);
