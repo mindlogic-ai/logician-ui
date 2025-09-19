@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0-alpha.11
+
+### Minor Changes
+
+- d5ef0ee: ErrorFallback의 errorId, timestamp prop을 optional로 변경
+
 ## 2.0.0-alpha.10
 
 ### Minor Changes
