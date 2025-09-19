@@ -46,11 +46,12 @@ export const MDXEditor = forwardRef<
   useImperativeHandle(ref, () => editorRef.current!, []);
 
   const handleContainerClick = (e: React.MouseEvent) => {
-    // Only focus if clicking on the container itself, not on toolbar elements
+    // Only focus if clicking on the container itself, not on toolbar and table elements
     const target = e.target as HTMLElement;
-    const isToolbarClick = target.closest('.toolbar');
+    const isToolbarClick = target.closest('.mdxeditor-toolbar');
+    const isTableClick = target.closest('table');
 
-    if (!isToolbarClick) {
+    if (!isToolbarClick && !isTableClick) {
       editorRef.current?.focus();
     }
   };
