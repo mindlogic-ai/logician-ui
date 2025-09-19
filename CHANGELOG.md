@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0-alpha.9
+
+### Minor Changes
+
+- 9f2110d: Entry file에 export되지 않은 컴포넌트들에 대해 export 추가
+
 ## 2.0.0-alpha.8
 
 ### Minor Changes
