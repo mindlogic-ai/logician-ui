@@ -1,5 +1,7 @@
 export interface ErrorFallbackProps {
   error: Error | null;
+  errorId?: string;
+  timestamp?: string;
   componentName?: string;
   userId?: string;
   onErrorReset?: () => void;

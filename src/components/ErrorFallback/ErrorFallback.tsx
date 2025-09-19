@@ -12,6 +12,8 @@ import type { ErrorFallbackProps } from './ErrorFallback.types';
 
 export function ErrorFallback({
   error,
+  errorId,
+  timestamp,
   componentName,
   userId,
   onErrorReset,
@@ -21,8 +23,9 @@ export function ErrorFallback({
 
   const errorInfo = {
     errorId:
+      errorId ??
       `ERR-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`.toUpperCase(),
-    timestamp: new Date().toISOString(),
+    timestamp: timestamp ?? new Date().toISOString(),
     message: error?.message || translate('error_boundary_default_message'),
     component: componentName || translate('unknown'),
     url: typeof window !== 'undefined' ? window.location.href : 'N/A',
