@@ -8,6 +8,7 @@
 - [ ] TypeScript 타입 정의 업데이트
 - [ ] 반응형 디자인 확인 완료
 - [ ] Changeset 추가 (버전 변경이 필요한 경우)
+- [ ] Entry(`src/index.ts`)에 export 추가 (필요한 경우)
 
 ## 테스트
 
