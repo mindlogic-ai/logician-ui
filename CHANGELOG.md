@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0-alpha.7
+
+### Patch Changes
+
+- d05891f: MDXEditor 마크다운 테이블 클릭시 focus가 되는 현상 해결
+
 ## 2.0.0-alpha.6
 
 ### Minor Changes
