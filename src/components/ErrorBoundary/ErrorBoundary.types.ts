@@ -1,8 +1,29 @@
-export interface ErrorFallbackProps {
-  error: Error | null;
+import { ErrorInfo, type ReactNode } from 'react';
+
+export interface ErrorBoundaryProps {
+  children: ReactNode;
+  fallback?: ReactNode;
   componentName?: string;
   userId?: string;
-  onErrorReset?: () => void;
+  onError?: (error: Error, info: ErrorInfo) => void;
+  onReset?: () => void;
+}
+
+export interface ErrorBoundaryState {
+  hasError: boolean;
+  error: (Error & { componentStack?: string }) | null;
+  errorId: string;
+  timestamp: string;
+  userId?: string;
+}
+
+export interface ErrorFallbackProps {
+  error: Error | null;
+  errorId: string;
+  timestamp: string;
+  componentName?: string;
+  userId?: string;
+  onReset?: () => void;
 }
 
 export interface ErrorLogData {

@@ -1,4 +1,4 @@
-import type { ErrorLogData } from './ErrorFallback.types';
+import type { ErrorLogData } from './ErrorBoundary.types';
 
 /**
  * Logs an error to Slack via webhook
@@ -11,7 +11,8 @@ export const logErrorToSlack = async (
   source: string,
   additionalInfo: Record<string, any> = {}
 ): Promise<void> => {
-  const webhookUrl = '/api/log-error-slack';
+  const webhookUrl =
+    process.env.NEXT_PUBLIC_ERROR_LOG_URL ?? '/api/log-error-slack';
   try {
     // Gather error data
     const errorData: ErrorLogData = {

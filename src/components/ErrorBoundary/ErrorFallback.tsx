@@ -8,21 +8,22 @@ import { Container } from '../Container';
 import { Icon, IconTypes } from '../Icon';
 import { useToast } from '../Toast/useToast';
 import { H1, H4, Subtext, Subtitle, Text } from '../Typography';
-import type { ErrorFallbackProps } from './ErrorFallback.types';
+import type { ErrorFallbackProps } from './ErrorBoundary.types';
 
 export function ErrorFallback({
   error,
+  errorId,
+  timestamp,
   componentName,
   userId,
-  onErrorReset,
+  onReset,
 }: ErrorFallbackProps) {
   const translate = useTranslate();
   const showToast = useToast();
 
   const errorInfo = {
-    errorId:
-      `ERR-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`.toUpperCase(),
-    timestamp: new Date().toISOString(),
+    errorId,
+    timestamp,
     message: error?.message || translate('error_boundary_default_message'),
     component: componentName || translate('unknown'),
     url: typeof window !== 'undefined' ? window.location.href : 'N/A',
@@ -179,7 +180,7 @@ User Agent: ${errorInfo.userAgent}`;
             {/* Action Buttons */}
             <VStack spacing={3} w="full" align="center">
               <Button
-                onClick={onErrorReset}
+                onClick={onReset}
                 size="lg"
                 variant="primary"
                 leftIcon={<Icon icon={IconTypes.HiRefresh} />}
