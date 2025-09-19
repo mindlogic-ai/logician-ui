@@ -27,8 +27,6 @@ export const logErrorToSlack = async (
       ...additionalInfo,
     };
 
-    console.log('Sending error data to Slack:', errorData);
-
     // Format the Slack message with attachments array structure
     const slackPayload = {
       attachments: [
