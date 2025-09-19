@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0-alpha.8
+
+### Minor Changes
+
+- ea6bd90: ErrorFallback 컴포넌트 추가
+
 ## 2.0.0-alpha.7
 
 ### Patch Changes
