@@ -20,6 +20,7 @@ export * from './components/CopyableCode';
 export * from './components/CrossPageToasts';
 export * from './components/DataField';
 export * from './components/DatePicker';
+export * from './components/ErrorFallback';
 
 // File Components
 export * from './components/FileInput';
@@ -46,6 +47,7 @@ export * from './components/Link';
 
 // Loading Components
 export * from './components/Loaders';
+export * from './components/LogicianProvider';
 export * from './components/Markdown';
 export * from './components/Masonry';
 export * from './components/MaxLengthIndicator';

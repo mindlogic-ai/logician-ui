@@ -1,1 +1,2 @@
-export { Alert } from './Alert';
+export * from './Alert';
+export type * from './Alert.types';

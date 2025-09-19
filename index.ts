@@ -1,2 +1,2 @@
 // Re-export everything from src for backwards compatibility
-export * from "./src/index";
+export * from './src/index';
