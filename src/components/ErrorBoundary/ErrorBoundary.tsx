@@ -66,7 +66,7 @@ export class ErrorBoundary extends Component<
   }
 
   resetError = (): void => {
-    this.props.onReset?.();
+    this.props.onResetError?.();
     this.setState(initialState);
   };
 
@@ -85,7 +85,7 @@ export class ErrorBoundary extends Component<
           timestamp={this.state.timestamp}
           componentName={this.props.componentName}
           userId={this.props.userId}
-          onReset={this.resetError}
+          onResetError={this.resetError}
         />
       );
     }

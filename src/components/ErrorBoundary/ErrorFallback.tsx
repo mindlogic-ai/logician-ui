@@ -16,7 +16,7 @@ export function ErrorFallback({
   timestamp,
   componentName,
   userId,
-  onReset,
+  onResetError,
 }: ErrorFallbackProps) {
   const translate = useTranslate();
   const showToast = useToast();
@@ -180,7 +180,7 @@ User Agent: ${errorInfo.userAgent}`;
             {/* Action Buttons */}
             <VStack spacing={3} w="full" align="center">
               <Button
-                onClick={onReset}
+                onClick={onResetError}
                 size="lg"
                 variant="primary"
                 leftIcon={<Icon icon={IconTypes.HiRefresh} />}

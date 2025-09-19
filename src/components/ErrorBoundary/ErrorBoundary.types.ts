@@ -6,7 +6,7 @@ export interface ErrorBoundaryProps {
   componentName?: string;
   userId?: string;
   onError?: (error: Error, info: ErrorInfo) => void;
-  onReset?: () => void;
+  onResetError?: () => void;
 }
 
 export interface ErrorBoundaryState {
@@ -23,7 +23,7 @@ export interface ErrorFallbackProps {
   timestamp: string;
   componentName?: string;
   userId?: string;
-  onReset?: () => void;
+  onResetError?: () => void;
 }
 
 export interface ErrorLogData {
