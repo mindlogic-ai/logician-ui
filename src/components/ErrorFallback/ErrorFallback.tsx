@@ -8,13 +8,8 @@ import { Container } from '../Container';
 import { Icon, IconTypes } from '../Icon';
 import { useToast } from '../Toast/useToast';
 import { H1, H4, Subtext, Subtitle, Text } from '../Typography';
+import type { ErrorFallbackProps } from './ErrorFallback.types';
 
-interface ErrorFallbackProps {
-  error: Error | null;
-  componentName?: string;
-  userId?: string;
-  onErrorReset?: () => void;
-}
 export function ErrorFallback({
   error,
   componentName,
