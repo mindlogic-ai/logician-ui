@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0-alpha.10
+
+### Minor Changes
+
+- e365f4f: errorLogger 제거
+
 ## 2.0.0-alpha.9
 
 ### Minor Changes

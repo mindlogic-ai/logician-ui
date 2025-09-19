@@ -2,7 +2,7 @@
   "mode": "exit",
   "tag": "alpha",
   "initialVersions": {
-    "@mindlogic-ai/logician-ui": "2.0.0-alpha.8"
+    "@mindlogic-ai/logician-ui": "2.0.0-alpha.9"
   },
   "changesets": [
     "add-storybook",
@@ -20,6 +20,7 @@
     "remove-color-picker",
     "reorganize-src-structure",
     "replace-chakra-icons",
+    "seven-kids-admire",
     "smooth-pears-refuse",
     "solid-parents-relax"
   ]
