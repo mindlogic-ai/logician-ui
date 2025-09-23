@@ -140,6 +140,10 @@ import StudioActiveIcon from './icons/studio_active.svg';
 import VerticalEllipsisIcon from './icons/vertical-ellipsis.svg';
 import WindowIcon from './icons/window.svg';
 
+export type CustomIconComponent = React.FunctionComponent<
+  React.SVGProps<SVGSVGElement> & { title?: string }
+>;
+
 export const REACT_ICONS_MAP: { [key: string]: ReactIconType } = {
   BiDetail,
   BiExpandAlt,
@@ -252,9 +256,7 @@ export const REACT_ICONS_MAP: { [key: string]: ReactIconType } = {
  * Sorted alphabetically.
  */
 export const CUSTOM_ICON_MAP: {
-  [key: string]: React.FunctionComponent<
-    React.SVGProps<SVGSVGElement> & { title?: string }
-  >;
+  [key: string]: CustomIconComponent;
 } = {
   Analytics: AnalyticsIcon,
   Bulb: BulbIcon,
