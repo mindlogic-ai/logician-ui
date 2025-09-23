@@ -1,23 +1,11 @@
-import { ComponentType, SVGProps } from 'react';
-import { IconType as ReactIconType } from 'react-icons/lib';
+import { SVGProps } from 'react';
 import { BoxProps } from '@chakra-ui/react';
 
 import { IconType } from './IconMap';
 
-type SVGIconComponent = ComponentType<SVGProps<SVGSVGElement>>;
-type ReactIconComponent = ReactIconType;
-
-// Icon props with either a predefined icon key OR a custom icon component
+// Icon props: 문자열 방식 또는 JSX element 방식
 export type IconProps = Partial<SVGProps<SVGElement>> &
   // Omit the size prop to avoid confusion. Only the boxSize prop should be used
-  Omit<BoxProps, 'size' | 'icon'> &
-  (
-    | {
-        icon: IconType;
-        iconComponent?: never;
-      }
-    | {
-        icon?: never;
-        iconComponent: SVGIconComponent | ReactIconComponent;
-      }
-  );
+  Omit<BoxProps, 'size' | 'icon'> & {
+    icon: IconType | React.ReactElement; // 문자열 또는 JSX 요소
+  };
