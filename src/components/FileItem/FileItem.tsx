@@ -104,6 +104,7 @@ export const FileItem = ({
                   <Icon
                     icon={IconTypes.LuDownload}
                     color={theme.colors.gray[800]}
+                    boxSize="sm"
                   />
                 }
                 size="xs"

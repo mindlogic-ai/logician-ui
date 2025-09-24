@@ -7,8 +7,6 @@ import remarkFlexibleMarkers from 'remark-flexible-markers';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 
-import { formatForMarkdown } from '@/utils/formatTextForMarkdown';
-
 import 'katex/dist/katex.min.css'; // Import KaTeX CSS
 
 import { Code } from '../Code';
@@ -126,7 +124,7 @@ export const Markdown = ({
         components={allComponents}
         {...rest}
       >
-        {formatForMarkdown(children ?? '')}
+        {children}
       </ReactMarkdown>
     </div>
   );

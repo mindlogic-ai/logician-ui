@@ -316,6 +316,7 @@ export const Input = forwardRef(
           onKeyDown={handleKeyDown}
           type={inputType}
           borderColor="gray.400"
+          bgColor="white"
           _hover={{
             borderColor: 'gray.600',
             ..._hover,
