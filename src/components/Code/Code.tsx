@@ -1,6 +1,6 @@
 import { lazy, Suspense, useState } from 'react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { Box, Flex, Spinner } from '@chakra-ui/react';
 
 import { useTranslate } from '@/hooks/useTranslate';
