@@ -32,7 +32,10 @@ export const VirtualizedMenuList = <
     getScrollElement: () => menuListRef.current,
     estimateSize: () => optionHeight,
     overscan: 5,
-    getItemKey: (index) => childrenArray[index].key, // Use stable keys
+    getItemKey: (index) => {
+      const child = childrenArray[index];
+      return React.isValidElement(child) && child.key ? child.key : index;
+    }, // Use stable keys
     measureElement: (_, entry, instance) => {
       if (entry) {
         instance.measure();
