@@ -31,8 +31,8 @@ export const optionStyles = ({
   isSelected: boolean;
 }) => ({
   cursor: isDisabled ? 'not-allowed' : 'pointer',
-  height: theme.sizes[10],
-  margin: '16px 0', // Use direct spacing value instead of theme.spacing[4]
+  height: theme.sizes[9],
+  margin: `${theme.space[1]} 0`,
   borderRadius: theme.radii.sm,
   fontSize: theme.fontSizes.p,
   backgroundColor:
@@ -84,9 +84,7 @@ export const getControlVariantStyles = (state: any, variant: SelectVariant) => {
     default:
       return {
         fontWeight: theme.fontWeights.semibold,
-        border: `1px solid ${
-          state.isFocused ? primaryColor : theme.colors.gray[400]
-        }`,
+        border: `1px solid ${state.isFocused ? primaryColor : theme.colors.gray[400]}`,
         boxShadow: state.isFocused
           ? `0 0 0 1px ${primaryColor} !important`
           : 'none',
