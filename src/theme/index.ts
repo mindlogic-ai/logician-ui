@@ -30,9 +30,9 @@ export const theme = {
   fontSizes: {
     // 커스텀 폰트 크기 토큰 (em 단위 사용)
     // xs: { base: '0.7em', md: '0.7em' },
-    subtitle: { base: '0.8em', md: '0.92em' },
-    subtext: { base: '0.8em', md: '0.92em' },
-    p: { base: '0.9em', md: '1em' },
+    subtitle: { base: '0.92em', md: '1em' },
+    subtext: { base: '0.92em', md: '1em' },
+    p: { base: '1em', md: '1em' },
     h5: { base: '1.1em', md: '1.2em' },
     h4: { base: '1.25em', md: '1.44em' },
     h3: { base: '1.5em', md: '1.75em' },
