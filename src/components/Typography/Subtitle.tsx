@@ -10,6 +10,7 @@ export const Subtitle = forwardRef<HTMLSpanElement, TextProps>((props, ref) => {
       fontSize={theme.fontSizes.p}
       fontWeight="medium"
       color="gray.1000"
+      wordBreak="keep-all"
       {...props}
     />
   );
