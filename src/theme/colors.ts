@@ -1,34 +1,40 @@
+export const semanticTokens = {
+  colors: {
+    primary: {
+      lightest: '#eff7fd',
+      lighter: 'blue.50',
+      light: 'blue.300',
+      main: 'blue.900',
+      dark: 'blue.1000',
+    },
+    secondary: {
+      lighter: 'purple.50',
+      light: 'purple.300',
+      main: 'purple.500',
+      dark: 'purple.700',
+    },
+    danger: {
+      lighter: 'red.50',
+      light: '#FFC9C9',
+      main: 'red.500',
+      dark: '#961616',
+    },
+    success: {
+      lighter: '#EBFBF1',
+      light: '#C1F4D4',
+      main: '#019939',
+      dark: '#016626',
+    },
+    warning: {
+      lighter: '#FFF6E7',
+      light: '#FFE9BA',
+      main: 'yellow.400',
+      dark: '#9D6508',
+    },
+  },
+} as const;
+
 export const colors = {
-  primary: {
-    lighter: 'blue.50',
-    light: 'blue.300',
-    main: 'blue.900',
-    dark: 'blue.1000',
-  },
-  secondary: {
-    lighter: 'purple.50',
-    light: 'purple.300',
-    main: 'purple.500',
-    dark: 'purple.700',
-  },
-  danger: {
-    lighter: 'red.50',
-    light: '#FFC9C9',
-    main: 'red.500',
-    dark: '#961616',
-  },
-  success: {
-    lighter: '#EBFBF1',
-    light: '#C1F4D4',
-    main: '#019939',
-    dark: '#016626',
-  },
-  warning: {
-    lighter: '#FFF6E7',
-    light: '#FFE9BA',
-    main: 'yellow.400',
-    dark: '#9D6508',
-  },
   gray: {
     50: '#F4F5F6',
     100: '#EAECEF',

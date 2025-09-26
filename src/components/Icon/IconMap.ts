@@ -96,6 +96,7 @@ import {
   MdPreview,
   MdSpaceDashboard,
   MdThumbsUpDown,
+  MdUpdate,
 } from 'react-icons/md';
 import { PiChatSlashBold, PiExam, PiGlobe, PiGlobeX } from 'react-icons/pi';
 import { RxDotsHorizontal } from 'react-icons/rx';
@@ -229,6 +230,7 @@ export const REACT_ICONS_MAP: { [key: string]: ReactIconType } = {
   MdOutlineSpaceDashboard,
   HiX,
   MdPreview,
+  MdUpdate,
   MdSpaceDashboard,
   MdThumbsUpDown,
   PiChatSlashBold,

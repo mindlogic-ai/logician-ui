@@ -43,7 +43,6 @@ export * from './components/InlineCode';
 // Input Components
 export * from './components/Input';
 export * from './components/LineGraph';
-export * from './components/Link';
 
 // Loading Components
 export * from './components/Loaders';

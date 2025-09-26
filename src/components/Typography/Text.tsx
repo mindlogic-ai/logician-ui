@@ -13,6 +13,7 @@ export const Text = forwardRef<HTMLParagraphElement, TextProps>(
         lineHeight="1.5"
         fontWeight="medium"
         color="gray.1200"
+        wordBreak="keep-all"
         {...props}
       />
     );

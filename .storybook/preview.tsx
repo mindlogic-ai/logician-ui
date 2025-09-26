@@ -21,7 +21,7 @@ const preview: Preview = {
     options: {
       storySort: {
         method: 'alphabetical',
-        order: ['Setup', 'Components', 'Chat', '*'],
+        order: ['Setup', 'Theme', 'Components', 'Chat', '*'],
         locales: 'en-US',
         includeName: true,
       },

@@ -34,8 +34,7 @@ export const VirtualizedMenuList = <
     overscan: 5,
     getItemKey: (index) => {
       const child = childrenArray[index];
-      // @ts-expect-error - Not all ReactNode types have key property
-      return child?.key || `item-${index}`;
+      return React.isValidElement(child) && child.key ? child.key : index;
     }, // Use stable keys
     measureElement: (_, entry, instance) => {
       if (entry) {
@@ -122,7 +121,7 @@ export const VirtualizedMenuList = <
               cursor: baseOptionStyle.cursor,
               borderRadius: baseOptionStyle.borderRadius,
               // Add some necessary styles for proper display
-              padding: `${theme.space[2]} ${theme.space[4]}`,
+              padding: `${theme.space[0.5]} ${theme.space[1]}`,
               userSelect: 'none',
               WebkitTapHighlightColor: 'rgba(0, 0, 0, 0)',
               display: 'block',

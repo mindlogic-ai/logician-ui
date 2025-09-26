@@ -5,7 +5,7 @@ import { SliderProps } from './Slider.types';
 
 export const Slider = forwardRef(
   ({ ...rest }: SliderProps, ref?: ForwardedRef<HTMLDivElement>) => {
-    return <ChakraSlider {...rest} ref={ref} />;
+    return <ChakraSlider isolation="isolate" ref={ref} {...rest} />;
   }
 );
 

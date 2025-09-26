@@ -131,7 +131,7 @@ export const Select = <
               ...resolveStyle(
                 {
                   ...base,
-                  padding: `0px ${theme.space[4]}`,
+                  padding: `0px ${theme.space[1]}`,
                   // Important for the virtualized list - DON'T override overflow
                   // as we need the default 'auto' from react-select for scrolling to work
                 },
@@ -144,7 +144,7 @@ export const Select = <
                 {
                   ...base,
                   textAlign: 'left',
-                  padding: `${theme.space[2]} ${theme.space[4]}`,
+                  padding: `${theme.space[0.5]} ${theme.space[1]}`,
                   ...optionStyles(state),
                 },
                 styles?.option,

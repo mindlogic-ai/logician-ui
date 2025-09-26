@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { FileItemProps } from '@/components/FileItem/FileItem.types';
+import { FileItemProps } from './FileItem.types';
 
 import { FileItem } from './FileItem';
 
@@ -23,5 +23,19 @@ export const WithProgress: Story = {
   args: {
     fileName: 'Test File',
     progress: 30,
+  },
+};
+
+export const WithDownload: Story = {
+  args: {
+    fileName: 'Test File',
+    onFileDownload: () => {},
+  },
+};
+
+export const WithDelete: Story = {
+  args: {
+    fileName: 'Test File',
+    onFileDelete: () => {},
   },
 };
