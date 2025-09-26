@@ -2,13 +2,14 @@
   "mode": "exit",
   "tag": "alpha",
   "initialVersions": {
-    "@mindlogic-ai/logician-ui": "2.0.0-alpha.10"
+    "@mindlogic-ai/logician-ui": "2.0.0-alpha.11"
   },
   "changesets": [
     "add-storybook",
     "add-svg-support",
     "cleanup-dependencies",
     "easy-swans-appear",
+    "fifty-pens-wash",
     "flat-mirrors-happen",
     "good-walls-poke",
     "light-beds-relate",

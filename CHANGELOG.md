@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0-alpha.12
+
+### Major Changes
+
+- 60c5169: Remove Link component(src/components/Link), Change InfoSprinkle props
+
 ## 2.0.0-alpha.11
 
 ### Minor Changes
