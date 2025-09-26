@@ -4,7 +4,7 @@ import {
   ThemeOverride,
 } from '@chakra-ui/react';
 
-import { colors } from './colors';
+import { colors, semanticTokens } from './colors';
 import { global } from './global';
 
 export const theme = {
@@ -31,43 +31,7 @@ export const theme = {
     h2: { base: '2em', md: '2.5em' },
     h1: { base: '2.4em', md: '3em' },
   },
-
-  semanticTokens: {
-    colors: {
-      primary: {
-        lightest: '#eff7fd',
-        lighter: 'blue.50',
-        light: 'blue.300',
-        main: 'blue.900',
-        dark: 'blue.1000',
-      },
-      secondary: {
-        lighter: 'purple.50',
-        light: 'purple.300',
-        main: 'purple.500',
-        dark: 'purple.700',
-      },
-      danger: {
-        lighter: 'red.50',
-        light: '#FFC9C9',
-        main: 'red.500',
-        dark: '#961616',
-      },
-      success: {
-        lighter: '#EBFBF1',
-        light: '#C1F4D4',
-        main: '#019939',
-        dark: '#016626',
-      },
-      warning: {
-        lighter: '#FFF6E7',
-        light: '#FFE9BA',
-        main: 'yellow.400',
-        dark: '#9D6508',
-      },
-    } as ThemeOverride['semanticTokens']['colors'],
-  },
-
+  semanticTokens,
   radii: {
     none: '0',
     sm: '6px',
@@ -76,7 +40,9 @@ export const theme = {
     xl: '32px',
     full: '9999px',
   },
-} satisfies ThemeOverride;
+} satisfies Omit<ThemeOverride, 'semanticTokens'> & {
+  semanticTokens: typeof semanticTokens;
+};
 
 export type Theme = typeof theme & ChakraTheme;
 
