@@ -32,7 +32,8 @@
     "changeset:publish": "changeset publish",
     "changeset:status": "changeset status",
     "optimize-icons": "node scripts/optimize-icons.js",
-    "update-intl": "./scripts/get-lang-pack.sh"
+    "update-intl": "./scripts/get-lang-pack.sh",
+    "check-exports": "node check-component-exports.js"
   },
   "peerDependencies": {
     "@chakra-ui/react": "^2.8.0",
