@@ -6,11 +6,15 @@ on:
     paths:
       - 'src/components/**'
       - 'src/index.ts'
+      - 'check-component-exports.js'
+      - '.github/workflows/check-exports.yml'
   push:
     branches: [dev, main]
     paths:
       - 'src/components/**'
       - 'src/index.ts'
+      - 'check-component-exports.js'
+      - '.github/workflows/check-exports.yml'
 
 jobs:
   check-exports:
