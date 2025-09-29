@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0-alpha.13
+
+### Patch Changes
+
+- 84c2a20: Typography 내 Link를 export 하지 않는 버그 수정
+
 ## 2.0.0-alpha.12
 
 ### Major Changes
