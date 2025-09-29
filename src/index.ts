@@ -90,6 +90,7 @@ export {
   H3,
   H4,
   H5,
+  Link,
   Subtext,
   Subtitle,
   Text,
