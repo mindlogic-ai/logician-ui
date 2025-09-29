@@ -34,16 +34,54 @@ jobs:
         run: npm ci
 
       - name: Check component exports
-        run: npm run check-exports
+        id: check-exports
+        run: |
+          # Run the check and capture output
+          if npm run check-exports 2>&1 | tee export-check-output.txt; then
+            echo "check_passed=true" >> $GITHUB_OUTPUT
+          else
+            echo "check_passed=false" >> $GITHUB_OUTPUT
+            echo "error_output<<EOF" >> $GITHUB_OUTPUT
+            cat export-check-output.txt >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
 
-      - name: Comment on PR (if failed)
-        if: failure() && github.event_name == 'pull_request'
+      - name: Comment on PR with detailed error (if failed)
+        if: steps.check-exports.outputs.check_passed == 'false' && github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
           script: |
+            const errorOutput = `${{ steps.check-exports.outputs.error_output }}`;
+
+            // Parse the error output to create a more readable format
+            let formattedOutput = errorOutput;
+
+            // Replace script output prefix
+            formattedOutput = formattedOutput.replace(/> @mindlogic-ai\/logician-ui@[\d\.-]+ check-exports[\s\S]*?> node check-component-exports\.js\s*/g, '');
+
+            const commentBody = `❌ **Component Export Check Failed**
+
+            \`\`\`
+            ${formattedOutput}
+            \`\`\`
+
+            **How to fix:**
+            1. Run \`npm run check-exports\` locally to see the detailed output
+            2. Add the missing exports to \`src/index.ts\` as suggested
+            3. Push your changes to update this PR
+
+            **Common patterns:**
+            - For new components: \`export * from './components/ComponentName';\`
+            - For specific exports: \`export { Item1, Item2 } from './components/ComponentName';\`
+            `;
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '❌ **Component Export Check Failed**\n\nSome components are not properly exported in `src/index.ts`. Please run `npm run check-exports` locally to see the missing exports and fix them.'
-            })
+              body: commentBody
+            });
+
+      - name: Fail the workflow if check failed
+        if: steps.check-exports.outputs.check_passed == 'false'
+        run: exit 1
