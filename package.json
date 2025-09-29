@@ -21,7 +21,7 @@
     "build": "tsup || true",
     "build:watch": "tsup --watch",
     "prepublishOnly": "yarn build",
-    "lint": "eslint src --ext .ts,.tsx",
+    "lint": "eslint src --ext .ts,.tsx && yarn run check-exports",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "type-check": "tsc --noEmit",
     "test": "echo 'No tests specified'",
