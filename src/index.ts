@@ -21,6 +21,7 @@ export * from './components/CrossPageToasts';
 export * from './components/DataField';
 export * from './components/DatePicker';
 export * from './components/ErrorFallback';
+export * from './components/ExpandableText';
 
 // File Components
 export * from './components/FileInput';
