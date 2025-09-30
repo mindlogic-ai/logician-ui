@@ -30,6 +30,7 @@ import {
   FaLock,
   FaPersonChalkboard,
   FaRegCopy,
+  FaRegNewspaper,
   FaRotateRight,
   FaUserClock,
 } from 'react-icons/fa6';
@@ -107,8 +108,10 @@ import {
   TbLayoutNavbar,
   TbLockCog,
   TbMessageChatbotFilled,
+  TbReport,
   TbSum,
   TbWorldSearch,
+  TbZoomQuestion,
 } from 'react-icons/tb';
 
 import AmountUsageIcon from './icons/amount-usage.svg';
@@ -163,6 +166,7 @@ export const REACT_ICONS_MAP: { [key: string]: ReactIconType } = {
   FaRegUserCircle,
   FaRegEye,
   FaRegEyeSlash,
+  FaRegNewspaper,
   FaRotateRight,
   FaPlay,
   FaSortAlphaDown,
@@ -244,8 +248,10 @@ export const REACT_ICONS_MAP: { [key: string]: ReactIconType } = {
   TbLayoutNavbar,
   TbLockCog,
   TbMessageChatbotFilled,
+  TbReport,
   TbSum,
   TbWorldSearch,
+  TbZoomQuestion,
 };
 
 /**
