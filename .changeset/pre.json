@@ -2,7 +2,7 @@
   "mode": "exit",
   "tag": "alpha",
   "initialVersions": {
-    "@mindlogic-ai/logician-ui": "2.0.0-alpha.12"
+    "@mindlogic-ai/logician-ui": "2.0.0-alpha.13"
   },
   "changesets": [
     "add-storybook",
@@ -16,6 +16,7 @@
     "light-beds-relate",
     "poor-plants-see",
     "pretty-cougars-deny",
+    "purple-streets-try",
     "quick-nails-warn",
     "remove-avatar-input",
     "remove-color-mode",
@@ -23,6 +24,7 @@
     "reorganize-src-structure",
     "replace-chakra-icons",
     "seven-kids-admire",
+    "slow-zoos-repeat",
     "smooth-pears-refuse",
     "solid-parents-relax",
     "some-ads-smile"

@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.0-alpha.14
+
+### Patch Changes
+
+- 2ade984: Add factchat task mode icon
+- ce536e6: Add src/index.ts export lint rule, Add ExpandableText export in src/index.ts
+
 ## 2.0.0-alpha.13
 
 ### Patch Changes
