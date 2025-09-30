@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0-alpha.15
+
+### Patch Changes
+
+- 768f361: 2ade984 변경 사항이 alpha.14에 반영되어있지 않아 재배포
+
 ## 2.0.0-alpha.14
 
 ### Patch Changes

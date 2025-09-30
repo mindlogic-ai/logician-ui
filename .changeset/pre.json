@@ -2,7 +2,7 @@
   "mode": "exit",
   "tag": "alpha",
   "initialVersions": {
-    "@mindlogic-ai/logician-ui": "2.0.0-alpha.13"
+    "@mindlogic-ai/logician-ui": "2.0.0-alpha.14"
   },
   "changesets": [
     "add-storybook",
@@ -27,6 +27,7 @@
     "slow-zoos-repeat",
     "smooth-pears-refuse",
     "solid-parents-relax",
-    "some-ads-smile"
+    "some-ads-smile",
+    "wise-needles-melt"
   ]
 }
