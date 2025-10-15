@@ -15,12 +15,10 @@ import { IconButtonProps } from '../IconButton/IconButton.types';
 
 export const InfoSprinkle = ({
   children,
-  icon,
   iconButtonProps,
   ...rest
 }: {
   children: React.ReactNode;
-  icon?: React.ReactNode;
   iconButtonProps?: Partial<IconButtonProps>;
 } & PopoverProps) => {
   return (
