@@ -8,6 +8,10 @@
     ".": {
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
+    },
+    "./icons": {
+      "import": "./dist/icons.mjs",
+      "require": "./dist/icons.js"
     }
   },
   "files": [

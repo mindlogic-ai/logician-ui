@@ -2,7 +2,7 @@ import { defineConfig } from 'tsup';
 import esbuildSvgr from 'esbuild-plugin-svgr';
 
 export default defineConfig({
-  entry: ['src/index.ts'],
+  entry: ['src/index.ts', 'src/icons.ts'],
   format: ['esm', 'cjs'],
   dts: true, // ✅ Re-enabled now that TS errors are fixed!
   splitting: true, // Enable code splitting for better memory usage
