@@ -43,7 +43,7 @@ export type {
   CreatedIcon,
   IconProps as CreateIconProps,
 } from './utils/createIcon';
-export { createIcon, createIcons } from './utils/createIcon';
+export { createIcon, createIconGroup } from './utils/createIcon';
 
 // Info Components
 export * from './components/InfoSprinkle';

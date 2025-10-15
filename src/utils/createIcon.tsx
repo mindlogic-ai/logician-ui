@@ -76,7 +76,7 @@ export const createIcon = (
  * import { FaHome, FaUser } from 'react-icons/fa';
  * import CustomSvg from './custom.svg';
  *
- * const icons = createIcons({
+ * const icons = createIconGroup({
  *   Home: FaHome,
  *   User: FaUser,
  *   Custom: CustomSvg,
@@ -88,7 +88,7 @@ export const createIcon = (
  * <icons.Custom boxSize="md" />
  * ```
  */
-export const createIcons = <T extends Record<string, React.ComponentType<any>>>(
+export const createIconGroup = <T extends Record<string, React.ComponentType<any>>>(
   iconMap: T
 ): {
   [K in keyof T]: React.ForwardRefExoticComponent<
