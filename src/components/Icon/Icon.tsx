@@ -33,8 +33,8 @@ export const Icon = forwardRef<SVGSVGElement, IconProps>(
       if (process.env.NODE_ENV === 'development') {
         console.warn(
           `[Deprecated] Using <Icon icon="${icon}" /> is deprecated. ` +
-          `Please use <${icon} /> directly for better tree-shaking. ` +
-          `Example: import { ${icon} } from '@mindlogic-ai/logician-ui'`
+            `Please use <${icon} /> directly for better tree-shaking. ` +
+            `Example: import { ${icon} } from '@mindlogic-ai/logician-ui'`
         );
       }
 
