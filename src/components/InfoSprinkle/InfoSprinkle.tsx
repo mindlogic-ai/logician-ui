@@ -1,4 +1,5 @@
 import {
+  Box,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -8,17 +9,19 @@ import {
   Portal,
 } from '@chakra-ui/react';
 
-import { Icon, IconTypes } from '@/components/Icon';
+import { Info } from '@/components/Icon';
 
 import { IconButton } from '../IconButton';
 import { IconButtonProps } from '../IconButton/IconButton.types';
 
 export const InfoSprinkle = ({
   children,
+  icon,
   iconButtonProps,
   ...rest
 }: {
   children: React.ReactNode;
+  icon?: React.ReactNode;
   iconButtonProps?: Partial<IconButtonProps>;
 } & PopoverProps) => {
   return (
@@ -26,7 +29,7 @@ export const InfoSprinkle = ({
       <PopoverTrigger>
         <IconButton
           aria-label="Info"
-          icon={<Icon icon={IconTypes.LuInfo} boxSize="sm" color="inherit" />}
+          icon={<Info boxSize="sm" color="inherit" />}
           {...iconButtonProps}
         />
       </PopoverTrigger>

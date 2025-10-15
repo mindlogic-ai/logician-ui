@@ -2,7 +2,13 @@ import { Fragment } from 'react';
 import { Box, Flex, useTheme } from '@chakra-ui/react';
 
 import { FileItemProps } from '@/components/FileItem/FileItem.types';
-import { Icon, IconTypes } from '@/components/Icon';
+import {
+  CiFileOn,
+  FaRegTrashAlt,
+  IoClose,
+  LuDownload,
+  MdError,
+} from '@/components/Icon';
 import { IconButton } from '@/components/IconButton';
 import { ProgressBar } from '@/components/ProgressBar';
 import { Subtext, Subtitle, Text } from '@/components/Typography';
@@ -52,10 +58,7 @@ export const FileItem = ({
     >
       <Flex w="60%" alignItems="center" gap={2}>
         <Box minW={5}>
-          <Icon
-            icon={IconTypes.CiFileOn}
-            color={error ? errorColor : 'gray.800'}
-          />
+          <CiFileOn color={error ? errorColor : 'gray.800'} />
         </Box>
         <Text isTruncated color={error ? errorColor : undefined}>
           {fileName}
@@ -65,7 +68,7 @@ export const FileItem = ({
         {error ? (
           <Flex w="100%" justify="flex-end" align="center" gap={2}>
             <Tooltip label={error} placement="top" shouldWrapChildren>
-              <Icon icon="MdError" color={errorColor} />
+              <MdError color={errorColor} />
             </Tooltip>
             {/* TODO: implement retry button */}
           </Flex>
@@ -79,13 +82,7 @@ export const FileItem = ({
                 <IconButton
                   aria-label={'remove uploading file button'}
                   onClick={onFileDelete}
-                  icon={
-                    <Icon
-                      icon={IconTypes.IoClose}
-                      color={theme.colors.gray[600]}
-                      boxSize="lg"
-                    />
-                  }
+                  icon={<IoClose color={theme.colors.gray[600]} />}
                   size="xs"
                   isDisabled={isDeleting}
                 />
@@ -100,13 +97,7 @@ export const FileItem = ({
               <IconButton
                 aria-label={'download uploaded file button'}
                 onClick={onFileDownload}
-                icon={
-                  <Icon
-                    icon={IconTypes.LuDownload}
-                    color={theme.colors.gray[800]}
-                    boxSize="sm"
-                  />
-                }
+                icon={<LuDownload color={theme.colors.gray[800]} />}
                 size="xs"
               />
             )}
@@ -118,7 +109,7 @@ export const FileItem = ({
                   isDeleting ? (
                     <Spinner size="xs" />
                   ) : (
-                    <Icon icon={IconTypes.FaRegTrashAlt} boxSize="sm" />
+                    <FaRegTrashAlt boxSize="sm" />
                   )
                 }
                 size="xs"

@@ -117,7 +117,7 @@ export function TabsProvider({
         tabNames.length > index &&
         tabNames[index] &&
         useRouter && // Check if Next.js navigation is available
-        router.replace !== (() => {}) // Check if we have real router, not fallback
+        router.replace // Check if router has replace method
       ) {
         const searchParams = new URLSearchParams(window.location.search);
         // Create a new URLSearchParams based on the current search params
