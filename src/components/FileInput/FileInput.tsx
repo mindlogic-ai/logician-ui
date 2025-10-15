@@ -93,13 +93,13 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
                 >
                   <Upload
                     color={
-                      bgImage ? theme.colors.gray[1200] : theme.colors.gray[800]
+                      bgImage ? 'gray.1200' : 'gray.800'
                     }
                   />
                 </Box>
                 <Text
                   color={
-                    bgImage ? theme.colors.gray[1200] : theme.colors.gray[800]
+                    bgImage ? 'gray.1200' : 'gray.800'
                   }
                 >
                   {fileInputLabel || translate('upload_your_file')}

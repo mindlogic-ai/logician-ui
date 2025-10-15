@@ -82,7 +82,7 @@ export const FileItem = ({
                 <IconButton
                   aria-label={'remove uploading file button'}
                   onClick={onFileDelete}
-                  icon={<IoClose color={theme.colors.gray[600]} />}
+                  icon={<IoClose color="gray.600" boxSize="lg" />}
                   size="xs"
                   isDisabled={isDeleting}
                 />
@@ -97,7 +97,7 @@ export const FileItem = ({
               <IconButton
                 aria-label={'download uploaded file button'}
                 onClick={onFileDownload}
-                icon={<LuDownload color={theme.colors.gray[800]} />}
+                icon={<LuDownload color="gray.800" />}
                 size="xs"
               />
             )}

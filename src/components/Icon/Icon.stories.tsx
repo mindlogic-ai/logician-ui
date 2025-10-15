@@ -40,7 +40,7 @@ import {
   Home, Search, Settings, Close, Add, MenuIcon, Download, Upload, Info, Warning, Error, Refresh,
 
   BaseIconProps
-} from './Icons';
+} from './Icon';
 
 const meta: Meta<typeof Analytics> = {
   title: 'Components/Icons',

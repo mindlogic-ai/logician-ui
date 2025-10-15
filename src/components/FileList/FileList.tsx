@@ -84,7 +84,7 @@ export const FileList = ({
           <Subtitle color="gray.600">
             {translate('see_more')} ({visibleCount}/{files.length})
           </Subtitle>
-          <IoChevronDownOutline color={theme.colors.gray[600]} />
+          <IoChevronDownOutline color="gray.600" />
         </Button>
       )}
     </List>
