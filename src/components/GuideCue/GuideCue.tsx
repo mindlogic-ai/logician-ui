@@ -13,7 +13,7 @@ import {
 import { keyframes } from '@emotion/react';
 
 import { Button } from '../Button';
-import { Icon } from '../Icon';
+import { FaCheck, IoChevronForward } from '../Icon';
 import { Subtext, Subtitle } from '../Typography';
 import { useGuideCue } from './GuideCueContext';
 
@@ -214,9 +214,9 @@ export const GuideCue = ({
                 ref={ctaRef}
                 rightIcon={
                   currentIndex < cueRefs.length - 1 ? (
-                    <Icon icon="IoChevronForward" boxSize="xs" />
+                    <IoChevronForward boxSize="xs" />
                   ) : (
-                    <Icon icon="FaCheck" boxSize="xs" />
+                    <FaCheck boxSize="xs" />
                   )
                 }
               >

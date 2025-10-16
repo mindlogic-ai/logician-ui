@@ -5,7 +5,7 @@ import { Code } from '@/components/Code';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@/components/Tabs';
 import { useTranslate } from '@/hooks/useTranslate';
 
-import { Icon } from '../Icon';
+import { FaRegCopy } from '../Icon';
 import { IconButton } from '../IconButton';
 import { useTabsContext } from '../Tabs/TabsContext';
 import { Tooltip } from '../Tooltip';
@@ -32,7 +32,7 @@ const CopyButton = ({
       <IconButton
         aria-label="Copy"
         borderRadius="full"
-        icon={<Icon icon="FaRegCopy" boxSize="xs" />}
+        icon={<FaRegCopy boxSize="xs" />}
         size="sm"
         _hover={{
           bgColor: 'whiteAlpha.500',

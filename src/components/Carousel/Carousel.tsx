@@ -3,7 +3,7 @@
 import React, { Children, useEffect, useRef, useState } from 'react';
 import { Box, Flex, HStack, useBreakpointValue } from '@chakra-ui/react';
 
-import { Icon } from '../Icon';
+import { IoChevronForward, IoIosArrowBack } from '../Icon';
 import { IconButton } from '../IconButton';
 import { CarouselProps } from './Carousel.types';
 
@@ -107,7 +107,7 @@ export const Carousel: React.FC<CarouselProps> = ({
       {showArrows && (
         <IconButton
           aria-label="Previous Slide"
-          icon={<Icon icon="IoIosArrowBack" />}
+          icon={<IoIosArrowBack />}
           position="absolute"
           left={3}
           top="50%"
@@ -122,7 +122,7 @@ export const Carousel: React.FC<CarouselProps> = ({
       {showArrows && (
         <IconButton
           aria-label="Next Slide"
-          icon={<Icon icon="IoChevronForward" />}
+          icon={<IoChevronForward />}
           position="absolute"
           right={3}
           top="50%"

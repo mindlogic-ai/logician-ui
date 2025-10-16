@@ -3,7 +3,7 @@ import {
   RangeDatepickerProps,
 } from 'chakra-dayzed-datepicker';
 
-import { Icon } from '../Icon';
+import { MdOutlineCalendarToday } from '../Icon';
 
 export const RangeDatePicker = ({
   propsConfigs,
@@ -28,8 +28,7 @@ export const RangeDatePicker = ({
           color: 'gray.1500',
           fontSize: 'md',
           leftIcon: (
-            <Icon
-              icon="MdOutlineCalendarToday"
+            <MdOutlineCalendarToday
               color="gray.600"
               style={{ marginInlineEnd: 3 }}
             />

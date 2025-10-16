@@ -18,7 +18,7 @@ import { DataFieldProps } from '@/components/DataField/DataField.types';
 import { IconButton } from '@/components/IconButton';
 import { Text } from '@/components/Typography';
 
-import { Icon } from '../Icon';
+import { Edit, FaRegCopy } from '../Icon';
 
 const TOOLTIP_DISPLAY_TIME = 3000;
 
@@ -108,14 +108,14 @@ export const DataField = ({
             />
             <IconButton
               aria-label={`Edit ${label}`}
-              icon={<Icon icon="Edit" color="gray.400" boxSize="sm" />}
+              icon={<Edit color="gray.400" boxSize="sm" />}
               onClick={handleEditButtonClick}
             />
             {isCopyable && (
               <Tooltip label="Copied!" isOpen={hasOpenCopyTooltip}>
                 <IconButton
                   aria-label={`Copy ${label}`}
-                  icon={<Icon icon="FaRegCopy" color="gray.400" boxSize="sm" />}
+                  icon={<FaRegCopy color="gray.400" boxSize="sm" />}
                   onClick={handleCopyButtonClick}
                 />
               </Tooltip>
@@ -128,7 +128,7 @@ export const DataField = ({
               <Tooltip label="Copied!" isOpen={hasOpenCopyTooltip}>
                 <IconButton
                   aria-label={`Copy ${label}`}
-                  icon={<Icon icon="FaRegCopy" color="gray.400" boxSize="sm" />}
+                  icon={<FaRegCopy color="gray.400" boxSize="sm" />}
                   onClick={handleCopyButtonClick}
                 />
               </Tooltip>

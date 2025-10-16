@@ -5,7 +5,7 @@ import { useTranslate } from '@/hooks/useTranslate';
 import { Button } from '../Button';
 import { Card } from '../Card';
 import { Container } from '../Container';
-import { Icon, IconTypes } from '../Icon';
+import { FaRegCopy, HiRefresh, MdError } from '../Icon';
 import { useToast } from '../Toast/useToast';
 import { H1, H4, Subtext, Subtitle, Text } from '../Typography';
 import type { ErrorFallbackProps } from './ErrorFallback.types';
@@ -84,7 +84,7 @@ User Agent: ${errorInfo.userAgent}`;
               bg="danger.lighter"
               borderRadius="full"
             >
-              <Icon icon={IconTypes.MdError} boxSize="xl" color="danger.main" />
+              <MdError boxSize="xl" color="danger.main" />
             </Box>
 
             {/* Error Title */}
@@ -172,7 +172,7 @@ User Agent: ${errorInfo.userAgent}`;
                   size="sm"
                   minW="fit-content"
                   variant="tertiary"
-                  leftIcon={<Icon icon={IconTypes.FaRegCopy} boxSize="xs" />}
+                  leftIcon={<FaRegCopy boxSize="xs" />}
                 >
                   {translate('copy_error_details')}
                 </Button>
@@ -185,7 +185,7 @@ User Agent: ${errorInfo.userAgent}`;
                 onClick={onErrorReset}
                 size="lg"
                 variant="primary"
-                leftIcon={<Icon icon={IconTypes.HiRefresh} />}
+                leftIcon={<HiRefresh />}
                 _hover={{
                   transform: 'translateY(-1px)',
                   boxShadow: 'lg',
@@ -200,7 +200,7 @@ User Agent: ${errorInfo.userAgent}`;
                 onClick={() => window.location.reload()}
                 size="sm"
                 variant="tertiary"
-                leftIcon={<Icon icon={IconTypes.HiRefresh} />}
+                leftIcon={<HiRefresh />}
               >
                 {translate('refresh_page')}
               </Button>

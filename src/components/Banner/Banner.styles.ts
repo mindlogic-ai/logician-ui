@@ -1,6 +1,6 @@
 import { BoxProps } from '@chakra-ui/react';
 
-import { IconProps } from '../Icon';
+import { IoIosCheckmarkCircle, IoWarning, LuInfo, MdError } from '../Icon';
 import { TypographyProps } from '../Typography';
 import { BannerProps } from './Banner.types';
 
@@ -44,23 +44,14 @@ export const accentStyles: Record<VariantType, BoxProps['_before']> = {
   },
 };
 
-export const iconStyles: Record<VariantType, IconProps> = {
-  info: {
-    icon: 'LuInfo',
-    color: 'primary.main',
-  },
-  success: {
-    icon: 'IoIosCheckmarkCircle',
-    color: 'success.main',
-  },
-  warning: {
-    icon: 'IoWarning',
-    color: 'warning.main',
-  },
-  danger: {
-    icon: 'MdError',
-    color: 'danger.main',
-  },
+export const iconConfig: Record<
+  VariantType,
+  { Icon: React.ComponentType<any>; color: string }
+> = {
+  info: { Icon: LuInfo, color: 'primary.main' },
+  success: { Icon: IoIosCheckmarkCircle, color: 'success.main' },
+  warning: { Icon: IoWarning, color: 'warning.main' },
+  danger: { Icon: MdError, color: 'danger.main' },
 };
 
 export const textStyles: Record<VariantType, TypographyProps> = {
