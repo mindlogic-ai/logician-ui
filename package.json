@@ -17,6 +17,10 @@
     "USAGE.md"
   ],
   "sideEffects": false,
+  "storybook": {
+    "title": "Logician UI",
+    "url": "https://mindlogic-storybook.vercel.app"
+  },
   "scripts": {
     "build": "tsup || true",
     "build:watch": "tsup --watch",
