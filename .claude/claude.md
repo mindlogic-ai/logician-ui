@@ -1,16 +1,66 @@
-# Logician UI Design System
+# Logician UI - Claude Code Instructions
 
-A comprehensive React design system built on Chakra UI, providing 70+ reusable UI components.
+React component library built on Chakra UI v2.8+. Published to npm as `@mindlogic-ai/logician-ui`.
 
-## Project Overview
+**Stack**: TypeScript, tsup (esbuild), Storybook 8.5, Changesets, Yarn
 
-- **Type**: React UI component library (published to npm as `@mindlogic-ai/logician-ui`)
-- **Base Framework**: Chakra UI v2.8+
-- **Language**: TypeScript with JSX
-- **Build Tool**: tsup (esbuild-based)
-- **Documentation**: Storybook 8.5
-- **Version Management**: Changesets
-- **Package Manager**: Yarn
+## Development Workflow
+
+### Common Commands
+
+```bash
+# Install dependencies
+yarn install
+
+# Start Storybook for component development (http://localhost:6006)
+yarn storybook
+
+# Build Storybook for deployment
+yarn build-storybook
+
+# Build the library (outputs to dist/)
+yarn build
+
+# Watch mode for development
+yarn build:watch
+
+# Linting
+yarn lint              # Check for issues
+yarn lint:fix          # Auto-fix issues
+
+# Type checking
+yarn type-check        # Run TypeScript type checking (no output files)
+
+# Icon optimization
+yarn optimize-icons    # Optimize SVG icons using the optimize-icons.js script
+
+# Update translations
+yarn update-intl       # Update internationalization using get-lang-pack.sh script
+
+# Validate component exports
+yarn check-exports
+```
+
+### Release Management
+
+```bash
+# After making changes, create a changeset
+yarn changeset
+
+# Select change type:
+# - major: Breaking changes, component API changes
+# - minor: New components, new features (non-breaking)
+# - patch: Bug fixes, docs, internal improvements
+
+# Update versions and CHANGELOG (done before release)
+yarn changeset:version
+
+# Check changeset status
+yarn changeset:status
+
+# Publish to npm (if configured)
+yarn changeset:publish
+```
 
 ## Architecture
 
@@ -28,7 +78,7 @@ ComponentName/
 
 ### Path Aliases
 
-The project uses TypeScript path aliases for cleaner imports:
+The project uses TypeScript path aliases configured in `tsconfig.json`:
 - `@/components/*` → `src/components/*`
 - `@/utils/*` → `src/utils/*`
 - `@/hooks/*` → `src/hooks/*`
@@ -43,44 +93,24 @@ src/
 ├── theme/          # Chakra UI theme customization
 ├── utils/          # Shared utility functions
 ├── hooks/          # Reusable React hooks
-├── translations/   # i18n support
+├── translations/   # i18n support (Korean via get-lang-pack.sh)
 ├── types/          # Shared TypeScript types
-└── index.ts        # Main export file
+└── index.ts        # Main export file (categorized exports)
 ```
 
-## Development Workflow
+## Build Configuration
 
-### Common Commands
+### tsup Build
 
-```bash
-# Install dependencies
-yarn install
+- Outputs: ESM + CJS with `.d.ts` and sourcemaps
+- `"use client"` banner for Next.js
+- Externalized: React, Chakra UI, @emotion, framer-motion, @mdxeditor/editor, recharts, lodash, date-fns, katex
 
-# Start Storybook for component development
-yarn storybook
+### ESLint
 
-# Build the library
-yarn build
+TypeScript ESLint + React + Prettier. Auto-removes unused imports. Simple import sorting.
 
-# Watch mode for development
-yarn build:watch
-
-# Linting
-yarn lint              # Check for issues
-yarn lint:fix          # Auto-fix issues
-
-# Type checking
-yarn type-check
-
-# Icon optimization
-yarn optimize-icons
-
-# Update translations
-yarn update-intl
-
-# Validate component exports
-yarn check-exports
-```
+## Development Guidelines
 
 ### Adding a New Component
 
@@ -93,61 +123,8 @@ yarn check-exports
 3. Add styles if needed: `ComponentName.styles.ts`
 4. Add export to `src/index.ts` (follow existing categorization)
 5. Run `yarn check-exports` to validate
-6. Create Storybook story with examples
-
-### Versioning & Releases
-
-This project uses [Changesets](https://github.com/changesets/changesets):
-
-```bash
-# After making changes, create a changeset
-yarn changeset
-
-# Select change type:
-# - major: Breaking changes, component API changes
-# - minor: New components, new features (non-breaking)
-# - patch: Bug fixes, docs, internal improvements
-
-# Update versions (done before release)
-yarn changeset:version
-
-# Check changeset status
-yarn changeset:status
-
-# Publish to npm (if configured)
-yarn changeset:publish
-```
-
-## Build Configuration
-
-### tsup Build
-
-The library is built using tsup with:
-- **Formats**: ESM and CJS
-- **Type Definitions**: Generated (.d.ts files)
-- **Code Splitting**: Enabled for better tree-shaking
-- **Banner**: `"use client"` for Next.js compatibility
-- **External Dependencies**: React, Chakra UI, and heavy deps are externalized
-
-### Exports
-
-Components are exported from `src/index.ts` with categorization:
-- Core Components (Button, Card, Badge, etc.)
-- Form Components (Input, Select, Checkbox, etc.)
-- Navigation (Tabs, Pagination, Breadcrumb, etc.)
-- Feedback (Alert, Toast, Modal, etc.)
-- Data Display (Table, Avatar, Typography, etc.)
-- File Components
-- Icon Components
-
-## Code Standards
-
-### TypeScript
-
-- Target: ES2020
-- JSX: react-jsx (automatic runtime)
-- Strict mode: Disabled (for flexibility)
-- Declaration files: Generated with sourcemaps
+6. Add changeset using `yarn changeset`
+7. Ensure responsive design and accessibility compliance
 
 ### Component Patterns
 
@@ -167,41 +144,26 @@ Components are exported from `src/index.ts` with categorization:
 - Use `useTheme()` and `useToken()` hooks
 - Support focus states with proper outlines
 
-## Key Dependencies
+### Testing Components
 
-### Peer Dependencies (required by consumers)
-- `react` & `react-dom` ^18.0.0
-- `@chakra-ui/react` ^2.8.0
-- `@emotion/react` & `@emotion/styled` ^11.11.0
-- `framer-motion` ^10.0.0
-- `next` ^13/14/15 (optional)
+- Use Storybook for visual testing and documentation
+- Test responsive behavior across screen sizes
+- Verify keyboard navigation and screen reader compatibility
+- Run type checking and linting before committing
 
-### Major Dependencies
-- `@mdxeditor/editor` - Rich text editing
-- `react-markdown` - Markdown rendering
-- `react-select` - Advanced select component
-- `recharts` - Charting components
-- `date-fns` - Date utilities
-- `lodash` - Utility functions
+### Pull Request Requirements
+
+- Add Storybook stories for new components
+- Update TypeScript type definitions
+- Verify responsive design
+- Add changeset for version management (if needed)
+- Export new components in src/index.ts
+- Include screenshots of visual changes
+- Test keyboard navigation and accessibility
 
 ## Git Workflow
 
-- Main development branch: `dev`
-- Follow conventional commits
-- Create changesets for all changes
-- Ensure lint and type-check pass before commits
-- Use meaningful commit messages
-
-## Testing
-
-Currently: `echo 'No tests specified'`
-(Tests should be added in the future)
-
-## Notes
-
-- Components are tree-shakable
-- Supports Server-Side Rendering (SSR)
-- Next.js compatible with "use client" directive
-- Storybook provides live component playground
-- Icon system uses optimized SVGs
-- Internationalization support via translations
+- Main branch: `dev`
+- Use conventional commits
+- Always create changesets for versioning
+- Run `yarn lint` and `yarn type-check` before committing
