@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 
-import { Icon } from '@/components/Icon';
+import { IoCall, IoSearch } from '../Icon';
 
-import { Input, InputDataProps } from './Input';
+import { Input } from './Input';
+import { InputProps } from './Input.types';
 
 const meta: Meta<typeof Input> = {
   title: 'Components/Input',
@@ -24,7 +25,7 @@ const meta: Meta<typeof Input> = {
 
 export default meta;
 
-const Template: StoryFn<InputDataProps> = (args) => {
+const Template: StoryFn<InputProps> = (args) => {
   const [value, setValue] = useState('');
 
   return (
@@ -32,24 +33,24 @@ const Template: StoryFn<InputDataProps> = (args) => {
   );
 };
 
-export const Basic: StoryFn<InputDataProps> = Template.bind({});
+export const Basic: StoryFn<InputProps> = Template.bind({});
 Basic.args = {};
 
-export const LeftIcon: StoryFn<InputDataProps> = Template.bind({});
+export const LeftIcon: StoryFn<InputProps> = Template.bind({});
 LeftIcon.args = {
   placeholder: 'Phone number',
   size: 'md',
   isDisabled: false,
   isInvalid: false,
-  leftIcon: <Icon icon="IoCall" color="gray.300" />,
+  leftIcon: <IoCall color="gray.300" />,
 };
 
-export const RightIcon: StoryFn<InputDataProps> = Template.bind({});
+export const RightIcon: StoryFn<InputProps> = Template.bind({});
 RightIcon.args = {
   placeholder: 'Search...',
   size: 'md',
   isDisabled: false,
   isInvalid: false,
-  rightIcon: <Icon icon="IoSearch" color="gray.300" />,
+  rightIcon: <IoSearch color="gray.300" />,
   maxLength: 20,
 };
