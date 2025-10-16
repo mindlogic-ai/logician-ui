@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button, HStack, IconButton, VStack } from '@chakra-ui/react';
 import { Meta, StoryFn } from '@storybook/react';
 
-import { Icon } from '../Icon';
+import { FaRegCopy } from '../Icon';
 import { Tooltip } from './Tooltip';
 
 export default {
@@ -87,7 +87,7 @@ export const CopyButtonExample: StoryFn<typeof Tooltip> = () => {
       <Tooltip label={tooltipLabel} isOpen={isTooltipOpen} placement="top">
         <IconButton
           aria-label="Copy text"
-          icon={<Icon icon="FaRegCopy" />}
+          icon={<FaRegCopy />}
           onClick={handleCopy}
           variant="tertiary"
         />

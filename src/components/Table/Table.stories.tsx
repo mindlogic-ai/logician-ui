@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Flex } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import { Icon } from '../Icon';
+import { IoChevronDownOutline } from '../Icon';
 import { IconButton } from '../IconButton';
 import {
   ExpandingTr,
@@ -152,7 +152,7 @@ export const ExpandedContent: Story = {
                 <Td w={2}>
                   <IconButton
                     aria-label="Expand"
-                    icon={<Icon icon="IoChevronDownOutline" />}
+                    icon={<IoChevronDownOutline />}
                     onClick={() => setIsExpanded((e) => !e)}
                   />
                 </Td>

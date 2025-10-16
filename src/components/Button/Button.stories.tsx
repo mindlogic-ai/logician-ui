@@ -2,7 +2,7 @@ import React from 'react';
 import { Box } from '@chakra-ui/react';
 import { Meta, StoryFn } from '@storybook/react';
 
-import { Icon } from '../Icon';
+import { Sparkles } from '../Icon';
 import { Button, variantStyles } from '.';
 import { ButtonVariant } from './Button.types';
 
@@ -48,5 +48,5 @@ export const ButtonsWithIcons: Story = (args) => {
   );
 };
 ButtonsWithIcons.args = {
-  leftIcon: <Icon icon="Sparkles" />,
+  leftIcon: <Sparkles />,
 };
