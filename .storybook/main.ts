@@ -8,6 +8,7 @@ const config: StorybookConfig = {
   ],
   addons: ['@storybook/addon-essentials', '@storybook/addon-docs'],
   staticDirs: ['../public'],
+  refs: () => ({}),
   framework: {
     name: '@storybook/react-vite',
     options: {},
@@ -22,7 +23,7 @@ const config: StorybookConfig = {
     },
   },
   docs: {
-    autodocs: 'tag',
+    autodocs: false,
   },
   async viteFinal(config) {
     const { mergeConfig } = await import('vite');

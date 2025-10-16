@@ -26,7 +26,7 @@ export const InfoSprinkle = ({
       <PopoverTrigger>
         <IconButton
           aria-label="Info"
-          icon={<Icon icon={IconTypes.LuInfo} boxSize="sm" color="inherit" />}
+          icon={<Icon icon={IconTypes.LuInfo} boxSize="xs" color="inherit" />}
           {...iconButtonProps}
         />
       </PopoverTrigger>
