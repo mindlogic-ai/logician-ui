@@ -2,45 +2,11 @@ import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 import { Box, HStack, VStack, Text, SimpleGrid, Wrap, WrapItem, Code } from '@chakra-ui/react';
 import { createIcon } from '../../utils/createIcon';
+import type { IconProps } from '../../utils/createIcon';
 
-// 모든 개별 아이콘 컴포넌트들 import
-import {
-  // Custom SVG Icons
-  Analytics, Bulb, Chat, Edit, Face, Language, Layout,
-  FilledAnalytics, FilledBulb, FilledChat, FilledEdit, FilledFace, FilledLayout,
-  Pending, Receipt, Sparkles, Store, StoreActive, Studio, StudioActive,
-  VerticalEllipsis, Dashboard, Faq, Members, FilledFaq, FilledMembers,
-  FilledAmountUsage, AmountUsage, Window,
-
-  // React Icons - FA
-  FaArchive, FaBeer, FaChartPie, FaGraduationCap, FaImage, FaMoneyBillWave,
-  FaPlay, FaPrint, FaRegEye, FaRegEyeSlash, FaRegQuestionCircle, FaRegTrashAlt,
-  FaRegUserCircle, FaSortAlphaDown, FaSortAlphaUp, FaSortNumericDown,
-  FaSortNumericUp, FaUniversity, FaUserCheck, FaUserPlus, FaUsers,
-
-  // React Icons - FA6
-  FaCheck, FaCode, FaLock, FaPersonChalkboard, FaRegCopy, FaRotateRight, FaUserClock,
-
-  // React Icons - 기타 (BI, BS, CI, GI, GO, GR, HI, IO, LU, MD, PI, RX, SL, TB)
-  BiDetail, BiExpandAlt, BsTranslate, CiFileOn, GiTwoCoins, GoArrowDownRight, GoArrowUpRight,
-  GrUserAdmin, HiLightningBolt, HiRefresh, HiX, IoIosAddCircleOutline, IoIosArrowBack,
-  IoIosArrowForward, IoIosAttach, IoIosCheckmarkCircle, IoIosList, IoIosMail, IoIosShareAlt,
-  IoMdLink, IoMdSave, IoMdSettings, IoMdThumbsDown, IoMdThumbsUp, IoAddCircleOutline,
-  IoAddOutline, IoCall, IoChatbubbleEllipses, IoChevronDownOutline, IoChevronForward,
-  IoClose, IoCloseOutline, IoCodeSlash, IoDocumentTextSharp, IoEyeOffOutline, IoEyeOutline,
-  IoFilter, IoHome, IoSearch, IoWarning, IoWarningOutline, LiaNewspaper, LuBookOpenText,
-  LuDownload, LuExternalLink, LuGraduationCap, LuInfo, LuMenu, LuReceipt, LuSendHorizontal,
-  LuUpload, MdAnnouncement, MdCardMembership, MdError, MdFilterList, MdLogout,
-  MdOutlineCalendarToday, MdOutlinePersonPin, MdOutlineSpaceDashboard, MdPreview,
-  MdSpaceDashboard, MdThumbsUpDown, PiChatSlashBold, PiExam, PiGlobe, PiGlobeX,
-  RxDotsHorizontal, SlSettings, TbAppWindowFilled, TbInfinity, TbLayoutNavbar, TbLockCog,
-  TbMessageChatbotFilled, TbSum, TbWorldSearch,
-
-  // Common UI Icons
-  Home, Search, Settings, Close, Add, MenuIcon, Download, Upload, Info, Warning, Error, Refresh,
-
-  BaseIconProps
-} from './Icon';
+// Icons 객체를 자동으로 가져와서 사용
+import { Icons } from './_constants/iconList';
+import { Analytics } from './index'; // 예시용으로 하나만 import
 
 const meta: Meta<typeof Analytics> = {
   title: 'Components/Icons',
@@ -48,7 +14,7 @@ const meta: Meta<typeof Analytics> = {
 };
 
 export default meta;
-type Story = StoryFn<BaseIconProps>;
+type Story = StoryFn<IconProps>;
 
 // 아이콘 컴포넌트 정리
 const IconGroup = ({ title, icons, color = "gray.700" }: {
@@ -74,296 +40,148 @@ const IconGroup = ({ title, icons, color = "gray.700" }: {
 );
 
 export const AllIcons: Story = () => {
-  const customSvgIcons = [
-    { component: Analytics, name: 'Analytics' },
-    { component: Bulb, name: 'Bulb' },
-    { component: Chat, name: 'Chat' },
-    { component: Edit, name: 'Edit' },
-    { component: Face, name: 'Face' },
-    { component: Language, name: 'Language' },
-    { component: Layout, name: 'Layout' },
-    { component: Pending, name: 'Pending' },
-    { component: Receipt, name: 'Receipt' },
-    { component: Sparkles, name: 'Sparkles' },
-    { component: Store, name: 'Store' },
-    { component: StoreActive, name: 'StoreActive' },
-    { component: Studio, name: 'Studio' },
-    { component: StudioActive, name: 'StudioActive' },
-    { component: Dashboard, name: 'Dashboard' },
-    { component: Faq, name: 'Faq' },
-    { component: Members, name: 'Members' },
-    { component: AmountUsage, name: 'AmountUsage' },
-    { component: Window, name: 'Window' },
-    { component: VerticalEllipsis, name: 'VerticalEllipsis' },
-  ];
+  // Icons 객체에서 자동으로 카테고리별 분류
+  const iconCategories = React.useMemo(() => {
+    const categories = {
+      customSvg: [] as Array<{ component: React.ComponentType<any>; name: string }>,
+      filled: [] as Array<{ component: React.ComponentType<any>; name: string }>,
+      fa: [] as Array<{ component: React.ComponentType<any>; name: string }>,
+      other: [] as Array<{ component: React.ComponentType<any>; name: string }>,
+    };
 
-  const filledIcons = [
-    { component: FilledAnalytics, name: 'FilledAnalytics' },
-    { component: FilledBulb, name: 'FilledBulb' },
-    { component: FilledChat, name: 'FilledChat' },
-    { component: FilledEdit, name: 'FilledEdit' },
-    { component: FilledFace, name: 'FilledFace' },
-    { component: FilledLayout, name: 'FilledLayout' },
-    { component: FilledFaq, name: 'FilledFaq' },
-    { component: FilledMembers, name: 'FilledMembers' },
-    { component: FilledAmountUsage, name: 'FilledAmountUsage' },
-  ];
+    Object.entries(Icons).forEach(([name, IconComponent]) => {
+      const iconData = { component: IconComponent, name };
 
-  const reactIcons = [
-    // FA Icons
-    { component: FaArchive, name: 'FaArchive' },
-    { component: FaBeer, name: 'FaBeer' },
-    { component: FaChartPie, name: 'FaChartPie' },
-    { component: FaGraduationCap, name: 'FaGraduationCap' },
-    { component: FaImage, name: 'FaImage' },
-    { component: FaMoneyBillWave, name: 'FaMoneyBillWave' },
-    { component: FaPlay, name: 'FaPlay' },
-    { component: FaPrint, name: 'FaPrint' },
-    { component: FaRegEye, name: 'FaRegEye' },
-    { component: FaRegEyeSlash, name: 'FaRegEyeSlash' },
-    { component: FaRegQuestionCircle, name: 'FaRegQuestionCircle' },
-    { component: FaRegTrashAlt, name: 'FaRegTrashAlt' },
-    { component: FaRegUserCircle, name: 'FaRegUserCircle' },
-    { component: FaSortAlphaDown, name: 'FaSortAlphaDown' },
-    { component: FaSortAlphaUp, name: 'FaSortAlphaUp' },
-    { component: FaSortNumericDown, name: 'FaSortNumericDown' },
-    { component: FaSortNumericUp, name: 'FaSortNumericUp' },
-    { component: FaUniversity, name: 'FaUniversity' },
-    { component: FaUserCheck, name: 'FaUserCheck' },
-    { component: FaUserPlus, name: 'FaUserPlus' },
-    { component: FaUsers, name: 'FaUsers' },
+      if (name.startsWith('Filled')) {
+        categories.filled.push(iconData);
+      } else if (name.startsWith('Fa')) {
+        categories.fa.push(iconData);
+      } else if (
+        // 커스텀 SVG 아이콘 (react-icons가 아닌 것들)
+        !name.match(/^(Bi|Bs|Ci|Fa|Gi|Go|Gr|Hi|Io|Lia|Lu|Md|Pi|Rx|Sl|Tb)/)
+      ) {
+        categories.customSvg.push(iconData);
+      } else {
+        categories.other.push(iconData);
+      }
+    });
 
-    // FA6 Icons
-    { component: FaCheck, name: 'FaCheck' },
-    { component: FaCode, name: 'FaCode' },
-    { component: FaLock, name: 'FaLock' },
-    { component: FaPersonChalkboard, name: 'FaPersonChalkboard' },
-    { component: FaRegCopy, name: 'FaRegCopy' },
-    { component: FaRotateRight, name: 'FaRotateRight' },
-    { component: FaUserClock, name: 'FaUserClock' },
-  ];
+    // 각 카테고리를 이름순으로 정렬
+    Object.keys(categories).forEach((key) => {
+      categories[key as keyof typeof categories].sort((a, b) => a.name.localeCompare(b.name));
+    });
 
-  const otherReactIcons = [
-    // BI, BS, CI Icons
-    { component: BiDetail, name: 'BiDetail' },
-    { component: BiExpandAlt, name: 'BiExpandAlt' },
-    { component: BsTranslate, name: 'BsTranslate' },
-    { component: CiFileOn, name: 'CiFileOn' },
+    return categories;
+  }, []);
 
-    // GI, GO, GR Icons
-    { component: GiTwoCoins, name: 'GiTwoCoins' },
-    { component: GoArrowDownRight, name: 'GoArrowDownRight' },
-    { component: GoArrowUpRight, name: 'GoArrowUpRight' },
-    { component: GrUserAdmin, name: 'GrUserAdmin' },
-
-    // HI Icons
-    { component: HiLightningBolt, name: 'HiLightningBolt' },
-    { component: HiX, name: 'HiX' },
-
-    // IO Icons
-    { component: IoIosAddCircleOutline, name: 'IoIosAddCircleOutline' },
-    { component: IoIosArrowBack, name: 'IoIosArrowBack' },
-    { component: IoIosArrowForward, name: 'IoIosArrowForward' },
-    { component: IoIosAttach, name: 'IoIosAttach' },
-    { component: IoIosCheckmarkCircle, name: 'IoIosCheckmarkCircle' },
-    { component: IoIosList, name: 'IoIosList' },
-    { component: IoIosMail, name: 'IoIosMail' },
-    { component: IoIosShareAlt, name: 'IoIosShareAlt' },
-    { component: IoMdLink, name: 'IoMdLink' },
-    { component: IoMdSave, name: 'IoMdSave' },
-    { component: IoMdThumbsDown, name: 'IoMdThumbsDown' },
-    { component: IoMdThumbsUp, name: 'IoMdThumbsUp' },
-
-    // IO5 Icons
-    { component: IoAddCircleOutline, name: 'IoAddCircleOutline' },
-    { component: IoCall, name: 'IoCall' },
-    { component: IoChatbubbleEllipses, name: 'IoChatbubbleEllipses' },
-    { component: IoChevronDownOutline, name: 'IoChevronDownOutline' },
-    { component: IoChevronForward, name: 'IoChevronForward' },
-    { component: IoCloseOutline, name: 'IoCloseOutline' },
-    { component: IoCodeSlash, name: 'IoCodeSlash' },
-    { component: IoDocumentTextSharp, name: 'IoDocumentTextSharp' },
-    { component: IoEyeOffOutline, name: 'IoEyeOffOutline' },
-    { component: IoEyeOutline, name: 'IoEyeOutline' },
-    { component: IoFilter, name: 'IoFilter' },
-    { component: IoWarningOutline, name: 'IoWarningOutline' },
-
-    // LIA, LU Icons
-    { component: LiaNewspaper, name: 'LiaNewspaper' },
-    { component: LuBookOpenText, name: 'LuBookOpenText' },
-    { component: LuExternalLink, name: 'LuExternalLink' },
-    { component: LuGraduationCap, name: 'LuGraduationCap' },
-    { component: LuReceipt, name: 'LuReceipt' },
-    { component: LuSendHorizontal, name: 'LuSendHorizontal' },
-
-    // MD Icons
-    { component: MdAnnouncement, name: 'MdAnnouncement' },
-    { component: MdCardMembership, name: 'MdCardMembership' },
-    { component: MdFilterList, name: 'MdFilterList' },
-    { component: MdLogout, name: 'MdLogout' },
-    { component: MdOutlineCalendarToday, name: 'MdOutlineCalendarToday' },
-    { component: MdOutlinePersonPin, name: 'MdOutlinePersonPin' },
-    { component: MdOutlineSpaceDashboard, name: 'MdOutlineSpaceDashboard' },
-    { component: MdPreview, name: 'MdPreview' },
-    { component: MdSpaceDashboard, name: 'MdSpaceDashboard' },
-    { component: MdThumbsUpDown, name: 'MdThumbsUpDown' },
-
-    // PI Icons
-    { component: PiChatSlashBold, name: 'PiChatSlashBold' },
-    { component: PiExam, name: 'PiExam' },
-    { component: PiGlobe, name: 'PiGlobe' },
-    { component: PiGlobeX, name: 'PiGlobeX' },
-
-    // RX, SL Icons
-    { component: RxDotsHorizontal, name: 'RxDotsHorizontal' },
-    { component: SlSettings, name: 'SlSettings' },
-
-    // TB Icons
-    { component: TbAppWindowFilled, name: 'TbAppWindowFilled' },
-    { component: TbInfinity, name: 'TbInfinity' },
-    { component: TbLayoutNavbar, name: 'TbLayoutNavbar' },
-    { component: TbLockCog, name: 'TbLockCog' },
-    { component: TbMessageChatbotFilled, name: 'TbMessageChatbotFilled' },
-    { component: TbSum, name: 'TbSum' },
-    { component: TbWorldSearch, name: 'TbWorldSearch' },
-  ];
-
-  const commonUiIcons = [
-    { component: Home, name: 'Home' },
-    { component: Search, name: 'Search' },
-    { component: Settings, name: 'Settings' },
-    { component: Close, name: 'Close' },
-    { component: Add, name: 'Add' },
-    { component: MenuIcon, name: 'MenuIcon' },
-    { component: Download, name: 'Download' },
-    { component: Upload, name: 'Upload' },
-    { component: Info, name: 'Info' },
-    { component: Warning, name: 'Warning' },
-    { component: Error, name: 'Error' },
-    { component: Refresh, name: 'Refresh' },
-  ];
+  const totalCount = Object.values(iconCategories).reduce((sum, arr) => sum + arr.length, 0);
 
   return (
     <VStack spacing={4} align="start" >
-      <Text fontSize="sm" fontWeight="bold">모든 아이콘 라이브러리 (총 {customSvgIcons.length + filledIcons.length + reactIcons.length + otherReactIcons.length + commonUiIcons.length}개)</Text>
+      <Text fontSize="sm" fontWeight="bold">모든 아이콘 라이브러리 (총 {totalCount}개) - 자동 생성됨! 🎉</Text>
 
       <IconGroup
-        title={`🎨 커스텀 SVG 아이콘 (${customSvgIcons.length}개)`}
-        icons={customSvgIcons}
+        title={`🎨 커스텀 SVG 아이콘 (${iconCategories.customSvg.length}개)`}
+        icons={iconCategories.customSvg}
         color="blue.500"
       />
 
       <IconGroup
-        title={`🟦 Filled 아이콘 (${filledIcons.length}개)`}
-        icons={filledIcons}
+        title={`🟦 Filled 아이콘 (${iconCategories.filled.length}개)`}
+        icons={iconCategories.filled}
         color="purple.500"
       />
 
       <IconGroup
-        title={`⚛️ React 아이콘 - FA 시리즈 (${reactIcons.length}개)`}
-        icons={reactIcons}
+        title={`⚛️ React 아이콘 - FA 시리즈 (${iconCategories.fa.length}개)`}
+        icons={iconCategories.fa}
         color="green.500"
       />
 
       <IconGroup
-        title={`🌟 React 아이콘 - 기타 (${otherReactIcons.length}개)`}
-        icons={otherReactIcons}
+        title={`🌟 React 아이콘 - 기타 (${iconCategories.other.length}개)`}
+        icons={iconCategories.other}
         color="teal.500"
-      />
-
-      <IconGroup
-        title={`🔧 공통 UI 아이콘 (${commonUiIcons.length}개)`}
-        icons={commonUiIcons}
-        color="orange.500"
       />
     </VStack>
   );
 };
 
-export const BasicUsage: Story = () => (
-  <VStack spacing={6} align="start">
-    <Text fontSize="sm" fontWeight="bold">기본 사용법</Text>
-    <Text color="gray.600" mb={4}>
-      각 아이콘을 개별 컴포넌트로 직접 사용할 수 있습니다.
-    </Text>
+export const BasicUsage: Story = () => {
+  // Icons 객체에서 몇 개의 샘플 아이콘 선택
+  const sampleIcons = React.useMemo(() => {
+    const iconNames = Object.keys(Icons);
+    return [
+      { name: iconNames.find(name => !name.match(/^(Bi|Bs|Ci|Fa|Gi|Go|Gr|Hi|Io|Lia|Lu|Md|Pi|Rx|Sl|Tb|Filled)/)) || iconNames[0], type: '커스텀 SVG', color: 'blue.500' },
+      { name: iconNames.find(name => name.startsWith('Io')) || iconNames[1], type: 'UI 아이콘', color: 'green.500' },
+      { name: iconNames.find(name => name.startsWith('Fa')) || iconNames[2], type: 'React 아이콘', color: 'purple.500' },
+    ];
+  }, []);
 
-    <SimpleGrid columns={3} spacing={8}>
-      <VStack>
-        <Analytics boxSize="xs" color="blue.500" />
-        <Text fontSize="sm" fontWeight="bold">&lt;Analytics /&gt;</Text>
-        <Text fontSize="sm" color="gray.500">커스텀 SVG</Text>
-      </VStack>
+  return (
+    <VStack spacing={6} align="start">
+      <Text fontSize="sm" fontWeight="bold">기본 사용법</Text>
+      <Text color="gray.600" mb={4}>
+        각 아이콘을 개별적으로 import해서 사용할 수 있습니다.
+      </Text>
 
-      <VStack>
-        <Home boxSize="xs" color="green.500" />
-        <Text fontSize="sm" fontWeight="bold">&lt;Home /&gt;</Text>
-        <Text fontSize="sm" color="gray.500">UI 아이콘</Text>
-      </VStack>
+      <SimpleGrid columns={3} spacing={8}>
+        {sampleIcons.map(({ name, type, color }) => {
+          const IconComponent = Icons[name];
+          return IconComponent ? (
+            <VStack key={name}>
+              <IconComponent boxSize="xs" color={color} />
+              <Text fontSize="sm" fontWeight="bold">&lt;{name} /&gt;</Text>
+              <Text fontSize="sm" color="gray.500">{type}</Text>
+            </VStack>
+          ) : null;
+        })}
+      </SimpleGrid>
+    </VStack>
+  );
+};
 
-      <VStack>
-        <FaCheck boxSize="xs" color="purple.500" />
-        <Text fontSize="sm" fontWeight="bold">&lt;FaCheck /&gt;</Text>
-        <Text fontSize="sm" color="gray.500">React 아이콘</Text>
-      </VStack>
-    </SimpleGrid>
-  </VStack>
-);
+export const Sizes: Story = () => {
+  // Icons 객체에서 첫 번째 아이콘 선택
+  const sampleIconName = Object.keys(Icons)[0];
+  const SampleIcon = Icons[sampleIconName];
 
-export const Sizes: Story = () => (
-  <VStack maxW="1400px" spacing={4} align="start">
-    <Text fontSize="sm" fontWeight="bold">크기 조절</Text>
-    <HStack spacing={1} align="center">
-      <VStack>
-        <Analytics boxSize="xs" color="blue.500" />
-        <Text fontSize="sm">xs</Text>
-      </VStack>
-      <VStack>
-        <Analytics boxSize="sm" color="blue.500" />
-        <Text fontSize="sm">sm</Text>
-      </VStack>
-      <VStack>
-        <Analytics boxSize="md" color="blue.500" />
-        <Text fontSize="sm">md</Text>
-      </VStack>
-      <VStack>
-        <Analytics boxSize="lg" color="blue.500" />
-        <Text fontSize="sm">lg</Text>
-      </VStack>
-      <VStack>
-        <Analytics boxSize="xl" color="blue.500" />
-        <Text fontSize="sm">xl</Text>
-      </VStack>
-    </HStack>
-  </VStack>
-);
+  return (
+    <VStack maxW="1400px" spacing={4} align="start">
+      <Text fontSize="sm" fontWeight="bold">크기 조절</Text>
+      <HStack spacing={1} align="center">
+        {['xs', 'sm', 'md', 'lg', 'xl'].map((size) => (
+          <VStack key={size}>
+            <SampleIcon boxSize={size} color="blue.500" />
+            <Text fontSize="sm">{size}</Text>
+          </VStack>
+        ))}
+      </HStack>
+    </VStack>
+  );
+};
 
-export const Colors: Story = () => (
-  <VStack spacing={4} align="start">
-    <Text fontSize="sm" fontWeight="bold">색상 조절</Text>
-    <HStack spacing={6}>
-      <VStack>
-        <Analytics boxSize="sm" color="red.500" />
-        <Text fontSize="sm">red.500</Text>
-      </VStack>
-      <VStack>
-        <Analytics boxSize="sm" color="green.500" />
-        <Text fontSize="sm">green.500</Text>
-      </VStack>
-      <VStack>
-        <Analytics boxSize="sm" color="blue.500" />
-        <Text fontSize="sm">blue.500</Text>
-      </VStack>
-      <VStack>
-        <Analytics boxSize="sm" color="purple.500" />
-        <Text fontSize="sm">purple.500</Text>
-      </VStack>
-      <VStack>
-        <Analytics boxSize="sm" color="orange.500" />
-        <Text fontSize="sm">orange.500</Text>
-      </VStack>
-    </HStack>
-  </VStack>
-);
+export const Colors: Story = () => {
+  // Icons 객체에서 첫 번째 아이콘 선택
+  const sampleIconName = Object.keys(Icons)[0];
+  const SampleIcon = Icons[sampleIconName];
+  
+  const colors = ['red.500', 'green.500', 'blue.500', 'purple.500', 'orange.500'];
+
+  return (
+    <VStack spacing={4} align="start">
+      <Text fontSize="sm" fontWeight="bold">색상 조절</Text>
+      <HStack spacing={6}>
+        {colors.map((color) => (
+          <VStack key={color}>
+            <SampleIcon boxSize="sm" color={color} />
+            <Text fontSize="sm">{color}</Text>
+          </VStack>
+        ))}
+      </HStack>
+    </VStack>
+  );
+};
 
 // 예제용 커스텀 아이콘 (React Icons 사용)
 import { FaBuildingUser } from 'react-icons/fa6';

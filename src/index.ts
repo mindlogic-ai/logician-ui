@@ -34,9 +34,8 @@ export * from './components/FormLabel';
 export * from './components/GuideCue';
 
 // Icon Components (wrapper only, individual icons available via @mindlogic-ai/logician-ui/icons)
-export type { IconProps } from './components/Icon';
-export { Icon } from './components/Icon';
 export * from './components/IconButton';
+export type { IconProps } from './utils/createIcon';
 
 // Icon Utilities
 export type {
