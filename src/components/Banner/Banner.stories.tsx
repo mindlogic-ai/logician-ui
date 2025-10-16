@@ -38,28 +38,6 @@ Danger.args = {
   children: 'An error occurred. Please try again.',
 };
 
-// Size variations
-export const Small = Template.bind({});
-Small.args = {
-  size: 'sm',
-  variant: 'info',
-  children: 'Small banner message',
-};
-
-export const Medium = Template.bind({});
-Medium.args = {
-  size: 'md',
-  variant: 'info',
-  children: 'Medium banner message (default)',
-};
-
-export const Large = Template.bind({});
-Large.args = {
-  size: 'lg',
-  variant: 'info',
-  children: 'Large banner message',
-};
-
 // Size with Typography components
 export const AllSizes: ComponentStory<typeof Banner> = () => (
   <VStack spacing={4} align="stretch">
