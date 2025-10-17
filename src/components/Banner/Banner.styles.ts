@@ -47,7 +47,7 @@ export const accentStyles: Record<VariantType, BoxProps['_before']> = {
 
 export const iconConfig: Record<
   VariantType,
-  { Icon: React.ComponentType<any>; color: string }
+  { Icon: React.ComponentType<IconProps>; color: string }
 > = {
   info: { Icon: LuInfo, color: 'primary.main' },
   success: { Icon: IoIosCheckmarkCircle, color: 'success.main' },

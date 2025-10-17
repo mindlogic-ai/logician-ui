@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 
-import { IoCall, IoSearch } from '../Icon';
+import { IoCall, IoSearch } from '@/components/Icon';
 
 import { Input } from './Input';
 import { InputProps } from './Input.types';
