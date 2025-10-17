@@ -1,4 +1,5 @@
 import { BoxProps } from '@chakra-ui/react';
+import { IconProps } from 'src/icons';
 
 import { IoIosCheckmarkCircle, IoWarning, LuInfo, MdError } from '../Icon';
 import { TypographyProps } from '../Typography';

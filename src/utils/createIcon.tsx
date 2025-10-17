@@ -88,7 +88,9 @@ export const createIcon = (
  * <icons.Custom boxSize="md" />
  * ```
  */
-export const createIconGroup = <T extends Record<string, React.ComponentType<any>>>(
+export const createIconGroup = <
+  T extends Record<string, React.ComponentType<any>>,
+>(
   iconMap: T
 ): {
   [K in keyof T]: React.ForwardRefExoticComponent<
