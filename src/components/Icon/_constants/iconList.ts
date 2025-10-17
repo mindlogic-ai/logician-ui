@@ -126,7 +126,7 @@ import {
   TbWorldSearch as TbWorldSearchIcon,
 } from 'react-icons/tb';
 
-import createIcon from '@/utils/createIcon';
+import createIcon from '@/components/Icon/_utils/createIcon';
 
 // Custom SVG Icon imports
 import AmountUsageIcon from '../icons/amount-usage.svg';

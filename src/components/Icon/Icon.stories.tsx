@@ -1,8 +1,8 @@
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 import { Box, HStack, VStack, Text, SimpleGrid, Wrap, WrapItem, Code } from '@chakra-ui/react';
-import { createIcon } from '../../utils/createIcon';
-import type { IconProps } from '../../utils/createIcon';
+import { createIcon } from './_utils/createIcon';
+import type { IconProps } from './_utils/createIcon';
 
 // Icons 객체를 자동으로 가져와서 사용
 import { Icons } from './_constants/iconList';
