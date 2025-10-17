@@ -34,15 +34,15 @@ export * from './components/FormLabel';
 export * from './components/GuideCue';
 
 // Icon Components (wrapper only, individual icons available via @mindlogic-ai/logician-ui/icons)
+export type { IconProps } from './components/Icon/_utils/createIcon';
 export * from './components/IconButton';
-export type { IconProps } from './utils/createIcon';
 
 // Icon Utilities
 export type {
   CreatedIcon,
   IconProps as CreateIconProps,
-} from './utils/createIcon';
-export { createIcon, createIconGroup } from './utils/createIcon';
+} from './components/Icon/_utils/createIcon';
+export { createIconGroup } from './components/Icon/_utils/createIconGroup';
 
 // Info Components
 export * from './components/InfoSprinkle';
