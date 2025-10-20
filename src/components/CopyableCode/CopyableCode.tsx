@@ -4,9 +4,8 @@ import { useTranslate } from '@/hooks/useTranslate';
 
 import { Button } from '../Button';
 import { Card } from '../Card';
-import { Icon } from '../Icon';
+import { FaRegCopy } from '../Icon';
 import { CopyableCodeProps } from './CopyableCode.types';
-
 /**
  * Intended for a quick one-click copy of one-liner code snippets.
  *
@@ -43,7 +42,7 @@ export const CopyableCode = ({
         bgColor="primary.dark"
         borderColor="primary.dark"
         size="xs"
-        leftIcon={<Icon icon="FaRegCopy" boxSize="xs" />}
+        leftIcon={<FaRegCopy boxSize="xs" />}
         onClick={onCopy}
         position="absolute"
         right={4}

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '@chakra-ui/react';
 import { Meta, StoryFn } from '@storybook/react';
 
-import { Icon } from '../Icon';
+import { IoChevronDownOutline, SlSettings } from '../Icon';
 import { IconButton } from '../IconButton';
 import { Menu, MenuButton, MenuItem, MenuList } from '.';
 import { MenuItemProps } from './MenuItem.types';
@@ -39,7 +39,7 @@ const Template: Story = ({ label, menuItems, ...args }) => (
     <MenuButton
       aria-label={'storybook button menu'}
       as={Button}
-      rightIcon={<Icon icon="IoChevronDownOutline" />}
+      rightIcon={<IoChevronDownOutline />}
       {...args}
     >
       {label}
@@ -76,12 +76,12 @@ IconMenu.args = {
     {
       label: 'Profile',
       onClick: () => alert('Profile clicked'),
-      itemIcon: <Icon icon="SlSettings" />,
+      itemIcon: <SlSettings />,
     },
     {
       label: 'Settings',
       onClick: () => alert('Settings clicked'),
-      itemIcon: <Icon icon="SlSettings" />,
+      itemIcon: <SlSettings />,
     },
   ],
 };
@@ -93,7 +93,7 @@ DangerMenu.args = {
     {
       label: 'Settings',
       onClick: () => alert('Settings clicked'),
-      itemIcon: <Icon icon="SlSettings" />,
+      itemIcon: <SlSettings />,
       variant: 'danger',
     },
   ],
@@ -104,7 +104,7 @@ const IconButtonTemplate: Story = ({ menuItems, ...args }) => (
     <MenuButton
       aria-label="storybook icon button menu"
       as={IconButton}
-      icon={<Icon icon="IoChevronDownOutline" />}
+      icon={<IoChevronDownOutline />}
       {...args}
     />
     <MenuList>
@@ -129,7 +129,7 @@ IconButtonTriggerMenu.args = {
     {
       label: 'Settings',
       onClick: () => alert('Settings clicked'),
-      itemIcon: <Icon icon="SlSettings" />,
+      itemIcon: <SlSettings />,
     },
   ],
 };
@@ -152,7 +152,7 @@ const SelectiveIconTemplate: Story = ({ label, menuItems, ...args }) => {
       <MenuButton
         aria-label={'storybook button menu'}
         as={Button}
-        rightIcon={<Icon icon="IoChevronDownOutline" />}
+        rightIcon={<IoChevronDownOutline />}
         {...args}
       >
         {label}
@@ -164,7 +164,7 @@ const SelectiveIconTemplate: Story = ({ label, menuItems, ...args }) => {
             onClick={() => handleItemClick(item.label, item.onClick)}
             icon={
               selectedLabel === item.label ? (
-                <Icon icon="SlSettings" />
+                <SlSettings />
               ) : undefined
             }
           >

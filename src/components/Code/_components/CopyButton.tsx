@@ -1,6 +1,6 @@
 import { MouseEventHandler, useState } from 'react';
 
-import { Icon } from '@/components/Icon';
+import { FaRegCopy } from '@/components/Icon';
 import { IconButton } from '@/components/IconButton';
 import { IconButtonProps } from '@/components/IconButton/IconButton.types';
 import { Tooltip } from '@/components/Tooltip';
@@ -38,7 +38,7 @@ export const CopyButton = ({
     <Tooltip label={labelText} isOpen={isTooltipOpen} placement="top">
       <IconButton
         aria-label="Copy code"
-        icon={<Icon icon="FaRegCopy" boxSize="sm" />}
+        icon={<FaRegCopy boxSize="sm" />}
         onClick={handleClick}
         p={0}
         {...rest}

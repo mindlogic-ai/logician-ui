@@ -111,7 +111,7 @@ export const Select = <
                 {
                   ...base,
                   margin: 0,
-                  color: theme.colors.gray[1000],
+                  color: 'gray.1000',
                 },
                 styles?.singleValue,
                 state
@@ -168,7 +168,7 @@ export const Select = <
                   ...controlStyles,
                   ...getControlVariantStyles(state, variant),
                   ...(state.isDisabled && {
-                    bg: theme.colors.gray[50],
+                    bg: 'gray.50',
                   }),
                 },
                 styles?.control,
@@ -189,7 +189,7 @@ export const Select = <
               ...resolveStyle(
                 {
                   ...base,
-                  color: theme.colors.gray[800],
+                  color: 'gray.800',
                 },
                 styles?.dropdownIndicator,
                 state

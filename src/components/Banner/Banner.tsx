@@ -1,12 +1,11 @@
 import { ForwardedRef, forwardRef } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 
-import { Icon } from '../Icon';
 import { Text } from '../Typography';
 import {
   accentStyles,
   bannerStyles,
-  iconStyles,
+  iconConfig,
   sizeStyles,
   textStyles,
 } from './Banner.styles';
@@ -23,6 +22,7 @@ export const Banner = forwardRef(
     }: BannerProps,
     ref?: ForwardedRef<HTMLDivElement>
   ) => {
+    const { Icon, color } = iconConfig[variant];
     const styles = sizeStyles[size];
     return (
       <Box
@@ -51,8 +51,7 @@ export const Banner = forwardRef(
         <Flex align="stretch" gap={2}>
           {!hideIcon && (
             <Box>
-              {/* @ts-expect-error - Icon ref type incompatibility */}
-              <Icon mr={2} {...styles.icon} {...iconStyles[variant]} />
+              <Icon mr={2} color={color} boxSize="md" />
             </Box>
           )}
           {typeof children === 'string' ? (

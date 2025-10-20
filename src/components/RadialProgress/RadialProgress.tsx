@@ -62,7 +62,7 @@ const RadialProgress: React.FC<RadialProgressProps> = ({
   // Add gray segment for remaining space if needed
   const allSegments: Segment[] =
     segments.length === 0
-      ? [{ color: theme.colors.gray[200], value: total }] // Full gray circle if no segments
+      ? [{ color: 'gray.200', value: total }] // Full gray circle if no segments
       : remainingValue > 0
         ? [
             ...segments,

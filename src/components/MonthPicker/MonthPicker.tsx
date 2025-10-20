@@ -23,7 +23,11 @@ import { Text } from '@/components/Typography';
 import useLocale from '@/hooks/useLocale';
 import { useTranslate } from '@/hooks/useTranslate';
 
-import { Icon } from '../Icon';
+import {
+  IoChevronForward,
+  IoIosArrowBack,
+  MdOutlineCalendarToday,
+} from '../Icon';
 import { hasEnabledMonthsInYear, isMonthDisabled } from './_utils';
 import {
   getDateFnsLocale,
@@ -214,7 +218,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
               disabled={!canNavigateToPrevYear}
               opacity={!canNavigateToPrevYear ? 0.4 : 1}
             >
-              <Icon icon="IoIosArrowBack" />
+              <IoIosArrowBack />
             </Button>
 
             <Text fontWeight="semibold" fontSize="lg">
@@ -228,7 +232,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
               disabled={!canNavigateToNextYear}
               opacity={!canNavigateToNextYear ? 0.4 : 1}
             >
-              <Icon icon="IoChevronForward" />
+              <IoChevronForward />
             </Button>
           </HStack>
 
@@ -275,11 +279,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
         <PopoverTrigger>
           <InputGroup>
             <InputLeftElement>
-              <Icon
-                icon="MdOutlineCalendarToday"
-                boxSize="xs"
-                color="gray.800"
-              />
+              <MdOutlineCalendarToday boxSize="xs" color="gray.800" />
             </InputLeftElement>
             <Input
               name={name}

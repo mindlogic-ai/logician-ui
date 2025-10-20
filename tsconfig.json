@@ -33,11 +33,9 @@
   "exclude": [
     "node_modules",
     "dist",
-    "**/*.stories.tsx",
     "**/*.test.tsx",
 
     "src/components/Skeleton/SkeletonGrid/**/*",
-    "src/components/Skeleton/SkeletonTable/**/*",
-    "src/theme/**/*"
+    "src/components/Skeleton/SkeletonTable/**/*"
   ]
 }

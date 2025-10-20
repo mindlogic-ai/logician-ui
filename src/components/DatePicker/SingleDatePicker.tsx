@@ -4,7 +4,7 @@ import {
   SingleDatepickerProps,
 } from 'chakra-dayzed-datepicker';
 
-import { Icon } from '../Icon';
+import { MdOutlineCalendarToday } from '../Icon';
 
 export const SingleDatePicker = ({
   propsConfigs,
@@ -30,8 +30,7 @@ export const SingleDatePicker = ({
           fontSize: 'md',
           height: '100%',
           leftIcon: (
-            <Icon
-              icon="MdOutlineCalendarToday"
+            <MdOutlineCalendarToday
               color="gray.600"
               style={{ marginInlineEnd: 3 }}
             />

@@ -35,7 +35,7 @@ export const LineGraph = <T extends DatumBase>({
             // No dashes
             strokeDasharray=""
             vertical={false}
-            stroke={theme.colors.gray[400]}
+            stroke="gray.400"
           />
           <XAxis
             dataKey="name"
@@ -43,7 +43,7 @@ export const LineGraph = <T extends DatumBase>({
             stroke="transparent"
             // Props of text
             tick={{
-              fill: theme.colors.gray[1200],
+              fill: 'gray.1200',
               fontSize: useToken('fontSizes', 'sm'),
             }}
             tickMargin={8}
@@ -53,7 +53,7 @@ export const LineGraph = <T extends DatumBase>({
             stroke="transparent"
             // Props of text
             tick={{
-              fill: theme.colors.gray[1200],
+              fill: 'gray.1200',
               fontSize: useToken('fontSizes', 'sm'),
             }}
             tickMargin={0}
@@ -61,7 +61,7 @@ export const LineGraph = <T extends DatumBase>({
           <Tooltip
             // invert label color since mode inside tooltip is different
             labelStyle={{
-              color: theme.colors.gray[1500],
+              color: 'gray.1500',
             }}
           />
           {displayLegend && (

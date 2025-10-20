@@ -8,8 +8,7 @@ import {
   Portal,
 } from '@chakra-ui/react';
 
-import { Icon, IconTypes } from '@/components/Icon';
-
+import { LuInfo } from '../Icon';
 import { IconButton } from '../IconButton';
 import { IconButtonProps } from '../IconButton/IconButton.types';
 
@@ -26,7 +25,7 @@ export const InfoSprinkle = ({
       <PopoverTrigger>
         <IconButton
           aria-label="Info"
-          icon={<Icon icon={IconTypes.LuInfo} boxSize="xs" color="inherit" />}
+          icon={<LuInfo boxSize="sm" color="inherit" />}
           {...iconButtonProps}
         />
       </PopoverTrigger>

@@ -1,7 +1,7 @@
 import { ChangeEventHandler, forwardRef } from 'react';
 import { Box, Flex, Input, useTheme } from '@chakra-ui/react';
 
-import { Icon, IconTypes } from '@/components/Icon';
+import { LuUpload } from '@/components/Icon';
 import { Spinner } from '@/components/Spinner';
 import { Text } from '@/components/Typography';
 import { useTranslate } from '@/hooks/useTranslate';
@@ -91,18 +91,9 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
                   mb={1}
                   w="fit-content"
                 >
-                  <Icon
-                    icon={IconTypes.LuUpload}
-                    color={
-                      bgImage ? theme.colors.gray[1200] : theme.colors.gray[800]
-                    }
-                  />
+                  <LuUpload color={bgImage ? 'gray.1200' : 'gray.800'} />
                 </Box>
-                <Text
-                  color={
-                    bgImage ? theme.colors.gray[1200] : theme.colors.gray[800]
-                  }
-                >
+                <Text color={bgImage ? 'gray.1200' : 'gray.800'}>
                   {fileInputLabel || translate('upload_your_file')}
                 </Text>
               </Flex>

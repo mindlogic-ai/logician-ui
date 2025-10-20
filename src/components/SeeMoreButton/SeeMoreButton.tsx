@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@chakra-ui/react';
 
-import { Icon } from '@/components/Icon';
+import { IoChevronDownOutline } from '@/components/Icon';
 import { useTranslate } from '@/hooks/useTranslate';
 
 import { seeMoreButtonStyles } from './SeeMoreButton.styles';
@@ -24,7 +24,7 @@ export const SeeMoreButton = ({
 
   return (
     <Button
-      rightIcon={<Icon icon="IoChevronDownOutline" color="inherit" />}
+      rightIcon={<IoChevronDownOutline color="inherit" />}
       {...seeMoreButtonStyles}
       {...rest}
     >

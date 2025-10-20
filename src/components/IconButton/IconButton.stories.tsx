@@ -2,7 +2,7 @@ import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 
 import { variantStyles as buttonVariantStyles } from '../Button/Button.styles';
-import { Icon } from '../Icon/Icon';
+import { FaUniversity } from '../Icon';
 import { IconButton } from './IconButton';
 import { IconButtonProps, IconButtonVariant } from './IconButton.types';
 
@@ -10,7 +10,7 @@ const meta: Meta<typeof IconButton> = {
   title: 'Components/IconButton',
   component: IconButton,
   args: {
-    icon: <Icon icon="FaUniversity" />,
+    icon: <FaUniversity />,
   },
   argTypes: {
     variant: {

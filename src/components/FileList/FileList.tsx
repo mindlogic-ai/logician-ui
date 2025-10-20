@@ -3,7 +3,7 @@ import { Button, List, useTheme } from '@chakra-ui/react';
 
 import { FileItem } from '@/components/FileItem';
 import { FileGroupProps } from '@/components/FileList/FileList.types';
-import { Icon, IconTypes } from '@/components/Icon';
+import { IoChevronDownOutline } from '@/components/Icon';
 import { Subtitle } from '@/components/Typography';
 import { useTranslate } from '@/hooks/useTranslate';
 
@@ -84,10 +84,7 @@ export const FileList = ({
           <Subtitle color="gray.600">
             {translate('see_more')} ({visibleCount}/{files.length})
           </Subtitle>
-          <Icon
-            icon={IconTypes.IoChevronDownOutline}
-            color={theme.colors.gray[600]}
-          />
+          <IoChevronDownOutline color="gray.600" />
         </Button>
       )}
     </List>
