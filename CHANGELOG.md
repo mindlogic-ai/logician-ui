@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.0.0-alpha.16
+
+### Minor Changes
+
+- 4e6661f: icon 선언 사용 방법 수정 style props 변경 <Icon icon="IoSearch" /> -> <IoSearch /> 로 변경
+
+### Patch Changes
+
+- 1fe38fb: icon system을 도입하여 기존의 아이콘 관리 방식을 개선합니다.
+- 6e58b66: 기존에는 IconMap에 없는 키인 경우 사용하지 못했는데 JSX 형식을 받아서 직접 import 하는 방식을 추가하였습니다
+
 ## 2.0.0-alpha.15
 
 ### Patch Changes
