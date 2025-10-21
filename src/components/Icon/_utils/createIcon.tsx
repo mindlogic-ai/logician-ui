@@ -7,11 +7,11 @@ export type IconProps = Partial<SVGProps<SVGElement>> &
 
 // Static size mapping (SSR-safe)
 const sizeMapping: Record<string, string> = {
-  xs: '16px',
-  sm: '20px',
-  md: '24px',
-  lg: '32px',
-  xl: '40px',
+  xs: '4',
+  sm: '5',
+  md: '6',
+  lg: '8',
+  xl: '10',
 };
 
 /**
