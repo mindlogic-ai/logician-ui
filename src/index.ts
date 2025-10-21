@@ -42,6 +42,7 @@ export type {
   CreatedIcon,
   IconProps as CreateIconProps,
 } from './components/Icon/_utils/createIcon';
+export { createIcon } from './components/Icon/_utils/createIcon';
 export { createIconGroup } from './components/Icon/_utils/createIconGroup';
 
 // Info Components
