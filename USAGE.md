@@ -2,15 +2,31 @@
 
 This document provides detailed examples of how to use the Logician Design System in your projects.
 
+## Documentation
+
+For comprehensive guides, copy the documentation to your project:
+
+```bash
+npx @mindlogic-ai/logician-ui copy-lui-docs
+```
+
+This installs detailed guides to `.claude/logician-ui/`:
+- **getting-started.md** - Installation and setup
+- **components.md** - Complete component reference
+- **theming.md** - Theme customization
+- **icons.md** - Icon library
+- **accessibility.md** - A11y best practices
+- **integration.md** - Framework guides
+
 ## Installation & Setup
 
 ### NPM Package Installation
 
 ```bash
 # Install the package
-yarn add logician-ui
+yarn add @mindlogic-ai/logician-ui
 # or
-npm install logician-ui
+npm install @mindlogic-ai/logician-ui
 
 # Install required peer dependencies
 yarn add react react-dom @chakra-ui/react @emotion/react @emotion/styled framer-motion
@@ -19,11 +35,14 @@ yarn add react react-dom @chakra-ui/react @emotion/react @emotion/styled framer-
 ### Basic Setup
 
 ```tsx
-import { ChakraProvider } from "@chakra-ui/react";
-import { Button, Input, Card } from "logician-ui";
+import { LogicianProvider, Button, Input, Card } from "@mindlogic-ai/logician-ui";
 
 function App() {
-  return <ChakraProvider>{/* Your app content */}</ChakraProvider>;
+  return (
+    <LogicianProvider>
+      {/* Your app content */}
+    </LogicianProvider>
+  );
 }
 ```
 
@@ -33,12 +52,17 @@ function App() {
 
 ```tsx
 import React from "react";
-import { ChakraProvider } from "@chakra-ui/react";
-import { Button, Input, FormLabel, Card } from "logician-ui";
+import {
+  LogicianProvider,
+  Button,
+  Input,
+  FormLabel,
+  Card,
+} from "@mindlogic-ai/logician-ui";
 
 function LoginForm() {
   return (
-    <ChakraProvider>
+    <LogicianProvider>
       <Card maxWidth="400px" margin="auto" padding={6}>
         <FormLabel>Email</FormLabel>
         <Input type="email" placeholder="Enter your email" marginBottom={4} />
@@ -54,7 +78,7 @@ function LoginForm() {
           Sign In
         </Button>
       </Card>
-    </ChakraProvider>
+    </LogicianProvider>
   );
 }
 ```
@@ -63,57 +87,55 @@ function LoginForm() {
 
 ```tsx
 import React from "react";
-import { ChakraProvider, Box, Grid, GridItem } from "@chakra-ui/react";
-import { Button, Card, Badge, Table, Avatar, Typography } from "logician-ui";
+import { Box, Grid, GridItem } from "@chakra-ui/react";
+import {
+  LogicianProvider,
+  Card,
+  Badge,
+  Table,
+  H1,
+  H2,
+  H3,
+} from "@mindlogic-ai/logician-ui";
 
 function Dashboard() {
   return (
-    <ChakraProvider>
+    <LogicianProvider>
       <Box padding={6}>
-        <Typography variant="h1" marginBottom={6}>
-          Dashboard
-        </Typography>
+        <H1 marginBottom={6}>Dashboard</H1>
 
         <Grid templateColumns="repeat(3, 1fr)" gap={6} marginBottom={8}>
           <GridItem>
             <Card>
-              <Typography variant="h3">Total Users</Typography>
-              <Typography variant="h1" color="blue.500">
-                1,234
-              </Typography>
-              <Badge variant="success">+12%</Badge>
+              <H3>Total Users</H3>
+              <H1 color="blue.500">1,234</H1>
+              <Badge colorScheme="green">+12%</Badge>
             </Card>
           </GridItem>
 
           <GridItem>
             <Card>
-              <Typography variant="h3">Revenue</Typography>
-              <Typography variant="h1" color="green.500">
-                $45,678
-              </Typography>
-              <Badge variant="success">+8%</Badge>
+              <H3>Revenue</H3>
+              <H1 color="green.500">$45,678</H1>
+              <Badge colorScheme="green">+8%</Badge>
             </Card>
           </GridItem>
 
           <GridItem>
             <Card>
-              <Typography variant="h3">Orders</Typography>
-              <Typography variant="h1" color="purple.500">
-                892
-              </Typography>
-              <Badge variant="warning">-3%</Badge>
+              <H3>Orders</H3>
+              <H1 color="purple.500">892</H1>
+              <Badge colorScheme="yellow">-3%</Badge>
             </Card>
           </GridItem>
         </Grid>
 
         <Card>
-          <Typography variant="h2" marginBottom={4}>
-            Recent Users
-          </Typography>
+          <H2 marginBottom={4}>Recent Users</H2>
           <Table>{/* Table content */}</Table>
         </Card>
       </Box>
-    </ChakraProvider>
+    </LogicianProvider>
   );
 }
 ```
@@ -122,7 +144,18 @@ function Dashboard() {
 
 ```tsx
 import React, { useState } from "react";
-import { Button, Modal, Input, FormLabel } from "logician-ui";
+import {
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Input,
+  FormLabel,
+  Switch,
+} from "@mindlogic-ai/logician-ui";
 
 function UserSettingsModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -131,23 +164,26 @@ function UserSettingsModal() {
     <>
       <Button onClick={() => setIsOpen(true)}>Open Settings</Button>
 
-      <Modal
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        title="User Settings"
-      >
-        <FormLabel>Display Name</FormLabel>
-        <Input placeholder="Enter display name" marginBottom={4} />
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>User Settings</ModalHeader>
+          <ModalBody>
+            <FormLabel>Display Name</FormLabel>
+            <Input placeholder="Enter display name" marginBottom={4} />
 
-        <FormLabel>Email Notifications</FormLabel>
-        <Switch defaultChecked marginBottom={6} />
-
-        <Button variant="primary" marginRight={3}>
-          Save Changes
-        </Button>
-        <Button variant="secondary" onClick={() => setIsOpen(false)}>
-          Cancel
-        </Button>
+            <FormLabel>Email Notifications</FormLabel>
+            <Switch defaultChecked marginBottom={6} />
+          </ModalBody>
+          <ModalFooter>
+            <Button variant="primary" marginRight={3}>
+              Save Changes
+            </Button>
+            <Button variant="secondary" onClick={() => setIsOpen(false)}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
       </Modal>
     </>
   );
@@ -237,10 +273,11 @@ import { Card } from "@/components/Card";
 
 ## Theme Customization
 
-You can extend the Chakra UI theme to customize the design system:
+You can extend the theme to customize colors, typography, and more:
 
 ```tsx
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { LogicianProvider } from "@mindlogic-ai/logician-ui";
+import { extendTheme } from "@chakra-ui/react";
 
 const customTheme = extendTheme({
   colors: {
@@ -250,6 +287,13 @@ const customTheme = extendTheme({
       900: "#234E52",
     },
   },
+  semanticTokens: {
+    colors: {
+      primary: {
+        main: "brand.500", // Use your brand color as primary
+      },
+    },
+  },
   fonts: {
     heading: `'Open Sans', sans-serif`,
     body: `'Raleway', sans-serif`,
@@ -257,9 +301,11 @@ const customTheme = extendTheme({
 });
 
 function App() {
-  return <ChakraProvider theme={customTheme}>{/* Your app */}</ChakraProvider>;
+  return <LogicianProvider theme={customTheme}>{/* Your app */}</LogicianProvider>;
 }
 ```
+
+See the [theming documentation](./.claude/logician-ui/theming.md) for comprehensive customization options.
 
 ## Best Practices
 

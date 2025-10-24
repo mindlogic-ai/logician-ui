@@ -46,24 +46,53 @@ git submodule add https://github.com/yourusername/logician-ui.git src/components
 git submodule update --init --recursive
 ```
 
+## Documentation
+
+Logician UI includes comprehensive documentation that you can copy to your project:
+
+```bash
+# Copy documentation to your project
+npx @mindlogic-ai/logician-ui copy-lui-docs
+```
+
+This will install 6 detailed guides to `.claude/logician-ui/` in your project:
+
+- **getting-started.md** - Installation, setup, and first component examples
+- **components.md** - Complete reference for 70+ components
+- **theming.md** - Theme customization (colors, typography, spacing, dark mode)
+- **icons.md** - Icon library reference (100+ icons)
+- **accessibility.md** - WCAG 2.1 compliance and best practices
+- **integration.md** - Framework-specific guides (Next.js, Vite, CRA, Remix)
+
+### Using with Claude Code
+
+Reference the documentation in your `.claude/claude.md`:
+
+```markdown
+## Logician UI Documentation
+- [Getting Started](./.claude/logician-ui/getting-started.md)
+- [Components](./.claude/logician-ui/components.md)
+- [Theming](./.claude/logician-ui/theming.md)
+- [Icons](./.claude/logician-ui/icons.md)
+```
+
 ## Usage
 
 ### Basic Setup
 
-Wrap your application with Chakra UI's `ChakraProvider`:
+Wrap your application with Logician UI's `LogicianProvider`:
 
 ```tsx
-import { ChakraProvider } from "@chakra-ui/react";
-import { Button, Input, Card } from "logician-ui";
+import { LogicianProvider, Button, Input, Card } from "@mindlogic-ai/logician-ui";
 
 function App() {
   return (
-    <ChakraProvider>
+    <LogicianProvider>
       <Card>
         <Input placeholder="Enter your name" />
         <Button variant="primary">Submit</Button>
       </Card>
-    </ChakraProvider>
+    </LogicianProvider>
   );
 }
 ```
