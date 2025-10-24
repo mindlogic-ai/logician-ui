@@ -1,6 +1,10 @@
 import React from 'react';
 import type { Preview } from '@storybook/react';
+import { initialize, mswLoader } from 'msw-storybook-addon';
 import { LogicianProvider } from '../src/components/LogicianProvider/LogicianProvider';
+
+// MSW 초기화
+initialize();
 
 const preview: Preview = {
   parameters: {
@@ -27,6 +31,7 @@ const preview: Preview = {
       },
     },
   },
+  loaders: [mswLoader],
   decorators: [
     (Story, context) => {
       // Check if the story has disabled the LogicianProvider

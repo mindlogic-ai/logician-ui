@@ -1,5 +1,5 @@
 import React from 'react';
-import { action } from '@storybook/addon-actions';
+import { fn } from 'storybook/test';
 import { Meta, StoryFn } from '@storybook/react';
 
 import { Alert } from './Alert';
@@ -34,5 +34,5 @@ export const WithButton: Story = (args) => <Alert {...args} />;
 WithButton.args = {
   status: 'success',
   children: '성공적으로 완료되었습니다!',
-  onClose: action('onClose'),
+  onClose: fn(),
 };
