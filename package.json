@@ -13,9 +13,14 @@
   "files": [
     "dist",
     "src",
+    ".claude",
+    "scripts",
     "README.md",
     "USAGE.md"
   ],
+  "bin": {
+    "copy-lui-docs": "./scripts/copy-docs.js"
+  },
   "sideEffects": false,
   "storybook": {
     "title": "Logician UI",
