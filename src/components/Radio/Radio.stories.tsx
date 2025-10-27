@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Stack, VStack } from '@chakra-ui/react';
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryFn, StoryObj } from '@storybook/react';
+import { expect, userEvent, within } from '@storybook/test';
 
 import { Radio, RadioGroup } from '.';
 import { RadioOption } from './Radio.types';
@@ -223,4 +224,117 @@ export const FormExample: StoryFn<typeof RadioGroup> = () => {
       </Box>
     </VStack>
   );
+};
+
+/**
+ * Component Test: Radio 컴포넌트의 상호작용 테스트
+ *
+ * Happy Path:
+ * - 라디오 버튼 선택 시 다른 버튼들이 해제되는지
+ * - RadioGroup 내에서 하나만 선택 가능한지
+ * - 초기 defaultValue가 올바르게 선택되는지
+ *
+ * Bad Path:
+ * - disabled 라디오는 선택 불가능한지
+ */
+type RadioStory = StoryObj<typeof RadioGroup>;
+
+export const InteractionTest: RadioStory = {
+  render: () => {
+    const [value, setValue] = useState('option1');
+
+    const options: RadioOption[] = [
+      { value: 'option1', label: 'First Option' },
+      { value: 'option2', label: 'Second Option' },
+      { value: 'option3', label: 'Third Option' },
+    ];
+
+    return (
+      <VStack align="flex-start" spacing={8}>
+        <Box>
+          <Box fontWeight="semibold" mb={2}>
+            Radio Group (defaultValue: option1)
+          </Box>
+          <RadioGroup
+            data-testid="radio-group"
+            options={options}
+            value={value}
+            onChange={setValue}
+          />
+        </Box>
+
+        <Box>
+          <Box fontWeight="semibold" mb={2}>
+            With Disabled Radio
+          </Box>
+          <Stack spacing={3}>
+            <Radio value="disabled1" isDisabled>
+              Disabled Option 1
+            </Radio>
+            <Radio value="disabled2">Enabled Option 2</Radio>
+          </Stack>
+        </Box>
+      </VStack>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await step('초기 defaultValue가 올바르게 선택되는지 확인', async () => {
+      const firstOption = canvas.getByRole('radio', { name: 'First Option' });
+      await expect(firstOption).toBeChecked();
+    });
+
+    await step('두 번째 라디오 버튼 선택', async () => {
+      const secondOption = canvas.getByRole('radio', { name: 'Second Option' });
+      await userEvent.click(secondOption);
+      await expect(secondOption).toBeChecked();
+    });
+
+    await step('라디오 버튼 선택 시 다른 버튼들이 해제되는지 확인', async () => {
+      const firstOption = canvas.getByRole('radio', { name: 'First Option' });
+      const secondOption = canvas.getByRole('radio', { name: 'Second Option' });
+
+      // 첫 번째는 해제되어야 함
+      await expect(firstOption).not.toBeChecked();
+      // 두 번째만 선택되어야 함
+      await expect(secondOption).toBeChecked();
+    });
+
+    await step('세 번째 라디오 버튼 선택 시 이전 선택이 해제되는지 확인', async () => {
+      const secondOption = canvas.getByRole('radio', { name: 'Second Option' });
+      const thirdOption = canvas.getByRole('radio', { name: 'Third Option' });
+
+      await userEvent.click(thirdOption);
+
+      // 세 번째만 선택되어야 함
+      await expect(thirdOption).toBeChecked();
+      // 두 번째는 해제되어야 함
+      await expect(secondOption).not.toBeChecked();
+    });
+
+    await step('RadioGroup 내에서 하나만 선택 가능한지 확인', async () => {
+      const allRadios = canvas.getAllByRole('radio');
+      const firstGroupRadios = allRadios.slice(0, 3); // First 3 are from first group
+
+      // 첫 번째 그룹에서 체크된 라디오가 하나만 있는지 확인
+      const checkedCount = firstGroupRadios.filter(
+        (radio) => (radio as HTMLInputElement).checked
+      ).length;
+
+      await expect(checkedCount).toBe(1);
+    });
+
+    await step('disabled 라디오는 선택 불가능한지 확인', async () => {
+      const disabledOption = canvas.getByRole('radio', { name: 'Disabled Option 1' });
+
+      await expect(disabledOption).toBeDisabled();
+
+      // disabled 라디오 클릭 시도
+      await userEvent.click(disabledOption);
+
+      // 여전히 체크되지 않아야 함
+      await expect(disabledOption).not.toBeChecked();
+    });
+  },
 };
