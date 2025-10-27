@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Box, VStack } from '@chakra-ui/react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { addMonths, subMonths } from 'date-fns';
+import { userEvent, waitFor } from '@storybook/test';
 
 import { Text } from '@/components/Typography';
 
@@ -160,5 +161,75 @@ export const CrossYearSelection: Story = {
         </Box>
       </Box>
     ),
+  },
+};
+
+/**
+ * Component Test: MonthPicker 컴포넌트의 상호작용 테스트
+ *
+ * Happy Path:
+ * - 월 리스트가 올바르게 표시되는지
+ */
+export const InteractionTest: Story = {
+  render: () => {
+    const [selectedRange, setSelectedRange] = useState<MonthRange | null>(null);
+
+    return (
+      <div>
+        <div style={{ fontWeight: 600, marginBottom: '8px' }}>
+          MonthPicker
+        </div>
+        <MonthPicker
+          selectedRange={selectedRange}
+          onChange={setSelectedRange}
+          name="test-month-picker"
+        />
+        {selectedRange && (
+          <div style={{ marginTop: '8px', fontSize: '14px' }}>
+            Selected: {selectedRange.startMonth.toLocaleDateString()}
+            {selectedRange.endMonth && ` - ${selectedRange.endMonth.toLocaleDateString()}`}
+          </div>
+        )}
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    await step('월 리스트가 올바르게 표시되는지 확인', async () => {
+      // Input 찾기 (캘린더 아이콘이 있는)
+      const input = canvasElement.querySelector('input[name="test-month-picker"]') as HTMLInputElement;
+
+      if (!input) {
+        throw new Error('MonthPicker input not found');
+      }
+
+      // Input 클릭하여 팝오버 열기
+      await userEvent.click(input);
+
+      // 팝오버가 나타날 때까지 대기
+      await waitFor(() => {
+        const popover = document.querySelector('[role="dialog"]');
+        if (!popover) {
+          throw new Error('Month picker popover not found');
+        }
+      }, { timeout: 3000 });
+
+      // 월 버튼들이 렌더링될 때까지 대기 (12개월)
+      await waitFor(() => {
+        const monthButtons = document.querySelectorAll('[role="dialog"] button');
+        // 12개의 월 버튼 + 년도 네비게이션 버튼 (이전/다음) + Clear 버튼
+        if (monthButtons.length < 12) {
+          throw new Error(`Month buttons not yet rendered (found ${monthButtons.length} buttons)`);
+        }
+      }, { timeout: 3000 });
+
+      // 현재 년도가 표시되는지 확인
+      const currentYear = new Date().getFullYear();
+      await waitFor(() => {
+        const yearText = document.querySelector('[role="dialog"]')?.textContent;
+        if (!yearText?.includes(currentYear.toString())) {
+          throw new Error('Current year not displayed');
+        }
+      });
+    });
   },
 };
