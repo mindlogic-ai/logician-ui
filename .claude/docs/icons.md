@@ -373,7 +373,7 @@ Logician UI includes 100+ icons from [react-icons](https://react-icons.github.io
 ### Full List
 
 For a complete list of all available react-icons, see:
-- [IconMap.ts](../src/components/Icon/IconMap.ts) - Full icon registry
+- [IconMap.ts on GitHub](https://github.com/mindlogic-ai/logician-ui/blob/dev/src/components/Icon/IconMap.ts) - Full icon registry
 - [react-icons.github.io](https://react-icons.github.io/react-icons/) - Interactive browser
 
 ---
@@ -624,7 +624,8 @@ import { Icon, Box } from '@mindlogic-ai/logician-ui';
 
 ## Resources
 
-- [Icon Component Code](../src/components/Icon/Icon.tsx)
-- [Icon Map Reference](../src/components/Icon/IconMap.ts)
-- [react-icons Library](https://react-icons.github.io/react-icons/)
-- [Chakra UI Icon Docs](https://chakra-ui.com/docs/components/icon)
+- [Icon Component Source](https://github.com/mindlogic-ai/logician-ui/blob/dev/src/components/Icon/Icon.tsx) - View source code on GitHub
+- [IconMap Reference](https://github.com/mindlogic-ai/logician-ui/blob/dev/src/components/Icon/IconMap.ts) - Full icon registry on GitHub
+- [react-icons Library](https://react-icons.github.io/react-icons/) - Browse all react-icons
+- [Logician UI Storybook](https://mindlogic-storybook.vercel.app) - Live component examples
+- [Chakra UI Icon Docs](https://chakra-ui.com/docs/components/icon) - Chakra UI icon documentation
