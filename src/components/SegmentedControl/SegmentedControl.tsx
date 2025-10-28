@@ -35,7 +35,9 @@ export const SegmentedControl = ({
     return paddings[size];
   };
 
-  const handleSelect = (selectedValue: string) => {
+  const handleSelect = (selectedValue: string, isDisabled?: boolean) => {
+    if (isDisabled) return;
+
     if (value === undefined) {
       setInternalValue(selectedValue);
     }
@@ -76,9 +78,13 @@ export const SegmentedControl = ({
           flex={1}
           variant="ghost"
           color={activeValue === option.value ? 'gray.1200' : 'gray.600'}
-          onClick={() => handleSelect(option.value)}
+          onClick={() => handleSelect(option.value, option.isDisabled)}
           _hover={{ bg: 'transparent' }}
           fontSize={size}
+          isDisabled={option.isDisabled}
+          opacity={option.isDisabled ? 0.4 : 1}
+          cursor={option.isDisabled ? 'not-allowed' : 'pointer'}
+          data-testid={`segment-${option.value}`}
           {...OptionStyles[size ?? 'md']}
         >
           {option.label}

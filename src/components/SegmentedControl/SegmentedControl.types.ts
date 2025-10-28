@@ -3,6 +3,7 @@ import { FlexProps, theme } from '@chakra-ui/react';
 export type SegmentedControlOption = {
   label: string;
   value: string;
+  isDisabled?: boolean;
 };
 
 export type SegmentedControlProps = Omit<FlexProps, 'onSelect'> & {
