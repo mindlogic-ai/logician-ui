@@ -11,6 +11,9 @@ export const ProgressBar = ({
 }: ProgressBarProps) => {
   const styles = sizeStyles[size];
 
+  // value를 0-100 범위로 제한
+  const clampedValue = Math.min(Math.max(value ?? 0, 0), 100);
+
   return (
     <ChakraProgress
       sx={{
@@ -20,7 +23,7 @@ export const ProgressBar = ({
         },
         bg: 'gray.200',
       }}
-      value={value}
+      value={clampedValue}
       {...styles}
       {...rest}
     />
