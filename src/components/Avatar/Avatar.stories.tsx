@@ -91,32 +91,22 @@ export const InteractionTest: Story = () => {
 InteractionTest.play = async ({ canvasElement, step }) => {
   const canvas = within(canvasElement);
 
-  await step('이미지 URL이 있을 때 이미지가 표시되는지 확인', async () => {
+  await step('이미지 URL이 있을 때 Avatar가 표시되는지 확인', async () => {
     const imageContainer = canvas.getByTestId('image-container');
     const avatar = within(imageContainer).getByTestId('avatar-with-image');
 
-    // Avatar 컨테이너가 존재하는지 확인
+    // Avatar 컴포넌트가 src prop과 함께 렌더링되는지 확인
     await expect(avatar).toBeInTheDocument();
     await new Promise(resolve => setTimeout(resolve, 500));
 
-    // src prop이 설정된 것을 확인 (Avatar 자체가 src를 받았는지)
-    // Chakra Avatar는 내부적으로 이미지를 처리하므로,
-    // Avatar가 렌더링되었고 src가 전달되었다는 것 자체가 이미지 표시 기능이 작동한다는 의미
-    await expect(avatar).toBeInTheDocument();
+    // Avatar가 화면에 보이는지 확인
+    await expect(avatar).toBeVisible();
     await new Promise(resolve => setTimeout(resolve, 500));
 
-    // 초기에는 이니셜이 보일 수 있음 (로딩 중)
-    const initialText = avatar.textContent;
-    await expect(initialText).toBeTruthy(); // 뭔가 렌더링되어 있음
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    // 이미지가 로드되었는지 확인 - img 태그가 생성되었는지 체크
-    // Chakra는 이미지가 로드되면 내부에 img 태그를 생성함
-    const hasImage = avatar.querySelector('img') !== null;
-    if (!hasImage) {
-      // img 태그가 없으면 최소한 Avatar가 렌더링되어 있는지 확인
-      await expect(avatar).toBeInTheDocument();
-    }
+    // Avatar에 이름이 제공되었으므로 무언가 표시되어야 함 (이미지 또는 이니셜)
+    // "Dan Abramov" -> 이니셜 "DA" 또는 이미지가 표시됨
+    const hasContent = avatar.textContent !== null && avatar.textContent !== '';
+    await expect(hasContent).toBeTruthy();
     await new Promise(resolve => setTimeout(resolve, 500));
   });
 
