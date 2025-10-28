@@ -1,5 +1,6 @@
-import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
+import { expect, within } from '@storybook/test';
+import { Box } from '@chakra-ui/react';
 
 import { Markdown } from './Markdown';
 import { MarkdownProps } from './Markdown.types';
@@ -217,4 +218,148 @@ The quadratic formula: $x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$
 ---
 
 *Markdown component with full GFM support!*`,
+};
+
+export const InteractionTest: StoryFn<MarkdownProps> = () => {
+  const validMarkdown = `# Hello World
+
+This is a **markdown** example with \`inline code\`.
+
+## Features
+- Lists work
+- **Bold** and *italic*
+- Code blocks:
+
+\`\`\`javascript
+const hello = "world";
+console.log(hello);
+\`\`\`
+
+| Name | Age |
+|------|-----|
+| Alice | 30 |
+| Bob | 25 |
+`;
+
+  const invalidMarkdown = `# Invalid Markdown
+
+This has some [broken link](
+
+And unclosed **bold text
+`;
+
+  const emptyMarkdown = '';
+
+  return (
+    <Box display="flex" flexDirection="column" gap={6} p={4}>
+      {/* Happy Path: 마크다운 렌더링 */}
+      <Box data-testid="valid-container">
+        <h3>Valid Markdown</h3>
+        <Markdown className="valid-markdown">{validMarkdown}</Markdown>
+      </Box>
+
+      {/* Bad Path: 잘못된 마크다운 */}
+      <Box data-testid="invalid-container">
+        <h3>Invalid Markdown</h3>
+        <Markdown className="invalid-markdown">{invalidMarkdown}</Markdown>
+      </Box>
+
+      {/* Bad Path: 빈 마크다운 */}
+      <Box data-testid="empty-container">
+        <h3>Empty Markdown</h3>
+        <Markdown className="empty-markdown">{emptyMarkdown}</Markdown>
+      </Box>
+    </Box>
+  );
+};
+
+InteractionTest.play = async ({ canvasElement, step }) => {
+  const canvas = within(canvasElement);
+
+  await step('마크다운이 HTML로 올바르게 렌더링되는지 확인', async () => {
+    const validContainer = canvas.getByTestId('valid-container');
+
+    // H1 헤더 확인
+    const heading = within(validContainer).getByRole('heading', { level: 1 });
+    await expect(heading).toHaveTextContent('Hello World');
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // H2 헤더 확인
+    const subheading = within(validContainer).getByRole('heading', { level: 2 });
+    await expect(subheading).toHaveTextContent('Features');
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // 리스트 확인
+    const list = validContainer.querySelector('ul');
+    await expect(list).toBeInTheDocument();
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // 테이블 확인
+    const table = validContainer.querySelector('table');
+    await expect(table).toBeInTheDocument();
+    await expect(table).toBeVisible();
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // 테이블 내용 확인
+    const tableText = table?.textContent;
+    await expect(tableText).toContain('Alice');
+    await expect(tableText).toContain('Bob');
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // 인라인 코드 확인
+    const inlineCode = validContainer.querySelector('code');
+    await expect(inlineCode).toBeInTheDocument();
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // Bold 텍스트 확인
+    const boldText = validContainer.querySelector('strong');
+    await expect(boldText).toBeInTheDocument();
+    await expect(boldText).toHaveTextContent('markdown');
+    await new Promise(resolve => setTimeout(resolve, 500));
+  });
+
+  await step('잘못된 마크다운 문법 시 처리되는지 확인', async () => {
+    const invalidContainer = canvas.getByTestId('invalid-container');
+
+    // className으로 Markdown 컴포넌트 찾기
+    const invalidMarkdown = invalidContainer.querySelector('.invalid-markdown');
+    await expect(invalidMarkdown).not.toBeNull();
+
+    // 잘못된 마크다운도 렌더링되는지 확인 (에러 없이)
+    if (invalidMarkdown) {
+      await expect(invalidMarkdown).toBeVisible();
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+
+    // 헤더는 정상적으로 렌더링되는지 확인
+    const heading = within(invalidContainer).getByRole('heading', {
+      level: 1,
+    });
+    await expect(heading).toHaveTextContent('Invalid Markdown');
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // 나머지 텍스트도 표시되는지 확인 (마크다운이 완벽하지 않아도)
+    await expect(invalidContainer.textContent).toContain('broken link');
+    await new Promise(resolve => setTimeout(resolve, 500));
+  });
+
+  await step('빈 마크다운일 때 처리되는지 확인', async () => {
+    const emptyContainer = canvas.getByTestId('empty-container');
+
+    // className으로 Markdown 컴포넌트 찾기
+    const emptyMarkdown = emptyContainer.querySelector('.empty-markdown');
+    await expect(emptyMarkdown).not.toBeNull();
+
+    // 빈 마크다운도 렌더링되는지 확인
+    if (emptyMarkdown) {
+      await expect(emptyMarkdown).toBeVisible();
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // 빈 상태인지 확인 (공백 제거 후)
+      const isEmpty =
+        !emptyMarkdown.textContent || emptyMarkdown.textContent.trim() === '';
+      await expect(isEmpty).toBeTruthy();
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+  });
 };
