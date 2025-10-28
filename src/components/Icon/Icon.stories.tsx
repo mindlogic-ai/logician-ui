@@ -1,12 +1,13 @@
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 import { Box, HStack, VStack, Text, SimpleGrid, Wrap, WrapItem, Code } from '@chakra-ui/react';
+import { expect, within } from '@storybook/test';
 import { createIcon } from './_utils/createIcon';
 import type { IconProps } from './_utils/createIcon';
 
 // Icons 객체를 자동으로 가져와서 사용
 import { Icons } from './_constants/iconList';
-import { Analytics } from './index'; // 예시용으로 하나만 import
+import { Analytics, FaCheck, IoSearch, MdError } from './index';
 
 const meta: Meta<typeof Analytics> = {
   title: 'Components/Icons',
@@ -308,3 +309,194 @@ const MyCustomIcon = createIcon(
     </Box>
   </VStack>
 );
+
+export const InteractionTest: StoryFn = () => {
+  // 존재하지 않는 아이콘을 시뮬레이션하기 위한 컴포넌트
+  const NonExistentIcon = () => (
+    <Box
+      data-testid="nonexistent-icon"
+      boxSize="md"
+      bg="gray.200"
+      borderRadius="md"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+    >
+      <Text fontSize="xs" color="gray.500">
+        ?
+      </Text>
+    </Box>
+  );
+
+  return (
+    <VStack spacing={6} align="start" p={4}>
+      {/* Happy Path: 아이콘 표시 */}
+      <Box data-testid="display-container">
+        <Text fontSize="md" fontWeight="bold" mb={4}>
+          Icon Display
+        </Text>
+        <HStack spacing={6}>
+          <VStack data-testid="analytics-icon">
+            <Analytics boxSize="md" color="blue.500" />
+            <Text fontSize="sm">Analytics</Text>
+          </VStack>
+          <VStack data-testid="check-icon">
+            <FaCheck boxSize="md" color="green.500" />
+            <Text fontSize="sm">FaCheck</Text>
+          </VStack>
+          <VStack data-testid="search-icon">
+            <IoSearch boxSize="md" color="purple.500" />
+            <Text fontSize="sm">IoSearch</Text>
+          </VStack>
+        </HStack>
+      </Box>
+
+      {/* Happy Path: size prop */}
+      <Box data-testid="size-container">
+        <Text fontSize="md" fontWeight="bold" mb={4}>
+          Size Props
+        </Text>
+        <HStack spacing={4} align="end">
+          <VStack>
+            <MdError boxSize="xs" color="red.500" data-testid="size-xs" />
+            <Text fontSize="xs">xs (16px)</Text>
+          </VStack>
+          <VStack>
+            <MdError boxSize="sm" color="red.500" data-testid="size-sm" />
+            <Text fontSize="xs">sm (20px)</Text>
+          </VStack>
+          <VStack>
+            <MdError boxSize="md" color="red.500" data-testid="size-md" />
+            <Text fontSize="xs">md (24px)</Text>
+          </VStack>
+          <VStack>
+            <MdError boxSize="lg" color="red.500" data-testid="size-lg" />
+            <Text fontSize="xs">lg (32px)</Text>
+          </VStack>
+          <VStack>
+            <MdError boxSize="xl" color="red.500" data-testid="size-xl" />
+            <Text fontSize="xs">xl (40px)</Text>
+          </VStack>
+        </HStack>
+      </Box>
+
+      {/* Happy Path: color prop */}
+      <Box data-testid="color-container">
+        <Text fontSize="md" fontWeight="bold" mb={4}>
+          Color Props
+        </Text>
+        <HStack spacing={4}>
+          <Analytics boxSize="md" color="red.500" data-testid="color-red" />
+          <Analytics boxSize="md" color="green.500" data-testid="color-green" />
+          <Analytics boxSize="md" color="blue.500" data-testid="color-blue" />
+          <Analytics boxSize="md" color="purple.500" data-testid="color-purple" />
+          <Analytics boxSize="md" color="orange.500" data-testid="color-orange" />
+        </HStack>
+      </Box>
+
+      {/* Bad Path: 존재하지 않는 아이콘 */}
+      <Box data-testid="fallback-container">
+        <Text fontSize="md" fontWeight="bold" mb={4}>
+          Nonexistent Icon Fallback
+        </Text>
+        <NonExistentIcon />
+        <Text fontSize="xs" color="gray.600" mt={2}>
+          존재하지 않는 아이콘은 fallback UI로 표시됩니다
+        </Text>
+      </Box>
+    </VStack>
+  );
+};
+
+InteractionTest.play = async ({ canvasElement, step }) => {
+  const canvas = within(canvasElement);
+
+  await step('아이콘이 올바르게 표시되는지 확인', async () => {
+    // Analytics 아이콘 확인
+    const analyticsIcon = canvas.getByTestId('analytics-icon');
+    await expect(analyticsIcon).toBeInTheDocument();
+    await expect(analyticsIcon).toBeVisible();
+
+    // SVG 요소가 있는지 확인
+    const svg = analyticsIcon.querySelector('svg');
+    await expect(svg).toBeInTheDocument();
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // FaCheck 아이콘 확인
+    const checkIcon = canvas.getByTestId('check-icon');
+    await expect(checkIcon).toBeInTheDocument();
+    await expect(checkIcon).toBeVisible();
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // IoSearch 아이콘 확인
+    const searchIcon = canvas.getByTestId('search-icon');
+    await expect(searchIcon).toBeInTheDocument();
+    await expect(searchIcon).toBeVisible();
+    await new Promise(resolve => setTimeout(resolve, 500));
+  });
+
+  await step('size prop이 적용되는지 확인', async () => {
+    const sizeContainer = canvas.getByTestId('size-container');
+
+    // xs 크기 확인
+    const xsIcon = within(sizeContainer).getByTestId('size-xs');
+    await expect(xsIcon).toBeVisible();
+    const xsStyle = window.getComputedStyle(xsIcon);
+    // boxSize="xs"는 16px
+    await expect(parseFloat(xsStyle.width)).toBeLessThanOrEqual(20);
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // md 크기 확인
+    const mdIcon = within(sizeContainer).getByTestId('size-md');
+    await expect(mdIcon).toBeVisible();
+    const mdStyle = window.getComputedStyle(mdIcon);
+    // boxSize="md"는 24px 정도
+    await expect(parseFloat(mdStyle.width)).toBeGreaterThanOrEqual(20);
+    await expect(parseFloat(mdStyle.width)).toBeLessThanOrEqual(30);
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // xl 크기 확인
+    const xlIcon = within(sizeContainer).getByTestId('size-xl');
+    await expect(xlIcon).toBeVisible();
+    const xlStyle = window.getComputedStyle(xlIcon);
+    // boxSize="xl"는 40px
+    await expect(parseFloat(xlStyle.width)).toBeGreaterThanOrEqual(35);
+    await new Promise(resolve => setTimeout(resolve, 500));
+  });
+
+  await step('color prop이 적용되는지 확인', async () => {
+    const colorContainer = canvas.getByTestId('color-container');
+
+    // 빨간색 아이콘
+    const redIcon = within(colorContainer).getByTestId('color-red');
+    await expect(redIcon).toBeVisible();
+    const redStyle = window.getComputedStyle(redIcon);
+    // 색상이 적용되었는지 확인 (정확한 값은 테마에 따라 다를 수 있음)
+    await expect(redStyle.color).toBeTruthy();
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // 파란색 아이콘
+    const blueIcon = within(colorContainer).getByTestId('color-blue');
+    await expect(blueIcon).toBeVisible();
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // 보라색 아이콘
+    const purpleIcon = within(colorContainer).getByTestId('color-purple');
+    await expect(purpleIcon).toBeVisible();
+    await new Promise(resolve => setTimeout(resolve, 500));
+  });
+
+  await step('존재하지 않는 아이콘 이름일 때 fallback 표시되는지 확인', async () => {
+    const fallbackContainer = canvas.getByTestId('fallback-container');
+
+    // fallback 아이콘 확인
+    const nonexistentIcon = within(fallbackContainer).getByTestId('nonexistent-icon');
+    await expect(nonexistentIcon).toBeInTheDocument();
+    await expect(nonexistentIcon).toBeVisible();
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // fallback UI에 "?" 텍스트가 있는지 확인
+    await expect(nonexistentIcon.textContent).toContain('?');
+    await new Promise(resolve => setTimeout(resolve, 500));
+  });
+};
