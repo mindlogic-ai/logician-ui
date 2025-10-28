@@ -1,5 +1,7 @@
 import React from 'react';
+import { Box } from '@chakra-ui/react';
 import { Meta, StoryFn } from '@storybook/react';
+import { expect, userEvent, within, waitFor } from '@storybook/test';
 
 import { ExpandableText } from './ExpandableText';
 import type { ExpandableTextProps } from './ExpandableText';
@@ -163,4 +165,135 @@ export const ComponentComparison: StoryFn<ExpandableTextProps> = args => {
       </div>
     </div>
   );
+};
+
+/**
+ * 🎬 ExpandableText 종합 Interaction 테스트
+ */
+export const InteractionTest: StoryFn<ExpandableTextProps> = () => {
+  return (
+    <Box display="flex" flexDirection="column" gap={6} p={4}>
+      {/* Happy Path: 확장/축소 토글 */}
+      <Box data-testid="expandable-container">
+        <h3>Expand/Collapse Toggle</h3>
+        <ExpandableText charLimit={50}>
+          이 텍스트는 50자를 초과하는 긴 텍스트입니다. 더보기 버튼을 클릭하면 전체
+          텍스트가 표시되고, 접기 버튼을 클릭하면 다시 축소됩니다. 이 기능은
+          토글로 동작합니다.
+        </ExpandableText>
+      </Box>
+
+      {/* Happy Path: 텍스트 변경 */}
+      <Box data-testid="text-change-container">
+        <h3>Text Change (더보기/접기)</h3>
+        <ExpandableText charLimit={40}>
+          더보기를 클릭하면 이 텍스트가 전체로 펼쳐지고 버튼 텍스트가 접기로
+          변경됩니다. 다시 클릭하면 접히면서 더보기로 돌아갑니다.
+        </ExpandableText>
+      </Box>
+
+      {/* Bad Path: 짧은 텍스트 (버튼 없음) */}
+      <Box data-testid="short-text-container">
+        <h3>Short Text (No Button)</h3>
+        <ExpandableText charLimit={100}>짧은 텍스트입니다.</ExpandableText>
+      </Box>
+
+      {/* Bad Path: 빈 텍스트 */}
+      <Box data-testid="empty-text-container">
+        <h3>Empty Text</h3>
+        <ExpandableText charLimit={100}></ExpandableText>
+      </Box>
+    </Box>
+  );
+};
+
+InteractionTest.play = async ({ canvasElement, step }) => {
+  const canvas = within(canvasElement);
+
+  await step('클릭 시 확장/축소 토글되는지 확인', async () => {
+    const container = canvas.getByTestId('expandable-container');
+
+    // 초기 상태: 축소된 텍스트 확인
+    const initialText = container.textContent;
+    await expect(initialText).toContain('이 텍스트는 50자를');
+    await expect(initialText).not.toContain('토글로 동작합니다');
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // "더보기" 버튼 찾기 및 클릭
+    const seeMoreButton = await waitFor(() =>
+      within(container).getByRole('button', { name: /더보기|see more/i })
+    );
+    await userEvent.click(seeMoreButton);
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // 확장된 상태: 전체 텍스트 표시 확인
+    const expandedText = container.textContent;
+    await expect(expandedText).toContain('토글로 동작합니다');
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // "접기" 버튼 클릭
+    const seeLessButton = await waitFor(() =>
+      within(container).getByRole('button', { name: /접기|see less/i })
+    );
+    await userEvent.click(seeLessButton);
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // 다시 축소된 상태 확인
+    const collapsedText = container.textContent;
+    await expect(collapsedText).not.toContain('토글로 동작합니다');
+    await new Promise(resolve => setTimeout(resolve, 500));
+  });
+
+  await step('텍스트가 "더보기"/"접기"로 변경되는지 확인', async () => {
+    const container = canvas.getByTestId('text-change-container');
+
+    // 초기: "더보기" 버튼 확인
+    const seeMoreButton = await waitFor(() =>
+      within(container).getByRole('button', { name: /더보기|see more/i })
+    );
+    await expect(seeMoreButton).toHaveTextContent(/더보기|see more/i);
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // 클릭 후: "접기" 버튼으로 변경 확인
+    await userEvent.click(seeMoreButton);
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    const seeLessButton = await waitFor(() =>
+      within(container).getByRole('button', { name: /접기|see less/i })
+    );
+    await expect(seeLessButton).toHaveTextContent(/접기|see less/i);
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // 다시 클릭: "더보기"로 되돌아가는지 확인
+    await userEvent.click(seeLessButton);
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    const seeMoreButtonAgain = await waitFor(() =>
+      within(container).getByRole('button', { name: /더보기|see more/i })
+    );
+    await expect(seeMoreButtonAgain).toHaveTextContent(/더보기|see more/i);
+    await new Promise(resolve => setTimeout(resolve, 500));
+  });
+
+  await step('짧은 내용일 때 버튼이 표시되지 않는지 확인', async () => {
+    const shortTextContainer = canvas.getByTestId('short-text-container');
+
+    // 짧은 텍스트는 버튼이 없어야 함
+    const buttons = within(shortTextContainer).queryAllByRole('button');
+    await expect(buttons).toHaveLength(0);
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // 텍스트는 그대로 표시되어야 함
+    await expect(shortTextContainer).toHaveTextContent('짧은 텍스트입니다.');
+    await new Promise(resolve => setTimeout(resolve, 500));
+  });
+
+  await step('빈 내용일 때 버튼이 표시되지 않는지 확인', async () => {
+    const emptyTextContainer = canvas.getByTestId('empty-text-container');
+
+    // 빈 텍스트도 버튼이 없어야 함
+    const buttons = within(emptyTextContainer).queryAllByRole('button');
+    await expect(buttons).toHaveLength(0);
+    await new Promise(resolve => setTimeout(resolve, 500));
+  });
 };
