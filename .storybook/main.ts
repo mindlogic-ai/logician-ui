@@ -6,7 +6,10 @@ const config: StorybookConfig = {
     '../src/theme/*.stories.@(js|jsx|ts|tsx|mdx)',
     '../src/components/**/*.stories.@(js|jsx|ts|tsx|mdx)',
   ],
-  addons: ['@storybook/addon-essentials', '@storybook/addon-docs'],
+  addons: [
+    '@chromatic-com/storybook',
+    '@storybook/addon-interactions',
+  ],
   staticDirs: ['../public'],
   refs: () => ({}),
   framework: {
