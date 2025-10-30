@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0-alpha.18
+
+### Patch Changes
+
+- 627427d: MDXEditor의 자식 팝업을 클릭했을때 에디터에 autofocus되는 이슈를 해결했습니다.
+
 ## 2.0.0-alpha.17
 
 ### Patch Changes
