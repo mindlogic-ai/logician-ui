@@ -18,7 +18,7 @@ export const theme = {
       baseStyle: {
         track: {
           _checked: {
-            bg: colors.blue[900],
+            bg: 'primary.main',
           },
         },
       },
