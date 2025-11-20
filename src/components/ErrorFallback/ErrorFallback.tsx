@@ -61,13 +61,7 @@ User Agent: ${errorInfo.userAgent}`;
   };
 
   return (
-    <Flex
-      minH="100vh"
-      bgGradient="linear(135deg, gray.50 0%, gray.100 100%)"
-      align="center"
-      justify="center"
-      p={8}
-    >
+    <Flex minH="100vh" align="center" justify="center" p={8}>
       <Container disableResponsive maxW="container.sm">
         <Card
           p={12}
