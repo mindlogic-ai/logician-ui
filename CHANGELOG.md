@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0-alpha.19
+
+### Patch Changes
+
+- b52865f: fix: ErrorFallback bgGradient 제거
+
 ## 2.0.0-alpha.18
 
 ### Patch Changes
