@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0-alpha.20
+
+### Patch Changes
+
+- 1a0ea5d: Switch enabled 상태에서 primary.main 색상 적용
+
 ## 2.0.0-alpha.19
 
 ### Patch Changes

@@ -2,7 +2,7 @@
   "mode": "exit",
   "tag": "alpha",
   "initialVersions": {
-    "@mindlogic-ai/logician-ui": "2.0.0-alpha.18"
+    "@mindlogic-ai/logician-ui": "2.0.0-alpha.19"
   },
   "changesets": [
     "add-storybook",
@@ -12,6 +12,7 @@
     "dark-feet-tease",
     "easy-swans-appear",
     "fifty-pens-wash",
+    "fix-switch-primary-color",
     "flat-mice-marry",
     "flat-mirrors-happen",
     "good-clouds-help",
