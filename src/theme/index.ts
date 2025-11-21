@@ -13,6 +13,18 @@ export const theme = {
     global,
   },
 
+  components: {
+    Switch: {
+      baseStyle: {
+        track: {
+          _checked: {
+            bg: 'primary.main',
+          },
+        },
+      },
+    },
+  },
+
   fonts: {
     body: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif',
     heading: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif',
