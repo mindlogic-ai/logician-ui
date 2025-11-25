@@ -63,6 +63,7 @@
     "@types/lodash": "^4.17.20",
     "@types/react-syntax-highlighter": "^15.5.13",
     "chakra-dayzed-datepicker": "^0.3.1",
+    "d3": "^7.9.0",
     "date-fns": "^2.30.0",
     "katex": "^0.16.22",
     "libphonenumber-js": "^1.10.0",
@@ -80,7 +81,8 @@
     "remark-breaks": "^4.0.0",
     "remark-flexible-markers": "^1.3.0",
     "remark-gfm": "^4.0.1",
-    "remark-math": "^6.0.0"
+    "remark-math": "^6.0.0",
+    "topojson-client": "^3.1.0"
   },
   "devDependencies": {
     "@chakra-ui/react": "^2.8.0",
@@ -92,9 +94,11 @@
     "@storybook/addon-essentials": "^8.5.0",
     "@storybook/react": "^8.5.0",
     "@storybook/react-vite": "^8.5.0",
+    "@types/d3": "^7.4.3",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "@types/svgo": "^3.0.0",
+    "@types/topojson-client": "^3.1.5",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react": "^4.0.0",
