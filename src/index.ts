@@ -51,6 +51,9 @@ export * from './components/InlineCode';
 
 // Input Components
 export * from './components/Input';
+
+// Map Components
+export * from './components/KoreaMap';
 export * from './components/LineGraph';
 
 // Loading Components

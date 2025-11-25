@@ -19,7 +19,7 @@ export interface MapTooltipRef {
  * 지도 툴팁 컴포넌트
  */
 export const MapTooltip = forwardRef<HTMLDivElement, MapTooltipProps>(
-  ({ data, formatter }, ref) => {
+  ({ data: _data, formatter: _formatter }, ref) => {
     return (
       <Box
         ref={ref}
