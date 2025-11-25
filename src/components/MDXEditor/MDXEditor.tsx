@@ -50,8 +50,9 @@ export const MDXEditor = forwardRef<
     const target = e.target as HTMLElement;
     const isToolbarClick = target.closest('.mdxeditor-toolbar');
     const isTableClick = target.closest('table');
+    const isPopupClick = target.closest('.mdxeditor-popup-container');
 
-    if (!isToolbarClick && !isTableClick) {
+    if (!isToolbarClick && !isTableClick && !isPopupClick) {
       editorRef.current?.focus();
     }
   };

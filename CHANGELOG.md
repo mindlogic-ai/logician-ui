@@ -1,5 +1,23 @@
 # Changelog
 
+## 2.0.0-alpha.20
+
+### Patch Changes
+
+- 1a0ea5d: Switch enabled 상태에서 primary.main 색상 적용
+
+## 2.0.0-alpha.19
+
+### Patch Changes
+
+- b52865f: fix: ErrorFallback bgGradient 제거
+
+## 2.0.0-alpha.18
+
+### Patch Changes
+
+- 627427d: MDXEditor의 자식 팝업을 클릭했을때 에디터에 autofocus되는 이슈를 해결했습니다.
+
 ## 2.0.0-alpha.17
 
 ### Patch Changes
