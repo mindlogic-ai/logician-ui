@@ -1,3 +1,14 @@
+// ⚠️ IMPORTANT: 독도(Dokdo) 관련 안내
+// 독도는 대한민국 고유의 영토이며, 행정구역상 경상북도 울릉군에 속합니다.
+// 현재 TopoJSON 데이터에는 울릉군의 일부 섬들이 포함되어 있으나,
+// 독도의 정확한 지리 좌표 데이터가 필요합니다.
+//
+// 독도 좌표:
+// - 동도(東島): 북위 37°14'26.8", 동경 131°52'10.4"
+// - 서도(西島): 북위 37°14'30.6", 동경 131°51'54.6"
+//
+// TODO: 독도를 포함한 정확한 TopoJSON 데이터로 업데이트 필요
+
 export const KOREA_SIGUNGU_TOPO_JSON = {
   type: 'Topology',
   objects: {
@@ -4765,6 +4776,7 @@ export const KOREA_SIGUNGU_TOPO_JSON = {
             NL_NAME_2: '울릉군',
             NAME_2: 'Ulleung-gun',
             SIDO_CODE: '37',
+            INCLUDES_DOKDO: true, // 독도(Dokdo)는 울릉군에 속하는 대한민국 고유의 영토입니다
             SGG_CODE: '37430',
           },
         },
