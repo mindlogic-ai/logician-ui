@@ -2,8 +2,7 @@ import { Box, Flex } from '@chakra-ui/react';
 
 import { Text } from '@/components/Typography';
 
-import type { MapLegendProps } from '../types';
-import { MAP_DEFAULTS } from '../types';
+import { MAP_DEFAULTS, type MapLegendProps } from '../KoreaMap.types';
 
 export interface MapLegendComponentProps extends MapLegendProps {
   /** 최소값 */

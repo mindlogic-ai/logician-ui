@@ -6,9 +6,8 @@ import { MapLegend } from './components/MapLegend';
 import { MapTooltip, useTooltipText } from './components/MapTooltip';
 import { useMapColor } from './hooks/useMapColor';
 import { getRegionCode, getRegionName, useMapData } from './hooks/useMapData';
-import { SidoProperties } from './KoreaMap.types';
-import type { KoreaMapProps, MapLevel } from './types';
-import { MAP_DEFAULTS } from './types';
+import type { KoreaMapProps, MapLevel, SidoProperties } from './KoreaMap.types';
+import { MAP_DEFAULTS } from './KoreaMap.types';
 
 export const KoreaMap = forwardRef<HTMLDivElement, KoreaMapProps>(
   (

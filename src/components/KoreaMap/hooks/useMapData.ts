@@ -5,7 +5,6 @@ import { KOREA_SIGUNGU_TOPO_JSON } from '../data/korea-sigungu-data';
 import { KOREA_TOPO_JSON } from '../data/korea-topo-data';
 import type {
   MapLevel,
-  RegionData,
   RegionProperties,
   SidoProperties,
   SidoTopology,
@@ -117,13 +116,4 @@ export function useMapData({
   }, [level, selectedSidoId, sidoTopoData, sigunguTopoData]);
 
   return { features, sidoTopoData, sigunguTopoData };
-}
-
-/**
- * 데이터 맵 생성 유틸리티
- * @param data - RegionData 배열
- * @returns code를 키로 하는 Map 객체
- */
-export function createDataMap(data: RegionData[]): Map<string, RegionData> {
-  return new Map(data.map((d) => [d.code, d]));
 }

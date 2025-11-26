@@ -1,7 +1,7 @@
 import { forwardRef, useCallback, useMemo } from 'react';
 import { Box } from '@chakra-ui/react';
 
-import type { RegionData, TooltipFormatter } from '../types';
+import type { RegionData, TooltipFormatter } from '../KoreaMap.types';
 
 export interface MapTooltipProps {
   /** 데이터 배열 */

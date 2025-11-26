@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { KoreaMap } from './KoreaMap';
 import { KoreaMapComparison } from './KoreaMapComparison';
-import type { RegionData } from './types';
+import type { RegionData } from './KoreaMap.types';
 
 const meta: Meta<typeof KoreaMap> = {
   title: 'Components/KoreaMap',

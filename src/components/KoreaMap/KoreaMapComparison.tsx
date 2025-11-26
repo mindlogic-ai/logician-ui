@@ -14,8 +14,8 @@ import type {
   RegionData,
   SelectedRegion,
   TooltipFormatter,
-} from './types';
-import { MAP_DEFAULTS } from './types';
+} from './KoreaMap.types';
+import { MAP_DEFAULTS } from './KoreaMap.types';
 
 // ============================================
 // Props 타입

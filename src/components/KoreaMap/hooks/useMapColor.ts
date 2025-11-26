@@ -1,8 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import * as d3 from 'd3';
 
-import type { RegionData } from '../types';
-import { MAP_DEFAULTS } from '../types';
+import { MAP_DEFAULTS, type RegionData } from '../KoreaMap.types';
 
 interface UseMapColorOptions {
   data: RegionData[];
