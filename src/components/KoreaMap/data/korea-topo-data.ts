@@ -1,3 +1,5 @@
+import type { SidoTopology } from '../KoreaMap.types';
+
 export const KOREA_TOPO_JSON = {
   type: 'Topology',
   objects: {
@@ -3351,4 +3353,4 @@ export const KOREA_TOPO_JSON = {
     scale: [0.00007258553753559508, 0.000054893603556274916],
     translate: [124.61167837048757, 33.12429381689931],
   },
-};
+} satisfies SidoTopology;

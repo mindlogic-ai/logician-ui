@@ -5,7 +5,7 @@ import type { RegionData, TooltipFormatter } from '../types';
 
 export interface MapTooltipProps {
   /** 데이터 배열 */
-  data: Array<RegionData>;
+  data: RegionData[];
   /** 툴팁 포맷터 */
   formatter?: TooltipFormatter;
 }
@@ -51,12 +51,12 @@ export function useTooltipText(
   formatter?: TooltipFormatter
 ) {
   const dataMap = useMemo(
-    () => new Map<string, RegionData>(data.map((d) => [d.code, d])),
+    () => new Map<number, RegionData>(data.map((d) => [d.code, d])),
     [data]
   );
 
   const getTooltipText = useCallback(
-    (name: string, code: string): string => {
+    (name: string, code: number): string => {
       const regionData = dataMap.get(code);
       if (formatter) {
         return formatter(name, regionData?.value, regionData?.metadata);

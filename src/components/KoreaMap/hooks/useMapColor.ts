@@ -11,7 +11,7 @@ interface UseMapColorOptions {
 }
 
 interface UseMapColorReturn {
-  getColor: (code: string) => string;
+  getColor: (code: number) => string;
   minValue: number;
   maxValue: number;
 }
@@ -26,7 +26,7 @@ export function useMapColor({
 }: UseMapColorOptions): UseMapColorReturn {
   // 데이터 맵 생성
   const dataMap = useMemo(
-    () => new Map<string, RegionData>(data.map((d) => [d.code, d])),
+    () => new Map<number, RegionData>(data.map((d) => [d.code, d])),
     [data]
   );
 
@@ -41,7 +41,7 @@ export function useMapColor({
 
   // 색상 스케일 함수
   const getColor = useCallback(
-    (code: string): string => {
+    (code: number): string => {
       const regionData = dataMap.get(code);
       if (!regionData) return defaultColor;
 

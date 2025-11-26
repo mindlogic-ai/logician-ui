@@ -9,6 +9,8 @@
 //
 // TODO: 독도를 포함한 정확한 TopoJSON 데이터로 업데이트 필요
 
+import type { SigunguTopology } from '../KoreaMap.types';
+
 export const KOREA_SIGUNGU_TOPO_JSON = {
   type: 'Topology',
   objects: {
@@ -16366,4 +16368,4 @@ export const KOREA_SIGUNGU_TOPO_JSON = {
     scale: [0.00007253397808567116, 0.00005489360353624068],
     translate: [124.61683426353233, 33.12429381719851],
   },
-};
+} satisfies SigunguTopology;

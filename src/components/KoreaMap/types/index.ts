@@ -53,7 +53,7 @@ export const MAP_DEFAULTS = {
 
 export interface RegionData {
   /** 지역 코드 (시도: ID_1, 시군구: ID_2) */
-  code: string;
+  code: number;
   /** 데이터 값 */
   value: number;
   /** 추가 데이터 (툴팁 등에서 사용) */
@@ -62,7 +62,7 @@ export interface RegionData {
 
 export interface SelectedRegion {
   /** 시도 ID (ID_1) */
-  sidoId: string;
+  sidoId: number;
   /** 시도 이름 */
   sidoName: string;
 }
@@ -119,13 +119,13 @@ export interface KoreaMapProps
   height?: number;
   /** 지역 클릭 핸들러 */
   onRegionClick?: (
-    regionCode: string,
+    regionCode: number,
     regionName: string,
     level: MapLevel
   ) => void;
   /** 지역 호버 핸들러 */
   onRegionHover?: (
-    regionCode: string | null,
+    regionCode: number | null,
     regionName: string | null,
     level: MapLevel
   ) => void;

@@ -6,6 +6,7 @@ import { MapLegend } from './components/MapLegend';
 import { MapTooltip, useTooltipText } from './components/MapTooltip';
 import { useMapColor } from './hooks/useMapColor';
 import { getRegionCode, getRegionName, useMapData } from './hooks/useMapData';
+import { SidoProperties } from './KoreaMap.types';
 import type { KoreaMapProps, MapLevel } from './types';
 import { MAP_DEFAULTS } from './types';
 
@@ -43,7 +44,7 @@ export const KoreaMap = forwardRef<HTMLDivElement, KoreaMapProps>(
     );
 
     const [currentLevel, setCurrentLevel] = useState<MapLevel>('sido');
-    const [selectedSido, setSelectedSido] = useState<string | null>(null);
+    const [selectedSido, setSelectedSido] = useState<number | null>(null);
     const [selectedSidoName, setSelectedSidoName] = useState<string | null>(
       null
     );
@@ -205,20 +206,26 @@ export const KoreaMap = forwardRef<HTMLDivElement, KoreaMapProps>(
             tooltipRef.current.style.display = 'none';
           }
         })
-        .on('click', function (event, d) {
-          const code = getRegionCode(d, currentLevel);
-          const name = getRegionName(d, currentLevel);
+        .on(
+          'click',
+          function (
+            event,
+            d: GeoJSON.Feature<GeoJSON.Geometry, SidoProperties>
+          ) {
+            const code = getRegionCode(d, currentLevel);
+            const name = getRegionName(d, currentLevel);
 
-          onRegionClick?.(code, name, currentLevel);
+            onRegionClick?.(code, name, currentLevel);
 
-          // 드릴다운: 시도 클릭 시 시군구로 이동
-          if (enableDrilldown && currentLevel === 'sido') {
-            setSelectedSido(String(d.properties?.ID_1));
-            setSelectedSidoName(d.properties?.NAME_1);
-            setCurrentLevel('sigungu');
-            onLevelChange?.('sigungu', String(d.properties?.ID_1));
+            // 드릴다운: 시도 클릭 시 시군구로 이동
+            if (enableDrilldown && currentLevel === 'sido') {
+              setSelectedSido(d.properties?.ID_1 ?? null);
+              setSelectedSidoName(d.properties?.NAME_1 ?? null);
+              setCurrentLevel('sigungu');
+              onLevelChange?.('sigungu', String(d.properties?.ID_1));
+            }
           }
-        });
+        );
 
       // 시도 레벨로 돌아갈 때 줌 리셋
       if (currentLevel === 'sido') {
@@ -245,7 +252,13 @@ export const KoreaMap = forwardRef<HTMLDivElement, KoreaMapProps>(
     ]);
 
     return (
-      <Box ref={ref} position="relative" className={className}>
+      <Box
+        ref={ref}
+        position="relative"
+        w="full"
+        h="full"
+        className={className}
+      >
         {/* 뒤로가기 버튼 */}
         {showBackButton && currentLevel === 'sigungu' && (
           <Button

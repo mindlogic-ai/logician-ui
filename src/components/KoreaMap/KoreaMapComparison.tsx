@@ -63,7 +63,7 @@ export interface KoreaMapComparisonProps {
 // ============================================
 
 interface SigunguPanelProps {
-  sidoId: string;
+  sidoId: number;
   sidoName: string;
   sigunguData: RegionData[];
   width: number;
@@ -350,7 +350,7 @@ export const KoreaMapComparison = forwardRef<
 
     // 지역 선택 핸들러
     const handleRegionSelect = useCallback(
-      (sidoId: string, sidoName: string) => {
+      (sidoId: number, sidoName: string) => {
         setSelectedRegions((prev) => {
           const existingIndex = prev.findIndex((r) => r.sidoId === sidoId);
           if (existingIndex >= 0) {
@@ -375,7 +375,7 @@ export const KoreaMapComparison = forwardRef<
 
     // 지역 제거 핸들러
     const handleRegionRemove = useCallback(
-      (sidoId: string) => {
+      (sidoId: number) => {
         setSelectedRegions((prev) => {
           const newSelections = prev.filter((r) => r.sidoId !== sidoId);
           onSelectionChange?.(newSelections);
