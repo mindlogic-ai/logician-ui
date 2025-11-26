@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 import type {
   LegendFormatter,
   LegendSize,
@@ -5,7 +7,16 @@ import type {
   TooltipFormatter,
 } from '../../types';
 
-export interface SigunguPanelProps {
+export interface SigunguPanelHeaderProps {
+  /** Badge 색상 스킴 */
+  badgeColorScheme?: string;
+  /** 헤더 배경색 */
+  headerBg?: string;
+  /** 헤더 테두리 색상 */
+  headerBorderColor?: string;
+}
+
+export interface SigunguPanelProps extends SigunguPanelHeaderProps {
   /** 시도 ID */
   sidoId: string;
   /** 시도 이름 */
@@ -36,4 +47,9 @@ export interface SigunguPanelProps {
   legendSize?: LegendSize;
   /** 닫기 핸들러 */
   onClose: () => void;
+  /** 커스텀 헤더 (제공하지 않으면 기본 헤더 사용) */
+  renderHeader?: (props: {
+    sidoName: string;
+    onClose: () => void;
+  }) => ReactNode;
 }

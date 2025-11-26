@@ -30,6 +30,10 @@ export const SigunguPanel = ({
   legendFormatter,
   legendSize,
   onClose,
+  renderHeader,
+  badgeColorScheme = 'blue',
+  headerBg = 'gray.50',
+  headerBorderColor,
 }: SigunguPanelProps) => {
   // DOM 참조
   const containerRef = useRef<HTMLDivElement>(null); // 패널 컨테이너 (반응형 크기 감지용)
@@ -264,20 +268,25 @@ export const SigunguPanel = ({
       display="flex"
       flexDirection="column"
     >
-      {/* 헤더 */}
-      <Flex
-        justify="space-between"
-        align="center"
-        px={3}
-        py={2}
-        bg="gray.50"
-        borderBottomWidth={1}
-      >
-        <Badge colorScheme="blue" fontSize="sm">
-          {sidoName}
-        </Badge>
-        <CloseButton size="sm" onClick={onClose} />
-      </Flex>
+      {/* 헤더 - 커스텀 또는 기본 */}
+      {renderHeader ? (
+        renderHeader({ sidoName, onClose })
+      ) : (
+        <Flex
+          justify="space-between"
+          align="center"
+          px={3}
+          py={2}
+          bg={headerBg}
+          borderBottomWidth={1}
+          borderBottomColor={headerBorderColor}
+        >
+          <Badge colorScheme={badgeColorScheme} fontSize="sm">
+            {sidoName}
+          </Badge>
+          <CloseButton size="sm" onClick={onClose} />
+        </Flex>
+      )}
 
       <Box ref={containerRef} position="relative" flex={1} overflow="hidden">
         <svg

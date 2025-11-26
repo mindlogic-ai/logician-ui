@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Box, Flex, Badge, Button } from '@chakra-ui/react';
+import { Box, Flex, Badge, Button, CloseButton } from '@chakra-ui/react';
 
 import { SAMPLE_SIDO_DATA, SAMPLE_SIGUNGU_DATA } from './constants';
 import { KoreaMap } from './KoreaMap';
@@ -438,6 +438,220 @@ export const MultipleRegionComparison: Story = {
         <Box fontSize="sm" color="gray.600">
           💡 전체 지도에서 시도를 클릭하면 오른쪽에 해당 지역의 시군구 상세 지도가 나타납니다.
           최대 2개 지역을 동시에 비교할 수 있습니다. Badge를 클릭하거나 시군구 지도의 ✕ 버튼으로 선택을 해제할 수 있습니다.
+        </Box>
+      </Flex>
+    );
+  },
+};
+
+/**
+ * SigunguPanel 헤더 커스터마이징 예제
+ * - 기본 헤더 스타일 변경 (색상, 배경)
+ * - 완전히 커스텀 헤더 렌더링
+ */
+export const CustomSigunguHeaders: Story = {
+  render: () => {
+    const {
+      selectedRegions,
+      toggleRegion,
+      clearSelections,
+    } = useKoreaMapSelection({
+      maxSelections: 3,
+    });
+
+    return (
+      <Flex direction="column" gap={4}>
+        {/* 상단 컨트롤 패널 */}
+        <Flex gap={2} wrap="wrap" align="center">
+          <Box fontWeight="bold">선택된 지역:</Box>
+          {selectedRegions.length === 0 && (
+            <Badge colorScheme="gray">지역을 선택하세요</Badge>
+          )}
+          {selectedRegions.map((region) => (
+            <Badge
+              key={region.sidoId}
+              colorScheme="blue"
+              fontSize="sm"
+              px={2}
+              py={1}
+              cursor="pointer"
+              onClick={() => toggleRegion(region.sidoId, region.sidoName)}
+            >
+              {region.sidoName} ✕
+            </Badge>
+          ))}
+          {selectedRegions.length > 0 && (
+            <Button size="sm" onClick={clearSelections}>
+              모두 지우기
+            </Button>
+          )}
+        </Flex>
+
+        <Flex gap={4} wrap="wrap" justify="center">
+          {/* 전체 지도 */}
+          <Box>
+            <Box fontWeight="bold" mb={2}>
+              전체 시도 지도
+            </Box>
+            <KoreaMap
+              width={400}
+              height={500}
+              data={sampleUserData}
+              colorScale={['#dbeafe', '#1e40af']}
+              enableDrilldown={false}
+              highlightedRegions={selectedRegions.map((r) => r.sidoId)}
+              selectedStyle={{
+                strokeColor: '#2563eb',
+                strokeWidth: 3,
+              }}
+              onRegionClick={(code, name) => {
+                toggleRegion(code, name);
+              }}
+              tooltipFormatter={(name, value) =>
+                value ? `${name}: ${value.toLocaleString()}명` : name
+              }
+            />
+          </Box>
+
+          {/* 선택된 지역들 - 다양한 헤더 스타일 */}
+          {selectedRegions.length > 0 && (
+            <Flex direction="row" gap={4} wrap="wrap">
+              {selectedRegions.map((region, index) => {
+                // 각 지역마다 다른 스타일 적용
+                if (index === 0) {
+                  // 첫 번째: 기본 스타일 변경
+                  return (
+                    <Box key={region.sidoId}>
+                      <Box fontWeight="bold" mb={2}>
+                        스타일 변경 예제
+                      </Box>
+                      <SigunguPanel
+                        sidoId={region.sidoId}
+                        sidoName={region.sidoName}
+                        sigunguData={sampleSigunguUserData}
+                        colorScale={['#fef3c7', '#b45309']}
+                        defaultColor="#f3f4f6"
+                        strokeColor="#d1d5db"
+                        hoverStrokeColor="#b45309"
+                        showTooltip={true}
+                        showLegend={false}
+                        animationDuration={500}
+                        onClose={() => toggleRegion(region.sidoId, region.sidoName)}
+                        badgeColorScheme="orange"
+                        headerBg="orange.50"
+                        headerBorderColor="orange.200"
+                        tooltipFormatter={(name, value) =>
+                          value ? `${name}: ${value.toLocaleString()}명` : name
+                        }
+                      />
+                    </Box>
+                  );
+                } else if (index === 1) {
+                  // 두 번째: 완전 커스텀 헤더
+                  return (
+                    <Box key={region.sidoId}>
+                      <Box fontWeight="bold" mb={2}>
+                        커스텀 헤더 예제
+                      </Box>
+                      <SigunguPanel
+                        sidoId={region.sidoId}
+                        sidoName={region.sidoName}
+                        sigunguData={sampleSigunguUserData}
+                        colorScale={['#dcfce7', '#166534']}
+                        defaultColor="#f3f4f6"
+                        strokeColor="#d1d5db"
+                        hoverStrokeColor="#166534"
+                        showTooltip={true}
+                        showLegend={false}
+                        animationDuration={500}
+                        onClose={() => toggleRegion(region.sidoId, region.sidoName)}
+                        renderHeader={({ sidoName, onClose }) => (
+                          <Flex
+                            justify="space-between"
+                            align="center"
+                            px={4}
+                            py={3}
+                            bgGradient="linear(to-r, green.400, green.600)"
+                            color="white"
+                          >
+                            <Box>
+                              <Box fontSize="xs" opacity={0.9}>
+                                선택된 지역
+                              </Box>
+                              <Box fontWeight="bold" fontSize="md">
+                                {sidoName}
+                              </Box>
+                            </Box>
+                            <CloseButton
+                              size="sm"
+                              onClick={onClose}
+                              color="white"
+                              _hover={{ bg: 'whiteAlpha.300' }}
+                            />
+                          </Flex>
+                        )}
+                        tooltipFormatter={(name, value) =>
+                          value ? `${name}: ${value.toLocaleString()}명` : name
+                        }
+                      />
+                    </Box>
+                  );
+                } else {
+                  // 세 번째: 또 다른 커스텀 스타일
+                  return (
+                    <Box key={region.sidoId}>
+                      <Box fontWeight="bold" mb={2}>
+                        미니멀 헤더 예제
+                      </Box>
+                      <SigunguPanel
+                        sidoId={region.sidoId}
+                        sidoName={region.sidoName}
+                        sigunguData={sampleSigunguUserData}
+                        colorScale={['#dbeafe', '#1e40af']}
+                        defaultColor="#f3f4f6"
+                        strokeColor="#d1d5db"
+                        hoverStrokeColor="#1e40af"
+                        showTooltip={true}
+                        showLegend={false}
+                        animationDuration={500}
+                        onClose={() => toggleRegion(region.sidoId, region.sidoName)}
+                        renderHeader={({ sidoName, onClose }) => (
+                          <Flex
+                            justify="space-between"
+                            align="center"
+                            px={3}
+                            py={2}
+                            bg="white"
+                            borderBottomWidth={2}
+                            borderBottomColor="blue.500"
+                          >
+                            <Box fontWeight="semibold" color="blue.700">
+                              {sidoName}
+                            </Box>
+                            <CloseButton size="sm" onClick={onClose} />
+                          </Flex>
+                        )}
+                        tooltipFormatter={(name, value) =>
+                          value ? `${name}: ${value.toLocaleString()}명` : name
+                        }
+                      />
+                    </Box>
+                  );
+                }
+              })}
+            </Flex>
+          )}
+        </Flex>
+
+        {/* 안내 */}
+        <Box fontSize="sm" color="gray.600">
+          💡 SigunguPanel의 헤더를 3가지 방식으로 커스터마이징할 수 있습니다:
+          <br />
+          1️⃣ 기본 헤더의 색상 변경 (badgeColorScheme, headerBg, headerBorderColor)
+          <br />
+          2️⃣ 완전 커스텀 헤더 (renderHeader prop으로 완전히 자유로운 디자인)
+          <br />
+          3️⃣ 미니멀 스타일 등 다양한 변형 가능
         </Box>
       </Flex>
     );
