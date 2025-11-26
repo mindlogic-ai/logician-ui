@@ -222,7 +222,7 @@ export const KoreaMap = forwardRef<HTMLDivElement, KoreaMapProps>(
               setSelectedSido(d.properties?.ID_1 ?? null);
               setSelectedSidoName(d.properties?.NAME_1 ?? null);
               setCurrentLevel('sigungu');
-              onLevelChange?.('sigungu', String(d.properties?.ID_1));
+              onLevelChange?.('sigungu', d.properties?.ID_1);
             }
           }
         );

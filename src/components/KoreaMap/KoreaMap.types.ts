@@ -156,7 +156,7 @@ export interface MapBehaviorProps {
     level: MapLevel
   ) => void;
   /** 레벨 변경 핸들러 */
-  onLevelChange?: (level: MapLevel, sidoId?: string) => void;
+  onLevelChange?: (level: MapLevel, sidoId?: number) => void;
   /** 드릴다운 활성화 여부 */
   enableDrilldown?: boolean;
   /** 애니메이션 지속 시간 (ms) */
