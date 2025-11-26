@@ -1,0 +1,1 @@
+export { useMapColor } from './useMapColor';

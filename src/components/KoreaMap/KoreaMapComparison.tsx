@@ -1,298 +1,19 @@
 import { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
-import { Box, CloseButton, Flex, Grid } from '@chakra-ui/react';
+import { Box, Flex, Grid } from '@chakra-ui/react';
 import * as d3 from 'd3';
 
-import { Badge } from '../Badge';
 import { Button } from '../Button';
 import { Text } from '../Typography';
-import { MapLegend } from './components/MapLegend';
-import { MapTooltip, useTooltipText } from './components/MapTooltip';
-import { useMapColor } from './hooks/useMapColor';
-import { getRegionCode, getRegionName, useMapData } from './hooks/useMapData';
-import type {
-  LegendFormatter,
-  RegionData,
-  SelectedRegion,
-  TooltipFormatter,
-} from './types';
-import { MAP_DEFAULTS } from './types';
-
-// ============================================
-// Props 타입
-// ============================================
-
-export interface KoreaMapComparisonProps {
-  /** 시도 레벨 데이터 */
-  data?: RegionData[];
-  /** 시군구 레벨 데이터 */
-  sigunguData?: RegionData[];
-  /** 전체 지도 너비 */
-  width?: number;
-  /** 전체 지도 높이 */
-  height?: number;
-  /** 최대 비교 가능 지역 수 */
-  maxSelections?: number;
-  /** 선택 변경 핸들러 */
-  onSelectionChange?: (selections: SelectedRegion[]) => void;
-  /** 색상 스케일 (낮은 값 -> 높은 값) */
-  colorScale?: [string, string];
-  /** 기본 지역 색상 (데이터 없을 때) */
-  defaultColor?: string;
-  /** 테두리 색상 */
-  strokeColor?: string;
-  /** 호버 시 테두리 색상 */
-  hoverStrokeColor?: string;
-  /** 툴팁 표시 여부 */
-  showTooltip?: boolean;
-  /** 툴팁 포맷터 */
-  tooltipFormatter?: TooltipFormatter;
-  /** 애니메이션 지속 시간 (ms) */
-  animationDuration?: number;
-  /** 범례 표시 여부 */
-  showLegend?: boolean;
-  /** 범례 제목 */
-  legendTitle?: string;
-  /** 범례 값 포맷터 */
-  legendFormatter?: LegendFormatter;
-  /** 클래스명 */
-  className?: string;
-}
-
-// ============================================
-// SigunguPanel 컴포넌트
-// ============================================
-
-interface SigunguPanelProps {
-  sidoId: string;
-  sidoName: string;
-  sigunguData: RegionData[];
-  width: number;
-  height: number;
-  colorScale: [string, string];
-  defaultColor: string;
-  strokeColor: string;
-  hoverStrokeColor: string;
-  showTooltip: boolean;
-  tooltipFormatter?: TooltipFormatter;
-  animationDuration: number;
-  showLegend: boolean;
-  legendTitle?: string;
-  legendFormatter?: LegendFormatter;
-  onClose: () => void;
-}
-
-const SigunguPanel = ({
-  sidoId,
-  sidoName,
-  sigunguData,
-  width,
-  height,
-  colorScale,
-  defaultColor,
-  strokeColor,
-  hoverStrokeColor,
-  showTooltip,
-  tooltipFormatter,
-  animationDuration,
-  showLegend,
-  legendTitle,
-  legendFormatter,
-  onClose,
-}: SigunguPanelProps) => {
-  const svgRef = useRef<SVGSVGElement>(null);
-  const tooltipRef = useRef<HTMLDivElement>(null);
-
-  // 훅 사용
-  const { getColor, minValue, maxValue } = useMapColor({
-    data: sigunguData,
-    colorScale,
-    defaultColor,
-  });
-
-  const { features } = useMapData({
-    level: 'sigungu',
-    selectedSidoId: sidoId,
-  });
-
-  const getTooltipText = useTooltipText(sigunguData, tooltipFormatter);
-
-  useEffect(() => {
-    if (!svgRef.current) return;
-
-    const svg = d3.select(svgRef.current);
-    svg.selectAll('*').remove();
-
-    const projection = d3
-      .geoMercator()
-      .center([127.5, 36.0])
-      .scale(width * 6)
-      .translate([width / 2, height / 2]);
-
-    const path = d3.geoPath().projection(projection);
-    const g = svg.append('g').attr('class', 'map-container');
-
-    const zoom = d3
-      .zoom<SVGSVGElement, unknown>()
-      .scaleExtent([1, 20])
-      .on('zoom', (event) => {
-        g.attr('transform', event.transform);
-      });
-
-    svg.call(zoom);
-
-    // 줌 설정
-    if (features.length > 0) {
-      const featuresWithArea = features.map((f) => ({
-        feature: f,
-        area: path.area(f),
-      }));
-      featuresWithArea.sort((a, b) => b.area - a.area);
-
-      const totalArea = featuresWithArea.reduce((sum, f) => sum + f.area, 0);
-      let accumulatedArea = 0;
-      const mainFeatures = featuresWithArea.filter((f) => {
-        if (accumulatedArea < totalArea * 0.95) {
-          accumulatedArea += f.area;
-          return true;
-        }
-        return false;
-      });
-
-      const boundsFeatures =
-        mainFeatures.length > 0 ? mainFeatures.map((f) => f.feature) : features;
-
-      const bounds = path.bounds({
-        type: 'FeatureCollection',
-        features: boundsFeatures,
-      } as GeoJSON.FeatureCollection);
-
-      const dx = bounds[1][0] - bounds[0][0];
-      const dy = bounds[1][1] - bounds[0][1];
-      const x = (bounds[0][0] + bounds[1][0]) / 2;
-      const y = (bounds[0][1] + bounds[1][1]) / 2;
-      const scale = Math.max(
-        2.5,
-        Math.min(15, 0.8 / Math.max(dx / width, dy / height))
-      );
-      const translate: [number, number] = [
-        width / 2 - scale * x,
-        height / 2 - scale * y,
-      ];
-
-      svg
-        .transition()
-        .duration(animationDuration)
-        .call(
-          zoom.transform,
-          d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale)
-        );
-    }
-
-    const regions = g
-      .selectAll('path')
-      .data(features)
-      .join('path')
-      .attr('d', path as unknown as string)
-      .attr('fill', (d) => getColor(getRegionCode(d, 'sigungu')))
-      .attr('stroke', '#64748b') // 고정된 어두운 회색
-      .attr('stroke-width', 0.8)
-      .attr('vector-effect', 'non-scaling-stroke')
-      .attr('cursor', 'pointer');
-
-    regions
-      .on('mouseenter', function (event, d) {
-        const code = getRegionCode(d, 'sigungu');
-        const name = getRegionName(d, 'sigungu');
-
-        d3.select(this)
-          .attr('stroke', hoverStrokeColor)
-          .attr('stroke-width', 1.5)
-          .raise();
-
-        if (showTooltip && tooltipRef.current) {
-          tooltipRef.current.style.display = 'block';
-          tooltipRef.current.innerHTML = getTooltipText(name, code);
-        }
-      })
-      .on('mousemove', function (event) {
-        if (showTooltip && tooltipRef.current) {
-          const [x, y] = d3.pointer(event, svgRef.current);
-          tooltipRef.current.style.left = `${x + 15}px`;
-          tooltipRef.current.style.top = `${y - 10}px`;
-        }
-      })
-      .on('mouseleave', function () {
-        d3.select(this).attr('stroke', '#64748b').attr('stroke-width', 0.8);
-
-        if (tooltipRef.current) {
-          tooltipRef.current.style.display = 'none';
-        }
-      });
-  }, [
-    sidoId,
-    features,
-    width,
-    height,
-    getColor,
-    strokeColor,
-    hoverStrokeColor,
-    showTooltip,
-    getTooltipText,
-    animationDuration,
-  ]);
-
-  return (
-    <Box
-      position="relative"
-      borderWidth={1}
-      borderRadius="md"
-      overflow="hidden"
-    >
-      {/* 헤더 */}
-      <Flex
-        justify="space-between"
-        align="center"
-        px={3}
-        py={2}
-        bg="gray.50"
-        borderBottomWidth={1}
-      >
-        <Badge colorScheme="blue" fontSize="sm">
-          {sidoName}
-        </Badge>
-        <CloseButton size="sm" onClick={onClose} />
-      </Flex>
-
-      <Box position="relative">
-        <svg ref={svgRef} width={width} height={height} />
-
-        {showTooltip && (
-          <MapTooltip
-            ref={tooltipRef}
-            data={sigunguData}
-            formatter={tooltipFormatter}
-          />
-        )}
-
-        {/* 범례 */}
-        <MapLegend
-          showLegend={showLegend}
-          legendTitle={legendTitle}
-          legendFormatter={legendFormatter}
-          minValue={minValue}
-          maxValue={maxValue}
-          colorScale={colorScale}
-          compact
-        />
-      </Box>
-    </Box>
-  );
-};
-
-// ============================================
-// KoreaMapComparison 컴포넌트
-// ============================================
-
+import { MapLegend, MapTooltip, SigunguPanel } from './components';
+import { MAP_DEFAULTS } from './constants';
+import {
+  getRegionCode,
+  getRegionName,
+  useMapColor,
+  useMapData,
+  useTooltipText,
+} from './hooks';
+import type { KoreaMapComparisonProps, SelectedRegion } from './types';
 export const KoreaMapComparison = forwardRef<
   HTMLDivElement,
   KoreaMapComparisonProps
@@ -315,25 +36,22 @@ export const KoreaMapComparison = forwardRef<
       showLegend = true,
       legendTitle = '사용자 수',
       legendFormatter,
+      legendSize = 'sm',
       className,
     },
     ref
   ) => {
-    const mainSvgRef = useRef<SVGSVGElement>(null);
-    const mainTooltipRef = useRef<HTMLDivElement>(null);
+    // DOM 참조
+    const mainSvgRef = useRef<SVGSVGElement>(null); // 메인 지도 SVG 엘리먼트 (D3 렌더링 대상)
+    const mainTooltipRef = useRef<HTMLDivElement>(null); // 메인 지도 툴팁 엘리먼트 (마우스 오버 시 표시)
 
     const [selectedRegions, setSelectedRegions] = useState<SelectedRegion[]>(
       []
     );
 
     // 메인 지도 크기 계산
-    const mainMapWidth = selectedRegions.length > 0 ? width * 0.4 : width;
+    const mainMapWidth = selectedRegions.length > 0 ? width * 0.5 : width;
     const mainMapHeight = height;
-    const panelWidth =
-      selectedRegions.length > 0
-        ? (width * 0.6 - 16) / Math.min(selectedRegions.length, 2)
-        : 0;
-    const panelHeight = selectedRegions.length > 2 ? (height - 8) / 2 : height;
 
     // 훅 사용
     const { getColor, minValue, maxValue } = useMapColor({
@@ -348,10 +66,11 @@ export const KoreaMapComparison = forwardRef<
 
     const getTooltipText = useTooltipText(data, tooltipFormatter);
 
-    // 지역 선택 핸들러
+    // 지역 선택/선택 해제 핸들러
     const handleRegionSelect = useCallback(
       (sidoId: string, sidoName: string) => {
         setSelectedRegions((prev) => {
+          // 이미 선택된 지역 클릭 시 선택 해제
           const existingIndex = prev.findIndex((r) => r.sidoId === sidoId);
           if (existingIndex >= 0) {
             const newSelections = prev.filter((r) => r.sidoId !== sidoId);
@@ -359,12 +78,14 @@ export const KoreaMapComparison = forwardRef<
             return newSelections;
           }
 
+          // 최대 선택 수 초과 시 가장 오래된 선택 제거 (FIFO)
           if (prev.length >= maxSelections) {
             const newSelections = [...prev.slice(1), { sidoId, sidoName }];
             onSelectionChange?.(newSelections);
             return newSelections;
           }
 
+          // 새 지역 추가
           const newSelections = [...prev, { sidoId, sidoName }];
           onSelectionChange?.(newSelections);
           return newSelections;
@@ -492,6 +213,72 @@ export const KoreaMapComparison = forwardRef<
           const name = getRegionName(d, 'sido');
           handleRegionSelect(code, name);
         });
+
+      // 독도 추가 (대한민국 고유 영토, 경상북도 울릉군 소속)
+      // 메인 지도 (sido 레벨)에 항상 표시
+      const dokdoCoords: [number, number][] = [
+        [131.873, 37.24], // 동도 (더 동쪽으로)
+        [131.861, 37.243], // 서도 (더 서쪽, 약간 북쪽으로)
+      ];
+
+      dokdoCoords.forEach((coord, idx) => {
+        const [lng, lat] = coord;
+        const projected = projection([lng, lat]);
+        if (projected) {
+          // 불규칙한 작은 섬 모양의 폴리곤 생성 (크기 50% 축소)
+          const [cx, cy] = projected;
+          const islandPath =
+            idx === 0
+              ? // 동도: 약간 긴 타원형
+                `M ${cx - 1} ${cy}
+                 L ${cx - 0.5} ${cy - 1.5}
+                 L ${cx + 0.5} ${cy - 1.5}
+                 L ${cx + 1} ${cy - 0.5}
+                 L ${cx + 1} ${cy + 0.5}
+                 L ${cx} ${cy + 1.5}
+                 L ${cx - 1} ${cy + 0.5} Z`
+              : // 서도: 약간 둥근 형태
+                `M ${cx - 1} ${cy - 0.5}
+                 L ${cx - 0.5} ${cy - 1.5}
+                 L ${cx + 1} ${cy - 1}
+                 L ${cx + 1} ${cy + 0.5}
+                 L ${cx} ${cy + 1.5}
+                 L ${cx - 1} ${cy + 1} Z`;
+
+          g.append('path')
+            .attr('d', islandPath)
+            .attr('fill', getColor('9')) // 경상북도(ID_1: 9) 색상
+            .attr('stroke', '#64748b')
+            .attr('stroke-width', 0.5)
+            .attr('cursor', 'pointer')
+            .on('mouseenter', function () {
+              d3.select(this)
+                .attr('stroke', hoverStrokeColor)
+                .attr('stroke-width', 1);
+
+              if (showTooltip && mainTooltipRef.current) {
+                mainTooltipRef.current.style.display = 'block';
+                mainTooltipRef.current.innerHTML = `독도 ${idx === 0 ? '동도' : '서도'} (경상북도 울릉군)`;
+              }
+            })
+            .on('mousemove', function (event) {
+              if (showTooltip && mainTooltipRef.current) {
+                const [x, y] = d3.pointer(event, mainSvgRef.current);
+                mainTooltipRef.current.style.left = `${x + 15}px`;
+                mainTooltipRef.current.style.top = `${y - 10}px`;
+              }
+            })
+            .on('mouseleave', function () {
+              d3.select(this)
+                .attr('stroke', '#64748b')
+                .attr('stroke-width', 0.5);
+
+              if (mainTooltipRef.current) {
+                mainTooltipRef.current.style.display = 'none';
+              }
+            });
+        }
+      });
     }, [
       mainMapWidth,
       mainMapHeight,
@@ -549,6 +336,7 @@ export const KoreaMapComparison = forwardRef<
                 minValue={minValue}
                 maxValue={maxValue}
                 colorScale={colorScale}
+                legendSize={legendSize}
               />
             )}
           </Box>
@@ -556,12 +344,17 @@ export const KoreaMapComparison = forwardRef<
           {/* 시군구 비교 패널들 */}
           {selectedRegions.length > 0 && (
             <Grid
-              templateColumns={`repeat(${Math.min(selectedRegions.length, 2)}, 1fr)`}
+              templateColumns={
+                selectedRegions.length === 1
+                  ? '1fr'
+                  : `repeat(${Math.min(selectedRegions.length, 2)}, 1fr)`
+              }
               templateRows={
                 selectedRegions.length > 2 ? 'repeat(2, 1fr)' : '1fr'
               }
               gap={2}
               flex={1}
+              height={`${height}px`}
             >
               {selectedRegions.map((region) => (
                 <SigunguPanel
@@ -569,8 +362,6 @@ export const KoreaMapComparison = forwardRef<
                   sidoId={region.sidoId}
                   sidoName={region.sidoName}
                   sigunguData={sigunguData}
-                  width={panelWidth}
-                  height={panelHeight}
                   colorScale={colorScale}
                   defaultColor={defaultColor}
                   strokeColor={strokeColor}
@@ -581,6 +372,7 @@ export const KoreaMapComparison = forwardRef<
                   showLegend={showLegend}
                   legendTitle={legendTitle}
                   legendFormatter={legendFormatter}
+                  legendSize={legendSize}
                   onClose={() => handleRegionRemove(region.sidoId)}
                 />
               ))}
