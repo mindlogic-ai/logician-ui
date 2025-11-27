@@ -1,8 +1,8 @@
-export {
-  useKoreaMapSelection,
-  type UseKoreaMapSelectionOptions,
-  type UseKoreaMapSelectionReturn,
-} from './useKoreaMapSelection';
+export { useKoreaMapSelection } from './useKoreaMapSelection';
+export type {
+  UseKoreaMapSelectionOptions,
+  UseKoreaMapSelectionReturn,
+} from './useKoreaMapSelection.types';
 export { useMapColor } from './useMapColor';
 export {
   createDataMap,

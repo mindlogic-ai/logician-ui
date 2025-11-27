@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Box, Flex, Badge, Button, CloseButton } from '@chakra-ui/react';
+import { useState } from 'react';
+import { Box, Flex, Badge, Button } from '@chakra-ui/react';
 
 import { SAMPLE_SIDO_DATA, SAMPLE_SIGUNGU_DATA } from './constants';
 import { KoreaMap } from './KoreaMap';
-import { KoreaMapComparison } from './KoreaMapComparison';
-import { SigunguPanel } from './components/SigunguPanel';
+import { SigunguMap } from './SigunguMap';
+import { MapLegend } from './components/MapLegend';
 import { useKoreaMapSelection } from './hooks/useKoreaMapSelection';
 
 const meta: Meta<typeof KoreaMap> = {
@@ -14,259 +15,203 @@ const meta: Meta<typeof KoreaMap> = {
     layout: 'centered',
   },
   tags: ['autodocs'],
-  argTypes: {
-    width: { control: { type: 'range', min: 300, max: 800, step: 50 } },
-    height: { control: { type: 'range', min: 400, max: 900, step: 50 } },
-    showTooltip: { control: 'boolean' },
-    enableDrilldown: { control: 'boolean' },
-    showBackButton: { control: 'boolean' },
-    defaultColor: { control: 'color' },
-    strokeColor: { control: 'color' },
-    hoverStrokeColor: { control: 'color' },
-    animationDuration: { control: { type: 'range', min: 0, max: 2000, step: 100 } },
-  },
 };
 
 export default meta;
 type Story = StoryObj<typeof KoreaMap>;
 
-// constants에서 가져온 샘플 데이터 사용
-const sampleUserData = SAMPLE_SIDO_DATA;
-const sampleSigunguUserData = SAMPLE_SIGUNGU_DATA;
-
-
 /**
- * 기본 한국 지도 (드릴다운 활성화)
+ * 기본 한국 지도
+ * - Box로 감싸서 크기를 지정합니다
+ * - 컴포넌트는 부모 크기에 맞춰 자동 렌더링됩니다
  */
 export const Default: Story = {
-  args: {
-    width: 600,
-    height: 700,
-    showTooltip: true,
-    enableDrilldown: true,
-  },
+  render: () => (
+    <Box width="600px" height="700px">
+      <KoreaMap showTooltip={true} />
+    </Box>
+  ),
 };
 
 /**
- * 사용자 수 데이터 (Choropleth)
- * - 많은 지역: 진한 파란색
- * - 적은 지역: 연한 파란색
+ * 데이터 시각화 (Choropleth)
+ * - 데이터 값에 따라 색상이 자동으로 계산됩니다
  */
-export const UserCountChoropleth: Story = {
-  args: {
-    width: 600,
-    height: 700,
-    data: sampleUserData,
-    colorScale: ['#dbeafe', '#1e40af'], // 연한 파랑 → 진한 파랑
-    showTooltip: true,
-    tooltipFormatter: (name, value, metadata) => {
-      const korName = metadata?.name || name;
-      return value ? `${korName}: ${value.toLocaleString()}명` : String(korName);
-    },
-  },
+export const WithData: Story = {
+  render: () => (
+    <Box width="600px" height="700px">
+      <KoreaMap
+        data={SAMPLE_SIDO_DATA}
+        colorScale={['#dbeafe', '#1e40af']}
+        showTooltip={true}
+        tooltipFormatter={(name, value, metadata) => {
+          const korName = metadata?.name || name;
+          return value ? `${korName}: ${value.toLocaleString()}명` : String(korName);
+        }}
+      />
+    </Box>
+  ),
 };
 
 /**
- * 시도 + 시군구 데이터 (드릴다운 시 색상 표시)
+ * 선택된 지역 강조
  */
-export const WithDrilldownData: Story = {
-  args: {
-    width: 600,
-    height: 700,
-    data: sampleUserData,
-    sigunguData: sampleSigunguUserData,
-    colorScale: ['#dcfce7', '#166534'],
-    enableDrilldown: true,
-    tooltipFormatter: (name, value) =>
-      value ? `${name}: ${value.toLocaleString()}명` : name,
-    onLevelChange: (level, sidoId) => {
-      console.log('Level changed:', level, sidoId);
-    },
-  },
+export const WithSelectedRegions: Story = {
+  render: () => (
+    <Box width="600px" height="700px">
+      <KoreaMap
+        data={SAMPLE_SIDO_DATA}
+        colorScale={['#fee2e2', '#dc2626']}
+        selectedRegions={['11', '26', '28']} // 서울, 부산, 인천
+        selectedStrokeColor="#991b1b"
+        selectedStrokeWidth={3}
+        showTooltip={true}
+      />
+    </Box>
+  ),
 };
 
 /**
- * 클릭 이벤트 핸들러
+ * 클릭 이벤트
  */
 export const WithClickHandler: Story = {
-  args: {
-    width: 600,
-    height: 700,
-    data: sampleUserData,
-    colorScale: ['#fef3c7', '#b45309'],
-    onRegionClick: (code, name, level) => {
-      alert(`클릭: ${name} (code: ${code}, level: ${level})`);
-    },
-    enableDrilldown: false, // 클릭 이벤트만 사용
+  render: () => {
+    const [clicked, setClicked] = useState<string>('');
+
+    return (
+      <Flex direction="column" gap={4} align="center">
+        <Box width="600px" height="700px">
+          <KoreaMap
+            data={SAMPLE_SIDO_DATA}
+            colorScale={['#fef3c7', '#b45309']}
+            onRegionClick={(region) => {
+              setClicked(`${region.regionName} (${region.regionId})`);
+            }}
+          />
+        </Box>
+        {clicked && (
+          <Badge colorScheme="blue" fontSize="md" px={3} py={1}>
+            클릭된 지역: {clicked}
+          </Badge>
+        )}
+      </Flex>
+    );
   },
 };
 
 /**
- * 드릴다운 비활성화
- */
-export const NoDrilldown: Story = {
-  args: {
-    width: 600,
-    height: 700,
-    data: sampleUserData,
-    enableDrilldown: false,
-    colorScale: ['#f3e8ff', '#7c3aed'],
-  },
-};
-
-/**
- * 커스텀 뒤로가기 버튼
- */
-export const CustomBackButton: Story = {
-  args: {
-    width: 600,
-    height: 700,
-    enableDrilldown: true,
-    showBackButton: true,
-    backButtonText: 'Back to Overview',
-    animationDuration: 1000,
-  },
-};
-
-/**
- * 작은 크기 지도
+ * 작은 크기
  */
 export const SmallSize: Story = {
-  args: {
-    width: 400,
-    height: 500,
-    data: sampleUserData,
-    colorScale: ['#fee2e2', '#dc2626'],
-  },
+  render: () => (
+    <Box width="400px" height="500px">
+      <KoreaMap
+        data={SAMPLE_SIDO_DATA}
+        colorScale={['#dbeafe', '#1e40af']}
+      />
+    </Box>
+  ),
 };
 
 /**
- * 애니메이션 없음
+ * 큰 크기
  */
-export const NoAnimation: Story = {
-  args: {
-    width: 600,
-    height: 700,
-    data: sampleUserData,
-    enableDrilldown: true,
-    animationDuration: 0,
-  },
+export const LargeSize: Story = {
+  render: () => (
+    <Box width="800px" height="900px">
+      <KoreaMap
+        data={SAMPLE_SIDO_DATA}
+        colorScale={['#dcfce7', '#166534']}
+      />
+    </Box>
+  ),
 };
 
 // ============================================
-// KoreaMapComparison 스토리
+// SigunguMap 스토리
 // ============================================
 
-const comparisonMeta: Meta<typeof KoreaMapComparison> = {
-  title: 'Components/KoreaMapComparison',
-  component: KoreaMapComparison,
+const sigunguMeta: Meta<typeof SigunguMap> = {
+  title: 'Components/KoreaMap/SigunguMap',
+  component: SigunguMap,
   parameters: {
     layout: 'centered',
   },
   tags: ['autodocs'],
-  argTypes: {
-    width: { control: { type: 'range', min: 600, max: 1200, step: 50 } },
-    height: { control: { type: 'range', min: 400, max: 800, step: 50 } },
-    maxSelections: { control: { type: 'range', min: 1, max: 4, step: 1 } },
-    showTooltip: { control: 'boolean' },
-    showLegend: { control: 'boolean' },
-  },
 };
 
-type ComparisonStory = StoryObj<typeof KoreaMapComparison>;
+type SigunguStory = StoryObj<typeof SigunguMap>;
 
 /**
- * 지역 비교 기능
- * - 시도를 클릭하면 오른쪽에 시군구 지도가 나타납니다
- * - 최대 2개 지역을 동시에 비교할 수 있습니다
+ * 시군구 지도 - 서울
  */
-export const Comparison: ComparisonStory = {
-  render: (args) => <KoreaMapComparison {...args} />,
-  args: {
-    width: 1000,
-    height: 600,
-    data: sampleUserData,
-    sigunguData: sampleSigunguUserData,
-    maxSelections: 2,
-    colorScale: ['#dbeafe', '#1e40af'],
-    showTooltip: true,
-    showLegend: true,
-    legendTitle: '사용자 수',
-    tooltipFormatter: (name, value) =>
-      value ? `${name}: ${value.toLocaleString()}명` : name,
-    onSelectionChange: (selections) => {
-      console.log('Selected regions:', selections);
-    },
-  },
+export const SigunguSeoul: SigunguStory = {
+  render: () => (
+    <Box width="400px" height="500px">
+      <SigunguMap
+        sidoId="11"
+        data={SAMPLE_SIGUNGU_DATA}
+        colorScale={['#dbeafe', '#1e40af']}
+        showTooltip={true}
+      />
+    </Box>
+  ),
 };
 
 /**
- * 4개 지역 비교
- * - 최대 4개 지역을 2x2 그리드로 비교
+ * 시군구 지도 - 경기도
  */
-export const FourWayComparison: ComparisonStory = {
-  render: (args) => <KoreaMapComparison {...args} />,
-  args: {
-    width: 1200,
-    height: 700,
-    data: sampleUserData,
-    sigunguData: sampleSigunguUserData,
-    maxSelections: 4,
-    colorScale: ['#dcfce7', '#166534'],
-    showTooltip: true,
-    tooltipFormatter: (name, value) =>
-      value ? `${name}: ${value.toLocaleString()}명` : name,
-  },
+export const SigunguGyeonggi: SigunguStory = {
+  render: () => (
+    <Box width="400px" height="500px">
+      <SigunguMap
+        sidoId="41"
+        data={SAMPLE_SIGUNGU_DATA}
+        colorScale={['#dcfce7', '#166534']}
+        showTooltip={true}
+      />
+    </Box>
+  ),
 };
 
 /**
- * 단일 지역 상세 보기
- * - 1개 지역만 선택 가능
+ * 시군구 선택
  */
-export const SingleRegionDetail: ComparisonStory = {
-  render: (args) => <KoreaMapComparison {...args} />,
-  args: {
-    width: 900,
-    height: 550,
-    data: sampleUserData,
-    sigunguData: sampleSigunguUserData,
-    maxSelections: 1,
-    colorScale: ['#fef3c7', '#b45309'],
-    showTooltip: true,
-  },
+export const SigunguWithSelection: SigunguStory = {
+  render: () => (
+    <Box width="400px" height="500px">
+      <SigunguMap
+        sidoId="11"
+        data={SAMPLE_SIGUNGU_DATA}
+        colorScale={['#dbeafe', '#1e40af']}
+        selectedRegions={['110', '140', '170']}
+        selectedStrokeColor="#1e3a8a"
+        selectedStrokeWidth={2.5}
+        showTooltip={true}
+      />
+    </Box>
+  ),
 };
 
-// Export comparison meta for Storybook
-export { comparisonMeta };
+export { sigunguMeta };
 
 // ============================================
-// Headless Component Pattern 예제
+// useKoreaMapSelection 훅 예제
 // ============================================
 
 /**
- * useKoreaMapSelection 훅을 사용한 커스텀 UI
- * - 지도의 선택 상태를 완전히 제어할 수 있습니다
- * - 최대 3개 지역 선택 가능 (FIFO)
- * - 외부 UI와 지도 상태 동기화
- * - 드릴다운으로 시군구 상세 보기 가능
+ * useKoreaMapSelection 훅으로 선택 상태 관리
  */
 export const WithSelectionHook: Story = {
   render: () => {
-    const {
-      selectedRegions,
-      toggleRegion,
-      clearSelections,
-      isSelected,
-    } = useKoreaMapSelection({
-      maxSelections: 3,
-      onSelectionChange: (selections) => {
-        console.log('Selected regions changed:', selections);
-      },
-    });
+    const { selectedRegions, toggleRegion, clearSelections } =
+      useKoreaMapSelection({
+        maxSelections: 3,
+      });
 
     return (
-      <Flex direction="column" gap={4}>
-        {/* 상단 컨트롤 패널 */}
+      <Flex direction="column" gap={4} align="center">
+        {/* 커스텀 UI */}
         <Flex gap={2} wrap="wrap" align="center">
           <Box fontWeight="bold">선택된 지역:</Box>
           {selectedRegions.length === 0 && (
@@ -274,15 +219,15 @@ export const WithSelectionHook: Story = {
           )}
           {selectedRegions.map((region) => (
             <Badge
-              key={region.sidoId}
+              key={region.regionId}
               colorScheme="blue"
               fontSize="sm"
               px={2}
               py={1}
               cursor="pointer"
-              onClick={() => toggleRegion(region.sidoId, region.sidoName)}
+              onClick={() => toggleRegion(region.regionId, region.regionName)}
             >
-              {region.sidoName} ✕
+              {region.regionName} ✕
             </Badge>
           ))}
           {selectedRegions.length > 0 && (
@@ -293,36 +238,20 @@ export const WithSelectionHook: Story = {
         </Flex>
 
         {/* 지도 */}
-        <KoreaMap
-          width={600}
-          height={700}
-          data={sampleUserData}
-          sigunguData={sampleSigunguUserData}
-          colorScale={['#dbeafe', '#1e40af']}
-          enableDrilldown={true}
-          highlightedRegions={selectedRegions.map((r) => r.sidoId)}
-          selectedStyle={{
-            strokeColor: '#2563eb',
-            strokeWidth: 3,
-          }}
-          onRegionClick={(code, name, level) => {
-            // 시도 레벨에서만 선택 토글
-            if (level === 'sido') {
-              toggleRegion(code, name);
+        <Box width="600px" height="700px">
+          <KoreaMap
+            data={SAMPLE_SIDO_DATA}
+            colorScale={['#dbeafe', '#1e40af']}
+            selectedRegions={selectedRegions.map((r) => r.regionId)}
+            selectedStrokeColor="#2563eb"
+            selectedStrokeWidth={3}
+            onRegionClick={(region) =>
+              toggleRegion(region.regionId, region.regionName)
             }
-          }}
-          tooltipFormatter={(name, value) =>
-            value
-              ? `${name}: ${value.toLocaleString()}명`
-              : name
-          }
-        />
-
-        {/* 안내 */}
-        <Box fontSize="sm" color="gray.600">
-          💡 시도를 클릭하면 선택되며, 선택된 지역은 파란색 테두리로 표시됩니다.
-          시도를 다시 클릭하면 시군구 상세 지도로 드릴다운됩니다.
-          최대 3개까지 선택 가능하며, 초과 시 가장 오래된 선택이 자동으로 제거됩니다.
+            tooltipFormatter={(name, value) =>
+              value ? `${name}: ${value.toLocaleString()}명` : name
+            }
+          />
         </Box>
       </Flex>
     );
@@ -330,43 +259,34 @@ export const WithSelectionHook: Story = {
 };
 
 /**
- * useKoreaMapSelection 훅으로 여러 지역 비교 UI 구현
- * - 왼쪽: 전체 시도 지도 (선택용)
- * - 오른쪽: 선택된 지역들의 시군구 상세 지도
- * - 최대 2개 지역 비교
+ * 시도 + 시군구 연동 예제
  */
-export const MultipleRegionComparison: Story = {
+export const SidoAndSigunguLink: Story = {
   render: () => {
-    const {
-      selectedRegions,
-      toggleRegion,
-      clearSelections,
-    } = useKoreaMapSelection({
-      maxSelections: 2,
-      onSelectionChange: (selections) => {
-        console.log('Selected regions for comparison:', selections);
-      },
-    });
+    const { selectedRegions, toggleRegion, clearSelections } =
+      useKoreaMapSelection({
+        maxSelections: 2,
+      });
 
     return (
       <Flex direction="column" gap={4}>
-        {/* 상단 컨트롤 패널 */}
+        {/* 커스텀 컨트롤 */}
         <Flex gap={2} wrap="wrap" align="center">
-          <Box fontWeight="bold">비교할 지역 선택:</Box>
+          <Box fontWeight="bold">선택된 시도:</Box>
           {selectedRegions.length === 0 && (
-            <Badge colorScheme="gray">지역을 선택하세요 (최대 2개)</Badge>
+            <Badge colorScheme="gray">시도를 선택하세요 (최대 2개)</Badge>
           )}
           {selectedRegions.map((region) => (
             <Badge
-              key={region.sidoId}
+              key={region.regionId}
               colorScheme="blue"
               fontSize="sm"
               px={2}
               py={1}
               cursor="pointer"
-              onClick={() => toggleRegion(region.sidoId, region.sidoName)}
+              onClick={() => toggleRegion(region.regionId, region.regionName)}
             >
-              {region.sidoName} ✕
+              {region.regionName} ✕
             </Badge>
           ))}
           {selectedRegions.length > 0 && (
@@ -376,283 +296,171 @@ export const MultipleRegionComparison: Story = {
           )}
         </Flex>
 
-        <Flex gap={4} wrap="wrap" justify={selectedRegions.length === 0 ? "center" : "flex-start"}>
-          {/* 전체 시도 지도 */}
+        <Flex gap={4} wrap="wrap">
+          {/* 시도 지도 */}
           <Box>
             <Box fontWeight="bold" mb={2}>
               전체 시도 지도
             </Box>
-            <KoreaMap
-              width={500}
-              height={600}
-              data={sampleUserData}
-              colorScale={['#dbeafe', '#1e40af']}
-              enableDrilldown={false}
-              highlightedRegions={selectedRegions.map((r) => r.sidoId)}
-              selectedStyle={{
-                strokeColor: '#2563eb',
-                strokeWidth: 3,
-              }}
-              onRegionClick={(code, name) => {
-                toggleRegion(code, name);
-              }}
-              tooltipFormatter={(name, value) =>
-                value ? `${name}: ${value.toLocaleString()}명` : name
-              }
-            />
-          </Box>
-
-          {/* 선택된 지역들의 시군구 지도 */}
-          {selectedRegions.length > 0 && (
-            <Flex direction="row" gap={4} wrap="wrap">
-              {selectedRegions.map((region) => (
-                <Box key={region.sidoId}>
-                  <Box fontWeight="bold" mb={2}>
-                    {region.sidoName} 시군구
-                  </Box>
-                  <SigunguPanel
-                    sidoId={region.sidoId}
-                    sidoName={region.sidoName}
-                    sigunguData={sampleSigunguUserData}
-                    colorScale={['#dbeafe', '#1e40af']}
-                    defaultColor="#f3f4f6"
-                    strokeColor="#d1d5db"
-                    hoverStrokeColor="#1e40af"
-                    showTooltip={true}
-                    showLegend={false}
-                    animationDuration={500}
-                    onClose={() => {
-                      toggleRegion(region.sidoId, region.sidoName);
-                    }}
-                    tooltipFormatter={(name, value) =>
-                      value ? `${name}: ${value.toLocaleString()}명` : name
-                    }
-                  />
-                </Box>
-              ))}
-            </Flex>
-          )}
-        </Flex>
-
-        {/* 안내 */}
-        <Box fontSize="sm" color="gray.600">
-          💡 전체 지도에서 시도를 클릭하면 오른쪽에 해당 지역의 시군구 상세 지도가 나타납니다.
-          최대 2개 지역을 동시에 비교할 수 있습니다. Badge를 클릭하거나 시군구 지도의 ✕ 버튼으로 선택을 해제할 수 있습니다.
-        </Box>
-      </Flex>
-    );
-  },
-};
-
-/**
- * SigunguPanel 헤더 커스터마이징 예제
- * - 기본 헤더 스타일 변경 (색상, 배경)
- * - 완전히 커스텀 헤더 렌더링
- */
-export const CustomSigunguHeaders: Story = {
-  render: () => {
-    const {
-      selectedRegions,
-      toggleRegion,
-      clearSelections,
-    } = useKoreaMapSelection({
-      maxSelections: 3,
-    });
-
-    return (
-      <Flex direction="column" gap={4}>
-        {/* 상단 컨트롤 패널 */}
-        <Flex gap={2} wrap="wrap" align="center">
-          <Box fontWeight="bold">선택된 지역:</Box>
-          {selectedRegions.length === 0 && (
-            <Badge colorScheme="gray">지역을 선택하세요</Badge>
-          )}
-          {selectedRegions.map((region) => (
-            <Badge
-              key={region.sidoId}
-              colorScheme="blue"
-              fontSize="sm"
-              px={2}
-              py={1}
-              cursor="pointer"
-              onClick={() => toggleRegion(region.sidoId, region.sidoName)}
-            >
-              {region.sidoName} ✕
-            </Badge>
-          ))}
-          {selectedRegions.length > 0 && (
-            <Button size="sm" onClick={clearSelections}>
-              모두 지우기
-            </Button>
-          )}
-        </Flex>
-
-        <Flex gap={4} wrap="wrap" justify="center">
-          {/* 전체 지도 */}
-          <Box>
-            <Box fontWeight="bold" mb={2}>
-              전체 시도 지도
-            </Box>
-            <KoreaMap
-              width={400}
-              height={500}
-              data={sampleUserData}
-              colorScale={['#dbeafe', '#1e40af']}
-              enableDrilldown={false}
-              highlightedRegions={selectedRegions.map((r) => r.sidoId)}
-              selectedStyle={{
-                strokeColor: '#2563eb',
-                strokeWidth: 3,
-              }}
-              onRegionClick={(code, name) => {
-                toggleRegion(code, name);
-              }}
-              tooltipFormatter={(name, value) =>
-                value ? `${name}: ${value.toLocaleString()}명` : name
-              }
-            />
-          </Box>
-
-          {/* 선택된 지역들 - 다양한 헤더 스타일 */}
-          {selectedRegions.length > 0 && (
-            <Flex direction="row" gap={4} wrap="wrap">
-              {selectedRegions.map((region, index) => {
-                // 각 지역마다 다른 스타일 적용
-                if (index === 0) {
-                  // 첫 번째: 기본 스타일 변경
-                  return (
-                    <Box key={region.sidoId}>
-                      <Box fontWeight="bold" mb={2}>
-                        스타일 변경 예제
-                      </Box>
-                      <SigunguPanel
-                        sidoId={region.sidoId}
-                        sidoName={region.sidoName}
-                        sigunguData={sampleSigunguUserData}
-                        colorScale={['#fef3c7', '#b45309']}
-                        defaultColor="#f3f4f6"
-                        strokeColor="#d1d5db"
-                        hoverStrokeColor="#b45309"
-                        showTooltip={true}
-                        showLegend={false}
-                        animationDuration={500}
-                        onClose={() => toggleRegion(region.sidoId, region.sidoName)}
-                        badgeColorScheme="orange"
-                        headerBg="orange.50"
-                        headerBorderColor="orange.200"
-                        tooltipFormatter={(name, value) =>
-                          value ? `${name}: ${value.toLocaleString()}명` : name
-                        }
-                      />
-                    </Box>
-                  );
-                } else if (index === 1) {
-                  // 두 번째: 완전 커스텀 헤더
-                  return (
-                    <Box key={region.sidoId}>
-                      <Box fontWeight="bold" mb={2}>
-                        커스텀 헤더 예제
-                      </Box>
-                      <SigunguPanel
-                        sidoId={region.sidoId}
-                        sidoName={region.sidoName}
-                        sigunguData={sampleSigunguUserData}
-                        colorScale={['#dcfce7', '#166534']}
-                        defaultColor="#f3f4f6"
-                        strokeColor="#d1d5db"
-                        hoverStrokeColor="#166534"
-                        showTooltip={true}
-                        showLegend={false}
-                        animationDuration={500}
-                        onClose={() => toggleRegion(region.sidoId, region.sidoName)}
-                        renderHeader={({ sidoName, onClose }) => (
-                          <Flex
-                            justify="space-between"
-                            align="center"
-                            px={4}
-                            py={3}
-                            bgGradient="linear(to-r, green.400, green.600)"
-                            color="white"
-                          >
-                            <Box>
-                              <Box fontSize="xs" opacity={0.9}>
-                                선택된 지역
-                              </Box>
-                              <Box fontWeight="bold" fontSize="md">
-                                {sidoName}
-                              </Box>
-                            </Box>
-                            <CloseButton
-                              size="sm"
-                              onClick={onClose}
-                              color="white"
-                              _hover={{ bg: 'whiteAlpha.300' }}
-                            />
-                          </Flex>
-                        )}
-                        tooltipFormatter={(name, value) =>
-                          value ? `${name}: ${value.toLocaleString()}명` : name
-                        }
-                      />
-                    </Box>
-                  );
-                } else {
-                  // 세 번째: 또 다른 커스텀 스타일
-                  return (
-                    <Box key={region.sidoId}>
-                      <Box fontWeight="bold" mb={2}>
-                        미니멀 헤더 예제
-                      </Box>
-                      <SigunguPanel
-                        sidoId={region.sidoId}
-                        sidoName={region.sidoName}
-                        sigunguData={sampleSigunguUserData}
-                        colorScale={['#dbeafe', '#1e40af']}
-                        defaultColor="#f3f4f6"
-                        strokeColor="#d1d5db"
-                        hoverStrokeColor="#1e40af"
-                        showTooltip={true}
-                        showLegend={false}
-                        animationDuration={500}
-                        onClose={() => toggleRegion(region.sidoId, region.sidoName)}
-                        renderHeader={({ sidoName, onClose }) => (
-                          <Flex
-                            justify="space-between"
-                            align="center"
-                            px={3}
-                            py={2}
-                            bg="white"
-                            borderBottomWidth={2}
-                            borderBottomColor="blue.500"
-                          >
-                            <Box fontWeight="semibold" color="blue.700">
-                              {sidoName}
-                            </Box>
-                            <CloseButton size="sm" onClick={onClose} />
-                          </Flex>
-                        )}
-                        tooltipFormatter={(name, value) =>
-                          value ? `${name}: ${value.toLocaleString()}명` : name
-                        }
-                      />
-                    </Box>
-                  );
+            <Box width="500px" height="600px">
+              <KoreaMap
+                data={SAMPLE_SIDO_DATA}
+                colorScale={['#dbeafe', '#1e40af']}
+                selectedRegions={selectedRegions.map((r) => r.regionId)}
+                selectedStrokeColor="#2563eb"
+                selectedStrokeWidth={3}
+                onRegionClick={(region) =>
+                  toggleRegion(region.regionId, region.regionName)
                 }
-              })}
-            </Flex>
+                tooltipFormatter={(name, value) =>
+                  value ? `${name}: ${value.toLocaleString()}명` : name
+                }
+              />
+            </Box>
+          </Box>
+
+          {/* 선택된 시도의 시군구 지도들 */}
+          {selectedRegions.map((region) => (
+            <Box key={region.regionId}>
+              <Flex justify="space-between" align="center" mb={2}>
+                <Box fontWeight="bold">{region.regionName} 시군구</Box>
+                <Button
+                  size="xs"
+                  onClick={() =>
+                    toggleRegion(region.regionId, region.regionName)
+                  }
+                >
+                  닫기
+                </Button>
+              </Flex>
+              <Box width="400px" height="500px">
+                <SigunguMap
+                  sidoId={region.regionId}
+                  data={SAMPLE_SIGUNGU_DATA}
+                  colorScale={['#dbeafe', '#1e40af']}
+                  showTooltip={true}
+                  tooltipFormatter={(name, value) =>
+                    value ? `${name}: ${value.toLocaleString()}명` : name
+                  }
+                />
+              </Box>
+            </Box>
+          ))}
+        </Flex>
+      </Flex>
+    );
+  },
+};
+
+/**
+ * 복잡한 커스텀 UI
+ */
+export const ComplexCustomUI: Story = {
+  render: () => {
+    const [selectedSido, setSelectedSido] = useState<{
+      regionId: string;
+      regionName: string;
+    } | null>(null);
+    const [selectedSigungu, setSelectedSigungu] = useState<string[]>([]);
+
+    return (
+      <Flex direction="column" gap={6} maxW="1200px">
+        <Box>
+          <Box fontSize="2xl" fontWeight="bold" mb={2}>
+            한국 지역 데이터 탐색기
+          </Box>
+          <Box fontSize="sm" color="gray.600">
+            시도를 선택하면 시군구 상세 정보를 볼 수 있습니다
+          </Box>
+        </Box>
+
+        <Flex gap={6} wrap="wrap">
+          {/* 시도 지도 */}
+          <Box flex="1" minW="500px">
+            <Box
+              fontSize="lg"
+              fontWeight="semibold"
+              mb={3}
+              color={selectedSido ? 'blue.600' : 'gray.700'}
+            >
+              {selectedSido ? selectedSido.regionName : '시도를 선택하세요'}
+            </Box>
+            <Box width="500px" height="600px">
+              <KoreaMap
+                data={SAMPLE_SIDO_DATA}
+                colorScale={['#ede9fe', '#6d28d9']}
+                selectedRegions={selectedSido ? [selectedSido.regionId] : []}
+                selectedStrokeColor="#4c1d95"
+                selectedStrokeWidth={3}
+                onRegionClick={(region) => {
+                  setSelectedSido(region);
+                  setSelectedSigungu([]);
+                }}
+                tooltipFormatter={(name, value) =>
+                  value
+                    ? `<strong>${name}</strong><br/>인구: ${value.toLocaleString()}명`
+                    : `<strong>${name}</strong>`
+                }
+              />
+            </Box>
+            {selectedSido && (
+              <Button
+                mt={3}
+                size="sm"
+                variant="outline"
+                onClick={() => {
+                  setSelectedSido(null);
+                  setSelectedSigungu([]);
+                }}
+              >
+                선택 해제
+              </Button>
+            )}
+          </Box>
+
+          {/* 시군구 지도 */}
+          {selectedSido && (
+            <Box flex="1" minW="400px">
+              <Box fontSize="lg" fontWeight="semibold" mb={3} color="green.600">
+                {selectedSido.regionName} 시군구 상세
+              </Box>
+              <Box width="450px" height="550px">
+                <SigunguMap
+                  sidoId={selectedSido.regionId}
+                  data={SAMPLE_SIGUNGU_DATA}
+                  colorScale={['#d1fae5', '#065f46']}
+                  selectedRegions={selectedSigungu}
+                  selectedStrokeColor="#064e3b"
+                  selectedStrokeWidth={2.5}
+                  onRegionClick={(region) => {
+                    setSelectedSigungu((prev) =>
+                      prev.includes(region.regionId)
+                        ? prev.filter((id) => id !== region.regionId)
+                        : [...prev, region.regionId]
+                    );
+                  }}
+                  tooltipFormatter={(name, value) =>
+                    value
+                      ? `<strong>${name}</strong><br/>인구: ${value.toLocaleString()}명`
+                      : `<strong>${name}</strong>`
+                  }
+                />
+              </Box>
+              {selectedSigungu.length > 0 && (
+                <Flex mt={3} gap={2} wrap="wrap">
+                  <Box fontSize="sm" fontWeight="medium">
+                    선택된 시군구:
+                  </Box>
+                  {selectedSigungu.map((id) => (
+                    <Badge key={id} colorScheme="green">
+                      {id}
+                    </Badge>
+                  ))}
+                </Flex>
+              )}
+            </Box>
           )}
         </Flex>
-
-        {/* 안내 */}
-        <Box fontSize="sm" color="gray.600">
-          💡 SigunguPanel의 헤더를 3가지 방식으로 커스터마이징할 수 있습니다:
-          <br />
-          1️⃣ 기본 헤더의 색상 변경 (badgeColorScheme, headerBg, headerBorderColor)
-          <br />
-          2️⃣ 완전 커스텀 헤더 (renderHeader prop으로 완전히 자유로운 디자인)
-          <br />
-          3️⃣ 미니멀 스타일 등 다양한 변형 가능
-        </Box>
       </Flex>
     );
   },

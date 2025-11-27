@@ -1,1 +1,0 @@
-export { useTooltipText } from './useTooltipText';

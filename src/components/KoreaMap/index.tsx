@@ -1,16 +1,20 @@
-export type { SigunguPanelProps } from './components/SigunguPanel';
-export { SigunguPanel } from './components/SigunguPanel';
-export {
-  useKoreaMapSelection,
-  type UseKoreaMapSelectionOptions,
-  type UseKoreaMapSelectionReturn,
-} from './hooks/useKoreaMapSelection';
+// 메인 컴포넌트
 export { KoreaMap } from './KoreaMap';
-export { KoreaMapComparison } from './KoreaMapComparison';
+export { SigunguMap } from './SigunguMap';
+export { MapLegend, type MapLegendProps } from './components';
+
+// 타입
 export type {
-  KoreaMapComparisonProps,
   KoreaMapProps,
-  MapLevel,
+  SigunguMapProps,
   RegionData,
   SelectedRegion,
+  TooltipFormatter,
 } from './types';
+
+// 훅
+export { useKoreaMapSelection } from './hooks/useKoreaMapSelection';
+export type {
+  UseKoreaMapSelectionOptions,
+  UseKoreaMapSelectionReturn,
+} from './hooks/useKoreaMapSelection.types';

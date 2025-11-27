@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import * as topojson from 'topojson-client';
 
-import { KOREA_SIGUNGU_TOPO_JSON } from '../../data/korea-sigungu-data';
-import { KOREA_TOPO_JSON } from '../../data/korea-topo-data';
-import type { KoreaTopology, MapLevel, RegionData } from '../../types';
+import { KOREA_SIGUNGU_TOPO_JSON } from '../data/korea-sigungu-data';
+import { KOREA_TOPO_JSON } from '../data/korea-topo-data';
+import type { KoreaTopology, MapLevel, RegionData } from '../types';
 
 interface UseMapDataOptions {
   level: MapLevel;

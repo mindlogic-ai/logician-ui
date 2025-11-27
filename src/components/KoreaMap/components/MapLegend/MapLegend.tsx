@@ -1,63 +1,63 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 
-import { Text } from '@/components/Typography';
-
-import { LEGEND_SIZE_CONFIG, MAP_DEFAULTS } from '../../constants';
-import type { MapLegendProps } from './MapLegend.types';
+export interface MapLegendProps {
+  /** 최소값 */
+  minValue: number;
+  /** 최대값 */
+  maxValue: number;
+  /** 색상 스케일 [최소값 색상, 최대값 색상] */
+  colorScale: [string, string];
+  /** 값 포맷터 */
+  formatter?: (value: number) => string;
+  /** 제목 */
+  title?: string;
+}
 
 /**
- * 지도 범례 컴포넌트
+ * MapLegend - 지도 범례 컴포넌트
+ *
+ * 심플한 그라데이션 범례를 표시합니다.
+ *
+ * @example
+ * ```tsx
+ * <MapLegend
+ *   minValue={0}
+ *   maxValue={1000}
+ *   colorScale={['#dbeafe', '#1e40af']}
+ *   formatter={(value) => `${value.toLocaleString()}명`}
+ *   title="인구"
+ * />
+ * ```
  */
 export function MapLegend({
-  showLegend = true,
-  legendTitle,
-  legendFormatter,
   minValue,
   maxValue,
-  colorScale = MAP_DEFAULTS.COLOR_SCALE,
-  legendSize = 'md',
+  colorScale,
+  formatter = (value) => value.toString(),
+  title,
 }: MapLegendProps) {
-  if (!showLegend) return null;
-
-  const config = LEGEND_SIZE_CONFIG[legendSize];
+  const [minColor, maxColor] = colorScale;
 
   return (
-    <Box
-      position="absolute"
-      bottom={config.bottom}
-      left={config.left}
-      bg="white"
-      p={config.padding}
-      borderRadius="md"
-      boxShadow={config.boxShadow}
-      zIndex={10}
-    >
-      {legendTitle && (
-        <Text
-          fontSize={config.fontSize}
-          fontWeight="bold"
-          mb={config.titleMarginBottom}
-          color="gray.800"
-        >
-          {legendTitle}
+    <Box>
+      {title && (
+        <Text fontSize="sm" fontWeight="medium" mb={2}>
+          {title}
         </Text>
       )}
-      <Flex align="center" gap={config.gap}>
-        <Text fontSize={config.fontSize} color="gray.800">
-          {legendFormatter
-            ? legendFormatter(minValue)
-            : minValue.toLocaleString()}
+      <Flex align="center" gap={2}>
+        <Text fontSize="xs" color="gray.600">
+          {formatter(minValue)}
         </Text>
         <Box
-          w={config.gradientWidth}
-          h={config.gradientHeight}
+          flex="1"
+          h="16px"
           borderRadius="sm"
-          bg={`linear-gradient(to right, ${colorScale[0]}, ${colorScale[1]})`}
+          bgGradient={`linear(to-r, ${minColor}, ${maxColor})`}
+          minW="100px"
         />
-        <Text fontSize={config.fontSize} color="gray.800">
-          {legendFormatter
-            ? legendFormatter(maxValue)
-            : maxValue.toLocaleString()}
+        <Text fontSize="xs" color="gray.600">
+          {formatter(maxValue)}
         </Text>
       </Flex>
     </Box>

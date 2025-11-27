@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 
-import type { RegionData, TooltipFormatter } from '../../types';
+import type { RegionData, TooltipFormatter } from '../types';
 
 /**
  * 툴팁 텍스트 생성 훅

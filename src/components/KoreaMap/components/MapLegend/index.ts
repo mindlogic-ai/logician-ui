@@ -1,2 +1,1 @@
-export { MapLegend } from './MapLegend';
-export type { MapLegendProps } from './MapLegend.types';
+export { MapLegend, type MapLegendProps } from './MapLegend';

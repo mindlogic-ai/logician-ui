@@ -1,4 +1,4 @@
-import type { SelectedRegion } from '../../types';
+import type { SelectedRegion } from '../types';
 
 export interface UseKoreaMapSelectionOptions {
   /** 최대 선택 가능 지역 수 */
@@ -13,13 +13,13 @@ export interface UseKoreaMapSelectionReturn {
   /** 현재 선택된 지역들 */
   selectedRegions: SelectedRegion[];
   /** 지역 선택/해제 토글 */
-  toggleRegion: (sidoId: string, sidoName: string) => void;
+  toggleRegion: (regionId: string, regionName: string) => void;
   /** 지역 선택 (추가) */
-  selectRegion: (sidoId: string, sidoName: string) => void;
+  selectRegion: (regionId: string, regionName: string) => void;
   /** 지역 선택 해제 */
-  deselectRegion: (sidoId: string) => void;
+  deselectRegion: (regionId: string) => void;
   /** 모든 선택 해제 */
   clearSelections: () => void;
   /** 특정 지역이 선택되었는지 확인 */
-  isSelected: (sidoId: string) => boolean;
+  isSelected: (regionId: string) => boolean;
 }

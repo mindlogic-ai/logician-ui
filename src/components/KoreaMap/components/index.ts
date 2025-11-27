@@ -1,6 +1,7 @@
-export type { MapLegendProps } from './MapLegend';
-export { MapLegend } from './MapLegend';
+// Internal components
 export type { MapTooltipProps, MapTooltipRef } from './MapTooltip';
 export { MapTooltip } from './MapTooltip';
-export type { SigunguPanelProps } from './SigunguPanel';
-export { SigunguPanel } from './SigunguPanel';
+
+// MapLegend - users can use this separately
+export type { MapLegendProps } from './MapLegend';
+export { MapLegend } from './MapLegend';
