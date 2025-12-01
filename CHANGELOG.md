@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0-alpha.21
+
+### Minor Changes
+
+- ea99714: useToast에서 토스트 생성시 toastId를 반환하도록 return toastId 추가
+
 ## 2.0.0-alpha.20
 
 ### Patch Changes
