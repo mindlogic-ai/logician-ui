@@ -59,6 +59,8 @@ export const useToast = (props?: UseToastOptions) => {
 
     // Add the new toast ID to the active list
     activeToasts.current.push(toastId);
+
+    return toastId;
   };
 
   return showToast;
