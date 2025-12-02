@@ -2,9 +2,8 @@ import { ReactNode } from 'react';
 import { FlexProps, theme } from '@chakra-ui/react';
 
 export type SegmentedControlOption = {
-  label: string;
+  label: ReactNode;
   value: string;
-  content?: ReactNode;
 };
 
 export type SegmentedControlProps = Omit<FlexProps, 'onSelect'> & {

@@ -81,7 +81,7 @@ export const SegmentedControl = ({
           fontSize={size}
           {...OptionStyles[size ?? 'md']}
         >
-          {option.content ?? option.label}
+          {option.label}
         </Button>
       ))}
     </Flex>

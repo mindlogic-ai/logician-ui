@@ -101,34 +101,31 @@ export const WithCustomContent = Template.bind({});
 WithCustomContent.args = {
   options: [
     {
-      label: 'Home',
-      value: 'home',
-      content: (
+      label: (
         <HStack spacing={2}>
           <Icon as={FiHome} />
           <Text>Home</Text>
         </HStack>
       ),
+      value: 'home',
     },
     {
-      label: 'Profile',
-      value: 'profile',
-      content: (
+      label: (
         <HStack spacing={2}>
           <Icon as={FiUser} />
           <Text>Profile</Text>
         </HStack>
       ),
+      value: 'profile',
     },
     {
-      label: 'Settings',
-      value: 'settings',
-      content: (
+      label: (
         <HStack spacing={2}>
           <Icon as={FiSettings} />
           <Text>Settings</Text>
         </HStack>
       ),
+      value: 'settings',
     },
   ],
 };
