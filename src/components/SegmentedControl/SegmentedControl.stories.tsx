@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Meta, StoryFn } from '@storybook/react';
+import { Icon, HStack, Text } from '@chakra-ui/react';
+import { FiHome, FiUser, FiSettings } from 'react-icons/fi';
 
 import { SegmentedControl } from './SegmentedControl';
 
@@ -93,4 +95,40 @@ Small.args = {
   size: 'sm',
   borderRadius: 'full',
   w: 'fit-content',
+};
+
+export const WithCustomContent = Template.bind({});
+WithCustomContent.args = {
+  options: [
+    {
+      label: 'Home',
+      value: 'home',
+      content: (
+        <HStack spacing={2}>
+          <Icon as={FiHome} />
+          <Text>Home</Text>
+        </HStack>
+      ),
+    },
+    {
+      label: 'Profile',
+      value: 'profile',
+      content: (
+        <HStack spacing={2}>
+          <Icon as={FiUser} />
+          <Text>Profile</Text>
+        </HStack>
+      ),
+    },
+    {
+      label: 'Settings',
+      value: 'settings',
+      content: (
+        <HStack spacing={2}>
+          <Icon as={FiSettings} />
+          <Text>Settings</Text>
+        </HStack>
+      ),
+    },
+  ],
 };
