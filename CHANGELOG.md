@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0-alpha.22
+
+### Minor Changes
+
+- cb6d2c5: useToast 메소드(update,close,...) 및 warning status 추가
+
 ## 2.0.0-alpha.21
 
 ### Minor Changes
