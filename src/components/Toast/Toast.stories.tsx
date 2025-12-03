@@ -17,22 +17,32 @@ export function Toasts() {
       <Button
         onClick={() =>
           showToast({
-            description: 'Your action was successful.',
-            status: 'success',
-          })
-        }
-      >
-        Show Success Toast
-      </Button>
-      <Button
-        onClick={() =>
-          showToast({
             description: 'There was an error processing your request.',
             status: 'info',
           })
         }
       >
         Show Info Toast
+      </Button>
+      <Button
+        onClick={() =>
+          showToast({
+            description: 'This is a warning toast.',
+            status: 'warning',
+          })
+        }
+      >
+        Show Warning Toast
+      </Button>
+      <Button
+        onClick={() =>
+          showToast({
+            description: 'Your action was successful.',
+            status: 'success',
+          })
+        }
+      >
+        Show Success Toast
       </Button>
       <Button
         onClick={() =>
