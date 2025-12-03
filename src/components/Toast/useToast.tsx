@@ -63,5 +63,11 @@ export const useToast = (props?: UseToastOptions) => {
     return toastId;
   };
 
-  return showToast;
+  return Object.assign(showToast, {
+    close: toast.close,
+    closeAll: toast.closeAll,
+    update: toast.update,
+    isActive: toast.isActive,
+    promise: toast.promise,
+  });
 };

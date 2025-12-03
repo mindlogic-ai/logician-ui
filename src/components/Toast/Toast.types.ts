@@ -10,7 +10,7 @@ export interface MLToastOptions {
   description: ReactNode;
   status?: Extract<
     ChakraUseToastOptions['status'],
-    'success' | 'error' | 'info'
+    'info' | 'warning' | 'success' | 'error'
   >;
 }
 
