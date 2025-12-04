@@ -1,16 +1,18 @@
-import React, { MouseEventHandler, useState } from 'react';
-import { Meta, StoryFn } from '@storybook/react';
 import { Box, Flex, useTheme, useToken, VStack } from '@chakra-ui/react';
-import { H4, Text } from '../components/Typography';
-import { Tooltip } from '../components/Tooltip';
+import { Meta, StoryObj } from '@storybook/react';
 import { lighten, readableColor } from 'polished';
+import { MouseEventHandler, useState } from 'react';
 
-const meta: Meta = {
+import { Tooltip } from '../components/Tooltip';
+import { H4, Text } from '../components/Typography';
+
+const meta = {
   title: 'Setup/Theme',
-};
+} satisfies Meta;
 
 export default meta;
-type Story = StoryFn<typeof meta>;
+
+type Story = StoryObj<typeof meta>;
 
 const ColorCard = ({
   color,
@@ -86,29 +88,31 @@ const ColorCard = ({
   );
 };
 
-export const Default: Story = (args) => {
-  const theme = useTheme();
-  return (
-    <VStack gap={4} align="flex-start">
-      {Object.entries(theme.semanticTokens.colors)
-        .filter(([color]) => !color.startsWith('chakra'))
-        .map(([color, shades]) => (
-          <Flex key={color} gap={4} align="center">
-            <H4 mb={2} w="100px" textTransform="capitalize" color="gray.1200">
-              {color}
-            </H4>
-            <Flex gap={2}>
-              {Object.entries(shades).map(([shade, shadeValue]) => (
-                <ColorCard
-                  key={shade}
-                  color={color}
-                  shade={shade}
-                  shadeValue={shadeValue as string}
-                />
-              ))}
+export const Default: Story = {
+  render: () => {
+    const theme = useTheme();
+    return (
+      <VStack gap={4} align="flex-start">
+        {Object.entries(theme.semanticTokens.colors)
+          .filter(([color]) => !color.startsWith('chakra'))
+          .map(([color, shades]) => (
+            <Flex key={color} gap={4} align="center">
+              <H4 mb={2} w="100px" textTransform="capitalize" color="gray.1200">
+                {color}
+              </H4>
+              <Flex gap={2}>
+                {Object.entries(shades).map(([shade, shadeValue]) => (
+                  <ColorCard
+                    key={shade}
+                    color={color}
+                    shade={shade}
+                    shadeValue={shadeValue as string}
+                  />
+                ))}
+              </Flex>
             </Flex>
-          </Flex>
-        ))}
-    </VStack>
-  );
+          ))}
+      </VStack>
+    );
+  },
 };

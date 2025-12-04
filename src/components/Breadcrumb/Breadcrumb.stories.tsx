@@ -1,14 +1,29 @@
-import React from 'react';
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { Breadcrumb } from './Breadcrumb';
+import { BreadcrumbItem } from './BreadcrumbItem';
+import { BreadcrumbLink } from './BreadcrumbLink';
 
-export default {
+const meta = {
   title: 'Components/Breadcrumb',
   component: Breadcrumb,
-} as Meta<typeof Breadcrumb>;
+  render: (args) => (
+    <Breadcrumb {...args}>
+      <BreadcrumbItem>
+        <BreadcrumbLink>Home</BreadcrumbLink>
+      </BreadcrumbItem>
+      <BreadcrumbItem>
+        <BreadcrumbLink>Page1</BreadcrumbLink>
+      </BreadcrumbItem>
+      <BreadcrumbItem>
+        <BreadcrumbLink>Page2</BreadcrumbLink>
+      </BreadcrumbItem>
+    </Breadcrumb>
+  ),
+} satisfies Meta<typeof Breadcrumb>;
 
-const Template: StoryFn<typeof Breadcrumb> = (args) => <Breadcrumb {...args} />;
+export default meta;
 
-export const Default = Template.bind({});
-Default.args = {};
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};

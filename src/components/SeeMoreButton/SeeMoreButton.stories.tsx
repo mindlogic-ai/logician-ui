@@ -1,10 +1,10 @@
-import React from 'react';
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { SeeMoreButton } from './SeeMoreButton';
 import { SeeMoreButtonProps } from './SeeMoreButton.types';
+import { useState } from 'react';
 
-export default {
+const meta = {
   title: 'Components/SeeMoreButton',
   component: SeeMoreButton,
   args: {
@@ -24,25 +24,26 @@ export default {
       expanded: true,
     },
   },
-} as Meta<typeof SeeMoreButton>;
+} satisfies Meta<typeof SeeMoreButton>;
 
-export const Default: StoryFn<SeeMoreButtonProps> = (args) => {
-  const [currentCount, setCurrentCount] = React.useState(args.currentCount);
+export default meta;
 
-  const handleClick = () => {
-    setCurrentCount((prev) => Math.min(prev + 1, args.maxCount));
-  };
+type Story = StoryObj<typeof meta>;
 
-  return (
-    <SeeMoreButton
-      {...args}
-      currentCount={currentCount}
-      onClick={handleClick}
-    />
-  );
-};
+export const Default: Story = {
+  render: (args) => {
+    const [currentCount, setCurrentCount] = useState(args.currentCount);
 
-Default.args = {
-  currentCount: 0,
-  maxCount: 10,
+    const handleClick = () => {
+      setCurrentCount((prev) => Math.min(prev + 1, args.maxCount));
+    };
+
+    return (
+      <SeeMoreButton
+        {...args}
+        currentCount={currentCount}
+        onClick={handleClick}
+      />
+    );
+  },
 };

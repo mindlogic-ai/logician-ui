@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
 
 import { IoCall, IoSearch } from '@/components/Icon';
 
 import { Input } from './Input';
-import { InputProps } from './Input.types';
 
-const meta: Meta<typeof Input> = {
+const meta = {
   title: 'Components/Input',
   component: Input,
   argTypes: {
@@ -21,36 +20,42 @@ const meta: Meta<typeof Input> = {
     isInvalid: { control: 'boolean' },
     maxLength: { control: 'number' },
   },
-};
+  render: (args) => {
+    const [value, setValue] = useState('');
+
+    return (
+      <Input
+        {...args}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+    );
+  },
+} satisfies Meta<typeof Input>;
 
 export default meta;
 
-const Template: StoryFn<InputProps> = (args) => {
-  const [value, setValue] = useState('');
+type Story = StoryObj<typeof Input>;
 
-  return (
-    <Input {...args} value={value} onChange={(e) => setValue(e.target.value)} />
-  );
+export const Basic: Story = {};
+
+export const LeftIcon: Story = {
+  args: {
+    placeholder: 'Phone number',
+    size: 'md',
+    isDisabled: false,
+    isInvalid: false,
+    leftIcon: <IoCall color="gray.300" />,
+  },
 };
 
-export const Basic: StoryFn<InputProps> = Template.bind({});
-Basic.args = {};
-
-export const LeftIcon: StoryFn<InputProps> = Template.bind({});
-LeftIcon.args = {
-  placeholder: 'Phone number',
-  size: 'md',
-  isDisabled: false,
-  isInvalid: false,
-  leftIcon: <IoCall color="gray.300" />,
-};
-
-export const RightIcon: StoryFn<InputProps> = Template.bind({});
-RightIcon.args = {
-  placeholder: 'Search...',
-  size: 'md',
-  isDisabled: false,
-  isInvalid: false,
-  rightIcon: <IoSearch color="gray.300" />,
-  maxLength: 20,
+export const RightIcon: Story = {
+  args: {
+    placeholder: 'Search...',
+    size: 'md',
+    isDisabled: false,
+    isInvalid: false,
+    rightIcon: <IoSearch color="gray.300" />,
+    maxLength: 20,
+  },
 };

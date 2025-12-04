@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
 
 import { AutosizeTextarea, Textarea } from '.';
 
-const meta: Meta<typeof Textarea> = {
+const meta = {
   title: 'Components/Textarea',
   component: Textarea,
   argTypes: {
@@ -21,57 +21,63 @@ const meta: Meta<typeof Textarea> = {
     maxRows: { control: 'number' },
     preFocusMaxRows: { control: 'number' },
   },
-};
+  render: (args) => {
+    const [value, setValue] = useState('');
+
+    return (
+      <Textarea
+        {...args}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder={args.placeholder ?? 'Type here...'}
+      />
+    );
+  },
+} satisfies Meta<typeof Textarea>;
 
 export default meta;
 
-const Template: StoryFn = (args) => {
-  const [value, setValue] = useState('');
+type Story = StoryObj<typeof Textarea>;
 
-  return (
-    <Textarea
-      {...args}
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-      placeholder={args.placeholder ?? 'Type here...'}
-    />
-  );
+export const Basic: Story = {
+  args: {
+    size: 'md',
+    isDisabled: false,
+    isInvalid: false,
+    maxLength: 200,
+  },
 };
 
-export const Basic: StoryFn = Template.bind({});
-Basic.args = {
-  size: 'md',
-  isDisabled: false,
-  isInvalid: false,
-  maxLength: 200,
+export const Disabled: Story = {
+  args: {
+    isDisabled: true,
+    placeholder: 'Disabled textarea',
+  },
 };
 
-export const Disabled: StoryFn = Template.bind({});
-Disabled.args = {
-  isDisabled: true,
-  placeholder: 'Disabled textarea',
+export const Invalid: Story = {
+  args: {
+    isInvalid: true,
+    placeholder: 'Invalid state',
+  },
 };
 
-export const Invalid: StoryFn = Template.bind({});
-Invalid.args = {
-  isInvalid: true,
-  placeholder: 'Invalid state',
-};
+export const Autosize: Story = {
+  args: {
+    minRows: 6,
+    preFocusMaxRows: 8,
+    maxRows: 12,
+  },
+  render: (args) => {
+    const [value, setValue] = useState('');
 
-export const Autosize: StoryFn = (args) => {
-  const [value, setValue] = useState('');
-
-  return (
-    <AutosizeTextarea
-      {...args}
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-      placeholder={args.placeholder ?? 'Autosize textarea...'}
-    />
-  );
-};
-Autosize.args = {
-  minRows: 6,
-  preFocusMaxRows: 8,
-  maxRows: 12,
+    return (
+      <AutosizeTextarea
+        {...args}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder={args.placeholder ?? 'Autosize textarea...'}
+      />
+    );
+  },
 };

@@ -1,28 +1,38 @@
+import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import { Meta, StoryFn } from '@storybook/react';
 
-import { FileInput, FileInputProps } from '.';
+import { FileInput } from '.';
 
-const meta: Meta = {
+ const meta = {
   title: 'Components/FileInput',
   component: FileInput,
-  args: {},
-  argTypes: {},
-};
+  args: {
+    onChange: () => {},
+  },
+} satisfies Meta<typeof FileInput>;
 
 export default meta;
 
-type Story = StoryFn<FileInputProps>;
+type Story = StoryObj<typeof meta>;
 
-const Template: Story = ({ ...args }) => {
-  const [bgImage, setBgImage] = useState<string>();
-  const handleChange = (filePath: string) => {
-    if (filePath.startsWith('data:image')) {
-      setBgImage(filePath);
-    }
-  };
-  return <FileInput {...args} onChange={handleChange} bgImage={bgImage} />;
+export const Basic: Story = {
+  render: () => {
+    const [bgImage, setBgImage] = useState<string>();
+
+    const handleChange = (files: FileList | null) => {
+      if (files && files.length > 0) {
+        const file = files[0];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const result = reader.result as string;
+          if (result.startsWith('data:image')) {
+            setBgImage(result);
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+
+    return <FileInput onChange={handleChange} bgImage={bgImage} />;
+  },
 };
-
-export const Basic = Template.bind({});
-Basic.args = {};

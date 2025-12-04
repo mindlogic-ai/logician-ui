@@ -1,8 +1,8 @@
-import React from 'react';
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { Avatar } from '.';
-const meta: Meta<typeof Avatar> = {
+
+const meta = {
   title: 'Components/Avatar',
   component: Avatar,
   args: {
@@ -16,8 +16,10 @@ const meta: Meta<typeof Avatar> = {
       options: ['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', 'full'],
     },
   },
-};
+} satisfies Meta<typeof Avatar>;
 
 export default meta;
-type Story = StoryFn<typeof Avatar>;
-export const Basic: Story = (args) => <Avatar {...args} />;
+
+type Story = StoryObj<typeof meta>;
+
+export const Basic: Story = {};

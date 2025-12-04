@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
 import { Flex } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
 
-import { IoChevronDownOutline } from '../Icon';
-import { IconButton } from '../IconButton';
 import {
   ExpandingTr,
   Table,
@@ -14,11 +12,13 @@ import {
   Thead,
   Tr,
 } from '.';
+import { IoChevronDownOutline } from '../Icon';
+import { IconButton } from '../IconButton';
 
-const meta: Meta<typeof Table> = {
+const meta = {
   title: 'Components/Table',
   component: Table,
-};
+} satisfies Meta<typeof Table>;
 
 export default meta;
 

@@ -44,6 +44,7 @@ const meta = {
 } satisfies Meta<typeof RadialProgress>;
 
 export default meta;
+
 type Story = StoryObj<typeof meta>;
 
 // Default story with the user's example

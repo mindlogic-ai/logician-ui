@@ -1,12 +1,12 @@
-import React from 'react';
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
+import { Box, Flex } from '@chakra-ui/react';
 import { variantStyles as buttonVariantStyles } from '../Button/Button.styles';
 import { FaUniversity } from '../Icon';
 import { IconButton } from './IconButton';
-import { IconButtonProps, IconButtonVariant } from './IconButton.types';
+import { IconButtonVariant } from './IconButton.types';
 
-const meta: Meta<typeof IconButton> = {
+const meta = {
   title: 'Components/IconButton',
   component: IconButton,
   args: {
@@ -18,34 +18,36 @@ const meta: Meta<typeof IconButton> = {
       options: Object.keys(buttonVariantStyles),
     },
   },
-};
+} satisfies Meta<typeof IconButton>;
 
 export default meta;
 
-const Template: StoryFn<IconButtonProps> = (args: IconButtonProps) => (
-  <IconButton {...args} />
-);
+type Story = StoryObj<typeof IconButton>;
 
-export const Basic: StoryFn<IconButtonProps> = Template.bind({});
-Basic.args = {
-  variant: 'primary',
+export const Basic: Story = {
+  args: {
+    variant: 'primary',
+  },
 };
 
-export const Round: StoryFn<IconButtonProps> = Template.bind({});
-Round.args = {
-  isRound: true,
+export const Round: Story = {
+  args: {
+    isRound: true,
+  },
 };
 
-export const AllIconButtonVariants: StoryFn<IconButtonProps> = (args) => {
-  const variants = Object.keys(buttonVariantStyles);
-  return (
-    <div>
-      {variants.map((variant) => (
-        <div key={variant}>
-          <p>{variant}</p>
-          <IconButton {...args} variant={variant as IconButtonVariant} />
-        </div>
-      ))}
-    </div>
-  );
+export const AllIconButtonVariants: Story = {
+  render: (args) => {
+    const variants = Object.keys(buttonVariantStyles);
+    return (
+      <Flex gap={4}>
+        {variants.map((variant) => (
+          <Box key={variant}>
+            <p>{variant}</p>
+            <IconButton {...args} variant={variant as IconButtonVariant} />
+          </Box>
+        ))}
+      </Flex>
+    );
+  },
 };

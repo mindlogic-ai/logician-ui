@@ -1,27 +1,25 @@
-import React from 'react';
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { Markdown } from './Markdown';
-import { MarkdownProps } from './Markdown.types';
 
-const meta: Meta<typeof Markdown> = {
+const meta = {
   title: 'Components/Markdown',
   component: Markdown,
   args: {
-    children: '# Hello World\nThis is a **markdown** example with `inline code`.',
+    children:
+      '# Hello World\nThis is a **markdown** example with `inline code`.',
   },
-};
+} satisfies Meta<typeof Markdown>;
 
 export default meta;
 
-const Template: StoryFn<MarkdownProps> = (args: MarkdownProps) => <Markdown {...args} />;
+type Story = StoryObj<typeof meta>;
 
-export const Basic: StoryFn<MarkdownProps> = Template.bind({});
-Basic.args = {};
+export const Basic: Story = {};
 
-export const WithCodeBlock: StoryFn<MarkdownProps> = Template.bind({});
-WithCodeBlock.args = {
-  children: `# Code Example
+export const WithCodeBlock: Story = {
+  args: {
+    children: `# Code Example
 
 Here's a JavaScript code block:
 
@@ -31,32 +29,35 @@ console.log(greeting);
 \`\`\`
 
 And some \`inline code\` here.`,
+  },
 };
 
-export const WithMath: StoryFn<MarkdownProps> = Template.bind({});
-WithMath.args = {
-  children: `# Math Expressions
+export const WithMath: Story = {
+  args: {
+    children: `# Math Expressions
 
 Inline math: $E = mc^2$
 
 Block math:
 $$\\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}$$`,
+  },
 };
 
-export const WithTable: StoryFn<MarkdownProps> = Template.bind({});
-WithTable.args = {
-  children: `# Table Example
+export const WithTable: Story = {
+  args: {
+    children: `# Table Example
 
 | Name | Age | City |
 |------|-----|------|
 | Alice | 30 | New York |
 | Bob | 25 | London |
 | Charlie | 35 | Tokyo |`,
+  },
 };
 
-export const WithLists: StoryFn<MarkdownProps> = Template.bind({});
-WithLists.args = {
-  children: `# Lists
+export const WithLists: Story = {
+  args: {
+    children: `# Lists
 
 ## Unordered List
 - First item
@@ -69,27 +70,23 @@ WithLists.args = {
 1. First step
 2. Second step
 3. Third step`,
+  },
 };
 
-export const WithLinks: StoryFn<MarkdownProps> = Template.bind({});
-WithLinks.args = {
-  children: `# Links and Images
+export const WithLinks: Story = {
+  args: {
+    children: `# Links and Images
 
 Check out [React](https://reactjs.org) for more information.
 
-![Sample Image](https://via.placeholder.com/300x150)`,
+![Sample Image](https://picsum.photos/200/300)`,
+  },
 };
 
-export const Typography: StoryFn<MarkdownProps> = Template.bind({});
-Typography.args = {
-  children: `# Heading 1
-## Heading 2
-### Heading 3
-#### Heading 4
-##### Heading 5
-###### Heading 6
-
-This is a regular paragraph with **bold text**, *italic text*, and ***bold italic text***.
+export const Typography: Story = {
+  args: {
+    children: `# Heading 1
+    This is a regular paragraph with **bold text**, *italic text*, and ***bold italic text***.
 
 You can also use ~~strikethrough~~ text and \`inline code\`.
 
@@ -98,16 +95,15 @@ You can also use ~~strikethrough~~ text and \`inline code\`.
 ---
 
 *Emphasis with italics* and **strong emphasis with bold**.`,
+  },
 };
 
-export const ChatResponse: StoryFn<MarkdownProps> = Template.bind({});
-ChatResponse.args = {
-  children: `안녕하세요! React 컴포넌트 개발에 대해 질문해주셔서 감사합니다.
+export const ChatResponse: Story = {
+  args: {
+    children: `안녕하세요! React 컴포넌트 개발에 대해 질문해주셔서 감사합니다.
 
 ## 답변 요약
-
 요청하신 **Markdown 컴포넌트**의 스토리북을 성공적으로 생성했습니다. 다음과 같은 기능들이 포함되어 있습니다:
-
 ### 주요 기능
 1. **Typography**: 다양한 헤딩 레벨과 텍스트 스타일링
 2. **코드 블록**: 문법 하이라이팅이 적용된 코드 표시
@@ -162,11 +158,12 @@ $$\int_{0}^{\infty} \frac{x^2}{e^x - 1} dx = \frac{\pi^4}{15}$$
 - [ ] 추가 커스터마이징 옵션 검토
 
 더 궁금한 점이 있으시면 언제든 말씀해 주세요! 😊`,
+  },
 };
 
-export const ComplexExample: StoryFn<MarkdownProps> = Template.bind({});
-ComplexExample.args = {
-  children: `# Complex Markdown Example
+export const ComplexExample: Story = {
+  args: {
+    children: `# Complex Markdown Example
 
 This is a **comprehensive** markdown example showcasing various features.
 
@@ -217,4 +214,5 @@ The quadratic formula: $x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$
 ---
 
 *Markdown component with full GFM support!*`,
+  },
 };

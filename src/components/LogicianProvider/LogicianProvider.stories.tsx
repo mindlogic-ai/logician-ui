@@ -1,18 +1,18 @@
-import React from "react";
-import type { Meta, StoryObj } from "@storybook/react";
-import { LogicianProvider } from "./LogicianProvider";
-import { Button } from "../Button";
-import { H1, Text } from "../Typography";
-import { Box, VStack } from "@chakra-ui/react";
+import type { Meta, StoryObj } from '@storybook/react';
+import { LogicianProvider } from './LogicianProvider';
+import { Button } from '../Button';
+import { H1, Text } from '../Typography';
+import { Box, VStack } from '@chakra-ui/react';
 
-const meta: Meta<typeof LogicianProvider> = {
-  title: "Setup/LogicianProvider",
+const meta = {
+  title: 'Setup/LogicianProvider',
   component: LogicianProvider,
   parameters: { disableLogicianProvider: true },
-};
+} satisfies Meta<typeof LogicianProvider>;
 
 export default meta;
-type Story = StoryObj<typeof LogicianProvider>;
+
+type Story = StoryObj<typeof meta>;
 
 const SampleContent = () => (
   <VStack spacing={6} p={8} align="start">
@@ -46,17 +46,17 @@ export const WithCustomTheme: Story = {
     const customTheme = {
       colors: {
         primary: {
-          light: "purple.300",
-          main: "purple.500",
-          dark: "purple.700",
+          light: 'purple.300',
+          main: 'purple.500',
+          dark: 'purple.700',
         },
       },
       semanticTokens: {
         colors: {
           primary: {
-            light: "purple.300",
-            main: "purple.500",
-            dark: "purple.700",
+            light: 'purple.300',
+            main: 'purple.500',
+            dark: 'purple.700',
           },
         },
       },

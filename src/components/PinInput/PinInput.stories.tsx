@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
 
-import { PinInput, PinInputProps } from '.';
+import { PinInput } from '.';
 
-const meta: Meta<typeof PinInput> = {
+const meta = {
   title: 'Components/PinInput',
   component: PinInput,
   args: {
@@ -12,15 +12,19 @@ const meta: Meta<typeof PinInput> = {
   argTypes: {
     length: { control: 'number' },
   },
-};
+} satisfies Meta<typeof PinInput>;
 
 export default meta;
 
-const Template: StoryFn<PinInputProps> = (args: PinInputProps) => {
-  const [value, setValue] = useState('');
+type Story = StoryObj<typeof PinInput>;
 
-  return <PinInput {...args} value={value} onChange={setValue} />;
-};
+export const Basic: Story = {
+  args: {
+    length: 5,
+  },
+  render: (args) => {
+    const [value, setValue] = useState('');
 
-export const Basic: StoryFn<PinInputProps> = Template.bind({});
-Basic.args = {};
+    return <PinInput {...args} value={value} onChange={setValue} />;
+  },
+}

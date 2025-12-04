@@ -1,11 +1,10 @@
-import React from 'react';
 import { Box } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
 import { H4, Text } from '../Typography';
 import { CarouselModal } from './CarouselModal';
 
-const meta: Meta<typeof CarouselModal> = {
+const meta = {
   title: 'Components/CarouselModal',
   component: CarouselModal,
   args: {
@@ -44,10 +43,10 @@ const meta: Meta<typeof CarouselModal> = {
       },
     ],
   },
-};
+} satisfies Meta<typeof CarouselModal>;
 
 export default meta;
 
-type Story = StoryObj<typeof CarouselModal>;
+type Story = StoryObj<typeof meta>;
 
 export const Basic: Story = {};

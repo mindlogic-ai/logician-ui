@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, List, useTheme } from '@chakra-ui/react';
+import { useState } from 'react';
+import { Button, List } from '@chakra-ui/react';
 
 import { FileItem } from '@/components/FileItem';
 import { FileGroupProps } from '@/components/FileList/FileList.types';
@@ -19,7 +19,6 @@ export const FileList = ({
   const [deletingFileIds, setDeletingFileIds] = useState<Set<number | null>>(
     new Set()
   );
-  const theme = useTheme();
   const translate = useTranslate();
   const shouldShowLoadMoreButton = files && files.length > currentVisibleCount;
 

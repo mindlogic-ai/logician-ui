@@ -8,7 +8,7 @@ import { Text } from '@/components/Typography';
 import { MonthPicker } from './MonthPicker';
 import { MonthRange } from './MonthPicker.types';
 
-const meta: Meta<typeof MonthPicker> = {
+const meta = {
   title: 'Components/MonthPicker',
   component: MonthPicker,
   parameters: {
@@ -65,10 +65,11 @@ const meta: Meta<typeof MonthPicker> = {
       );
     },
   ],
-};
+} satisfies Meta<typeof MonthPicker>;
 
 export default meta;
-type Story = StoryObj<typeof MonthPicker>;
+
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
