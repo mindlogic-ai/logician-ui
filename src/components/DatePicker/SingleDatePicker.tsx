@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   SingleDatepicker,
   SingleDatepickerProps,
@@ -21,14 +20,12 @@ export const SingleDatePicker = ({
         dateFormat: configs?.dateFormat ?? 'MM/dd/yyyy',
       }}
       propsConfigs={{
-        // Manually make it look like an Input
         triggerBtnProps: {
           justifyContent: 'left',
           pl: 2,
           fontWeight: 'regular',
           color: 'gray.1500',
           fontSize: 'md',
-          height: '100%',
           leftIcon: (
             <MdOutlineCalendarToday
               color="gray.600"
@@ -38,12 +35,55 @@ export const SingleDatePicker = ({
         },
         inputProps: {
           color: 'primary.dark',
-
           ...propsConfigs?.inputProps,
         },
+        popoverCompProps: {
+          popoverContentProps: {
+            borderRadius: 16,
+            border: '1px solid',
+            borderColor: 'blue.300',
+            boxShadow: 'lg',
+            ...propsConfigs?.popoverCompProps?.popoverContentProps,
+          },
+          ...propsConfigs?.popoverCompProps,
+        },
+        calendarPanelProps: {
+          wrapperProps: {
+            gap: 4,
+            ...propsConfigs?.calendarPanelProps?.wrapperProps,
+          },
+          dividerProps: {
+            borderStyle: 'none',
+            ...propsConfigs?.calendarPanelProps?.dividerProps,
+          },
+          contentProps: {
+            p: 4,
+            border: 'none',
+            ...propsConfigs?.calendarPanelProps?.contentProps,
+          },
+          bodyProps: {
+            gap: 0,
+            spacingY: 1,
+            ...propsConfigs?.calendarPanelProps?.bodyProps,
+          },
+          ...propsConfigs?.calendarPanelProps,
+        },
+        dateNavBtnProps: {
+          color: 'primary.main',
+          ...propsConfigs?.dateNavBtnProps,
+        },
+        weekdayLabelProps: {
+          mb: 2,
+          color: 'gray.1000',
+          fontSize: 'xs',
+          fontWeight: 'regular',
+          ...propsConfigs?.weekdayLabelProps,
+        },
         dayOfMonthBtnProps: {
-          // Regular day
           defaultBtnProps: {
+            width: 34,
+            height: 34,
+            color: 'gray.1500',
             fontWeight: 'regular',
             _hover: {
               background: 'primary.light',
@@ -53,13 +93,13 @@ export const SingleDatePicker = ({
           },
           // Today
           todayBtnProps: {
-            color: 'gray.1200',
             fontWeight: 'semibold',
             ...propsConfigs?.dayOfMonthBtnProps?.todayBtnProps,
           },
           selectedBtnProps: {
-            color: 'primary.dark',
-            background: 'primary.light',
+            color: 'white',
+            background: 'primary.main',
+            borderRadius: 'full',
             ...propsConfigs?.dayOfMonthBtnProps?.selectedBtnProps,
           },
           ...propsConfigs?.dayOfMonthBtnProps,
