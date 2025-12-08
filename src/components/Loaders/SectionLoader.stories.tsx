@@ -1,26 +1,25 @@
-import React from 'react';
 import { Box } from '@chakra-ui/react';
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { SectionLoader } from './SectionLoader';
 
-const meta: Meta<typeof SectionLoader> = {
+const meta = {
   title: 'Components/SectionLoader',
   component: SectionLoader,
-  argTypes: {
-    isLoading: {
-      type: 'boolean',
-    },
+  args: {
+    isLoading: true,
   },
-};
+  render: (args) => {
+    return (
+      <Box p="128px" bg="primary.lighter">
+        <SectionLoader {...args} />
+      </Box>
+    );
+  }
+} satisfies Meta<typeof SectionLoader>;
 
 export default meta;
-type Story = StoryFn<typeof SectionLoader>;
 
-export const Basic: Story = (args) => {
-  return (
-    <Box position="relative" p="128px" bg="red">
-      <SectionLoader {...args} />
-    </Box>
-  );
-};
+type Story = StoryObj<typeof SectionLoader>;
+
+export const Basic: Story = {}

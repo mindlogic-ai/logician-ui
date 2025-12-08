@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Stack, Switch, Text } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
-const meta: Meta<typeof Switch> = {
+const meta = {
   title: 'Components/Switch',
   component: Switch,
   argTypes: {
@@ -13,11 +13,11 @@ const meta: Meta<typeof Switch> = {
       options: ['sm', 'md', 'lg'], // Available sizes in Chakra's Switch
     },
   },
-};
+} satisfies Meta<typeof Switch>;
 
 export default meta;
 
-type Story = StoryObj<typeof Switch>;
+type Story = StoryObj<typeof meta>;
 
 // Uncontrolled Story: Allows toggling without external state management
 export const Uncontrolled: Story = {

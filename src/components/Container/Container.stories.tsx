@@ -1,28 +1,20 @@
-import React from 'react';
-import { ContainerProps } from '@chakra-ui/react';
-import { Meta, StoryFn } from '@storybook/react';
-import * as CSS from 'csstype';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { Container } from './Container';
 
-const meta: Meta<typeof Container> = {
+const meta = {
   title: 'Components/Container',
   component: Container,
-};
+  args: {
+    children: 'Container',
+    bg: 'primary.lighter',
+    p: 32,
+    textAlign: 'center',
+  },
+} satisfies Meta<typeof Container>;
 
 export default meta;
-type Story = StoryFn<typeof Container>;
 
-const containerStoryStyles = {
-  bg: 'red',
-  p: 32,
-  textAlign: 'center' as CSS.Property.TextAlign,
-};
+type Story = StoryObj<typeof meta>;
 
-export const Basic: Story = (props: ContainerProps) => {
-  return (
-    <Container {...containerStoryStyles} {...props}>
-      Container
-    </Container>
-  );
-};
+export const Basic: Story = {};

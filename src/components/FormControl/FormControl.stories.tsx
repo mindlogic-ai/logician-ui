@@ -1,16 +1,16 @@
-import React from 'react';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import { FormControl } from './FormControl';
 
-export default {
+const meta = {
   title: 'Components/FormControl',
   component: FormControl,
-} as ComponentMeta<typeof FormControl>;
+} satisfies Meta<typeof FormControl>;
 
-const Template: ComponentStory<typeof FormControl> = (args) => (
-  <FormControl {...args} />
-);
+export default meta;
 
-export const Default = Template.bind({});
-Default.args = {};
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  args: {},
+};

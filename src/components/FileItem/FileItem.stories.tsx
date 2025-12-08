@@ -1,17 +1,15 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { FileItemProps } from './FileItem.types';
-
 import { FileItem } from './FileItem';
 
-const meta: Meta<typeof FileItem> = {
+const meta = {
   title: 'Components/FileItem',
   component: FileItem,
-};
+} satisfies Meta<typeof FileItem>;
 
 export default meta;
 
-type Story = StoryObj<FileItemProps>;
+type Story = StoryObj<typeof FileItem>;
 
 export const Basic: Story = {
   args: {

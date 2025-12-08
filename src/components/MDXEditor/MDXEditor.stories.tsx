@@ -9,7 +9,8 @@ const meta = {
 } satisfies Meta<typeof MDXEditor>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+
+type Story = StoryObj<typeof MDXEditor>;
 
 const sampleMarkdown = `# Hello World
 This is a sample markdown text. You can:

@@ -1,10 +1,9 @@
-import React from 'react';
 import { Box } from '@chakra-ui/react';
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { PageLoader } from './PageLoader';
 
-const meta: Meta<typeof PageLoader> = {
+const meta = {
   title: 'Components/PageLoader',
   component: PageLoader,
   argTypes: {
@@ -12,18 +11,20 @@ const meta: Meta<typeof PageLoader> = {
       type: 'boolean',
     },
   },
-};
+} satisfies Meta<typeof PageLoader>;
 
 export default meta;
-type Story = StoryFn<typeof PageLoader>;
+type Story = StoryObj<typeof PageLoader>;
 
-export const Basic: Story = (args) => {
-  return (
-    <Box position="relative" p="128px" bg="red">
-      <PageLoader {...args} />
-    </Box>
-  );
-};
-Basic.args = {
-  isLoading: true,
+export const Basic: Story = {
+  args: {
+    isLoading: true,
+  },
+  render: (args) => {
+    return (
+      <Box position="relative" p="128px" bg="red">
+        <PageLoader {...args} />
+      </Box>
+    );
+  },
 };

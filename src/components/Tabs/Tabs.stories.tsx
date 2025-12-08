@@ -1,5 +1,4 @@
-import React from 'react';
-import { Meta, StoryFn } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import { Tab } from '@/components/Tabs/Tab/Tab';
 import { TabList } from '@/components/Tabs/TabList';
@@ -8,38 +7,50 @@ import { TabPanels } from '@/components/Tabs/TabPanels';
 
 import { Tabs } from './Tabs';
 
-const meta: Meta<typeof Tabs> = {
+const meta = {
   title: 'Components/Tabs',
   component: Tabs,
-};
+} satisfies Meta<typeof Tabs>;
 
 export default meta;
-type Story = StoryFn<typeof Tabs>;
 
-const RenderTemplate = (props) => {
-  return (
-    <Tabs {...props}>
-      <TabList>
-        <Tab>Tab 1</Tab>
-        <Tab>Tab 2</Tab>
-        <Tab>Tab 3</Tab>
-      </TabList>
-      <TabPanels>
-        <TabPanel>Tab 1 content</TabPanel>
-        <TabPanel>Tab 2 content</TabPanel>
-        <TabPanel>Tab 3 content</TabPanel>
-      </TabPanels>
-    </Tabs>
-  );
-};
+type Story = StoryObj<typeof meta>;
 
 export const Basic: Story = {
-  render: RenderTemplate,
+  args: {
+    children: (
+      <>
+        <TabList>
+          <Tab>Tab 1</Tab>
+          <Tab>Tab 2</Tab>
+          <Tab>Tab 3</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>Tab 1 content</TabPanel>
+          <TabPanel>Tab 2 content</TabPanel>
+          <TabPanel>Tab 3 content</TabPanel>
+        </TabPanels>
+      </>
+    ),
+  },
 };
 
 export const Vertical: Story = {
-  render: RenderTemplate,
   args: {
     orientation: 'vertical',
+    children: (
+      <>
+        <TabList>
+          <Tab>Tab 1</Tab>
+          <Tab>Tab 2</Tab>
+          <Tab>Tab 3</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>Tab 1 content</TabPanel>
+          <TabPanel>Tab 2 content</TabPanel>
+          <TabPanel>Tab 3 content</TabPanel>
+        </TabPanels>
+      </>
+    ),
   },
 };

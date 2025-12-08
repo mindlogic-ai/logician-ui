@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
 
 import {
   Slider,
@@ -8,68 +8,77 @@ import {
   SliderTrack,
 } from '@/components/Slider';
 
-export default {
+const meta = {
   title: 'Components/Slider',
   component: Slider,
-  subcomponents: { SliderTrack, SliderFilledTrack, SliderThumb },
   decorators: [
     (Story) => {
       const [value, setValue] = useState(50);
       return (
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <span>Value: {value}</span>
-          <Story
-            args={{
-              onChange: (val: number) => setValue(val),
-              value,
-            }}
-          />
+          <div style={{ flex: 1 }}>
+            <Story args={{ onChange: (val: number) => setValue(val), value }} />
+          </div>
         </div>
       );
     },
   ],
-} as ComponentMeta<typeof Slider>;
+} satisfies Meta<typeof Slider>;
 
-const Template: ComponentStory<typeof Slider> = (args) => (
-  <Slider {...args}>
-    <SliderTrack>
-      <SliderFilledTrack />
-    </SliderTrack>
-    <SliderThumb />
-  </Slider>
-);
+export default meta;
 
-export const Default = Template.bind({});
-Default.args = {
-  min: 0,
-  max: 100,
-  step: 1,
-  defaultValue: 50,
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  args: {
+    min: 0,
+    max: 100,
+    step: 1,
+    defaultValue: 50,
+  },
+  render: (args) => (
+    <Slider {...args}>
+      <SliderTrack>
+        <SliderFilledTrack />
+      </SliderTrack>
+      <SliderThumb />
+    </Slider>
+  ),
 };
 
-export const Customized = Template.bind({});
-Customized.args = {
-  min: 0,
-  max: 10,
-  step: 0.5,
-  defaultValue: 5,
+export const Customized: Story = {
+  args: {
+    min: 0,
+    max: 10,
+    step: 0.5,
+    defaultValue: 5,
+  },
+  render: (args) => (
+    <Slider {...args}>
+      <SliderTrack>
+        <SliderFilledTrack />
+      </SliderTrack>
+      <SliderThumb />
+    </Slider>
+  ),
 };
 
-export const WithCustomThumb = Template.bind({});
-WithCustomThumb.args = {
-  min: 0,
-  max: 1,
-  step: 0.01,
-  defaultValue: 0.5,
-  children: (
-    <>
+export const WithCustomThumb: Story = {
+  args: {
+    min: 0,
+    max: 1,
+    step: 0.01,
+    defaultValue: 0.5,
+  },
+  render: (args) => (
+    <Slider {...args}>
       <SliderTrack>
         <SliderFilledTrack />
       </SliderTrack>
       <SliderThumb boxSize={6} bg="blue.500">
-        {/* Example custom content inside thumb */}
         <span style={{ color: 'white', fontWeight: 'bold' }}>•</span>
       </SliderThumb>
-    </>
+    </Slider>
   ),
 };

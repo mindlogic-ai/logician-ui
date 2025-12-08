@@ -5,6 +5,7 @@ Storybook 8.5 is used for interactive component documentation and development in
 ## Configuration Overview
 
 ### File Structure
+
 ```
 .storybook/
 ├── main.ts                    # Main Storybook configuration
@@ -18,6 +19,7 @@ Storybook 8.5 is used for interactive component documentation and development in
 ### Key Configuration Points
 
 **main.ts:**
+
 - Stories location: `src/components/**/*.stories.@(js|jsx|ts|tsx|mdx)` and `src/theme/*.stories.@(js|jsx|ts|tsx|mdx)`
 - Framework: Vite + React
 - Autodocs enabled for all stories
@@ -25,15 +27,18 @@ Storybook 8.5 is used for interactive component documentation and development in
 - SVGR plugin for SVG-as-component support
 
 **preview.tsx:**
+
 - Global `LogicianProvider` wrapper (Chakra UI provider)
-- Story sorting: Setup → Theme → Components → Chat → *
+- Story sorting: Setup → Theme → Components → Chat → \*
 - Alphabetical sorting within categories
 - Can disable provider per story with `parameters: { disableLogicianProvider: true }`
 
 ## Creating Story Files
 
 ### File Location
+
 Place stories next to components:
+
 ```
 ComponentName/
 ├── ComponentName.tsx
@@ -42,17 +47,15 @@ ComponentName/
 └── index.tsx
 ```
 
-### Basic Story Template
+### Basic Story Template (CSF3)
 
 ```tsx
-import React from 'react';
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { ComponentName } from './ComponentName';
-import { ComponentNameProps } from './ComponentName.types';
 
-const meta: Meta<typeof ComponentName> = {
-  title: 'Components/ComponentName',  // Categorize under Components
+const meta = {
+  title: 'Components/ComponentName',
   component: ComponentName,
   args: {
     // Default args for all stories
@@ -61,13 +64,20 @@ const meta: Meta<typeof ComponentName> = {
   argTypes: {
     // Control definitions (see below)
   },
-};
+} satisfies Meta<typeof ComponentName>;
 
 export default meta;
 
-type Story = StoryFn<typeof ComponentName>;
+type Story = StoryObj<typeof ComponentName>;
 
-export const Basic: Story = (args) => <ComponentName {...args} />;
+export const Basic: Story = {};
+
+export const WithProps: Story = {
+  args: {
+    children: 'Custom content',
+    variant: 'primary',
+  },
+};
 ```
 
 ### Story with State Management
@@ -76,33 +86,48 @@ For components requiring controlled state (inputs, forms):
 
 ```tsx
 import { useState } from 'react';
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
-const meta: Meta<typeof Input> = {
+import { Input } from './Input';
+
+const meta = {
   title: 'Components/Input',
   component: Input,
-};
+} satisfies Meta<typeof Input>;
 
 export default meta;
 
-const Template: StoryFn<InputProps> = (args) => {
-  const [value, setValue] = useState('');
+type Story = StoryObj<typeof Input>;
 
-  return (
-    <Input
-      {...args}
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-    />
-  );
+export const Basic: Story = {
+  render: (args) => {
+    const [value, setValue] = useState('');
+
+    return (
+      <Input
+        {...args}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+    );
+  },
 };
 
-export const Basic: StoryFn<InputProps> = Template.bind({});
-Basic.args = {};
+export const WithPlaceholder: Story = {
+  args: {
+    placeholder: 'Enter text...',
+  },
+  render: (args) => {
+    const [value, setValue] = useState('');
 
-export const WithPlaceholder: StoryFn<InputProps> = Template.bind({});
-WithPlaceholder.args = {
-  placeholder: 'Enter text...',
+    return (
+      <Input
+        {...args}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+    );
+  },
 };
 ```
 
@@ -111,19 +136,23 @@ WithPlaceholder.args = {
 Show all variants of a component:
 
 ```tsx
-export const AllVariants: Story = (args) => {
-  const variants = ['primary', 'secondary', 'tertiary', 'danger'] as const;
+import { Flex, Box } from '@chakra-ui/react';
 
-  return (
-    <Box>
-      {variants.map((variant) => (
-        <div key={variant}>
-          <p>{variant}</p>
-          <Button {...args} variant={variant} />
-        </div>
-      ))}
-    </Box>
-  );
+export const AllVariants: Story = {
+  render: (args) => {
+    const variants = ['primary', 'secondary', 'tertiary', 'danger'] as const;
+
+    return (
+      <Flex gap={4}>
+        {variants.map((variant) => (
+          <Box key={variant}>
+            <p>{variant}</p>
+            <Button {...args} variant={variant} />
+          </Box>
+        ))}
+      </Flex>
+    );
+  },
 };
 ```
 
@@ -207,11 +236,13 @@ argTypes: {
 ## Story Naming Conventions
 
 ### Title Structure
+
 ```tsx
-title: 'Category/SubCategory/ComponentName'
+title: 'Category/SubCategory/ComponentName';
 ```
 
 **Categories in use:**
+
 - `Setup` - Getting started guides
 - `Theme` - Color palette, typography
 - `Components` - UI components
@@ -244,7 +275,7 @@ Use `getChakraArgTypes` to expose common Chakra props:
 ```tsx
 import { getChakraArgTypes } from '../../.storybook/getChakraArgTypes';
 
-const meta: Meta<typeof Icon> = {
+const meta = {
   title: 'Components/Icon',
   component: Icon,
   argTypes: {
@@ -254,10 +285,11 @@ const meta: Meta<typeof Icon> = {
       description: 'Icon name from react-icons',
     },
   },
-};
+} satisfies Meta<typeof Icon>;
 ```
 
 **Exposed Chakra props:**
+
 - `color`
 - `boxSize` (with select control: xs, sm, md, lg, xl)
 - `width`
@@ -267,6 +299,7 @@ const meta: Meta<typeof Icon> = {
 ## Story Args Pattern
 
 ### Basic Args
+
 ```tsx
 Basic.args = {
   variant: 'primary',
@@ -275,6 +308,7 @@ Basic.args = {
 ```
 
 ### Complex Args
+
 ```tsx
 WithIcon.args = {
   placeholder: 'Search...',
@@ -291,10 +325,11 @@ All stories are wrapped in `LogicianProvider` (Chakra UI provider) by default.
 ### Disable Provider for Specific Story
 
 ```tsx
-export const WithoutProvider: Story = (args) => <Component {...args} />;
-
-WithoutProvider.parameters = {
-  disableLogicianProvider: true,
+export const WithoutProvider: Story = {
+  parameters: {
+    disableLogicianProvider: true,
+  },
+  render: (args) => <Component {...args} />,
 };
 ```
 
@@ -303,11 +338,11 @@ WithoutProvider.parameters = {
 ### Story-specific Parameters
 
 ```tsx
-export const DarkBackground: Story = (args) => <Component {...args} />;
-
-DarkBackground.parameters = {
-  backgrounds: {
-    default: 'dark',
+export const DarkBackground: Story = {
+  parameters: {
+    backgrounds: {
+      default: 'dark',
+    },
   },
 };
 ```
@@ -343,23 +378,26 @@ parameters: {
 
 ```tsx
 // ✅ Good - shows realistic use case
-export const SearchInput: Story = Template.bind({});
-SearchInput.args = {
-  placeholder: 'Search products...',
-  leftIcon: <Icon icon="IoSearch" />,
-  size: 'md',
+export const SearchInput: Story = {
+  args: {
+    placeholder: 'Search products...',
+    leftIcon: <Icon icon="IoSearch" />,
+    size: 'md',
+  },
 };
 
 // ❌ Poor - generic, unhelpful
-export const Example1: Story = Template.bind({});
-Example1.args = {
-  placeholder: 'text',
+export const Example1: Story = {
+  args: {
+    placeholder: 'text',
+  },
 };
 ```
 
 ### 2. Cover All Variants
 
 Create stories for:
+
 - Basic/default state
 - All variants (primary, secondary, etc.)
 - Interactive states (disabled, error, loading)
@@ -385,6 +423,7 @@ argTypes: {
 ### 4. Use Actions
 
 For callback props:
+
 ```tsx
 argTypes: {
   onClick: { action: 'clicked' },
@@ -396,14 +435,19 @@ argTypes: {
 ### 5. Organize Related Stories
 
 Group related stories together:
+
 ```tsx
-export const Sizes: Story = () => (
-  <Stack spacing={4}>
-    <Button size="sm">Small</Button>
-    <Button size="md">Medium</Button>
-    <Button size="lg">Large</Button>
-  </Stack>
-);
+import { Stack } from '@chakra-ui/react';
+
+export const Sizes: Story = {
+  render: () => (
+    <Stack spacing={4}>
+      <Button size="sm">Small</Button>
+      <Button size="md">Medium</Button>
+      <Button size="lg">Large</Button>
+    </Stack>
+  ),
+};
 ```
 
 ## Interactive Examples
@@ -411,40 +455,49 @@ export const Sizes: Story = () => (
 ### Form Component Example
 
 ```tsx
-export const FormExample: Story = () => {
-  const [formData, setFormData] = useState({ name: '', email: '' });
+import { useState } from 'react';
+import { Stack, Text } from '@chakra-ui/react';
 
-  return (
-    <Stack spacing={4}>
-      <Input
-        placeholder="Name"
-        value={formData.name}
-        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-      />
-      <Input
-        placeholder="Email"
-        value={formData.email}
-        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-      />
-      <Text>Name: {formData.name}</Text>
-      <Text>Email: {formData.email}</Text>
-    </Stack>
-  );
+export const FormExample: Story = {
+  render: () => {
+    const [formData, setFormData] = useState({ name: '', email: '' });
+
+    return (
+      <Stack spacing={4}>
+        <Input
+          placeholder="Name"
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+        />
+        <Input
+          placeholder="Email"
+          value={formData.email}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+        />
+        <Text>Name: {formData.name}</Text>
+        <Text>Email: {formData.email}</Text>
+      </Stack>
+    );
+  },
 };
 ```
 
 ### Component with Hooks Example
 
 ```tsx
-export const WithTimer: Story = () => {
-  const [count, setCount] = useState(0);
+import { useState, useEffect } from 'react';
 
-  useEffect(() => {
-    const interval = setInterval(() => setCount(c => c + 1), 1000);
-    return () => clearInterval(interval);
-  }, []);
+export const WithTimer: Story = {
+  render: () => {
+    const [count, setCount] = useState(0);
 
-  return <Badge>Count: {count}</Badge>;
+    useEffect(() => {
+      const interval = setInterval(() => setCount((c) => c + 1), 1000);
+      return () => clearInterval(interval);
+    }, []);
+
+    return <Badge>Count: {count}</Badge>;
+  },
 };
 ```
 
@@ -484,7 +537,9 @@ Storybook will be available at http://localhost:6006
 ## Troubleshooting
 
 ### Path Alias Issues
+
 If `@/` imports don't work, check `.storybook/main.ts`:
+
 ```ts
 resolve: {
   alias: {
@@ -494,42 +549,50 @@ resolve: {
 ```
 
 ### Provider Issues
+
 If Chakra components don't render correctly, ensure `LogicianProvider` is wrapping the story (check `preview.tsx`).
 
 ### SVG Import Issues
+
 SVGs should be imported as components. If not working, check SVGR plugin in `main.ts`.
 
 ## Common Patterns
 
 ### Showcase All Props
+
 ```tsx
-export const AllProps: Story = () => (
-  <SimpleGrid columns={2} spacing={4}>
-    <div>
-      <Text fontWeight="bold">Default</Text>
-      <Button>Button</Button>
-    </div>
-    <div>
-      <Text fontWeight="bold">Disabled</Text>
-      <Button isDisabled>Button</Button>
-    </div>
-    <div>
-      <Text fontWeight="bold">Loading</Text>
-      <Button isLoading>Button</Button>
-    </div>
-    <div>
-      <Text fontWeight="bold">With Icon</Text>
-      <Button leftIcon={<Icon icon="IoAdd" />}>Button</Button>
-    </div>
-  </SimpleGrid>
-);
+import { SimpleGrid, Text } from '@chakra-ui/react';
+
+export const AllProps: Story = {
+  render: () => (
+    <SimpleGrid columns={2} spacing={4}>
+      <div>
+        <Text fontWeight="bold">Default</Text>
+        <Button>Button</Button>
+      </div>
+      <div>
+        <Text fontWeight="bold">Disabled</Text>
+        <Button isDisabled>Button</Button>
+      </div>
+      <div>
+        <Text fontWeight="bold">Loading</Text>
+        <Button isLoading>Button</Button>
+      </div>
+      <div>
+        <Text fontWeight="bold">With Icon</Text>
+        <Button leftIcon={<Icon icon="IoAdd" />}>Button</Button>
+      </div>
+    </SimpleGrid>
+  ),
+};
 ```
 
 ### Responsive Component
+
 ```tsx
-export const Responsive: Story = () => (
-  <Button size={{ base: 'sm', md: 'md', lg: 'lg' }}>
-    Responsive Button
-  </Button>
-);
+export const Responsive: Story = {
+  render: () => (
+    <Button size={{ base: 'sm', md: 'md', lg: 'lg' }}>Responsive Button</Button>
+  ),
+};
 ```

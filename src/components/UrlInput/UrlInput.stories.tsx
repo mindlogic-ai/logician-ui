@@ -1,9 +1,8 @@
-import React from 'react';
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
-import { UrlInput, UrlInputProps } from './UrlInput';
+import { UrlInput } from './UrlInput';
 
-const meta: Meta<typeof UrlInput> = {
+const meta = {
   title: 'Components/UrlInput',
   component: UrlInput,
   argTypes: {
@@ -19,48 +18,52 @@ const meta: Meta<typeof UrlInput> = {
     leftAddon: { control: 'text' },
     rightAddon: { control: 'text' },
   },
-};
+} satisfies Meta<typeof UrlInput>;
 
 export default meta;
 
-const Template: StoryFn<UrlInputProps> = (args) => <UrlInput {...args} />;
+type Story = StoryObj<typeof meta>;
 
-export const Basic: StoryFn<UrlInputProps> = Template.bind({});
-Basic.args = {
-  placeholder: 'mysite',
-  size: 'md',
-  isDisabled: false,
-  isInvalid: false,
-  leftAddon: 'https://',
-  rightAddon: '.com',
+export const Basic: Story = {
+  args: {
+    placeholder: 'mysite',
+    size: 'md',
+    isDisabled: false,
+    isInvalid: false,
+    leftAddon: 'https://',
+    rightAddon: '.com',
+  },
 };
 
-export const Disabled: StoryFn<UrlInputProps> = Template.bind({});
-Disabled.args = {
-  placeholder: 'mysite',
-  size: 'md',
-  isDisabled: true,
-  isInvalid: false,
-  leftAddon: 'https://',
-  rightAddon: '.com',
+export const Disabled: Story = {
+  args: {
+    placeholder: 'mysite',
+    size: 'md',
+    isDisabled: true,
+    isInvalid: false,
+    leftAddon: 'https://',
+    rightAddon: '.com',
+  },
 };
 
-export const Invalid: StoryFn<UrlInputProps> = Template.bind({});
-Invalid.args = {
-  placeholder: 'mysite',
-  size: 'md',
-  isDisabled: false,
-  isInvalid: true,
-  leftAddon: 'https://',
-  rightAddon: '.com',
+export const Invalid: Story = {
+  args: {
+    placeholder: 'mysite',
+    size: 'md',
+    isDisabled: false,
+    isInvalid: true,
+    leftAddon: 'https://',
+    rightAddon: '.com',
+  },
 };
 
-export const CustomAddons: StoryFn<UrlInputProps> = Template.bind({});
-CustomAddons.args = {
-  placeholder: 'mysite',
-  size: 'md',
-  isDisabled: false,
-  isInvalid: false,
-  leftAddon: 'ftp://',
-  rightAddon: '/home',
+export const CustomAddons: Story = {
+  args: {
+    placeholder: 'mysite',
+    size: 'md',
+    isDisabled: false,
+    isInvalid: false,
+    leftAddon: 'ftp://',
+    rightAddon: '/home',
+  },
 };
