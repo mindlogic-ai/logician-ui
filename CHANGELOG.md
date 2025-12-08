@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0-alpha.23
+
+### Minor Changes
+
+- 339c162: DatePicker(RangeDatePicker, SingleDatePicker) UI 개선
+
 ## 2.0.0-alpha.22
 
 ### Minor Changes

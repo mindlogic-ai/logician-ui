@@ -2,7 +2,7 @@
   "mode": "exit",
   "tag": "alpha",
   "initialVersions": {
-    "@mindlogic-ai/logician-ui": "2.0.0-alpha.21"
+    "@mindlogic-ai/logician-ui": "2.0.0-alpha.22"
   },
   "changesets": [
     "add-storybook",
@@ -17,6 +17,7 @@
     "flat-mirrors-happen",
     "good-clouds-help",
     "good-walls-poke",
+    "honest-suns-stand",
     "light-beds-relate",
     "lovely-baths-go",
     "petite-wombats-yell",
