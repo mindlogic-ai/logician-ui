@@ -1,3 +1,12 @@
 export { Button } from './Button';
-export { variantStyles } from './Button.styles';
-export type { ButtonProps } from './Button.types';
+export {
+  colorSchemeStyles,
+  getButtonStyles,
+  colorSchemes,
+  variants,
+} from './Button.styles';
+export type {
+  ButtonProps,
+  ButtonColorScheme,
+  ButtonVariant,
+} from './Button.types';

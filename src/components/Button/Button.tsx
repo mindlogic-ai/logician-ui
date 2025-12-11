@@ -1,13 +1,28 @@
 import { forwardRef } from 'react';
 import { Button as ChakraButton, useTheme, useToken } from '@chakra-ui/react';
 
-import { variantStyles } from './Button.styles';
+import { getButtonStyles } from './Button.styles';
 import { ButtonProps } from './Button.types';
 
+/**
+ * Button component with two-dimensional variant system.
+ *
+ * Combines `colorScheme` (semantic color) with `variant` (visual appearance)
+ * for flexible, consistent button styling.
+ *
+ * @example
+ * ```tsx
+ * <Button colorScheme="primary" variant="solid">Submit</Button>
+ * <Button colorScheme="danger" variant="soft">Delete</Button>
+ * <Button colorScheme="secondary" variant="outline">Cancel</Button>
+ * <Button colorScheme="neutral" variant="ghost">Close</Button>
+ * ```
+ */
 export const Button = forwardRef(
   (
     {
-      variant = 'secondary', // default to secondary as they are less likely to cause bigger design issues
+      colorScheme = 'primary',
+      variant = 'solid',
       _focus,
       size,
       ...rest
@@ -19,14 +34,16 @@ export const Button = forwardRef(
       'colors',
       theme.semanticTokens.colors.primary.main
     );
+
+    const styles = getButtonStyles(colorScheme, variant);
+
     return (
       <ChakraButton
         border="1px solid"
         lineHeight="1.2"
         size={size}
         fontSize={size === 'xs' ? 'sm' : size} // xs is too small
-        variant={variant === 'link' ? 'link' : undefined} // if variant isn't link, use our custom variant styles
-        {...variantStyles[variant]}
+        {...styles}
         _focus={{
           outline: 'none',
           boxShadow: `rgb(255, 255, 255) 0px 0px 0px 2px, ${primaryMainColor} 0px 0px 0px 4px`,

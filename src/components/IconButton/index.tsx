@@ -1,3 +1,12 @@
 export { IconButton } from './IconButton';
-export { variantStyles } from './IconButton.styles';
-export type * from './IconButton.types';
+export {
+  colorSchemeStyles,
+  getIconButtonStyles,
+  colorSchemes,
+  variants,
+} from './IconButton.styles';
+export type {
+  IconButtonProps,
+  IconButtonColorScheme,
+  IconButtonVariant,
+} from './IconButton.types';
