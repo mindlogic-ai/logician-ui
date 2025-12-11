@@ -30,12 +30,27 @@ export const theme = {
     heading: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif',
   },
 
-  // 반응형 폰트 사이즈 - 모바일에서는 더 작은 폰트 크기, 데스크톱에서는 기존 크기 유지
+  // Responsive font sizes - smaller on mobile, standard on desktop
+  // Only custom tokens are available; Chakra defaults are disabled
   fontSizes: {
-    // 커스텀 폰트 크기 토큰 (em 단위 사용)
-    // xs: { base: '0.7em', md: '0.7em' },
-    subtitle: { base: '0.92em', md: '1em' },
+    // Disable Chakra default tokens
+    xs: undefined,
+    sm: undefined,
+    md: undefined,
+    lg: undefined,
+    xl: undefined,
+    '2xl': undefined,
+    '3xl': undefined,
+    '4xl': undefined,
+    '5xl': undefined,
+    '6xl': undefined,
+    '7xl': undefined,
+    '8xl': undefined,
+    '9xl': undefined,
+
+    // Custom font size tokens (em units for relative scaling)
     subtext: { base: '0.92em', md: '1em' },
+    subtitle: { base: '0.92em', md: '1em' },
     p: { base: '1em', md: '1em' },
     h5: { base: '1.1em', md: '1.2em' },
     h4: { base: '1.25em', md: '1.44em' },
