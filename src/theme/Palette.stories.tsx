@@ -12,7 +12,16 @@ import { lighten, readableColor } from 'polished';
 import { MouseEventHandler, useState } from 'react';
 
 import { Tooltip } from '../components/Tooltip';
-import { H4, Subtext, Text, Subtitle } from '../components/Typography';
+import {
+  H1,
+  H2,
+  H3,
+  H4,
+  H5,
+  Subtext,
+  Subtitle,
+  Text,
+} from '../components/Typography';
 import { colors } from './colors';
 
 const meta = {
@@ -492,79 +501,106 @@ export const ContrastReference: Story = {
 };
 
 /**
- * Font size scale showing responsive typography tokens.
- * Uses em units for scalability and includes mobile/desktop breakpoints.
+ * Typography components showcasing the font size scale.
+ * Each component uses responsive em units for scalability.
  */
 export const FontSizes: Story = {
   name: 'Font Sizes',
   render: () => {
-    const fontSizeTokens = [
-      { name: 'h1', base: '2.4em', md: '3em', description: 'Page titles' },
-      { name: 'h2', base: '2em', md: '2.5em', description: 'Section headers' },
-      { name: 'h3', base: '1.5em', md: '1.75em', description: 'Subsection headers' },
-      { name: 'h4', base: '1.25em', md: '1.44em', description: 'Card titles' },
-      { name: 'h5', base: '1.1em', md: '1.2em', description: 'Small headings' },
-      { name: 'p', base: '1em', md: '1em', description: 'Body text' },
-      { name: 'subtitle', base: '0.92em', md: '1em', description: 'Subtitle text' },
-      { name: 'subtext', base: '0.92em', md: '1em', description: 'Helper text, captions' },
+    const typographyItems = [
+      {
+        component: <H1 color="gray.1200">H1 - Page titles</H1>,
+        name: 'H1',
+        base: '2.4em',
+        md: '3em',
+      },
+      {
+        component: <H2 color="gray.1200">H2 - Section headers</H2>,
+        name: 'H2',
+        base: '2em',
+        md: '2.5em',
+      },
+      {
+        component: <H3 color="gray.1200">H3 - Subsection headers</H3>,
+        name: 'H3',
+        base: '1.5em',
+        md: '1.75em',
+      },
+      {
+        component: <H4 color="gray.1200">H4 - Card titles</H4>,
+        name: 'H4',
+        base: '1.25em',
+        md: '1.44em',
+      },
+      {
+        component: <H5 color="gray.1200">H5 - Small headings</H5>,
+        name: 'H5',
+        base: '1.1em',
+        md: '1.2em',
+      },
+      {
+        component: <Text color="gray.1200">Text - Body text</Text>,
+        name: 'Text',
+        base: '1em',
+        md: '1em',
+      },
+      {
+        component: <Subtitle color="gray.1200">Subtitle - Subtitle text</Subtitle>,
+        name: 'Subtitle',
+        base: '0.92em',
+        md: '1em',
+      },
+      {
+        component: <Subtext color="gray.800">Subtext - Helper text, captions</Subtext>,
+        name: 'Subtext',
+        base: '0.92em',
+        md: '1em',
+      },
     ];
 
     return (
       <VStack gap={6} align="flex-start" w="full">
         <Box>
           <H4 color="gray.1300" mb={2}>
-            Font Size Scale
+            Typography Components
           </H4>
           <Subtext color="gray.700">
-            Responsive typography tokens using em units. Scales automatically based on root font size.
+            Responsive typography using em units. Import from @mindlogic-ai/logician-ui.
           </Subtext>
         </Box>
 
         <Divider />
 
-        <VStack gap={4} align="stretch" w="full">
-          {fontSizeTokens.map((token) => (
+        <VStack gap={0} align="stretch" w="full">
+          {typographyItems.map((item) => (
             <Flex
-              key={token.name}
-              p={4}
-              borderRadius="md"
-              border="1px solid"
-              borderColor="gray.200"
+              key={item.name}
+              py={4}
+              borderBottom="1px solid"
+              borderColor="gray.100"
               align="center"
               justify="space-between"
               wrap="wrap"
               gap={4}
             >
-              <Box flex="1" minW="200px">
-                <Text
-                  fontSize={token.name}
-                  color="gray.1200"
-                  fontWeight="semibold"
-                  lineHeight="1.2"
-                >
-                  {token.name}
-                </Text>
+              <Box flex="1" minW="300px">
+                {item.component}
               </Box>
-              <Flex gap={6} align="center" wrap="wrap">
-                <Box>
-                  <Subtext color="gray.600" mb={1}>
-                    Mobile
-                  </Subtext>
-                  <Text fontFamily="mono" fontSize="sm" color="gray.900">
-                    {token.base}
-                  </Text>
+              <Flex gap={4} align="center">
+                <Box
+                  px={2}
+                  py={1}
+                  bg="gray.100"
+                  borderRadius="md"
+                  fontFamily="mono"
+                  fontSize="xs"
+                  color="gray.700"
+                >
+                  {item.name}
                 </Box>
-                <Box>
-                  <Subtext color="gray.600" mb={1}>
-                    Desktop
-                  </Subtext>
-                  <Text fontFamily="mono" fontSize="sm" color="gray.900">
-                    {token.md}
-                  </Text>
-                </Box>
-                <Box minW="150px">
-                  <Subtext color="gray.700">{token.description}</Subtext>
-                </Box>
+                <Text fontFamily="mono" fontSize="xs" color="gray.600">
+                  {item.base} → {item.md}
+                </Text>
               </Flex>
             </Flex>
           ))}
@@ -572,22 +608,23 @@ export const FontSizes: Story = {
 
         <Box mt={4} p={4} bg="gray.50" borderRadius="md" w="full">
           <Subtitle color="gray.1100" mb={2} fontWeight="semibold">
-            Usage Notes
+            Usage
           </Subtitle>
-          <VStack align="flex-start" gap={1}>
-            <Subtext color="gray.800">
-              • Font sizes use <strong>em units</strong> for relative scaling
-            </Subtext>
-            <Subtext color="gray.800">
-              • <strong>base</strong> values apply on mobile ({"<"}768px)
-            </Subtext>
-            <Subtext color="gray.800">
-              • <strong>md</strong> values apply on desktop (≥768px)
-            </Subtext>
-            <Subtext color="gray.800">
-              • Use Typography components (H1-H5, Text, Subtext) for semantic markup
-            </Subtext>
-          </VStack>
+          <Box
+            as="pre"
+            p={3}
+            bg="gray.800"
+            color="gray.100"
+            borderRadius="md"
+            fontSize="sm"
+            overflow="auto"
+          >
+            {`import { H1, H2, H3, H4, H5, Text, Subtitle, Subtext } from '@mindlogic-ai/logician-ui';
+
+<H1>Page Title</H1>
+<Text>Body content goes here.</Text>
+<Subtext>Helper text or caption.</Subtext>`}
+          </Box>
         </Box>
       </VStack>
     );
