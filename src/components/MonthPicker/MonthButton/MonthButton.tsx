@@ -1,7 +1,10 @@
 import React, { memo } from 'react';
 
 import { Button } from '@/components/Button';
-import { ButtonVariant } from '@/components/Button/Button.types';
+import {
+  ButtonColorScheme,
+  ButtonVariant,
+} from '@/components/Button/Button.types';
 
 import {
   isMonthDisabled,
@@ -12,6 +15,11 @@ import {
 } from '../_utils';
 import { MonthRange } from '../MonthPicker.types';
 import { MonthButtonProps } from './MonthButton.types';
+
+type MonthButtonStyle = {
+  colorScheme: ButtonColorScheme;
+  variant: ButtonVariant;
+};
 
 export const MonthButton: React.FC<MonthButtonProps> = memo(
   ({
@@ -48,7 +56,7 @@ export const MonthButton: React.FC<MonthButtonProps> = memo(
       }
     };
 
-    const getMonthButtonVariant = (
+    const getMonthButtonStyle = (
       month: number,
       year: number,
       selectedRange?: MonthRange | null,
@@ -56,13 +64,21 @@ export const MonthButton: React.FC<MonthButtonProps> = memo(
       hoveredMonth?: { month: number; year: number } | null,
       minMonth?: Date,
       maxMonth?: Date
-    ): ButtonVariant => {
-      if (isMonthDisabled(month, year, minMonth, maxMonth)) return 'tertiary';
-      if (isMonthSelected(month, year, selectedRange)) return 'primary';
-      if (isSelectionStart(month, year, selectionStart)) return 'primary';
-      if (isMonthInRange(month, year, selectedRange)) return 'secondary';
+    ): MonthButtonStyle => {
+      // Selected months get solid primary
+      if (isMonthSelected(month, year, selectedRange)) {
+        return { colorScheme: 'primary', variant: 'solid' };
+      }
+      if (isSelectionStart(month, year, selectionStart)) {
+        return { colorScheme: 'primary', variant: 'solid' };
+      }
 
-      // Show preview range when hovering with a selection start
+      // In-range months get soft primary
+      if (isMonthInRange(month, year, selectedRange)) {
+        return { colorScheme: 'primary', variant: 'soft' };
+      }
+
+      // Preview range when hovering with a selection start
       if (
         isMonthInPreviewRange(
           month,
@@ -71,24 +87,28 @@ export const MonthButton: React.FC<MonthButtonProps> = memo(
           hoveredMonth || null
         )
       ) {
-        return 'secondary';
+        return { colorScheme: 'primary', variant: 'soft' };
       }
 
-      return 'tertiary';
+      // Default: ghost neutral
+      return { colorScheme: 'neutral', variant: 'ghost' };
     };
+
+    const style = getMonthButtonStyle(
+      month,
+      year,
+      selectedRange,
+      selectionStart,
+      hoveredMonth,
+      minMonth,
+      maxMonth
+    );
 
     return (
       <Button
         size="sm"
-        variant={getMonthButtonVariant(
-          month,
-          year,
-          selectedRange,
-          selectionStart,
-          hoveredMonth,
-          minMonth,
-          maxMonth
-        )}
+        colorScheme={style.colorScheme}
+        variant={style.variant}
         onClick={handleClick}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}

@@ -115,7 +115,7 @@ export const RangeDatePicker = ({
             color: 'gray.1500',
             fontWeight: 'regular',
             _hover: {
-              background: 'primary.light',
+              background: 'primary.lightest',
               ...propsConfigs?.dayOfMonthBtnProps?.defaultBtnProps?._hover,
             },
             ...propsConfigs?.dayOfMonthBtnProps?.defaultBtnProps,
@@ -127,13 +127,13 @@ export const RangeDatePicker = ({
           },
           selectedBtnProps: {
             color: 'white',
-            background: 'primary.light',
+            background: 'primary.lightest',
             fontWeight: 'semibold',
             position: 'relative',
             zIndex: 1,
             borderRadius: 0,
             _hover: {
-              background: 'primary.light',
+              background: 'primary.lightest',
             },
             _before: {
               content: '""',
@@ -150,7 +150,7 @@ export const RangeDatePicker = ({
           },
           isInRangeBtnProps: {
             color: 'primary.dark',
-            background: 'primary.light',
+            background: 'primary.lightest',
             borderRadius: 0,
             ...propsConfigs?.dayOfMonthBtnProps?.isInRangeBtnProps,
           },

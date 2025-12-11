@@ -109,7 +109,7 @@ User Agent: ${errorInfo.userAgent}`;
             </Card>
 
             {/* Support Information */}
-            <Card bg="primary.light" borderColor="primary.light" p={6} w="full">
+            <Card bg="primary.lightest" borderColor="primary.light" p={6} w="full">
               <H4 color="primary.dark" mb={4} textAlign="center">
                 {translate('support_information')}
               </H4>
@@ -165,7 +165,7 @@ User Agent: ${errorInfo.userAgent}`;
                   onClick={copyErrorInfo}
                   size="sm"
                   minW="fit-content"
-                  variant="tertiary"
+                  variant="ghost"
                   leftIcon={<FaRegCopy boxSize="xs" />}
                 >
                   {translate('copy_error_details')}
@@ -178,7 +178,7 @@ User Agent: ${errorInfo.userAgent}`;
               <Button
                 onClick={onErrorReset}
                 size="lg"
-                variant="primary"
+                variant="solid"
                 leftIcon={<HiRefresh />}
                 _hover={{
                   transform: 'translateY(-1px)',
@@ -193,7 +193,7 @@ User Agent: ${errorInfo.userAgent}`;
               <Button
                 onClick={() => window.location.reload()}
                 size="sm"
-                variant="tertiary"
+                variant="ghost"
                 leftIcon={<HiRefresh />}
               >
                 {translate('refresh_page')}
