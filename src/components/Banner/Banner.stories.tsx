@@ -58,3 +58,17 @@ export const AllSizes: Story = {
     </VStack>
   ),
 };
+
+const variants = ['info', 'success', 'warning', 'danger'] as const;
+
+export const AllVariants: Story = {
+  render: () => (
+    <VStack spacing={4} align="stretch">
+      {variants.map((variant) => (
+        <Banner key={variant} variant={variant}>
+          This is a {variant} banner message
+        </Banner>
+      ))}
+    </VStack>
+  ),
+};
