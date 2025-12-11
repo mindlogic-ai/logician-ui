@@ -3,8 +3,13 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import { Chip, colorSchemes, variants } from '.';
 
+/**
+ * @deprecated Use `Tag` component instead. Chip will be removed in the next major version.
+ *
+ * Migration: Replace `<Chip>` with `<Tag>` - the API is identical.
+ */
 const meta = {
-  title: 'Components/Chip',
+  title: 'Components/Chip (Deprecated)',
   component: Chip,
   args: {
     children: 'Chip',
@@ -17,6 +22,14 @@ const meta = {
     variant: {
       control: 'select',
       options: variants,
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          '⚠️ **Deprecated**: Use `Tag` component instead. Chip will be removed in the next major version.',
+      },
     },
   },
 } satisfies Meta<typeof Chip>;

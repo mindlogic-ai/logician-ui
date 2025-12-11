@@ -1,20 +1,25 @@
-import { Flex, VStack, Text } from '@chakra-ui/react';
+import { Box, Flex, Text, VStack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import { Tag } from './Tag';
+import { Tag, colorSchemes, variants } from '.';
 import { TagCloseButton } from './TagCloseButton';
 
 const meta = {
   title: 'Components/Tag',
   component: Tag,
   args: {
-    children: 'Insert your tag',
+    children: 'Tag',
   },
   argTypes: {
+    colorScheme: {
+      control: 'select',
+      options: colorSchemes,
+      description: 'Semantic color of the tag',
+    },
     variant: {
       control: 'select',
-      options: ['default', 'active'],
-      description: 'Tag variant',
+      options: variants,
+      description: 'Visual style of the tag',
     },
   },
 } satisfies Meta<typeof Tag>;
@@ -23,56 +28,196 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  render: (args) => <Tag {...args} />,
+export const Basic: Story = {};
+
+export const Primary: Story = {
+  args: {
+    colorScheme: 'primary',
+    children: 'Primary',
+  },
+};
+
+export const Secondary: Story = {
+  args: {
+    colorScheme: 'secondary',
+    children: 'Secondary',
+  },
+};
+
+export const Success: Story = {
+  args: {
+    colorScheme: 'success',
+    children: 'Success',
+  },
+};
+
+export const Warning: Story = {
+  args: {
+    colorScheme: 'warning',
+    children: 'Warning',
+  },
+};
+
+export const Danger: Story = {
+  args: {
+    colorScheme: 'danger',
+    children: 'Danger',
+  },
+};
+
+export const Neutral: Story = {
+  args: {
+    colorScheme: 'neutral',
+    children: 'Neutral',
+  },
+};
+
+export const Soft: Story = {
+  args: {
+    colorScheme: 'primary',
+    variant: 'soft',
+    children: 'Soft',
+  },
+};
+
+export const Solid: Story = {
+  args: {
+    colorScheme: 'primary',
+    variant: 'solid',
+    children: 'Solid',
+  },
+};
+
+export const Outline: Story = {
+  args: {
+    colorScheme: 'primary',
+    variant: 'outline',
+    children: 'Outline',
+  },
 };
 
 /**
- * All tag variants using the Golden Ratio color system.
- * - default: Gray background with subtle border
- * - active: Primary lightest background with primary border
+ * Tags with close button for removable items.
  */
-export const AllVariants: Story = {
+export const Closable: Story = {
   render: () => (
-    <Flex gap={4}>
-      <VStack spacing={1}>
-        <Text fontSize="subtext" color="gray.600">default</Text>
-        <Tag variant="default">Default Tag</Tag>
-      </VStack>
-      <VStack spacing={1}>
-        <Text fontSize="subtext" color="gray.600">active</Text>
-        <Tag variant="active">Active Tag</Tag>
-      </VStack>
+    <Flex gap={2} wrap="wrap">
+      {colorSchemes.map((colorScheme) => (
+        <Tag key={colorScheme} colorScheme={colorScheme} variant="soft">
+          {colorScheme}
+          <TagCloseButton />
+        </Tag>
+      ))}
     </Flex>
   ),
 };
 
-export const Active: Story = {
-  args: {
-    variant: 'active',
-    children: 'Active Tag',
-  },
+/**
+ * Shows all combinations of colorScheme × variant in a matrix layout.
+ */
+export const AllCombinations: Story = {
+  render: () => (
+    <Box>
+      {/* Header row */}
+      <Flex mb={4} gap={4} align="center">
+        <Box w="100px" />
+        {variants.map((variant) => (
+          <Box key={variant} w="100px" textAlign="center">
+            <Text fontWeight="bold" fontSize="subtext">
+              {variant}
+            </Text>
+          </Box>
+        ))}
+      </Flex>
+
+      {/* Color scheme rows */}
+      {colorSchemes.map((colorScheme) => (
+        <Flex key={colorScheme} mb={4} gap={4} align="center">
+          <Box w="100px">
+            <Text fontWeight="medium" fontSize="subtext">
+              {colorScheme}
+            </Text>
+          </Box>
+          {variants.map((variant) => (
+            <Box key={`${colorScheme}-${variant}`} w="100px" textAlign="center">
+              <Tag colorScheme={colorScheme} variant={variant}>
+                Tag
+              </Tag>
+            </Box>
+          ))}
+        </Flex>
+      ))}
+    </Box>
+  ),
 };
 
-export const Closable: Story = {
-  args: {
-    children: (
-      <>
-        Insert your tag
-        <TagCloseButton />
-      </>
-    ),
-  },
+/**
+ * Example use case: categorization tags
+ */
+export const Categories: Story = {
+  render: () => (
+    <VStack align="start" spacing={4}>
+      <Box>
+        <Text fontWeight="bold" mb={2}>
+          Article Categories
+        </Text>
+        <Flex gap={2} wrap="wrap">
+          <Tag colorScheme="primary" variant="soft">Technology</Tag>
+          <Tag colorScheme="secondary" variant="soft">Design</Tag>
+          <Tag colorScheme="success" variant="soft">Business</Tag>
+          <Tag colorScheme="warning" variant="soft">Opinion</Tag>
+        </Flex>
+      </Box>
+
+      <Box>
+        <Text fontWeight="bold" mb={2}>
+          Task Status
+        </Text>
+        <Flex gap={2} wrap="wrap">
+          <Tag colorScheme="neutral" variant="outline">Draft</Tag>
+          <Tag colorScheme="primary" variant="solid">In Progress</Tag>
+          <Tag colorScheme="warning" variant="soft">Review</Tag>
+          <Tag colorScheme="success" variant="solid">Completed</Tag>
+          <Tag colorScheme="danger" variant="soft">Blocked</Tag>
+        </Flex>
+      </Box>
+
+      <Box>
+        <Text fontWeight="bold" mb={2}>
+          Priority Labels
+        </Text>
+        <Flex gap={2} wrap="wrap">
+          <Tag colorScheme="danger" variant="solid">Critical</Tag>
+          <Tag colorScheme="warning" variant="solid">High</Tag>
+          <Tag colorScheme="primary" variant="soft">Medium</Tag>
+          <Tag colorScheme="neutral" variant="soft">Low</Tag>
+        </Flex>
+      </Box>
+    </VStack>
+  ),
 };
 
-export const ClosableActive: Story = {
-  args: {
-    variant: 'active',
-    children: (
-      <>
-        Active Tag
-        <TagCloseButton />
-      </>
-    ),
-  },
+/**
+ * Removable filter tags
+ */
+export const FilterTags: Story = {
+  render: () => (
+    <VStack align="start" spacing={4}>
+      <Text fontWeight="bold">Active Filters</Text>
+      <Flex gap={2} wrap="wrap">
+        <Tag colorScheme="primary" variant="soft">
+          Category: Design
+          <TagCloseButton />
+        </Tag>
+        <Tag colorScheme="primary" variant="soft">
+          Status: Active
+          <TagCloseButton />
+        </Tag>
+        <Tag colorScheme="primary" variant="soft">
+          Date: Last 7 days
+          <TagCloseButton />
+        </Tag>
+      </Flex>
+    </VStack>
+  ),
 };
