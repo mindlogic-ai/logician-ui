@@ -511,48 +511,56 @@ export const FontSizes: Story = {
       {
         component: <H1 color="gray.1200">H1 - Page titles</H1>,
         name: 'H1',
+        token: 'h1',
         base: '2.4em',
         md: '3em',
       },
       {
         component: <H2 color="gray.1200">H2 - Section headers</H2>,
         name: 'H2',
+        token: 'h2',
         base: '2em',
         md: '2.5em',
       },
       {
         component: <H3 color="gray.1200">H3 - Subsection headers</H3>,
         name: 'H3',
+        token: 'h3',
         base: '1.5em',
         md: '1.75em',
       },
       {
         component: <H4 color="gray.1200">H4 - Card titles</H4>,
         name: 'H4',
+        token: 'h4',
         base: '1.25em',
         md: '1.44em',
       },
       {
         component: <H5 color="gray.1200">H5 - Small headings</H5>,
         name: 'H5',
+        token: 'h5',
         base: '1.1em',
         md: '1.2em',
       },
       {
         component: <Text color="gray.1200">Text - Body text</Text>,
         name: 'Text',
+        token: 'p',
         base: '1em',
         md: '1em',
       },
       {
         component: <Subtitle color="gray.1200">Subtitle - Subtitle text</Subtitle>,
         name: 'Subtitle',
+        token: 'subtitle',
         base: '0.92em',
         md: '1em',
       },
       {
         component: <Subtext color="gray.800">Subtext - Helper text, captions</Subtext>,
         name: 'Subtext',
+        token: 'subtext',
         base: '0.92em',
         md: '1em',
       },
@@ -565,17 +573,37 @@ export const FontSizes: Story = {
             Typography Components
           </H4>
           <Subtext color="gray.700">
-            Responsive typography using em units. Import from @mindlogic-ai/logician-ui.
+            Responsive typography using em units. Use the token with fontSize prop on any component.
           </Subtext>
         </Box>
 
         <Divider />
+
+        {/* Header row */}
+        <Flex w="full" px={4} gap={4} display={{ base: 'none', md: 'flex' }}>
+          <Box flex="1" minW="300px">
+            <Subtext color="gray.600" fontWeight="semibold">
+              Component
+            </Subtext>
+          </Box>
+          <Box w="80px" textAlign="center">
+            <Subtext color="gray.600" fontWeight="semibold">
+              Token
+            </Subtext>
+          </Box>
+          <Box w="120px" textAlign="right">
+            <Subtext color="gray.600" fontWeight="semibold">
+              Size (mobile → desktop)
+            </Subtext>
+          </Box>
+        </Flex>
 
         <VStack gap={0} align="stretch" w="full">
           {typographyItems.map((item) => (
             <Flex
               key={item.name}
               py={4}
+              px={4}
               borderBottom="1px solid"
               borderColor="gray.100"
               align="center"
@@ -588,17 +616,19 @@ export const FontSizes: Story = {
               </Box>
               <Flex gap={4} align="center">
                 <Box
+                  w="80px"
                   px={2}
                   py={1}
-                  bg="gray.100"
+                  bg="primary.lightest"
                   borderRadius="md"
                   fontFamily="mono"
                   fontSize="xs"
-                  color="gray.700"
+                  color="primary.dark"
+                  textAlign="center"
                 >
-                  {item.name}
+                  {item.token}
                 </Box>
-                <Text fontFamily="mono" fontSize="xs" color="gray.600">
+                <Text w="120px" fontFamily="mono" fontSize="xs" color="gray.600" textAlign="right">
                   {item.base} → {item.md}
                 </Text>
               </Flex>
@@ -619,11 +649,15 @@ export const FontSizes: Story = {
             fontSize="sm"
             overflow="auto"
           >
-            {`import { H1, H2, H3, H4, H5, Text, Subtitle, Subtext } from '@mindlogic-ai/logician-ui';
+            {`// Using Typography components (recommended)
+import { H1, Text, Subtext } from '@mindlogic-ai/logician-ui';
 
 <H1>Page Title</H1>
-<Text>Body content goes here.</Text>
-<Subtext>Helper text or caption.</Subtext>`}
+<Text>Body content</Text>
+
+// Using tokens on any Chakra component
+<Box fontSize="h1">Large text</Box>
+<ChakraText fontSize="subtext">Small helper</ChakraText>`}
           </Box>
         </Box>
       </VStack>
