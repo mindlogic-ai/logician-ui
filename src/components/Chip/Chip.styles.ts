@@ -1,128 +1,142 @@
-import * as CSS from 'csstype';
+import { StyleProps } from '@chakra-ui/react';
 
-import theme from '@/theme/index';
+import { ChipColorScheme, ChipVariant } from './Chip.types';
 
-import { ChipProps, ChipUseCase } from './Chip.types';
-
-export const baseStyles = {
-  borderRadius: '32px', // large border radius to round it
+export const baseStyles: StyleProps = {
+  borderRadius: '32px',
   px: 3,
-  py: 2, // Use direct spacing value instead of theme.spacing[2]
-  textTransform: 'none' as CSS.Property.TextTransform,
+  py: 2,
+  textTransform: 'none',
 };
 
 /**
- * Chip variant styles using the Golden Ratio color system.
+ * Chip styles using a two-dimensional variant system.
  *
- * Uses semantic tokens where possible for consistency with design system.
- * The `highlight` variant uses violet for accent differentiation.
+ * Structure: colorSchemeStyles[colorScheme][variant]
+ *
+ * Uses semantic color tokens from the Golden Ratio color system.
  */
-export const useCaseStyles: Record<
-  ChipUseCase,
-  Record<string, Partial<ChipProps>>
+export const colorSchemeStyles: Record<
+  ChipColorScheme,
+  Record<ChipVariant, StyleProps>
 > = {
   primary: {
     solid: {
-      bgColor: theme.semanticTokens.colors.primary.main,
+      bgColor: 'primary.main',
       color: 'white',
+    },
+    soft: {
+      bgColor: 'primary.lightest',
+      color: 'primary.dark',
     },
     outline: {
       border: '1px solid',
-      borderColor: theme.semanticTokens.colors.primary.main,
-      color: theme.semanticTokens.colors.primary.main,
-      bgColor: 'white',
-    },
-    subtle: {
-      bgColor: theme.semanticTokens.colors.primary.lightest, // #E8EEFB
-      color: theme.semanticTokens.colors.primary.main,
+      borderColor: 'primary.main',
+      color: 'primary.main',
+      bgColor: 'transparent',
     },
   },
-  /**
-   * Secondary chips - Uses violet (secondary) semantic tokens
-   * Consistent with Button/IconButton secondary variants
-   */
   secondary: {
     solid: {
-      bgColor: theme.semanticTokens.colors.secondary.main, // #9117D0 (violet)
-      color: theme.colors.white,
-    },
-    outline: {
-      border: '1px solid',
-      borderColor: theme.semanticTokens.colors.secondary.main,
-      color: theme.semanticTokens.colors.secondary.main,
-      bgColor: 'white',
-    },
-    subtle: {
-      bgColor: theme.semanticTokens.colors.secondary.lightest, // #F4E8FB
-      color: theme.semanticTokens.colors.secondary.main,
-    },
-  },
-  success: {
-    solid: {
-      bgColor: theme.semanticTokens.colors.success.main,
+      bgColor: 'secondary.main',
       color: 'white',
     },
+    soft: {
+      bgColor: 'secondary.lightest',
+      color: 'secondary.dark',
+    },
     outline: {
       border: '1px solid',
-      borderColor: theme.semanticTokens.colors.success.main,
-      color: theme.semanticTokens.colors.success.main,
-      bgColor: 'white',
-    },
-    subtle: {
-      bgColor: theme.semanticTokens.colors.success.lightest, // #E9FBE8
-      color: theme.semanticTokens.colors.success.main,
+      borderColor: 'secondary.main',
+      color: 'secondary.main',
+      bgColor: 'transparent',
     },
   },
   danger: {
     solid: {
-      bgColor: theme.semanticTokens.colors.danger.main,
+      bgColor: 'danger.main',
       color: 'white',
+    },
+    soft: {
+      bgColor: 'danger.lightest',
+      color: 'danger.dark',
     },
     outline: {
       border: '1px solid',
-      borderColor: theme.semanticTokens.colors.danger.main,
-      color: theme.semanticTokens.colors.danger.main,
-      bgColor: 'white',
-    },
-    subtle: {
-      bgColor: theme.semanticTokens.colors.danger.lightest, // #FBE8E9
-      color: theme.semanticTokens.colors.danger.main,
+      borderColor: 'danger.main',
+      color: 'danger.main',
+      bgColor: 'transparent',
     },
   },
-  dark: {
+  success: {
     solid: {
-      bgColor: theme.colors.gray[800],
+      bgColor: 'success.main',
       color: 'white',
+    },
+    soft: {
+      bgColor: 'success.lightest',
+      color: 'success.dark',
     },
     outline: {
       border: '1px solid',
-      backgroundColor: 'transparent',
-      borderColor: theme.colors.gray[700],
-      color: theme.colors.gray[700],
-    },
-    subtle: {
-      bgColor: theme.colors.gray[100],
-      color: theme.colors.gray[800],
+      borderColor: 'success.main',
+      color: 'success.main',
+      bgColor: 'transparent',
     },
   },
-  /**
-   * Highlight chips - Darker violet for special emphasis
-   * @deprecated Consider using `secondary` for violet chips
-   */
-  highlight: {
+  warning: {
     solid: {
-      bgColor: theme.colors.violet[600], // #7412A6 - Darker than secondary.main
+      bgColor: 'warning.main',
       color: 'white',
+    },
+    soft: {
+      bgColor: 'warning.lightest',
+      color: 'warning.dark',
     },
     outline: {
       border: '1px solid',
-      backgroundColor: 'transparent',
-      borderColor: theme.colors.violet[600],
-      color: theme.colors.violet[600],
+      borderColor: 'warning.main',
+      color: 'warning.main',
+      bgColor: 'transparent',
     },
-    subtle: {
-      bgColor: theme.colors.violet[50], // #F4E8FB
-      color: theme.colors.violet[600],
+  },
+  neutral: {
+    solid: {
+      bgColor: 'gray.800',
+      color: 'white',
+    },
+    soft: {
+      bgColor: 'gray.100',
+      color: 'gray.800',
+    },
+    outline: {
+      border: '1px solid',
+      borderColor: 'gray.700',
+      color: 'gray.700',
+      bgColor: 'transparent',
     },
   },
 };
+
+/**
+ * Helper function to get chip styles for a given colorScheme and variant.
+ */
+export const getChipStyles = (
+  colorScheme: ChipColorScheme = 'primary',
+  variant: ChipVariant = 'soft'
+): StyleProps => {
+  return colorSchemeStyles[colorScheme][variant];
+};
+
+/** All available color schemes */
+export const colorSchemes: ChipColorScheme[] = [
+  'primary',
+  'secondary',
+  'danger',
+  'success',
+  'warning',
+  'neutral',
+];
+
+/** All available variants */
+export const variants: ChipVariant[] = ['solid', 'soft', 'outline'];
