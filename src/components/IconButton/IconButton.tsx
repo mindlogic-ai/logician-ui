@@ -12,8 +12,8 @@ import { IconButtonProps } from './IconButton.types';
  *
  * @example
  * ```tsx
- * <IconButton colorScheme="primary" variant="solid" icon={<Icon />} />
- * <IconButton colorScheme="danger" variant="soft" icon={<Icon />} />
+ * <IconButton colorScheme="primary" variant="soft" icon={<Icon />} />
+ * <IconButton colorScheme="danger" variant="solid" icon={<Icon />} />
  * <IconButton colorScheme="neutral" variant="ghost" icon={<Icon />} />
  * ```
  */
@@ -21,7 +21,7 @@ export const IconButton = forwardRef(
   (
     {
       colorScheme = 'primary',
-      variant = 'solid',
+      variant = 'soft',
       sx,
       ...rest
     }: IconButtonProps,

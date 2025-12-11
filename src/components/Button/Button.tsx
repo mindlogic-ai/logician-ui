@@ -12,8 +12,8 @@ import { ButtonProps } from './Button.types';
  *
  * @example
  * ```tsx
- * <Button colorScheme="primary" variant="solid">Submit</Button>
- * <Button colorScheme="danger" variant="soft">Delete</Button>
+ * <Button colorScheme="primary" variant="soft">Submit</Button>
+ * <Button colorScheme="danger" variant="solid">Delete</Button>
  * <Button colorScheme="secondary" variant="outline">Cancel</Button>
  * <Button colorScheme="neutral" variant="ghost">Close</Button>
  * ```
@@ -22,7 +22,7 @@ export const Button = forwardRef(
   (
     {
       colorScheme = 'primary',
-      variant = 'solid',
+      variant = 'soft',
       _focus,
       size,
       ...rest

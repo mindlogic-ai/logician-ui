@@ -108,6 +108,7 @@ export const Carousel: React.FC<CarouselProps> = ({
         <IconButton
           aria-label="Previous Slide"
           icon={<IoIosArrowBack />}
+          variant="ghost"
           position="absolute"
           left={3}
           top="50%"
@@ -123,6 +124,7 @@ export const Carousel: React.FC<CarouselProps> = ({
         <IconButton
           aria-label="Next Slide"
           icon={<IoChevronForward />}
+          variant="ghost"
           position="absolute"
           right={3}
           top="50%"
