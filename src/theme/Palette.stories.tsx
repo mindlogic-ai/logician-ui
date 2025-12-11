@@ -491,6 +491,109 @@ export const ContrastReference: Story = {
   },
 };
 
+/**
+ * Font size scale showing responsive typography tokens.
+ * Uses em units for scalability and includes mobile/desktop breakpoints.
+ */
+export const FontSizes: Story = {
+  name: 'Font Sizes',
+  render: () => {
+    const fontSizeTokens = [
+      { name: 'h1', base: '2.4em', md: '3em', description: 'Page titles' },
+      { name: 'h2', base: '2em', md: '2.5em', description: 'Section headers' },
+      { name: 'h3', base: '1.5em', md: '1.75em', description: 'Subsection headers' },
+      { name: 'h4', base: '1.25em', md: '1.44em', description: 'Card titles' },
+      { name: 'h5', base: '1.1em', md: '1.2em', description: 'Small headings' },
+      { name: 'p', base: '1em', md: '1em', description: 'Body text' },
+      { name: 'subtitle', base: '0.92em', md: '1em', description: 'Subtitle text' },
+      { name: 'subtext', base: '0.92em', md: '1em', description: 'Helper text, captions' },
+    ];
+
+    return (
+      <VStack gap={6} align="flex-start" w="full">
+        <Box>
+          <H4 color="gray.1300" mb={2}>
+            Font Size Scale
+          </H4>
+          <Subtext color="gray.700">
+            Responsive typography tokens using em units. Scales automatically based on root font size.
+          </Subtext>
+        </Box>
+
+        <Divider />
+
+        <VStack gap={4} align="stretch" w="full">
+          {fontSizeTokens.map((token) => (
+            <Flex
+              key={token.name}
+              p={4}
+              borderRadius="md"
+              border="1px solid"
+              borderColor="gray.200"
+              align="center"
+              justify="space-between"
+              wrap="wrap"
+              gap={4}
+            >
+              <Box flex="1" minW="200px">
+                <Text
+                  fontSize={token.name}
+                  color="gray.1200"
+                  fontWeight="semibold"
+                  lineHeight="1.2"
+                >
+                  {token.name}
+                </Text>
+              </Box>
+              <Flex gap={6} align="center" wrap="wrap">
+                <Box>
+                  <Subtext color="gray.600" mb={1}>
+                    Mobile
+                  </Subtext>
+                  <Text fontFamily="mono" fontSize="sm" color="gray.900">
+                    {token.base}
+                  </Text>
+                </Box>
+                <Box>
+                  <Subtext color="gray.600" mb={1}>
+                    Desktop
+                  </Subtext>
+                  <Text fontFamily="mono" fontSize="sm" color="gray.900">
+                    {token.md}
+                  </Text>
+                </Box>
+                <Box minW="150px">
+                  <Subtext color="gray.700">{token.description}</Subtext>
+                </Box>
+              </Flex>
+            </Flex>
+          ))}
+        </VStack>
+
+        <Box mt={4} p={4} bg="gray.50" borderRadius="md" w="full">
+          <Subtitle color="gray.1100" mb={2} fontWeight="semibold">
+            Usage Notes
+          </Subtitle>
+          <VStack align="flex-start" gap={1}>
+            <Subtext color="gray.800">
+              • Font sizes use <strong>em units</strong> for relative scaling
+            </Subtext>
+            <Subtext color="gray.800">
+              • <strong>base</strong> values apply on mobile ({"<"}768px)
+            </Subtext>
+            <Subtext color="gray.800">
+              • <strong>md</strong> values apply on desktop (≥768px)
+            </Subtext>
+            <Subtext color="gray.800">
+              • Use Typography components (H1-H5, Text, Subtext) for semantic markup
+            </Subtext>
+          </VStack>
+        </Box>
+      </VStack>
+    );
+  },
+};
+
 // Keep the original Default story for backwards compatibility
 export const Default: Story = {
   render: () => {
