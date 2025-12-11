@@ -16,7 +16,7 @@ export const MenuItem = ({
         isDangerVariant ? theme.semanticTokens.colors.danger.main : 'gray.1000'
       }
       iconSpacing={0}
-      fontSize="md"
+      fontSize="p"
       borderRadius="sm"
       py={2}
       minW="fit-content"

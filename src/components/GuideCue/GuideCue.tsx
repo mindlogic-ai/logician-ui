@@ -194,7 +194,7 @@ export const GuideCue = ({
                   color="primary.dark"
                   opacity={0.5}
                   mb={2}
-                  fontSize="xs"
+                  fontSize="subtext"
                 >{`${index + 1} / ${cueRefs.length}`}</Subtext>
               )}
               <Subtitle color="primary.dark" fontWeight="bold" mb={1}>

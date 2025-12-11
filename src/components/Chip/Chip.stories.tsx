@@ -101,7 +101,7 @@ export const AllCombinations: Story = {
         <Box w="100px" />
         {variants.map((variant) => (
           <Box key={variant} w="100px" textAlign="center">
-            <Text fontWeight="bold" fontSize="sm">
+            <Text fontWeight="bold" fontSize="subtext">
               {variant}
             </Text>
           </Box>
@@ -112,7 +112,7 @@ export const AllCombinations: Story = {
       {colorSchemes.map((colorScheme) => (
         <Flex key={colorScheme} mb={4} gap={4} align="center">
           <Box w="100px">
-            <Text fontWeight="medium" fontSize="sm">
+            <Text fontWeight="medium" fontSize="subtext">
               {colorScheme}
             </Text>
           </Box>

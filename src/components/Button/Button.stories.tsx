@@ -59,7 +59,7 @@ export const AllCombinations: Story = {
         <Box w="100px" />
         {variants.map((variant) => (
           <Box key={variant} w="120px" textAlign="center">
-            <Text fontSize="sm" fontWeight="bold" color="gray.600">
+            <Text fontSize="subtext" fontWeight="bold" color="gray.600">
               {variant}
             </Text>
           </Box>
@@ -70,7 +70,7 @@ export const AllCombinations: Story = {
       {colorSchemes.map((colorScheme) => (
         <HStack key={colorScheme} spacing={4}>
           <Box w="100px">
-            <Text fontSize="sm" fontWeight="bold" color="gray.600">
+            <Text fontSize="subtext" fontWeight="bold" color="gray.600">
               {colorScheme}
             </Text>
           </Box>
@@ -97,7 +97,7 @@ export const AllWithIcons: Story = {
         <Box w="100px" />
         {variants.map((variant) => (
           <Box key={variant} w="140px" textAlign="center">
-            <Text fontSize="sm" fontWeight="bold" color="gray.600">
+            <Text fontSize="subtext" fontWeight="bold" color="gray.600">
               {variant}
             </Text>
           </Box>
@@ -107,7 +107,7 @@ export const AllWithIcons: Story = {
       {colorSchemes.map((colorScheme) => (
         <HStack key={colorScheme} spacing={4}>
           <Box w="100px">
-            <Text fontSize="sm" fontWeight="bold" color="gray.600">
+            <Text fontSize="subtext" fontWeight="bold" color="gray.600">
               {colorScheme}
             </Text>
           </Box>
@@ -136,7 +136,7 @@ export const Primary: Story = {
     <Flex gap={4} wrap="wrap">
       {variants.map((variant) => (
         <VStack key={variant} spacing={1}>
-          <Text fontSize="sm" color="gray.600">{variant}</Text>
+          <Text fontSize="subtext" color="gray.600">{variant}</Text>
           <Button colorScheme="primary" variant={variant}>
             Primary
           </Button>
@@ -154,7 +154,7 @@ export const Secondary: Story = {
     <Flex gap={4} wrap="wrap">
       {variants.map((variant) => (
         <VStack key={variant} spacing={1}>
-          <Text fontSize="sm" color="gray.600">{variant}</Text>
+          <Text fontSize="subtext" color="gray.600">{variant}</Text>
           <Button colorScheme="secondary" variant={variant}>
             Secondary
           </Button>
@@ -172,7 +172,7 @@ export const Danger: Story = {
     <Flex gap={4} wrap="wrap">
       {variants.map((variant) => (
         <VStack key={variant} spacing={1}>
-          <Text fontSize="sm" color="gray.600">{variant}</Text>
+          <Text fontSize="subtext" color="gray.600">{variant}</Text>
           <Button colorScheme="danger" variant={variant}>
             Danger
           </Button>
@@ -190,7 +190,7 @@ export const Success: Story = {
     <Flex gap={4} wrap="wrap">
       {variants.map((variant) => (
         <VStack key={variant} spacing={1}>
-          <Text fontSize="sm" color="gray.600">{variant}</Text>
+          <Text fontSize="subtext" color="gray.600">{variant}</Text>
           <Button colorScheme="success" variant={variant}>
             Success
           </Button>
@@ -208,7 +208,7 @@ export const Warning: Story = {
     <Flex gap={4} wrap="wrap">
       {variants.map((variant) => (
         <VStack key={variant} spacing={1}>
-          <Text fontSize="sm" color="gray.600">{variant}</Text>
+          <Text fontSize="subtext" color="gray.600">{variant}</Text>
           <Button colorScheme="warning" variant={variant}>
             Warning
           </Button>
@@ -226,7 +226,7 @@ export const Neutral: Story = {
     <Flex gap={4} wrap="wrap">
       {variants.map((variant) => (
         <VStack key={variant} spacing={1}>
-          <Text fontSize="sm" color="gray.600">{variant}</Text>
+          <Text fontSize="subtext" color="gray.600">{variant}</Text>
           <Button colorScheme="neutral" variant={variant}>
             Neutral
           </Button>
@@ -244,7 +244,7 @@ export const SolidVariant: Story = {
     <Flex gap={4} wrap="wrap">
       {colorSchemes.map((colorScheme) => (
         <VStack key={colorScheme} spacing={1}>
-          <Text fontSize="sm" color="gray.600">{colorScheme}</Text>
+          <Text fontSize="subtext" color="gray.600">{colorScheme}</Text>
           <Button colorScheme={colorScheme} variant="solid">
             Solid
           </Button>
@@ -262,7 +262,7 @@ export const SoftVariant: Story = {
     <Flex gap={4} wrap="wrap">
       {colorSchemes.map((colorScheme) => (
         <VStack key={colorScheme} spacing={1}>
-          <Text fontSize="sm" color="gray.600">{colorScheme}</Text>
+          <Text fontSize="subtext" color="gray.600">{colorScheme}</Text>
           <Button colorScheme={colorScheme} variant="soft">
             Soft
           </Button>
@@ -280,7 +280,7 @@ export const OutlineVariant: Story = {
     <Flex gap={4} wrap="wrap">
       {colorSchemes.map((colorScheme) => (
         <VStack key={colorScheme} spacing={1}>
-          <Text fontSize="sm" color="gray.600">{colorScheme}</Text>
+          <Text fontSize="subtext" color="gray.600">{colorScheme}</Text>
           <Button colorScheme={colorScheme} variant="outline">
             Outline
           </Button>
@@ -298,7 +298,7 @@ export const GhostVariant: Story = {
     <Flex gap={4} wrap="wrap">
       {colorSchemes.map((colorScheme) => (
         <VStack key={colorScheme} spacing={1}>
-          <Text fontSize="sm" color="gray.600">{colorScheme}</Text>
+          <Text fontSize="subtext" color="gray.600">{colorScheme}</Text>
           <Button colorScheme={colorScheme} variant="ghost">
             Ghost
           </Button>

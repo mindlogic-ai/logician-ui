@@ -36,11 +36,11 @@ export const AllVariants: Story = {
   render: () => (
     <Flex gap={4}>
       <VStack spacing={1}>
-        <Text fontSize="sm" color="gray.600">default</Text>
+        <Text fontSize="subtext" color="gray.600">default</Text>
         <Tag variant="default">Default Tag</Tag>
       </VStack>
       <VStack spacing={1}>
-        <Text fontSize="sm" color="gray.600">active</Text>
+        <Text fontSize="subtext" color="gray.600">active</Text>
         <Tag variant="active">Active Tag</Tag>
       </VStack>
     </Flex>

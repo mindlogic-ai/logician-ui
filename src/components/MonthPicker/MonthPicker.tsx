@@ -221,7 +221,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
               <IoIosArrowBack />
             </Button>
 
-            <Text fontWeight="semibold" fontSize="lg">
+            <Text fontWeight="semibold" fontSize="h5">
               {currentYear}
             </Text>
 

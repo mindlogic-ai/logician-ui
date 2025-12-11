@@ -126,14 +126,14 @@ const ColorCard = ({
               w="100%"
               borderRadius="md"
             >
-              <Text color="inherit" fontSize="xs">
+              <Text color="inherit" fontSize="subtext">
                 {hexCode}
               </Text>
             </Box>
           )}
         </Flex>
       </Tooltip>
-      <Text color="gray.1200" mt={2} fontSize="sm">
+      <Text color="gray.1200" mt={2} fontSize="subtext">
         {color}.{shade}
       </Text>
       <Subtext color="gray.700">{shadeValue !== hexCode && shadeValue}</Subtext>
@@ -182,7 +182,7 @@ const PrimitiveColorCard = ({
           }}
         >
           {wasCopied ? (
-            <Text color={readableColor(hex)} fontSize="xs">
+            <Text color={readableColor(hex)} fontSize="subtext">
               Copied!
             </Text>
           ) : (
@@ -192,7 +192,7 @@ const PrimitiveColorCard = ({
           )}
         </Flex>
       </Tooltip>
-      <Text color="gray.1200" mt={1} fontSize="xs">
+      <Text color="gray.1200" mt={1} fontSize="subtext">
         {name}.{shade}
       </Text>
     </Flex>
@@ -476,7 +476,7 @@ export const ContrastReference: Story = {
               >
                 <Subtext color="gray.800">{pair.label}</Subtext>
                 <Flex align="center" gap={2}>
-                  <Text fontFamily="mono" fontSize="xs" color="gray.700">
+                  <Text fontFamily="mono" fontSize="subtext" color="gray.700">
                     {pair.ratio}
                   </Text>
                   <Box
@@ -622,13 +622,13 @@ export const FontSizes: Story = {
                   bg="primary.lightest"
                   borderRadius="md"
                   fontFamily="mono"
-                  fontSize="xs"
+                  fontSize="subtext"
                   color="primary.dark"
                   textAlign="center"
                 >
                   {item.token}
                 </Box>
-                <Text w="120px" fontFamily="mono" fontSize="xs" color="gray.600" textAlign="right">
+                <Text w="120px" fontFamily="mono" fontSize="subtext" color="gray.600" textAlign="right">
                   {item.base} → {item.md}
                 </Text>
               </Flex>
@@ -646,7 +646,7 @@ export const FontSizes: Story = {
             bg="gray.800"
             color="gray.100"
             borderRadius="md"
-            fontSize="sm"
+            fontSize="subtext"
             overflow="auto"
           >
             {`// Using Typography components (recommended)

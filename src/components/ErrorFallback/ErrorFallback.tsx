@@ -83,10 +83,10 @@ User Agent: ${errorInfo.userAgent}`;
 
             {/* Error Title */}
             <VStack spacing={3} align="center" w="full">
-              <H1 color="gray.1200" fontSize="3xl" fontWeight="bold">
+              <H1 color="gray.1200" fontSize="h2" fontWeight="bold">
                 {translate('error_boundary_title')}
               </H1>
-              <Subtitle color="gray.1000" fontSize="lg" maxW="md">
+              <Subtitle color="gray.1000" fontSize="h5" maxW="md">
                 {translate('error_boundary_subtitle')}
               </Subtitle>
             </VStack>
