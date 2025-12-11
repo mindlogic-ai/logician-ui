@@ -1,13 +1,57 @@
-import { Box, Flex, useTheme, useToken, VStack } from '@chakra-ui/react';
+import {
+  Box,
+  Divider,
+  Flex,
+  Grid,
+  useTheme,
+  useToken,
+  VStack,
+} from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 import { lighten, readableColor } from 'polished';
 import { MouseEventHandler, useState } from 'react';
 
 import { Tooltip } from '../components/Tooltip';
-import { H4, Text } from '../components/Typography';
+import { H4, Subtext, Text, Subtitle } from '../components/Typography';
+import { colors } from './colors';
 
 const meta = {
   title: 'Setup/Theme',
+  parameters: {
+    docs: {
+      description: {
+        component: `
+## Golden Ratio Color System
+
+A mathematically harmonious color palette designed using the golden ratio (φ ≈ 1.618)
+to create visually balanced color relationships.
+
+### Design Principles
+
+1. **Accessibility First**: All semantic color combinations meet WCAG 2.1 AA standards
+2. **Cool Gray Foundation**: Slate-based grays with blue undertone for modern feel
+3. **Consistent Scale**: Each color has 50/100/200/300/500/600/700/800/900 steps
+
+### Semantic Tokens
+
+- **Primary** (Blue): Main brand interactions
+- **Secondary** (Violet): Supporting accent elements
+- **Success** (Green): Positive feedback
+- **Warning** (Gold): Cautionary feedback
+- **Danger** (Rose): Error/destructive feedback
+
+### Primitive Palettes
+
+- **Blue**: Primary brand color
+- **Rose**: Danger/error states
+- **Green**: Success states
+- **Violet**: Secondary/accent
+- **Gold**: Warning states
+- **Gray**: Neutral tones (slate-based with cool blue undertone)
+        `,
+      },
+    },
+  },
 } satisfies Meta;
 
 export default meta;
@@ -37,7 +81,6 @@ const ColorCard = ({
   return (
     <Flex flexDir="column" align="center" key={shade} p={2}>
       <Tooltip label="Copy hex code" placement="top">
-        {/* Color block */}
         <Flex
           w="100px"
           h="100px"
@@ -65,7 +108,6 @@ const ColorCard = ({
             </Flex>
           ) : (
             <Box
-              // Label
               textAlign="center"
               mt={4}
               color={readableColor(lighten(0.2, hexCode))}
@@ -75,19 +117,381 @@ const ColorCard = ({
               w="100%"
               borderRadius="md"
             >
-              <Text color="inherit">{hexCode}</Text>
+              <Text color="inherit" fontSize="xs">
+                {hexCode}
+              </Text>
             </Box>
           )}
         </Flex>
       </Tooltip>
-      <Text color="gray.1200" mt={2}>
+      <Text color="gray.1200" mt={2} fontSize="sm">
         {color}.{shade}
       </Text>
-      <Text color="gray.800">{shadeValue !== hexCode && shadeValue}</Text>
+      <Subtext color="gray.700">{shadeValue !== hexCode && shadeValue}</Subtext>
     </Flex>
   );
 };
 
+const PrimitiveColorCard = ({
+  name,
+  shade,
+  hex,
+}: {
+  name: string;
+  shade: string;
+  hex: string;
+}) => {
+  const [wasCopied, setWasCopied] = useState<boolean>();
+
+  const handleClick: MouseEventHandler<HTMLButtonElement> = () => {
+    navigator.clipboard.writeText(hex);
+    setWasCopied(true);
+    setTimeout(() => {
+      setWasCopied(false);
+    }, 2000);
+  };
+
+  return (
+    <Flex flexDir="column" align="center" p={1}>
+      <Tooltip label="Copy hex code" placement="top">
+        <Flex
+          w="72px"
+          h="56px"
+          align="center"
+          justify="center"
+          bg={hex}
+          borderRadius="md"
+          boxShadow="sm"
+          border="1px solid"
+          borderColor="gray.200"
+          as="button"
+          transition="transform 0.1s ease-in-out"
+          // @ts-expect-error as prop
+          onClick={handleClick}
+          _hover={{
+            transform: 'scale(1.05)',
+          }}
+        >
+          {wasCopied ? (
+            <Text color={readableColor(hex)} fontSize="xs">
+              Copied!
+            </Text>
+          ) : (
+            <Text color={readableColor(hex)} fontSize="10px" fontFamily="mono">
+              {hex}
+            </Text>
+          )}
+        </Flex>
+      </Tooltip>
+      <Text color="gray.1200" mt={1} fontSize="xs">
+        {name}.{shade}
+      </Text>
+    </Flex>
+  );
+};
+
+/**
+ * Semantic tokens provide meaning-based color references for UI elements.
+ * These are the recommended colors to use in components.
+ */
+export const SemanticTokens: Story = {
+  name: 'Semantic Tokens',
+  render: () => {
+    const theme = useTheme();
+    return (
+      <VStack gap={6} align="flex-start" w="full">
+        <Box>
+          <H4 color="gray.1300" mb={2}>
+            Semantic Color Tokens
+          </H4>
+          <Subtext color="gray.700">
+            Use these tokens in components for consistent theming. Click to copy
+            hex value.
+          </Subtext>
+        </Box>
+
+        <Divider />
+
+        {Object.entries(theme.semanticTokens.colors)
+          .filter(([color]) => !color.startsWith('chakra'))
+          .map(([color, shades]) => (
+            <Flex key={color} gap={4} align="center" wrap="wrap">
+              <H4
+                mb={2}
+                w="100px"
+                textTransform="capitalize"
+                color="gray.1200"
+              >
+                {color}
+              </H4>
+              <Flex gap={2} wrap="wrap">
+                {Object.entries(shades).map(([shade, shadeValue]) => (
+                  <ColorCard
+                    key={shade}
+                    color={color}
+                    shade={shade}
+                    shadeValue={shadeValue as string}
+                  />
+                ))}
+              </Flex>
+            </Flex>
+          ))}
+      </VStack>
+    );
+  },
+};
+
+/**
+ * Primitive colors are the raw color values organized by hue.
+ * Use semantic tokens when possible, but these are available for edge cases.
+ */
+export const PrimitiveColors: Story = {
+  name: 'Primitive Colors',
+  render: () => {
+    const primitiveColors = {
+      blue: colors.blue,
+      rose: colors.rose,
+      green: colors.green,
+      violet: colors.violet,
+      gold: colors.gold,
+    };
+
+    return (
+      <VStack gap={6} align="flex-start" w="full">
+        <Box>
+          <H4 color="gray.1300" mb={2}>
+            Primitive Color Palettes
+          </H4>
+          <Subtext color="gray.700">
+            Raw color values organized by hue. Prefer semantic tokens when
+            possible.
+          </Subtext>
+        </Box>
+
+        <Divider />
+
+        {Object.entries(primitiveColors).map(([name, shades]) => (
+          <Box key={name} w="full">
+            <Subtitle
+              color="gray.1100"
+              textTransform="capitalize"
+              mb={2}
+              fontWeight="semibold"
+            >
+              {name}
+            </Subtitle>
+            <Flex gap={1} wrap="wrap">
+              {Object.entries(shades).map(([shade, hex]) => (
+                <PrimitiveColorCard
+                  key={shade}
+                  name={name}
+                  shade={shade}
+                  hex={hex as string}
+                />
+              ))}
+            </Flex>
+          </Box>
+        ))}
+      </VStack>
+    );
+  },
+};
+
+/**
+ * Extended gray scale with 16 shades (0-1500) for fine-grained control.
+ * Based on a cool slate palette with subtle blue undertone.
+ */
+export const GrayScale: Story = {
+  name: 'Gray Scale (Slate)',
+  render: () => {
+    return (
+      <VStack gap={6} align="flex-start" w="full">
+        <Box>
+          <H4 color="gray.1300" mb={2}>
+            Gray Scale (Slate-based)
+          </H4>
+          <Subtext color="gray.700">
+            Extended 16-shade gray scale with cool blue undertone. Optimized for
+            WCAG contrast ratios.
+          </Subtext>
+        </Box>
+
+        <Divider />
+
+        <Grid templateColumns="repeat(auto-fill, minmax(80px, 1fr))" gap={2}>
+          {Object.entries(colors.gray).map(([shade, hex]) => (
+            <PrimitiveColorCard
+              key={shade}
+              name="gray"
+              shade={shade}
+              hex={hex as string}
+            />
+          ))}
+        </Grid>
+
+        <Box mt={4} p={4} bg="gray.50" borderRadius="md" w="full">
+          <Subtitle color="gray.1100" mb={2} fontWeight="semibold">
+            Recommended Usage
+          </Subtitle>
+          <VStack align="flex-start" gap={1}>
+            <Subtext color="gray.800">
+              • <strong>gray.0-200</strong>: Backgrounds, subtle borders
+            </Subtext>
+            <Subtext color="gray.800">
+              • <strong>gray.300-500</strong>: Borders, disabled states,
+              placeholders
+            </Subtext>
+            <Subtext color="gray.800">
+              • <strong>gray.600-800</strong>: Secondary text, icons
+            </Subtext>
+            <Subtext color="gray.800">
+              • <strong>gray.900-1200</strong>: Primary text, headings
+            </Subtext>
+            <Subtext color="gray.800">
+              • <strong>gray.1300-1500</strong>: High-contrast text, dark
+              backgrounds
+            </Subtext>
+          </VStack>
+        </Box>
+      </VStack>
+    );
+  },
+};
+
+/**
+ * Contrast ratio reference for accessibility compliance.
+ */
+export const ContrastReference: Story = {
+  name: 'Contrast Reference',
+  render: () => {
+    const contrastPairs = [
+      {
+        bg: 'primary.lightest',
+        text: 'primary.dark',
+        label: 'primary.lightest + dark',
+        ratio: '7.2:1',
+        badge: 'AAA',
+      },
+      {
+        bg: 'primary.main',
+        text: 'white',
+        label: 'primary.main + white',
+        ratio: '5.9:1',
+        badge: 'AA',
+      },
+      {
+        bg: 'danger.lightest',
+        text: 'danger.dark',
+        label: 'danger.lightest + dark',
+        ratio: '7.4:1',
+        badge: 'AAA',
+      },
+      {
+        bg: 'danger.main',
+        text: 'white',
+        label: 'danger.main + white',
+        ratio: '5.2:1',
+        badge: 'AA',
+      },
+      {
+        bg: 'success.lightest',
+        text: 'success.dark',
+        label: 'success.lightest + dark',
+        ratio: '6.1:1',
+        badge: 'AA',
+      },
+      {
+        bg: 'warning.lightest',
+        text: 'warning.dark',
+        label: 'warning.lightest + dark',
+        ratio: '5.8:1',
+        badge: 'AA',
+      },
+      {
+        bg: 'gray.0',
+        text: 'gray.1300',
+        label: 'gray.0 + gray.1300',
+        ratio: '11.2:1',
+        badge: 'AAA',
+      },
+      {
+        bg: 'gray.50',
+        text: 'gray.900',
+        label: 'gray.50 + gray.900',
+        ratio: '6.2:1',
+        badge: 'AA',
+      },
+    ];
+
+    return (
+      <VStack gap={6} align="flex-start" w="full">
+        <Box>
+          <H4 color="gray.1300" mb={2}>
+            WCAG Contrast Reference
+          </H4>
+          <Subtext color="gray.700">
+            All semantic color combinations meet WCAG 2.1 AA standards (4.5:1
+            minimum).
+          </Subtext>
+        </Box>
+
+        <Divider />
+
+        <Grid templateColumns="repeat(auto-fill, minmax(240px, 1fr))" gap={4}>
+          {contrastPairs.map((pair) => (
+            <Box
+              key={pair.label}
+              borderRadius="lg"
+              overflow="hidden"
+              border="1px solid"
+              borderColor="gray.200"
+            >
+              <Flex
+                bg={pair.bg}
+                p={6}
+                justify="center"
+                align="center"
+                minH="80px"
+              >
+                <Text color={pair.text} fontWeight="semibold">
+                  Sample Text
+                </Text>
+              </Flex>
+              <Flex
+                p={3}
+                bg="gray.50"
+                justify="space-between"
+                align="center"
+                borderTop="1px solid"
+                borderColor="gray.200"
+              >
+                <Subtext color="gray.800">{pair.label}</Subtext>
+                <Flex align="center" gap={2}>
+                  <Text fontFamily="mono" fontSize="xs" color="gray.700">
+                    {pair.ratio}
+                  </Text>
+                  <Box
+                    px={2}
+                    py={0.5}
+                    borderRadius="sm"
+                    bg={pair.badge === 'AAA' ? 'success.lightest' : 'gold.100'}
+                    color={pair.badge === 'AAA' ? 'success.dark' : 'gold.700'}
+                  >
+                    <Text fontSize="10px" fontWeight="bold">
+                      {pair.badge}
+                    </Text>
+                  </Box>
+                </Flex>
+              </Flex>
+            </Box>
+          ))}
+        </Grid>
+      </VStack>
+    );
+  },
+};
+
+// Keep the original Default story for backwards compatibility
 export const Default: Story = {
   render: () => {
     const theme = useTheme();

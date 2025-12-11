@@ -11,6 +11,12 @@ export const baseStyles = {
   textTransform: 'none' as CSS.Property.TextTransform,
 };
 
+/**
+ * Chip variant styles using the Golden Ratio color system.
+ *
+ * Uses semantic tokens where possible for consistency with design system.
+ * The `highlight` variant uses violet for accent differentiation.
+ */
 export const useCaseStyles: Record<
   ChipUseCase,
   Record<string, Partial<ChipProps>>
@@ -27,7 +33,7 @@ export const useCaseStyles: Record<
       bgColor: 'white',
     },
     subtle: {
-      bgColor: '#EBF0FB',
+      bgColor: theme.semanticTokens.colors.primary.lightest, // #E8EEFB
       color: theme.semanticTokens.colors.primary.main,
     },
   },
@@ -59,7 +65,7 @@ export const useCaseStyles: Record<
       bgColor: 'white',
     },
     subtle: {
-      bgColor: theme.colors.green[50],
+      bgColor: theme.semanticTokens.colors.success.lightest, // #E9FBE8
       color: theme.semanticTokens.colors.success.main,
     },
   },
@@ -75,7 +81,7 @@ export const useCaseStyles: Record<
       bgColor: 'white',
     },
     subtle: {
-      bgColor: theme.semanticTokens.colors.danger.lighter,
+      bgColor: theme.semanticTokens.colors.danger.lightest, // #FBE8E9
       color: theme.semanticTokens.colors.danger.main,
     },
   },
@@ -97,18 +103,18 @@ export const useCaseStyles: Record<
   },
   highlight: {
     solid: {
-      bgColor: theme.colors.purple[600],
+      bgColor: theme.colors.violet[600], // #7412A6
       color: 'white',
     },
     outline: {
       border: '1px solid',
       backgroundColor: 'transparent',
-      borderColor: theme.colors.purple[600],
-      color: theme.colors.purple[600],
+      borderColor: theme.colors.violet[600],
+      color: theme.colors.violet[600],
     },
     subtle: {
-      bgColor: theme.colors.purple[50],
-      color: theme.colors.purple[600],
+      bgColor: theme.colors.violet[50], // #F4E8FB
+      color: theme.colors.violet[600],
     },
   },
 };
