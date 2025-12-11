@@ -11,7 +11,6 @@ export * from './components/Card';
 export * from './components/Carousel';
 export * from './components/CarouselModal';
 export * from './components/Checkbox';
-export * from './components/Chip';
 export * from './components/ChipButton';
 export * from './components/Code';
 export * from './components/CodeTabs';
