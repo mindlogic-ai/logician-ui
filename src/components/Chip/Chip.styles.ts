@@ -37,20 +37,24 @@ export const useCaseStyles: Record<
       color: theme.semanticTokens.colors.primary.main,
     },
   },
+  /**
+   * Secondary chips - Uses violet (secondary) semantic tokens
+   * Consistent with Button/IconButton secondary variants
+   */
   secondary: {
     solid: {
-      bgColor: theme.colors.blue[700],
+      bgColor: theme.semanticTokens.colors.secondary.main, // #9117D0 (violet)
       color: theme.colors.white,
     },
     outline: {
       border: '1px solid',
-      borderColor: theme.colors.blue[700],
-      color: theme.colors.blue[700],
+      borderColor: theme.semanticTokens.colors.secondary.main,
+      color: theme.semanticTokens.colors.secondary.main,
       bgColor: 'white',
     },
     subtle: {
-      bgColor: theme.colors.blue[50],
-      color: theme.colors.blue[700],
+      bgColor: theme.semanticTokens.colors.secondary.lightest, // #F4E8FB
+      color: theme.semanticTokens.colors.secondary.main,
     },
   },
   success: {
@@ -101,9 +105,13 @@ export const useCaseStyles: Record<
       color: theme.colors.gray[800],
     },
   },
+  /**
+   * Highlight chips - Darker violet for special emphasis
+   * @deprecated Consider using `secondary` for violet chips
+   */
   highlight: {
     solid: {
-      bgColor: theme.colors.violet[600], // #7412A6
+      bgColor: theme.colors.violet[600], // #7412A6 - Darker than secondary.main
       color: 'white',
     },
     outline: {
