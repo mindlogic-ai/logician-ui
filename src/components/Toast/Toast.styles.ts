@@ -2,25 +2,31 @@ import { BoxProps } from '@chakra-ui/react';
 
 import type { MLToastOptions } from './Toast.types';
 
+/**
+ * Toast variant styles using the Golden Ratio color system.
+ *
+ * Uses `lightest` backgrounds with `lighter` borders and `dark` text
+ * for optimal readability and WCAG AA compliance.
+ */
 export const toastStyles = {
   info: {
-    bg: 'primary.light',
-    color: 'primary.dark',
-    borderColor: 'primary.lighter',
+    bg: 'primary.lightest', // #E8EEFB
+    color: 'primary.dark', // #0D317D
+    borderColor: 'primary.lighter', // #B9CBF3
   },
   warning: {
-    bg: 'warning.lighter',
-    color: 'warning.dark',
-    borderColor: 'warning.light',
+    bg: 'warning.lightest', // #FBF6E8
+    color: 'warning.dark', // #7D610D
+    borderColor: 'warning.lighter', // #F3E4B9
   },
   success: {
-    bg: 'success.lighter',
-    color: 'success.dark',
-    borderColor: 'success.light',
+    bg: 'success.lightest', // #E9FBE8
+    color: 'success.dark', // #147D0D
+    borderColor: 'success.lighter', // #BDF3B9
   },
   error: {
-    bg: 'danger.lighter',
-    color: 'danger.dark',
-    borderColor: 'danger.light',
+    bg: 'danger.lightest', // #FBE8E9
+    color: 'danger.dark', // #7D0D14
+    borderColor: 'danger.lighter', // #F3B9BD
   },
 } satisfies Record<MLToastOptions['status'], BoxProps>;

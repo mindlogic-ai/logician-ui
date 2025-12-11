@@ -7,26 +7,32 @@ import { BannerProps, BannerSize } from './Banner.types';
 
 type VariantType = NonNullable<BannerProps['variant']>;
 
+/**
+ * Banner variant styles using the Golden Ratio color system.
+ *
+ * Uses `lightest` backgrounds with `lighter` borders and `dark` text
+ * for optimal readability and WCAG AA compliance.
+ */
 export const bannerStyles: Record<VariantType, BoxProps> = {
   info: {
-    bg: 'primary.lighter',
-    borderColor: 'primary.light',
-    color: 'primary.dark',
+    bg: 'primary.lightest', // #E8EEFB
+    borderColor: 'primary.lighter', // #B9CBF3
+    color: 'primary.dark', // #0D317D
   },
   success: {
-    bg: 'success.lighter',
-    borderColor: 'success.light',
-    color: 'success.dark',
+    bg: 'success.lightest', // #E9FBE8
+    borderColor: 'success.lighter', // #BDF3B9
+    color: 'success.dark', // #147D0D
   },
   warning: {
-    bg: 'warning.lighter',
-    borderColor: 'warning.light',
-    color: 'warning.dark',
+    bg: 'warning.lightest', // #FBF6E8
+    borderColor: 'warning.lighter', // #F3E4B9
+    color: 'warning.dark', // #7D610D
   },
   danger: {
-    bg: 'danger.lighter',
-    borderColor: 'danger.light',
-    color: 'danger.dark',
+    bg: 'danger.lightest', // #FBE8E9
+    borderColor: 'danger.lighter', // #F3B9BD
+    color: 'danger.dark', // #7D0D14
   },
 };
 

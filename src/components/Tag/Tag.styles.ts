@@ -1,12 +1,15 @@
+/**
+ * Tag variant styles using the Golden Ratio color system.
+ */
 export const variantStyles = {
   default: {
-    bgColor: 'gray.50',
-    borderColor: 'gray.400',
-    color: 'gray.1200',
+    bgColor: 'gray.50', // #F7F9FC
+    borderColor: 'gray.300', // #CDD3E0
+    color: 'gray.1200', // #2A3142
   },
   active: {
-    bgColor: 'primary.light',
-    borderColor: 'primary.main',
-    color: 'primary.dark',
+    bgColor: 'primary.lightest', // #E8EEFB
+    borderColor: 'primary.main', // #1751D0
+    color: 'primary.dark', // #0D317D
   },
 };

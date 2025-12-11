@@ -4,8 +4,12 @@ import theme from '@/theme/index';
 
 import { SelectVariant } from './Select.types';
 
+/**
+ * Select styles using the Golden Ratio color system.
+ */
+
 export const placeholderStyles = {
-  color: theme.colors.gray[800],
+  color: theme.colors.gray[600], // #8690A7 - placeholder text
   fontSize: theme.fontSizes.p,
   fontWeight: theme.fontWeights.semibold,
 };
@@ -15,7 +19,7 @@ export const menuStyles = {
   minWidth: '100%',
   backgroundColor: theme.colors.white,
   borderRadius: theme.radii.md,
-  border: `1px solid ${theme.colors.gray[400]}`,
+  border: `1px solid ${theme.colors.gray[300]}`, // #CDD3E0
   marginTop: 3,
   boxShadow: '0px 5px 20px 0px rgba(0, 0, 0, 0.10)',
   zIndex: 9,
@@ -37,18 +41,18 @@ export const optionStyles = ({
   fontSize: theme.fontSizes.p,
   backgroundColor:
     isSelected || isFocused || isDisabled
-      ? theme.colors.gray[50]
+      ? theme.colors.gray[50] // #F7F9FC
       : theme.colors.white,
   color: isSelected
-    ? theme.colors.gray[1500]
+    ? theme.colors.gray[1300] // #1E2433 - selected text
     : isDisabled
-      ? theme.colors.gray[800]
-      : theme.colors.gray[1200],
+      ? theme.colors.gray[500] // #9AA3B8 - disabled text
+      : theme.colors.gray[1200], // #2A3142 - default text
   fontWeight: isSelected
     ? theme.fontWeights.semibold
     : theme.fontWeights.normal,
   '&:hover': {
-    backgroundColor: theme.colors.gray[50],
+    backgroundColor: theme.colors.gray[50], // #F7F9FC
   },
 });
 
@@ -57,12 +61,12 @@ export const controlStyles = {
   cursor: 'pointer',
   maxWidth: '100%',
   height: '100%',
-  color: theme.colors.gray[1200],
+  color: theme.colors.gray[1200], // #2A3142
   fontSize: theme.fontSizes.p,
   fontWeight: theme.fontWeights.semibold,
   paddingLeft: 4,
   paddingRight: 3,
-  border: `1px solid ${theme.colors.gray[400]}`,
+  border: `1px solid ${theme.colors.gray[300]}`, // #CDD3E0
   boxShadow: 'none',
 };
 
@@ -84,7 +88,7 @@ export const getControlVariantStyles = (state: any, variant: SelectVariant) => {
     default:
       return {
         fontWeight: theme.fontWeights.semibold,
-        border: `1px solid ${state.isFocused ? primaryColor : theme.colors.gray[400]}`,
+        border: `1px solid ${state.isFocused ? primaryColor : theme.colors.gray[300]}`, // #CDD3E0
         boxShadow: state.isFocused
           ? `0 0 0 1px ${primaryColor} !important`
           : 'none',
@@ -93,7 +97,7 @@ export const getControlVariantStyles = (state: any, variant: SelectVariant) => {
               borderColor: primaryColor,
             }
           : {
-              borderColor: useToken('colors', 'gray.600'),
+              borderColor: useToken('colors', 'gray.400'), // #B0B8C9
             },
       };
   }

@@ -29,7 +29,7 @@ export const horizontalSelectedStyles = {
 };
 
 export const verticalSelectedStyles = {
-  backgroundColor: 'primary.light',
-  color: 'primary.dark',
+  backgroundColor: 'primary.lightest', // #E8EEFB
+  color: 'primary.dark', // #0D317D
   fontWeight: 'bold',
 };
