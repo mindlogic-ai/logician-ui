@@ -1,9 +1,9 @@
 export { IconButton } from './IconButton';
 export {
-  colorSchemes,
-  colorSchemeStyles,
   getIconButtonStyles,
-  variants,
+  iconButtonColorSchemes,
+  iconButtonColorSchemeStyles,
+  iconButtonVariants,
 } from './IconButton.styles';
 export type {
   IconButtonColorScheme,

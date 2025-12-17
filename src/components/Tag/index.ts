@@ -1,9 +1,9 @@
 export { Tag } from './Tag';
 export {
-  colorSchemes,
-  colorSchemeStyles,
   getTagStyles,
-  variants,
+  tagColorSchemes,
+  tagColorSchemeStyles,
+  tagVariants,
 } from './Tag.styles';
 export type { TagColorScheme, TagProps, TagVariant } from './Tag.types';
 export * from './TagCloseButton';

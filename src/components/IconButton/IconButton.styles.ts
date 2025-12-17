@@ -5,8 +5,8 @@
  * (colorScheme × variant), we simply re-export the Button styles.
  */
 export {
-  colorSchemes,
-  colorSchemeStyles,
   getButtonStyles as getIconButtonStyles,
-  variants,
+  buttonColorSchemes as iconButtonColorSchemes,
+  buttonColorSchemeStyles as iconButtonColorSchemeStyles,
+  buttonVariants as iconButtonVariants,
 } from '../Button/Button.styles';

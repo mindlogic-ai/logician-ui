@@ -1,9 +1,9 @@
 export { Button } from './Button';
 export {
-  colorSchemes,
-  colorSchemeStyles,
+  buttonColorSchemes,
+  buttonColorSchemeStyles,
+  buttonVariants,
   getButtonStyles,
-  variants,
 } from './Button.styles';
 export type {
   ButtonColorScheme,

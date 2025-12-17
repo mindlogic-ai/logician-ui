@@ -55,7 +55,7 @@ export const Default: Story = {
             {args.footerButtons && (
               <ModalFooter>
                 {args.footerButtons.map((button, index) => (
-                  <Button key={index} variant={button.variant || 'primary'}>
+                  <Button key={index} variant={button.variant || 'soft'}>
                     {button.label}
                   </Button>
                 ))}
@@ -86,7 +86,7 @@ export const WithHeader: Story = {
             {args.footerButtons && (
               <ModalFooter>
                 {args.footerButtons.map((button, index) => (
-                  <Button key={index} variant={button.variant || 'primary'}>
+                  <Button key={index} variant={button.variant || 'soft'}>
                     {button.label}
                   </Button>
                 ))}
@@ -118,7 +118,7 @@ export const WithFooterButton: Story = {
             {args.footerButtons && (
               <ModalFooter>
                 {args.footerButtons.map((button, index) => (
-                  <Button key={index} variant={button.variant || 'primary'}>
+                  <Button key={index} variant={button.variant || 'soft'}>
                     {button.label}
                   </Button>
                 ))}
@@ -134,8 +134,8 @@ export const WithFooterButton: Story = {
 export const TwoButtons: Story = {
   args: {
     footerButtons: [
-      { label: 'Cancel', variant: 'tertiary' },
-      { label: 'Save', variant: 'primary' },
+      { label: 'Cancel', variant: 'ghost' },
+      { label: 'Save', variant: 'solid' },
     ],
   },
   render: (args) => {
@@ -152,7 +152,7 @@ export const TwoButtons: Story = {
             {args.footerButtons && (
               <ModalFooter>
                 {args.footerButtons.map((button, index) => (
-                  <Button key={index} variant={button.variant || 'primary'}>
+                  <Button key={index} variant={button.variant || 'soft'}>
                     {button.label}
                   </Button>
                 ))}

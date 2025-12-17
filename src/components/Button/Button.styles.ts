@@ -24,7 +24,7 @@ type StyleProps = Partial<ChakraButtonProps>;
  * - `outline`: Border only (medium emphasis)
  * - `ghost`: No background or border (lowest emphasis)
  */
-export const colorSchemeStyles: Record<
+export const buttonColorSchemeStyles: Record<
   ButtonColorScheme,
   Record<ButtonVariant, StyleProps>
 > = {
@@ -348,13 +348,13 @@ export const getButtonStyles = (
   colorScheme: ButtonColorScheme = 'primary',
   variant: ButtonVariant = 'solid'
 ): StyleProps => {
-  return colorSchemeStyles[colorScheme][variant];
+  return buttonColorSchemeStyles[colorScheme][variant];
 };
 
 /**
  * List of all available color schemes.
  */
-export const colorSchemes: ButtonColorScheme[] = [
+export const buttonColorSchemes: ButtonColorScheme[] = [
   'primary',
   'secondary',
   'danger',
@@ -366,4 +366,9 @@ export const colorSchemes: ButtonColorScheme[] = [
 /**
  * List of all available variants.
  */
-export const variants: ButtonVariant[] = ['solid', 'soft', 'outline', 'ghost'];
+export const buttonVariants: ButtonVariant[] = [
+  'solid',
+  'soft',
+  'outline',
+  'ghost',
+];

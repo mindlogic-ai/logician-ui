@@ -5,11 +5,11 @@ import { TagColorScheme, TagVariant } from './Tag.types';
 /**
  * Tag styles using a two-dimensional variant system.
  *
- * Structure: colorSchemeStyles[colorScheme][variant]
+ * Structure: tagColorSchemeStyles[colorScheme][variant]
  *
  * Uses semantic color tokens from the Golden Ratio color system.
  */
-export const colorSchemeStyles: Record<
+export const tagColorSchemeStyles: Record<
   TagColorScheme,
   Record<TagVariant, StyleProps>
 > = {
@@ -124,11 +124,11 @@ export const getTagStyles = (
   colorScheme: TagColorScheme = 'neutral',
   variant: TagVariant = 'soft'
 ): StyleProps => {
-  return colorSchemeStyles[colorScheme][variant];
+  return tagColorSchemeStyles[colorScheme][variant];
 };
 
 /** All available color schemes */
-export const colorSchemes: TagColorScheme[] = [
+export const tagColorSchemes: TagColorScheme[] = [
   'primary',
   'secondary',
   'danger',
@@ -138,4 +138,4 @@ export const colorSchemes: TagColorScheme[] = [
 ];
 
 /** All available variants */
-export const variants: TagVariant[] = ['soft', 'solid', 'outline'];
+export const tagVariants: TagVariant[] = ['soft', 'solid', 'outline'];

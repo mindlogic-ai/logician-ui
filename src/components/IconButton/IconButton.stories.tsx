@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import { Box, Flex, VStack, HStack, Text } from '@chakra-ui/react';
 import { FaUniversity } from '../Icon';
-import { IconButton, colorSchemes, variants } from '.';
+import { IconButton, iconButtonColorSchemes, iconButtonVariants } from '.';
 import { IconButtonColorScheme, IconButtonVariant } from './IconButton.types';
 
 const meta = {
@@ -15,12 +15,12 @@ const meta = {
   argTypes: {
     colorScheme: {
       control: 'select',
-      options: colorSchemes,
+      options: iconButtonColorSchemes,
       description: 'Semantic color family (overrides Chakra colorScheme)',
     },
     variant: {
       control: 'select',
-      options: variants,
+      options: iconButtonVariants,
       description: 'Visual appearance (overrides Chakra variant)',
     },
   },
@@ -46,7 +46,7 @@ export const AllCombinations: Story = {
       {/* Header row */}
       <HStack spacing={4}>
         <Box w="100px" />
-        {variants.map((variant) => (
+        {iconButtonVariants.map((variant) => (
           <Box key={variant} w="80px" textAlign="center">
             <Text fontSize="subtext" fontWeight="bold" color="gray.600">
               {variant}
@@ -56,14 +56,14 @@ export const AllCombinations: Story = {
       </HStack>
 
       {/* Color scheme rows */}
-      {colorSchemes.map((colorScheme) => (
+      {iconButtonColorSchemes.map((colorScheme) => (
         <HStack key={colorScheme} spacing={4}>
           <Box w="100px">
             <Text fontSize="subtext" fontWeight="bold" color="gray.600">
               {colorScheme}
             </Text>
           </Box>
-          {variants.map((variant) => (
+          {iconButtonVariants.map((variant) => (
             <Box key={`${colorScheme}-${variant}`} w="80px" textAlign="center">
               <IconButton
                 {...args}
@@ -86,7 +86,7 @@ export const RoundAllCombinations: Story = {
     <VStack spacing={6} align="stretch">
       <HStack spacing={4}>
         <Box w="100px" />
-        {variants.map((variant) => (
+        {iconButtonVariants.map((variant) => (
           <Box key={variant} w="80px" textAlign="center">
             <Text fontSize="subtext" fontWeight="bold" color="gray.600">
               {variant}
@@ -95,14 +95,14 @@ export const RoundAllCombinations: Story = {
         ))}
       </HStack>
 
-      {colorSchemes.map((colorScheme) => (
+      {iconButtonColorSchemes.map((colorScheme) => (
         <HStack key={colorScheme} spacing={4}>
           <Box w="100px">
             <Text fontSize="subtext" fontWeight="bold" color="gray.600">
               {colorScheme}
             </Text>
           </Box>
-          {variants.map((variant) => (
+          {iconButtonVariants.map((variant) => (
             <Box key={`${colorScheme}-${variant}`} w="80px" textAlign="center">
               <IconButton
                 {...args}
@@ -124,7 +124,7 @@ export const RoundAllCombinations: Story = {
 export const Primary: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
-      {variants.map((variant) => (
+      {iconButtonVariants.map((variant) => (
         <VStack key={variant} spacing={1}>
           <Text fontSize="subtext" color="gray.600">{variant}</Text>
           <IconButton {...args} colorScheme="primary" variant={variant} />
@@ -140,7 +140,7 @@ export const Primary: Story = {
 export const Secondary: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
-      {variants.map((variant) => (
+      {iconButtonVariants.map((variant) => (
         <VStack key={variant} spacing={1}>
           <Text fontSize="subtext" color="gray.600">{variant}</Text>
           <IconButton {...args} colorScheme="secondary" variant={variant} />
@@ -156,7 +156,7 @@ export const Secondary: Story = {
 export const Danger: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
-      {variants.map((variant) => (
+      {iconButtonVariants.map((variant) => (
         <VStack key={variant} spacing={1}>
           <Text fontSize="subtext" color="gray.600">{variant}</Text>
           <IconButton {...args} colorScheme="danger" variant={variant} />
@@ -172,7 +172,7 @@ export const Danger: Story = {
 export const Success: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
-      {variants.map((variant) => (
+      {iconButtonVariants.map((variant) => (
         <VStack key={variant} spacing={1}>
           <Text fontSize="subtext" color="gray.600">{variant}</Text>
           <IconButton {...args} colorScheme="success" variant={variant} />
@@ -188,7 +188,7 @@ export const Success: Story = {
 export const Warning: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
-      {variants.map((variant) => (
+      {iconButtonVariants.map((variant) => (
         <VStack key={variant} spacing={1}>
           <Text fontSize="subtext" color="gray.600">{variant}</Text>
           <IconButton {...args} colorScheme="warning" variant={variant} />
@@ -204,7 +204,7 @@ export const Warning: Story = {
 export const Neutral: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
-      {variants.map((variant) => (
+      {iconButtonVariants.map((variant) => (
         <VStack key={variant} spacing={1}>
           <Text fontSize="subtext" color="gray.600">{variant}</Text>
           <IconButton {...args} colorScheme="neutral" variant={variant} />
@@ -220,7 +220,7 @@ export const Neutral: Story = {
 export const SolidVariant: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
-      {colorSchemes.map((colorScheme) => (
+      {iconButtonColorSchemes.map((colorScheme) => (
         <VStack key={colorScheme} spacing={1}>
           <Text fontSize="subtext" color="gray.600">{colorScheme}</Text>
           <IconButton {...args} colorScheme={colorScheme} variant="solid" />
@@ -236,7 +236,7 @@ export const SolidVariant: Story = {
 export const SoftVariant: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
-      {colorSchemes.map((colorScheme) => (
+      {iconButtonColorSchemes.map((colorScheme) => (
         <VStack key={colorScheme} spacing={1}>
           <Text fontSize="subtext" color="gray.600">{colorScheme}</Text>
           <IconButton {...args} colorScheme={colorScheme} variant="soft" />
@@ -252,7 +252,7 @@ export const SoftVariant: Story = {
 export const OutlineVariant: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
-      {colorSchemes.map((colorScheme) => (
+      {iconButtonColorSchemes.map((colorScheme) => (
         <VStack key={colorScheme} spacing={1}>
           <Text fontSize="subtext" color="gray.600">{colorScheme}</Text>
           <IconButton {...args} colorScheme={colorScheme} variant="outline" />
@@ -268,7 +268,7 @@ export const OutlineVariant: Story = {
 export const GhostVariant: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
-      {colorSchemes.map((colorScheme) => (
+      {iconButtonColorSchemes.map((colorScheme) => (
         <VStack key={colorScheme} spacing={1}>
           <Text fontSize="subtext" color="gray.600">{colorScheme}</Text>
           <IconButton {...args} colorScheme={colorScheme} variant="ghost" />

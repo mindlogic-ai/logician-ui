@@ -1,7 +1,7 @@
 import { Box, Flex, Text, VStack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import { Tag, colorSchemes, variants } from '.';
+import { Tag, tagColorSchemes, tagVariants } from '.';
 import { TagCloseButton } from './TagCloseButton';
 
 const meta = {
@@ -13,12 +13,12 @@ const meta = {
   argTypes: {
     colorScheme: {
       control: 'select',
-      options: colorSchemes,
+      options: tagColorSchemes,
       description: 'Semantic color of the tag',
     },
     variant: {
       control: 'select',
-      options: variants,
+      options: tagVariants,
       description: 'Visual style of the tag',
     },
   },
@@ -102,7 +102,7 @@ export const Outline: Story = {
 export const Closable: Story = {
   render: () => (
     <Flex gap={2} wrap="wrap">
-      {colorSchemes.map((colorScheme) => (
+      {tagColorSchemes.map((colorScheme) => (
         <Tag key={colorScheme} colorScheme={colorScheme} variant="soft">
           {colorScheme}
           <TagCloseButton />
@@ -121,7 +121,7 @@ export const AllCombinations: Story = {
       {/* Header row */}
       <Flex mb={4} gap={4} align="center">
         <Box w="100px" />
-        {variants.map((variant) => (
+        {tagVariants.map((variant) => (
           <Box key={variant} w="100px" textAlign="center">
             <Text fontWeight="bold" fontSize="subtext">
               {variant}
@@ -131,14 +131,14 @@ export const AllCombinations: Story = {
       </Flex>
 
       {/* Color scheme rows */}
-      {colorSchemes.map((colorScheme) => (
+      {tagColorSchemes.map((colorScheme) => (
         <Flex key={colorScheme} mb={4} gap={4} align="center">
           <Box w="100px">
             <Text fontWeight="medium" fontSize="subtext">
               {colorScheme}
             </Text>
           </Box>
-          {variants.map((variant) => (
+          {tagVariants.map((variant) => (
             <Box key={`${colorScheme}-${variant}`} w="100px" textAlign="center">
               <Tag colorScheme={colorScheme} variant={variant}>
                 Tag
