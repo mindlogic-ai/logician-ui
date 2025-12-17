@@ -213,6 +213,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
           <HStack justify="space-between" align="center">
             <Button
               size="sm"
+              colorScheme="neutral"
               variant="ghost"
               onClick={() => handleYearChange('prev')}
               disabled={!canNavigateToPrevYear}
@@ -227,6 +228,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
 
             <Button
               size="sm"
+              colorScheme="neutral"
               variant="ghost"
               onClick={() => handleYearChange('next')}
               disabled={!canNavigateToNextYear}
@@ -258,7 +260,12 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
 
           {/* Action Buttons */}
           <HStack spacing={2} justify="flex-end">
-            <Button size="sm" variant="ghost" onClick={handleClear}>
+            <Button
+              size="sm"
+              colorScheme="neutral"
+              variant="ghost"
+              onClick={handleClear}
+            >
               {translate('clear')}
             </Button>
           </HStack>

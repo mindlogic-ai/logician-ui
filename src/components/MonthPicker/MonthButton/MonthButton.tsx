@@ -91,7 +91,7 @@ export const MonthButton: React.FC<MonthButtonProps> = memo(
       }
 
       // Default: ghost neutral
-      return { colorScheme: 'neutral', variant: 'ghost' };
+      return { colorScheme: 'neutral', variant: 'outline' };
     };
 
     const style = getMonthButtonStyle(
