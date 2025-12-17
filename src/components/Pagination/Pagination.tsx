@@ -128,6 +128,8 @@ export const Pagination = ({
             </Subtitle>
             <Flex align="center">
               <IconButton
+                colorScheme="neutral"
+                variant="ghost"
                 icon={<IoIosArrowBack boxSize="sm" />}
                 aria-label={translate('previous') as string}
                 onClick={handleBack}
@@ -135,6 +137,8 @@ export const Pagination = ({
                 color={currentPage === 1 ? 'gray.400' : 'gray.1500'}
               />
               <IconButton
+                colorScheme="neutral"
+                variant="ghost"
                 icon={<IoChevronForward boxSize="sm" />}
                 aria-label={translate('go_next_page_button') as string}
                 onClick={handleNext}
