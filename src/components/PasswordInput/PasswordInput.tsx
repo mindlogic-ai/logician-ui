@@ -22,11 +22,19 @@ export const PasswordInput = forwardRef(
         type={show ? 'text' : 'password'}
         rightIcon={
           <IconButton
+            colorScheme="neutral"
+            variant="ghost"
+            _hover={{
+              bgColor: 'whiteAlpha.400',
+            }}
+            _active={{
+              bgColor: 'whiteAlpha.400',
+            }}
             icon={
               show ? (
-                <FaRegEye fill="gray.900" boxSize="sm" />
+                <FaRegEye fill="gray.900" boxSize="xs" />
               ) : (
-                <FaRegEyeSlash fill="gray.900" boxSize="sm" />
+                <FaRegEyeSlash fill="gray.900" boxSize="xs" />
               )
             }
             onClick={handleClick}
