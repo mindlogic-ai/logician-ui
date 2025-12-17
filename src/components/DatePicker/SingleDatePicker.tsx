@@ -41,7 +41,7 @@ export const SingleDatePicker = ({
           popoverContentProps: {
             borderRadius: 16,
             border: '1px solid',
-            borderColor: 'blue.300',
+            borderColor: 'primary.lightest',
             boxShadow: 'lg',
             ...propsConfigs?.popoverCompProps?.popoverContentProps,
           },
@@ -75,7 +75,7 @@ export const SingleDatePicker = ({
         weekdayLabelProps: {
           mb: 2,
           color: 'gray.1000',
-          fontSize: 'xs',
+          fontSize: 'sm',
           fontWeight: 'regular',
           ...propsConfigs?.weekdayLabelProps,
         },

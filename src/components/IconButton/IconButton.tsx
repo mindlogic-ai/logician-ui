@@ -19,12 +19,7 @@ import { IconButtonProps } from './IconButton.types';
  */
 export const IconButton = forwardRef(
   (
-    {
-      colorScheme = 'primary',
-      variant = 'soft',
-      sx,
-      ...rest
-    }: IconButtonProps,
+    { colorScheme = 'primary', variant = 'soft', sx, ...rest }: IconButtonProps,
     ref?: ForwardedRef<HTMLButtonElement>
   ) => {
     const styles = getIconButtonStyles(colorScheme, variant);

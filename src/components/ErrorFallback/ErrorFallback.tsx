@@ -75,7 +75,7 @@ User Agent: ${errorInfo.userAgent}`;
             <Box
               position="relative"
               p={4}
-              bg="danger.lighter"
+              bg="danger.lightest"
               borderRadius="full"
             >
               <MdError boxSize="xl" color="danger.main" />
@@ -93,9 +93,9 @@ User Agent: ${errorInfo.userAgent}`;
 
             {/* Error Message */}
             <Card
-              bg="danger.lighter"
+              bg="danger.lightest"
               border="1px solid"
-              borderColor="danger.light"
+              borderColor="danger.lighter"
               p={4}
               w="full"
             >
@@ -109,7 +109,12 @@ User Agent: ${errorInfo.userAgent}`;
             </Card>
 
             {/* Support Information */}
-            <Card bg="primary.lightest" borderColor="primary.light" p={6} w="full">
+            <Card
+              bg="primary.lightest"
+              borderColor="primary.lighter"
+              p={6}
+              w="full"
+            >
               <H4 color="primary.dark" mb={4} textAlign="center">
                 {translate('support_information')}
               </H4>

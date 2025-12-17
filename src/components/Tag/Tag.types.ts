@@ -40,7 +40,8 @@ export type TagVariant = 'soft' | 'solid' | 'outline';
  * </Tag>
  * ```
  */
-export interface TagProps extends Omit<ChakraTagProps, 'colorScheme' | 'variant'> {
+export interface TagProps
+  extends Omit<ChakraTagProps, 'colorScheme' | 'variant'> {
   colorScheme?: TagColorScheme;
   variant?: TagVariant;
 }

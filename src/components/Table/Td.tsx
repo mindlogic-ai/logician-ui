@@ -23,7 +23,6 @@ export const Td = ({
   const tableContext = useTableContext();
 
   // Define all style variables ahead of time so they can be used constantly
-  const grayColor = useToken('colors', 'gray.300');
   const paddingToken = useToken('space', '3'); // py={3} equivalent
   const fontSizeToken = useToken('fontSizes', 'p');
   const spacingToken = useToken('space', '4'); // spacing 4 for paddingInlineStart
@@ -43,9 +42,6 @@ export const Td = ({
       <td
         ref={cellRef}
         style={{
-          border: 0,
-          borderTop: '1px solid',
-          borderTopColor: grayColor,
           color: 'inherit',
           fontSize: fontSizeToken,
           paddingTop: paddingToken,
@@ -104,9 +100,6 @@ export const Td = ({
 
   return (
     <ChakraTd
-      border={0}
-      borderTop="1px solid"
-      borderTopColor="gray.300"
       color="inherit"
       fontSize="p"
       py={3}

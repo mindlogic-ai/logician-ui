@@ -38,9 +38,8 @@ export const CopyableCode = ({
         />
       </Card>
       <Button
-        variant="primary"
-        bgColor="primary.dark"
-        borderColor="primary.dark"
+        colorScheme="primary"
+        variant="solid"
         size="xs"
         leftIcon={<FaRegCopy boxSize="xs" />}
         onClick={onCopy}

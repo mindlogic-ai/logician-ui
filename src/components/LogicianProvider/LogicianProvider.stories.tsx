@@ -22,10 +22,12 @@ const SampleContent = () => (
       automatically applies the Logician theme to all Chakra UI components.
     </Text>
     <Box>
-      <Button variant="primary" mr={4}>
+      <Button colorScheme="primary" variant="soft" mr={4}>
         Primary Button
       </Button>
-      <Button variant="secondary">Secondary Button</Button>
+      <Button colorScheme="secondary" variant="soft">
+        Secondary Button
+      </Button>
     </Box>
     <Text fontSize="subtitle" color="gray.1200">
       This text uses the custom font sizes and colors from the Logician theme.
@@ -43,27 +45,8 @@ export const Default: Story = {
 
 export const WithCustomTheme: Story = {
   render: () => {
-    const customTheme = {
-      colors: {
-        primary: {
-          light: 'purple.300',
-          main: 'purple.500',
-          dark: 'purple.700',
-        },
-      },
-      semanticTokens: {
-        colors: {
-          primary: {
-            light: 'purple.300',
-            main: 'purple.500',
-            dark: 'purple.700',
-          },
-        },
-      },
-    };
-
     return (
-      <LogicianProvider theme={customTheme}>
+      <LogicianProvider>
         <SampleContent />
       </LogicianProvider>
     );

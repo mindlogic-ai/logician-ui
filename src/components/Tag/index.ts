@@ -1,11 +1,11 @@
 export { Tag } from './Tag';
 export {
+  colorSchemes,
   colorSchemeStyles,
   getTagStyles,
-  colorSchemes,
   variants,
 } from './Tag.styles';
-export type { TagProps, TagColorScheme, TagVariant } from './Tag.types';
+export type { TagColorScheme, TagProps, TagVariant } from './Tag.types';
 export * from './TagCloseButton';
 export * from './TagLabel';
 export * from './TagLeftIcon';

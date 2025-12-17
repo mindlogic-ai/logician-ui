@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Box, Flex, useTheme } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 
 import { FileItemProps } from '@/components/FileItem/FileItem.types';
 import {
@@ -27,7 +27,6 @@ export const FileItem = ({
   isDeleting = false,
   ...rest
 }: FileItemProps) => {
-  const theme = useTheme();
   const errorColor = 'danger.main';
 
   const isUploadingFile =
@@ -82,9 +81,11 @@ export const FileItem = ({
                 <IconButton
                   aria-label={'remove uploading file button'}
                   onClick={onFileDelete}
-                  icon={<IoClose color="gray.600" boxSize="lg" />}
+                  icon={<IoClose color="gray.600" boxSize="md" />}
                   size="xs"
                   isDisabled={isDeleting}
+                  colorScheme="neutral"
+                  variant="ghost"
                 />
               </Flex>
             )}
@@ -99,6 +100,8 @@ export const FileItem = ({
                 onClick={onFileDownload}
                 icon={<LuDownload color="gray.800" />}
                 size="xs"
+                colorScheme="neutral"
+                variant="ghost"
               />
             )}
             {onFileDelete && (
@@ -109,11 +112,13 @@ export const FileItem = ({
                   isDeleting ? (
                     <Spinner size="xs" />
                   ) : (
-                    <FaRegTrashAlt boxSize="sm" />
+                    <FaRegTrashAlt boxSize="sm" color="gray.800" />
                   )
                 }
                 size="xs"
                 isDisabled={isDeleting}
+                colorScheme="neutral"
+                variant="ghost"
               />
             )}
           </Fragment>

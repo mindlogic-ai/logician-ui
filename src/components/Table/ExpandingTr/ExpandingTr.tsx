@@ -20,8 +20,22 @@ export const ExpandingTr: React.FC<ExpandingTrProps> = ({
       {/* Main Row */}
       <Tr {...rest}>{children}</Tr>
 
-      {/* Expanded Row */}
-      <Tr h={isExpanded ? undefined : 0} {...expandedRowProps}>
+      {/* Expanded Row - always render for Collapse animation */}
+      <Tr
+        h={isExpanded ? undefined : 0}
+        sx={{
+          // When collapsed, make it invisible and non-interactive
+          ...(!isExpanded && {
+            visibility: 'collapse',
+            '& td': {
+              border: 'none',
+              p: 0,
+              h: 0,
+            },
+          }),
+        }}
+        {...expandedRowProps}
+      >
         <Td colSpan={childrenArray.length} p={0}>
           <Collapse in={isExpanded}>{expandedContent}</Collapse>
         </Td>

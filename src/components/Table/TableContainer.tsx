@@ -29,7 +29,7 @@ const TableContainerInner = forwardRef<HTMLDivElement, TableContainerProps>(
       <ChakraTableContainer
         border="1px solid"
         borderRadius="md"
-        borderColor="gray.300"
+        borderColor="gray.200"
         ref={handleRef}
         {...rest}
       >

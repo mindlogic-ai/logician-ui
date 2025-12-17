@@ -74,7 +74,7 @@ export const CarouselModal = ({
           </Box>
         </ModalBody>
         <ModalFooter mt={4} py={8} borderTop="1px solid" borderColor="gray.300">
-          <Button px={0} variant="tertiary" onClick={handleBackClick}>
+          <Button px={0} onClick={handleBackClick}>
             {translate('previous')}
           </Button>
           <Flex align="center" flex={1} gap={2} justify="center">

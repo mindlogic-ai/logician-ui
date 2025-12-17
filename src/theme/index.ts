@@ -23,6 +23,25 @@ export const theme = {
         },
       },
     },
+    Table: {
+      variants: {
+        simple: {
+          th: {
+            borderColor: 'gray.200',
+          },
+          td: {
+            borderColor: 'gray.200',
+          },
+          tbody: {
+            'tr:last-child': {
+              td: {
+                borderBottom: 'none',
+              },
+            },
+          },
+        },
+      },
+    },
   },
 
   fonts: {

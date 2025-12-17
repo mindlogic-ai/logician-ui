@@ -131,6 +131,7 @@ export const ExpandedContent: Story = {
             {columns.map((column) => (
               <Th key={column.key}>{column.label}</Th>
             ))}
+            <Th w={2}></Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -154,6 +155,8 @@ export const ExpandedContent: Story = {
                     aria-label="Expand"
                     icon={<IoChevronDownOutline />}
                     onClick={() => setIsExpanded((e) => !e)}
+                    colorScheme="neutral"
+                    variant="ghost"
                   />
                 </Td>
               </ExpandingTr>

@@ -42,9 +42,9 @@ export const RangeDatePicker = ({
             p: 2,
             borderRadius: 16,
             border: '1px solid',
-            borderColor: 'blue.300',
+            borderColor: 'primary.lightest',
             boxShadow: 'lg',
-            bg: 'blue.100',
+            // bg: 'primary.lightest',
             sx: {
               '.chakra-button[aria-pressed="true"]': {
                 borderRadius: 'full',
@@ -85,7 +85,7 @@ export const RangeDatePicker = ({
             px: 6,
             py: 4,
             border: '1px solid',
-            borderColor: 'blue.300',
+            borderColor: 'primary.lightest',
             borderRadius: 16,
             bg: 'white',
             ...propsConfigs?.calendarPanelProps?.contentProps,
@@ -104,7 +104,7 @@ export const RangeDatePicker = ({
         weekdayLabelProps: {
           mb: 2,
           color: 'gray.1000',
-          fontSize: 'xs',
+          fontSize: 'sm',
           fontWeight: 'regular',
           ...propsConfigs?.weekdayLabelProps,
         },

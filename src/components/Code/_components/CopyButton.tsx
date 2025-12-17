@@ -41,6 +41,8 @@ export const CopyButton = ({
         icon={<FaRegCopy boxSize="sm" />}
         onClick={handleClick}
         p={0}
+        colorScheme="neutral"
+        variant="ghost"
         {...rest}
       />
     </Tooltip>

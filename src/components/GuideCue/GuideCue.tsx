@@ -210,7 +210,8 @@ export const GuideCue = ({
                 data-testid="guideCue-nextButton"
                 onClick={handleNext}
                 w="fit-content"
-                variant="secondary"
+                colorScheme="primary"
+                variant="soft"
                 ref={ctaRef}
                 rightIcon={
                   currentIndex < cueRefs.length - 1 ? (

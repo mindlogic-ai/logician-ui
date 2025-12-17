@@ -108,15 +108,19 @@ export const DataField = ({
             />
             <IconButton
               aria-label={`Edit ${label}`}
-              icon={<Edit color="gray.400" boxSize="sm" />}
+              icon={<Edit boxSize="xs" />}
               onClick={handleEditButtonClick}
+              colorScheme="neutral"
+              variant="ghost"
             />
             {isCopyable && (
               <Tooltip label="Copied!" isOpen={hasOpenCopyTooltip}>
                 <IconButton
                   aria-label={`Copy ${label}`}
-                  icon={<FaRegCopy color="gray.400" boxSize="sm" />}
+                  icon={<FaRegCopy boxSize="xs" />}
                   onClick={handleCopyButtonClick}
+                  colorScheme="neutral"
+                  variant="ghost"
                 />
               </Tooltip>
             )}
@@ -128,8 +132,10 @@ export const DataField = ({
               <Tooltip label="Copied!" isOpen={hasOpenCopyTooltip}>
                 <IconButton
                   aria-label={`Copy ${label}`}
-                  icon={<FaRegCopy color="gray.400" boxSize="sm" />}
+                  icon={<FaRegCopy boxSize="xs" />}
                   onClick={handleCopyButtonClick}
+                  colorScheme="neutral"
+                  variant="ghost"
                 />
               </Tooltip>
             )}

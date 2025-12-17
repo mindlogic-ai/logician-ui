@@ -34,8 +34,14 @@ const CopyButton = ({
         borderRadius="full"
         icon={<FaRegCopy boxSize="xs" />}
         size="sm"
+        colorScheme="neutral"
+        variant="ghost"
+        color="gray.800"
         _hover={{
-          bgColor: 'whiteAlpha.500',
+          bgColor: 'whiteAlpha.400',
+        }}
+        _active={{
+          bgColor: 'whiteAlpha.400',
         }}
         onClick={handleCopyClick}
       />

@@ -24,7 +24,10 @@ export const baseStyles = {
  * Pattern: bg = `*.lightest`, color = `*.dark`
  * This matches the Alert/Toast/Banner component styling.
  */
-export const variantStyles: Record<BadgeVariant, { bgColor: string; color: string }> = {
+export const variantStyles: Record<
+  BadgeVariant,
+  { bgColor: string; color: string }
+> = {
   /**
    * Primary badge - Default, general purpose
    * Blue lightest background with dark blue text
