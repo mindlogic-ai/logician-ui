@@ -26,13 +26,15 @@ export const RangeDatePicker = ({
           fontWeight: 'regular',
           color: 'gray.1500',
           fontSize: 'md',
-          leftIcon: (
-            <MdOutlineCalendarToday
-              color="gray.600"
-              style={{ marginInlineEnd: 3 }}
-            />
+          children: (
+            <>
+              <MdOutlineCalendarToday
+                color="gray.600"
+                style={{ marginInlineEnd: 8 }}
+              />
+            </>
           ),
-        },
+        } as any, // Type assertion for v3 compatibility
         inputProps: {
           color: 'primary.dark',
           ...propsConfigs?.inputProps,
@@ -45,7 +47,7 @@ export const RangeDatePicker = ({
             borderColor: 'blue.300',
             boxShadow: 'lg',
             bg: 'blue.100',
-            sx: {
+            css: {
               '.chakra-button[aria-pressed="true"]': {
                 borderRadius: 'full',
               },
@@ -69,7 +71,7 @@ export const RangeDatePicker = ({
               },
             },
             ...propsConfigs?.popoverCompProps?.popoverContentProps,
-          },
+          } as any,
           ...propsConfigs?.popoverCompProps,
         },
         calendarPanelProps: {
@@ -89,12 +91,12 @@ export const RangeDatePicker = ({
             borderRadius: 16,
             bg: 'white',
             ...propsConfigs?.calendarPanelProps?.contentProps,
-          },
+          } as any,
           bodyProps: {
             gap: 0,
-            spacingY: 1,
+            rowGap: 1,
             ...propsConfigs?.calendarPanelProps?.bodyProps,
-          },
+          } as any,
           ...propsConfigs?.calendarPanelProps,
         },
         dateNavBtnProps: {

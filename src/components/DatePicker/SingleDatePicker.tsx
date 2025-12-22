@@ -26,13 +26,15 @@ export const SingleDatePicker = ({
           fontWeight: 'regular',
           color: 'gray.1500',
           fontSize: 'md',
-          leftIcon: (
-            <MdOutlineCalendarToday
-              color="gray.600"
-              style={{ marginInlineEnd: 3 }}
-            />
+          children: (
+            <>
+              <MdOutlineCalendarToday
+                color="gray.600"
+                style={{ marginInlineEnd: 8 }}
+              />
+            </>
           ),
-        },
+        } as any, // Type assertion for v3 compatibility
         inputProps: {
           color: 'primary.dark',
           ...propsConfigs?.inputProps,
@@ -44,7 +46,7 @@ export const SingleDatePicker = ({
             borderColor: 'blue.300',
             boxShadow: 'lg',
             ...propsConfigs?.popoverCompProps?.popoverContentProps,
-          },
+          } as any,
           ...propsConfigs?.popoverCompProps,
         },
         calendarPanelProps: {
@@ -60,12 +62,12 @@ export const SingleDatePicker = ({
             p: 4,
             border: 'none',
             ...propsConfigs?.calendarPanelProps?.contentProps,
-          },
+          } as any,
           bodyProps: {
             gap: 0,
-            spacingY: 1,
+            rowGap: 1,
             ...propsConfigs?.calendarPanelProps?.bodyProps,
-          },
+          } as any,
           ...propsConfigs?.calendarPanelProps,
         },
         dateNavBtnProps: {
