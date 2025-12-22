@@ -1,19 +1,29 @@
-import React from 'react';
+import React, { useId } from 'react';
 import { Accordion } from '@chakra-ui/react';
 
-type AccordionItemProps = React.ComponentProps<typeof Accordion.Item> & {
+type ChakraAccordionItemBaseProps = React.ComponentProps<typeof Accordion.Item>;
+
+// Extend with children since Chakra v3 types don't include it
+type ChakraAccordionItemProps = ChakraAccordionItemBaseProps & {
   children?: React.ReactNode;
 };
 
-let accordionItemCounter = 0;
+export interface AccordionItemProps extends Omit<ChakraAccordionItemBaseProps, 'value'> {
+  children?: React.ReactNode;
+  value?: string;
+}
 
 export const AccordionItem = ({ children, value, ...props }: AccordionItemProps) => {
+  const generatedId = useId();
   // Auto-generate value if not provided
-  const itemValue = value ?? `accordion-item-${accordionItemCounter++}`;
+  const itemValue = value ?? generatedId;
+
+  // Cast to extended type that includes children
+  const Item = Accordion.Item as React.FC<ChakraAccordionItemProps>;
 
   return (
-    <Accordion.Item value={itemValue} {...props}>
+    <Item value={itemValue} {...props}>
       {children}
-    </Accordion.Item>
+    </Item>
   );
 };

@@ -1,4 +1,4 @@
-import { TabsProps } from '@chakra-ui/react';
+import { TabsProps } from '../Tabs/Tabs.types';
 
 export interface CodeTabsProps extends Omit<TabsProps, 'children' | 'onCopy'> {
   /**

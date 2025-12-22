@@ -1,7 +1,15 @@
-import { forwardRef } from 'react';
+import { forwardRef, ReactNode } from 'react';
 import { Checkbox as ChakraCheckbox } from '@chakra-ui/react';
 
 import { CheckboxProps } from './Checkbox.types';
+
+// Extended types for Chakra v3 compound components that need children
+type CheckboxLabelProps = React.ComponentProps<typeof ChakraCheckbox.Label> & {
+  children?: ReactNode;
+};
+
+// Cast Label component to extended type that includes children
+const CheckboxLabel = ChakraCheckbox.Label as React.FC<CheckboxLabelProps>;
 
 export const Checkbox = forwardRef<HTMLLabelElement, CheckboxProps>(
   ({ children, ...rest }, ref) => {
@@ -23,7 +31,7 @@ export const Checkbox = forwardRef<HTMLLabelElement, CheckboxProps>(
       >
         <ChakraCheckbox.HiddenInput />
         <ChakraCheckbox.Control />
-        {children && <ChakraCheckbox.Label>{children}</ChakraCheckbox.Label>}
+        {children && <CheckboxLabel>{children}</CheckboxLabel>}
       </ChakraCheckbox.Root>
     );
   }

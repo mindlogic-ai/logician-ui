@@ -15,4 +15,8 @@ export type IconButtonProps = Omit<ChakraIconButtonProps, 'variant'> & {
    * @deprecated Use children instead
    */
   icon?: React.ReactElement;
+  /**
+   * @deprecated Use disabled instead
+   */
+  isDisabled?: boolean;
 };

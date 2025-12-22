@@ -60,7 +60,7 @@ export const FileItem = ({
         <Box minW={5}>
           <CiFileOn color={error ? errorColor : 'gray.800'} />
         </Box>
-        <Text isTruncated color={error ? errorColor : undefined}>
+        <Text truncate color={error ? errorColor : undefined}>
           {fileName}
         </Text>
       </Flex>
@@ -84,7 +84,7 @@ export const FileItem = ({
                   onClick={onFileDelete}
                   icon={<IoClose color="gray.600" boxSize="lg" />}
                   size="xs"
-                  isDisabled={isDeleting}
+                  disabled={isDeleting}
                 />
               </Flex>
             )}

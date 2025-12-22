@@ -1,8 +1,29 @@
-import { RefObject, useEffect, useRef, useState } from 'react';
+import { ReactNode, RefObject, useEffect, useRef, useState } from 'react';
 import { Box, Flex, Popover, Portal } from '@chakra-ui/react';
 import { keyframes } from '@emotion/react';
 
 type PopoverRootProps = React.ComponentProps<typeof Popover.Root>;
+type PopoverCloseTriggerBaseProps = React.ComponentProps<typeof Popover.CloseTrigger>;
+
+// Extended types for Chakra v3 compound components that need children
+type PopoverTriggerProps = React.ComponentProps<typeof Popover.Trigger> & {
+  children?: ReactNode;
+};
+type PopoverPositionerProps = React.ComponentProps<typeof Popover.Positioner> & {
+  children?: ReactNode;
+};
+type PopoverContentProps = React.ComponentProps<typeof Popover.Content> & {
+  children?: ReactNode;
+};
+type PopoverArrowProps = React.ComponentProps<typeof Popover.Arrow> & {
+  children?: ReactNode;
+};
+
+// Cast Popover components to extended types that include children
+const PopoverTrigger = Popover.Trigger as React.FC<PopoverTriggerProps>;
+const PopoverPositioner = Popover.Positioner as React.FC<PopoverPositionerProps>;
+const PopoverContent = Popover.Content as React.FC<PopoverContentProps>;
+const PopoverArrow = Popover.Arrow as React.FC<PopoverArrowProps>;
 
 import { Button } from '../Button';
 import { FaCheck, IoChevronForward } from '../Icon';
@@ -37,6 +58,18 @@ const pulseDot = keyframes`
     transform: scale(0.8);
   }
 `;
+
+// Styled close trigger
+const CloseButton = (props: PopoverCloseTriggerBaseProps) => (
+  <Box
+    as={Popover.CloseTrigger}
+    position="absolute"
+    top={2}
+    right={2}
+    color="gray.600"
+    {...props}
+  />
+);
 
 export const GuideCue = ({
   index,
@@ -126,7 +159,7 @@ export const GuideCue = ({
         autoFocus
       >
         {isRendered && (
-          <Popover.Trigger asChild>
+          <PopoverTrigger asChild>
             <Box
               position="absolute"
               top={top ?? '50%'}
@@ -174,20 +207,15 @@ export const GuideCue = ({
               }}
               zIndex={2}
             />
-          </Popover.Trigger>
+          </PopoverTrigger>
         )}
-        <Popover.Positioner>
-          <Popover.Content w="fit-content" minW="200px" maxW="400px">
-            <Popover.Arrow>
+        <PopoverPositioner>
+          <PopoverContent w="fit-content" minW="200px" maxW="400px">
+            <PopoverArrow>
               <Popover.ArrowTip />
-            </Popover.Arrow>
+            </PopoverArrow>
             <Box textAlign="left" p={0}>
-              <Popover.CloseTrigger
-                position="absolute"
-                top={2}
-                right={2}
-                color="gray.600"
-              />
+              <CloseButton />
               <Box py={4} px={2} color="black">
                 {cueRefs.length > 1 && (
                   <Subtext
@@ -222,8 +250,8 @@ export const GuideCue = ({
                 </Button>
               </Flex>
             </Box>
-          </Popover.Content>
-        </Popover.Positioner>
+          </PopoverContent>
+        </PopoverPositioner>
       </Popover.Root>
     </Portal>
   );

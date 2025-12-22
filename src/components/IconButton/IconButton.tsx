@@ -6,11 +6,13 @@ import { IconButtonProps } from './IconButton.types';
 
 export const IconButton = forwardRef(
   (
-    { variant = 'link', sx, icon, children, ...rest }: IconButtonProps,
+    { variant = 'link', sx, icon, children, isDisabled, disabled, ...rest }: IconButtonProps,
     ref?: ForwardedRef<HTMLButtonElement>
   ) => {
     // Support both deprecated icon prop and new children prop
     const content = children ?? icon;
+    // Support both deprecated isDisabled and new disabled prop
+    const isButtonDisabled = disabled ?? isDisabled;
 
     return (
       <ChakraIconButton
@@ -19,6 +21,7 @@ export const IconButton = forwardRef(
         background="transparent"
         {...variantStyles[variant]}
         {...rest}
+        disabled={isButtonDisabled}
         ref={ref}
         css={{
           ...sx,

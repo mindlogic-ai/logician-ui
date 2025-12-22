@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { Button, List } from '@chakra-ui/react';
 
 import { FileItem } from '@/components/FileItem';
@@ -6,6 +6,14 @@ import { FileGroupProps } from '@/components/FileList/FileList.types';
 import { IoChevronDownOutline } from '@/components/Icon';
 import { Subtitle } from '@/components/Typography';
 import { useTranslate } from '@/hooks/useTranslate';
+
+// Extended types for Chakra v3 compound components that need children
+type ListRootProps = React.ComponentProps<typeof List.Root> & {
+  children?: ReactNode;
+};
+
+// Cast List.Root to extended type that includes children
+const ListRoot = List.Root as React.FC<ListRootProps>;
 
 export const FileList = ({
   files,
@@ -45,7 +53,7 @@ export const FileList = ({
   if (files?.length <= 0) return null;
 
   return (
-    <List
+    <ListRoot
       w="100%"
       border="1px solid"
       borderColor="gray.200"
@@ -76,7 +84,7 @@ export const FileList = ({
           onClick={handleFileLoadMore}
           alignSelf="stretch"
           w="100%"
-          variant="unstyled"
+          variant="plain"
           display="flex"
           gap={1}
         >
@@ -86,7 +94,7 @@ export const FileList = ({
           <IoChevronDownOutline color="gray.600" />
         </Button>
       )}
-    </List>
+    </ListRoot>
   );
 };
 
