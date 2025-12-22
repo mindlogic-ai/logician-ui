@@ -1,5 +1,7 @@
-import { TagProps as ChakraTagProps } from '@chakra-ui/react';
+import { Tag } from '@chakra-ui/react';
 
-export interface TagProps extends ChakraTagProps {
+type ChakraTagRootProps = React.ComponentProps<typeof Tag.Root>;
+
+export interface TagProps extends ChakraTagRootProps {
   variant?: 'default' | 'active';
 }

@@ -34,14 +34,26 @@ const TabsWithUrlSync = ({
   index: externalIndex,
   ...rest
 }: Omit<TabsProps, 'urlParam'>) => {
-  const { selectedIndex, setSelectedIndex } = useTabsContext();
+  const { selectedIndex, setSelectedIndex, tabNames } = useTabsContext();
 
   // Use the context's index if no external index is provided
   const actualIndex =
     externalIndex !== undefined ? externalIndex : selectedIndex;
 
   // Handle tab changes
-  const handleTabChange = (newIndex: number) => {
+  const handleTabChange = (details: { value: string }) => {
+    const newIndex = tabNames.indexOf(details.value);
+    if (newIndex === -1) {
+      // If value not found in tabNames, try to parse as index
+      const parsedIndex = parseInt(details.value, 10);
+      if (!isNaN(parsedIndex)) {
+        setSelectedIndex(parsedIndex);
+        if (onChange) {
+          onChange(parsedIndex);
+        }
+      }
+      return;
+    }
     // Update the context state
     setSelectedIndex(newIndex);
 
@@ -51,15 +63,18 @@ const TabsWithUrlSync = ({
     }
   };
 
+  // Convert index to value string
+  const value = tabNames[actualIndex] ?? String(actualIndex);
+
   return (
-    <ChakraTabs
+    <ChakraTabs.Root
       position="relative"
-      variant="unstyled"
-      index={actualIndex}
-      onChange={handleTabChange}
+      variant="plain"
+      value={value}
+      onValueChange={handleTabChange}
       {...rest}
     >
       {children}
-    </ChakraTabs>
+    </ChakraTabs.Root>
   );
 };

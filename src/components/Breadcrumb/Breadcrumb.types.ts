@@ -1,3 +1,5 @@
-import { BreadcrumbProps as ChakraBreadcrumbProps } from '@chakra-ui/react';
+import { Breadcrumb } from '@chakra-ui/react';
 
-export interface BreadcrumbProps extends ChakraBreadcrumbProps {}
+type ChakraBreadcrumbRootProps = React.ComponentProps<typeof Breadcrumb.Root>;
+
+export interface BreadcrumbProps extends ChakraBreadcrumbRootProps {}

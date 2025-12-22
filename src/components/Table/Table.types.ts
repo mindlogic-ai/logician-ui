@@ -1,11 +1,11 @@
-import {
-  TableCellProps as ChakraTableCellProps,
-  TableContainerProps as ChakraTableContainerProps,
-} from '@chakra-ui/react';
+import { Table } from '@chakra-ui/react';
 
 import { StickyDirection } from './Table.styles';
 
-export interface TableContainerProps extends ChakraTableContainerProps {
+type ChakraTableScrollAreaProps = React.ComponentProps<typeof Table.ScrollArea>;
+type ChakraTableCellProps = React.ComponentProps<typeof Table.Cell>;
+
+export interface TableContainerProps extends ChakraTableScrollAreaProps {
   children: React.ReactNode;
 }
 

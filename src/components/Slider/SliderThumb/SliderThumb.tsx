@@ -1,15 +1,17 @@
 import { ForwardedRef, forwardRef } from 'react';
-import { SliderThumb as ChakraSliderThumb } from '@chakra-ui/react';
+import { Slider } from '@chakra-ui/react';
 
 import { SliderThumbProps } from './SliderThumb.types';
 
 export const SliderThumb = forwardRef(
   ({ ...rest }: SliderThumbProps, ref?: ForwardedRef<HTMLDivElement>) => {
     return (
-      <ChakraSliderThumb
-        border="3px solid"
+      <Slider.Thumb
+        index={0}
         w={4}
         h={4}
+        borderWidth="3px"
+        borderStyle="solid"
         borderColor="primary.main"
         boxShadow="none"
         {...rest}

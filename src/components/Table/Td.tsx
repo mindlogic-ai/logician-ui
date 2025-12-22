@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Td as ChakraTd, useToken } from '@chakra-ui/react';
+import { Table } from '@chakra-ui/react';
 
 import { getStickyStyles } from './Table.styles';
 import { TableCellProps } from './Table.types';
@@ -22,11 +22,11 @@ export const Td = ({
   const cellRef = useRef<HTMLTableCellElement>(null);
   const tableContext = useTableContext();
 
-  // Define all style variables ahead of time so they can be used constantly
-  const grayColor = useToken('colors', 'gray.300');
-  const paddingToken = useToken('space', '3'); // py={3} equivalent
-  const fontSizeToken = useToken('fontSizes', 'p');
-  const spacingToken = useToken('space', '4'); // spacing 4 for paddingInlineStart
+  // Use static values since useToken is removed in v3
+  const grayColor = '#E2E8F0'; // gray.300
+  const paddingToken = '12px'; // py={3} equivalent
+  const fontSizeToken = '16px'; // p font size
+  const spacingToken = '16px'; // spacing 4 for paddingInlineStart
 
   // If not inside TableContext, render regular HTML td with same styles
   if (!tableContext) {
@@ -103,7 +103,7 @@ export const Td = ({
   );
 
   return (
-    <ChakraTd
+    <Table.Cell
       border={0}
       borderTop="1px solid"
       borderTopColor="gray.300"
@@ -131,7 +131,7 @@ export const Td = ({
       {...rest}
     >
       {children}
-    </ChakraTd>
+    </Table.Cell>
   );
 };
 

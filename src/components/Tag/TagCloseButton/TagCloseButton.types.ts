@@ -1,3 +1,5 @@
-import { TagCloseButtonProps as ChakraTagCloseButtonProps } from '@chakra-ui/react';
+import { Tag } from '@chakra-ui/react';
 
-export interface TagCloseButtonProps extends ChakraTagCloseButtonProps {}
+type ChakraTagCloseTriggerProps = React.ComponentProps<typeof Tag.CloseTrigger>;
+
+export interface TagCloseButtonProps extends ChakraTagCloseTriggerProps {}

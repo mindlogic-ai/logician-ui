@@ -1,5 +1,5 @@
 import { forwardRef, useCallback } from 'react';
-import { TableContainer as ChakraTableContainer } from '@chakra-ui/react';
+import { Table } from '@chakra-ui/react';
 
 import { TableContainerProps } from './Table.types';
 import { TableProvider, useTableContext } from './TableContext';
@@ -26,7 +26,7 @@ const TableContainerInner = forwardRef<HTMLDivElement, TableContainerProps>(
     );
 
     return (
-      <ChakraTableContainer
+      <Table.ScrollArea
         border="1px solid"
         borderRadius="md"
         borderColor="gray.300"
@@ -34,7 +34,7 @@ const TableContainerInner = forwardRef<HTMLDivElement, TableContainerProps>(
         {...rest}
       >
         {children}
-      </ChakraTableContainer>
+      </Table.ScrollArea>
     );
   }
 );

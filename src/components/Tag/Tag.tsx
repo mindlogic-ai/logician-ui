@@ -6,16 +6,18 @@ import { TagProps } from './Tag.types';
 
 export const Tag = forwardRef(
   (
-    { variant = 'default', ...rest }: TagProps,
+    { variant = 'default', children, ...rest }: TagProps,
     ref?: ForwardedRef<HTMLDivElement>
   ) => {
     return (
-      <ChakraTag
+      <ChakraTag.Root
         border="1px solid"
         {...variantStyles[variant]}
         {...rest}
         ref={ref}
-      />
+      >
+        <ChakraTag.Label>{children}</ChakraTag.Label>
+      </ChakraTag.Root>
     );
   }
 );

@@ -1,3 +1,5 @@
-import { FormControlProps as ChakraFormControlProps } from '@chakra-ui/react';
+import { Field } from '@chakra-ui/react';
 
-export interface FormControlProps extends ChakraFormControlProps {}
+type ChakraFieldRootProps = React.ComponentProps<typeof Field.Root>;
+
+export interface FormControlProps extends ChakraFieldRootProps {}

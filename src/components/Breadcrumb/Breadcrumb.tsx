@@ -3,10 +3,11 @@ import { Breadcrumb as ChakraBreadcrumb } from '@chakra-ui/react';
 
 import { IoChevronForward } from '../Icon';
 import { BreadcrumbProps } from './Breadcrumb.types';
+
 export const Breadcrumb = forwardRef(
-  ({ ...rest }: BreadcrumbProps, ref?: ForwardedRef<HTMLDivElement>) => {
+  ({ ...rest }: BreadcrumbProps, ref?: ForwardedRef<HTMLElement>) => {
     return (
-      <ChakraBreadcrumb
+      <ChakraBreadcrumb.Root
         separator={<IoChevronForward color="gray.800" />}
         {...rest}
         ref={ref}

@@ -1,8 +1,10 @@
 import React from 'react';
 import { Switch as ChakraSwitch } from '@chakra-ui/react';
 
-export const Switch = ({ ...rest }) => {
-  return <ChakraSwitch {...rest} />;
+type SwitchRootProps = React.ComponentProps<typeof ChakraSwitch.Root>;
+
+export const Switch = ({ ...rest }: SwitchRootProps) => {
+  return <ChakraSwitch.Root {...rest} />;
 };
 
 Switch.displayName = 'Switch';

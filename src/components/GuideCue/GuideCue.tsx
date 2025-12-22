@@ -1,16 +1,8 @@
 import { RefObject, useEffect, useRef, useState } from 'react';
-import {
-  Box,
-  Flex,
-  Popover,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverProps,
-  PopoverTrigger,
-  Portal,
-} from '@chakra-ui/react';
+import { Box, Flex, Popover, Portal } from '@chakra-ui/react';
 import { keyframes } from '@emotion/react';
+
+type PopoverRootProps = React.ComponentProps<typeof Popover.Root>;
 
 import { Button } from '../Button';
 import { FaCheck, IoChevronForward } from '../Icon';
@@ -61,7 +53,7 @@ export const GuideCue = ({
   containerRef: RefObject<HTMLElement>;
   title: string;
   description: string;
-  placement?: PopoverProps['placement'];
+  placement?: PopoverRootProps['positioning'];
   top?: number | string;
   left?: number | string;
 }) => {
@@ -126,15 +118,15 @@ export const GuideCue = ({
 
   return (
     <Portal containerRef={containerRef}>
-      <Popover
-        isOpen={isOpen}
-        onClose={handleClose}
-        initialFocusRef={ctaRef}
-        placement={placement}
-        returnFocusOnClose={false}
+      <Popover.Root
+        open={isOpen}
+        onOpenChange={(details) => !details.open && handleClose()}
+        initialFocusEl={() => ctaRef.current}
+        positioning={placement}
+        autoFocus
       >
         {isRendered && (
-          <PopoverTrigger>
+          <Popover.Trigger asChild>
             <Box
               position="absolute"
               top={top ?? '50%'}
@@ -182,50 +174,57 @@ export const GuideCue = ({
               }}
               zIndex={2}
             />
-          </PopoverTrigger>
+          </Popover.Trigger>
         )}
-        <PopoverContent w="fit-content" minW="200px" maxW="400px">
-          <PopoverArrow />
-          <Box textAlign="left" p={0}>
-            <PopoverCloseButton color="gray.600" />
-            <Box py={4} px={2} color="black">
-              {cueRefs.length > 1 && (
-                <Subtext
-                  color="primary.dark"
-                  opacity={0.5}
-                  mb={2}
-                  fontSize="xs"
-                >{`${index + 1} / ${cueRefs.length}`}</Subtext>
-              )}
-              <Subtitle color="primary.dark" fontWeight="bold" mb={1}>
-                {title}
-              </Subtitle>
-              <Subtext color="gray.800" fontWeight="normal">
-                {description}
-              </Subtext>
-            </Box>
-            <Flex justifyContent="flex-end" gap={2} w="100%" p={3} pt={0}>
-              <Button
-                size="xs"
-                data-testid="guideCue-nextButton"
-                onClick={handleNext}
-                w="fit-content"
-                variant="secondary"
-                ref={ctaRef}
-                rightIcon={
-                  currentIndex < cueRefs.length - 1 ? (
+        <Popover.Positioner>
+          <Popover.Content w="fit-content" minW="200px" maxW="400px">
+            <Popover.Arrow>
+              <Popover.ArrowTip />
+            </Popover.Arrow>
+            <Box textAlign="left" p={0}>
+              <Popover.CloseTrigger
+                position="absolute"
+                top={2}
+                right={2}
+                color="gray.600"
+              />
+              <Box py={4} px={2} color="black">
+                {cueRefs.length > 1 && (
+                  <Subtext
+                    color="primary.dark"
+                    opacity={0.5}
+                    mb={2}
+                    fontSize="xs"
+                  >{`${index + 1} / ${cueRefs.length}`}</Subtext>
+                )}
+                <Subtitle color="primary.dark" fontWeight="bold" mb={1}>
+                  {title}
+                </Subtitle>
+                <Subtext color="gray.800" fontWeight="normal">
+                  {description}
+                </Subtext>
+              </Box>
+              <Flex justifyContent="flex-end" gap={2} w="100%" p={3} pt={0}>
+                <Button
+                  size="xs"
+                  data-testid="guideCue-nextButton"
+                  onClick={handleNext}
+                  w="fit-content"
+                  variant="secondary"
+                  ref={ctaRef}
+                >
+                  {currentIndex < cueRefs.length - 1 ? 'Next' : `Got it!`}
+                  {currentIndex < cueRefs.length - 1 ? (
                     <IoChevronForward boxSize="xs" />
                   ) : (
                     <FaCheck boxSize="xs" />
-                  )
-                }
-              >
-                {currentIndex < cueRefs.length - 1 ? 'Next' : `Got it!`}
-              </Button>
-            </Flex>
-          </Box>
-        </PopoverContent>
-      </Popover>
+                  )}
+                </Button>
+              </Flex>
+            </Box>
+          </Popover.Content>
+        </Popover.Positioner>
+      </Popover.Root>
     </Portal>
   );
 };

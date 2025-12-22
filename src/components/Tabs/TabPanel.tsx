@@ -1,5 +1,7 @@
-import { TabPanel as ChakraTabPanel, TabPanelProps } from '@chakra-ui/react';
+import { Tabs } from '@chakra-ui/react';
 
-export const TabPanel = (props: TabPanelProps) => {
-  return <ChakraTabPanel p={0} {...props} />;
+type TabsContentProps = React.ComponentProps<typeof Tabs.Content>;
+
+export const TabPanel = (props: TabsContentProps) => {
+  return <Tabs.Content p={0} {...props} />;
 };

@@ -8,7 +8,9 @@ import React, {
   useLayoutEffect,
   useState,
 } from 'react';
-import { TabsProps as ChakraTabsProps } from '@chakra-ui/react';
+import { Tabs } from '@chakra-ui/react';
+
+type ChakraTabsRootProps = React.ComponentProps<typeof Tabs.Root>;
 import PropTypes from 'prop-types';
 
 // Optional Next.js navigation hooks with fallbacks
@@ -36,7 +38,7 @@ try {
 }
 
 interface TabsContextProps {
-  orientation: ChakraTabsProps['orientation'];
+  orientation: ChakraTabsRootProps['orientation'];
   urlParam?: string;
   tabNames: string[];
   setTabNames: React.Dispatch<React.SetStateAction<string[]>>;
@@ -62,7 +64,7 @@ export function TabsProvider({
   orientation,
   urlParam,
 }: PropsWithChildren<{
-  orientation: ChakraTabsProps['orientation'];
+  orientation: ChakraTabsRootProps['orientation'];
   urlParam?: string;
 }>) {
   const [tabNames, setTabNames] = useState<string[]>([]);

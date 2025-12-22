@@ -1,3 +1,5 @@
-import { SliderMarkProps as ChakraSliderMarkProps } from '@chakra-ui/react';
+import { Slider } from '@chakra-ui/react';
 
-export interface SliderMarkProps extends ChakraSliderMarkProps {}
+type ChakraSliderMarkerProps = React.ComponentProps<typeof Slider.Marker>;
+
+export interface SliderMarkProps extends ChakraSliderMarkerProps {}

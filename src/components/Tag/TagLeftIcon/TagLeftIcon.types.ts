@@ -1,3 +1,5 @@
-import { IconProps } from '@chakra-ui/react';
+import { Tag } from '@chakra-ui/react';
 
-export interface TagLeftIconProps extends IconProps {}
+type ChakraTagStartElementProps = React.ComponentProps<typeof Tag.StartElement>;
+
+export interface TagLeftIconProps extends ChakraTagStartElementProps {}

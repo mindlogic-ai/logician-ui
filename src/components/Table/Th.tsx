@@ -1,13 +1,11 @@
 import { forwardRef, useCallback, useEffect, useRef } from 'react';
-import {
-  TableColumnHeaderProps,
-  Th as ChakraTh,
-  useToken,
-} from '@chakra-ui/react';
+import { Table } from '@chakra-ui/react';
 
 import { getStickyStyles } from './Table.styles';
 import { TableCellProps } from './Table.types';
 import { useTableContext } from './TableContext';
+
+type TableColumnHeaderProps = React.ComponentProps<typeof Table.ColumnHeader>;
 
 export const Th = forwardRef<
   HTMLTableCellElement,
@@ -30,8 +28,9 @@ export const Th = forwardRef<
   ) => {
     const tableContext = useTableContext();
     const measureNodeRef = useRef<HTMLTableCellElement | null>(null);
-    const fontSizeToken = useToken('fontSizes', 'subtitle');
-    const spacingToken = useToken('space', '4'); // spacing 4 for paddingInlineStart
+    // Use static values since useToken is removed in v3
+    const fontSizeToken = '14px'; // subtitle font size
+    const spacingToken = '16px'; // spacing 4 for paddingInlineStart
 
     // If not inside TableContext, render regular HTML th with same styles
     if (!tableContext) {
@@ -129,7 +128,7 @@ export const Th = forwardRef<
     );
 
     return (
-      <ChakraTh
+      <Table.ColumnHeader
         color="inherit"
         fontWeight="inherit"
         fontSize="subtitle"
@@ -146,7 +145,7 @@ export const Th = forwardRef<
         {...rest}
       >
         {children}
-      </ChakraTh>
+      </Table.ColumnHeader>
     );
   }
 );

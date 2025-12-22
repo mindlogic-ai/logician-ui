@@ -1,3 +1,8 @@
-import { TooltipProps as ChakraTooltipProps } from '@chakra-ui/react';
+import { Tooltip } from '@chakra-ui/react';
 
-export interface TooltipProps extends ChakraTooltipProps {}
+type ChakraTooltipRootProps = React.ComponentProps<typeof Tooltip.Root>;
+
+export interface TooltipProps extends ChakraTooltipRootProps {
+  label?: React.ReactNode;
+  children?: React.ReactNode;
+}
