@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { ReactNode, useLayoutEffect, useRef, useState } from 'react';
 import { Tabs } from '@chakra-ui/react';
 
 import { useTabsContext } from '@/components/Tabs/TabsContext';
@@ -13,7 +13,11 @@ import {
 // A global counter to assign unique IDs to tabs for identification
 let nextTabId = 0;
 
-export const Tab = ({ name, value, ...props }: TabProps) => {
+export interface ExtendedTabProps extends TabProps {
+  children?: ReactNode;
+}
+
+export const Tab = ({ name, value, children, ...props }: ExtendedTabProps) => {
   const { orientation, registerTabName } = useTabsContext();
   const tabRef = useRef<HTMLButtonElement>(null);
   const [tabId] = useState(() => `tab-${nextTabId++}`);
@@ -67,6 +71,8 @@ export const Tab = ({ name, value, ...props }: TabProps) => {
           : horizontalSelectedStyles),
       }}
       {...props}
-    />
+    >
+      {children}
+    </Tabs.Trigger>
   );
 };

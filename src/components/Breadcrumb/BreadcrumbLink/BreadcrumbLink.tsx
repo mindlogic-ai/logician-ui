@@ -1,7 +1,8 @@
 import { ForwardedRef, forwardRef } from 'react';
-import { BreadcrumbLink as ChakraBreadcrumbLink } from '@chakra-ui/react';
+import { Breadcrumb } from '@chakra-ui/react';
 
 import { BreadcrumbLinkProps } from './BreadcrumbLink.types';
+
 // Optional Next.js Link import
 let NextLink: any;
 try {
@@ -12,17 +13,22 @@ try {
 
 export const BreadcrumbLink = forwardRef(
   (
-    { href, ...rest }: BreadcrumbLinkProps,
-    ref?: ForwardedRef<HTMLDivElement>
+    { href, children, ...rest }: BreadcrumbLinkProps,
+    ref?: ForwardedRef<HTMLAnchorElement>
   ) => {
+    // In Chakra v3, use asChild pattern for Next.js Link
+    if (NextLink && href) {
+      return (
+        <Breadcrumb.Link asChild color="primary.dark" {...rest} ref={ref}>
+          <NextLink href={href}>{children}</NextLink>
+        </Breadcrumb.Link>
+      );
+    }
+
     return (
-      <ChakraBreadcrumbLink
-        color="primary.dark"
-        as={NextLink || 'a'}
-        href={href}
-        {...rest}
-        ref={ref}
-      />
+      <Breadcrumb.Link color="primary.dark" href={href} {...rest} ref={ref}>
+        {children}
+      </Breadcrumb.Link>
     );
   }
 );
