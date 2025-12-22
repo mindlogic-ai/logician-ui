@@ -1,11 +1,11 @@
 import * as CSS from 'csstype';
 
-import theme from '@/theme/index';
+import { colors } from '@/theme/colors';
 
 export const editableStyles = {
   display: 'flex',
   alignItems: 'center',
-  gap: 4, // Use direct spacing value instead of theme.spacing[4]
+  gap: 4,
 };
 
 export const previewWrapperStyles = {
@@ -28,6 +28,6 @@ export const inputStyles = {
     boxSizing: 'content-box',
   },
   _focus: {
-    backgroundColor: theme.colors.white,
+    backgroundColor: colors.white,
   },
 };

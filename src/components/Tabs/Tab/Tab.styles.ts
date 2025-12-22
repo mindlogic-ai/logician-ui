@@ -1,6 +1,6 @@
 import * as CSS from 'csstype';
 
-import theme from '@/theme/index';
+import { semanticTokens } from '@/theme/colors';
 
 // TODO: investigate why these TS issues are coming up
 export const verticalStyles = {
@@ -14,7 +14,7 @@ export const verticalStyles = {
 };
 
 export const horizontalSelectedStyles = {
-  color: theme.semanticTokens.colors.primary.main,
+  color: semanticTokens.colors.primary.main,
   fontWeight: 'semibold',
   position: 'relative',
   _after: {
@@ -24,7 +24,7 @@ export const horizontalSelectedStyles = {
     left: 0,
     width: '100%',
     height: '2px',
-    background: theme.semanticTokens.colors.primary.main,
+    background: semanticTokens.colors.primary.main,
   },
 };
 

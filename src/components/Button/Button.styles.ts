@@ -1,7 +1,7 @@
 import { ButtonProps } from '@chakra-ui/react';
 
 import { ButtonVariant } from '@/components/Button/Button.types';
-import theme from '@/theme/index';
+import { colors } from '@/theme/colors';
 
 export const variantStyles: Record<
   Exclude<ButtonVariant, undefined>,
@@ -45,7 +45,7 @@ export const variantStyles: Record<
     bgColor: 'danger.main',
     color: 'white',
     _hover: {
-      bgColor: theme.colors.red[600],
+      bgColor: colors.red?.[600] ?? '#c53030',
     },
   },
   link: {

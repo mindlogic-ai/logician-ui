@@ -1,6 +1,6 @@
 import * as CSS from 'csstype';
 
-import theme from '@/theme/index';
+import { colors, semanticTokens } from '@/theme/colors';
 
 import { ChipProps, ChipUseCase } from './Chip.types';
 
@@ -17,98 +17,98 @@ export const useCaseStyles: Record<
 > = {
   primary: {
     solid: {
-      bgColor: theme.semanticTokens.colors.primary.main,
+      bgColor: semanticTokens.colors.primary.main,
       color: 'white',
     },
     outline: {
       border: '1px solid',
-      borderColor: theme.semanticTokens.colors.primary.main,
-      color: theme.semanticTokens.colors.primary.main,
+      borderColor: semanticTokens.colors.primary.main,
+      color: semanticTokens.colors.primary.main,
       bgColor: 'white',
     },
     subtle: {
       bgColor: '#EBF0FB',
-      color: theme.semanticTokens.colors.primary.main,
+      color: semanticTokens.colors.primary.main,
     },
   },
   secondary: {
     solid: {
-      bgColor: theme.colors.blue[700],
-      color: theme.colors.white,
+      bgColor: colors.blue[700],
+      color: colors.white,
     },
     outline: {
       border: '1px solid',
-      borderColor: theme.colors.blue[700],
-      color: theme.colors.blue[700],
+      borderColor: colors.blue[700],
+      color: colors.blue[700],
       bgColor: 'white',
     },
     subtle: {
-      bgColor: theme.colors.blue[50],
-      color: theme.colors.blue[700],
+      bgColor: colors.blue[100],
+      color: colors.blue[700],
     },
   },
   success: {
     solid: {
-      bgColor: theme.semanticTokens.colors.success.main,
+      bgColor: semanticTokens.colors.success.main,
       color: 'white',
     },
     outline: {
       border: '1px solid',
-      borderColor: theme.semanticTokens.colors.success.main,
-      color: theme.semanticTokens.colors.success.main,
+      borderColor: semanticTokens.colors.success.main,
+      color: semanticTokens.colors.success.main,
       bgColor: 'white',
     },
     subtle: {
-      bgColor: theme.colors.green[50],
-      color: theme.semanticTokens.colors.success.main,
+      bgColor: semanticTokens.colors.success.lighter,
+      color: semanticTokens.colors.success.main,
     },
   },
   danger: {
     solid: {
-      bgColor: theme.semanticTokens.colors.danger.main,
+      bgColor: semanticTokens.colors.danger.main,
       color: 'white',
     },
     outline: {
       border: '1px solid',
-      borderColor: theme.semanticTokens.colors.danger.main,
-      color: theme.semanticTokens.colors.danger.main,
+      borderColor: semanticTokens.colors.danger.main,
+      color: semanticTokens.colors.danger.main,
       bgColor: 'white',
     },
     subtle: {
-      bgColor: theme.semanticTokens.colors.danger.lighter,
-      color: theme.semanticTokens.colors.danger.main,
+      bgColor: semanticTokens.colors.danger.lighter,
+      color: semanticTokens.colors.danger.main,
     },
   },
   dark: {
     solid: {
-      bgColor: theme.colors.gray[800],
+      bgColor: colors.gray[800],
       color: 'white',
     },
     outline: {
       border: '1px solid',
       backgroundColor: 'transparent',
-      borderColor: theme.colors.gray[700],
-      color: theme.colors.gray[700],
+      borderColor: colors.gray[700],
+      color: colors.gray[700],
     },
     subtle: {
-      bgColor: theme.colors.gray[100],
-      color: theme.colors.gray[800],
+      bgColor: colors.gray[100],
+      color: colors.gray[800],
     },
   },
   highlight: {
     solid: {
-      bgColor: theme.colors.purple[600],
+      bgColor: '#9F7AEA',
       color: 'white',
     },
     outline: {
       border: '1px solid',
       backgroundColor: 'transparent',
-      borderColor: theme.colors.purple[600],
-      color: theme.colors.purple[600],
+      borderColor: '#9F7AEA',
+      color: '#9F7AEA',
     },
     subtle: {
-      bgColor: theme.colors.purple[50],
-      color: theme.colors.purple[600],
+      bgColor: '#FAF5FF',
+      color: '#9F7AEA',
     },
   },
 };

@@ -1,10 +1,10 @@
-import theme from '@/theme/index';
+import { colors } from '@/theme/colors';
 
 // Light mode styles only
 export const cardStyles = {
-  bgColor: theme.colors.white,
-  color: theme.colors.black,
-  borderColor: theme.colors.gray[100],
+  bgColor: colors.white,
+  color: colors.black,
+  borderColor: colors.gray[100],
 };
 
 export const clickableStyles = {
