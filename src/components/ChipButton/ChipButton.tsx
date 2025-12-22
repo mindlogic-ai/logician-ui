@@ -1,23 +1,35 @@
 import { ForwardedRef, forwardRef } from 'react';
-import { Button as ChakraButton, ButtonProps } from '@chakra-ui/react';
+import { Button as ChakraButton } from '@chakra-ui/react';
 
 import { ChipButtonPropsTypes } from './Chip.types';
 
+type ChakraButtonProps = React.ComponentProps<typeof ChakraButton>;
+
 export const ChipButton = forwardRef(
   (
-    { rightIcon, leftIcon, ...rest }: ChipButtonPropsTypes & ButtonProps,
+    {
+      rightIcon,
+      leftIcon,
+      children,
+      ...rest
+    }: ChipButtonPropsTypes & ChakraButtonProps & {
+      rightIcon?: React.ReactElement;
+      leftIcon?: React.ReactElement;
+    },
     ref?: ForwardedRef<HTMLButtonElement>
   ) => {
     return (
       <ChakraButton
-        rightIcon={rightIcon ?? undefined}
-        leftIcon={leftIcon ?? undefined}
-        iconSpacing={1}
+        gap={1}
         border="1px solid"
         width="fit-content"
         {...rest}
         ref={ref}
-      />
+      >
+        {leftIcon}
+        {children}
+        {rightIcon}
+      </ChakraButton>
     );
   }
 );

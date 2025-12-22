@@ -6,9 +6,12 @@ import { IconButtonProps } from './IconButton.types';
 
 export const IconButton = forwardRef(
   (
-    { variant = 'link', sx, ...rest }: IconButtonProps,
+    { variant = 'link', sx, icon, children, ...rest }: IconButtonProps,
     ref?: ForwardedRef<HTMLButtonElement>
   ) => {
+    // Support both deprecated icon prop and new children prop
+    const content = children ?? icon;
+
     return (
       <ChakraIconButton
         border="1px solid"
@@ -17,7 +20,7 @@ export const IconButton = forwardRef(
         {...variantStyles[variant]}
         {...rest}
         ref={ref}
-        sx={{
+        css={{
           ...sx,
           '& svg': {
             pointerEvents: 'none',
@@ -28,7 +31,9 @@ export const IconButton = forwardRef(
             ...(sx as any)?.['& svg *'],
           },
         }}
-      />
+      >
+        {content}
+      </ChakraIconButton>
     );
   }
 );

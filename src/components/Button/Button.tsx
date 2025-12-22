@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import { Button as ChakraButton, useTheme, useToken } from '@chakra-ui/react';
+import { Button as ChakraButton } from '@chakra-ui/react';
 
 import { variantStyles } from './Button.styles';
 import { ButtonProps } from './Button.types';
@@ -10,22 +10,23 @@ export const Button = forwardRef(
       variant = 'secondary', // default to secondary as they are less likely to cause bigger design issues
       _focus,
       size,
+      leftIcon,
+      rightIcon,
+      children,
       ...rest
     }: ButtonProps,
     ref
   ) => {
-    const theme = useTheme();
-    const primaryMainColor = useToken(
-      'colors',
-      theme.semanticTokens.colors.primary.main
-    );
+    // Use a CSS variable for the primary color
+    const primaryMainColor = 'var(--chakra-colors-primary-main, #1A3E8A)';
+
     return (
       <ChakraButton
         border="1px solid"
         lineHeight="1.2"
         size={size}
         fontSize={size === 'xs' ? 'sm' : size} // xs is too small
-        variant={variant === 'link' ? 'link' : undefined} // if variant isn't link, use our custom variant styles
+        variant={variant === 'link' ? 'plain' : undefined} // if variant isn't link, use our custom variant styles
         {...variantStyles[variant]}
         _focus={{
           outline: 'none',
@@ -35,7 +36,11 @@ export const Button = forwardRef(
         transition="all 0.25s ease-in-out"
         ref={ref}
         {...rest}
-      />
+      >
+        {leftIcon}
+        {children}
+        {rightIcon}
+      </ChakraButton>
     );
   }
 );

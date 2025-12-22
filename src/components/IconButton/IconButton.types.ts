@@ -1,4 +1,6 @@
-import { IconButtonProps as ChakraIconButtonProps } from '@chakra-ui/react';
+import { IconButton } from '@chakra-ui/react';
+
+type ChakraIconButtonProps = React.ComponentProps<typeof IconButton>;
 
 export type IconButtonVariant =
   | 'primary'
@@ -9,4 +11,8 @@ export type IconButtonVariant =
 
 export type IconButtonProps = Omit<ChakraIconButtonProps, 'variant'> & {
   variant?: IconButtonVariant;
+  /**
+   * @deprecated Use children instead
+   */
+  icon?: React.ReactElement;
 };
