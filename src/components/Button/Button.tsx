@@ -4,7 +4,7 @@ import { Button as ChakraButton } from '@chakra-ui/react';
 import { variantStyles } from './Button.styles';
 import { ButtonProps } from './Button.types';
 
-export const Button = forwardRef(
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       variant = 'secondary', // default to secondary as they are less likely to cause bigger design issues
@@ -14,7 +14,7 @@ export const Button = forwardRef(
       rightIcon,
       children,
       ...rest
-    }: ButtonProps,
+    },
     ref
   ) => {
     // Use a CSS variable for the primary color
