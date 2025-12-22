@@ -1,61 +1,108 @@
 import {
-  extendTheme,
-  Theme as ChakraTheme,
-  ThemeOverride,
+  createSystem,
+  defaultConfig,
+  defineConfig,
+  SystemConfig,
 } from '@chakra-ui/react';
 
 import { colors, semanticTokens } from './colors';
-import { global } from './global';
+import { globalCss } from './global';
 
-export const theme = {
-  colors,
-  styles: {
-    global,
-  },
-
-  components: {
-    Switch: {
-      baseStyle: {
-        track: {
-          _checked: {
-            bg: 'primary.main',
-          },
+const config = defineConfig({
+  globalCss,
+  theme: {
+    tokens: {
+      colors: {
+        gray: {
+          50: { value: colors.gray[50] },
+          100: { value: colors.gray[100] },
+          200: { value: colors.gray[200] },
+          300: { value: colors.gray[300] },
+          400: { value: colors.gray[400] },
+          500: { value: colors.gray[500] },
+          600: { value: colors.gray[600] },
+          700: { value: colors.gray[700] },
+          800: { value: colors.gray[800] },
+          900: { value: colors.gray[900] },
+          1000: { value: colors.gray[1000] },
+          1100: { value: colors.gray[1100] },
+          1200: { value: colors.gray[1200] },
+          1300: { value: colors.gray[1300] },
+          1400: { value: colors.gray[1400] },
+          1500: { value: colors.gray[1500] },
         },
+        blue: {
+          100: { value: colors.blue[100] },
+          200: { value: colors.blue[200] },
+          300: { value: colors.blue[300] },
+          400: { value: colors.blue[400] },
+          500: { value: colors.blue[500] },
+          600: { value: colors.blue[600] },
+          700: { value: colors.blue[700] },
+          800: { value: colors.blue[800] },
+          900: { value: colors.blue[900] },
+          1000: { value: colors.blue[1000] },
+        },
+        white: { value: colors.white },
+        black: { value: colors.black },
+      },
+      fonts: {
+        body: { value: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif' },
+        heading: { value: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif' },
+      },
+      fontSizes: {
+        subtitle: { value: '1em' },
+        subtext: { value: '1em' },
+        p: { value: '1em' },
+        h5: { value: '1.2em' },
+        h4: { value: '1.44em' },
+        h3: { value: '1.75em' },
+        h2: { value: '2.5em' },
+        h1: { value: '3em' },
+      },
+      radii: {
+        none: { value: '0' },
+        sm: { value: '6px' },
+        md: { value: '8px' },
+        lg: { value: '12px' },
+        xl: { value: '32px' },
+        full: { value: '9999px' },
+      },
+    },
+    semanticTokens: {
+      colors: {
+        'primary.lightest': { value: semanticTokens.colors.primary.lightest },
+        'primary.lighter': { value: '{colors.blue.50}' },
+        'primary.light': { value: '{colors.blue.300}' },
+        'primary.main': { value: '{colors.blue.900}' },
+        'primary.dark': { value: '{colors.blue.1000}' },
+        'secondary.lighter': { value: '{colors.purple.50}' },
+        'secondary.light': { value: '{colors.purple.300}' },
+        'secondary.main': { value: '{colors.purple.500}' },
+        'secondary.dark': { value: '{colors.purple.700}' },
+        'danger.lighter': { value: '{colors.red.50}' },
+        'danger.light': { value: semanticTokens.colors.danger.light },
+        'danger.main': { value: '{colors.red.500}' },
+        'danger.dark': { value: semanticTokens.colors.danger.dark },
+        'success.lighter': { value: semanticTokens.colors.success.lighter },
+        'success.light': { value: semanticTokens.colors.success.light },
+        'success.main': { value: semanticTokens.colors.success.main },
+        'success.dark': { value: semanticTokens.colors.success.dark },
+        'warning.lighter': { value: semanticTokens.colors.warning.lighter },
+        'warning.light': { value: semanticTokens.colors.warning.light },
+        'warning.main': { value: '{colors.yellow.400}' },
+        'warning.dark': { value: semanticTokens.colors.warning.dark },
       },
     },
   },
+});
 
-  fonts: {
-    body: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif',
-    heading: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif',
-  },
+export const system = createSystem(defaultConfig, config);
 
-  // 반응형 폰트 사이즈 - 모바일에서는 더 작은 폰트 크기, 데스크톱에서는 기존 크기 유지
-  fontSizes: {
-    // 커스텀 폰트 크기 토큰 (em 단위 사용)
-    // xs: { base: '0.7em', md: '0.7em' },
-    subtitle: { base: '0.92em', md: '1em' },
-    subtext: { base: '0.92em', md: '1em' },
-    p: { base: '1em', md: '1em' },
-    h5: { base: '1.1em', md: '1.2em' },
-    h4: { base: '1.25em', md: '1.44em' },
-    h3: { base: '1.5em', md: '1.75em' },
-    h2: { base: '2em', md: '2.5em' },
-    h1: { base: '2.4em', md: '3em' },
-  },
-  semanticTokens,
-  radii: {
-    none: '0',
-    sm: '6px',
-    md: '8px',
-    lg: '12px',
-    xl: '32px',
-    full: '9999px',
-  },
-} satisfies Omit<ThemeOverride, 'semanticTokens'> & {
-  semanticTokens: typeof semanticTokens;
-};
+// Export config type for external use
+export type ThemeConfig = typeof config;
+export type System = typeof system;
 
-export type Theme = typeof theme & ChakraTheme;
-
-export default extendTheme(theme);
+// Legacy exports for backward compatibility during migration
+export const theme = config;
+export default system;

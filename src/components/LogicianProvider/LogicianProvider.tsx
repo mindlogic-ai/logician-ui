@@ -1,53 +1,20 @@
 'use client';
 import React from 'react';
-import { ChakraProvider, ChakraProviderProps } from '@chakra-ui/react';
+import { ChakraProvider } from '@chakra-ui/react';
 
-import theme from '../../theme';
+import { system, System } from '../../theme';
 
-/**
- * Deep merge utility function that recursively merges objects
- */
-function deepMerge<T extends Record<string, any>>(
-  target: T,
-  source: Partial<T>
-): T {
-  const result = { ...target };
-
-  for (const key in source) {
-    if (Object.prototype.hasOwnProperty.call(source, key)) {
-      const sourceValue = source[key];
-      const targetValue = result[key];
-
-      if (
-        sourceValue &&
-        typeof sourceValue === 'object' &&
-        !Array.isArray(sourceValue) &&
-        targetValue &&
-        typeof targetValue === 'object' &&
-        !Array.isArray(targetValue)
-      ) {
-        // Recursively merge nested objects
-        result[key] = deepMerge(targetValue, sourceValue);
-      } else {
-        // Override primitive values, arrays, or null/undefined
-        result[key] = sourceValue;
-      }
-    }
-  }
-
-  return result;
-}
-
-export interface LogicianProviderProps
-  extends Omit<ChakraProviderProps, 'theme'> {
+export interface LogicianProviderProps {
+  children: React.ReactNode;
   /**
-   * Custom theme to override the default Logician theme
+   * Custom system to override the default Logician system
+   * In Chakra UI v3, use createSystem to create a custom system
    */
-  theme?: ChakraProviderProps['theme'];
+  value?: System;
 }
 
 /**
- * LogicianProvider component that wraps ChakraProvider with the LogicianUI design system theme.
+ * LogicianProvider component that wraps ChakraProvider with the LogicianUI design system.
  *
  * This provider should be placed at the root of your application to provide
  * the Logician design system theme and styling to all child components.
@@ -67,13 +34,10 @@ export interface LogicianProviderProps
  */
 export const LogicianProvider: React.FC<LogicianProviderProps> = ({
   children,
-  theme: customTheme,
-  ...rest
+  value = system,
 }) => {
-  const mergedTheme = customTheme ? deepMerge(theme, customTheme) : theme;
-
   return (
-    <ChakraProvider theme={mergedTheme} {...rest}>
+    <ChakraProvider value={value}>
       {children}
     </ChakraProvider>
   );

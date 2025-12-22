@@ -1,6 +1,6 @@
 import { inter, noto, pretendard } from './font';
 
-export const global = {
+export const globalCss = {
   ':root': {
     '--chakra-colors-chakra-body-text': '#121315', // gray.1500 hex value
     '--chakra-colors-chakra-body-bg': '#FFFFFF',
