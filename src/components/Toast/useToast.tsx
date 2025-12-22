@@ -1,21 +1,31 @@
 import { useRef } from 'react';
-import { ToastId, useToast as useChakraToast } from '@chakra-ui/react';
+import { createToaster, Toaster as ChakraToaster } from '@chakra-ui/react';
 
 import { Toast } from './Toast';
 import { toastStyles } from './Toast.styles';
-import { UseToastOptions } from './Toast.types';
+import { CreateToastOptions, UseToastOptions } from './Toast.types';
 
 const MAX_TOASTS = 3;
 
-export const useToast = (props?: UseToastOptions) => {
-  const toast = useChakraToast();
-  const activeToasts = useRef<ToastId[]>([]); // Track active toast IDs
+// Create a toaster instance
+const toaster = createToaster({
+  placement: 'top',
+  pauseOnPageIdle: true,
+});
+
+// Export the Toaster component for use in app root
+export const Toaster = () => <ChakraToaster toaster={toaster} />;
+
+export const useToast = () => {
+  const activeToasts = useRef<string[]>([]); // Track active toast IDs
 
   const showToast = ({
     status = 'success',
     title,
     description,
     position = 'top',
+    duration = 5000,
+    isClosable = true,
     styles: stylesProp,
     ...rest
   }: UseToastOptions) => {
@@ -28,46 +38,41 @@ export const useToast = (props?: UseToastOptions) => {
     if (activeToasts.current.length >= MAX_TOASTS) {
       const [oldestToastId] = activeToasts.current;
       if (oldestToastId) {
-        toast.close(oldestToastId); // Close the oldest toast
+        toaster.dismiss(oldestToastId); // Close the oldest toast
         activeToasts.current.shift(); // Remove it from the list
       }
     }
 
-    // Create a new toast and capture its ID
-    const toastId = toast({
-      duration: 5000,
-      isClosable: true,
-      position,
-      ...props,
-      render: () => (
+    // Create a new toast
+    const toastId = toaster.create({
+      duration,
+      type: status === 'error' ? 'error' : status === 'warning' ? 'warning' : status === 'info' ? 'info' : 'success',
+      render: ({ onClose }) => (
         <Toast
           title={title || ''}
           description={description}
           status={status}
-          onClose={() => toast.close(toastId)} // Close this specific toast
-          {...styles} // Apply status-specific styles
+          onClose={onClose}
+          {...styles}
         />
       ),
-      onCloseComplete: () => {
-        // Remove the toast ID from the active list once closed
-        activeToasts.current = activeToasts.current.filter(
-          (id) => id !== toastId
-        );
-      },
-      ...rest,
     });
 
     // Add the new toast ID to the active list
-    activeToasts.current.push(toastId);
+    if (toastId) {
+      activeToasts.current.push(toastId);
+    }
 
     return toastId;
   };
 
   return Object.assign(showToast, {
-    close: toast.close,
-    closeAll: toast.closeAll,
-    update: toast.update,
-    isActive: toast.isActive,
-    promise: toast.promise,
+    close: toaster.dismiss,
+    closeAll: () => toaster.dismiss(),
+    update: toaster.update,
+    isActive: (id: string) => activeToasts.current.includes(id),
   });
 };
+
+// Export the toaster for direct usage
+export { toaster };

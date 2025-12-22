@@ -1,4 +1,4 @@
-import { Box, CloseButton, Flex } from '@chakra-ui/react'; // Import CloseButton
+import { Box, CloseButton, Flex } from '@chakra-ui/react';
 
 import { H5, Text } from '../Typography';
 import { ToastProps } from './Toast.types';
@@ -8,9 +8,9 @@ export const Toast = ({
   title,
   description,
   status = 'success',
-  onClose, // Add onClose prop
+  onClose,
   ...rest
-}: ToastProps & { onClose?: () => void }) => (
+}: ToastProps) => (
   <Flex
     align="center"
     p={4}
@@ -20,6 +20,7 @@ export const Toast = ({
     boxShadow="lg"
     whiteSpace="pre-line"
     position="relative"
+    flexDirection="row"
     {...rest}
   >
     <ToastIcon status={status} />
@@ -31,8 +32,6 @@ export const Toast = ({
       )}
       <Text color="inherit">{description}</Text>
     </Box>
-    <CloseButton
-      onClick={onClose} // Call onClose when clicked
-    />
+    {onClose && <CloseButton onClick={onClose} />}
   </Flex>
 );
