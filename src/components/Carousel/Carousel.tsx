@@ -140,7 +140,7 @@ export const Carousel: React.FC<CarouselProps> = ({
           bottom={3}
           width="full"
           justifyContent="center"
-          spacing={2}
+          gap={2}
         >
           {slides.map((_, index) => (
             <Box

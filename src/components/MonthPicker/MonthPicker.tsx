@@ -208,7 +208,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
   const popoverContent = (
     <PopoverContent width="320px">
       <PopoverBody>
-        <VStack spacing={4} align="stretch">
+        <VStack gap={4} align="stretch">
           {/* Year Navigation */}
           <HStack justify="space-between" align="center">
             <Button
@@ -257,7 +257,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
           </Grid>
 
           {/* Action Buttons */}
-          <HStack spacing={2} justify="flex-end">
+          <HStack gap={2} justify="flex-end">
             <Button size="sm" variant="ghost" onClick={handleClear}>
               {translate('clear')}
             </Button>

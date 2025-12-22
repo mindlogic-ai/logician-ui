@@ -1,5 +1,9 @@
-import { AlertProps as ChakraAlertProps } from '@chakra-ui/react';
+import { Alert } from '@chakra-ui/react';
 
-export interface AlertProps extends ChakraAlertProps {
+type ChakraAlertRootProps = React.ComponentProps<typeof Alert.Root>;
+
+export interface AlertProps extends ChakraAlertRootProps {
+  children?: React.ReactNode;
+  status?: 'error' | 'success' | 'warning' | 'info';
   onClose?: () => void;
 }

@@ -11,7 +11,7 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
   ) => {
     return (
       <ChakraRadioGroup value={value} onChange={onChange} {...rest}>
-        <Stack direction={direction} spacing={spacing} ref={ref}>
+        <Stack direction={direction} gap={spacing} ref={ref}>
           {options.map((option: RadioOption) => (
             <Radio key={option.value} value={option.value}>
               {option.label}

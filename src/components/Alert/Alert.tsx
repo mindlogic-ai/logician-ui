@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert as ChakraAlert, AlertIcon, CloseButton } from '@chakra-ui/react';
+import { Alert as ChakraAlert, CloseButton } from '@chakra-ui/react';
 
 import { AlertStyles } from './Alert.styles';
 import { AlertProps } from './Alert.types';
@@ -25,7 +25,7 @@ export const Alert = ({
   const styles = AlertStyles[status] || {};
 
   return (
-    <ChakraAlert
+    <ChakraAlert.Root
       minH={16}
       display="flex"
       justifyContent="center"
@@ -33,9 +33,9 @@ export const Alert = ({
       {...styles}
       {...rest}
     >
-      <AlertIcon />
+      <ChakraAlert.Indicator />
       {children}
       {onClose && <CloseButton onClick={onClose} />}
-    </ChakraAlert>
+    </ChakraAlert.Root>
   );
 };
