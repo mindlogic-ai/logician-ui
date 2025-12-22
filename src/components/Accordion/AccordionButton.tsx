@@ -2,7 +2,9 @@ import { PropsWithChildren, ReactNode } from 'react';
 import { Accordion, Flex } from '@chakra-ui/react';
 import { LuChevronDown } from 'react-icons/lu';
 
-type AccordionItemTriggerProps = React.ComponentProps<typeof Accordion.ItemTrigger>;
+type AccordionItemTriggerProps = React.ComponentProps<typeof Accordion.ItemTrigger> & {
+  children?: React.ReactNode;
+};
 
 export const AccordionButton = ({
   customIcon = undefined,
@@ -25,7 +27,13 @@ export const AccordionButton = ({
     >
       <Flex w="100%" justify="space-between" align="center">
         {children}
-        {customIcon ? customIcon : <Accordion.ItemIndicator><LuChevronDown /></Accordion.ItemIndicator>}
+        {customIcon ? (
+          customIcon
+        ) : (
+          <Accordion.ItemIndicator>
+            <LuChevronDown />
+          </Accordion.ItemIndicator>
+        )}
       </Flex>
     </Accordion.ItemTrigger>
   );

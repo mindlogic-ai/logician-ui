@@ -4,23 +4,26 @@ import { Checkbox as ChakraCheckbox } from '@chakra-ui/react';
 import { CheckboxProps } from './Checkbox.types';
 
 export const Checkbox = forwardRef<HTMLLabelElement, CheckboxProps>(
-  ({ ...rest }, ref) => {
+  ({ children, ...rest }, ref) => {
     return (
       <ChakraCheckbox.Root
         ref={ref}
         colorPalette="blue"
+        css={{
+          '& [data-part="control"]': {
+            borderRadius: '4px',
+            borderColor: 'gray.400',
+            '&[data-checked]': {
+              bg: 'primary.main',
+              borderColor: 'primary.main',
+            },
+          },
+        }}
         {...rest}
       >
         <ChakraCheckbox.HiddenInput />
-        <ChakraCheckbox.Control
-          borderRadius="4px"
-          borderColor="gray.400"
-          _checked={{
-            bg: 'primary.main',
-            borderColor: 'primary.main',
-          }}
-        />
-        <ChakraCheckbox.Label>{rest.children}</ChakraCheckbox.Label>
+        <ChakraCheckbox.Control />
+        {children && <ChakraCheckbox.Label>{children}</ChakraCheckbox.Label>}
       </ChakraCheckbox.Root>
     );
   }
