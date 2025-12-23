@@ -1,4 +1,4 @@
-import { Box, useTheme, useToken } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import {
   CartesianGrid,
   Legend,
@@ -10,7 +10,13 @@ import {
   YAxis,
 } from 'recharts';
 
+import { colors } from '@/theme/colors';
+
 import { DatumBase, LineGraphProps } from './LineGraph.types';
+
+// Theme values for v3 compatibility
+const primaryMainColor = colors.blue[900];
+const smFontSize = '0.875rem';
 
 export const LineGraph = <T extends DatumBase>({
   data = [],
@@ -18,7 +24,6 @@ export const LineGraph = <T extends DatumBase>({
   displayLegend = true,
   ...rest
 }: LineGraphProps<T>) => {
-  const theme = useTheme();
   return (
     <Box h="400px" {...rest}>
       <ResponsiveContainer width="100%" height="100%">
@@ -35,7 +40,7 @@ export const LineGraph = <T extends DatumBase>({
             // No dashes
             strokeDasharray=""
             vertical={false}
-            stroke="gray.400"
+            stroke={colors.gray[400]}
           />
           <XAxis
             dataKey="name"
@@ -43,8 +48,8 @@ export const LineGraph = <T extends DatumBase>({
             stroke="transparent"
             // Props of text
             tick={{
-              fill: 'gray.1200',
-              fontSize: useToken('fontSizes', 'sm'),
+              fill: colors.gray[1200],
+              fontSize: smFontSize,
             }}
             tickMargin={8}
           />
@@ -53,15 +58,15 @@ export const LineGraph = <T extends DatumBase>({
             stroke="transparent"
             // Props of text
             tick={{
-              fill: 'gray.1200',
-              fontSize: useToken('fontSizes', 'sm'),
+              fill: colors.gray[1200],
+              fontSize: smFontSize,
             }}
             tickMargin={0}
           />
           <Tooltip
             // invert label color since mode inside tooltip is different
             labelStyle={{
-              color: 'gray.1500',
+              color: colors.gray[1500],
             }}
           />
           {displayLegend && (
@@ -77,10 +82,7 @@ export const LineGraph = <T extends DatumBase>({
               type="monotone"
               dataKey={key}
               name={label}
-              stroke={
-                color ??
-                useToken('colors', theme.semanticTokens.colors.primary.main)
-              }
+              stroke={color ?? primaryMainColor}
               dot={{ r: 0 }}
             />
           ))}

@@ -4,17 +4,21 @@ import { RadioGroup } from '@chakra-ui/react';
 import { RadioProps } from './Radio.types';
 
 // Extended types for RadioGroup compound components
-type RadioGroupItemProps = React.ComponentProps<typeof RadioGroup.Item> & {
+type RadioGroupItemBaseProps = React.ComponentProps<typeof RadioGroup.Item>;
+type RadioGroupItemProps = Omit<RadioGroupItemBaseProps, 'ref'> & {
   children?: ReactNode;
   css?: Record<string, any>;
-  ref?: React.Ref<HTMLDivElement>;
+  value?: string;
+  disabled?: boolean;
 };
 
 type RadioGroupItemTextProps = React.ComponentProps<typeof RadioGroup.ItemText> & {
   children?: ReactNode;
 };
 
-const RadioItem = RadioGroup.Item as React.ForwardRefExoticComponent<RadioGroupItemProps>;
+const RadioItem = RadioGroup.Item as React.ForwardRefExoticComponent<
+  RadioGroupItemProps & React.RefAttributes<HTMLDivElement>
+>;
 const RadioItemText = RadioGroup.ItemText as React.FC<RadioGroupItemTextProps>;
 
 export const Radio = forwardRef<HTMLDivElement, RadioProps>(
@@ -32,7 +36,7 @@ export const Radio = forwardRef<HTMLDivElement, RadioProps>(
             },
           },
         }}
-        {...(rest as React.ComponentProps<typeof RadioGroup.Item>)}
+        {...(rest as RadioGroupItemProps)}
       >
         <RadioGroup.ItemHiddenInput />
         <RadioGroup.ItemControl />
