@@ -1,10 +1,12 @@
 import { ReactNode } from 'react';
-import { FlexProps, theme } from '@chakra-ui/react';
+import { FlexProps } from '@chakra-ui/react';
 
 export type SegmentedControlOption = {
   label: ReactNode;
   value: string;
 };
+
+export type SegmentedControlSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 export type SegmentedControlProps = Omit<FlexProps, 'onSelect'> & {
   options: Array<SegmentedControlOption>;
@@ -12,5 +14,5 @@ export type SegmentedControlProps = Omit<FlexProps, 'onSelect'> & {
   onSelect?: (selectedValue: string) => void;
   // Value is key in Chakra theme
   borderRadius?: string;
-  size?: Extract<keyof typeof theme.sizes, 'xs' | 'sm' | 'md' | 'lg' | 'xl'>;
+  size?: SegmentedControlSize;
 };

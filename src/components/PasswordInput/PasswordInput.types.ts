@@ -1,11 +1,10 @@
 import {
-  InputGroupProps,
+  GroupProps,
   InputProps as ChakraInputProps,
-  InputRightElementProps,
 } from '@chakra-ui/react';
 
 export interface PasswordInputProps
   extends Omit<ChakraInputProps, 'rightIcon'> {
-  wrapperProps?: InputGroupProps;
-  rightElementProps?: InputRightElementProps;
+  wrapperProps?: GroupProps;
+  rightElementProps?: Record<string, any>;
 }

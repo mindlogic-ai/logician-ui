@@ -16,4 +16,6 @@ export interface InputProps extends ChakraInputProps {
   trimWhiteSpace?: boolean;
   /** 모든 공백을 허용하지 않음 */
   noSpaces?: boolean;
+  /** Whether the input is invalid - for v3 compatibility */
+  invalid?: boolean;
 }

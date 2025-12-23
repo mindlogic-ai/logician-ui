@@ -1,12 +1,25 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, ReactNode } from 'react';
 import { RadioGroup } from '@chakra-ui/react';
 
 import { RadioProps } from './Radio.types';
 
-export const Radio = forwardRef<HTMLInputElement, RadioProps>(
+// Extended types for RadioGroup compound components
+type RadioGroupItemProps = React.ComponentProps<typeof RadioGroup.Item> & {
+  children?: ReactNode;
+  css?: Record<string, any>;
+};
+
+type RadioGroupItemTextProps = React.ComponentProps<typeof RadioGroup.ItemText> & {
+  children?: ReactNode;
+};
+
+const RadioItem = RadioGroup.Item as React.FC<RadioGroupItemProps>;
+const RadioItemText = RadioGroup.ItemText as React.FC<RadioGroupItemTextProps>;
+
+export const Radio = forwardRef<HTMLDivElement, RadioProps>(
   ({ children, value = '', disabled, ...rest }, ref) => {
     return (
-      <RadioGroup.Item
+      <RadioItem
         ref={ref}
         value={value}
         disabled={disabled}
@@ -22,8 +35,8 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
       >
         <RadioGroup.ItemHiddenInput />
         <RadioGroup.ItemControl />
-        {children && <RadioGroup.ItemText>{children}</RadioGroup.ItemText>}
-      </RadioGroup.Item>
+        {children && <RadioItemText>{children}</RadioItemText>}
+      </RadioItem>
     );
   }
 );

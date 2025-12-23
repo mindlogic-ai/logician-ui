@@ -1,20 +1,39 @@
 import { useState } from 'react';
-import { Button, Flex, useTheme } from '@chakra-ui/react';
+import { Button, Flex } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 
 import { OptionStyles } from './SegmentedControl.styles';
 import { SegmentedControlProps } from './SegmentedControl.types';
+
+// Padding values for different sizes
+const controlPaddings = {
+  xs: 'var(--chakra-spacing-1)',
+  sm: 'var(--chakra-spacing-1)',
+  md: 'var(--chakra-spacing-1)',
+  lg: 'var(--chakra-spacing-2)',
+  xl: 'var(--chakra-spacing-2)',
+};
+
+// Border radius map
+const radiiMap: Record<string, string> = {
+  none: '0',
+  sm: 'var(--chakra-radii-sm)',
+  base: 'var(--chakra-radii-base)',
+  md: 'var(--chakra-radii-md)',
+  lg: 'var(--chakra-radii-lg)',
+  xl: 'var(--chakra-radii-xl)',
+  full: 'var(--chakra-radii-full)',
+};
 
 export const SegmentedControl = ({
   options,
   value,
   onSelect,
   borderRadius = 'md',
-  size,
+  size = 'md',
   ...rest
 }: SegmentedControlProps) => {
   const [internalValue, setInternalValue] = useState(options[0].value);
-  const theme = useTheme();
 
   // Use the controlled value if provided, otherwise use the internal state
   const activeValue = value !== undefined ? value : internalValue;
@@ -22,18 +41,7 @@ export const SegmentedControl = ({
     (option) => option.value === activeValue
   );
 
-  const getControlPadding: (
-    size: SegmentedControlProps['size']
-  ) => SegmentedControlProps['padding'] = (size = 'md') => {
-    const paddings = {
-      xs: theme.space[1],
-      sm: theme.space[1],
-      md: theme.space[1],
-      lg: {},
-      xl: {},
-    };
-    return paddings[size];
-  };
+  const controlPadding = controlPaddings[size] || controlPaddings.md;
 
   const handleSelect = (selectedValue: string) => {
     if (value === undefined) {
@@ -47,26 +55,23 @@ export const SegmentedControl = ({
       position="relative"
       borderRadius={borderRadius}
       bg="gray.50"
-      // p="1"
       {...rest}
     >
       <motion.div
         initial={false}
         animate={{
-          x: `calc(${100 * activeIndex}% + ${getControlPadding(size)})`,
+          x: `calc(${100 * activeIndex}% + ${controlPadding})`,
         }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         style={{
           position: 'absolute',
-          // @ts-expect-error - Chakra UI responsive values in Framer Motion styles
-          top: getControlPadding(size),
-          // @ts-expect-error - Chakra UI responsive values in Framer Motion styles
-          bottom: getControlPadding(size),
-          left: `calc(${activeIndex * 2} * ${getControlPadding(size)})`,
-          width: `calc(${100 / options.length}% - 2 * ${getControlPadding(size)})`,
-          borderRadius: theme.radii[borderRadius],
-          background: theme.colors.white,
-          boxShadow: theme.shadows.md,
+          top: controlPadding,
+          bottom: controlPadding,
+          left: `calc(${activeIndex * 2} * ${controlPadding})`,
+          width: `calc(${100 / options.length}% - 2 * ${controlPadding})`,
+          borderRadius: radiiMap[borderRadius] || radiiMap.md,
+          background: 'white',
+          boxShadow: 'var(--chakra-shadows-md)',
         }}
       />
 

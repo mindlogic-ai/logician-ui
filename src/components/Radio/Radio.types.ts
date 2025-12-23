@@ -14,6 +14,11 @@ export interface RadioProps extends Omit<RadioGroupItemProps, 'value'> {
   value?: string;
   disabled?: boolean;
   checked?: boolean;
+  /** @deprecated Use 'disabled' instead */
+  isDisabled?: boolean;
+  /** @deprecated Use 'checked' instead */
+  isChecked?: boolean;
+  size?: 'sm' | 'md' | 'lg';
 }
 
 export interface RadioGroupProps extends Omit<RadioGroupRootProps, 'children'> {
