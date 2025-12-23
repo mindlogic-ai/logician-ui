@@ -280,7 +280,7 @@ export const ComparisonWithGrid: Story = {
         <Text fontSize="h4" fontWeight="bold" mt={8} mb={4}>
           Regular Grid Layout
         </Text>
-        <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={4}>
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} gap={4}>
           {items.map((item) => (
             <Box
               key={item.id}

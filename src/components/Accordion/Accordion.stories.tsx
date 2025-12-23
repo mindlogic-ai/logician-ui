@@ -11,7 +11,7 @@ const meta = {
   render: (args) => {
     return (
       <Accordion {...args}>
-        <AccordionItem>
+        <AccordionItem value="item-1">
           <AccordionButton>Test button</AccordionButton>
           <AccordionPanel>Test panel</AccordionPanel>
         </AccordionItem>
@@ -30,11 +30,11 @@ export const TwoItems: Story = {
   render: (args) => {
     return (
       <Accordion {...args}>
-        <AccordionItem>
+        <AccordionItem value="item-1">
           <AccordionButton>Test button</AccordionButton>
           <AccordionPanel>Test panel</AccordionPanel>
         </AccordionItem>
-        <AccordionItem>
+        <AccordionItem value="item-2">
           <AccordionButton>Test button 2</AccordionButton>
           <AccordionPanel>Test panel 2</AccordionPanel>
         </AccordionItem>

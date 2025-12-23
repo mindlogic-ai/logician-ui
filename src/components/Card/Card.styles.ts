@@ -1,14 +1,12 @@
-import theme from '@/theme/index';
-
 /**
  * Card styles using the Golden Ratio color system.
  */
 
-// Light mode styles only
+// Light mode styles only - using semantic tokens
 export const cardStyles = {
-  bgColor: theme.colors.white,
-  color: theme.colors.gray[1300], // Primary text color
-  borderColor: theme.colors.gray[200], // #E2E6F0
+  bgColor: 'white',
+  color: 'gray.1300', // Primary text color
+  borderColor: 'gray.200', // #E2E6F0
 };
 
 export const clickableStyles = {
@@ -26,8 +24,8 @@ export const clickableStyles = {
 export const variantStyles = {
   default: {},
   gradient: {
-    bg: `linear-gradient(180deg, ${theme.colors.gray[50]} 0%, ${theme.colors.white} 100%)`,
-    border: `1px solid`,
+    bg: 'linear-gradient(180deg, var(--chakra-colors-gray-50) 0%, var(--chakra-colors-white) 100%)',
+    border: '1px solid',
     borderColor: 'blue.300', // #4A79DC
   },
 };

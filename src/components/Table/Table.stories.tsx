@@ -153,7 +153,7 @@ export const ExpandedContent: Story = {
                 <Td w={2}>
                   <IconButton
                     aria-label="Expand"
-                    icon={<IoChevronDownOutline />}
+                    {...({icon: <IoChevronDownOutline />} as any)}
                     onClick={() => setIsExpanded((e) => !e)}
                     colorScheme="neutral"
                     variant="ghost"

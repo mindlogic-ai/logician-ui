@@ -4,17 +4,32 @@ import { Tooltip as ChakraTooltip, useTheme } from '@chakra-ui/react';
 import { TooltipProps } from './Tooltip.types';
 
 export const Tooltip = forwardRef(
-  ({ ...rest }: TooltipProps, ref?: ForwardedRef<HTMLDivElement>) => {
+  (
+    { children, label, open, onOpenChange, ...rest }: TooltipProps,
+    ref?: ForwardedRef<HTMLDivElement>
+  ) => {
     const theme = useTheme();
     return (
-      <ChakraTooltip
-        bgColor="gray.1200"
-        placement="top"
-        fontSize={theme.fontSizes.p}
+      <ChakraTooltip.Root
+        positioning={{ placement: 'top' } as any}
         closeOnScroll
+        open={open}
+        onOpenChange={onOpenChange}
         {...rest}
-        ref={ref}
-      />
+        {...({} as any)}
+      >
+        <ChakraTooltip.Trigger asChild {...({} as any)}>{children}</ChakraTooltip.Trigger>
+        <ChakraTooltip.Content
+          ref={ref}
+          css={{
+            '--tooltip-bg': 'var(--chakra-colors-gray-1200)',
+            fontSize: theme.fontSizes.p,
+          } as any}
+          {...({} as any)}
+        >
+          {label}
+        </ChakraTooltip.Content>
+      </ChakraTooltip.Root>
     );
   }
 );

@@ -31,13 +31,13 @@ export type IconButtonVariant = 'solid' | 'soft' | 'outline' | 'ghost';
  *
  * @example
  * ```tsx
- * <IconButton colorScheme="primary" variant="solid" icon={<Icon />} />
- * <IconButton colorScheme="danger" variant="soft" icon={<Icon />} />
+ * <IconButton colorScheme="primary" variant="solid"><Icon /></IconButton>
+ * <IconButton colorScheme="danger" variant="soft"><Icon /></IconButton>
  * ```
  */
 export type IconButtonProps = Omit<
   ChakraIconButtonProps,
-  'variant' | 'colorScheme'
+  'variant' | 'colorScheme' | 'icon'
 > & {
   /**
    * The color scheme of the icon button (semantic color family).

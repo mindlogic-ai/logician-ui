@@ -15,7 +15,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const SampleContent = () => (
-  <VStack spacing={6} p={8} align="start">
+  <VStack gap={6} p={8} align="start">
     <H1 size="lg">Logician Design System</H1>
     <Text fontSize="p">
       This is a sample application wrapped in LogicianProvider. The provider

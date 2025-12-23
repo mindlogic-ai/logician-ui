@@ -8,13 +8,8 @@ import {
   HStack,
   Input,
   InputGroup,
-  InputLeftElement,
   Popover,
-  PopoverBody,
-  PopoverContent,
-  PopoverTrigger,
   Portal,
-  useDisclosure,
   VStack,
 } from '@chakra-ui/react';
 import { format, isAfter, isSameMonth } from 'date-fns';
@@ -51,7 +46,9 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
   name,
   ...boxProps
 }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isOpen, setIsOpen] = useState(false);
+  const onOpen = () => setIsOpen(true);
+  const onClose = () => setIsOpen(false);
   const { language: locale } = useLocale();
   const translate = useTranslate();
 
@@ -206,9 +203,10 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
   }, [onChange]);
 
   const popoverContent = (
-    <PopoverContent width="320px">
-      <PopoverBody>
-        <VStack spacing={4} align="stretch">
+    <Popover.Content width="320px" {...({ asChild: true } as any)}>
+      <div>
+        <Popover.Body>
+        <VStack gap={4} align="stretch">
           {/* Year Navigation */}
           <HStack justify="space-between" align="center">
             <Button
@@ -259,7 +257,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
           </Grid>
 
           {/* Action Buttons */}
-          <HStack spacing={2} justify="flex-end">
+          <HStack gap={2} justify="flex-end">
             <Button
               size="sm"
               colorScheme="neutral"
@@ -270,37 +268,44 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
             </Button>
           </HStack>
         </VStack>
-      </PopoverBody>
-    </PopoverContent>
+        </Popover.Body>
+      </div>
+    </Popover.Content>
   );
 
   return (
     <Box {...boxProps}>
-      <Popover
-        isOpen={isOpen}
-        onOpen={onOpen}
-        onClose={onClose}
-        placement="bottom-start"
+      <Popover.Root
+        open={isOpen}
+        onOpenChange={(e) => {
+          if (e.open) {
+            onOpen();
+          } else {
+            onClose();
+          }
+        }}
+        positioning={{ placement: 'bottom-start' }}
         {...popoverProps}
       >
-        <PopoverTrigger>
-          <InputGroup>
-            <InputLeftElement>
-              <MdOutlineCalendarToday boxSize="xs" color="gray.800" />
-            </InputLeftElement>
-            <Input
-              name={name}
-              value={displayValue}
-              placeholder={effectivePlaceholder}
-              readOnly
-              disabled={disabled}
-              cursor={disabled ? 'not-allowed' : 'pointer'}
-              onClick={disabled ? undefined : onOpen}
-            />
-          </InputGroup>
-        </PopoverTrigger>
+        <Popover.Trigger {...({ asChild: true } as any)}>
+          <Box>
+            <InputGroup
+              startElement={<MdOutlineCalendarToday boxSize="xs" color="gray.800" />}
+            >
+              <Input
+                name={name}
+                value={displayValue}
+                placeholder={effectivePlaceholder}
+                readOnly
+                disabled={disabled}
+                cursor={disabled ? 'not-allowed' : 'pointer'}
+                onClick={disabled ? undefined : onOpen}
+              />
+            </InputGroup>
+          </Box>
+        </Popover.Trigger>
         {usePortal ? <Portal>{popoverContent}</Portal> : popoverContent}
-      </Popover>
+      </Popover.Root>
     </Box>
   );
 };

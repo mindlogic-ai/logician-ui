@@ -7,7 +7,7 @@ import { CardProps } from './Card.types';
 export const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ clickable, variant = 'default', ...rest }, ref) => {
     return (
-      <ChakraCard
+      <ChakraCard.Root
         ref={ref}
         position="relative"
         bgColor="inherit"

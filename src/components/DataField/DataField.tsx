@@ -2,9 +2,6 @@ import { useRef, useState } from 'react';
 import {
   Box,
   Editable,
-  EditableInput,
-  EditablePreview,
-  Tooltip,
 } from '@chakra-ui/react';
 
 import { AutowidthInput } from '@/components/AutowidthInput';
@@ -17,6 +14,7 @@ import {
 import { DataFieldProps } from '@/components/DataField/DataField.types';
 import { IconButton } from '@/components/IconButton';
 import { Text } from '@/components/Typography';
+import { Tooltip } from '@/components/Tooltip';
 
 import { Edit, FaRegCopy } from '../Icon';
 
@@ -70,8 +68,8 @@ export const DataField = ({
     }
   };
 
-  const handleSubmit = (val: string) => {
-    actIfAllowed(editableProps?.onSubmit, val);
+  const handleSubmit = (details: { value: string }) => {
+    actIfAllowed(editableProps?.onSubmit, details.value);
   };
 
   const PreviewComponent = as ? as : (props: any) => <span {...props} />;
@@ -86,57 +84,64 @@ export const DataField = ({
       )}
       <Text>
         {isEditable ? (
-          <Editable
+          <Editable.Root
             value={value}
             {...editableStyles}
             {...editableProps}
-            onSubmit={handleSubmit}
+            onValueCommit={handleSubmit}
           >
             <PreviewComponent {...previewWrapperStyles}>
-              <EditablePreview
+              <Editable.Preview
                 {...editablePreviewStyles}
                 {...editablePreviewProps}
                 ref={previewRef}
               />
             </PreviewComponent>
             <AutowidthInput
-              as={EditableInput}
+              as={Editable.Input}
               value={value}
               {...inputStyles}
               {...inputProps}
               onChange={handleInputChange}
             />
-            <IconButton
-              aria-label={`Edit ${label}`}
-              icon={<Edit boxSize="xs" />}
-              onClick={handleEditButtonClick}
-              colorScheme="neutral"
-              variant="ghost"
-            />
-            {isCopyable && (
-              <Tooltip label="Copied!" isOpen={hasOpenCopyTooltip}>
+            <Editable.Control {...({ asChild: true } as any)}>
+              <div>
                 <IconButton
-                  aria-label={`Copy ${label}`}
-                  icon={<FaRegCopy boxSize="xs" />}
-                  onClick={handleCopyButtonClick}
+                  aria-label={`Edit ${label}`}
+                  onClick={handleEditButtonClick}
                   colorScheme="neutral"
                   variant="ghost"
-                />
-              </Tooltip>
-            )}
-          </Editable>
+                >
+                  <Edit boxSize="xs" />
+                </IconButton>
+                {isCopyable && (
+                  <Tooltip label="Copied!" open={hasOpenCopyTooltip}>
+                    <IconButton
+                      aria-label={`Copy ${label}`}
+                      onClick={handleCopyButtonClick}
+                      colorScheme="neutral"
+                      variant="ghost"
+                    >
+                      <FaRegCopy boxSize="xs" />
+                    </IconButton>
+                  </Tooltip>
+                )}
+              </div>
+            </Editable.Control>
+          </Editable.Root>
         ) : (
           <Box>
             {value}{' '}
             {isCopyable && (
-              <Tooltip label="Copied!" isOpen={hasOpenCopyTooltip}>
+              <Tooltip label="Copied!" open={hasOpenCopyTooltip}>
                 <IconButton
                   aria-label={`Copy ${label}`}
-                  icon={<FaRegCopy boxSize="xs" />}
                   onClick={handleCopyButtonClick}
                   colorScheme="neutral"
                   variant="ghost"
-                />
+                >
+                  <FaRegCopy boxSize="xs" />
+                </IconButton>
               </Tooltip>
             )}
           </Box>

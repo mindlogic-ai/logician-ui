@@ -1,14 +1,14 @@
 import React from 'react';
-import { Modal as ChakraModal } from '@chakra-ui/react';
+import { Dialog } from '@chakra-ui/react';
 
 import { ModalProps } from './Modal.types';
 import { ModalOverlay } from './ModalOverlay';
 
-export const Modal = ({ children, ...rest }: ModalProps) => {
+export const Modal = ({ children, open, onOpenChange, ...rest }: ModalProps) => {
   return (
-    <ChakraModal isCentered closeOnOverlayClick {...rest}>
+    <Dialog.Root open={open} onOpenChange={onOpenChange} placement="center" closeOnInteractOutside {...rest}>
       <ModalOverlay />
       {children}
-    </ChakraModal>
+    </Dialog.Root>
   );
 };

@@ -20,7 +20,7 @@ export const Toast = ({
     boxShadow="lg"
     whiteSpace="pre-line"
     position="relative"
-    {...rest}
+    {...(rest as any)}
   >
     <ToastIcon status={status} />
     <Box flex={1}>

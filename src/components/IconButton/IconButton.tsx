@@ -12,14 +12,14 @@ import { IconButtonProps } from './IconButton.types';
  *
  * @example
  * ```tsx
- * <IconButton colorScheme="primary" variant="soft" icon={<Icon />} />
- * <IconButton colorScheme="danger" variant="solid" icon={<Icon />} />
- * <IconButton colorScheme="neutral" variant="ghost" icon={<Icon />} />
+ * <IconButton colorScheme="primary" variant="soft"><Icon /></IconButton>
+ * <IconButton colorScheme="danger" variant="solid"><Icon /></IconButton>
+ * <IconButton colorScheme="neutral" variant="ghost"><Icon /></IconButton>
  * ```
  */
 export const IconButton = forwardRef(
   (
-    { colorScheme = 'primary', variant = 'soft', sx, ...rest }: IconButtonProps,
+    { colorScheme = 'primary', variant = 'soft', css, ...rest }: IconButtonProps,
     ref?: ForwardedRef<HTMLButtonElement>
   ) => {
     const styles = getIconButtonStyles(colorScheme, variant);
@@ -31,15 +31,15 @@ export const IconButton = forwardRef(
         {...styles}
         {...rest}
         ref={ref}
-        sx={{
-          ...sx,
+        css={{
+          ...css,
           '& svg': {
             pointerEvents: 'none',
-            ...(sx as any)?.['& svg'],
+            ...(css as any)?.['& svg'],
           },
           '& svg *': {
             pointerEvents: 'none',
-            ...(sx as any)?.['& svg *'],
+            ...(css as any)?.['& svg *'],
           },
         }}
       />

@@ -23,6 +23,7 @@ interface MenuStoryProps {
 
 const meta = {
   title: 'Components/Menu',
+  // @ts-expect-error - Menu is a namespace, not a component
   component: Menu,
   args: {
     label: 'Trigger',
@@ -51,13 +52,9 @@ export const DefaultMenu: Story = {
     ],
   },
   render: ({ label, menuItems }) => (
-    <Menu>
-      <MenuButton
-        aria-label={'storybook button menu'}
-        as={Button}
-        rightIcon={<IoChevronDownOutline />}
-      >
-        {label}
+    <Menu.Root>
+      <MenuButton aria-label={'storybook button menu'} as={Button}>
+        {label} <IoChevronDownOutline />
       </MenuButton>
       <MenuList>
         {menuItems.map((item: StoryMenuItemProps) => (
@@ -71,7 +68,7 @@ export const DefaultMenu: Story = {
           </MenuItem>
         ))}
       </MenuList>
-    </Menu>
+    </Menu.Root>
   ),
 };
 
@@ -91,13 +88,9 @@ export const IconMenu: Story = {
     ],
   },
   render: ({ label, menuItems }) => (
-    <Menu>
-      <MenuButton
-        aria-label={'storybook button menu'}
-        as={Button}
-        rightIcon={<IoChevronDownOutline />}
-      >
-        {label}
+    <Menu.Root>
+      <MenuButton aria-label={'storybook button menu'} as={Button}>
+        {label} <IoChevronDownOutline />
       </MenuButton>
       <MenuList>
         {menuItems.map((item: StoryMenuItemProps) => (
@@ -111,7 +104,7 @@ export const IconMenu: Story = {
           </MenuItem>
         ))}
       </MenuList>
-    </Menu>
+    </Menu.Root>
   ),
 };
 
@@ -128,13 +121,9 @@ export const DangerMenu: Story = {
     ],
   },
   render: ({ label, menuItems }) => (
-    <Menu>
-      <MenuButton
-        aria-label={'storybook button menu'}
-        as={Button}
-        rightIcon={<IoChevronDownOutline />}
-      >
-        {label}
+    <Menu.Root>
+      <MenuButton aria-label={'storybook button menu'} as={Button}>
+        {label} <IoChevronDownOutline />
       </MenuButton>
       <MenuList>
         {menuItems.map((item: StoryMenuItemProps) => (
@@ -148,7 +137,7 @@ export const DangerMenu: Story = {
           </MenuItem>
         ))}
       </MenuList>
-    </Menu>
+    </Menu.Root>
   ),
 };
 
@@ -167,12 +156,10 @@ export const IconButtonTriggerMenu: Story = {
     label: { table: { disable: true } },
   },
   render: ({ menuItems }) => (
-    <Menu>
-      <MenuButton
-        aria-label="storybook icon button menu"
-        as={IconButton}
-        icon={<IoChevronDownOutline />}
-      />
+    <Menu.Root>
+      <MenuButton aria-label="storybook icon button menu" as={IconButton}>
+        <IoChevronDownOutline />
+      </MenuButton>
       <MenuList>
         {menuItems.map((item: StoryMenuItemProps) => (
           <MenuItem
@@ -185,7 +172,7 @@ export const IconButtonTriggerMenu: Story = {
           </MenuItem>
         ))}
       </MenuList>
-    </Menu>
+    </Menu.Root>
   ),
 };
 
@@ -208,13 +195,9 @@ export const SelectiveIconMenu: Story = {
     };
 
     return (
-      <Menu>
-        <MenuButton
-          aria-label={'storybook button menu'}
-          as={Button}
-          rightIcon={<IoChevronDownOutline />}
-        >
-          {label}
+      <Menu.Root>
+        <MenuButton aria-label={'storybook button menu'} as={Button}>
+          {label} <IoChevronDownOutline />
         </MenuButton>
         <MenuList>
           {menuItems.map((item: StoryMenuItemProps) => (
@@ -229,7 +212,7 @@ export const SelectiveIconMenu: Story = {
             </MenuItem>
           ))}
         </MenuList>
-      </Menu>
+      </Menu.Root>
     );
   },
 };

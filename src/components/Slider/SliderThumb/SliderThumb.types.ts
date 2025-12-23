@@ -1,3 +1,3 @@
-import { SliderThumbProps as ChakraSliderThumbProps } from '@chakra-ui/react';
+import { Slider } from '@chakra-ui/react';
 
-export interface SliderThumbProps extends ChakraSliderThumbProps {}
+export interface SliderThumbProps extends Slider.ThumbProps {}

@@ -30,16 +30,15 @@ export const PasswordInput = forwardRef(
             _active={{
               bgColor: 'whiteAlpha.400',
             }}
-            icon={
-              show ? (
-                <FaRegEye fill="gray.900" boxSize="xs" />
-              ) : (
-                <FaRegEyeSlash fill="gray.900" boxSize="xs" />
-              )
-            }
             onClick={handleClick}
             aria-label="Toggle password visibility"
-          />
+          >
+            {show ? (
+              <FaRegEye fill="gray.900" boxSize="xs" />
+            ) : (
+              <FaRegEyeSlash fill="gray.900" boxSize="xs" />
+            )}
+          </IconButton>
         }
         rightElementProps={{ ...rightElementProps }}
       />

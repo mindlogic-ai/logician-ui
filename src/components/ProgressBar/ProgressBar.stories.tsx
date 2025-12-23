@@ -23,7 +23,7 @@ export const Basic: Story = {};
 // All sizes in one view
 export const AllSizes: Story = {
   render: () => (
-    <VStack spacing={4} align="stretch">
+    <VStack gap={4} align="stretch">
       <Box>
         <Text mb={2} fontSize="subtext" fontWeight="medium">
           Extra Small (xs) - 4px

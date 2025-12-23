@@ -1,10 +1,5 @@
 import {
   Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverContent,
-  PopoverProps,
-  PopoverTrigger,
   Portal,
 } from '@chakra-ui/react';
 
@@ -19,22 +14,27 @@ export const InfoSprinkle = ({
 }: {
   children: React.ReactNode;
   iconButtonProps?: Partial<IconButtonProps>;
-} & PopoverProps) => {
+} & Popover.RootProps) => {
   return (
-    <Popover trigger="hover" placement="top" isLazy {...rest}>
-      <PopoverTrigger>
+    <Popover.Root openDelay={200} closeDelay={200} positioning={{ placement: 'top' }} lazyMount {...rest}>
+      <Popover.Trigger {...({ asChild: true } as any)}>
         <IconButton
           aria-label="Info"
-          icon={<LuInfo boxSize="sm" color="inherit" />}
           {...iconButtonProps}
-        />
-      </PopoverTrigger>
+        >
+          <LuInfo boxSize="sm" color="inherit" />
+        </IconButton>
+      </Popover.Trigger>
       <Portal>
-        <PopoverContent boxShadow="2xl" w="fit-content">
-          <PopoverArrow />
-          <PopoverBody>{children}</PopoverBody>
-        </PopoverContent>
+        <Popover.Content {...({ asChild: true } as any)}>
+          <div style={{ backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)' }}>
+            <Popover.Arrow />
+            <Popover.Body {...({ asChild: true } as any)}>
+              <div style={{ padding: '16px', width: 'fit-content' }}>{children}</div>
+            </Popover.Body>
+          </div>
+        </Popover.Content>
       </Portal>
-    </Popover>
+    </Popover.Root>
   );
 };

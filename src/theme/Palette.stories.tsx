@@ -1,6 +1,6 @@
 import {
   Box,
-  Divider,
+  Separator,
   Flex,
   Grid,
   useTheme,
@@ -77,7 +77,16 @@ const ColorCard = ({
   shadeValue: string;
 }) => {
   const [wasCopied, setWasCopied] = useState<boolean>();
-  const hexCode = useToken('colors', shadeValue);
+  const [hexCodeToken] = useToken('colors', [shadeValue]);
+  const hexCode = (() => {
+    if (!hexCodeToken) return '';
+    const token = hexCodeToken!;
+    // @ts-expect-error - token is guaranteed to not be null after the check above
+    if (typeof token === 'object' && 'value' in token) {
+      return (token as any).value as string;
+    }
+    return token as string;
+  })();
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = () => {
     navigator.clipboard.writeText(hexCode);
@@ -219,7 +228,7 @@ export const SemanticTokens: Story = {
           </Subtext>
         </Box>
 
-        <Divider />
+        <Separator />
 
         {Object.entries(theme.semanticTokens.colors)
           .filter(([color]) => !color.startsWith('chakra'))
@@ -277,7 +286,7 @@ export const PrimitiveColors: Story = {
           </Subtext>
         </Box>
 
-        <Divider />
+        <Separator />
 
         {Object.entries(primitiveColors).map(([name, shades]) => (
           <Box key={name} w="full">
@@ -290,14 +299,21 @@ export const PrimitiveColors: Story = {
               {name}
             </Subtitle>
             <Flex gap={1} wrap="wrap">
-              {Object.entries(shades).map(([shade, hex]) => (
-                <PrimitiveColorCard
-                  key={shade}
-                  name={name}
-                  shade={shade}
-                  hex={hex as string}
-                />
-              ))}
+              {Object.entries(shades).map(([shade, hex]) => {
+                const hexValue = hex
+                  ? (typeof hex === 'object' && 'value' in hex
+                    ? (hex as any).value as string
+                    : hex as string)
+                  : '';
+                return (
+                  <PrimitiveColorCard
+                    key={shade}
+                    name={name}
+                    shade={shade}
+                    hex={hexValue}
+                  />
+                );
+              })}
             </Flex>
           </Box>
         ))}
@@ -325,17 +341,24 @@ export const GrayScale: Story = {
           </Subtext>
         </Box>
 
-        <Divider />
+        <Separator />
 
         <Grid templateColumns="repeat(auto-fill, minmax(80px, 1fr))" gap={2}>
-          {Object.entries(colors.gray).map(([shade, hex]) => (
-            <PrimitiveColorCard
-              key={shade}
-              name="gray"
-              shade={shade}
-              hex={hex as string}
-            />
-          ))}
+          {Object.entries(colors.gray).map(([shade, hex]) => {
+            const hexValue = hex
+              ? (typeof hex === 'object' && 'value' in hex
+                ? (hex as any).value as string
+                : hex as string)
+              : '';
+            return (
+              <PrimitiveColorCard
+                key={shade}
+                name="gray"
+                shade={shade}
+                hex={hexValue}
+              />
+            );
+          })}
         </Grid>
 
         <Box mt={4} p={4} bg="gray.50" borderRadius="md" w="full">
@@ -444,7 +467,7 @@ export const ContrastReference: Story = {
           </Subtext>
         </Box>
 
-        <Divider />
+        <Separator />
 
         <Grid templateColumns="repeat(auto-fill, minmax(240px, 1fr))" gap={4}>
           {contrastPairs.map((pair) => (
@@ -577,7 +600,7 @@ export const FontSizes: Story = {
           </Subtext>
         </Box>
 
-        <Divider />
+        <Separator />
 
         {/* Header row */}
         <Flex w="full" px={4} gap={4} display={{ base: 'none', md: 'flex' }}>

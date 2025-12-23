@@ -1,9 +1,6 @@
 import React from 'react';
-import {
-  ModalHeader as ChakraModalHeader,
-  ModalHeaderProps as ChakraModalHeaderProps,
-} from '@chakra-ui/react';
+import { Dialog } from '@chakra-ui/react';
 
-export const ModalHeader = ({ ...rest }: ChakraModalHeaderProps) => {
-  return <ChakraModalHeader fontSize="h4" {...rest} />;
+export const ModalHeader = ({ ...rest }: Dialog.HeaderProps) => {
+  return <Dialog.Header fontSize="h4" {...rest} />;
 };

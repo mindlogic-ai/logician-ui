@@ -21,7 +21,7 @@ export type BadgeVariant =
   | 'danger'
   | 'neutral';
 
-export interface BadgeProps extends ChakraBadgeProps {
+export interface BadgeProps extends Omit<ChakraBadgeProps, 'variant'> {
   /**
    * The color variant of the badge.
    * @default 'primary'

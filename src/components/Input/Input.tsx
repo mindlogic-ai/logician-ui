@@ -10,9 +10,6 @@ import {
 import {
   Input as ChakraInput,
   InputGroup,
-  InputLeftElement,
-  InputRightElement,
-  useTheme,
 } from '@chakra-ui/react';
 
 import { formatNumber } from '@/utils/formatNumber';
@@ -84,7 +81,6 @@ export const Input = forwardRef(
   ) => {
     const rightElementRef = useRef<HTMLDivElement>(null);
     const [rightElementWidth, setRightElementWidth] = useState(0);
-    const theme = useTheme();
     const isComposing = useRef(false);
     const cursorPosition = useRef<number | null>(null);
     const [shouldRestoreCursor, setShouldRestoreCursor] = useState(false);
@@ -301,12 +297,16 @@ export const Input = forwardRef(
     const inputType = maskNumber && type === 'number' ? 'text' : type;
 
     return (
-      <InputGroup size={size} {...wrapperProps}>
-        {leftIcon && (
-          <InputLeftElement {...leftElementProps}>{leftIcon}</InputLeftElement>
-        )}
+      <InputGroup
+        size={size as any}
+        startElement={leftIcon as any}
+        endElement={rightIcon ? <div ref={rightElementRef}>{rightIcon}</div> : undefined}
+        {...wrapperProps}
+        {...({} as any)}
+      >
         <ChakraInput
           ref={ref}
+          {...({} as any)}
           maxLength={maxLength}
           value={currentValue}
           onChange={handleChange}
@@ -325,7 +325,7 @@ export const Input = forwardRef(
             borderColor: 'primary.main',
             ..._focus,
           }}
-          focusBorderColor={theme.semanticTokens.colors.primary.main}
+          focusBorderColor="primary.main"
           _readOnly={{
             opacity: 1,
             cursor: 'not-allowed',
@@ -340,17 +340,12 @@ export const Input = forwardRef(
             color: 'gray.1000',
             fontWeight: 'semibold',
           }}
-          sx={{
+          css={{
             paddingInlineEnd: rightElementWidth,
           }}
-          errorBorderColor={theme.semanticTokens.colors.danger.main}
+          errorBorderColor="danger.main"
           {...rest}
         />
-        {rightIcon && (
-          <InputRightElement ref={rightElementRef} {...rightElementProps}>
-            {rightIcon}
-          </InputRightElement>
-        )}
       </InputGroup>
     );
   }

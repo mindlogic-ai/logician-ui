@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { Stack, Switch, Text } from '@chakra-ui/react';
+import { Stack, Text } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
+
+import { Switch } from './Switch';
 
 const meta = {
   title: 'Components/Switch',
   component: Switch,
   argTypes: {
-    isChecked: { control: 'boolean' },
-    isDisabled: { control: 'boolean' },
+    checked: { control: 'boolean' },
+    disabled: { control: 'boolean' },
     size: {
       control: { type: 'select' },
       options: ['sm', 'md', 'lg'], // Available sizes in Chakra's Switch
@@ -23,33 +25,33 @@ type Story = StoryObj<typeof meta>;
 export const Uncontrolled: Story = {
   args: {
     size: 'md',
-    isDisabled: false,
+    disabled: false,
   },
 };
 
 // Controlled Story: Manage state externally
 export const Controlled: Story = {
   render: (args) => {
-    const [isChecked, setIsChecked] = useState(false);
+    const [checked, setChecked] = useState(false);
 
-    const handleToggle = () => {
-      setIsChecked(!isChecked);
+    const handleToggle = (e: any) => {
+      setChecked(e.checked);
     };
 
     return (
-      <Stack direction="row" align="center" spacing={4}>
+      <Stack direction="row" align="center" gap={4}>
         <Switch
           {...args}
-          isChecked={isChecked} // Controlled isChecked state
-          onChange={handleToggle} // Toggling state
+          checked={checked} // Controlled checked state
+          onCheckedChange={handleToggle} // Toggling state
         />
-        <Text>{isChecked ? 'On' : 'Off'}</Text>
+        <Text>{checked ? 'On' : 'Off'}</Text>
       </Stack>
     );
   },
   args: {
     size: 'md',
-    isDisabled: false,
+    disabled: false,
   },
 };
 
@@ -57,7 +59,7 @@ export const Controlled: Story = {
 export const Disabled: Story = {
   args: {
     size: 'md',
-    isDisabled: true,
-    isChecked: true,
+    disabled: true,
+    checked: true,
   },
 };

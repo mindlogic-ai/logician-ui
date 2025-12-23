@@ -1,21 +1,22 @@
-import { MenuItem as ChakraMenuItem, useTheme } from '@chakra-ui/react';
+import { Menu, useTheme } from '@chakra-ui/react';
 
 import { ItemVariant, MenuItemProps } from './MenuItem.types';
 
 export const MenuItem = ({
   variant = ItemVariant.Default,
   children,
+  icon,
   ...rest
 }: MenuItemProps) => {
   const theme = useTheme();
   const isDangerVariant = variant === ItemVariant.Danger;
 
   return (
-    <ChakraMenuItem
+    // @ts-expect-error - Menu.Item accepts children but types are incomplete
+    <Menu.Item
       color={
         isDangerVariant ? theme.semanticTokens.colors.danger.main : 'gray.1000'
       }
-      iconSpacing={0}
       fontSize="p"
       borderRadius="sm"
       py={2}
@@ -30,7 +31,8 @@ export const MenuItem = ({
       }}
       {...rest}
     >
+      {icon && icon}
       {children}
-    </ChakraMenuItem>
+    </Menu.Item>
   );
 };

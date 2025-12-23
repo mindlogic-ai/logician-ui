@@ -7,7 +7,7 @@ import {
 } from '@chakra-ui/react';
 import { darken } from 'polished';
 
-export interface LinkCustomProps extends LinkProps {
+export interface LinkCustomProps extends Omit<LinkProps, 'variant'> {
   variant?: 'error';
 }
 
@@ -22,7 +22,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkCustomProps>(
         : (typeof color === 'string' ? color : undefined) || defaultColor;
 
     const linkColor =
-      useToken('colors', tokenKey) ??
+      useToken('colors', tokenKey)[0] ??
       (typeof color === 'string' ? color : defaultColor);
 
     const getHoverColor = () => {
@@ -45,6 +45,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkCustomProps>(
           color: getHoverColor(),
         }} // Darken by 10% on hover
         {...rest}
+        {...({} as any)}
       />
     );
   }

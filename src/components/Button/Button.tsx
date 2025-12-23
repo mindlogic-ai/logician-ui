@@ -18,7 +18,7 @@ import { ButtonProps } from './Button.types';
  * <Button colorScheme="neutral" variant="ghost">Close</Button>
  * ```
  */
-export const Button = forwardRef(
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       colorScheme = 'primary',
@@ -26,7 +26,7 @@ export const Button = forwardRef(
       _focus,
       size,
       ...rest
-    }: ButtonProps,
+    },
     ref
   ) => {
     const theme = useTheme();

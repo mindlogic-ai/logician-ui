@@ -13,12 +13,12 @@ const meta = {
   component: Slider,
   decorators: [
     (Story) => {
-      const [value, setValue] = useState(50);
+      const [value, setValue] = useState([50]);
       return (
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <span>Value: {value}</span>
+          <span>Value: {value[0]}</span>
           <div style={{ flex: 1 }}>
-            <Story args={{ onChange: (val: number) => setValue(val), value }} />
+            <Story args={{ onValueChange: (details: any) => setValue(details.value), value }} />
           </div>
         </div>
       );
@@ -35,13 +35,12 @@ export const Default: Story = {
     min: 0,
     max: 100,
     step: 1,
-    defaultValue: 50,
+    defaultValue: [50],
   },
   render: (args) => (
     <Slider {...args}>
-      <SliderTrack>
-        <SliderFilledTrack />
-      </SliderTrack>
+      <SliderTrack />
+      <SliderFilledTrack />
       <SliderThumb />
     </Slider>
   ),
@@ -52,13 +51,12 @@ export const Customized: Story = {
     min: 0,
     max: 10,
     step: 0.5,
-    defaultValue: 5,
+    defaultValue: [5],
   },
   render: (args) => (
     <Slider {...args}>
-      <SliderTrack>
-        <SliderFilledTrack />
-      </SliderTrack>
+      <SliderTrack />
+      <SliderFilledTrack />
       <SliderThumb />
     </Slider>
   ),
@@ -69,16 +67,13 @@ export const WithCustomThumb: Story = {
     min: 0,
     max: 1,
     step: 0.01,
-    defaultValue: 0.5,
+    defaultValue: [0.5],
   },
   render: (args) => (
     <Slider {...args}>
-      <SliderTrack>
-        <SliderFilledTrack />
-      </SliderTrack>
-      <SliderThumb boxSize={6} bg="blue.500">
-        <span style={{ color: 'white', fontWeight: 'bold' }}>•</span>
-      </SliderThumb>
+      <SliderTrack />
+      <SliderFilledTrack />
+      <SliderThumb {...({} as any)} />
     </Slider>
   ),
 };

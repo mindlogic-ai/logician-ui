@@ -39,8 +39,7 @@ export const RangeDatePicker = ({
         },
         popoverCompProps: {
           popoverContentProps: {
-            p: 2,
-            borderRadius: 16,
+            ...(({ p: 2, borderRadius: 16 } as any)),
             border: '1px solid',
             borderColor: 'primary.lightest',
             boxShadow: 'lg',
@@ -92,7 +91,7 @@ export const RangeDatePicker = ({
           },
           bodyProps: {
             gap: 0,
-            spacingY: 1,
+            rowGap: 1,
             ...propsConfigs?.calendarPanelProps?.bodyProps,
           },
           ...propsConfigs?.calendarPanelProps,

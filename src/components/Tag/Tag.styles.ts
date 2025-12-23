@@ -1,4 +1,4 @@
-import { StyleProps } from '@chakra-ui/react';
+import { BoxProps } from '@chakra-ui/react';
 
 import { TagColorScheme, TagVariant } from './Tag.types';
 
@@ -11,7 +11,7 @@ import { TagColorScheme, TagVariant } from './Tag.types';
  */
 export const tagColorSchemeStyles: Record<
   TagColorScheme,
-  Record<TagVariant, StyleProps>
+  Record<TagVariant, BoxProps>
 > = {
   primary: {
     soft: {
@@ -123,7 +123,7 @@ export const tagColorSchemeStyles: Record<
 export const getTagStyles = (
   colorScheme: TagColorScheme = 'neutral',
   variant: TagVariant = 'soft'
-): StyleProps => {
+): BoxProps => {
   return tagColorSchemeStyles[colorScheme][variant];
 };
 

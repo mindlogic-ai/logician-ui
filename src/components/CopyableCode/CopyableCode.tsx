@@ -41,7 +41,6 @@ export const CopyableCode = ({
         colorScheme="primary"
         variant="solid"
         size="xs"
-        leftIcon={<FaRegCopy boxSize="xs" />}
         onClick={onCopy}
         position="absolute"
         right={4}
@@ -49,7 +48,7 @@ export const CopyableCode = ({
         transform="translateY(-50%)"
         zIndex={1}
       >
-        {translate('copy')}
+        <FaRegCopy boxSize="xs" /> {translate('copy')}
       </Button>
     </Flex>
   );

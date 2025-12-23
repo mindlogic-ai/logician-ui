@@ -1,3 +1,3 @@
-import { ModalProps as ChakraModalProps } from '@chakra-ui/react';
+import { Dialog } from '@chakra-ui/react';
 
-export type ModalProps = ChakraModalProps;
+export type ModalProps = Dialog.RootProps;

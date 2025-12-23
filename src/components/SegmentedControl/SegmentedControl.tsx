@@ -74,7 +74,7 @@ export const SegmentedControl = ({
         <Button
           key={option.value}
           flex={1}
-          variant="ghost"
+          variant={"ghost" as any}
           color={activeValue === option.value ? 'gray.1200' : 'gray.600'}
           onClick={() => handleSelect(option.value)}
           _hover={{ bg: 'transparent' }}

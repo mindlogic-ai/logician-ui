@@ -11,6 +11,7 @@ export const Spinner = forwardRef(
         color="primary.main"
         speed="0.65s"
         {...rest}
+        {...({} as any)}
         ref={ref}
       />
     );

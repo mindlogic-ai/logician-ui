@@ -1,9 +1,12 @@
-import { Accordion as ChakraAccordion, AccordionProps } from '@chakra-ui/react';
+import { Accordion as ChakraAccordion } from '@chakra-ui/react';
+import { ComponentProps } from 'react';
+
+export type AccordionProps = ComponentProps<typeof ChakraAccordion.Root>;
 
 export const Accordion = (props: AccordionProps) => {
   return (
-    <ChakraAccordion
-      allowMultiple
+    <ChakraAccordion.Root
+      multiple
       borderRadius={4}
       overflow="hidden"
       border="1px solid"

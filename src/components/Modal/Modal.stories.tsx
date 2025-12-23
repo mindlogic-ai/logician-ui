@@ -47,7 +47,7 @@ export const Default: Story = {
     return (
       <>
         <Button onClick={() => setIsOpen(true)}>Open Confirm Modal</Button>
-        <Modal {...args} isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <Modal {...args} open={isOpen} onOpenChange={(e) => setIsOpen(e.open)}>
           <ModalContent>
             {args.headerTitle && <ModalHeader>{args.headerTitle}</ModalHeader>}
             {args.hasCloseButton && <ModalCloseButton />}
@@ -78,7 +78,7 @@ export const WithHeader: Story = {
     return (
       <>
         <Button onClick={() => setIsOpen(true)}>Open Confirm Modal</Button>
-        <Modal {...args} isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <Modal {...args} open={isOpen} onOpenChange={(e) => setIsOpen(e.open)}>
           <ModalContent>
             {args.headerTitle && <ModalHeader>{args.headerTitle}</ModalHeader>}
             {args.hasCloseButton && <ModalCloseButton />}
@@ -110,7 +110,7 @@ export const WithFooterButton: Story = {
     return (
       <>
         <Button onClick={() => setIsOpen(true)}>Open Confirm Modal</Button>
-        <Modal {...args} isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <Modal {...args} open={isOpen} onOpenChange={(e) => setIsOpen(e.open)}>
           <ModalContent>
             {args.headerTitle && <ModalHeader>{args.headerTitle}</ModalHeader>}
             {args.hasCloseButton && <ModalCloseButton />}
@@ -144,7 +144,7 @@ export const TwoButtons: Story = {
     return (
       <>
         <Button onClick={() => setIsOpen(true)}>Open Confirm Modal</Button>
-        <Modal {...args} isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <Modal {...args} open={isOpen} onOpenChange={(e) => setIsOpen(e.open)}>
           <ModalContent>
             {args.headerTitle && <ModalHeader>{args.headerTitle}</ModalHeader>}
             {args.hasCloseButton && <ModalCloseButton />}

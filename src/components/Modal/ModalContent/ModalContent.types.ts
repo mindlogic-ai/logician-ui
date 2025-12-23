@@ -1,3 +1,6 @@
-import { ModalContentProps as ChakraModalContentProps } from '@chakra-ui/react';
+import { Dialog } from '@chakra-ui/react';
+import { ReactNode } from 'react';
 
-export type ModalContentProps = ChakraModalContentProps;
+export interface ModalContentProps extends Dialog.ContentProps {
+  children?: ReactNode;
+}

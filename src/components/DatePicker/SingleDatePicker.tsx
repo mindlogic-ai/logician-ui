@@ -39,7 +39,7 @@ export const SingleDatePicker = ({
         },
         popoverCompProps: {
           popoverContentProps: {
-            borderRadius: 16,
+            ...(({ borderRadius: 16 } as any)),
             border: '1px solid',
             borderColor: 'primary.lightest',
             boxShadow: 'lg',
@@ -63,7 +63,7 @@ export const SingleDatePicker = ({
           },
           bodyProps: {
             gap: 0,
-            spacingY: 1,
+            rowGap: 1,
             ...propsConfigs?.calendarPanelProps?.bodyProps,
           },
           ...propsConfigs?.calendarPanelProps,

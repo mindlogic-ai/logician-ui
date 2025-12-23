@@ -67,8 +67,8 @@ export const MDXEditor = forwardRef<
       onClick={handleContainerClick}
       cursor="text"
       {...containerProps}
-      sx={{
-        ...containerProps?.sx,
+      css={{
+        ...containerProps?.css,
         '.mdxeditor': {
           width: '100%',
           minHeight: '300px',

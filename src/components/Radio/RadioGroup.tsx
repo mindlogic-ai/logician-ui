@@ -6,19 +6,19 @@ import { RadioGroupProps, RadioOption } from './Radio.types';
 
 export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
   (
-    { options, value, onChange, direction = 'column', spacing = 3, ...rest },
+    { options, value, direction = 'column', gap = 3, ...rest },
     ref
   ) => {
     return (
-      <ChakraRadioGroup value={value} onChange={onChange} {...rest}>
-        <Stack direction={direction} spacing={spacing} ref={ref}>
+      <ChakraRadioGroup.Root value={value} {...rest}>
+        <Stack direction={direction} gap={gap} ref={ref}>
           {options.map((option: RadioOption) => (
             <Radio key={option.value} value={option.value}>
               {option.label}
             </Radio>
           ))}
         </Stack>
-      </ChakraRadioGroup>
+      </ChakraRadioGroup.Root>
     );
   }
 );

@@ -35,16 +35,17 @@ export const CopyButton = ({
   };
 
   return (
-    <Tooltip label={labelText} isOpen={isTooltipOpen} placement="top">
+    <Tooltip label={labelText} open={isTooltipOpen} placement="top">
       <IconButton
         aria-label="Copy code"
-        icon={<FaRegCopy boxSize="sm" />}
         onClick={handleClick}
         p={0}
         colorScheme="neutral"
         variant="ghost"
         {...rest}
-      />
+      >
+        <FaRegCopy boxSize="sm" />
+      </IconButton>
     </Tooltip>
   );
 };

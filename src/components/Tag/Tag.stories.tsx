@@ -156,7 +156,7 @@ export const AllCombinations: Story = {
  */
 export const Categories: Story = {
   render: () => (
-    <VStack align="start" spacing={4}>
+    <VStack align="start" gap={4}>
       <Box>
         <Text fontWeight="bold" mb={2}>
           Article Categories
@@ -202,7 +202,7 @@ export const Categories: Story = {
  */
 export const FilterTags: Story = {
   render: () => (
-    <VStack align="start" spacing={4}>
+    <VStack align="start" gap={4}>
       <Text fontWeight="bold">Active Filters</Text>
       <Flex gap={2} wrap="wrap">
         <Tag colorScheme="primary" variant="soft">

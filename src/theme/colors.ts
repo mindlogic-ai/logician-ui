@@ -70,12 +70,12 @@ export const semanticTokens = {
      * - dark (#0D317D): 9.4:1 ✓ AAA
      */
     primary: {
-      lightest: 'blue.50', // #E8EEFB - Very light backgrounds
-      lighter: 'blue.100', // #B9CBF3 - Light backgrounds
-      light: 'blue.200', // #7DA0E8 - Hover states, subtle fills
-      main: 'blue.500', // #1751D0 - Primary actions
-      dark: 'blue.700', // #0D317D - Text on light backgrounds
-      darker: 'blue.900', // #04102A - High-contrast text
+      lightest: { value: '{colors.blue.50}' }, // #E8EEFB - Very light backgrounds
+      lighter: { value: '{colors.blue.100}' }, // #B9CBF3 - Light backgrounds
+      light: { value: '{colors.blue.200}' }, // #7DA0E8 - Hover states, subtle fills
+      main: { value: '{colors.blue.500}' }, // #1751D0 - Primary actions
+      dark: { value: '{colors.blue.700}' }, // #0D317D - Text on light backgrounds
+      darker: { value: '{colors.blue.900}' }, // #04102A - High-contrast text
     },
 
     /**
@@ -87,12 +87,12 @@ export const semanticTokens = {
      * - dark (#570D7D): 9.2:1 ✓ AAA
      */
     secondary: {
-      lightest: 'violet.50', // #F4E8FB - Very light backgrounds
-      lighter: 'violet.100', // #DEB9F3 - Light backgrounds
-      light: 'violet.200', // #C17DE8 - Hover states
-      main: 'violet.500', // #9117D0 - Accent actions
-      dark: 'violet.700', // #570D7D - Text on light backgrounds
-      darker: 'violet.900', // #1D042A - High-contrast text
+      lightest: { value: '{colors.violet.50}' }, // #F4E8FB - Very light backgrounds
+      lighter: { value: '{colors.violet.100}' }, // #DEB9F3 - Light backgrounds
+      light: { value: '{colors.violet.200}' }, // #C17DE8 - Hover states
+      main: { value: '{colors.violet.500}' }, // #9117D0 - Accent actions
+      dark: { value: '{colors.violet.700}' }, // #570D7D - Text on light backgrounds
+      darker: { value: '{colors.violet.900}' }, // #1D042A - High-contrast text
     },
 
     /**
@@ -104,12 +104,12 @@ export const semanticTokens = {
      * - dark (#7D0D14): 9.6:1 ✓ AAA
      */
     danger: {
-      lightest: 'rose.50', // #FBE8E9 - Error backgrounds
-      lighter: 'rose.100', // #F3B9BD - Light error fills
-      light: 'rose.200', // #E87D84 - Error borders, icons
-      main: 'rose.500', // #D01721 - Error text, buttons
-      dark: 'rose.700', // #7D0D14 - Error text on light bg
-      darker: 'rose.900', // #2A0407 - High-contrast error text
+      lightest: { value: '{colors.rose.50}' }, // #FBE8E9 - Error backgrounds
+      lighter: { value: '{colors.rose.100}' }, // #F3B9BD - Light error fills
+      light: { value: '{colors.rose.200}' }, // #E87D84 - Error borders, icons
+      main: { value: '{colors.rose.500}' }, // #D01721 - Error text, buttons
+      dark: { value: '{colors.rose.700}' }, // #7D0D14 - Error text on light bg
+      darker: { value: '{colors.rose.900}' }, // #2A0407 - High-contrast error text
     },
 
     /**
@@ -121,12 +121,12 @@ export const semanticTokens = {
      * - dark (#147D0D): 6.1:1 ✓ AA
      */
     success: {
-      lightest: 'green.50', // #E9FBE8 - Success backgrounds
-      lighter: 'green.100', // #BDF3B9 - Light success fills
-      light: 'green.200', // #84E87D - Success borders, icons
-      main: 'green.600', // #1AA612 - Success text, buttons
-      dark: 'green.700', // #147D0D - Success text on light bg
-      darker: 'green.900', // #072A04 - High-contrast success text
+      lightest: { value: '{colors.green.50}' }, // #E9FBE8 - Success backgrounds
+      lighter: { value: '{colors.green.100}' }, // #BDF3B9 - Light success fills
+      light: { value: '{colors.green.200}' }, // #84E87D - Success borders, icons
+      main: { value: '{colors.green.600}' }, // #1AA612 - Success text, buttons
+      dark: { value: '{colors.green.700}' }, // #147D0D - Success text on light bg
+      darker: { value: '{colors.green.900}' }, // #072A04 - High-contrast success text
     },
 
     /**
@@ -138,12 +138,12 @@ export const semanticTokens = {
      * - dark (#7D610D): 5.8:1 ✓ AA
      */
     warning: {
-      lightest: 'gold.50', // #FBF6E8 - Warning backgrounds
-      lighter: 'gold.100', // #F3E4B9 - Light warning fills
-      light: 'gold.200', // #E8CD7D - Warning borders, icons
-      main: 'gold.500', // #D0A117 - Warning icons, accents
-      dark: 'gold.700', // #7D610D - Warning text on light bg
-      darker: 'gold.900', // #2A2004 - High-contrast warning text
+      lightest: { value: '{colors.gold.50}' }, // #FBF6E8 - Warning backgrounds
+      lighter: { value: '{colors.gold.100}' }, // #F3E4B9 - Light warning fills
+      light: { value: '{colors.gold.200}' }, // #E8CD7D - Warning borders, icons
+      main: { value: '{colors.gold.500}' }, // #D0A117 - Warning icons, accents
+      dark: { value: '{colors.gold.700}' }, // #7D610D - Warning text on light bg
+      darker: { value: '{colors.gold.900}' }, // #2A2004 - High-contrast warning text
     },
   },
 } as const;
@@ -186,15 +186,15 @@ export const colors = {
    * Used for: primary semantic tokens, interactive elements
    */
   blue: {
-    50: '#E8EEFB', // Lightest - backgrounds
-    100: '#B9CBF3', // Lighter - subtle fills
-    200: '#7DA0E8', // Light - hover, focus rings
-    300: '#4A79DC', // Medium - borders
-    500: '#1751D0', // Base - primary.main
-    600: '#1241A6', // Dark - hover on main
-    700: '#0D317D', // Darker - text
-    800: '#092053', // Very dark - emphasis
-    900: '#04102A', // Darkest - high contrast
+    50: { value: '#E8EEFB' }, // Lightest - backgrounds
+    100: { value: '#B9CBF3' }, // Lighter - subtle fills
+    200: { value: '#7DA0E8' }, // Light - hover, focus rings
+    300: { value: '#4A79DC' }, // Medium - borders
+    500: { value: '#1751D0' }, // Base - primary.main
+    600: { value: '#1241A6' }, // Dark - hover on main
+    700: { value: '#0D317D' }, // Darker - text
+    800: { value: '#092053' }, // Very dark - emphasis
+    900: { value: '#04102A' }, // Darkest - high contrast
   },
 
   /**
@@ -202,15 +202,15 @@ export const colors = {
    * Used for: danger semantic tokens, error states, destructive actions
    */
   rose: {
-    50: '#FBE8E9', // Lightest - error backgrounds
-    100: '#F3B9BD', // Lighter - subtle error fills
-    200: '#E87D84', // Light - error borders
-    300: '#DC4A53', // Medium - error accents
-    500: '#D01721', // Base - danger.main
-    600: '#A6121A', // Dark - hover on main
-    700: '#7D0D14', // Darker - error text
-    800: '#53090D', // Very dark - emphasis
-    900: '#2A0407', // Darkest - high contrast
+    50: { value: '#FBE8E9' }, // Lightest - error backgrounds
+    100: { value: '#F3B9BD' }, // Lighter - subtle error fills
+    200: { value: '#E87D84' }, // Light - error borders
+    300: { value: '#DC4A53' }, // Medium - error accents
+    500: { value: '#D01721' }, // Base - danger.main
+    600: { value: '#A6121A' }, // Dark - hover on main
+    700: { value: '#7D0D14' }, // Darker - error text
+    800: { value: '#53090D' }, // Very dark - emphasis
+    900: { value: '#2A0407' }, // Darkest - high contrast
   },
 
   /**
@@ -218,15 +218,15 @@ export const colors = {
    * Used for: success semantic tokens, confirmations, positive feedback
    */
   green: {
-    50: '#E9FBE8', // Lightest - success backgrounds
-    100: '#BDF3B9', // Lighter - subtle success fills
-    200: '#84E87D', // Light - success borders
-    300: '#53DC4A', // Medium - success accents
-    500: '#21D017', // Bright - icons (avoid for text)
-    600: '#1AA612', // Base - success.main
-    700: '#147D0D', // Darker - success text
-    800: '#0D5309', // Very dark - emphasis
-    900: '#072A04', // Darkest - high contrast
+    50: { value: '#E9FBE8' }, // Lightest - success backgrounds
+    100: { value: '#BDF3B9' }, // Lighter - subtle success fills
+    200: { value: '#84E87D' }, // Light - success borders
+    300: { value: '#53DC4A' }, // Medium - success accents
+    500: { value: '#21D017' }, // Bright - icons (avoid for text)
+    600: { value: '#1AA612' }, // Base - success.main
+    700: { value: '#147D0D' }, // Darker - success text
+    800: { value: '#0D5309' }, // Very dark - emphasis
+    900: { value: '#072A04' }, // Darkest - high contrast
   },
 
   /**
@@ -234,15 +234,15 @@ export const colors = {
    * Used for: secondary semantic tokens, highlights, tags
    */
   violet: {
-    50: '#F4E8FB', // Lightest - accent backgrounds
-    100: '#DEB9F3', // Lighter - subtle accent fills
-    200: '#C17DE8', // Light - accent borders
-    300: '#A84ADC', // Medium - accent elements
-    500: '#9117D0', // Base - secondary.main
-    600: '#7412A6', // Dark - hover on main
-    700: '#570D7D', // Darker - accent text
-    800: '#3A0953', // Very dark - emphasis
-    900: '#1D042A', // Darkest - high contrast
+    50: { value: '#F4E8FB' }, // Lightest - accent backgrounds
+    100: { value: '#DEB9F3' }, // Lighter - subtle accent fills
+    200: { value: '#C17DE8' }, // Light - accent borders
+    300: { value: '#A84ADC' }, // Medium - accent elements
+    500: { value: '#9117D0' }, // Base - secondary.main
+    600: { value: '#7412A6' }, // Dark - hover on main
+    700: { value: '#570D7D' }, // Darker - accent text
+    800: { value: '#3A0953' }, // Very dark - emphasis
+    900: { value: '#1D042A' }, // Darkest - high contrast
   },
 
   /**
@@ -250,15 +250,15 @@ export const colors = {
    * Used for: warning semantic tokens, caution states
    */
   gold: {
-    50: '#FBF6E8', // Lightest - warning backgrounds
-    100: '#F3E4B9', // Lighter - subtle warning fills
-    200: '#E8CD7D', // Light - warning borders
-    300: '#DCB84A', // Medium - warning accents
-    500: '#D0A117', // Base - warning.main
-    600: '#A68112', // Dark - hover on main
-    700: '#7D610D', // Darker - warning text
-    800: '#534109', // Very dark - emphasis
-    900: '#2A2004', // Darkest - high contrast
+    50: { value: '#FBF6E8' }, // Lightest - warning backgrounds
+    100: { value: '#F3E4B9' }, // Lighter - subtle warning fills
+    200: { value: '#E8CD7D' }, // Light - warning borders
+    300: { value: '#DCB84A' }, // Medium - warning accents
+    500: { value: '#D0A117' }, // Base - warning.main
+    600: { value: '#A68112' }, // Dark - hover on main
+    700: { value: '#7D610D' }, // Darker - warning text
+    800: { value: '#534109' }, // Very dark - emphasis
+    900: { value: '#2A2004' }, // Darkest - high contrast
   },
 
   /**
@@ -273,23 +273,23 @@ export const colors = {
    * - gray.1300: 11.2:1 ✓ AAA
    */
   gray: {
-    0: '#FDFDFF', // Pure background (near-white with blue tint)
-    50: '#F7F9FC', // Subtle background
-    100: '#F0F3F9', // Muted background
-    200: '#E2E6F0', // Light borders, dividers
-    300: '#CDD3E0', // Default borders
-    400: '#B0B8C9', // Disabled borders
-    500: '#9AA3B8', // Placeholder text, tertiary
-    600: '#8690A7', // Icons, secondary text
-    700: '#737D96', // Secondary text
-    800: '#616B85', // Body text (light)
-    900: '#505A74', // Body text (medium)
-    1000: '#414A63', // Body text (strong)
-    1100: '#343C52', // Headings (light)
-    1200: '#2A3142', // Headings (medium)
-    1300: '#1E2433', // Primary text, headings
-    1400: '#141924', // Dark backgrounds
-    1500: '#0B0E17', // Darkest background
+    0: { value: '#FDFDFF' }, // Pure background (near-white with blue tint)
+    50: { value: '#F7F9FC' }, // Subtle background
+    100: { value: '#F0F3F9' }, // Muted background
+    200: { value: '#E2E6F0' }, // Light borders, dividers
+    300: { value: '#CDD3E0' }, // Default borders
+    400: { value: '#B0B8C9' }, // Disabled borders
+    500: { value: '#9AA3B8' }, // Placeholder text, tertiary
+    600: { value: '#8690A7' }, // Icons, secondary text
+    700: { value: '#737D96' }, // Secondary text
+    800: { value: '#616B85' }, // Body text (light)
+    900: { value: '#505A74' }, // Body text (medium)
+    1000: { value: '#414A63' }, // Body text (strong)
+    1100: { value: '#343C52' }, // Headings (light)
+    1200: { value: '#2A3142' }, // Headings (medium)
+    1300: { value: '#1E2433' }, // Primary text, headings
+    1400: { value: '#141924' }, // Dark backgrounds
+    1500: { value: '#0B0E17' }, // Darkest background
   },
 
   /**
@@ -297,15 +297,15 @@ export const colors = {
    * @deprecated Use `violet` instead
    */
   purple: {
-    50: '#F4E8FB',
-    100: '#DEB9F3',
-    200: '#C17DE8',
-    300: '#A84ADC',
-    500: '#9117D0',
-    600: '#7412A6',
-    700: '#570D7D',
-    800: '#3A0953',
-    900: '#1D042A',
+    50: { value: '#F4E8FB' },
+    100: { value: '#DEB9F3' },
+    200: { value: '#C17DE8' },
+    300: { value: '#A84ADC' },
+    500: { value: '#9117D0' },
+    600: { value: '#7412A6' },
+    700: { value: '#570D7D' },
+    800: { value: '#3A0953' },
+    900: { value: '#1D042A' },
   },
 
   /**
@@ -313,15 +313,15 @@ export const colors = {
    * @deprecated Use `rose` instead
    */
   red: {
-    50: '#FBE8E9',
-    100: '#F3B9BD',
-    200: '#E87D84',
-    300: '#DC4A53',
-    500: '#D01721',
-    600: '#A6121A',
-    700: '#7D0D14',
-    800: '#53090D',
-    900: '#2A0407',
+    50: { value: '#FBE8E9' },
+    100: { value: '#F3B9BD' },
+    200: { value: '#E87D84' },
+    300: { value: '#DC4A53' },
+    500: { value: '#D01721' },
+    600: { value: '#A6121A' },
+    700: { value: '#7D0D14' },
+    800: { value: '#53090D' },
+    900: { value: '#2A0407' },
   },
 
   /**
@@ -329,18 +329,18 @@ export const colors = {
    * @deprecated Use `gold` instead
    */
   yellow: {
-    50: '#FBF6E8',
-    100: '#F3E4B9',
-    200: '#E8CD7D',
-    300: '#DCB84A',
-    400: '#D0A117', // For backwards compat (warning.main used yellow.400)
-    500: '#D0A117',
-    600: '#A68112',
-    700: '#7D610D',
-    800: '#534109',
-    900: '#2A2004',
+    50: { value: '#FBF6E8' },
+    100: { value: '#F3E4B9' },
+    200: { value: '#E8CD7D' },
+    300: { value: '#DCB84A' },
+    400: { value: '#D0A117' }, // For backwards compat (warning.main used yellow.400)
+    500: { value: '#D0A117' },
+    600: { value: '#A68112' },
+    700: { value: '#7D610D' },
+    800: { value: '#534109' },
+    900: { value: '#2A2004' },
   },
 
-  white: '#FFFFFF',
-  black: '#0B0E17', // Matches gray.1500
+  white: { value: '#FFFFFF' },
+  black: { value: '#0B0E17' }, // Matches gray.1500
 };

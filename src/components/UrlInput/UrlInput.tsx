@@ -1,7 +1,5 @@
 import { ForwardedRef, forwardRef } from 'react';
-import { InputGroup, InputLeftAddon, InputProps } from '@chakra-ui/react';
-
-import { Input } from '@/components/Input';
+import { Group, InputAddon, InputProps, Input as ChakraInput } from '@chakra-ui/react';
 
 export interface UrlInputProps extends InputProps {
   leftAddon?: string;
@@ -30,16 +28,16 @@ export const UrlInput = forwardRef(
       typeof value === 'string' ? value.replace(leftAddon, '') : value;
 
     return (
-      <InputGroup width="100%">
-        {leftAddon && <InputLeftAddon>{leftAddon}</InputLeftAddon>}
-        <Input
+      <Group width="100%" attached>
+        {leftAddon && <InputAddon>{leftAddon}</InputAddon>}
+        <ChakraInput
           name="service_url"
           {...rest}
           value={displayValue}
           onChange={handleChange}
           ref={ref}
         />
-      </InputGroup>
+      </Group>
     );
   }
 );

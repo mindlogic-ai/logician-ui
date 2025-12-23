@@ -1,33 +1,33 @@
 import React, { forwardRef } from 'react';
-import { Radio as ChakraRadio } from '@chakra-ui/react';
+import { RadioGroup } from '@chakra-ui/react';
 
 import { RadioProps } from './Radio.types';
 
 export const Radio = forwardRef<HTMLInputElement, RadioProps>(
   ({ children, ...rest }, ref) => {
     return (
-      <ChakraRadio
-        ref={ref}
-        _checked={{
-          bg: 'primary.main',
-          borderColor: 'primary.main',
-          position: 'relative',
-          _before: {
-            content: '""',
-            bg: 'white',
-            w: '50%',
-            h: '50%',
-            borderRadius: 'full',
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-          },
-        }}
-        {...rest}
-      >
-        {children}
-      </ChakraRadio>
+      <RadioGroup.Item ref={ref} {...rest} {...({ asChild: true } as any)}>
+        <div>
+          <RadioGroup.ItemHiddenInput />
+          <RadioGroup.ItemControl {...({ asChild: true } as any)}>
+            <div
+              style={{
+                borderRadius: '50%',
+                borderColor: 'var(--chakra-colors-gray-400)',
+                borderWidth: '2px',
+                borderStyle: 'solid',
+              }}
+              data-peer
+            />
+          </RadioGroup.ItemControl>
+          <RadioGroup.ItemIndicator />
+          {children && (
+            <RadioGroup.ItemText {...({ asChild: true } as any)}>
+              <span>{children}</span>
+            </RadioGroup.ItemText>
+          )}
+        </div>
+      </RadioGroup.Item>
     );
   }
 );

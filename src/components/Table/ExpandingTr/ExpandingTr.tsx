@@ -1,5 +1,5 @@
 import { Children } from 'react';
-import { Collapse } from '@chakra-ui/react';
+import { Collapsible } from '@chakra-ui/react';
 
 import { Td } from '../Td';
 import { Tr } from '../Tr';
@@ -20,24 +20,23 @@ export const ExpandingTr: React.FC<ExpandingTrProps> = ({
       {/* Main Row */}
       <Tr {...rest}>{children}</Tr>
 
-      {/* Expanded Row - always render for Collapse animation */}
+      {/* Expanded Row - always render for Collapsible animation */}
       <Tr
         h={isExpanded ? undefined : 0}
-        sx={{
+        style={{
           // When collapsed, make it invisible and non-interactive
           ...(!isExpanded && {
-            visibility: 'collapse',
-            '& td': {
-              border: 'none',
-              p: 0,
-              h: 0,
-            },
+            visibility: 'collapse' as const,
           }),
         }}
         {...expandedRowProps}
       >
         <Td colSpan={childrenArray.length} p={0}>
-          <Collapse in={isExpanded}>{expandedContent}</Collapse>
+          <Collapsible.Root open={isExpanded}>
+            <Collapsible.Content {...({} as any)}>
+              {expandedContent}
+            </Collapsible.Content>
+          </Collapsible.Root>
         </Td>
       </Tr>
     </>

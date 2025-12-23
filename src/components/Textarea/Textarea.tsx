@@ -1,12 +1,11 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, forwardRef, useEffect, useState } from 'react';
 import {
-  forwardRef,
   Textarea as ChakraTextarea,
   TextareaProps,
   useTheme,
 } from '@chakra-ui/react';
 
-export const Textarea = forwardRef<TextareaProps, 'textarea'>(
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   (
     {
       placeholder,
@@ -14,8 +13,8 @@ export const Textarea = forwardRef<TextareaProps, 'textarea'>(
       value: propValue,
       _focusVisible,
       ...props
-    }: TextareaProps,
-    ref?
+    },
+    ref
   ) => {
     const theme = useTheme();
     const [currentValue, setCurrentValue] = useState<
@@ -41,7 +40,10 @@ export const Textarea = forwardRef<TextareaProps, 'textarea'>(
         value={currentValue}
         onChange={handleChange}
         resize="none"
-        focusBorderColor={theme.semanticTokens.colors.primary.main}
+        borderColor="gray.400"
+        _focus={{
+          borderColor: theme.semanticTokens.colors.primary.main as string,
+        }}
         {...props}
       />
     );

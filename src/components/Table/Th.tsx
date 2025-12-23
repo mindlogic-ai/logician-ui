@@ -1,7 +1,6 @@
 import { forwardRef, useCallback, useEffect, useRef } from 'react';
 import {
-  TableColumnHeaderProps,
-  Th as ChakraTh,
+  Table,
   useToken,
 } from '@chakra-ui/react';
 
@@ -11,7 +10,7 @@ import { useTableContext } from './TableContext';
 
 export const Th = forwardRef<
   HTMLTableCellElement,
-  TableColumnHeaderProps & TableCellProps
+  Table.ColumnHeaderProps & TableCellProps
 >(
   (
     {
@@ -66,10 +65,10 @@ export const Th = forwardRef<
           style={{
             color: 'inherit',
             fontWeight: 'inherit',
-            fontSize: fontSizeToken,
+            fontSize: Array.isArray(fontSizeToken) ? fontSizeToken[0] : fontSizeToken,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            paddingInlineStart: spacingToken,
+            paddingInlineStart: Array.isArray(spacingToken) ? spacingToken[0] : spacingToken,
             ...style,
           }}
           {...htmlProps}
@@ -129,7 +128,7 @@ export const Th = forwardRef<
     );
 
     return (
-      <ChakraTh
+      <Table.ColumnHeader
         color="inherit"
         fontWeight="inherit"
         fontSize="subtitle"
@@ -146,7 +145,7 @@ export const Th = forwardRef<
         {...rest}
       >
         {children}
-      </ChakraTh>
+      </Table.ColumnHeader>
     );
   }
 );

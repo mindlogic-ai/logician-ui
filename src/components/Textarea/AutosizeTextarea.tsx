@@ -38,13 +38,14 @@ export const AutosizeTextarea = ({
 
   return (
     <Textarea
-      as={ResizeTextarea}
+      as={ResizeTextarea as any}
       onFocus={handleFocus}
       onBlur={handleBlur}
       minRows={minRows}
       maxRows={effectiveMaxRows}
       overflow="auto"
       {...props}
+      {...({} as any)}
     />
   );
 };

@@ -16,15 +16,20 @@ import { CarouselModalProps } from './CarouselModal.types';
 
 export const CarouselModal = ({
   slides,
-  onClose,
+  onOpenChange,
   ...rest
 }: CarouselModalProps) => {
   const nextButtonRef = useRef(null);
   const translate = useTranslate();
   const [currentSlide, setCurrentSlide] = useState<number>(0);
+
+  const handleClose = () => {
+    onOpenChange?.({ open: false });
+  };
+
   const handleNextClick = () => {
     if (currentSlide === slides.length - 1) {
-      onClose();
+      handleClose();
     } else {
       setCurrentSlide(currentSlide + 1);
     }
@@ -38,17 +43,17 @@ export const CarouselModal = ({
   };
 
   const handleEndClick = () => {
-    onClose();
+    handleClose();
   };
 
   return (
     <Modal
-      size="2xl"
-      onClose={onClose}
+      size={"2xl" as any}
+      onOpenChange={onOpenChange}
       initialFocusRef={nextButtonRef}
       {...rest}
     >
-      <ModalContent overflow="hidden">
+      <ModalContent overflow="hidden" {...({} as any)}>
         <ModalCloseButton />
         <ModalBody pb={0} pt={12}>
           <Carousel

@@ -24,7 +24,7 @@ const RadialProgress: React.FC<RadialProgressProps> = ({
   const resolveColor = (color: string): string => {
     try {
       // Try to resolve as a token first
-      const resolvedColor = useToken('colors', color);
+      const resolvedColor = useToken('colors', color)[0];
       return resolvedColor || color;
     } catch {
       // If token resolution fails, return the original color

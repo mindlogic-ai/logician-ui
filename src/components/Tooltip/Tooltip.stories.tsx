@@ -13,11 +13,7 @@ const meta = {
     children: <Button>Hover me</Button>,
   },
   argTypes: {
-    placement: {
-      control: { type: 'select' },
-      options: ['top', 'bottom', 'left', 'right', 'auto'],
-    },
-    isOpen: {
+    open: {
       control: { type: 'boolean' },
     },
   },
@@ -37,8 +33,8 @@ export const Default: Story = {
 
 export const DifferentPlacements: Story = {
   render: () => (
-    <VStack spacing={8} p={8}>
-      <HStack spacing={8}>
+    <VStack gap={8} p={8}>
+      <HStack gap={8}>
         <Tooltip label="Top tooltip" placement="top">
           <Button>Top</Button>
         </Tooltip>
@@ -91,13 +87,14 @@ export const CopyButtonExample: Story = {
 
     return (
       <Box p={8} display="flex" justifyContent="center">
-        <Tooltip label={tooltipLabel} isOpen={isTooltipOpen} placement="top">
+        <Tooltip label={tooltipLabel} open={isTooltipOpen}>
           <IconButton
             aria-label="Copy text"
-            icon={<FaRegCopy />}
             onClick={handleCopy}
-            variant="tertiary"
-          />
+            variant="ghost"
+          >
+            <FaRegCopy />
+          </IconButton>
         </Tooltip>
       </Box>
     );

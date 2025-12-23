@@ -1,7 +1,5 @@
 import * as CSS from 'csstype';
 
-import theme from '@/theme/index';
-
 // TODO: investigate why these TS issues are coming up
 export const verticalStyles = {
   borderInlineStart: 'none',
@@ -14,7 +12,7 @@ export const verticalStyles = {
 };
 
 export const horizontalSelectedStyles = {
-  color: theme.semanticTokens.colors.primary.main,
+  color: 'primary.main',
   fontWeight: 'semibold',
   position: 'relative',
   _after: {
@@ -24,7 +22,7 @@ export const horizontalSelectedStyles = {
     left: 0,
     width: '100%',
     height: '2px',
-    background: theme.semanticTokens.colors.primary.main,
+    background: 'primary.main',
   },
 };
 

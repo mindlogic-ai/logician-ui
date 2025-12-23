@@ -1,22 +1,17 @@
 import { ReactNode } from 'react';
-import {
-  BoxProps,
-  ChakraProps,
-  UseToastOptions as ChakraUseToastOptions,
-} from '@chakra-ui/react';
+import { BoxProps } from '@chakra-ui/react';
 
 export interface MLToastOptions {
   title?: ReactNode;
   description: ReactNode;
-  status?: Extract<
-    ChakraUseToastOptions['status'],
-    'info' | 'warning' | 'success' | 'error'
-  >;
+  status?: 'info' | 'warning' | 'success' | 'error';
 }
 
 export interface ToastProps extends Omit<BoxProps, 'title'>, MLToastOptions {}
 
-export type UseToastOptions = ChakraUseToastOptions &
-  MLToastOptions & {
-    styles?: ChakraProps;
-  };
+export interface UseToastOptions extends MLToastOptions {
+  duration?: number;
+  placement?: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end';
+  styles?: BoxProps;
+  [key: string]: any;
+}

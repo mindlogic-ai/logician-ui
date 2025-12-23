@@ -1,17 +1,17 @@
+import { ComponentProps } from 'react';
 import {
-  EditablePreviewProps,
-  EditableProps,
+  Editable,
   InputProps,
 } from '@chakra-ui/react';
 
 export interface DataFieldProps {
   label?: string;
   value: string;
-  as?: EditableProps['as'];
+  as?: any;
   onChange?: (val?: string) => void;
   inputProps?: Omit<InputProps, 'value'>;
-  editableProps?: Omit<EditableProps, 'value'>;
-  editablePreviewProps?: EditablePreviewProps;
+  editableProps?: Omit<ComponentProps<typeof Editable.Root>, 'value'>;
+  editablePreviewProps?: ComponentProps<typeof Editable.Preview>;
   isEditable?: boolean;
   isCopyable?: boolean;
   allowEmpty?: boolean;

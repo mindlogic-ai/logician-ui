@@ -1,7 +1,5 @@
 import * as CSS from 'csstype';
 
-import theme from '@/theme/index';
-
 export const editableStyles = {
   display: 'flex',
   alignItems: 'center',
@@ -28,6 +26,6 @@ export const inputStyles = {
     boxSizing: 'content-box',
   },
   _focus: {
-    backgroundColor: theme.colors.white,
+    backgroundColor: 'white',
   },
 };

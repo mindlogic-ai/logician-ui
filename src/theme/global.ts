@@ -1,3 +1,5 @@
+import { defineGlobalStyles } from '@chakra-ui/react';
+
 import { inter, noto, pretendard } from './font';
 
 /**
@@ -8,7 +10,7 @@ import { inter, noto, pretendard } from './font';
  *
  * @see ./colors.ts for full color palette documentation
  */
-export const global = {
+export const globalCss = defineGlobalStyles({
   ':root': {
     '--chakra-colors-chakra-body-text': '#1E2433', // gray.1300 - Primary text
     '--chakra-colors-chakra-body-bg': '#FDFDFF', // gray.0 - Background
@@ -35,4 +37,7 @@ export const global = {
   "body[data-lang='es']": {
     fontFamily: inter.style.fontFamily,
   },
-} as const;
+});
+
+// Legacy export for backwards compatibility
+export const global = globalCss;

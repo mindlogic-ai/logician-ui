@@ -1,17 +1,11 @@
-import { AccordionItem as ChakraAccordionItem } from '@chakra-ui/react';
+import { Accordion } from '@chakra-ui/react';
+import { ComponentProps, ReactNode } from 'react';
 
-export const AccordionItem = ({ _first = {}, _last = {}, ...rest }) => {
-  return (
-    <ChakraAccordionItem
-      _first={{
-        borderTopWidth: 0,
-        ..._first,
-      }}
-      _last={{
-        borderBottomWidth: 0,
-        ..._last,
-      }}
-      {...rest}
-    />
-  );
+export type AccordionItemProps = ComponentProps<typeof Accordion.Item> & {
+  children?: ReactNode;
+  value?: string;
+};
+
+export const AccordionItem = (props: AccordionItemProps) => {
+  return <Accordion.Item {...props} />;
 };

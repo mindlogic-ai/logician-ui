@@ -59,7 +59,7 @@ export const FileItem = ({
         <Box minW={5}>
           <CiFileOn color={error ? errorColor : 'gray.800'} />
         </Box>
-        <Text isTruncated color={error ? errorColor : undefined}>
+        <Text truncate color={error ? errorColor : undefined}>
           {fileName}
         </Text>
       </Flex>
@@ -81,12 +81,13 @@ export const FileItem = ({
                 <IconButton
                   aria-label={'remove uploading file button'}
                   onClick={onFileDelete}
-                  icon={<IoClose color="gray.600" boxSize="md" />}
                   size="xs"
-                  isDisabled={isDeleting}
+                  disabled={isDeleting}
                   colorScheme="neutral"
                   variant="ghost"
-                />
+                >
+                  <IoClose color="gray.600" boxSize="md" />
+                </IconButton>
               </Flex>
             )}
           </Box>
@@ -98,28 +99,28 @@ export const FileItem = ({
               <IconButton
                 aria-label={'download uploaded file button'}
                 onClick={onFileDownload}
-                icon={<LuDownload color="gray.800" />}
                 size="xs"
                 colorScheme="neutral"
                 variant="ghost"
-              />
+              >
+                <LuDownload color="gray.800" />
+              </IconButton>
             )}
             {onFileDelete && (
               <IconButton
                 aria-label={'remove uploaded file button'}
                 onClick={onFileDelete}
-                icon={
-                  isDeleting ? (
-                    <Spinner size="xs" />
-                  ) : (
-                    <FaRegTrashAlt boxSize="sm" color="gray.800" />
-                  )
-                }
                 size="xs"
-                isDisabled={isDeleting}
+                disabled={isDeleting}
                 colorScheme="neutral"
                 variant="ghost"
-              />
+              >
+                {isDeleting ? (
+                  <Spinner size="xs" />
+                ) : (
+                  <FaRegTrashAlt boxSize="sm" color="gray.800" />
+                )}
+              </IconButton>
             )}
           </Fragment>
         )}

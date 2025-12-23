@@ -176,9 +176,10 @@ export const Masonry = ({
       templateColumns={`repeat(${numCols}, 1fr)`}
       gap={gap}
       {...rest}
+      {...({} as any)}
     >
       {columns.map((colItems, i) => (
-        <Flex key={`masonry-column-${i}`} direction="column" width="100%">
+        <Flex key={`masonry-column-${i}`} direction="column" width="100%" {...({} as any)}>
           {colItems}
         </Flex>
       ))}

@@ -65,6 +65,7 @@ export const Banner = forwardRef(
               justify="center"
               {...styles.text}
               {...textStyles[variant]}
+              {...({} as any)}
             >
               {children}
             </Flex>

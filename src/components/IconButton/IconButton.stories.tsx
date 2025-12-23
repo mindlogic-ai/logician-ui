@@ -9,7 +9,7 @@ const meta = {
   title: 'Components/IconButton',
   component: IconButton,
   args: {
-    icon: <FaUniversity />,
+    children: <FaUniversity />,
     'aria-label': 'University',
   },
   argTypes: {
@@ -22,6 +22,9 @@ const meta = {
       control: 'select',
       options: iconButtonVariants,
       description: 'Visual appearance (overrides Chakra variant)',
+    },
+    children: {
+      table: { disable: true },
     },
   },
 } satisfies Meta<typeof IconButton>;
@@ -42,9 +45,9 @@ export const Basic: Story = {
  */
 export const AllCombinations: Story = {
   render: (args) => (
-    <VStack spacing={6} align="stretch">
+    <VStack gap={6} align="stretch">
       {/* Header row */}
-      <HStack spacing={4}>
+      <HStack gap={4}>
         <Box w="100px" />
         {iconButtonVariants.map((variant) => (
           <Box key={variant} w="80px" textAlign="center">
@@ -57,7 +60,7 @@ export const AllCombinations: Story = {
 
       {/* Color scheme rows */}
       {iconButtonColorSchemes.map((colorScheme) => (
-        <HStack key={colorScheme} spacing={4}>
+        <HStack key={colorScheme} gap={4}>
           <Box w="100px">
             <Text fontSize="subtext" fontWeight="bold" color="gray.600">
               {colorScheme}
@@ -83,8 +86,8 @@ export const AllCombinations: Story = {
  */
 export const RoundAllCombinations: Story = {
   render: (args) => (
-    <VStack spacing={6} align="stretch">
-      <HStack spacing={4}>
+    <VStack gap={6} align="stretch">
+      <HStack gap={4}>
         <Box w="100px" />
         {iconButtonVariants.map((variant) => (
           <Box key={variant} w="80px" textAlign="center">
@@ -96,7 +99,7 @@ export const RoundAllCombinations: Story = {
       </HStack>
 
       {iconButtonColorSchemes.map((colorScheme) => (
-        <HStack key={colorScheme} spacing={4}>
+        <HStack key={colorScheme} gap={4}>
           <Box w="100px">
             <Text fontSize="subtext" fontWeight="bold" color="gray.600">
               {colorScheme}
@@ -108,7 +111,6 @@ export const RoundAllCombinations: Story = {
                 {...args}
                 colorScheme={colorScheme}
                 variant={variant}
-                isRound
               />
             </Box>
           ))}
@@ -125,7 +127,7 @@ export const Primary: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
       {iconButtonVariants.map((variant) => (
-        <VStack key={variant} spacing={1}>
+        <VStack key={variant} gap={1}>
           <Text fontSize="subtext" color="gray.600">{variant}</Text>
           <IconButton {...args} colorScheme="primary" variant={variant} />
         </VStack>
@@ -141,7 +143,7 @@ export const Secondary: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
       {iconButtonVariants.map((variant) => (
-        <VStack key={variant} spacing={1}>
+        <VStack key={variant} gap={1}>
           <Text fontSize="subtext" color="gray.600">{variant}</Text>
           <IconButton {...args} colorScheme="secondary" variant={variant} />
         </VStack>
@@ -157,7 +159,7 @@ export const Danger: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
       {iconButtonVariants.map((variant) => (
-        <VStack key={variant} spacing={1}>
+        <VStack key={variant} gap={1}>
           <Text fontSize="subtext" color="gray.600">{variant}</Text>
           <IconButton {...args} colorScheme="danger" variant={variant} />
         </VStack>
@@ -173,7 +175,7 @@ export const Success: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
       {iconButtonVariants.map((variant) => (
-        <VStack key={variant} spacing={1}>
+        <VStack key={variant} gap={1}>
           <Text fontSize="subtext" color="gray.600">{variant}</Text>
           <IconButton {...args} colorScheme="success" variant={variant} />
         </VStack>
@@ -189,7 +191,7 @@ export const Warning: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
       {iconButtonVariants.map((variant) => (
-        <VStack key={variant} spacing={1}>
+        <VStack key={variant} gap={1}>
           <Text fontSize="subtext" color="gray.600">{variant}</Text>
           <IconButton {...args} colorScheme="warning" variant={variant} />
         </VStack>
@@ -205,7 +207,7 @@ export const Neutral: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
       {iconButtonVariants.map((variant) => (
-        <VStack key={variant} spacing={1}>
+        <VStack key={variant} gap={1}>
           <Text fontSize="subtext" color="gray.600">{variant}</Text>
           <IconButton {...args} colorScheme="neutral" variant={variant} />
         </VStack>
@@ -221,7 +223,7 @@ export const SolidVariant: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
       {iconButtonColorSchemes.map((colorScheme) => (
-        <VStack key={colorScheme} spacing={1}>
+        <VStack key={colorScheme} gap={1}>
           <Text fontSize="subtext" color="gray.600">{colorScheme}</Text>
           <IconButton {...args} colorScheme={colorScheme} variant="solid" />
         </VStack>
@@ -237,7 +239,7 @@ export const SoftVariant: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
       {iconButtonColorSchemes.map((colorScheme) => (
-        <VStack key={colorScheme} spacing={1}>
+        <VStack key={colorScheme} gap={1}>
           <Text fontSize="subtext" color="gray.600">{colorScheme}</Text>
           <IconButton {...args} colorScheme={colorScheme} variant="soft" />
         </VStack>
@@ -253,7 +255,7 @@ export const OutlineVariant: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
       {iconButtonColorSchemes.map((colorScheme) => (
-        <VStack key={colorScheme} spacing={1}>
+        <VStack key={colorScheme} gap={1}>
           <Text fontSize="subtext" color="gray.600">{colorScheme}</Text>
           <IconButton {...args} colorScheme={colorScheme} variant="outline" />
         </VStack>
@@ -269,7 +271,7 @@ export const GhostVariant: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
       {iconButtonColorSchemes.map((colorScheme) => (
-        <VStack key={colorScheme} spacing={1}>
+        <VStack key={colorScheme} gap={1}>
           <Text fontSize="subtext" color="gray.600">{colorScheme}</Text>
           <IconButton {...args} colorScheme={colorScheme} variant="ghost" />
         </VStack>

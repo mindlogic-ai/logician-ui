@@ -1,10 +1,10 @@
 import { forwardRef } from 'react';
-import { TableBodyProps, Tbody as ChakraTbody } from '@chakra-ui/react';
+import { Table } from '@chakra-ui/react';
 
-export const Tbody = forwardRef<HTMLTableSectionElement, TableBodyProps>(
+export const Tbody = forwardRef<HTMLTableSectionElement, Table.BodyProps>(
   (props, ref) => {
     return (
-      <ChakraTbody ref={ref} color="gray.1500" fontWeight="medium" {...props} />
+      <Table.Body ref={ref} color="gray.1500" fontWeight="medium" {...props} />
     );
   }
 );

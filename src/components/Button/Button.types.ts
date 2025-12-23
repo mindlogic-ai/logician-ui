@@ -51,7 +51,10 @@ export type ButtonVariant = 'solid' | 'soft' | 'outline' | 'ghost';
  * <Button colorScheme="secondary" variant="outline">Cancel</Button>
  * ```
  */
-export type ButtonProps = Omit<ChakraButtonProps, 'variant' | 'colorScheme'> & {
+export type ButtonProps = Omit<
+  ChakraButtonProps,
+  'variant' | 'colorScheme' | 'leftIcon' | 'rightIcon'
+> & {
   /**
    * The color scheme of the button (semantic color family).
    * Overrides Chakra UI's colorScheme prop.

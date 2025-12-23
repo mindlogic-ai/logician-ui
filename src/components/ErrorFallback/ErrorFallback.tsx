@@ -70,7 +70,7 @@ User Agent: ${errorInfo.userAgent}`;
           bgColor="white"
           boxShadow="2xl"
         >
-          <VStack spacing={6} align="center" w="full" mx="auto">
+          <VStack gap={6} align="center" w="full" mx="auto">
             {/* Error Icon */}
             <Box
               position="relative"
@@ -82,7 +82,7 @@ User Agent: ${errorInfo.userAgent}`;
             </Box>
 
             {/* Error Title */}
-            <VStack spacing={3} align="center" w="full">
+            <VStack gap={3} align="center" w="full">
               <H1 color="gray.1200" fontSize="h2" fontWeight="bold">
                 {translate('error_boundary_title')}
               </H1>
@@ -118,7 +118,7 @@ User Agent: ${errorInfo.userAgent}`;
               <H4 color="primary.dark" mb={4} textAlign="center">
                 {translate('support_information')}
               </H4>
-              <VStack spacing={2} align="stretch" mb={4}>
+              <VStack gap={2} align="stretch" mb={4}>
                 <Flex justify="space-between">
                   <Text color="primary.main" fontWeight="semibold">
                     {translate('error_id')}:
@@ -171,20 +171,18 @@ User Agent: ${errorInfo.userAgent}`;
                   size="sm"
                   minW="fit-content"
                   variant="ghost"
-                  leftIcon={<FaRegCopy boxSize="xs" />}
                 >
-                  {translate('copy_error_details')}
+                  <FaRegCopy boxSize="xs" /> {translate('copy_error_details')}
                 </Button>
               </Flex>
             </Card>
 
             {/* Action Buttons */}
-            <VStack spacing={3} w="full" align="center">
+            <VStack gap={3} w="full" align="center">
               <Button
                 onClick={onErrorReset}
                 size="lg"
                 variant="solid"
-                leftIcon={<HiRefresh />}
                 _hover={{
                   transform: 'translateY(-1px)',
                   boxShadow: 'lg',
@@ -192,16 +190,15 @@ User Agent: ${errorInfo.userAgent}`;
                 w="full"
                 maxW="300px"
               >
-                {translate('try_again')}
+                <HiRefresh /> {translate('try_again')}
               </Button>
 
               <Button
                 onClick={() => window.location.reload()}
                 size="sm"
                 variant="ghost"
-                leftIcon={<HiRefresh />}
               >
-                {translate('refresh_page')}
+                <HiRefresh /> {translate('refresh_page')}
               </Button>
             </VStack>
           </VStack>

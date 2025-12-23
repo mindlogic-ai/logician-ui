@@ -130,21 +130,23 @@ export const Pagination = ({
               <IconButton
                 colorScheme="neutral"
                 variant="ghost"
-                icon={<IoIosArrowBack boxSize="sm" />}
                 aria-label={translate('previous') as string}
                 onClick={handleBack}
-                isDisabled={currentPage <= 1}
+                disabled={currentPage <= 1}
                 color={currentPage === 1 ? 'gray.400' : 'gray.1500'}
-              />
+              >
+                <IoIosArrowBack boxSize="sm" />
+              </IconButton>
               <IconButton
                 colorScheme="neutral"
                 variant="ghost"
-                icon={<IoChevronForward boxSize="sm" />}
                 aria-label={translate('go_next_page_button') as string}
                 onClick={handleNext}
-                isDisabled={currentPage >= maxPage}
+                disabled={currentPage >= maxPage}
                 color={currentPage === maxPage ? 'gray.400' : 'gray.1500'}
-              />
+              >
+                <IoChevronForward boxSize="sm" />
+              </IconButton>
             </Flex>
           </>
         )}

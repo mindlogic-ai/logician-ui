@@ -8,8 +8,8 @@ const meta = {
   title: 'Components/CarouselModal',
   component: CarouselModal,
   args: {
-    isOpen: true,
-    onClose: () => alert('should close here!'),
+    open: true,
+    onOpenChange: () => alert('should close here!'),
     slides: [
       {
         image: 'https://via.placeholder.com/800x400.png?text=Slide+1',

@@ -13,8 +13,7 @@ const meta = {
         options: ['sm', 'md', 'lg'],
       },
     },
-    isDisabled: { control: 'boolean' },
-    isInvalid: { control: 'boolean' },
+    disabled: { control: 'boolean' },
     leftAddon: { control: 'text' },
     rightAddon: { control: 'text' },
   },
@@ -28,8 +27,7 @@ export const Basic: Story = {
   args: {
     placeholder: 'mysite',
     size: 'md',
-    isDisabled: false,
-    isInvalid: false,
+    disabled: false,
     leftAddon: 'https://',
     rightAddon: '.com',
   },
@@ -39,19 +37,7 @@ export const Disabled: Story = {
   args: {
     placeholder: 'mysite',
     size: 'md',
-    isDisabled: true,
-    isInvalid: false,
-    leftAddon: 'https://',
-    rightAddon: '.com',
-  },
-};
-
-export const Invalid: Story = {
-  args: {
-    placeholder: 'mysite',
-    size: 'md',
-    isDisabled: false,
-    isInvalid: true,
+    disabled: true,
     leftAddon: 'https://',
     rightAddon: '.com',
   },
@@ -61,8 +47,7 @@ export const CustomAddons: Story = {
   args: {
     placeholder: 'mysite',
     size: 'md',
-    isDisabled: false,
-    isInvalid: false,
+    disabled: false,
     leftAddon: 'ftp://',
     rightAddon: '/home',
   },

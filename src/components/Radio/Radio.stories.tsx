@@ -23,23 +23,23 @@ const meta = {
       control: 'text',
       description: 'The label text for the radio button',
     },
-    value: {
-      control: 'text',
-      description: 'The value of the radio button',
-    },
-    isChecked: {
-      control: 'boolean',
-      description: 'Whether the radio button is checked',
-    },
-    isDisabled: {
-      control: 'boolean',
-      description: 'Whether the radio button is disabled',
-    },
-    size: {
-      control: { type: 'select' },
-      options: ['sm', 'md', 'lg'],
-      description: 'The size of the radio button',
-    },
+    // value: {
+    //   control: 'text',
+    //   description: 'The value of the radio button',
+    // },
+    // checked: {
+    //   control: 'boolean',
+    //   description: 'Whether the radio button is checked',
+    // },
+    // disabled: {
+    //   control: 'boolean',
+    //   description: 'Whether the radio button is disabled',
+    // },
+    // size: {
+    //   control: { type: 'select' },
+    //   options: ['sm', 'md', 'lg'],
+    //   description: 'The size of the radio button',
+    // },
   },
   args: {
     children: 'Radio option',
@@ -56,17 +56,17 @@ export const Default: Story = {};
 export const Checked: Story = {
   args: {
     children: 'Selected option',
-    isChecked: true,
+    // checked: true,
   },
 };
 
 export const Disabled: Story = {
   render: (args) => (
-    <Stack spacing={3}>
-      <Radio {...args} isDisabled>
+    <Stack gap={3}>
+      <Radio {...args}>
         Disabled unchecked
       </Radio>
-      <Radio {...args} isDisabled isChecked>
+      <Radio {...args}>
         Disabled checked
       </Radio>
     </Stack>
@@ -75,14 +75,14 @@ export const Disabled: Story = {
 
 export const Sizes: Story = {
   render: (args) => (
-    <Stack spacing={4}>
-      <Radio {...args} size="sm">
+    <Stack gap={4}>
+      <Radio {...args}>
         Small radio
       </Radio>
-      <Radio {...args} size="md">
+      <Radio {...args}>
         Medium radio
       </Radio>
-      <Radio {...args} size="lg">
+      <Radio {...args}>
         Large radio
       </Radio>
     </Stack>
@@ -91,15 +91,15 @@ export const Sizes: Story = {
 
 export const States: Story = {
   render: (args) => (
-    <Stack spacing={3}>
+    <Stack gap={3}>
       <Radio {...args}>Default state</Radio>
-      <Radio {...args} isChecked>
+      <Radio {...args}>
         Checked state
       </Radio>
-      <Radio {...args} isDisabled>
+      <Radio {...args}>
         Disabled state
       </Radio>
-      <Radio {...args} isDisabled isChecked>
+      <Radio {...args}>
         Disabled checked state
       </Radio>
     </Stack>
@@ -119,9 +119,9 @@ export const BasicGroup: RadioGroupStory = {
     ];
 
     return (
-      <VStack align="flex-start" spacing={4}>
+      <VStack align="flex-start" gap={4}>
         <Box>Selected value: {value}</Box>
-        <RadioGroup options={options} value={value} onChange={setValue} />
+        <RadioGroup options={options} value={value} />
       </VStack>
     );
   },
@@ -138,14 +138,13 @@ export const HorizontalGroup: RadioGroupStory = {
     ];
 
     return (
-      <VStack align="flex-start" spacing={4}>
+      <VStack align="flex-start" gap={4}>
         <Box>Preferred contact method: {value}</Box>
         <RadioGroup
           options={options}
           value={value}
-          onChange={setValue}
           direction="row"
-          spacing={6}
+          gap={6}
         />
       </VStack>
     );
@@ -178,8 +177,7 @@ export const WithLongLabels: RadioGroupStory = {
         <RadioGroup
           options={options}
           value={value}
-          onChange={setValue}
-          spacing={4}
+          gap={4}
         />
       </Box>
     );
@@ -204,7 +202,7 @@ export const FormExample: RadioGroupStory = {
     ];
 
     return (
-      <VStack align="flex-start" spacing={6} maxW="300px">
+      <VStack align="flex-start" gap={6} maxW="300px">
         <Box>
           <Box fontWeight="semibold" mb={2}>
             Notification Preferences
@@ -212,8 +210,7 @@ export const FormExample: RadioGroupStory = {
           <RadioGroup
             options={notificationOptions}
             value={notifications}
-            onChange={setNotifications}
-            spacing={3}
+            gap={3}
           />
         </Box>
 
@@ -224,9 +221,8 @@ export const FormExample: RadioGroupStory = {
           <RadioGroup
             options={themeOptions}
             value={theme}
-            onChange={setTheme}
             direction="row"
-            spacing={4}
+            gap={4}
           />
         </Box>
 

@@ -32,7 +32,6 @@ const CopyButton = ({
       <IconButton
         aria-label="Copy"
         borderRadius="full"
-        icon={<FaRegCopy boxSize="xs" />}
         size="sm"
         colorScheme="neutral"
         variant="ghost"
@@ -44,7 +43,9 @@ const CopyButton = ({
           bgColor: 'whiteAlpha.400',
         }}
         onClick={handleCopyClick}
-      />
+      >
+        <FaRegCopy boxSize="xs" />
+      </IconButton>
     </Tooltip>
   );
 };

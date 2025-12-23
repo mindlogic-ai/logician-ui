@@ -36,7 +36,7 @@ export const Default: Story = {
  */
 export const AllVariants: Story = {
   render: () => (
-    <VStack spacing={4} align="stretch">
+    <VStack gap={4} align="stretch">
       <Alert status="info">
         This is an info alert - use for general information.
       </Alert>
