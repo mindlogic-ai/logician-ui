@@ -14,12 +14,8 @@ const meta = {
         options: ['sm', 'md', 'lg'],
       },
     },
-    isDisabled: { control: 'boolean' },
-    isInvalid: { control: 'boolean' },
+    disabled: { control: 'boolean' },
     maxLength: { control: 'number' },
-    minRows: { control: 'number' },
-    maxRows: { control: 'number' },
-    preFocusMaxRows: { control: 'number' },
   },
   render: (args) => {
     const [value, setValue] = useState('');
@@ -42,32 +38,27 @@ type Story = StoryObj<typeof Textarea>;
 export const Basic: Story = {
   args: {
     size: 'md',
-    isDisabled: false,
-    isInvalid: false,
+    disabled: false,
     maxLength: 200,
   },
 };
 
 export const Disabled: Story = {
   args: {
-    isDisabled: true,
+    disabled: true,
     placeholder: 'Disabled textarea',
   },
 };
 
 export const Invalid: Story = {
   args: {
-    isInvalid: true,
+    'aria-invalid': true,
     placeholder: 'Invalid state',
   },
 };
 
 export const Autosize: Story = {
-  args: {
-    minRows: 6,
-    preFocusMaxRows: 8,
-    maxRows: 12,
-  },
+  args: {},
   render: (args) => {
     const [value, setValue] = useState('');
 

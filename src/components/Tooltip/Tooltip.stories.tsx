@@ -94,10 +94,11 @@ export const CopyButtonExample: Story = {
         <Tooltip label={tooltipLabel} isOpen={isTooltipOpen} placement="top">
           <IconButton
             aria-label="Copy text"
-            icon={<FaRegCopy />}
             onClick={handleCopy}
-            variant="tertiary"
-          />
+            variant="ghost"
+          >
+            <FaRegCopy />
+          </IconButton>
         </Tooltip>
       </Box>
     );

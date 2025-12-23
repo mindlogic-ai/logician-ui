@@ -2,7 +2,7 @@ import { Box, Flex } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
 import { Chip, useCaseStyles } from '.';
-import { ChipUseCase } from './Chip.types';
+import { ChipUseCase, ChipVariant } from './Chip.types';
 
 const meta = {
   title: 'Components/Chip',
@@ -21,7 +21,7 @@ export const Basic: Story = {};
 export const AllChipVariants: Story = {
   render: (args) => {
     const useCases = Object.keys(useCaseStyles) as Array<ChipUseCase>;
-    const variants = ['solid', 'outline', 'subtle'];
+    const variants: ChipVariant[] = ['solid', 'subtle'];
     return (
       <Box>
         <Flex mb="16px" gap="16px" align="center">
@@ -29,10 +29,10 @@ export const AllChipVariants: Story = {
           <Chip {...args} />
         </Flex>
         {useCases.map((useCase) => (
-          <Flex mb="16px" gap="16px" align="center">
+          <Flex key={useCase} mb="16px" gap="16px" align="center">
             <p style={{ width: '100px' }}>{useCase}</p>
             {variants.map((variant) => (
-              <div>
+              <div key={variant}>
                 <p>{variant}</p>
                 <Chip {...args} useCase={useCase} variant={variant} />
               </div>

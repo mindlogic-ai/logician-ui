@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { LogicianProvider } from './LogicianProvider';
+import { LogicianProvider, LogicianProviderProps } from './LogicianProvider';
 import { Button } from '../Button';
 import { H1, Text } from '../Typography';
 import { Box, VStack } from '@chakra-ui/react';
@@ -8,11 +8,11 @@ const meta = {
   title: 'Setup/LogicianProvider',
   component: LogicianProvider,
   parameters: { disableLogicianProvider: true },
-} satisfies Meta<typeof LogicianProvider>;
+} satisfies Meta<LogicianProviderProps>;
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<LogicianProviderProps>;
 
 const SampleContent = () => (
   <VStack gap={6} p={8} align="start">
@@ -41,30 +41,24 @@ export const Default: Story = {
   ),
 };
 
-export const WithCustomTheme: Story = {
+export const WithCustomContent: Story = {
   render: () => {
-    const customTheme = {
-      colors: {
-        primary: {
-          light: 'purple.300',
-          main: 'purple.500',
-          dark: 'purple.700',
-        },
-      },
-      semanticTokens: {
-        colors: {
-          primary: {
-            light: 'purple.300',
-            main: 'purple.500',
-            dark: 'purple.700',
-          },
-        },
-      },
-    };
-
     return (
-      <LogicianProvider theme={customTheme}>
-        <SampleContent />
+      <LogicianProvider>
+        <VStack gap={6} p={8} align="start">
+          <H1 size="lg">Custom Content Example</H1>
+          <Text fontSize="p">
+            This demonstrates the LogicianProvider with different content.
+            To customize the theme in Chakra UI v3, use createSystem() to create
+            a custom system and pass it via the value prop.
+          </Text>
+          <Box>
+            <Button variant="primary" mr={4}>
+              Action Button
+            </Button>
+            <Button variant="secondary">Cancel</Button>
+          </Box>
+        </VStack>
       </LogicianProvider>
     );
   },
