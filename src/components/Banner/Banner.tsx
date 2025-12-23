@@ -63,8 +63,9 @@ export const Banner = forwardRef(
               w="100%"
               flexDir="column"
               justify="center"
-              {...styles.text}
-              {...textStyles[variant]}
+              fontSize={styles.text.fontSize}
+              lineHeight={styles.text.lineHeight}
+              color={textStyles[variant].color}
             >
               {children}
             </Flex>

@@ -32,7 +32,7 @@ export const Basic: Story = {
 
 export const Round: Story = {
   args: {
-    isRound: true,
+    rounded: 'full',
   },
 };
 

@@ -45,7 +45,7 @@ export const Danger: Story = {
 
 export const AllSizes: Story = {
   render: () => (
-    <VStack spacing={4} align="stretch">
+    <VStack gap={4} align="stretch">
       <Banner size="sm" variant="info">
         <Subtext color="inherit">Small banner with Subtext component</Subtext>
       </Banner>

@@ -51,7 +51,7 @@ export const Default: Story = {
 
 export const BasicUsage: Story = {
   render: () => (
-    <VStack spacing={6} align="stretch" width="400px">
+    <VStack gap={6} align="stretch" width="400px">
       <Box>
         <Text mb={2} fontWeight="semibold">
           Basic Two-Segment Progress
@@ -72,7 +72,7 @@ export const BasicUsage: Story = {
 
 export const MultipleSegments: Story = {
   render: () => (
-    <VStack spacing={6} align="stretch" width="400px">
+    <VStack gap={6} align="stretch" width="400px">
       <Box>
         <Text mb={2} fontWeight="semibold">
           Multiple Segments with Different Colors
@@ -96,7 +96,7 @@ export const MultipleSegments: Story = {
 
 export const WithStripes: Story = {
   render: () => (
-    <VStack spacing={6} align="stretch" width="400px">
+    <VStack gap={6} align="stretch" width="400px">
       <Box>
         <Text mb={2} fontWeight="semibold">
           Progress Segments with Stripes
@@ -130,7 +130,7 @@ export const WithStripes: Story = {
 
 export const DifferentSizes: Story = {
   render: () => (
-    <VStack spacing={6} align="stretch" width="400px">
+    <VStack gap={6} align="stretch" width="400px">
       <Box>
         <Text mb={2} fontWeight="semibold">
           Small Progress Bar (8px)
@@ -166,7 +166,7 @@ export const DifferentSizes: Story = {
 
 export const RealWorldExample: Story = {
   render: () => (
-    <VStack spacing={6} align="stretch" width="500px">
+    <VStack gap={6} align="stretch" width="500px">
       <Box>
         <Text mb={2} fontWeight="semibold">
           Member Invitation Progress
@@ -200,7 +200,7 @@ export const RealWorldExample: Story = {
 
 export const EmptyState: Story = {
   render: () => (
-    <VStack spacing={6} align="stretch" width="400px">
+    <VStack gap={6} align="stretch" width="400px">
       <Box>
         <Text mb={2} fontWeight="semibold">
           Empty Progress Bar
@@ -218,7 +218,7 @@ export const EmptyState: Story = {
 
 export const SingleSegment: Story = {
   render: () => (
-    <VStack spacing={6} align="stretch" width="400px">
+    <VStack gap={6} align="stretch" width="400px">
       <Box>
         <Text mb={2} fontWeight="semibold">
           Single Segment Progress
@@ -236,7 +236,7 @@ export const SingleSegment: Story = {
 
 export const CustomColors: Story = {
   render: () => (
-    <VStack spacing={6} align="stretch" width="400px">
+    <VStack gap={6} align="stretch" width="400px">
       <Box>
         <Text mb={2} fontWeight="semibold">
           Custom Color Segments

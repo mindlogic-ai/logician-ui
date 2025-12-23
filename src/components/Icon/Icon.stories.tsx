@@ -24,12 +24,12 @@ const IconGroup = ({ title, icons, color = "gray.700" }: {
 }) => (
   <Box mb={6}>
     <Text fontSize="md" fontWeight="bold" mb={3}>{title}</Text>
-    <Wrap spacing={6}>
+    <Wrap gap={6}>
       {icons.map(({ component: IconComponent, name }) => (
         <WrapItem key={name}>
-          <VStack spacing={4} p={2} borderRadius="md" bg="gray.50" minW="140px" maxW="140px">
+          <VStack gap={4} p={2} borderRadius="md" bg="gray.50" minW="140px" maxW="140px">
             <IconComponent boxSize="24px" color={color} />
-            <Text fontSize="12px" color="gray.1500" textAlign="center" lineHeight="1.1" noOfLines={2}>
+            <Text fontSize="12px" color="gray.1500" textAlign="center" lineHeight="1.1" lineClamp={2}>
               {name}
             </Text>
           </VStack>
@@ -78,7 +78,7 @@ export const AllIcons: Story = {
     const totalCount = Object.values(iconCategories).reduce((sum, arr) => sum + arr.length, 0);
 
     return (
-      <VStack spacing={4} align="start">
+      <VStack gap={4} align="start">
         <Text fontSize="sm" fontWeight="bold">모든 아이콘 라이브러리 (총 {totalCount}개) - 자동 생성됨! 🎉</Text>
 
         <IconGroup
@@ -122,13 +122,13 @@ export const BasicUsage: Story = {
     }, []);
 
     return (
-      <VStack spacing={6} align="start">
+      <VStack gap={6} align="start">
         <Text fontSize="sm" fontWeight="bold">기본 사용법</Text>
         <Text color="gray.600" mb={4}>
           각 아이콘을 개별적으로 import해서 사용할 수 있습니다.
         </Text>
 
-        <SimpleGrid columns={3} spacing={8}>
+        <SimpleGrid columns={3} gap={8}>
           {sampleIcons.map(({ name, type, color }) => {
             const IconComponent = Icons[name];
             return IconComponent ? (
@@ -152,9 +152,9 @@ export const Sizes: Story = {
     const SampleIcon = Icons[sampleIconName];
 
     return (
-      <VStack maxW="1400px" spacing={4} align="start">
+      <VStack maxW="1400px" gap={4} align="start">
         <Text fontSize="sm" fontWeight="bold">크기 조절</Text>
-        <HStack spacing={4} align="center">
+        <HStack gap={4} align="center">
           {['xs', 'sm', 'md', 'lg', 'xl'].map((size) => (
             <VStack key={size}>
               <SampleIcon boxSize={size} color="blue.500" />
@@ -176,9 +176,9 @@ export const Colors: Story = {
     const colors = ['red.500', 'green.500', 'blue.500', 'purple.500', 'orange.500'];
 
     return (
-      <VStack spacing={4} align="start">
+      <VStack gap={4} align="start">
         <Text fontSize="sm" fontWeight="bold">색상 조절</Text>
-        <HStack spacing={6}>
+        <HStack gap={6}>
           {colors.map((color) => (
             <VStack key={color}>
               <SampleIcon boxSize="sm" color={color} />
@@ -197,7 +197,7 @@ const CustomDashboardIcon = createIcon(MdDashboard, 'CustomDashboardIcon');
 
 export const CreateIconDemo: Story = {
   render: () => (
-  <VStack spacing={8} align="start" maxW="900px">
+  <VStack gap={8} align="start" maxW="900px">
     <Box>
       <Text fontSize="lg" fontWeight="bold" mb={4}>createIcon 유틸리티 사용법</Text>
       <Text fontSize="sm" color="gray.600" mb={4}>
@@ -222,7 +222,7 @@ const CustomBuildingIcon = createIcon(
 
       <Box borderTop="1px solid" borderColor="gray.200" pt={4}>
         <Text fontSize="sm" fontWeight="semibold" mb={3}>결과:</Text>
-        <HStack spacing={6}>
+        <HStack gap={6}>
           <VStack>
             <CustomBuildingIcon boxSize="xs" color="blue.500" />
             <Text fontSize="xs">xs (16px)</Text>
@@ -261,7 +261,7 @@ const CustomDashboardIcon = createIcon(
 
       <Box borderTop="1px solid" borderColor="gray.200" pt={4}>
         <Text fontSize="sm" fontWeight="semibold" mb={3}>결과 (색상 변경):</Text>
-        <HStack spacing={6}>
+        <HStack gap={6}>
           <VStack>
             <CustomDashboardIcon boxSize="md" color="red.500" />
             <Text fontSize="xs">red.500</Text>
@@ -304,7 +304,7 @@ const MyCustomIcon = createIcon(
 
     <Box w="100%" bg="blue.50" p={4} borderRadius="md" borderLeft="4px solid" borderColor="blue.500">
       <Text fontSize="md" fontWeight="bold" mb={2}>✨ 주요 기능</Text>
-      <VStack align="start" spacing={2} fontSize="sm">
+      <VStack align="start" gap={2} fontSize="sm">
         <Text>• <strong>boxSize 지원:</strong> xs, sm, md, lg, xl (16px ~ 40px)</Text>
         <Text>• <strong>Chakra UI 스타일링:</strong> color, bg, margin, padding 등 모든 Box props 사용 가능</Text>
         <Text>• <strong>Tree shaking:</strong> 사용하지 않는 아이콘은 번들에서 제외됨</Text>

@@ -37,8 +37,8 @@ export const Default: Story = {
 
 export const DifferentPlacements: Story = {
   render: () => (
-    <VStack spacing={8} p={8}>
-      <HStack spacing={8}>
+    <VStack gap={8} p={8}>
+      <HStack gap={8}>
         <Tooltip label="Top tooltip" placement="top">
           <Button>Top</Button>
         </Tooltip>

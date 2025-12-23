@@ -21,7 +21,7 @@ export const Carousel: React.FC<CarouselProps> = ({
   const slidesCount = slides.length;
 
   // Determine button size based on screen size
-  const buttonSize = useBreakpointValue({ base: 'sm', md: 'md' });
+  const buttonSize = useBreakpointValue({ base: 'sm', md: 'md' }) as 'sm' | 'md';
 
   // Controlled vs Uncontrolled
   const isControlled = controlledCurrentSlide !== undefined;

@@ -105,7 +105,7 @@ export const WithCustomContent = {
     options: [
       {
         label: (
-          <HStack spacing={2}>
+          <HStack gap={2}>
             <Icon as={FiHome} />
             <Text>Home</Text>
           </HStack>
@@ -114,7 +114,7 @@ export const WithCustomContent = {
       },
       {
         label: (
-          <HStack spacing={2}>
+          <HStack gap={2}>
             <Icon as={FiUser} />
             <Text>Profile</Text>
           </HStack>
@@ -123,7 +123,7 @@ export const WithCustomContent = {
       },
       {
         label: (
-          <HStack spacing={2}>
+          <HStack gap={2}>
             <Icon as={FiSettings} />
             <Text>Settings</Text>
           </HStack>

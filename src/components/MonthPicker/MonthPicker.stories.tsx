@@ -30,7 +30,7 @@ const meta = {
       );
 
       return (
-        <VStack spacing={4} align="start" width="400px">
+        <VStack gap={4} align="start" width="400px">
           {context.parameters?.additionalContent}
           <Story
             args={{

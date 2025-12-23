@@ -37,7 +37,7 @@ export const Controlled: Story = {
     };
 
     return (
-      <Stack direction="row" align="center" spacing={4}>
+      <Stack direction="row" align="center" gap={4}>
         <Switch
           {...args}
           isChecked={isChecked} // Controlled isChecked state
