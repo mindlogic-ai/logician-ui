@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Box, Flex, useTheme } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 
 import { FileItemProps } from '@/components/FileItem/FileItem.types';
 import {
@@ -27,7 +27,6 @@ export const FileItem = ({
   isDeleting = false,
   ...rest
 }: FileItemProps) => {
-  const theme = useTheme();
   const errorColor = 'danger.main';
 
   const isUploadingFile =

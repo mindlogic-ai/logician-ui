@@ -1,10 +1,11 @@
 import { ChangeEventHandler, forwardRef } from 'react';
-import { Box, Flex, Input, useTheme } from '@chakra-ui/react';
+import { Box, Flex, Input } from '@chakra-ui/react';
 
 import { LuUpload } from '@/components/Icon';
 import { Spinner } from '@/components/Spinner';
 import { Text } from '@/components/Typography';
 import { useTranslate } from '@/hooks/useTranslate';
+import { colors } from '@/theme/colors';
 
 import { FileInputProps } from './FileInput.types';
 
@@ -20,7 +21,6 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
     },
     ref
   ) => {
-    const theme = useTheme();
     const translate = useTranslate();
 
     const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -75,7 +75,7 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
             flexDir="column"
             justify="center"
             align="center"
-            bgColor={`${theme.colors.white}da`}
+            bgColor={`${colors.white}da`}
             opacity={bgImage ? 0 : 1}
             transition="ease-in"
             _groupHover={{ opacity: 1 }} // Set opacity to 1 on parent hover

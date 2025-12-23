@@ -6,7 +6,7 @@ import ReactSelect, {
   MenuListProps,
   OptionProps,
 } from 'react-select';
-import { Box, useTheme } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 
 import { resolveStyle } from './_utils/resolveStyle';
 import { VirtualizedMenuList } from './MenuList';
@@ -20,6 +20,10 @@ import {
 } from './Select.styles';
 import { SelectProps } from './Select.types';
 
+// Static values for theme tokens (Chakra v3 compatibility)
+const space05 = '2px';
+const space1 = '4px';
+
 export const Select = <
   Option,
   IsMulti extends boolean = false,
@@ -32,7 +36,6 @@ export const Select = <
   'data-testid': dataTestId,
   ...rest
 }: SelectProps<Option, IsMulti, Group> & { 'data-testid'?: string }) => {
-  const theme = useTheme();
   const CustomOption = (props: OptionProps<Option, IsMulti, Group>) => {
     const optionValue = (props.data as any)?.value || props.label || 'option';
     return (
@@ -131,7 +134,7 @@ export const Select = <
               ...resolveStyle(
                 {
                   ...base,
-                  padding: `0px ${theme.space[1]}`,
+                  padding: `0px ${space1}`,
                   // Important for the virtualized list - DON'T override overflow
                   // as we need the default 'auto' from react-select for scrolling to work
                 },
@@ -144,7 +147,7 @@ export const Select = <
                 {
                   ...base,
                   textAlign: 'left',
-                  padding: `${theme.space[0.5]} ${theme.space[1]}`,
+                  padding: `${space05} ${space1}`,
                   ...optionStyles(state),
                 },
                 styles?.option,

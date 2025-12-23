@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { SingleValue } from 'react-select';
-import { Flex, useTheme } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 
 import { IoChevronForward, IoIosArrowBack } from '@/components/Icon';
 import { IconButton } from '@/components/IconButton';
@@ -10,6 +10,10 @@ import { useTranslate } from '@/hooks/useTranslate';
 import { Select } from '../Select';
 import { SelectOption } from '../Select/Select.types';
 import { PaginationProps } from './Pagination.types';
+
+// Static values for theme tokens (Chakra v3 compatibility)
+const smFontSize = '0.875rem';
+const space1 = '4px';
 
 /**
  * A pagination component that allows users to navigate through pages.
@@ -36,7 +40,6 @@ export const Pagination = ({
   onItemsPerPageOptionChange,
   ...rest
 }: PaginationProps) => {
-  const theme = useTheme();
   const translate = useTranslate();
   const [uncontrolledCurrentPage, setUncontrolledCurrentPage] =
     useState<number>(1);
@@ -88,13 +91,13 @@ export const Pagination = ({
               styles={{
                 control: (base, state) => ({
                   ...base,
-                  fontSize: theme.fontSizes.sm,
+                  fontSize: smFontSize,
                   padding: 0,
                   minHeight: '28px',
                 }),
                 dropdownIndicator: (base, props) => ({
                   ...base,
-                  padding: `0 ${theme.space[1]}`,
+                  padding: `0 ${space1}`,
                 }),
               }}
               options={itemsPerPageOptions.map((option) => ({
