@@ -1,13 +1,12 @@
 import { forwardRef } from 'react';
-import { Heading, HeadingProps, useTheme } from '@chakra-ui/react';
+import { Heading, HeadingProps } from '@chakra-ui/react';
 
 export const H2 = forwardRef<HTMLHeadingElement, HeadingProps>((props, ref) => {
-  const theme = useTheme();
   return (
     <Heading
       ref={ref}
       as="h2"
-      fontSize={theme.fontSizes.h2}
+      fontSize="h2"
       fontWeight="semibold"
       wordBreak="keep-all"
       {...props}

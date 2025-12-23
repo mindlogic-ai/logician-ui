@@ -1,9 +1,18 @@
 import { useState } from 'react';
-import { Button, Flex, useTheme } from '@chakra-ui/react';
+import { Button, Flex } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 
 import { OptionStyles } from './SegmentedControl.styles';
 import { SegmentedControlProps } from './SegmentedControl.types';
+
+const RADII: Record<string, string> = {
+  none: '0',
+  sm: '6px',
+  md: '8px',
+  lg: '12px',
+  xl: '32px',
+  full: '9999px',
+};
 
 export const SegmentedControl = ({
   options,
@@ -14,7 +23,6 @@ export const SegmentedControl = ({
   ...rest
 }: SegmentedControlProps) => {
   const [internalValue, setInternalValue] = useState(options[0].value);
-  const theme = useTheme();
 
   // Use the controlled value if provided, otherwise use the internal state
   const activeValue = value !== undefined ? value : internalValue;
@@ -26,9 +34,9 @@ export const SegmentedControl = ({
     size: SegmentedControlProps['size']
   ) => SegmentedControlProps['padding'] = (size = 'md') => {
     const paddings = {
-      xs: theme.space[1],
-      sm: theme.space[1],
-      md: theme.space[1],
+      xs: '4px',
+      sm: '4px',
+      md: '4px',
       lg: {},
       xl: {},
     };
@@ -64,9 +72,9 @@ export const SegmentedControl = ({
           bottom: getControlPadding(size),
           left: `calc(${activeIndex * 2} * ${getControlPadding(size)})`,
           width: `calc(${100 / options.length}% - 2 * ${getControlPadding(size)})`,
-          borderRadius: theme.radii[borderRadius],
-          background: theme.colors.white,
-          boxShadow: theme.shadows.md,
+          borderRadius: RADII[borderRadius] || '8px',
+          background: 'white',
+          boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)',
         }}
       />
 

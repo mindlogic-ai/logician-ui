@@ -19,6 +19,15 @@ const config = defineConfig({
           value: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif',
         },
       },
+      fontSizes: {
+        h1: { value: '2.25em' },
+        h2: { value: '1.75em' },
+        h3: { value: '1.375em' },
+        h4: { value: '1.125em' },
+        h5: { value: '1em' },
+        p: { value: '0.875em' },
+        subtext: { value: '0.75em' },
+      },
       radii: {
         none: { value: '0' },
         sm: { value: '6px' },

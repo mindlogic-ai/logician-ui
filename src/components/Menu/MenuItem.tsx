@@ -1,4 +1,4 @@
-import { Menu, useTheme } from '@chakra-ui/react';
+import { Menu } from '@chakra-ui/react';
 
 import { ItemVariant, MenuItemProps } from './MenuItem.types';
 
@@ -8,15 +8,12 @@ export const MenuItem = ({
   icon,
   ...rest
 }: MenuItemProps) => {
-  const theme = useTheme();
   const isDangerVariant = variant === ItemVariant.Danger;
 
   return (
     // @ts-expect-error - Menu.Item accepts children but types are incomplete
     <Menu.Item
-      color={
-        isDangerVariant ? theme.semanticTokens.colors.danger.main : 'gray.1000'
-      }
+      color={isDangerVariant ? 'red.500' : 'gray.1000'}
       fontSize="p"
       borderRadius="sm"
       py={2}
@@ -24,9 +21,7 @@ export const MenuItem = ({
       fontWeight="semibold"
       gap={3}
       _hover={{
-        color: isDangerVariant
-          ? theme.semanticTokens.colors.danger.main
-          : 'gray.1500',
+        color: isDangerVariant ? 'red.500' : 'gray.1500',
         backgroundColor: 'gray.50',
       }}
       {...rest}

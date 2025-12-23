@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { SingleValue } from 'react-select';
-import { Flex, useTheme } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 
 import { IoChevronForward, IoIosArrowBack } from '@/components/Icon';
 import { IconButton } from '@/components/IconButton';
@@ -36,7 +36,6 @@ export const Pagination = ({
   onItemsPerPageOptionChange,
   ...rest
 }: PaginationProps) => {
-  const theme = useTheme();
   const translate = useTranslate();
   const [uncontrolledCurrentPage, setUncontrolledCurrentPage] =
     useState<number>(1);
@@ -88,13 +87,13 @@ export const Pagination = ({
               styles={{
                 control: (base, state) => ({
                   ...base,
-                  fontSize: theme.fontSizes.sm,
+                  fontSize: '0.875rem',
                   padding: 0,
                   minHeight: '28px',
                 }),
                 dropdownIndicator: (base, props) => ({
                   ...base,
-                  padding: `0 ${theme.space[1]}`,
+                  padding: '0 4px',
                 }),
               }}
               options={itemsPerPageOptions.map((option) => ({

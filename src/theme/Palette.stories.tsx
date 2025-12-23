@@ -3,7 +3,6 @@ import {
   Separator,
   Flex,
   Grid,
-  useTheme,
   useToken,
   VStack,
 } from '@chakra-ui/react';
@@ -22,7 +21,7 @@ import {
   Subtitle,
   Text,
 } from '../components/Typography';
-import { colors } from './colors';
+import { colors, semanticTokens } from './colors';
 
 const meta = {
   title: 'Setup/Theme',
@@ -215,7 +214,6 @@ const PrimitiveColorCard = ({
 export const SemanticTokens: Story = {
   name: 'Semantic Tokens',
   render: () => {
-    const theme = useTheme();
     return (
       <VStack gap={6} align="flex-start" w="full">
         <Box>
@@ -230,7 +228,7 @@ export const SemanticTokens: Story = {
 
         <Separator />
 
-        {Object.entries(theme.semanticTokens.colors)
+        {Object.entries(semanticTokens.colors)
           .filter(([color]) => !color.startsWith('chakra'))
           .map(([color, shades]) => (
             <Flex key={color} gap={4} align="center" wrap="wrap">
@@ -248,7 +246,7 @@ export const SemanticTokens: Story = {
                     key={shade}
                     color={color}
                     shade={shade}
-                    shadeValue={shadeValue as string}
+                    shadeValue={(shadeValue as any).value as string}
                   />
                 ))}
               </Flex>
@@ -691,10 +689,9 @@ import { H1, Text, Subtext } from '@mindlogic-ai/logician-ui';
 // Keep the original Default story for backwards compatibility
 export const Default: Story = {
   render: () => {
-    const theme = useTheme();
     return (
       <VStack gap={4} align="flex-start">
-        {Object.entries(theme.semanticTokens.colors)
+        {Object.entries(semanticTokens.colors)
           .filter(([color]) => !color.startsWith('chakra'))
           .map(([color, shades]) => (
             <Flex key={color} gap={4} align="center">
@@ -707,7 +704,7 @@ export const Default: Story = {
                     key={shade}
                     color={color}
                     shade={shade}
-                    shadeValue={shadeValue as string}
+                    shadeValue={(shadeValue as any).value as string}
                   />
                 ))}
               </Flex>

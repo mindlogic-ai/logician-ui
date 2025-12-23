@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import { Button as ChakraButton, useTheme, useToken } from '@chakra-ui/react';
+import { Button as ChakraButton, useToken } from '@chakra-ui/react';
 
 import { getButtonStyles } from './Button.styles';
 import { ButtonProps } from './Button.types';
@@ -29,11 +29,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    const theme = useTheme();
-    const primaryMainColor = useToken(
-      'colors',
-      theme.semanticTokens.colors.primary.main
-    );
+    const primaryMainColor = useToken('colors', 'blue.500')[0];
 
     const styles = getButtonStyles(colorScheme, variant);
 

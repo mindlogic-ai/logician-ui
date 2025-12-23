@@ -1,5 +1,5 @@
 import { ForwardedRef, forwardRef } from 'react';
-import { Tooltip as ChakraTooltip, useTheme } from '@chakra-ui/react';
+import { Tooltip as ChakraTooltip } from '@chakra-ui/react';
 
 import { TooltipProps } from './Tooltip.types';
 
@@ -8,7 +8,6 @@ export const Tooltip = forwardRef(
     { children, label, open, onOpenChange, ...rest }: TooltipProps,
     ref?: ForwardedRef<HTMLDivElement>
   ) => {
-    const theme = useTheme();
     return (
       <ChakraTooltip.Root
         positioning={{ placement: 'top' } as any}
@@ -23,7 +22,7 @@ export const Tooltip = forwardRef(
           ref={ref}
           css={{
             '--tooltip-bg': 'var(--chakra-colors-gray-1200)',
-            fontSize: theme.fontSizes.p,
+            fontSize: '0.875em',
           } as any}
           {...({} as any)}
         >

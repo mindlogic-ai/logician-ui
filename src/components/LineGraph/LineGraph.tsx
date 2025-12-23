@@ -1,4 +1,4 @@
-import { Box, useTheme, useToken } from '@chakra-ui/react';
+import { Box, useToken } from '@chakra-ui/react';
 import {
   CartesianGrid,
   Legend,
@@ -18,7 +18,7 @@ export const LineGraph = <T extends DatumBase>({
   displayLegend = true,
   ...rest
 }: LineGraphProps<T>) => {
-  const theme = useTheme();
+  const primaryColor = useToken('colors', 'blue.500')[0];
   return (
     <Box h="400px" {...rest}>
       <ResponsiveContainer width="100%" height="100%">
@@ -44,7 +44,7 @@ export const LineGraph = <T extends DatumBase>({
             // Props of text
             tick={{
               fill: 'gray.1200',
-              fontSize: useToken('fontSizes', 'sm')[0],
+              fontSize: '0.875rem',
             }}
             tickMargin={8}
           />
@@ -54,7 +54,7 @@ export const LineGraph = <T extends DatumBase>({
             // Props of text
             tick={{
               fill: 'gray.1200',
-              fontSize: useToken('fontSizes', 'sm')[0],
+              fontSize: '0.875rem',
             }}
             tickMargin={0}
           />
@@ -77,10 +77,7 @@ export const LineGraph = <T extends DatumBase>({
               type="monotone"
               dataKey={key}
               name={label}
-              stroke={
-                color ??
-                useToken('colors', theme.semanticTokens.colors.primary.main)[0]
-              }
+              stroke={color ?? primaryColor}
               dot={{ r: 0 }}
             />
           ))}

@@ -1,7 +1,7 @@
 'use client';
 
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
-import { Box, useTheme } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import {
   BlockTypeSelect,
   BoldItalicUnderlineToggles,
@@ -36,7 +36,6 @@ export const MDXEditor = forwardRef<
   BaseEditorProps & MDXEditorMethods,
   MDXEditorProps
 >(({ containerProps, autoFocus = true, onError, ...rest }, ref) => {
-  const theme = useTheme();
   const [error, setError] = useState<string | null>(null);
 
   // 내부적으로 Editor 인스턴스를 참조하기 위한 로컬 ref
@@ -79,8 +78,8 @@ export const MDXEditor = forwardRef<
         },
         '.mdxeditor-toolbar': {
           display: 'flex',
-          gap: theme.space[2],
-          p: theme.space[2],
+          gap: '8px',
+          p: '8px',
           borderBottomWidth: '1px',
           bg: 'gray.50',
           flexShrink: 0,
@@ -108,57 +107,57 @@ export const MDXEditor = forwardRef<
           flexDirection: 'column',
         },
         '.content-editable': {
-          padding: theme.space[4],
+          padding: '16px',
           color: 'black',
           display: 'flex',
           flexDirection: 'column',
-          gap: theme.space[1.5],
+          gap: '6px',
           flex: 1,
           height: '100%',
 
           'h1, h2, h3, h4, h5': {
-            marginBottom: theme.space[0.5],
+            marginBottom: '2px',
             fontWeight: 'bold',
           },
 
           'h1:not(:first-child), h2:not(:first-child), h3:not(:first-child), h4:not(:first-child)':
             {
-              marginTop: theme.space[1],
+              marginTop: '4px',
             },
 
           h1: {
-            fontSize: theme.fontSizes.h1,
+            fontSize: '2.25em',
           },
           h2: {
-            fontSize: theme.fontSizes.h2,
+            fontSize: '1.75em',
           },
           h3: {
-            fontSize: theme.fontSizes.h3,
+            fontSize: '1.375em',
           },
           h4: {
-            fontSize: theme.fontSizes.h4,
+            fontSize: '1.125em',
           },
           h5: {
-            fontSize: theme.fontSizes.h5,
+            fontSize: '1em',
           },
 
           'ol, ul': {
-            marginTop: theme.space[2],
-            paddingInlineStart: theme.space[4],
+            marginTop: '8px',
+            paddingInlineStart: '16px',
           },
 
           li: {
             lineHeight: '1.5',
-            marginBottom: theme.space[2],
+            marginBottom: '8px',
           },
 
           blockquote: {
             borderLeftWidth: '4px',
             borderLeftColor: 'primary.light',
             bg: 'primary.lighter',
-            pl: theme.space[4],
-            py: theme.space[2],
-            my: theme.space[4],
+            pl: '16px',
+            py: '8px',
+            my: '16px',
             color: 'gray.800',
           },
 
@@ -170,8 +169,8 @@ export const MDXEditor = forwardRef<
           code: {
             fontFamily: 'mono',
             bg: 'gray.100',
-            px: theme.space[1],
-            borderRadius: theme.radii.sm,
+            px: '4px',
+            borderRadius: '6px',
 
             span: {
               bg: 'transparent',
