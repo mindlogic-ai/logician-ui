@@ -1,25 +1,21 @@
 import React from 'react';
 import { Dialog } from '@chakra-ui/react';
 
-type DialogCloseTriggerBaseProps = React.ComponentProps<typeof Dialog.CloseTrigger>;
-
-// Extended type for Dialog.CloseTrigger
-type DialogCloseTriggerProps = DialogCloseTriggerBaseProps & {
-  color?: string;
-  _hover?: Record<string, any>;
-};
-
-const DialogCloseTrigger = Dialog.CloseTrigger as React.FC<DialogCloseTriggerProps>;
+type DialogCloseTriggerBaseProps = React.ComponentProps<
+  typeof Dialog.CloseTrigger
+>;
 
 export interface ModalCloseButtonProps extends DialogCloseTriggerBaseProps {}
 
 export const ModalCloseButton = ({ ...rest }: ModalCloseButtonProps) => {
   return (
-    <DialogCloseTrigger
-      color="gray.600"
-      _hover={{
-        color: 'primary.main',
-        backgroundColor: 'transparent',
+    <Dialog.CloseTrigger
+      css={{
+        color: 'var(--chakra-colors-gray-600)',
+        '&:hover': {
+          color: 'var(--chakra-colors-primary-main)',
+          backgroundColor: 'transparent',
+        },
       }}
       {...rest}
     />

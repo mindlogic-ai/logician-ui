@@ -21,12 +21,14 @@ export interface RadioProps extends Omit<RadioGroupItemProps, 'value'> {
   size?: 'sm' | 'md' | 'lg';
 }
 
-export interface RadioGroupProps extends Omit<RadioGroupRootProps, 'children'> {
+export interface RadioGroupProps
+  extends Omit<RadioGroupRootProps, 'children' | 'onValueChange' | 'onChange'> {
   options: RadioOption[];
   direction?: StackProps['direction'];
   gap?: number;
   /** @deprecated use gap instead */
   spacing?: number;
+  onValueChange?: (details: { value: string }) => void;
   /** @deprecated use onValueChange instead */
   onChange?: (value: string) => void;
 }

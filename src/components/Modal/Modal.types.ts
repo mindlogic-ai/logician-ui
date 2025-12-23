@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, RefObject } from 'react';
 import { Dialog } from '@chakra-ui/react';
 
 type DialogRootProps = React.ComponentProps<typeof Dialog.Root>;
@@ -9,4 +9,6 @@ export interface ModalProps extends Omit<DialogRootProps, 'children'> {
   isOpen?: boolean;
   /** @deprecated Use 'onOpenChange' instead */
   onClose?: () => void;
+  /** @deprecated Use 'initialFocusEl' instead */
+  initialFocusRef?: RefObject<HTMLElement>;
 }

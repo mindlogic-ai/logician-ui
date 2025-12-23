@@ -65,8 +65,7 @@ const pulseDot = keyframes`
 
 // Styled close trigger
 const CloseButton = (props: PopoverCloseTriggerBaseProps) => (
-  <Box
-    as={Popover.CloseTrigger}
+  <Popover.CloseTrigger
     position="absolute"
     top={2}
     right={2}
@@ -74,6 +73,8 @@ const CloseButton = (props: PopoverCloseTriggerBaseProps) => (
     {...props}
   />
 );
+
+type PlacementType = 'top' | 'bottom' | 'left' | 'right' | 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end' | 'left-start' | 'left-end' | 'right-start' | 'right-end';
 
 export const GuideCue = ({
   index,
@@ -90,7 +91,7 @@ export const GuideCue = ({
   containerRef: RefObject<HTMLElement>;
   title: string;
   description: string;
-  placement?: PopoverRootProps['positioning'];
+  placement?: PlacementType;
   top?: number | string;
   left?: number | string;
 }) => {
@@ -154,12 +155,12 @@ export const GuideCue = ({
   const pulseDotAnimation = `${pulseDot} ${PULSE_TIME}ms cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s infinite`;
 
   return (
-    <Portal containerRef={containerRef}>
+    <Portal container={containerRef}>
       <Popover.Root
         open={isOpen}
         onOpenChange={(details) => !details.open && handleClose()}
         initialFocusEl={() => ctaRef.current}
-        positioning={placement}
+        positioning={{ placement }}
         autoFocus
       >
         {isRendered && (

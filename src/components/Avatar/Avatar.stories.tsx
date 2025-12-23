@@ -7,8 +7,6 @@ const meta = {
   component: Avatar,
   args: {
     size: 'md',
-    name: '',
-    src: '',
   },
   argTypes: {
     size: {

@@ -46,19 +46,13 @@ export const useToast = () => {
       }
     }
 
-    // Create a new toast
+    // Create a new toast using custom() for custom rendering
     const toastId = toaster.create({
       duration,
       type: status === 'error' ? 'error' : status === 'warning' ? 'warning' : status === 'info' ? 'info' : 'success',
-      render: ({ onClose }) => (
-        <Toast
-          title={title || ''}
-          description={description}
-          status={status}
-          onClose={onClose}
-          {...styles}
-        />
-      ),
+      title: title || '',
+      description,
+      meta: { status, styles },
     });
 
     // Add the new toast ID to the active list

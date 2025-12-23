@@ -52,12 +52,18 @@ export const CodeTabs = ({ code, onCopy, ...rest }: CodeTabsProps) => {
   }
 
   return (
-    <Tabs bgColor="gray.1500" borderRadius="md" {...rest}>
+    <Tabs
+      defaultValue={languages[0]}
+      bgColor="gray.1500"
+      borderRadius="md"
+      {...rest}
+    >
       <TabList px={2} alignItems="center">
         <Flex w="100%" flex={1}>
           {languages.map((language) => (
             <Tab
               key={`${language}-tab`}
+              value={language}
               color="gray.800"
               px={3}
               py={1}
@@ -78,7 +84,7 @@ export const CodeTabs = ({ code, onCopy, ...rest }: CodeTabsProps) => {
       </TabList>
       <TabPanels>
         {languages.map((language) => (
-          <TabPanel key={`${language}-tab-panel`}>
+          <TabPanel key={`${language}-tab-panel`} value={language}>
             <Code
               language={language}
               hideHeader

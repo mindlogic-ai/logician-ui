@@ -54,7 +54,7 @@ const meta = {
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof CarouselModal>;
 
 export const Basic: Story = {
   render: (args) => <CarouselModal {...args} slides={sampleSlides} />,
