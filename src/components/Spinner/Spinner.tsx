@@ -7,9 +7,11 @@ export const Spinner = forwardRef(
   ({ ...rest }: SpinnerProps, ref?: ForwardedRef<HTMLDivElement>) => {
     return (
       <ChakraSpinner
-        emptyColor="gray.200"
         color="primary.main"
-        speed="0.65s"
+        animationDuration="0.65s"
+        css={{
+          '--spinner-track-color': 'var(--chakra-colors-gray-200)',
+        }}
         {...rest}
         ref={ref}
       />

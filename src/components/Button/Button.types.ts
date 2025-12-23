@@ -2,6 +2,7 @@ import { Button } from '@chakra-ui/react';
 
 type ChakraButtonProps = React.ComponentProps<typeof Button>;
 
+// Custom semantic variants that map to Chakra v3 styling
 export type ButtonVariant =
   | 'primary'
   | 'secondary'
@@ -9,6 +10,9 @@ export type ButtonVariant =
   | 'danger'
   | 'link'
   | undefined;
+
+// Valid Chakra v3 button variants
+export type ChakraV3ButtonVariant = 'solid' | 'outline' | 'ghost' | 'plain' | 'subtle' | 'surface';
 
 export type ButtonProps = Omit<ChakraButtonProps, 'variant'> & {
   variant?: ButtonVariant;

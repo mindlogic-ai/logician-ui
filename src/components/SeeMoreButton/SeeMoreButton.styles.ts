@@ -1,7 +1,8 @@
+// Button variant for Chakra v3 - 'unstyled' is now 'plain'
 export const seeMoreButtonStyles = {
   alignSelf: 'stretch',
   w: '100%',
-  variant: 'unstyled',
+  variant: 'plain' as const,
   display: 'flex',
   borderTop: '1px solid',
   borderRadius: 'none',

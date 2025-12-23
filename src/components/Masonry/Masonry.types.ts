@@ -1,6 +1,7 @@
 import { FlexProps } from '@chakra-ui/react';
 
-export interface MasonryProps extends Omit<FlexProps, 'gap'> {
+// Omit 'direction' as it conflicts with Grid's direction prop (ltr/rtl vs flex-direction)
+export interface MasonryProps extends Omit<FlexProps, 'gap' | 'direction'> {
   /**
    * Number of columns in the masonry layout
    */

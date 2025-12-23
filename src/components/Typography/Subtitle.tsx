@@ -1,13 +1,12 @@
 import { forwardRef } from 'react';
-import { Text, TextProps, useTheme } from '@chakra-ui/react';
+import { Text, TextProps } from '@chakra-ui/react';
 
-export const Subtitle = forwardRef<HTMLSpanElement, TextProps>((props, ref) => {
-  const theme = useTheme();
+export const Subtitle = forwardRef<HTMLParagraphElement, TextProps>((props, ref) => {
   return (
     <Text
       ref={ref}
       as="h6"
-      fontSize={theme.fontSizes.p}
+      fontSize="p"
       fontWeight="medium"
       color="gray.1000"
       wordBreak="keep-all"

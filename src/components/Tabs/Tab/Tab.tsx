@@ -14,8 +14,9 @@ import {
 let nextTabId = 0;
 
 // Extended props including style props that Chakra v3 types don't export
-export interface ExtendedTabProps extends TabProps {
+export interface ExtendedTabProps extends Omit<TabProps, 'value'> {
   children?: ReactNode;
+  value?: string;
   // Common style props
   color?: string;
   bgColor?: string;
@@ -34,6 +35,18 @@ export interface ExtendedTabProps extends TabProps {
   _hover?: Record<string, any>;
   css?: Record<string, any>;
 }
+
+// Typed component for Tabs.Trigger with extended props
+type TabsTriggerProps = React.ComponentProps<typeof Tabs.Trigger> & {
+  children?: ReactNode;
+  color?: string;
+  py?: number | string;
+  _selected?: Record<string, any>;
+  id?: string;
+  value?: string;
+  'data-tab-name'?: string;
+};
+const TabsTrigger = Tabs.Trigger as React.FC<TabsTriggerProps & React.RefAttributes<HTMLButtonElement>>;
 
 export const Tab = ({ name, value, children, ...props }: ExtendedTabProps) => {
   const { orientation, registerTabName } = useTabsContext();
@@ -75,7 +88,7 @@ export const Tab = ({ name, value, children, ...props }: ExtendedTabProps) => {
   const tabValue = value || name || tabId;
 
   return (
-    <Tabs.Trigger
+    <TabsTrigger
       ref={tabRef}
       id={tabId}
       value={tabValue}
@@ -88,9 +101,9 @@ export const Tab = ({ name, value, children, ...props }: ExtendedTabProps) => {
           ? verticalSelectedStyles
           : horizontalSelectedStyles),
       }}
-      {...props}
+      {...(props as TabsTriggerProps)}
     >
       {children}
-    </Tabs.Trigger>
+    </TabsTrigger>
   );
 };

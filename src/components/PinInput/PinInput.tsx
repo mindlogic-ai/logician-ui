@@ -1,8 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import ReactPinInput from 'react-pin-input';
-import { useTheme, useToken } from '@chakra-ui/react';
+
+import { colors } from '@/theme/colors';
 
 import { PinInputProps } from './PinInput.types';
+
+// Theme values for v3 compatibility
+const primaryMainColor = colors.blue[900];
 
 // TODO: forwardRef
 export const PinInput = ({
@@ -14,7 +18,6 @@ export const PinInput = ({
   ...rest
 }: PinInputProps) => {
   const pinInputRef = useRef<ReactPinInput>(null);
-  const theme = useTheme();
 
   useEffect(() => {
     // Automatically focus the PinInput component on mount
@@ -29,18 +32,15 @@ export const PinInput = ({
       type={isNumberOnly ? 'numeric' : 'custom'}
       inputMode={isNumberOnly ? 'number' : 'text'}
       inputStyle={{
-        borderColor: 'gray.200',
-        borderRadius: theme.radii.md,
-        width: theme.sizes[12],
-        height: theme.sizes[12],
+        borderColor: colors.gray[200],
+        borderRadius: '8px',
+        width: '3rem',
+        height: '3rem',
         ...inputStyle,
       }}
       inputFocusStyle={{
-        borderColor: useToken(
-          'colors',
-          theme.semanticTokens.colors.primary.main
-        ),
-        boxShadow: `0 0 0 1px ${useToken('colors', theme.semanticTokens.colors.primary.main)}`,
+        borderColor: primaryMainColor,
+        boxShadow: `0 0 0 1px ${primaryMainColor}`,
       }}
       onComplete={onChange}
       autoSelect

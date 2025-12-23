@@ -7,10 +7,16 @@ type TooltipTriggerBaseProps = React.ComponentProps<typeof ChakraTooltip.Trigger
 type TooltipPositionerBaseProps = React.ComponentProps<typeof ChakraTooltip.Positioner>;
 type TooltipContentBaseProps = React.ComponentProps<typeof ChakraTooltip.Content>;
 
-// Cast components to include children
-const TooltipTrigger = ChakraTooltip.Trigger as React.FC<TooltipTriggerBaseProps & { children?: ReactNode }>;
-const TooltipPositioner = ChakraTooltip.Positioner as React.FC<TooltipPositionerBaseProps & { children?: ReactNode }>;
-const TooltipContent = ChakraTooltip.Content as React.FC<TooltipContentBaseProps & { children?: ReactNode }>;
+// Cast components to include children and additional style props
+const TooltipTrigger = ChakraTooltip.Trigger as React.FC<
+  TooltipTriggerBaseProps & { children?: ReactNode; asChild?: boolean }
+>;
+const TooltipPositioner = ChakraTooltip.Positioner as React.FC<
+  TooltipPositionerBaseProps & { children?: ReactNode }
+>;
+const TooltipContent = ChakraTooltip.Content as React.FC<
+  TooltipContentBaseProps & { children?: ReactNode; bgColor?: string; bg?: string; fontSize?: string }
+>;
 
 export const Tooltip = forwardRef(
   (
@@ -23,7 +29,7 @@ export const Tooltip = forwardRef(
           {children}
         </TooltipTrigger>
         <TooltipPositioner>
-          <TooltipContent ref={ref} bgColor="gray.1200" fontSize="sm">
+          <TooltipContent ref={ref} bg="gray.1200" fontSize="sm">
             {label}
           </TooltipContent>
         </TooltipPositioner>

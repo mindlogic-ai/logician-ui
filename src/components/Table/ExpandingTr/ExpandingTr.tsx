@@ -1,9 +1,15 @@
-import { Children } from 'react';
+import { Children, ReactNode } from 'react';
 import { Collapsible } from '@chakra-ui/react';
 
 import { Td } from '../Td';
 import { Tr } from '../Tr';
 import { ExpandingTrProps } from './ExpandingTr.types';
+
+// Cast Collapsible.Content to include children prop
+type CollapsibleContentProps = React.ComponentProps<typeof Collapsible.Content> & {
+  children?: ReactNode;
+};
+const CollapsibleContent = Collapsible.Content as React.FC<CollapsibleContentProps>;
 
 export const ExpandingTr: React.FC<ExpandingTrProps> = ({
   children,
@@ -24,7 +30,7 @@ export const ExpandingTr: React.FC<ExpandingTrProps> = ({
       <Tr h={isExpanded ? undefined : 0} {...expandedRowProps}>
         <Td colSpan={childrenArray.length} p={0}>
           <Collapsible.Root open={isExpanded}>
-            <Collapsible.Content>{expandedContent}</Collapsible.Content>
+            <CollapsibleContent>{expandedContent}</CollapsibleContent>
           </Collapsible.Root>
         </Td>
       </Tr>

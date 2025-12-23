@@ -1,9 +1,16 @@
-import { ButtonProps } from '../Button/Button.types';
 import { SegmentedControlProps } from './SegmentedControl.types';
+
+// Style props for segmented control options (without variant to avoid type conflicts)
+type SegmentedOptionStyleProps = {
+  minW?: number | string;
+  h?: number | string;
+  paddingInlineStart?: number | string;
+  paddingInlineEnd?: number | string;
+};
 
 export const OptionStyles: Record<
   Exclude<SegmentedControlProps['size'], undefined>,
-  ButtonProps
+  SegmentedOptionStyleProps
 > = {
   xs: {
     minW: 6,

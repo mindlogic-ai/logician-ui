@@ -1,4 +1,7 @@
-import { BoxProps, PopoverProps } from '@chakra-ui/react';
+import { BoxProps, Popover } from '@chakra-ui/react';
+
+// Popover root props from the namespace
+type PopoverRootProps = React.ComponentProps<typeof Popover.Root>;
 
 export interface MonthRange {
   startMonth: Date;
@@ -34,7 +37,7 @@ export interface MonthPickerProps extends Omit<BoxProps, 'onChange'> {
   usePortal?: boolean;
 
   /** Props for the popover */
-  popoverProps?: Partial<PopoverProps>;
+  popoverProps?: Partial<PopoverRootProps>;
 
   /** Name attribute for form usage */
   name?: string;

@@ -1,21 +1,42 @@
-import { useToken } from '@chakra-ui/react';
-
-import theme from '@/theme/index';
+import { colors } from '@/theme/colors';
 
 import { SelectVariant } from './Select.types';
 
+// Font sizes and weights as constants
+const fontSizes = {
+  p: '1em',
+};
+
+const fontWeights = {
+  normal: 400,
+  semibold: 600,
+};
+
+const radii = {
+  sm: '6px',
+  md: '8px',
+};
+
+const sizes = {
+  9: '2.25rem',
+};
+
+const space = {
+  1: '0.25rem',
+};
+
 export const placeholderStyles = {
-  color: theme.colors.gray[800],
-  fontSize: theme.fontSizes.p,
-  fontWeight: theme.fontWeights.semibold,
+  color: colors.gray[800],
+  fontSize: fontSizes.p,
+  fontWeight: fontWeights.semibold,
 };
 
 export const menuStyles = {
   width: 'max-content',
   minWidth: '100%',
-  backgroundColor: theme.colors.white,
-  borderRadius: theme.radii.md,
-  border: `1px solid ${theme.colors.gray[400]}`,
+  backgroundColor: colors.white,
+  borderRadius: radii.md,
+  border: `1px solid ${colors.gray[400]}`,
   marginTop: 3,
   boxShadow: '0px 5px 20px 0px rgba(0, 0, 0, 0.10)',
   zIndex: 9,
@@ -31,69 +52,65 @@ export const optionStyles = ({
   isSelected: boolean;
 }) => ({
   cursor: isDisabled ? 'not-allowed' : 'pointer',
-  height: theme.sizes[9],
-  margin: `${theme.space[1]} 0`,
-  borderRadius: theme.radii.sm,
-  fontSize: theme.fontSizes.p,
+  height: sizes[9],
+  margin: `${space[1]} 0`,
+  borderRadius: radii.sm,
+  fontSize: fontSizes.p,
   backgroundColor:
     isSelected || isFocused || isDisabled
-      ? theme.colors.gray[50]
-      : theme.colors.white,
+      ? colors.gray[50]
+      : colors.white,
   color: isSelected
-    ? theme.colors.gray[1500]
+    ? colors.gray[1500]
     : isDisabled
-      ? theme.colors.gray[800]
-      : theme.colors.gray[1200],
+      ? colors.gray[800]
+      : colors.gray[1200],
   fontWeight: isSelected
-    ? theme.fontWeights.semibold
-    : theme.fontWeights.normal,
+    ? fontWeights.semibold
+    : fontWeights.normal,
   '&:hover': {
-    backgroundColor: theme.colors.gray[50],
+    backgroundColor: colors.gray[50],
   },
 });
 
 export const controlStyles = {
-  borderRadius: theme.radii.md,
+  borderRadius: radii.md,
   cursor: 'pointer',
   maxWidth: '100%',
   height: '100%',
-  color: theme.colors.gray[1200],
-  fontSize: theme.fontSizes.p,
-  fontWeight: theme.fontWeights.semibold,
+  color: colors.gray[1200],
+  fontSize: fontSizes.p,
+  fontWeight: fontWeights.semibold,
   paddingLeft: 4,
   paddingRight: 3,
-  border: `1px solid ${theme.colors.gray[400]}`,
+  border: `1px solid ${colors.gray[400]}`,
   boxShadow: 'none',
 };
 
+// Semantic colors from the theme
+const primaryMain = colors.blue[900];
+const dangerMain = colors.red[500];
+
 export const getControlVariantStyles = (state: any, variant: SelectVariant) => {
-  const primaryColor = useToken(
-    'colors',
-    theme.semanticTokens.colors.primary.main
-  );
-  const dangerColor = useToken(
-    'colors',
-    theme.semanticTokens.colors.danger.main
-  );
   switch (variant) {
     case 'danger':
       return {
-        border: `1px solid ${dangerColor}`,
-        boxShadow: `0 0 0 1px ${dangerColor}`,
+        border: `1px solid ${dangerMain}`,
+        boxShadow: `0 0 0 1px ${dangerMain}`,
       };
     default:
       return {
-        fontWeight: theme.fontWeights.semibold,
-        border: `1px solid ${state.isFocused ? primaryColor : theme.colors.gray[400]}`,
+        fontWeight: fontWeights.semibold,
+        border: `1px solid ${state.isFocused ? primaryMain : colors.gray[400]}`,
         boxShadow: state.isFocused
-          ? `0 0 0 1px ${primaryColor} !important`
+          ? `0 0 0 1px ${primaryMain} !important`
           : 'none',
         '&:hover': state.isFocused
           ? {
-              borderColor: primaryColor,
+              borderColor: primaryMain,
             }
           : {
-              borderColor: useToken('colors', 'gray.600'),
+              borderColor: colors.gray[600],
             },
       };
   }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@chakra-ui/react';
+import { Button, HStack } from '@chakra-ui/react';
 
 import { IoChevronDownOutline } from '@/components/Icon';
 import { useTranslate } from '@/hooks/useTranslate';
@@ -23,12 +23,13 @@ export const SeeMoreButton = ({
   const translate = useTranslate();
 
   return (
-    <Button
-      rightIcon={<IoChevronDownOutline color="inherit" />}
-      {...seeMoreButtonStyles}
-      {...rest}
-    >
-      {translate('see_more')} ({currentCount}/{maxCount})
+    <Button {...seeMoreButtonStyles} {...rest}>
+      <HStack gap={2}>
+        <span>
+          {translate('see_more')} ({currentCount}/{maxCount})
+        </span>
+        <IoChevronDownOutline color="inherit" />
+      </HStack>
     </Button>
   );
 };

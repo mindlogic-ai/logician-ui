@@ -1,5 +1,7 @@
 import React from 'react';
-import { Box, useTheme, useToken } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
+
+import { colors } from '@/theme/colors';
 
 import { Text } from '../Typography';
 import {
@@ -8,6 +10,32 @@ import {
   Segment,
   SegmentAngle,
 } from './RadialProgress.types';
+
+// Color token resolution map for common tokens
+const colorTokenMap: Record<string, string> = {
+  'gray.50': colors.gray[50],
+  'gray.100': colors.gray[100],
+  'gray.200': colors.gray[200],
+  'gray.300': colors.gray[300],
+  'gray.400': colors.gray[400],
+  'gray.500': colors.gray[500],
+  'gray.600': colors.gray[600],
+  'gray.700': colors.gray[700],
+  'gray.800': colors.gray[800],
+  'gray.900': colors.gray[900],
+  'gray.1000': colors.gray[1000],
+  'gray.1100': colors.gray[1100],
+  'gray.1200': colors.gray[1200],
+  'blue.500': colors.blue[500],
+  'blue.600': colors.blue[600],
+  'blue.900': colors.blue[900],
+  'red.500': colors.red[500],
+};
+
+// Helper function to resolve color tokens
+const resolveColor = (color: string): string => {
+  return colorTokenMap[color] || color;
+};
 
 const RadialProgress: React.FC<RadialProgressProps> = ({
   size = 200,
@@ -18,19 +46,6 @@ const RadialProgress: React.FC<RadialProgressProps> = ({
   className,
   ...rest
 }) => {
-  const theme = useTheme();
-
-  // Helper function to resolve color tokens
-  const resolveColor = (color: string): string => {
-    try {
-      // Try to resolve as a token first
-      const resolvedColor = useToken('colors', color);
-      return resolvedColor || color;
-    } catch {
-      // If token resolution fails, return the original color
-      return color;
-    }
-  };
 
   // Early return if total is 0 or negative to prevent division by zero
   if (total <= 0) {

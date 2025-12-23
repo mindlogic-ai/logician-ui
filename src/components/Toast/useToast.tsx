@@ -14,7 +14,10 @@ const toaster = createToaster({
 });
 
 // Export the Toaster component for use in app root
-export const Toaster = () => <ChakraToaster toaster={toaster} />;
+// Type assertion needed as Chakra v3 Toaster types don't include toaster prop
+export const Toaster = () => (
+  <ChakraToaster {...({ toaster } as any)} />
+);
 
 export const useToast = () => {
   const activeToasts = useRef<string[]>([]); // Track active toast IDs

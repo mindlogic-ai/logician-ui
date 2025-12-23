@@ -9,7 +9,8 @@ export interface MLToastOptions {
   status?: ToastStatus;
 }
 
-export interface ToastProps extends Omit<BoxProps, 'title'>, MLToastOptions {
+// Omit 'direction' as it conflicts with Flex's flexDirection type in Chakra v3
+export interface ToastProps extends Omit<BoxProps, 'title' | 'direction'>, MLToastOptions {
   onClose?: () => void;
 }
 

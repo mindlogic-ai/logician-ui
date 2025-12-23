@@ -1,20 +1,15 @@
 'use client';
 
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { ReactNode, useCallback, useMemo, useState } from 'react';
 import {
   Box,
   Button,
   Grid,
+  Group,
   HStack,
   Input,
-  InputGroup,
-  InputLeftElement,
   Popover,
-  PopoverBody,
-  PopoverContent,
-  PopoverTrigger,
   Portal,
-  useDisclosure,
   VStack,
 } from '@chakra-ui/react';
 import { format, isAfter, isSameMonth } from 'date-fns';
@@ -37,6 +32,35 @@ import {
 import { MonthButton } from './MonthButton/MonthButton';
 import { MonthPickerProps, MonthRange } from './MonthPicker.types';
 
+// Extended types for Chakra v3 Popover compound components
+type PopoverRootProps = React.ComponentProps<typeof Popover.Root> & {
+  children?: ReactNode;
+};
+
+type PopoverTriggerProps = React.ComponentProps<typeof Popover.Trigger> & {
+  children?: ReactNode;
+  asChild?: boolean;
+};
+
+type PopoverContentProps = React.ComponentProps<typeof Popover.Content> & {
+  children?: ReactNode;
+  width?: string;
+};
+
+type PopoverBodyProps = React.ComponentProps<typeof Popover.Body> & {
+  children?: ReactNode;
+};
+
+type PopoverPositionerProps = React.ComponentProps<typeof Popover.Positioner> & {
+  children?: ReactNode;
+};
+
+const PopoverRoot = Popover.Root as React.FC<PopoverRootProps>;
+const PopoverTrigger = Popover.Trigger as React.FC<PopoverTriggerProps>;
+const PopoverPositioner = Popover.Positioner as React.FC<PopoverPositionerProps>;
+const PopoverContent = Popover.Content as React.FC<PopoverContentProps>;
+const PopoverBody = Popover.Body as React.FC<PopoverBodyProps>;
+
 export const MonthPicker: React.FC<MonthPickerProps> = ({
   selectedRange,
   onChange,
@@ -51,7 +75,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
   name,
   ...boxProps
 }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [open, setOpen] = useState(false);
   const { language: locale } = useLocale();
   const translate = useTranslate();
 
@@ -108,6 +132,9 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
     dateFnsLocale,
     isRange,
   ]);
+
+  const onClose = useCallback(() => setOpen(false), []);
+  const onOpen = useCallback(() => setOpen(true), []);
 
   // Check if navigation to previous/next year is possible
   const canNavigateToPrevYear = useMemo(() => {
@@ -206,8 +233,9 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
   }, [onChange]);
 
   const popoverContent = (
-    <PopoverContent width="320px">
-      <PopoverBody>
+    <PopoverPositioner>
+      <PopoverContent width="320px">
+        <PopoverBody>
         <VStack gap={4} align="stretch">
           {/* Year Navigation */}
           <HStack justify="space-between" align="center">
@@ -262,25 +290,32 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
               {translate('clear')}
             </Button>
           </HStack>
-        </VStack>
-      </PopoverBody>
-    </PopoverContent>
+          </VStack>
+        </PopoverBody>
+      </PopoverContent>
+    </PopoverPositioner>
   );
 
   return (
     <Box {...boxProps}>
-      <Popover
-        isOpen={isOpen}
-        onOpen={onOpen}
-        onClose={onClose}
-        placement="bottom-start"
+      <PopoverRoot
+        open={open}
+        onOpenChange={(details) => setOpen(details.open)}
+        positioning={{ placement: 'bottom-start' }}
         {...popoverProps}
       >
-        <PopoverTrigger>
-          <InputGroup>
-            <InputLeftElement>
+        <PopoverTrigger asChild>
+          <Group position="relative">
+            <Box
+              position="absolute"
+              left={2}
+              top="50%"
+              transform="translateY(-50%)"
+              zIndex={1}
+              pointerEvents="none"
+            >
               <MdOutlineCalendarToday boxSize="xs" color="gray.800" />
-            </InputLeftElement>
+            </Box>
             <Input
               name={name}
               value={displayValue}
@@ -289,11 +324,12 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
               disabled={disabled}
               cursor={disabled ? 'not-allowed' : 'pointer'}
               onClick={disabled ? undefined : onOpen}
+              css={{ paddingInlineStart: '2.5rem' }}
             />
-          </InputGroup>
+          </Group>
         </PopoverTrigger>
         {usePortal ? <Portal>{popoverContent}</Portal> : popoverContent}
-      </Popover>
+      </PopoverRoot>
     </Box>
   );
 };
