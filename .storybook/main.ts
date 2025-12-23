@@ -40,6 +40,9 @@ const config: StorybookConfig = {
           '@': path.resolve(__dirname, '../src'),
         },
       },
+      optimizeDeps: {
+        include: ['framer-motion'],
+      },
     });
   },
 };
