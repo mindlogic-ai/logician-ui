@@ -1,4 +1,4 @@
-import { HStack, Icon, Text } from '@chakra-ui/react';
+import { HStack, Text } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { FiHome, FiSettings, FiUser } from 'react-icons/fi';
@@ -106,7 +106,7 @@ export const WithCustomContent = {
       {
         label: (
           <HStack gap={2}>
-            <Icon as={FiHome} />
+            <FiHome />
             <Text>Home</Text>
           </HStack>
         ),
@@ -115,7 +115,7 @@ export const WithCustomContent = {
       {
         label: (
           <HStack gap={2}>
-            <Icon as={FiUser} />
+            <FiUser />
             <Text>Profile</Text>
           </HStack>
         ),
@@ -124,7 +124,7 @@ export const WithCustomContent = {
       {
         label: (
           <HStack gap={2}>
-            <Icon as={FiSettings} />
+            <FiSettings />
             <Text>Settings</Text>
           </HStack>
         ),
