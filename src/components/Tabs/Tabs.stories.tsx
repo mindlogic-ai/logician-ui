@@ -18,17 +18,18 @@ type Story = StoryObj<typeof meta>;
 
 export const Basic: Story = {
   args: {
+    defaultValue: 'tab1',
     children: (
       <>
         <TabList>
-          <Tab>Tab 1</Tab>
-          <Tab>Tab 2</Tab>
-          <Tab>Tab 3</Tab>
+          <Tab value="tab1">Tab 1</Tab>
+          <Tab value="tab2">Tab 2</Tab>
+          <Tab value="tab3">Tab 3</Tab>
         </TabList>
         <TabPanels>
-          <TabPanel>Tab 1 content</TabPanel>
-          <TabPanel>Tab 2 content</TabPanel>
-          <TabPanel>Tab 3 content</TabPanel>
+          <TabPanel value="tab1">Tab 1 content</TabPanel>
+          <TabPanel value="tab2">Tab 2 content</TabPanel>
+          <TabPanel value="tab3">Tab 3 content</TabPanel>
         </TabPanels>
       </>
     ),
@@ -37,18 +38,19 @@ export const Basic: Story = {
 
 export const Vertical: Story = {
   args: {
+    defaultValue: 'tab1',
     orientation: 'vertical',
     children: (
       <>
         <TabList>
-          <Tab>Tab 1</Tab>
-          <Tab>Tab 2</Tab>
-          <Tab>Tab 3</Tab>
+          <Tab value="tab1">Tab 1</Tab>
+          <Tab value="tab2">Tab 2</Tab>
+          <Tab value="tab3">Tab 3</Tab>
         </TabList>
         <TabPanels>
-          <TabPanel>Tab 1 content</TabPanel>
-          <TabPanel>Tab 2 content</TabPanel>
-          <TabPanel>Tab 3 content</TabPanel>
+          <TabPanel value="tab1">Tab 1 content</TabPanel>
+          <TabPanel value="tab2">Tab 2 content</TabPanel>
+          <TabPanel value="tab3">Tab 3 content</TabPanel>
         </TabPanels>
       </>
     ),

@@ -7,4 +7,6 @@ export interface ModalProps extends Omit<DialogRootProps, 'children'> {
   children?: ReactNode;
   /** @deprecated Use 'open' instead */
   isOpen?: boolean;
+  /** @deprecated Use 'onOpenChange' instead */
+  onClose?: () => void;
 }

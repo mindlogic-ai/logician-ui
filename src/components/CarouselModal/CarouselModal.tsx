@@ -43,7 +43,7 @@ export const CarouselModal = ({
 
   return (
     <Modal
-      size="2xl"
+      size="xl"
       onClose={onClose}
       initialFocusRef={nextButtonRef}
       {...rest}

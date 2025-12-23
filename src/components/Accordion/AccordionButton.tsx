@@ -10,7 +10,6 @@ type AccordionItemTriggerProps = AccordionItemTriggerBaseProps & {
   children?: ReactNode;
   _hover?: Record<string, any>;
   _expanded?: Record<string, any>;
-  fontWeight?: string;
 };
 
 type AccordionItemIndicatorProps = AccordionItemIndicatorBaseProps & {

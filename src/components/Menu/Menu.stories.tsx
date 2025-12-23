@@ -63,6 +63,7 @@ export const DefaultMenu: Story = {
         {menuItems.map((item: StoryMenuItemProps) => (
           <MenuItem
             key={item.label}
+            value={item.label}
             variant={item.variant}
             icon={item.itemIcon}
             onClick={item.onClick}
@@ -103,6 +104,7 @@ export const IconMenu: Story = {
         {menuItems.map((item: StoryMenuItemProps) => (
           <MenuItem
             key={item.label}
+            value={item.label}
             variant={item.variant}
             icon={item.itemIcon}
             onClick={item.onClick}
@@ -140,6 +142,7 @@ export const DangerMenu: Story = {
         {menuItems.map((item: StoryMenuItemProps) => (
           <MenuItem
             key={item.label}
+            value={item.label}
             variant={item.variant}
             icon={item.itemIcon}
             onClick={item.onClick}
@@ -177,6 +180,7 @@ export const IconButtonTriggerMenu: Story = {
         {menuItems.map((item: StoryMenuItemProps) => (
           <MenuItem
             key={item.label}
+            value={item.label}
             variant={item.variant}
             icon={item.itemIcon}
             onClick={item.onClick}
@@ -220,6 +224,7 @@ export const SelectiveIconMenu: Story = {
           {menuItems.map((item: StoryMenuItemProps) => (
             <MenuItem
               key={item.label}
+              value={item.label}
               onClick={() => handleItemClick(item.label, item.onClick)}
               icon={
                 selectedLabel === item.label ? <SlSettings /> : undefined

@@ -27,4 +27,6 @@ export interface RadioGroupProps extends Omit<RadioGroupRootProps, 'children'> {
   gap?: number;
   /** @deprecated use gap instead */
   spacing?: number;
+  /** @deprecated use onValueChange instead */
+  onChange?: (value: string) => void;
 }

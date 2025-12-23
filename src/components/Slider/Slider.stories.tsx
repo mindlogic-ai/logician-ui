@@ -18,7 +18,13 @@ const meta = {
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <span>Value: {value}</span>
           <div style={{ flex: 1 }}>
-            <Story args={{ onChange: (val: number) => setValue(val), value }} />
+            <Story
+              args={{
+                onValueChange: (details: { value: number[] }) =>
+                  setValue(details.value[0]),
+                value: [value],
+              }}
+            />
           </div>
         </div>
       );
@@ -35,14 +41,14 @@ export const Default: Story = {
     min: 0,
     max: 100,
     step: 1,
-    defaultValue: 50,
+    defaultValue: [50],
   },
   render: (args) => (
     <Slider {...args}>
       <SliderTrack>
         <SliderFilledTrack />
       </SliderTrack>
-      <SliderThumb />
+      <SliderThumb index={0} />
     </Slider>
   ),
 };
@@ -52,14 +58,14 @@ export const Customized: Story = {
     min: 0,
     max: 10,
     step: 0.5,
-    defaultValue: 5,
+    defaultValue: [5],
   },
   render: (args) => (
     <Slider {...args}>
       <SliderTrack>
         <SliderFilledTrack />
       </SliderTrack>
-      <SliderThumb />
+      <SliderThumb index={0} />
     </Slider>
   ),
 };
@@ -69,14 +75,14 @@ export const WithCustomThumb: Story = {
     min: 0,
     max: 1,
     step: 0.01,
-    defaultValue: 0.5,
+    defaultValue: [0.5],
   },
   render: (args) => (
     <Slider {...args}>
       <SliderTrack>
         <SliderFilledTrack />
       </SliderTrack>
-      <SliderThumb boxSize={6} bg="blue.500">
+      <SliderThumb index={0} boxSize={6} bg="blue.500">
         <span style={{ color: 'white', fontWeight: 'bold' }}>•</span>
       </SliderThumb>
     </Slider>
