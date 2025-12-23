@@ -1,4 +1,4 @@
-import { ReactNode, useLayoutEffect, useRef, useState } from 'react';
+import { CSSProperties, ReactNode, useLayoutEffect, useRef, useState } from 'react';
 import { Tabs } from '@chakra-ui/react';
 
 import { useTabsContext } from '@/components/Tabs/TabsContext';
@@ -13,8 +13,26 @@ import {
 // A global counter to assign unique IDs to tabs for identification
 let nextTabId = 0;
 
+// Extended props including style props that Chakra v3 types don't export
 export interface ExtendedTabProps extends TabProps {
   children?: ReactNode;
+  // Common style props
+  color?: string;
+  bgColor?: string;
+  bg?: string;
+  px?: string | number;
+  py?: string | number;
+  p?: string | number;
+  m?: string | number;
+  mx?: string | number;
+  my?: string | number;
+  borderRadius?: string;
+  textTransform?: CSSProperties['textTransform'];
+  fontWeight?: string | number;
+  fontSize?: string | number;
+  _selected?: Record<string, any>;
+  _hover?: Record<string, any>;
+  css?: Record<string, any>;
 }
 
 export const Tab = ({ name, value, children, ...props }: ExtendedTabProps) => {

@@ -1,7 +1,7 @@
 'use client';
 
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
-import { Box, useTheme } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import {
   BlockTypeSelect,
   BoldItalicUnderlineToggles,
@@ -36,7 +36,6 @@ export const MDXEditor = forwardRef<
   BaseEditorProps & MDXEditorMethods,
   MDXEditorProps
 >(({ containerProps, autoFocus = true, onError, ...rest }, ref) => {
-  const theme = useTheme();
   const [error, setError] = useState<string | null>(null);
 
   // 내부적으로 Editor 인스턴스를 참조하기 위한 로컬 ref
@@ -67,22 +66,21 @@ export const MDXEditor = forwardRef<
       onClick={handleContainerClick}
       cursor="text"
       {...containerProps}
-      sx={{
-        ...containerProps?.sx,
+      css={{
         '.mdxeditor': {
           width: '100%',
           minHeight: '300px',
           height: '100%',
-          bg: 'white',
+          backgroundColor: 'white',
           display: 'flex',
           flexDirection: 'column',
         },
         '.mdxeditor-toolbar': {
           display: 'flex',
-          gap: theme.space[2],
-          p: theme.space[2],
+          gap: 'var(--chakra-spacing-2)',
+          padding: 'var(--chakra-spacing-2)',
           borderBottomWidth: '1px',
-          bg: 'gray.50',
+          backgroundColor: 'var(--chakra-colors-gray-50)',
           flexShrink: 0,
           cursor: 'default',
         },
@@ -108,73 +106,76 @@ export const MDXEditor = forwardRef<
           flexDirection: 'column',
         },
         '.content-editable': {
-          padding: theme.space[4],
+          padding: 'var(--chakra-spacing-4)',
           color: 'black',
           display: 'flex',
           flexDirection: 'column',
-          gap: theme.space[1.5],
+          gap: 'var(--chakra-spacing-1-5)',
           flex: 1,
           height: '100%',
 
           'h1, h2, h3, h4, h5': {
-            marginBottom: theme.space[0.5],
+            marginBottom: 'var(--chakra-spacing-0-5)',
             fontWeight: 'bold',
           },
 
           'h1:not(:first-child), h2:not(:first-child), h3:not(:first-child), h4:not(:first-child)':
             {
-              marginTop: theme.space[1],
+              marginTop: 'var(--chakra-spacing-1)',
             },
 
           h1: {
-            fontSize: theme.fontSizes.h1,
+            fontSize: 'var(--chakra-font-sizes-h1)',
           },
           h2: {
-            fontSize: theme.fontSizes.h2,
+            fontSize: 'var(--chakra-font-sizes-h2)',
           },
           h3: {
-            fontSize: theme.fontSizes.h3,
+            fontSize: 'var(--chakra-font-sizes-h3)',
           },
           h4: {
-            fontSize: theme.fontSizes.h4,
+            fontSize: 'var(--chakra-font-sizes-h4)',
           },
           h5: {
-            fontSize: theme.fontSizes.h5,
+            fontSize: 'var(--chakra-font-sizes-h5)',
           },
 
           'ol, ul': {
-            marginTop: theme.space[2],
-            paddingInlineStart: theme.space[4],
+            marginTop: 'var(--chakra-spacing-2)',
+            paddingInlineStart: 'var(--chakra-spacing-4)',
           },
 
           li: {
             lineHeight: '1.5',
-            marginBottom: theme.space[2],
+            marginBottom: 'var(--chakra-spacing-2)',
           },
 
           blockquote: {
             borderLeftWidth: '4px',
-            borderLeftColor: 'primary.light',
-            bg: 'primary.lighter',
-            pl: theme.space[4],
-            py: theme.space[2],
-            my: theme.space[4],
-            color: 'gray.800',
+            borderLeftColor: 'var(--chakra-colors-primary-light)',
+            backgroundColor: 'var(--chakra-colors-primary-lighter)',
+            paddingLeft: 'var(--chakra-spacing-4)',
+            paddingTop: 'var(--chakra-spacing-2)',
+            paddingBottom: 'var(--chakra-spacing-2)',
+            marginTop: 'var(--chakra-spacing-4)',
+            marginBottom: 'var(--chakra-spacing-4)',
+            color: 'var(--chakra-colors-gray-800)',
           },
 
           a: {
-            color: 'primary.main',
+            color: 'var(--chakra-colors-primary-main)',
             textDecoration: 'underline',
           },
 
           code: {
-            fontFamily: 'mono',
-            bg: 'gray.100',
-            px: theme.space[1],
-            borderRadius: theme.radii.sm,
+            fontFamily: 'var(--chakra-fonts-mono)',
+            backgroundColor: 'var(--chakra-colors-gray-100)',
+            paddingLeft: 'var(--chakra-spacing-1)',
+            paddingRight: 'var(--chakra-spacing-1)',
+            borderRadius: 'var(--chakra-radii-sm)',
 
             span: {
-              bg: 'transparent',
+              backgroundColor: 'transparent',
             },
           },
         },

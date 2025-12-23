@@ -1,9 +1,10 @@
 import React from 'react';
-import {
-  ModalOverlay as ChakraModalOverlay,
-  ModalOverlayProps as ChakraModalOverlayProps,
-} from '@chakra-ui/react';
+import { Dialog } from '@chakra-ui/react';
 
-export const ModalOverlay = ({ ...rest }: ChakraModalOverlayProps) => {
-  return <ChakraModalOverlay {...rest} />;
+type DialogBackdropProps = React.ComponentProps<typeof Dialog.Backdrop>;
+
+export interface ModalOverlayProps extends DialogBackdropProps {}
+
+export const ModalOverlay = ({ ...rest }: ModalOverlayProps) => {
+  return <Dialog.Backdrop {...rest} />;
 };

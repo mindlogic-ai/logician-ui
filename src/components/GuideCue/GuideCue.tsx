@@ -5,21 +5,25 @@ import { keyframes } from '@emotion/react';
 type PopoverRootProps = React.ComponentProps<typeof Popover.Root>;
 type PopoverCloseTriggerBaseProps = React.ComponentProps<typeof Popover.CloseTrigger>;
 
-// Extended types for Chakra v3 compound components that need children
+// Extended types for Chakra v3 compound components
 type PopoverTriggerProps = React.ComponentProps<typeof Popover.Trigger> & {
   children?: ReactNode;
+  asChild?: boolean;
 };
 type PopoverPositionerProps = React.ComponentProps<typeof Popover.Positioner> & {
   children?: ReactNode;
 };
 type PopoverContentProps = React.ComponentProps<typeof Popover.Content> & {
   children?: ReactNode;
+  w?: string;
+  minW?: string;
+  maxW?: string;
 };
 type PopoverArrowProps = React.ComponentProps<typeof Popover.Arrow> & {
   children?: ReactNode;
 };
 
-// Cast Popover components to extended types that include children
+// Cast Popover components to extended types
 const PopoverTrigger = Popover.Trigger as React.FC<PopoverTriggerProps>;
 const PopoverPositioner = Popover.Positioner as React.FC<PopoverPositionerProps>;
 const PopoverContent = Popover.Content as React.FC<PopoverContentProps>;

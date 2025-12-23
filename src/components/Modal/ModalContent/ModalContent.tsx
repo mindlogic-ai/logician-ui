@@ -1,8 +1,15 @@
-import React from 'react';
-import { ModalContent as ChakraModalContent } from '@chakra-ui/react';
+import React, { ReactNode } from 'react';
+import { Dialog } from '@chakra-ui/react';
 
 import { ModalContentProps } from './ModalContent.types';
 
-export const ModalContent = ({ ...rest }: ModalContentProps) => {
-  return <ChakraModalContent {...rest} />;
+// Extended type for Dialog.Content
+type DialogContentProps = React.ComponentProps<typeof Dialog.Content> & {
+  children?: ReactNode;
+};
+
+const DialogContent = Dialog.Content as React.FC<DialogContentProps>;
+
+export const ModalContent = ({ children, ...rest }: ModalContentProps) => {
+  return <DialogContent {...rest}>{children}</DialogContent>;
 };

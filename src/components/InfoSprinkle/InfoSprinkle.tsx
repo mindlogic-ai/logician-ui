@@ -10,9 +10,15 @@ type PopoverRootProps = React.ComponentProps<typeof Popover.Root>;
 // Extended types for Chakra v3 compound components
 type PopoverTriggerProps = React.ComponentProps<typeof Popover.Trigger> & {
   children?: ReactNode;
+  asChild?: boolean;
+};
+type PopoverPositionerProps = React.ComponentProps<typeof Popover.Positioner> & {
+  children?: ReactNode;
 };
 type PopoverContentProps = React.ComponentProps<typeof Popover.Content> & {
   children?: ReactNode;
+  boxShadow?: string;
+  w?: string;
 };
 type PopoverArrowProps = React.ComponentProps<typeof Popover.Arrow> & {
   children?: ReactNode;
@@ -20,6 +26,7 @@ type PopoverArrowProps = React.ComponentProps<typeof Popover.Arrow> & {
 
 // Cast components to extended types
 const PopoverTrigger = Popover.Trigger as React.FC<PopoverTriggerProps>;
+const PopoverPositioner = Popover.Positioner as React.FC<PopoverPositionerProps>;
 const PopoverContent = Popover.Content as React.FC<PopoverContentProps>;
 const PopoverArrow = Popover.Arrow as React.FC<PopoverArrowProps>;
 
@@ -45,14 +52,14 @@ export const InfoSprinkle = ({
         />
       </PopoverTrigger>
       <Portal>
-        <Popover.Positioner>
+        <PopoverPositioner>
           <PopoverContent boxShadow="2xl" w="fit-content">
             <PopoverArrow>
               <Popover.ArrowTip />
             </PopoverArrow>
             <Popover.Body>{children}</Popover.Body>
           </PopoverContent>
-        </Popover.Positioner>
+        </PopoverPositioner>
       </Portal>
     </Popover.Root>
   );

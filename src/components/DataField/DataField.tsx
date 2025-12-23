@@ -14,9 +14,10 @@ import { Text } from '@/components/Typography';
 
 import { Edit, FaRegCopy } from '../Icon';
 
-// Extended types for Chakra v3 compound components that need children
+// Extended types for Chakra v3 compound components that need children and asChild
 type TooltipTriggerProps = React.ComponentProps<typeof Tooltip.Trigger> & {
   children?: ReactNode;
+  asChild?: boolean;
 };
 type TooltipPositionerProps = React.ComponentProps<typeof Tooltip.Positioner> & {
   children?: ReactNode;

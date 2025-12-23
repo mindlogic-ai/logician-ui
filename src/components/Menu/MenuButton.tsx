@@ -1,8 +1,20 @@
-import React from 'react';
-import { MenuButton as ChakraMenuButton } from '@chakra-ui/react';
+import React, { ReactNode } from 'react';
+import { Menu } from '@chakra-ui/react';
 
 import { CustomMenuButtonProps } from './MenuButton.types';
 
-export const MenuButton = ({ as, ...rest }: CustomMenuButtonProps) => {
-  return <ChakraMenuButton as={as} {...rest} />;
+// Extended type for Chakra v3 Menu.Trigger
+type MenuTriggerProps = React.ComponentProps<typeof Menu.Trigger> & {
+  children?: ReactNode;
+  asChild?: boolean;
+};
+
+const MenuTrigger = Menu.Trigger as React.FC<MenuTriggerProps>;
+
+export const MenuButton = ({ as: Component, children, ...rest }: CustomMenuButtonProps) => {
+  return (
+    <MenuTrigger asChild>
+      <Component {...rest}>{children}</Component>
+    </MenuTrigger>
+  );
 };

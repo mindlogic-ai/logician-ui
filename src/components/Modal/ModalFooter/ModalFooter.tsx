@@ -1,20 +1,36 @@
-import React from 'react';
-import {
-  ModalFooter as ChakraModalFooter,
-  ModalFooterProps as ChakraModalFooterProps,
-} from '@chakra-ui/react';
+import React, { ReactNode } from 'react';
+import { Dialog } from '@chakra-ui/react';
 
 import styles from './ModalFooter.module.css';
 
-export const ModalFooter = ({ className, ...rest }: ChakraModalFooterProps) => {
+type DialogFooterBaseProps = React.ComponentProps<typeof Dialog.Footer>;
+
+// Extended type for Dialog.Footer
+type DialogFooterProps = DialogFooterBaseProps & {
+  children?: ReactNode;
+  className?: string;
+  css?: Record<string, any>;
+};
+
+const DialogFooter = Dialog.Footer as React.FC<DialogFooterProps>;
+
+export interface ModalFooterProps extends DialogFooterBaseProps {
+  children?: ReactNode;
+  className?: string;
+}
+
+export const ModalFooter = ({ className, children, ...rest }: ModalFooterProps) => {
   return (
-    <ChakraModalFooter
+    <DialogFooter
       className={[styles['ml-modal-footer'], className].join(' ')}
-      gap={3}
-      pt={4}
-      borderTop="1px solid"
-      borderColor="gray.50"
+      css={{
+        gap: 3,
+        paddingTop: 'var(--chakra-spacing-4)',
+        borderTop: '1px solid var(--chakra-colors-gray-50)',
+      }}
       {...rest}
-    />
+    >
+      {children}
+    </DialogFooter>
   );
 };

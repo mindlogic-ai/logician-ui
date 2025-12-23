@@ -1,3 +1,10 @@
-import { ModalProps as ChakraModalProps } from '@chakra-ui/react';
+import { ReactNode } from 'react';
+import { Dialog } from '@chakra-ui/react';
 
-export type ModalProps = ChakraModalProps;
+type DialogRootProps = React.ComponentProps<typeof Dialog.Root>;
+
+export interface ModalProps extends Omit<DialogRootProps, 'children'> {
+  children?: ReactNode;
+  /** @deprecated Use 'open' instead */
+  isOpen?: boolean;
+}

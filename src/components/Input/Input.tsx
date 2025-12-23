@@ -7,13 +7,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import {
-  Input as ChakraInput,
-  InputGroup,
-  InputLeftElement,
-  InputRightElement,
-  useTheme,
-} from '@chakra-ui/react';
+import { Box, Group, Input as ChakraInput } from '@chakra-ui/react';
 
 import { formatNumber } from '@/utils/formatNumber';
 
@@ -84,7 +78,6 @@ export const Input = forwardRef(
   ) => {
     const rightElementRef = useRef<HTMLDivElement>(null);
     const [rightElementWidth, setRightElementWidth] = useState(0);
-    const theme = useTheme();
     const isComposing = useRef(false);
     const cursorPosition = useRef<number | null>(null);
     const [shouldRestoreCursor, setShouldRestoreCursor] = useState(false);
@@ -301,9 +294,21 @@ export const Input = forwardRef(
     const inputType = maskNumber && type === 'number' ? 'text' : type;
 
     return (
-      <InputGroup size={size} {...wrapperProps}>
+      <Group size={size} position="relative" {...wrapperProps}>
         {leftIcon && (
-          <InputLeftElement {...leftElementProps}>{leftIcon}</InputLeftElement>
+          <Box
+            position="absolute"
+            left={2}
+            top="50%"
+            transform="translateY(-50%)"
+            zIndex={1}
+            display="flex"
+            alignItems="center"
+            pointerEvents="none"
+            {...leftElementProps}
+          >
+            {leftIcon}
+          </Box>
         )}
         <ChakraInput
           ref={ref}
@@ -323,9 +328,13 @@ export const Input = forwardRef(
           }}
           _focus={{
             borderColor: 'primary.main',
+            boxShadow: '0 0 0 1px var(--chakra-colors-primary-main)',
             ..._focus,
           }}
-          focusBorderColor={theme.semanticTokens.colors.primary.main}
+          _invalid={{
+            borderColor: 'danger.main',
+            boxShadow: '0 0 0 1px var(--chakra-colors-danger-main)',
+          }}
           _readOnly={{
             opacity: 1,
             cursor: 'not-allowed',
@@ -340,18 +349,27 @@ export const Input = forwardRef(
             color: 'gray.1000',
             fontWeight: 'semibold',
           }}
-          sx={{
-            paddingInlineEnd: rightElementWidth,
+          css={{
+            paddingInlineStart: leftIcon ? '2.5rem' : undefined,
+            paddingInlineEnd: rightIcon ? rightElementWidth : undefined,
           }}
-          errorBorderColor={theme.semanticTokens.colors.danger.main}
           {...rest}
         />
         {rightIcon && (
-          <InputRightElement ref={rightElementRef} {...rightElementProps}>
+          <Box
+            ref={rightElementRef}
+            position="absolute"
+            right={2}
+            top="50%"
+            transform="translateY(-50%)"
+            display="flex"
+            alignItems="center"
+            {...rightElementProps}
+          >
             {rightIcon}
-          </InputRightElement>
+          </Box>
         )}
-      </InputGroup>
+      </Group>
     );
   }
 );

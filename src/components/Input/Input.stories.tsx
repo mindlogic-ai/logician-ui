@@ -16,8 +16,8 @@ const meta = {
         options: ['sm', 'md', 'lg'],
       },
     },
-    isDisabled: { control: 'boolean' },
-    isInvalid: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    invalid: { control: 'boolean' },
     maxLength: { control: 'number' },
   },
   render: (args) => {
@@ -43,8 +43,8 @@ export const LeftIcon: Story = {
   args: {
     placeholder: 'Phone number',
     size: 'md',
-    isDisabled: false,
-    isInvalid: false,
+    disabled: false,
+    invalid: false,
     leftIcon: <IoCall color="gray.300" />,
   },
 };
@@ -53,8 +53,8 @@ export const RightIcon: Story = {
   args: {
     placeholder: 'Search...',
     size: 'md',
-    isDisabled: false,
-    isInvalid: false,
+    disabled: false,
+    invalid: false,
     rightIcon: <IoSearch color="gray.300" />,
     maxLength: 20,
   },

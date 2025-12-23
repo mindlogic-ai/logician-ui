@@ -1,13 +1,11 @@
 import DotLoader from 'react-spinners/DotLoader';
-import { Flex, FlexProps, useToken } from '@chakra-ui/react';
-
-import theme from '../../theme';
+import { Flex, FlexProps } from '@chakra-ui/react';
 
 export const SectionLoader = ({
   isLoading,
   ...rest
 }: FlexProps & { isLoading: boolean }) => {
-  if (!isLoading) return;
+  if (!isLoading) return null;
   return (
     <Flex
       position="absolute"
@@ -18,13 +16,11 @@ export const SectionLoader = ({
       align="center"
       justify="center"
       bg="white"
-      transition="0.3 opacity ease"
+      transition="0.3s opacity ease"
       zIndex={9999}
       {...rest}
     >
-      <DotLoader
-        color={useToken('colors', theme.semanticTokens.colors.primary.main)}
-      />
+      <DotLoader color="var(--chakra-colors-primary-main)" />
     </Flex>
   );
 };
