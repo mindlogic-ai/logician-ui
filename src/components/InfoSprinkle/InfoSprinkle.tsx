@@ -1,16 +1,27 @@
-import {
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverContent,
-  PopoverProps,
-  PopoverTrigger,
-  Portal,
-} from '@chakra-ui/react';
+import { ReactNode } from 'react';
+import { Popover, Portal } from '@chakra-ui/react';
 
 import { LuInfo } from '../Icon';
 import { IconButton } from '../IconButton';
 import { IconButtonProps } from '../IconButton/IconButton.types';
+
+type PopoverRootProps = React.ComponentProps<typeof Popover.Root>;
+
+// Extended types for Chakra v3 compound components
+type PopoverTriggerProps = React.ComponentProps<typeof Popover.Trigger> & {
+  children?: ReactNode;
+};
+type PopoverContentProps = React.ComponentProps<typeof Popover.Content> & {
+  children?: ReactNode;
+};
+type PopoverArrowProps = React.ComponentProps<typeof Popover.Arrow> & {
+  children?: ReactNode;
+};
+
+// Cast components to extended types
+const PopoverTrigger = Popover.Trigger as React.FC<PopoverTriggerProps>;
+const PopoverContent = Popover.Content as React.FC<PopoverContentProps>;
+const PopoverArrow = Popover.Arrow as React.FC<PopoverArrowProps>;
 
 export const InfoSprinkle = ({
   children,
@@ -19,10 +30,14 @@ export const InfoSprinkle = ({
 }: {
   children: React.ReactNode;
   iconButtonProps?: Partial<IconButtonProps>;
-} & PopoverProps) => {
+} & Omit<PopoverRootProps, 'children'>) => {
   return (
-    <Popover trigger="hover" placement="top" isLazy {...rest}>
-      <PopoverTrigger>
+    <Popover.Root
+      positioning={{ placement: 'top' }}
+      lazyMount
+      {...rest}
+    >
+      <PopoverTrigger asChild>
         <IconButton
           aria-label="Info"
           icon={<LuInfo boxSize="sm" color="inherit" />}
@@ -30,11 +45,15 @@ export const InfoSprinkle = ({
         />
       </PopoverTrigger>
       <Portal>
-        <PopoverContent boxShadow="2xl" w="fit-content">
-          <PopoverArrow />
-          <PopoverBody>{children}</PopoverBody>
-        </PopoverContent>
+        <Popover.Positioner>
+          <PopoverContent boxShadow="2xl" w="fit-content">
+            <PopoverArrow>
+              <Popover.ArrowTip />
+            </PopoverArrow>
+            <Popover.Body>{children}</Popover.Body>
+          </PopoverContent>
+        </Popover.Positioner>
       </Portal>
-    </Popover>
+    </Popover.Root>
   );
 };

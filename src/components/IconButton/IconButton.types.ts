@@ -19,4 +19,8 @@ export type IconButtonProps = Omit<ChakraIconButtonProps, 'variant'> & {
    * @deprecated Use disabled instead
    */
   isDisabled?: boolean;
+  /**
+   * @deprecated Use css instead
+   */
+  sx?: Record<string, any>;
 };

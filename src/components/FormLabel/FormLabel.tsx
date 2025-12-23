@@ -1,9 +1,21 @@
+import { ReactNode } from 'react';
 import { Field } from '@chakra-ui/react';
 
-type FieldLabelProps = React.ComponentProps<typeof Field.Label>;
+type FieldLabelBaseProps = React.ComponentProps<typeof Field.Label>;
 
-export type FormLabelProps = FieldLabelProps;
+export interface FormLabelProps extends FieldLabelBaseProps {
+  children?: ReactNode;
+}
 
-export const FormLabel = (props: FormLabelProps) => (
-  <Field.Label color="gray.1000" mb={0.5} marginInlineEnd={0} {...props} />
+export const FormLabel = ({ children, ...props }: FormLabelProps) => (
+  <Field.Label
+    css={{
+      color: 'var(--chakra-colors-gray-1000)',
+      marginBottom: '2px',
+      marginInlineEnd: 0,
+    }}
+    {...props}
+  >
+    {children}
+  </Field.Label>
 );

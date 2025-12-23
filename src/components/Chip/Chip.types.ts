@@ -1,4 +1,6 @@
-import { BadgeProps as ChakraBadgeProps } from '@chakra-ui/react';
+import { Badge } from '@chakra-ui/react';
+
+type ChakraBadgeProps = React.ComponentProps<typeof Badge>;
 
 export type ChipUseCase =
   | 'danger'
@@ -8,7 +10,9 @@ export type ChipUseCase =
   | 'dark'
   | 'highlight';
 
-export interface ChipProps extends ChakraBadgeProps {
+export type ChipVariant = 'subtle' | 'solid';
+
+export interface ChipProps extends Omit<ChakraBadgeProps, 'variant'> {
   useCase?: ChipUseCase;
-  variant?: string;
+  variant?: ChipVariant;
 }
