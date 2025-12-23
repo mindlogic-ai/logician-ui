@@ -3,7 +3,6 @@ import {
   Separator,
   Flex,
   Grid,
-  useToken,
   VStack,
 } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
@@ -22,6 +21,25 @@ import {
   Text,
 } from '../components/Typography';
 import { colors, semanticTokens } from './colors';
+
+/**
+ * Helper function to resolve a semantic token reference to its actual hex value.
+ * E.g., '{colors.blue.500}' -> '#1751D0'
+ */
+const resolveTokenReference = (reference: string): string => {
+  // Check if it's a reference string like '{colors.blue.500}'
+  const match = reference.match(/^\{colors\.(\w+)\.(\d+)\}$/);
+  if (!match) {
+    // Already a hex value or unknown format
+    return reference;
+  }
+  const [, colorName, shade] = match;
+  const colorScale = (colors as any)[colorName];
+  if (colorScale && colorScale[shade]) {
+    return colorScale[shade].value;
+  }
+  return reference;
+};
 
 const meta = {
   title: 'Setup/Theme',
@@ -76,16 +94,8 @@ const ColorCard = ({
   shadeValue: string;
 }) => {
   const [wasCopied, setWasCopied] = useState<boolean>();
-  const [hexCodeToken] = useToken('colors', [shadeValue]);
-  const hexCode = (() => {
-    if (!hexCodeToken) return '';
-    const token = hexCodeToken!;
-    // @ts-expect-error - token is guaranteed to not be null after the check above
-    if (typeof token === 'object' && 'value' in token) {
-      return (token as any).value as string;
-    }
-    return token as string;
-  })();
+  // Resolve the token reference to actual hex value
+  const hexCode = resolveTokenReference(shadeValue);
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = () => {
     navigator.clipboard.writeText(hexCode);
@@ -95,6 +105,24 @@ const ColorCard = ({
     }, 2000);
   };
 
+  // Safe lighten that falls back to the original color
+  const safeLighten = (amount: number, color: string) => {
+    try {
+      return lighten(amount, color);
+    } catch {
+      return color;
+    }
+  };
+
+  // Safe readableColor that falls back to black
+  const safeReadableColor = (color: string) => {
+    try {
+      return readableColor(color);
+    } catch {
+      return '#000000';
+    }
+  };
+
   return (
     <Flex flexDir="column" align="center" key={shade} p={2}>
       <Tooltip label="Copy hex code" placement="top">
@@ -102,7 +130,7 @@ const ColorCard = ({
           w="100px"
           h="100px"
           align="flex-end"
-          bg={shadeValue}
+          bg={hexCode}
           borderRadius="md"
           boxShadow="md"
           as="button"
@@ -115,7 +143,7 @@ const ColorCard = ({
         >
           {wasCopied ? (
             <Flex
-              color={readableColor(hexCode)}
+              color={safeReadableColor(hexCode)}
               w="100%"
               h="100%"
               justify="center"
@@ -127,8 +155,8 @@ const ColorCard = ({
             <Box
               textAlign="center"
               mt={4}
-              color={readableColor(lighten(0.2, hexCode))}
-              bgColor={lighten(0.2, hexCode)}
+              color={safeReadableColor(safeLighten(0.2, hexCode))}
+              bgColor={safeLighten(0.2, hexCode)}
               m={2}
               p={1}
               w="100%"
