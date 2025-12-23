@@ -46,6 +46,10 @@ const meta = {
     isOpen: true,
     onClose: () => alert('should close here!'),
   },
+  argTypes: {
+    // Disable slides from Controls panel to prevent JSON serialization of JSX
+    slides: { table: { disable: true } },
+  },
 } satisfies Meta<typeof CarouselModal>;
 
 export default meta;
