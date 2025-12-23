@@ -7,13 +7,14 @@ import { RadioProps } from './Radio.types';
 type RadioGroupItemProps = React.ComponentProps<typeof RadioGroup.Item> & {
   children?: ReactNode;
   css?: Record<string, any>;
+  ref?: React.Ref<HTMLDivElement>;
 };
 
 type RadioGroupItemTextProps = React.ComponentProps<typeof RadioGroup.ItemText> & {
   children?: ReactNode;
 };
 
-const RadioItem = RadioGroup.Item as React.FC<RadioGroupItemProps>;
+const RadioItem = RadioGroup.Item as React.ForwardRefExoticComponent<RadioGroupItemProps>;
 const RadioItemText = RadioGroup.ItemText as React.FC<RadioGroupItemTextProps>;
 
 export const Radio = forwardRef<HTMLDivElement, RadioProps>(

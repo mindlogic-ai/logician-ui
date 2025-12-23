@@ -178,7 +178,7 @@ export const Masonry = ({
       {...rest}
     >
       {columns.map((colItems, i) => (
-        <Flex key={`masonry-column-${i}`} direction="column" width="100%">
+        <Flex key={`masonry-column-${i}`} flexDirection="column" width="100%">
           {colItems}
         </Flex>
       ))}
