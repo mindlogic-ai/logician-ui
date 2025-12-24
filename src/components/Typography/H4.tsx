@@ -7,6 +7,7 @@ export const H4 = forwardRef<HTMLHeadingElement, HeadingProps>((props, ref) => {
       ref={ref}
       as="h4"
       fontSize="h4"
+      lineHeight="1.4"
       fontWeight="semibold"
       wordBreak="keep-all"
       {...props}

@@ -6,6 +6,7 @@ export const Subtext = forwardRef<HTMLParagraphElement, TextProps>((props, ref) 
     <Text
       ref={ref}
       fontSize="subtext"
+      lineHeight="1.5"
       fontWeight="regular"
       color="gray.1500"
       wordBreak="keep-all"
