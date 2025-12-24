@@ -37,6 +37,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <ChakraButton
         border="1px solid"
         lineHeight="1.2"
+        fontWeight="semibold"
         size={size}
         fontSize={size === 'xs' ? 'sm' : size} // xs is too small
         {...styles}
