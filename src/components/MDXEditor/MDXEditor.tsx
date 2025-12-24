@@ -126,19 +126,19 @@ export const MDXEditor = forwardRef<
             },
 
           h1: {
-            fontSize: '2.25em',
+            fontSize: '3em',
           },
           h2: {
-            fontSize: '1.75em',
+            fontSize: '2.5em',
           },
           h3: {
-            fontSize: '1.375em',
+            fontSize: '1.75em',
           },
           h4: {
-            fontSize: '1.125em',
+            fontSize: '1.44em',
           },
           h5: {
-            fontSize: '1em',
+            fontSize: '1.2em',
           },
 
           'ol, ul': {

@@ -19,15 +19,6 @@ const config = defineConfig({
           value: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif',
         },
       },
-      fontSizes: {
-        h1: { value: '2.25em' },
-        h2: { value: '1.75em' },
-        h3: { value: '1.375em' },
-        h4: { value: '1.125em' },
-        h5: { value: '1em' },
-        p: { value: '0.875em' },
-        subtext: { value: '0.75em' },
-      },
       radii: {
         none: { value: '0' },
         sm: { value: '6px' },
@@ -39,6 +30,17 @@ const config = defineConfig({
     },
     semanticTokens: {
       colors: semanticTokens.colors,
+      // Responsive font sizes - smaller on mobile, standard on desktop
+      fontSizes: {
+        subtext: { value: { base: '0.92em', md: '1em' } },
+        subtitle: { value: { base: '0.92em', md: '1em' } },
+        p: { value: { base: '1em', md: '1em' } },
+        h5: { value: { base: '1.1em', md: '1.2em' } },
+        h4: { value: { base: '1.25em', md: '1.44em' } },
+        h3: { value: { base: '1.5em', md: '1.75em' } },
+        h2: { value: { base: '2em', md: '2.5em' } },
+        h1: { value: { base: '2.4em', md: '3em' } },
+      },
     },
   },
 });
