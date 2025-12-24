@@ -8,8 +8,8 @@ export interface LinkCustomProps extends Omit<LinkProps, 'variant'> {
 
 export const Link = forwardRef<HTMLAnchorElement, LinkCustomProps>(
   ({ color, variant, ...rest }, ref) => {
-    const defaultColor = 'blue.500';
-    const errorColor = 'red.500';
+    const defaultColor = 'primary.main';
+    const errorColor = 'danger.main';
     const tokenKey =
       variant === 'error'
         ? errorColor

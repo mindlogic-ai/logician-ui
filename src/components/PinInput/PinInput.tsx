@@ -14,7 +14,7 @@ export const PinInput = ({
   ...rest
 }: PinInputProps) => {
   const pinInputRef = useRef<ReactPinInput>(null);
-  const primaryColor = useToken('colors', 'blue.500')[0];
+  const primaryColor = useToken('colors', 'primary.main')[0];
   const grayColor = useToken('colors', 'gray.200')[0];
 
   useEffect(() => {

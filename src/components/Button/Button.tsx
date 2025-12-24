@@ -29,7 +29,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    const primaryMainColor = useToken('colors', 'blue.500')[0];
+    const primaryMainColor = useToken('colors', 'primary.main')[0];
 
     const styles = getButtonStyles(colorScheme, variant);
 

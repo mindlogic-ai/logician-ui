@@ -37,7 +37,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         resize="none"
         borderColor="gray.400"
         _focus={{
-          borderColor: 'blue.500',
+          borderColor: 'primary.main',
         }}
         {...props}
       />

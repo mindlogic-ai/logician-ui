@@ -18,7 +18,7 @@ export const LineGraph = <T extends DatumBase>({
   displayLegend = true,
   ...rest
 }: LineGraphProps<T>) => {
-  const primaryColor = useToken('colors', 'blue.500')[0];
+  const primaryColor = useToken('colors', 'primary.main')[0];
   return (
     <Box h="400px" {...rest}>
       <ResponsiveContainer width="100%" height="100%">
