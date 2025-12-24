@@ -47,11 +47,11 @@ const config = defineConfig({
     },
     semanticTokens: {
       colors: semanticTokens.colors,
-      // Responsive font sizes - smaller on mobile, standard on desktop (matches v2)
+      // Responsive font sizes - smaller on mobile, standard on desktop
       fontSizes: {
-        subtext: { value: { base: '0.8em', md: '0.92em' } },
-        subtitle: { value: { base: '0.8em', md: '0.92em' } },
-        p: { value: { base: '0.9em', md: '1em' } },
+        subtext: { value: { base: '0.92em', md: '1em' } },
+        subtitle: { value: { base: '0.92em', md: '1em' } },
+        p: { value: { base: '1em', md: '1em' } },
         h5: { value: { base: '1.1em', md: '1.2em' } },
         h4: { value: { base: '1.25em', md: '1.44em' } },
         h3: { value: { base: '1.5em', md: '1.75em' } },
