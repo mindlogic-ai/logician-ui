@@ -1,5 +1,5 @@
-import { Progress } from '@chakra-ui/react';
 import { ComponentProps } from 'react';
+import { Progress } from '@chakra-ui/react';
 
 export type ProgressBarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 

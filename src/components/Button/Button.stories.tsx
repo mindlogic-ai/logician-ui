@@ -2,17 +2,17 @@ import { Box, Flex, VStack, HStack, Text, Grid, GridItem } from '@chakra-ui/reac
 import { Meta, StoryObj } from '@storybook/react';
 
 import { Sparkles } from '../Icon';
-import { Button, buttonColorSchemes, buttonVariants } from '.';
-import { ButtonColorScheme, ButtonVariant } from './Button.types';
+import { Button, buttonColorPalettes, buttonVariants } from '.';
+import { ButtonColorPalette, ButtonVariant } from './Button.types';
 
 const meta = {
   title: 'Components/Button',
   component: Button,
   argTypes: {
-    colorScheme: {
+    colorPalette: {
       control: 'select',
-      options: buttonColorSchemes,
-      description: 'Semantic color family (overrides Chakra colorScheme)',
+      options: buttonColorPalettes,
+      description: 'Semantic color family (Chakra v3 colorPalette)',
     },
     variant: {
       control: 'select',
@@ -29,15 +29,15 @@ type Story = StoryObj<typeof Button>;
 export const Basic: Story = {
   args: {
     children: 'Button',
-    colorScheme: 'primary',
+    colorPalette: 'primary',
     variant: 'solid',
   },
 };
 
 /**
- * Complete button matrix showing all colorScheme × variant combinations.
+ * Complete button matrix showing all colorPalette × variant combinations.
  *
- * ## Color Schemes (rows):
+ * ## Color Palettes (rows):
  * - `primary`: Blue - main brand actions
  * - `secondary`: Violet - accent actions
  * - `danger`: Rose - destructive actions
@@ -66,17 +66,17 @@ export const AllCombinations: Story = {
         ))}
       </HStack>
 
-      {/* Color scheme rows */}
-      {buttonColorSchemes.map((colorScheme) => (
-        <HStack key={colorScheme} gap={4}>
+      {/* Color palette rows */}
+      {buttonColorPalettes.map((colorPalette) => (
+        <HStack key={colorPalette} gap={4}>
           <Box w="100px">
             <Text fontSize="subtext" fontWeight="bold" color="gray.600">
-              {colorScheme}
+              {colorPalette}
             </Text>
           </Box>
           {buttonVariants.map((variant) => (
-            <Box key={`${colorScheme}-${variant}`} w="120px">
-              <Button colorScheme={colorScheme} variant={variant}>
+            <Box key={`${colorPalette}-${variant}`} w="120px">
+              <Button colorPalette={colorPalette} variant={variant}>
                 Button
               </Button>
             </Box>
@@ -104,16 +104,16 @@ export const AllWithIcons: Story = {
         ))}
       </HStack>
 
-      {buttonColorSchemes.map((colorScheme) => (
-        <HStack key={colorScheme} gap={4}>
+      {buttonColorPalettes.map((colorPalette) => (
+        <HStack key={colorPalette} gap={4}>
           <Box w="100px">
             <Text fontSize="subtext" fontWeight="bold" color="gray.600">
-              {colorScheme}
+              {colorPalette}
             </Text>
           </Box>
           {buttonVariants.map((variant) => (
-            <Box key={`${colorScheme}-${variant}`} w="140px">
-              <Button colorScheme={colorScheme} variant={variant}>
+            <Box key={`${colorPalette}-${variant}`} w="140px">
+              <Button colorPalette={colorPalette} variant={variant}>
                 <Sparkles /> Button
               </Button>
             </Box>
@@ -133,7 +133,7 @@ export const Primary: Story = {
       {buttonVariants.map((variant) => (
         <VStack key={variant} gap={1}>
           <Text fontSize="subtext" color="gray.600">{variant}</Text>
-          <Button colorScheme="primary" variant={variant}>
+          <Button colorPalette="primary" variant={variant}>
             Primary
           </Button>
         </VStack>
@@ -151,7 +151,7 @@ export const Secondary: Story = {
       {buttonVariants.map((variant) => (
         <VStack key={variant} gap={1}>
           <Text fontSize="subtext" color="gray.600">{variant}</Text>
-          <Button colorScheme="secondary" variant={variant}>
+          <Button colorPalette="secondary" variant={variant}>
             Secondary
           </Button>
         </VStack>
@@ -169,7 +169,7 @@ export const Danger: Story = {
       {buttonVariants.map((variant) => (
         <VStack key={variant} gap={1}>
           <Text fontSize="subtext" color="gray.600">{variant}</Text>
-          <Button colorScheme="danger" variant={variant}>
+          <Button colorPalette="danger" variant={variant}>
             Danger
           </Button>
         </VStack>
@@ -187,7 +187,7 @@ export const Success: Story = {
       {buttonVariants.map((variant) => (
         <VStack key={variant} gap={1}>
           <Text fontSize="subtext" color="gray.600">{variant}</Text>
-          <Button colorScheme="success" variant={variant}>
+          <Button colorPalette="success" variant={variant}>
             Success
           </Button>
         </VStack>
@@ -205,7 +205,7 @@ export const Warning: Story = {
       {buttonVariants.map((variant) => (
         <VStack key={variant} gap={1}>
           <Text fontSize="subtext" color="gray.600">{variant}</Text>
-          <Button colorScheme="warning" variant={variant}>
+          <Button colorPalette="warning" variant={variant}>
             Warning
           </Button>
         </VStack>
@@ -223,7 +223,7 @@ export const Neutral: Story = {
       {buttonVariants.map((variant) => (
         <VStack key={variant} gap={1}>
           <Text fontSize="subtext" color="gray.600">{variant}</Text>
-          <Button colorScheme="neutral" variant={variant}>
+          <Button colorPalette="neutral" variant={variant}>
             Neutral
           </Button>
         </VStack>
@@ -238,10 +238,10 @@ export const Neutral: Story = {
 export const SolidVariant: Story = {
   render: () => (
     <Flex gap={4} wrap="wrap">
-      {buttonColorSchemes.map((colorScheme) => (
-        <VStack key={colorScheme} gap={1}>
-          <Text fontSize="subtext" color="gray.600">{colorScheme}</Text>
-          <Button colorScheme={colorScheme} variant="solid">
+      {buttonColorPalettes.map((colorPalette) => (
+        <VStack key={colorPalette} gap={1}>
+          <Text fontSize="subtext" color="gray.600">{colorPalette}</Text>
+          <Button colorPalette={colorPalette} variant="solid">
             Solid
           </Button>
         </VStack>
@@ -256,10 +256,10 @@ export const SolidVariant: Story = {
 export const SoftVariant: Story = {
   render: () => (
     <Flex gap={4} wrap="wrap">
-      {buttonColorSchemes.map((colorScheme) => (
-        <VStack key={colorScheme} gap={1}>
-          <Text fontSize="subtext" color="gray.600">{colorScheme}</Text>
-          <Button colorScheme={colorScheme} variant="soft">
+      {buttonColorPalettes.map((colorPalette) => (
+        <VStack key={colorPalette} gap={1}>
+          <Text fontSize="subtext" color="gray.600">{colorPalette}</Text>
+          <Button colorPalette={colorPalette} variant="soft">
             Soft
           </Button>
         </VStack>
@@ -274,10 +274,10 @@ export const SoftVariant: Story = {
 export const OutlineVariant: Story = {
   render: () => (
     <Flex gap={4} wrap="wrap">
-      {buttonColorSchemes.map((colorScheme) => (
-        <VStack key={colorScheme} gap={1}>
-          <Text fontSize="subtext" color="gray.600">{colorScheme}</Text>
-          <Button colorScheme={colorScheme} variant="outline">
+      {buttonColorPalettes.map((colorPalette) => (
+        <VStack key={colorPalette} gap={1}>
+          <Text fontSize="subtext" color="gray.600">{colorPalette}</Text>
+          <Button colorPalette={colorPalette} variant="outline">
             Outline
           </Button>
         </VStack>
@@ -292,10 +292,10 @@ export const OutlineVariant: Story = {
 export const GhostVariant: Story = {
   render: () => (
     <Flex gap={4} wrap="wrap">
-      {buttonColorSchemes.map((colorScheme) => (
-        <VStack key={colorScheme} gap={1}>
-          <Text fontSize="subtext" color="gray.600">{colorScheme}</Text>
-          <Button colorScheme={colorScheme} variant="ghost">
+      {buttonColorPalettes.map((colorPalette) => (
+        <VStack key={colorPalette} gap={1}>
+          <Text fontSize="subtext" color="gray.600">{colorPalette}</Text>
+          <Button colorPalette={colorPalette} variant="ghost">
             Ghost
           </Button>
         </VStack>

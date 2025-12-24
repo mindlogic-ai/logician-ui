@@ -5,9 +5,7 @@ import { SliderFilledTrackProps } from './SliderFilledTrack.types';
 
 export const SliderFilledTrack = forwardRef(
   ({ ...rest }: SliderFilledTrackProps, ref?: ForwardedRef<HTMLDivElement>) => {
-    return (
-      <Slider.Range {...(rest as any)} ref={ref as any} />
-    );
+    return <Slider.Range {...(rest as any)} ref={ref as any} />;
   }
 );
 

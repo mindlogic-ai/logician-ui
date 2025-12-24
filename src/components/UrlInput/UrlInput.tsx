@@ -1,5 +1,10 @@
 import { ForwardedRef, forwardRef } from 'react';
-import { Group, InputAddon, InputProps, Input as ChakraInput } from '@chakra-ui/react';
+import {
+  Group,
+  Input as ChakraInput,
+  InputAddon,
+  InputProps,
+} from '@chakra-ui/react';
 
 export interface UrlInputProps extends InputProps {
   leftAddon?: string;

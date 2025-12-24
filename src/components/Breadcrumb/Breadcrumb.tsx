@@ -1,15 +1,15 @@
 import { ForwardedRef, forwardRef } from 'react';
 import { Breadcrumb as ChakraBreadcrumb } from '@chakra-ui/react';
 
-import { IoChevronForward } from '../Icon';
 import { BreadcrumbProps } from './Breadcrumb.types';
 export const Breadcrumb = forwardRef(
-  ({ children, ...rest }: BreadcrumbProps, ref?: ForwardedRef<HTMLDivElement>) => {
+  (
+    { children, ...rest }: BreadcrumbProps,
+    ref?: ForwardedRef<HTMLDivElement>
+  ) => {
     return (
       <ChakraBreadcrumb.Root {...rest} ref={ref}>
-        <ChakraBreadcrumb.List>
-          {children}
-        </ChakraBreadcrumb.List>
+        <ChakraBreadcrumb.List>{children}</ChakraBreadcrumb.List>
       </ChakraBreadcrumb.Root>
     );
   }

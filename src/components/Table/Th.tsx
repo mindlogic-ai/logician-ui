@@ -1,8 +1,5 @@
 import { forwardRef, useCallback, useEffect, useRef } from 'react';
-import {
-  Table,
-  useToken,
-} from '@chakra-ui/react';
+import { Table, useToken } from '@chakra-ui/react';
 
 import { getStickyStyles } from './Table.styles';
 import { TableCellProps } from './Table.types';
@@ -65,10 +62,14 @@ export const Th = forwardRef<
           style={{
             color: 'inherit',
             fontWeight: 'inherit',
-            fontSize: Array.isArray(fontSizeToken) ? fontSizeToken[0] : fontSizeToken,
+            fontSize: Array.isArray(fontSizeToken)
+              ? fontSizeToken[0]
+              : fontSizeToken,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            paddingInlineStart: Array.isArray(spacingToken) ? spacingToken[0] : spacingToken,
+            paddingInlineStart: Array.isArray(spacingToken)
+              ? spacingToken[0]
+              : spacingToken,
             ...style,
           }}
           {...htmlProps}

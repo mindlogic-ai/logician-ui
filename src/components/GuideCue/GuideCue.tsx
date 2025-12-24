@@ -1,10 +1,5 @@
 import { RefObject, useEffect, useRef, useState } from 'react';
-import {
-  Box,
-  Flex,
-  Popover,
-  Portal,
-} from '@chakra-ui/react';
+import { Box, Flex, Popover, Portal } from '@chakra-ui/react';
 import { keyframes } from '@emotion/react';
 
 import { Button } from '../Button';
@@ -189,12 +184,27 @@ export const GuideCue = ({
           </Popover.Trigger>
         )}
         <Popover.Content {...({ asChild: true } as any)}>
-          <div style={{ backgroundColor: 'white', borderRadius: '8px', padding: '0', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+          <div
+            style={{
+              backgroundColor: 'white',
+              borderRadius: '8px',
+              padding: '0',
+              boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+            }}
+          >
             <Popover.Arrow />
-            <Box textAlign="left" p={0} w="fit-content" minW="200px" maxW="400px">
+            <Box
+              textAlign="left"
+              p={0}
+              w="fit-content"
+              minW="200px"
+              maxW="400px"
+            >
               <Box color="gray.600">
                 <Popover.CloseTrigger {...({ asChild: true } as any)}>
-                  <button style={{ all: 'unset', cursor: 'pointer' }}>&times;</button>
+                  <button style={{ all: 'unset', cursor: 'pointer' }}>
+                    &times;
+                  </button>
                 </Popover.CloseTrigger>
               </Box>
               <Box py={4} px={2} color="black">
@@ -219,7 +229,7 @@ export const GuideCue = ({
                   data-testid="guideCue-nextButton"
                   onClick={handleNext}
                   w="fit-content"
-                  colorScheme="primary"
+                  colorPalette="primary"
                   variant="soft"
                   ref={ctaRef}
                 >

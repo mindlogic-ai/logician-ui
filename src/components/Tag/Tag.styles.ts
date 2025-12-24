@@ -1,16 +1,16 @@
 import { BoxProps } from '@chakra-ui/react';
 
-import { TagColorScheme, TagVariant } from './Tag.types';
+import { TagColorPalette, TagVariant } from './Tag.types';
 
 /**
  * Tag styles using a two-dimensional variant system.
  *
- * Structure: tagColorSchemeStyles[colorScheme][variant]
+ * Structure: tagColorPaletteStyles[colorPalette][variant]
  *
  * Uses semantic color tokens from the Golden Ratio color system.
  */
-export const tagColorSchemeStyles: Record<
-  TagColorScheme,
+export const tagColorPaletteStyles: Record<
+  TagColorPalette,
   Record<TagVariant, BoxProps>
 > = {
   primary: {
@@ -118,17 +118,17 @@ export const tagColorSchemeStyles: Record<
 };
 
 /**
- * Helper function to get tag styles for a given colorScheme and variant.
+ * Helper function to get tag styles for a given colorPalette and variant.
  */
 export const getTagStyles = (
-  colorScheme: TagColorScheme = 'neutral',
+  colorPalette: TagColorPalette = 'neutral',
   variant: TagVariant = 'soft'
 ): BoxProps => {
-  return tagColorSchemeStyles[colorScheme][variant];
+  return tagColorPaletteStyles[colorPalette][variant];
 };
 
-/** All available color schemes */
-export const tagColorSchemes: TagColorScheme[] = [
+/** All available color palettes */
+export const tagColorPalettes: TagColorPalette[] = [
   'primary',
   'secondary',
   'danger',
@@ -136,6 +136,16 @@ export const tagColorSchemes: TagColorScheme[] = [
   'warning',
   'neutral',
 ];
+
+/**
+ * @deprecated Use tagColorPalettes instead. Will be removed in next major version.
+ */
+export const tagColorSchemes = tagColorPalettes;
+
+/**
+ * @deprecated Use tagColorPaletteStyles instead. Will be removed in next major version.
+ */
+export const tagColorSchemeStyles = tagColorPaletteStyles;
 
 /** All available variants */
 export const tagVariants: TagVariant[] = ['soft', 'solid', 'outline'];

@@ -1,7 +1,8 @@
-export { Accordion } from './Accordion';
 export type { AccordionProps } from './Accordion';
+export { Accordion } from './Accordion';
+export type { AccordionButtonProps } from './AccordionButton';
 export { AccordionButton } from './AccordionButton';
-export { AccordionItem } from './AccordionItem';
 export type { AccordionItemProps } from './AccordionItem';
-// In v3, AccordionPanel is now Accordion.ItemContent
+export { AccordionItem } from './AccordionItem';
+export type { AccordionPanelProps } from './AccordionPanel';
 export { AccordionPanel } from './AccordionPanel';

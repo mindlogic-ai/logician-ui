@@ -1,6 +1,5 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { Button, Tabs } from '@chakra-ui/react';
-import type { ButtonProps } from '@chakra-ui/react';
 
 import { useTabsContext } from '@/components/Tabs/TabsContext';
 
@@ -12,7 +11,8 @@ import {
 } from './Tab.styles';
 
 export const Tab = ({ name, children, ...props }: TabProps) => {
-  const { orientation, registerTabName, getNextTriggerIndex } = useTabsContext();
+  const { orientation, registerTabName, getNextTriggerIndex } =
+    useTabsContext();
   const tabRef = useRef<HTMLButtonElement>(null);
   const [tabIndex] = useState(() => getNextTriggerIndex());
   const tabValue = tabIndex.toString();

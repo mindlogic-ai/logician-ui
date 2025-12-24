@@ -1,10 +1,8 @@
-import {
-  Menu,
-  useToken,
-} from '@chakra-ui/react';
 import { ComponentProps, ReactNode } from 'react';
+import { Menu, useToken } from '@chakra-ui/react';
 
-export interface MenuListProps extends Omit<ComponentProps<typeof Menu.Content>, 'children'> {
+export interface MenuListProps
+  extends Omit<ComponentProps<typeof Menu.Content>, 'children'> {
   children?: ReactNode;
 }
 

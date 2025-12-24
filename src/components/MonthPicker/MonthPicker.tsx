@@ -206,68 +206,68 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
     <Popover.Content width="320px" {...({ asChild: true } as any)}>
       <div>
         <Popover.Body>
-        <VStack gap={4} align="stretch">
-          {/* Year Navigation */}
-          <HStack justify="space-between" align="center">
-            <Button
-              size="sm"
-              colorScheme="neutral"
-              variant="ghost"
-              onClick={() => handleYearChange('prev')}
-              disabled={!canNavigateToPrevYear}
-              opacity={!canNavigateToPrevYear ? 0.4 : 1}
-            >
-              <IoIosArrowBack />
-            </Button>
+          <VStack gap={4} align="stretch">
+            {/* Year Navigation */}
+            <HStack justify="space-between" align="center">
+              <Button
+                size="sm"
+                colorPalette="neutral"
+                variant="ghost"
+                onClick={() => handleYearChange('prev')}
+                disabled={!canNavigateToPrevYear}
+                opacity={!canNavigateToPrevYear ? 0.4 : 1}
+              >
+                <IoIosArrowBack />
+              </Button>
 
-            <Text fontWeight="semibold" fontSize="h5">
-              {currentYear}
-            </Text>
+              <Text fontWeight="semibold" fontSize="h5">
+                {currentYear}
+              </Text>
 
-            <Button
-              size="sm"
-              colorScheme="neutral"
-              variant="ghost"
-              onClick={() => handleYearChange('next')}
-              disabled={!canNavigateToNextYear}
-              opacity={!canNavigateToNextYear ? 0.4 : 1}
-            >
-              <IoChevronForward />
-            </Button>
-          </HStack>
+              <Button
+                size="sm"
+                colorPalette="neutral"
+                variant="ghost"
+                onClick={() => handleYearChange('next')}
+                disabled={!canNavigateToNextYear}
+                opacity={!canNavigateToNextYear ? 0.4 : 1}
+              >
+                <IoChevronForward />
+              </Button>
+            </HStack>
 
-          {/* Months Grid */}
-          <Grid templateColumns="repeat(3, 1fr)" gap={2}>
-            {monthNames.map((monthName, monthIndex) => (
-              <MonthButton
-                key={monthIndex}
-                month={monthIndex}
-                year={currentYear}
-                monthName={monthName}
-                selectedRange={selectedRange}
-                selectionStart={selectionStart}
-                hoveredMonth={hoveredMonth}
-                minMonth={minMonth}
-                maxMonth={maxMonth}
-                onClick={handleMonthClick}
-                onMouseEnter={handleMonthHover}
-                onMouseLeave={handleMonthHoverLeave}
-              />
-            ))}
-          </Grid>
+            {/* Months Grid */}
+            <Grid templateColumns="repeat(3, 1fr)" gap={2}>
+              {monthNames.map((monthName, monthIndex) => (
+                <MonthButton
+                  key={monthIndex}
+                  month={monthIndex}
+                  year={currentYear}
+                  monthName={monthName}
+                  selectedRange={selectedRange}
+                  selectionStart={selectionStart}
+                  hoveredMonth={hoveredMonth}
+                  minMonth={minMonth}
+                  maxMonth={maxMonth}
+                  onClick={handleMonthClick}
+                  onMouseEnter={handleMonthHover}
+                  onMouseLeave={handleMonthHoverLeave}
+                />
+              ))}
+            </Grid>
 
-          {/* Action Buttons */}
-          <HStack gap={2} justify="flex-end">
-            <Button
-              size="sm"
-              colorScheme="neutral"
-              variant="ghost"
-              onClick={handleClear}
-            >
-              {translate('clear')}
-            </Button>
-          </HStack>
-        </VStack>
+            {/* Action Buttons */}
+            <HStack gap={2} justify="flex-end">
+              <Button
+                size="sm"
+                colorPalette="neutral"
+                variant="ghost"
+                onClick={handleClear}
+              >
+                {translate('clear')}
+              </Button>
+            </HStack>
+          </VStack>
         </Popover.Body>
       </div>
     </Popover.Content>
@@ -290,7 +290,9 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
         <Popover.Trigger {...({ asChild: true } as any)}>
           <Box>
             <InputGroup
-              startElement={<MdOutlineCalendarToday boxSize="xs" color="gray.800" />}
+              startElement={
+                <MdOutlineCalendarToday boxSize="xs" color="gray.800" />
+              }
             >
               <Input
                 name={name}

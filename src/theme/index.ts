@@ -14,7 +14,9 @@ const config = defineConfig({
     tokens: {
       colors,
       fonts: {
-        body: { value: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif' },
+        body: {
+          value: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif',
+        },
         heading: {
           value: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif',
         },

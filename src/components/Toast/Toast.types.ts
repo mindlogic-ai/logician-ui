@@ -11,7 +11,13 @@ export interface ToastProps extends Omit<BoxProps, 'title'>, MLToastOptions {}
 
 export interface UseToastOptions extends MLToastOptions {
   duration?: number;
-  placement?: 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end';
+  placement?:
+    | 'top'
+    | 'top-start'
+    | 'top-end'
+    | 'bottom'
+    | 'bottom-start'
+    | 'bottom-end';
   styles?: BoxProps;
   [key: string]: any;
 }

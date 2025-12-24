@@ -3,8 +3,6 @@ import {
   RangeDatepickerProps,
 } from 'chakra-dayzed-datepicker';
 
-import { MdOutlineCalendarToday } from '../Icon';
-
 export const RangeDatePicker = ({
   propsConfigs,
   configs,
@@ -26,20 +24,22 @@ export const RangeDatePicker = ({
           fontWeight: 'regular',
           color: 'gray.1500',
           fontSize: 'md',
-          leftIcon: (
-            <MdOutlineCalendarToday
-              color="gray.600"
-              style={{ marginInlineEnd: 3 }}
-            />
-          ),
-        },
+          // TODO: Chakra v3 removed leftIcon prop. Waiting for chakra-dayzed-datepicker v3 update.
+          // Icon temporarily removed until library supports v3
+          // leftIcon: (
+          //   <MdOutlineCalendarToday
+          //     color="gray.600"
+          //     style={{ marginInlineEnd: 3 }}
+          //   />
+          // ),
+        } as any, // Suppress type error until chakra-dayzed-datepicker updates for v3
         inputProps: {
           color: 'primary.dark',
           ...propsConfigs?.inputProps,
         },
         popoverCompProps: {
           popoverContentProps: {
-            ...(({ p: 2, borderRadius: 16 } as any)),
+            ...({ p: 2, borderRadius: 16 } as any),
             border: '1px solid',
             borderColor: 'primary.lightest',
             boxShadow: 'lg',

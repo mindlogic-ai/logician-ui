@@ -7,10 +7,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import {
-  Input as ChakraInput,
-  InputGroup,
-} from '@chakra-ui/react';
+import { Input as ChakraInput, InputGroup } from '@chakra-ui/react';
 
 import { formatNumber } from '@/utils/formatNumber';
 
@@ -300,7 +297,9 @@ export const Input = forwardRef(
       <InputGroup
         size={size as any}
         startElement={leftIcon as any}
-        endElement={rightIcon ? <div ref={rightElementRef}>{rightIcon}</div> : undefined}
+        endElement={
+          rightIcon ? <div ref={rightElementRef}>{rightIcon}</div> : undefined
+        }
         {...wrapperProps}
         {...({} as any)}
       >

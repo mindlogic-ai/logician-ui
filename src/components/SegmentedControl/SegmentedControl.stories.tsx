@@ -95,8 +95,27 @@ export const Rounded: Story = {
 export const Small: Story = {
   args: {
     size: 'sm',
-    borderRadius: 'full',
     w: 'fit-content',
+  },
+};
+
+export const WithDisabledOption = {
+  args: {
+    options: [
+      {
+        label: 'Complete',
+        value: 'complete',
+      },
+      {
+        label: 'Incomplete',
+        value: 'incomplete',
+        disabled: true,
+      },
+      {
+        label: 'Pending',
+        value: 'pending',
+      },
+    ],
   },
 };
 

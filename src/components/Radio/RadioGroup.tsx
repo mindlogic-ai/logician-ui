@@ -5,10 +5,7 @@ import { Radio } from './Radio';
 import { RadioGroupProps, RadioOption } from './Radio.types';
 
 export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
-  (
-    { options, value, direction = 'column', gap = 3, ...rest },
-    ref
-  ) => {
+  ({ options, value, direction = 'column', gap = 3, ...rest }, ref) => {
     return (
       <ChakraRadioGroup.Root value={value} {...rest}>
         <Stack direction={direction} gap={gap} ref={ref}>

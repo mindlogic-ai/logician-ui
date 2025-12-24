@@ -1,11 +1,18 @@
 export { Tag } from './Tag';
 export {
   getTagStyles,
-  tagColorSchemes,
-  tagColorSchemeStyles,
+  tagColorPalettes,
+  tagColorPaletteStyles,
+  tagColorSchemes, // Deprecated
+  tagColorSchemeStyles, // Deprecated
   tagVariants,
 } from './Tag.styles';
-export type { TagColorScheme, TagProps, TagVariant } from './Tag.types';
+export type {
+  TagColorPalette,
+  TagColorScheme, // Deprecated
+  TagProps,
+  TagVariant,
+} from './Tag.types';
 export * from './TagCloseButton';
 export * from './TagLabel';
 export * from './TagLeftIcon';

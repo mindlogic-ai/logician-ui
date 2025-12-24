@@ -1,8 +1,5 @@
 import { ComponentProps } from 'react';
-import {
-  Editable,
-  InputProps,
-} from '@chakra-ui/react';
+import { Editable, InputProps } from '@chakra-ui/react';
 
 export interface DataFieldProps {
   label?: string;

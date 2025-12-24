@@ -11,7 +11,7 @@ const meta = {
     children: 'Tag',
   },
   argTypes: {
-    colorScheme: {
+    colorPalette: {
       control: 'select',
       options: tagColorSchemes,
       description: 'Semantic color of the tag',
@@ -32,49 +32,49 @@ export const Basic: Story = {};
 
 export const Primary: Story = {
   args: {
-    colorScheme: 'primary',
+    colorPalette: 'primary',
     children: 'Primary',
   },
 };
 
 export const Secondary: Story = {
   args: {
-    colorScheme: 'secondary',
+    colorPalette: 'secondary',
     children: 'Secondary',
   },
 };
 
 export const Success: Story = {
   args: {
-    colorScheme: 'success',
+    colorPalette: 'success',
     children: 'Success',
   },
 };
 
 export const Warning: Story = {
   args: {
-    colorScheme: 'warning',
+    colorPalette: 'warning',
     children: 'Warning',
   },
 };
 
 export const Danger: Story = {
   args: {
-    colorScheme: 'danger',
+    colorPalette: 'danger',
     children: 'Danger',
   },
 };
 
 export const Neutral: Story = {
   args: {
-    colorScheme: 'neutral',
+    colorPalette: 'neutral',
     children: 'Neutral',
   },
 };
 
 export const Soft: Story = {
   args: {
-    colorScheme: 'primary',
+    colorPalette: 'primary',
     variant: 'soft',
     children: 'Soft',
   },
@@ -82,7 +82,7 @@ export const Soft: Story = {
 
 export const Solid: Story = {
   args: {
-    colorScheme: 'primary',
+    colorPalette: 'primary',
     variant: 'solid',
     children: 'Solid',
   },
@@ -90,7 +90,7 @@ export const Solid: Story = {
 
 export const Outline: Story = {
   args: {
-    colorScheme: 'primary',
+    colorPalette: 'primary',
     variant: 'outline',
     children: 'Outline',
   },
@@ -102,9 +102,9 @@ export const Outline: Story = {
 export const Closable: Story = {
   render: () => (
     <Flex gap={2} wrap="wrap">
-      {tagColorSchemes.map((colorScheme) => (
-        <Tag key={colorScheme} colorScheme={colorScheme} variant="soft">
-          {colorScheme}
+      {tagColorSchemes.map((colorPalette) => (
+        <Tag key={colorPalette} colorPalette={colorPalette} variant="soft">
+          {colorPalette}
           <TagCloseButton />
         </Tag>
       ))}
@@ -113,7 +113,7 @@ export const Closable: Story = {
 };
 
 /**
- * Shows all combinations of colorScheme × variant in a matrix layout.
+ * Shows all combinations of colorPalette × variant in a matrix layout.
  */
 export const AllCombinations: Story = {
   render: () => (
@@ -131,16 +131,16 @@ export const AllCombinations: Story = {
       </Flex>
 
       {/* Color scheme rows */}
-      {tagColorSchemes.map((colorScheme) => (
-        <Flex key={colorScheme} mb={4} gap={4} align="center">
+      {tagColorSchemes.map((colorPalette) => (
+        <Flex key={colorPalette} mb={4} gap={4} align="center">
           <Box w="100px">
             <Text fontWeight="medium" fontSize="subtext">
-              {colorScheme}
+              {colorPalette}
             </Text>
           </Box>
           {tagVariants.map((variant) => (
-            <Box key={`${colorScheme}-${variant}`} w="100px" textAlign="center">
-              <Tag colorScheme={colorScheme} variant={variant}>
+            <Box key={`${colorPalette}-${variant}`} w="100px" textAlign="center">
+              <Tag colorPalette={colorPalette} variant={variant}>
                 Tag
               </Tag>
             </Box>
@@ -162,10 +162,10 @@ export const Categories: Story = {
           Article Categories
         </Text>
         <Flex gap={2} wrap="wrap">
-          <Tag colorScheme="primary" variant="soft">Technology</Tag>
-          <Tag colorScheme="secondary" variant="soft">Design</Tag>
-          <Tag colorScheme="success" variant="soft">Business</Tag>
-          <Tag colorScheme="warning" variant="soft">Opinion</Tag>
+          <Tag colorPalette="primary" variant="soft">Technology</Tag>
+          <Tag colorPalette="secondary" variant="soft">Design</Tag>
+          <Tag colorPalette="success" variant="soft">Business</Tag>
+          <Tag colorPalette="warning" variant="soft">Opinion</Tag>
         </Flex>
       </Box>
 
@@ -174,11 +174,11 @@ export const Categories: Story = {
           Task Status
         </Text>
         <Flex gap={2} wrap="wrap">
-          <Tag colorScheme="neutral" variant="outline">Draft</Tag>
-          <Tag colorScheme="primary" variant="solid">In Progress</Tag>
-          <Tag colorScheme="warning" variant="soft">Review</Tag>
-          <Tag colorScheme="success" variant="solid">Completed</Tag>
-          <Tag colorScheme="danger" variant="soft">Blocked</Tag>
+          <Tag colorPalette="neutral" variant="outline">Draft</Tag>
+          <Tag colorPalette="primary" variant="solid">In Progress</Tag>
+          <Tag colorPalette="warning" variant="soft">Review</Tag>
+          <Tag colorPalette="success" variant="solid">Completed</Tag>
+          <Tag colorPalette="danger" variant="soft">Blocked</Tag>
         </Flex>
       </Box>
 
@@ -187,10 +187,10 @@ export const Categories: Story = {
           Priority Labels
         </Text>
         <Flex gap={2} wrap="wrap">
-          <Tag colorScheme="danger" variant="solid">Critical</Tag>
-          <Tag colorScheme="warning" variant="solid">High</Tag>
-          <Tag colorScheme="primary" variant="soft">Medium</Tag>
-          <Tag colorScheme="neutral" variant="soft">Low</Tag>
+          <Tag colorPalette="danger" variant="solid">Critical</Tag>
+          <Tag colorPalette="warning" variant="solid">High</Tag>
+          <Tag colorPalette="primary" variant="soft">Medium</Tag>
+          <Tag colorPalette="neutral" variant="soft">Low</Tag>
         </Flex>
       </Box>
     </VStack>
@@ -205,15 +205,15 @@ export const FilterTags: Story = {
     <VStack align="start" gap={4}>
       <Text fontWeight="bold">Active Filters</Text>
       <Flex gap={2} wrap="wrap">
-        <Tag colorScheme="primary" variant="soft">
+        <Tag colorPalette="primary" variant="soft">
           Category: Design
           <TagCloseButton />
         </Tag>
-        <Tag colorScheme="primary" variant="soft">
+        <Tag colorPalette="primary" variant="soft">
           Status: Active
           <TagCloseButton />
         </Tag>
-        <Tag colorScheme="primary" variant="soft">
+        <Tag colorPalette="primary" variant="soft">
           Date: Last 7 days
           <TagCloseButton />
         </Tag>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, List, Box } from '@chakra-ui/react';
+import { Box, Button, List } from '@chakra-ui/react';
 
 import { FileItem } from '@/components/FileItem';
 import { FileGroupProps } from '@/components/FileList/FileList.types';
@@ -57,7 +57,9 @@ export const FileList = ({
           <List.Item key={file.id} listStyle="none">
             <FileItem
               fileName={file.name}
-              onFileDelete={onFileDelete ? () => handleFileDelete(file) : undefined}
+              onFileDelete={
+                onFileDelete ? () => handleFileDelete(file) : undefined
+              }
               onFileDownload={
                 onFileDownload && file.fileUrl
                   ? () => onFileDownload?.(file)
@@ -82,7 +84,12 @@ export const FileList = ({
           variant="ghost"
           display="flex"
           gap={1}
-          css={{ all: 'unset', display: 'flex', gap: '0.25rem', cursor: 'pointer' }}
+          css={{
+            all: 'unset',
+            display: 'flex',
+            gap: '0.25rem',
+            cursor: 'pointer',
+          }}
         >
           <Subtitle color="gray.600">
             {translate('see_more')} ({visibleCount}/{files.length})

@@ -26,29 +26,54 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     status: 'error',
-    children: 'Pro 플랜 무료 체험이 Jan 01 에 종료됩니다.',
+    title: 'Trial Ending Soon',
+    description: 'Pro 플랜 무료 체험이 Jan 01 에 종료됩니다.',
   },
 };
 
 /**
- * All alert status variants using the Golden Ratio color system.
- * Each variant uses `lightest` background with `dark` text for WCAG AA compliance.
+ * Alert with only title (no description)
+ */
+export const TitleOnly: Story = {
+  args: {
+    status: 'info',
+    title: 'New Feature Available',
+  },
+};
+
+/**
+ * Alert with only description (no title)
+ */
+export const DescriptionOnly: Story = {
+  args: {
+    status: 'warning',
+    description:
+      'Please save your work. The session will expire in 5 minutes.',
+  },
+};
+
+/**
+ * All alert status variants with title and description
  */
 export const AllVariants: Story = {
   render: () => (
     <VStack gap={4} align="stretch">
-      <Alert status="info">
-        This is an info alert - use for general information.
-      </Alert>
-      <Alert status="success">
-        This is a success alert - use for confirmations.
-      </Alert>
-      <Alert status="warning">
-        This is a warning alert - use for caution messages.
-      </Alert>
-      <Alert status="error">
-        This is an error alert - use for error messages.
-      </Alert>
+      <Alert
+        status="info"
+        title="Information"
+      />
+      <Alert
+        status="success"
+        title="Success"
+      />
+      <Alert
+        status="warning"
+        title="Warning"
+      />
+      <Alert
+        status="error"
+        title="Error"
+      />
     </VStack>
   ),
 };
@@ -56,35 +81,69 @@ export const AllVariants: Story = {
 export const Info: Story = {
   args: {
     status: 'info',
-    children: 'This is an informational message.',
+    title: 'Information',
+    description: 'This is an informational message.',
   },
 };
 
 export const Success: Story = {
   args: {
     status: 'success',
-    children: 'Operation completed successfully!',
+    title: 'Success',
+    description: 'Operation completed successfully!',
   },
 };
 
 export const Warning: Story = {
   args: {
     status: 'warning',
-    children: 'Please review your changes before continuing.',
+    title: 'Warning',
+    description: 'Please review your changes before continuing.',
   },
 };
 
 export const Error: Story = {
   args: {
     status: 'error',
-    children: 'An error occurred. Please try again.',
+    title: 'Error',
+    description: 'An error occurred. Please try again.',
   },
 };
 
 export const WithCloseButton: Story = {
   args: {
     status: 'success',
-    children: '성공적으로 완료되었습니다!',
+    title: 'Success',
+    description: '성공적으로 완료되었습니다!',
     onClose: action('onClose'),
   },
+};
+
+/**
+ * Alert sizes - sm, md (default), lg
+ * Size affects spacing and icon size
+ */
+export const Sizes: Story = {
+  render: () => (
+    <VStack gap={4} align="stretch">
+      <Alert
+        status="info"
+        size="sm"
+        title="Small Alert"
+        description="This is a small size alert with smaller icon and spacing."
+      />
+      <Alert
+        status="success"
+        size="md"
+        title="Medium Alert (Default)"
+        description="This is the default medium size alert."
+      />
+      <Alert
+        status="warning"
+        size="lg"
+        title="Large Alert"
+        description="This is a large size alert with larger icon and spacing."
+      />
+    </VStack>
+  ),
 };

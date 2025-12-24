@@ -1,7 +1,4 @@
-import {
-  Popover,
-  Portal,
-} from '@chakra-ui/react';
+import { Popover, Portal } from '@chakra-ui/react';
 
 import { LuInfo } from '../Icon';
 import { IconButton } from '../IconButton';
@@ -16,21 +13,33 @@ export const InfoSprinkle = ({
   iconButtonProps?: Partial<IconButtonProps>;
 } & Popover.RootProps) => {
   return (
-    <Popover.Root openDelay={200} closeDelay={200} positioning={{ placement: 'top' }} lazyMount {...rest}>
+    <Popover.Root
+      openDelay={200}
+      closeDelay={200}
+      positioning={{ placement: 'top' }}
+      lazyMount
+      {...rest}
+    >
       <Popover.Trigger {...({ asChild: true } as any)}>
-        <IconButton
-          aria-label="Info"
-          {...iconButtonProps}
-        >
+        <IconButton aria-label="Info" {...iconButtonProps}>
           <LuInfo boxSize="sm" color="inherit" />
         </IconButton>
       </Popover.Trigger>
       <Portal>
         <Popover.Content {...({ asChild: true } as any)}>
-          <div style={{ backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)' }}>
+          <div
+            style={{
+              backgroundColor: 'white',
+              borderRadius: '8px',
+              boxShadow:
+                '0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)',
+            }}
+          >
             <Popover.Arrow />
             <Popover.Body {...({ asChild: true } as any)}>
-              <div style={{ padding: '16px', width: 'fit-content' }}>{children}</div>
+              <div style={{ padding: '16px', width: 'fit-content' }}>
+                {children}
+              </div>
             </Popover.Body>
           </div>
         </Popover.Content>

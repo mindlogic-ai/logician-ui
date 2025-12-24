@@ -1,8 +1,5 @@
 import { useRef, useState } from 'react';
-import {
-  Box,
-  Editable,
-} from '@chakra-ui/react';
+import { Box, Editable } from '@chakra-ui/react';
 
 import { AutowidthInput } from '@/components/AutowidthInput';
 import {
@@ -13,8 +10,8 @@ import {
 } from '@/components/DataField/DataField.styles';
 import { DataFieldProps } from '@/components/DataField/DataField.types';
 import { IconButton } from '@/components/IconButton';
-import { Text } from '@/components/Typography';
 import { Tooltip } from '@/components/Tooltip';
+import { Text } from '@/components/Typography';
 
 import { Edit, FaRegCopy } from '../Icon';
 
@@ -109,7 +106,7 @@ export const DataField = ({
                 <IconButton
                   aria-label={`Edit ${label}`}
                   onClick={handleEditButtonClick}
-                  colorScheme="neutral"
+                  colorPalette="neutral"
                   variant="ghost"
                 >
                   <Edit boxSize="xs" />
@@ -119,7 +116,7 @@ export const DataField = ({
                     <IconButton
                       aria-label={`Copy ${label}`}
                       onClick={handleCopyButtonClick}
-                      colorScheme="neutral"
+                      colorPalette="neutral"
                       variant="ghost"
                     >
                       <FaRegCopy boxSize="xs" />
@@ -137,7 +134,7 @@ export const DataField = ({
                 <IconButton
                   aria-label={`Copy ${label}`}
                   onClick={handleCopyButtonClick}
-                  colorScheme="neutral"
+                  colorPalette="neutral"
                   variant="ghost"
                 >
                   <FaRegCopy boxSize="xs" />

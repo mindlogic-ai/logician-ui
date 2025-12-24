@@ -47,9 +47,7 @@ export const optionStyles = ({
     : isDisabled
       ? 'gray.500' // #9AA3B8 - disabled text
       : 'gray.1200', // #2A3142 - default text
-  fontWeight: isSelected
-    ? 'semibold'
-    : 'normal',
+  fontWeight: isSelected ? 'semibold' : 'normal',
   '&:hover': {
     backgroundColor: 'gray.50', // #F7F9FC
   },

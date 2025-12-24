@@ -83,7 +83,7 @@ export const FileItem = ({
                   onClick={onFileDelete}
                   size="xs"
                   disabled={isDeleting}
-                  colorScheme="neutral"
+                  colorPalette="neutral"
                   variant="ghost"
                 >
                   <IoClose color="gray.600" boxSize="md" />
@@ -100,7 +100,7 @@ export const FileItem = ({
                 aria-label={'download uploaded file button'}
                 onClick={onFileDownload}
                 size="xs"
-                colorScheme="neutral"
+                colorPalette="neutral"
                 variant="ghost"
               >
                 <LuDownload color="gray.800" />
@@ -112,7 +112,7 @@ export const FileItem = ({
                 onClick={onFileDelete}
                 size="xs"
                 disabled={isDeleting}
-                colorScheme="neutral"
+                colorPalette="neutral"
                 variant="ghost"
               >
                 {isDeleting ? (

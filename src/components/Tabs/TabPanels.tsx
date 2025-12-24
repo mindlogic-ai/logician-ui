@@ -1,10 +1,13 @@
 import { useEffect } from 'react';
-import { Box, Tabs } from '@chakra-ui/react';
 import type { BoxProps } from '@chakra-ui/react';
+import { Box, Tabs } from '@chakra-ui/react';
 
 import { useTabsContext } from './TabsContext';
 
-export const TabPanels = ({ children, ...props }: BoxProps & { children?: React.ReactNode }) => {
+export const TabPanels = ({
+  children,
+  ...props
+}: BoxProps & { children?: React.ReactNode }) => {
   const { resetPanelIndex } = useTabsContext();
 
   // Reset panel index counter when TabPanels renders

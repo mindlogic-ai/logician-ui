@@ -12,18 +12,17 @@ export const ProgressBar = ({
   const styles = sizeStyles[size];
 
   return (
-    <ChakraProgress.Root
-      value={value}
-      {...styles}
-      {...rest}
-    >
+    <ChakraProgress.Root value={value} {...styles} {...rest}>
       <ChakraProgress.Track {...({ asChild: true } as any)}>
         <div style={{ backgroundColor: 'var(--chakra-colors-gray-200)' }}>
           <ChakraProgress.Range {...({ asChild: true } as any)}>
-            <div style={{
-              backgroundColor: filledTrackColor ?? 'var(--chakra-colors-primary-main)',
-              transition: 'width 0.3s ease-in-out'
-            }} />
+            <div
+              style={{
+                backgroundColor:
+                  filledTrackColor ?? 'var(--chakra-colors-primary-main)',
+                transition: 'width 0.3s ease-in-out',
+              }}
+            />
           </ChakraProgress.Range>
         </div>
       </ChakraProgress.Track>

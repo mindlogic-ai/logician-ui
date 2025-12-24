@@ -21,7 +21,10 @@ export const PageLoader = ({
       {...rest}
     >
       <Box position="relative">
-        <BounceLoader color="var(--chakra-colors-blue-500)" style={{ zIndex: 999 }} />
+        <BounceLoader
+          color="var(--chakra-colors-blue-500)"
+          style={{ zIndex: 999 }}
+        />
       </Box>
     </Flex>
   );

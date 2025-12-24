@@ -3,13 +3,7 @@ import { Textarea as ChakraTextarea, TextareaProps } from '@chakra-ui/react';
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   (
-    {
-      placeholder,
-      onChange,
-      value: propValue,
-      _focusVisible,
-      ...props
-    },
+    { placeholder, onChange, value: propValue, _focusVisible, ...props },
     ref
   ) => {
     const [currentValue, setCurrentValue] = useState<

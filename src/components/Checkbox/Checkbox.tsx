@@ -6,11 +6,7 @@ import { CheckboxProps } from './Checkbox.types';
 export const Checkbox = forwardRef<HTMLLabelElement, CheckboxProps>(
   ({ children, ...rest }, ref) => {
     return (
-      <ChakraCheckbox.Root
-        ref={ref}
-        colorPalette="blue"
-        {...rest}
-      >
+      <ChakraCheckbox.Root ref={ref} colorPalette="blue" {...rest}>
         <ChakraCheckbox.HiddenInput />
         <ChakraCheckbox.Control {...({ asChild: true } as any)}>
           <div

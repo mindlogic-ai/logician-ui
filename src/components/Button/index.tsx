@@ -1,12 +1,15 @@
 export { Button } from './Button';
 export {
-  buttonColorSchemes,
-  buttonColorSchemeStyles,
+  buttonColorPalettes,
+  buttonColorPaletteStyles,
+  buttonColorSchemes, // Deprecated export for backward compatibility
+  buttonColorSchemeStyles, // Deprecated export for backward compatibility
   buttonVariants,
   getButtonStyles,
 } from './Button.styles';
 export type {
-  ButtonColorScheme,
+  ButtonColorPalette,
+  ButtonColorScheme, // Deprecated type for backward compatibility
   ButtonProps,
   ButtonVariant,
 } from './Button.types';

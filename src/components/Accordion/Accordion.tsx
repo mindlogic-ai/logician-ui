@@ -1,17 +1,35 @@
-import { Accordion as ChakraAccordion } from '@chakra-ui/react';
 import { ComponentProps } from 'react';
+import { Accordion as ChakraAccordion } from '@chakra-ui/react';
 
-export type AccordionProps = ComponentProps<typeof ChakraAccordion.Root>;
+export type AccordionProps = ComponentProps<typeof ChakraAccordion.Root> & {
+  /**
+   * @deprecated Use `collapsible` instead. Will be removed in next major version.
+   */
+  allowToggle?: boolean;
+  /**
+   * @deprecated Use `multiple` instead. Will be removed in next major version.
+   */
+  allowMultiple?: boolean;
+};
 
-export const Accordion = (props: AccordionProps) => {
+export const Accordion = ({
+  allowToggle, // v2 prop (deprecated)
+  allowMultiple, // v2 prop (deprecated)
+  collapsible,
+  multiple,
+  variant = 'enclosed', // Default to enclosed variant for v3
+  ...rest
+}: AccordionProps) => {
+  // Support both v2 and v3 props for backward compatibility
+  const isCollapsible = collapsible ?? allowToggle;
+  const isMultiple = multiple ?? allowMultiple ?? true; // Default to multiple
+
   return (
     <ChakraAccordion.Root
-      multiple
-      borderRadius={4}
-      overflow="hidden"
-      border="1px solid"
-      borderColor="gray.300"
-      {...props}
+      collapsible={isCollapsible}
+      multiple={isMultiple}
+      variant={variant}
+      {...rest}
     />
   );
 };

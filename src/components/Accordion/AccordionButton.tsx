@@ -1,35 +1,21 @@
-import { PropsWithChildren, ReactNode } from 'react';
-import { Accordion, Flex } from '@chakra-ui/react';
-import { ComponentProps } from 'react';
+import { ReactNode } from 'react';
+import type { AccordionItemTriggerProps } from '@chakra-ui/react';
+import { Accordion, HStack } from '@chakra-ui/react';
 
-type AccordionItemTriggerProps = ComponentProps<typeof Accordion.ItemTrigger> & {
+export type AccordionButtonProps = AccordionItemTriggerProps & {
+  children?: ReactNode;
   customIcon?: ReactNode;
 };
 
 export const AccordionButton = ({
-  customIcon = undefined,
+  customIcon,
   children,
   ...rest
-}: PropsWithChildren<AccordionItemTriggerProps>) => {
+}: AccordionButtonProps) => {
   return (
-    <Accordion.ItemTrigger
-      _hover={{
-        bg: 'primary.lightest',
-      }}
-      _expanded={{
-        bg: 'primary.lightest',
-        borderBottomWidth: '1px',
-      }}
-      fontWeight="bold"
-      {...rest}
-      {...({ asChild: true } as any)}
-    >
-      <button style={{ all: 'unset', display: 'flex', width: '100%', cursor: 'pointer' }}>
-        <Flex w="100%" justify="space-between" align="center">
-          {children}
-          {customIcon ? customIcon : <Accordion.ItemIndicator />}
-        </Flex>
-      </button>
+    <Accordion.ItemTrigger fontWeight="bold" {...rest}>
+      <HStack flex="1">{children}</HStack>
+      {customIcon ?? <Accordion.ItemIndicator />}
     </Accordion.ItemTrigger>
   );
 };

@@ -8,7 +8,9 @@ export const Switch = ({ children, ...rest }: any) => {
       <ChakraSwitch.Control {...({} as any)}>
         <ChakraSwitch.Thumb />
       </ChakraSwitch.Control>
-      {children && <ChakraSwitch.Label {...({} as any)}>{children}</ChakraSwitch.Label>}
+      {children && (
+        <ChakraSwitch.Label {...({} as any)}>{children}</ChakraSwitch.Label>
+      )}
     </ChakraSwitch.Root>
   );
 };

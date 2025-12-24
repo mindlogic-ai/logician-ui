@@ -1,16 +1,16 @@
 import { ButtonProps as ChakraButtonProps } from '@chakra-ui/react';
 
-import { ButtonColorScheme, ButtonVariant } from './Button.types';
+import { ButtonColorPalette, ButtonVariant } from './Button.types';
 
 type StyleProps = Partial<ChakraButtonProps>;
 
 /**
  * Two-dimensional Button styles using the Golden Ratio color system.
  *
- * Combines `colorScheme` (semantic color) with `variant` (visual appearance)
+ * Combines `colorPalette` (semantic color) with `variant` (visual appearance)
  * to create a flexible, consistent button styling system.
  *
- * ## Color Schemes:
+ * ## Color Palettes:
  * - `primary`: Blue - main brand actions
  * - `secondary`: Violet - accent actions
  * - `danger`: Rose - destructive actions
@@ -24,8 +24,8 @@ type StyleProps = Partial<ChakraButtonProps>;
  * - `outline`: Border only (medium emphasis)
  * - `ghost`: No background or border (lowest emphasis)
  */
-export const buttonColorSchemeStyles: Record<
-  ButtonColorScheme,
+export const buttonColorPaletteStyles: Record<
+  ButtonColorPalette,
   Record<ButtonVariant, StyleProps>
 > = {
   /**
@@ -342,19 +342,19 @@ export const buttonColorSchemeStyles: Record<
 };
 
 /**
- * Get button styles for a given colorScheme and variant combination.
+ * Get button styles for a given colorPalette and variant combination.
  */
 export const getButtonStyles = (
-  colorScheme: ButtonColorScheme = 'primary',
+  colorPalette: ButtonColorPalette = 'primary',
   variant: ButtonVariant = 'solid'
 ): StyleProps => {
-  return buttonColorSchemeStyles[colorScheme][variant];
+  return buttonColorPaletteStyles[colorPalette][variant];
 };
 
 /**
- * List of all available color schemes.
+ * List of all available color palettes.
  */
-export const buttonColorSchemes: ButtonColorScheme[] = [
+export const buttonColorPalettes: ButtonColorPalette[] = [
   'primary',
   'secondary',
   'danger',
@@ -362,6 +362,16 @@ export const buttonColorSchemes: ButtonColorScheme[] = [
   'warning',
   'neutral',
 ];
+
+/**
+ * @deprecated Use buttonColorPalettes instead. Will be removed in next major version.
+ */
+export const buttonColorSchemes = buttonColorPalettes;
+
+/**
+ * @deprecated Use buttonColorPaletteStyles instead. Will be removed in next major version.
+ */
+export const buttonColorSchemeStyles = buttonColorPaletteStyles;
 
 /**
  * List of all available variants.

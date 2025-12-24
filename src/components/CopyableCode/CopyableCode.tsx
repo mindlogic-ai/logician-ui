@@ -38,7 +38,7 @@ export const CopyableCode = ({
         />
       </Card>
       <Button
-        colorScheme="primary"
+        colorPalette="primary"
         variant="solid"
         size="xs"
         onClick={onCopy}

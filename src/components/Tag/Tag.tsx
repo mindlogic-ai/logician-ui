@@ -8,16 +8,16 @@ import { TagProps } from './Tag.types';
  * Tag component for categorization, filtering, and labeling.
  *
  * Uses a two-dimensional variant system:
- * - `colorScheme`: What semantic color (primary, secondary, danger, etc.)
+ * - `colorPalette`: What semantic color (primary, secondary, danger, etc.)
  * - `variant`: How it looks visually (soft, solid, outline)
  *
  * Supports close button via TagCloseButton sub-component.
  *
  * @example
  * ```tsx
- * <Tag colorScheme="primary">Category</Tag>
- * <Tag colorScheme="danger" variant="solid">Error</Tag>
- * <Tag colorScheme="success" variant="outline">
+ * <Tag colorPalette="primary">Category</Tag>
+ * <Tag colorPalette="danger" variant="solid">Error</Tag>
+ * <Tag colorPalette="success" variant="outline">
  *   Completed
  *   <TagCloseButton />
  * </Tag>
@@ -25,12 +25,14 @@ import { TagProps } from './Tag.types';
  */
 export const Tag = forwardRef(
   (
-    { colorScheme = 'neutral', variant = 'soft', ...rest }: TagProps,
+    { colorPalette = 'neutral', variant = 'soft', ...rest }: TagProps,
     ref?: ForwardedRef<HTMLDivElement>
   ) => {
-    const styles = getTagStyles(colorScheme, variant);
+    const styles = getTagStyles(colorPalette, variant);
 
-    return <ChakraTag.Root border="1px solid" {...styles} {...rest} ref={ref} />;
+    return (
+      <ChakraTag.Root border="1px solid" {...styles} {...rest} ref={ref} />
+    );
   }
 );
 

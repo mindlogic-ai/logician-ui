@@ -1,12 +1,15 @@
 export { IconButton } from './IconButton';
 export {
   getIconButtonStyles,
-  iconButtonColorSchemes,
-  iconButtonColorSchemeStyles,
+  iconButtonColorPalettes,
+  iconButtonColorPaletteStyles,
+  iconButtonColorSchemes, // Deprecated
+  iconButtonColorSchemeStyles, // Deprecated
   iconButtonVariants,
 } from './IconButton.styles';
 export type {
-  IconButtonColorScheme,
+  IconButtonColorPalette,
+  IconButtonColorScheme, // Deprecated
   IconButtonProps,
   IconButtonVariant,
 } from './IconButton.types';

@@ -7,21 +7,22 @@ import { ButtonProps } from './Button.types';
 /**
  * Button component with two-dimensional variant system.
  *
- * Combines `colorScheme` (semantic color) with `variant` (visual appearance)
+ * Combines `colorPalette` (semantic color) with `variant` (visual appearance)
  * for flexible, consistent button styling.
  *
  * @example
  * ```tsx
- * <Button colorScheme="primary" variant="soft">Submit</Button>
- * <Button colorScheme="danger" variant="solid">Delete</Button>
- * <Button colorScheme="secondary" variant="outline">Cancel</Button>
- * <Button colorScheme="neutral" variant="ghost">Close</Button>
+ * <Button colorPalette="primary" variant="soft">Submit</Button>
+ * <Button colorPalette="danger" variant="solid">Delete</Button>
+ * <Button colorPalette="secondary" variant="outline">Cancel</Button>
+ * <Button colorPalette="neutral" variant="ghost">Close</Button>
  * ```
  */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
-      colorScheme = 'primary',
+      colorPalette,
+      colorScheme, // Deprecated, but maintained for backward compatibility
       variant = 'soft',
       _focus,
       size,
@@ -31,7 +32,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const primaryMainColor = useToken('colors', 'primary.main')[0];
 
-    const styles = getButtonStyles(colorScheme, variant);
+    // Support both colorPalette (v3) and colorScheme (v2) for backward compatibility
+    const palette = colorPalette ?? colorScheme ?? 'primary';
+
+    const styles = getButtonStyles(palette, variant);
 
     return (
       <ChakraButton

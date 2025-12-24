@@ -18,7 +18,6 @@ const RadialProgress: React.FC<RadialProgressProps> = ({
   className,
   ...rest
 }) => {
-
   // Helper function to resolve color tokens
   const resolveColor = (color: string): string => {
     try {

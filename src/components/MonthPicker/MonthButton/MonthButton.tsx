@@ -107,7 +107,7 @@ export const MonthButton: React.FC<MonthButtonProps> = memo(
     return (
       <Button
         size="sm"
-        colorScheme={style.colorScheme}
+        colorPalette={style.colorScheme}
         variant={style.variant}
         onClick={handleClick}
         onMouseEnter={handleMouseEnter}

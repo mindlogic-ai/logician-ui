@@ -8,9 +8,7 @@ export const ModalContent = ({ children, ...rest }: ModalContentProps) => {
     <Portal>
       <Dialog.Positioner {...({ asChild: true } as any)}>
         <div>
-          <Dialog.Content {...rest}>
-            {children}
-          </Dialog.Content>
+          <Dialog.Content {...rest}>{children}</Dialog.Content>
         </div>
       </Dialog.Positioner>
     </Portal>

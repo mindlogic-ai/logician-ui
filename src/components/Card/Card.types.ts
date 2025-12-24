@@ -1,5 +1,5 @@
-import { Card } from '@chakra-ui/react';
 import { ComponentProps } from 'react';
+import { Card } from '@chakra-ui/react';
 
 export type CardVariant = 'default' | 'gradient';
 

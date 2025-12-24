@@ -17,13 +17,17 @@ export const Tooltip = forwardRef(
         {...rest}
         {...({} as any)}
       >
-        <ChakraTooltip.Trigger asChild {...({} as any)}>{children}</ChakraTooltip.Trigger>
+        <ChakraTooltip.Trigger asChild {...({} as any)}>
+          {children}
+        </ChakraTooltip.Trigger>
         <ChakraTooltip.Content
           ref={ref}
-          css={{
-            '--tooltip-bg': 'var(--chakra-colors-gray-1200)',
-            fontSize: '0.875em',
-          } as any}
+          css={
+            {
+              '--tooltip-bg': 'var(--chakra-colors-gray-1200)',
+              fontSize: '0.875em',
+            } as any
+          }
           {...({} as any)}
         >
           {label}

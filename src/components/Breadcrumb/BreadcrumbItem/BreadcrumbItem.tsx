@@ -5,7 +5,10 @@ import { IoChevronForward } from '../../Icon';
 import { BreadcrumbItemProps } from './BreadcrumbItem.types';
 
 export const BreadcrumbItem = forwardRef(
-  ({ children, ...rest }: BreadcrumbItemProps, ref?: ForwardedRef<HTMLLIElement>) => {
+  (
+    { children, ...rest }: BreadcrumbItemProps,
+    ref?: ForwardedRef<HTMLLIElement>
+  ) => {
     return (
       <Breadcrumb.Item {...rest} ref={ref}>
         {children}

@@ -7,22 +7,27 @@ import { IconButtonProps } from './IconButton.types';
 /**
  * IconButton component with two-dimensional variant system.
  *
- * Uses the same `colorScheme` and `variant` system as Button
+ * Uses the same `colorPalette` and `variant` system as Button
  * for consistent styling across the design system.
  *
  * @example
  * ```tsx
- * <IconButton colorScheme="primary" variant="soft"><Icon /></IconButton>
- * <IconButton colorScheme="danger" variant="solid"><Icon /></IconButton>
- * <IconButton colorScheme="neutral" variant="ghost"><Icon /></IconButton>
+ * <IconButton colorPalette="primary" variant="soft"><Icon /></IconButton>
+ * <IconButton colorPalette="danger" variant="solid"><Icon /></IconButton>
+ * <IconButton colorPalette="neutral" variant="ghost"><Icon /></IconButton>
  * ```
  */
 export const IconButton = forwardRef(
   (
-    { colorScheme = 'primary', variant = 'soft', css, ...rest }: IconButtonProps,
+    {
+      colorPalette = 'primary',
+      variant = 'soft',
+      css,
+      ...rest
+    }: IconButtonProps,
     ref?: ForwardedRef<HTMLButtonElement>
   ) => {
-    const styles = getIconButtonStyles(colorScheme, variant);
+    const styles = getIconButtonStyles(colorPalette, variant);
 
     return (
       <ChakraIconButton

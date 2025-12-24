@@ -6,34 +6,62 @@ import { AlertProps } from './Alert.types';
 /**
  * A reusable Alert component that displays status messages.
  *
- * @param children - The content to display inside the alert.
- * @param status - The status of the alert. Determines the visual style of the alert.
+ * @param title - The title of the alert message.
+ * @param description - The description/details of the alert message.
+ * @param children - Optional additional content to display after description.
+ * @param status - The status of the alert. Determines the visual style.
  *                 Options: `'error' | 'success' | 'warning' | 'info'`.
  *                 Default: `'error'`.
+ * @param size - The size of the alert. Controls spacing and icon size.
+ *               Options: `'sm' | 'md' | 'lg'`.
+ *               Default: `'md'`.
  * @param onClose - Callback function triggered when the close button is clicked.
- *                  If provided, a close button will be rendered in the alert.
- *                  The function receives no arguments.
- * @param rest - Additional props inherited from Chakra UI's `AlertProps`.
+ * @param rest - Additional props inherited from Chakra UI's AlertRootProps.
+ *
+ * @example
+ * // Basic usage
+ * <Alert
+ *   status="success"
+ *   title="Success!"
+ *   description="Your changes have been saved."
+ * />
+ *
+ * @example
+ * // With close button
+ * <Alert
+ *   status="error"
+ *   title="Error"
+ *   description="Failed to save changes."
+ *   onClose={() => console.log('closed')}
+ * />
+ *
+ * @example
+ * // With additional content
+ * <Alert status="info" title="Information" description="New feature available">
+ *   <Button>Learn More</Button>
+ * </Alert>
  */
 export const Alert = ({
+  title,
+  description,
   children,
   status = 'error',
+  size = 'md',
   onClose,
   ...rest
 }: AlertProps) => {
   const styles = AlertStyles[status] || {};
 
   return (
-    <ChakraAlert.Root
-      minH={16}
-      display="flex"
-      justifyContent="center"
-      status={status}
-      {...styles}
-      {...rest}
-    >
+    <ChakraAlert.Root status={status} size={size} {...styles} {...rest}>
       <ChakraAlert.Indicator />
-      <ChakraAlert.Content>{children}</ChakraAlert.Content>
+      <ChakraAlert.Content>
+        {title && <ChakraAlert.Title>{title}</ChakraAlert.Title>}
+        {description && (
+          <ChakraAlert.Description>{description}</ChakraAlert.Description>
+        )}
+        {children}
+      </ChakraAlert.Content>
       {onClose && <CloseButton onClick={onClose} />}
     </ChakraAlert.Root>
   );

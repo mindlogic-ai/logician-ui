@@ -43,12 +43,22 @@ export const Td = ({
         ref={cellRef}
         style={{
           color: 'inherit',
-          fontSize: Array.isArray(fontSizeToken) ? fontSizeToken[0] : fontSizeToken,
-          paddingTop: Array.isArray(paddingToken) ? paddingToken[0] : paddingToken,
-          paddingBottom: Array.isArray(paddingToken) ? paddingToken[0] : paddingToken,
+          fontSize: Array.isArray(fontSizeToken)
+            ? fontSizeToken[0]
+            : fontSizeToken,
+          paddingTop: Array.isArray(paddingToken)
+            ? paddingToken[0]
+            : paddingToken,
+          paddingBottom: Array.isArray(paddingToken)
+            ? paddingToken[0]
+            : paddingToken,
           overflow: 'hidden',
           textOverflow: 'ellipsis',
-          paddingInlineStart: _first ? (Array.isArray(spacingToken) ? spacingToken[0] : spacingToken) : undefined,
+          paddingInlineStart: _first
+            ? Array.isArray(spacingToken)
+              ? spacingToken[0]
+              : spacingToken
+            : undefined,
           ...(wrap
             ? {
                 whiteSpace: 'normal',

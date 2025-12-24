@@ -1,6 +1,4 @@
-import {
-  Table,
-} from '@chakra-ui/react';
+import { Table } from '@chakra-ui/react';
 
 import { StickyDirection } from './Table.styles';
 

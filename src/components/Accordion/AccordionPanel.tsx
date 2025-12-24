@@ -1,10 +1,17 @@
-import { Accordion } from '@chakra-ui/react';
 import { ComponentProps, ReactNode } from 'react';
+import { Accordion } from '@chakra-ui/react';
 
-export type AccordionPanelProps = ComponentProps<typeof Accordion.ItemContent> & {
+export type AccordionPanelProps = Omit<
+  ComponentProps<typeof Accordion.ItemContent>,
+  'children'
+> & {
   children?: ReactNode;
 };
 
-export const AccordionPanel = (props: AccordionPanelProps) => {
-  return <Accordion.ItemContent {...props} />;
+export const AccordionPanel = ({ children, ...rest }: AccordionPanelProps) => {
+  return (
+    <Accordion.ItemContent {...rest}>
+      <Accordion.ItemBody>{children}</Accordion.ItemBody>
+    </Accordion.ItemContent>
+  );
 };

@@ -40,7 +40,7 @@ export const CopyButton = ({
         aria-label="Copy code"
         onClick={handleClick}
         p={0}
-        colorScheme="neutral"
+        colorPalette="neutral"
         variant="ghost"
         {...rest}
       >

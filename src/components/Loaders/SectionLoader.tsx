@@ -20,9 +20,7 @@ export const SectionLoader = ({
       zIndex={9999}
       {...rest}
     >
-      <DotLoader
-        color="var(--chakra-colors-primary-main)"
-      />
+      <DotLoader color="var(--chakra-colors-primary-main)" />
     </Flex>
   );
 };
