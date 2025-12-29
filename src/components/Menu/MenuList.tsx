@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Menu, Portal } from '@chakra-ui/react';
+import { Menu, Portal, useToken } from '@chakra-ui/react';
 
 type MenuContentBaseProps = React.ComponentProps<typeof Menu.Content>;
 type MenuPositionerBaseProps = React.ComponentProps<typeof Menu.Positioner>;
@@ -22,15 +22,18 @@ export interface MenuListProps extends MenuContentBaseProps {
 }
 
 export const MenuList = ({ children, ...rest }: MenuListProps) => {
+  const shadowColor = useToken('colors', 'gray.50');
+
   return (
     <Portal>
       <MenuPositioner>
         <MenuContent
           css={{
-            border: '1px solid var(--chakra-colors-gray-400)',
+            border: '1px solid',
+            borderColor: 'var(--chakra-colors-gray-200)',
             borderRadius: 'var(--chakra-radii-md)',
-            boxShadow: '0 5px 20px 1px var(--chakra-colors-gray-50)',
-            padding: 'var(--chakra-spacing-1-5)',
+            boxShadow: `0 5px 20px 1px ${shadowColor}`,
+            padding: 'var(--chakra-space-1-5)',
           }}
           {...rest}
         >
