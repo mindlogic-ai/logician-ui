@@ -42,7 +42,7 @@ const sharedConfig = {
 };
 
 export default defineConfig([
-  // Main exports: ESM + CJS for backward compatibility with full type definitions
+  // Main exports: ESM + CJS for backward compatibility
   {
     ...sharedConfig,
     entry: {
@@ -50,19 +50,19 @@ export default defineConfig([
       icons: 'src/icons.ts',
     },
     format: ['esm', 'cjs'],
-    dts: true, // Generate type definitions for main exports
+    dts: false, // Types generated separately via tsc for reliability
     sourcemap: true, // Enable sourcemaps for main exports
     splitting: false, // Disable splitting for main exports to avoid chunk conflicts
-    onSuccess: 'echo "✅ Main exports built (ESM + CJS + DTS)"',
+    onSuccess: 'echo "✅ Main exports built (ESM + CJS)"',
   },
-  // Component exports: ESM-only for tree-shaking (no DTS to avoid memory issues)
+  // Component exports: ESM-only for tree-shaking
   {
     ...sharedConfig,
     entry: componentEntries,
     format: ['esm'],
-    dts: false, // Disabled: generating DTS for 63 components exhausts worker memory
+    dts: false, // Types generated separately via tsc for reliability
     sourcemap: false, // Disabled to reduce build size
     splitting: true, // Enable splitting to create shared chunks
-    onSuccess: 'echo "✅ Component exports built (ESM only, types from main export)"',
+    onSuccess: 'echo "✅ Component exports built (ESM only)"',
   },
 ]);

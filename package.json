@@ -6,200 +6,265 @@
   "module": "dist/index.mjs",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     },
     "./icons": {
+      "types": "./dist/icons.d.ts",
       "import": "./dist/icons.mjs",
       "require": "./dist/icons.js"
     },
     "./accordion": {
+      "types": "./dist/components/Accordion/index.d.ts",
       "import": "./dist/accordion.mjs"
     },
     "./alert": {
+      "types": "./dist/components/Alert/index.d.ts",
       "import": "./dist/alert.mjs"
     },
     "./autowidthinput": {
+      "types": "./dist/components/AutowidthInput/index.d.ts",
       "import": "./dist/autowidthinput.mjs"
     },
     "./avatar": {
+      "types": "./dist/components/Avatar/index.d.ts",
       "import": "./dist/avatar.mjs"
     },
     "./badge": {
+      "types": "./dist/components/Badge/index.d.ts",
       "import": "./dist/badge.mjs"
     },
     "./banner": {
+      "types": "./dist/components/Banner/index.d.ts",
       "import": "./dist/banner.mjs"
     },
     "./breadcrumb": {
+      "types": "./dist/components/Breadcrumb/index.d.ts",
       "import": "./dist/breadcrumb.mjs"
     },
     "./button": {
+      "types": "./dist/components/Button/index.d.ts",
       "import": "./dist/button.mjs"
     },
     "./card": {
+      "types": "./dist/components/Card/index.d.ts",
       "import": "./dist/card.mjs"
     },
     "./carousel": {
+      "types": "./dist/components/Carousel/index.d.ts",
       "import": "./dist/carousel.mjs"
     },
     "./carouselmodal": {
+      "types": "./dist/components/CarouselModal/index.d.ts",
       "import": "./dist/carouselmodal.mjs"
     },
     "./checkbox": {
+      "types": "./dist/components/Checkbox/index.d.ts",
       "import": "./dist/checkbox.mjs"
     },
     "./chip": {
+      "types": "./dist/components/Chip/index.d.ts",
       "import": "./dist/chip.mjs"
     },
     "./chipbutton": {
+      "types": "./dist/components/ChipButton/index.d.ts",
       "import": "./dist/chipbutton.mjs"
     },
     "./code": {
+      "types": "./dist/components/Code/index.d.ts",
       "import": "./dist/code.mjs"
     },
     "./codetabs": {
+      "types": "./dist/components/CodeTabs/index.d.ts",
       "import": "./dist/codetabs.mjs"
     },
     "./container": {
+      "types": "./dist/components/Container/index.d.ts",
       "import": "./dist/container.mjs"
     },
     "./copyablecode": {
+      "types": "./dist/components/CopyableCode/index.d.ts",
       "import": "./dist/copyablecode.mjs"
     },
     "./crosspagetoasts": {
+      "types": "./dist/components/CrossPageToasts/index.d.ts",
       "import": "./dist/crosspagetoasts.mjs"
     },
     "./datafield": {
+      "types": "./dist/components/DataField/index.d.ts",
       "import": "./dist/datafield.mjs"
     },
     "./datepicker": {
+      "types": "./dist/components/DatePicker/index.d.ts",
       "import": "./dist/datepicker.mjs"
     },
     "./errorfallback": {
+      "types": "./dist/components/ErrorFallback/index.d.ts",
       "import": "./dist/errorfallback.mjs"
     },
     "./expandabletext": {
+      "types": "./dist/components/ExpandableText/index.d.ts",
       "import": "./dist/expandabletext.mjs"
     },
     "./fileinput": {
+      "types": "./dist/components/FileInput/index.d.ts",
       "import": "./dist/fileinput.mjs"
     },
     "./fileitem": {
+      "types": "./dist/components/FileItem/index.d.ts",
       "import": "./dist/fileitem.mjs"
     },
     "./filelist": {
+      "types": "./dist/components/FileList/index.d.ts",
       "import": "./dist/filelist.mjs"
     },
     "./formcontrol": {
+      "types": "./dist/components/FormControl/index.d.ts",
       "import": "./dist/formcontrol.mjs"
     },
     "./formlabel": {
+      "types": "./dist/components/FormLabel/index.d.ts",
       "import": "./dist/formlabel.mjs"
     },
     "./guidecue": {
+      "types": "./dist/components/GuideCue/index.d.ts",
       "import": "./dist/guidecue.mjs"
     },
     "./iconbutton": {
+      "types": "./dist/components/IconButton/index.d.ts",
       "import": "./dist/iconbutton.mjs"
     },
     "./infosprinkle": {
+      "types": "./dist/components/InfoSprinkle/index.d.ts",
       "import": "./dist/infosprinkle.mjs"
     },
     "./inlinecode": {
+      "types": "./dist/components/InlineCode/index.d.ts",
       "import": "./dist/inlinecode.mjs"
     },
     "./input": {
+      "types": "./dist/components/Input/index.d.ts",
       "import": "./dist/input.mjs"
     },
     "./linegraph": {
+      "types": "./dist/components/LineGraph/index.d.ts",
       "import": "./dist/linegraph.mjs"
     },
     "./loaders": {
+      "types": "./dist/components/Loaders/index.d.ts",
       "import": "./dist/loaders.mjs"
     },
     "./logicianprovider": {
+      "types": "./dist/components/LogicianProvider/index.d.ts",
       "import": "./dist/logicianprovider.mjs"
     },
     "./markdown": {
+      "types": "./dist/components/Markdown/index.d.ts",
       "import": "./dist/markdown.mjs"
     },
     "./masonry": {
+      "types": "./dist/components/Masonry/index.d.ts",
       "import": "./dist/masonry.mjs"
     },
     "./maxlengthindicator": {
+      "types": "./dist/components/MaxLengthIndicator/index.d.ts",
       "import": "./dist/maxlengthindicator.mjs"
     },
     "./mdxeditor": {
+      "types": "./dist/components/MDXEditor/index.d.ts",
       "import": "./dist/mdxeditor.mjs"
     },
     "./menu": {
+      "types": "./dist/components/Menu/index.d.ts",
       "import": "./dist/menu.mjs"
     },
     "./modal": {
+      "types": "./dist/components/Modal/index.d.ts",
       "import": "./dist/modal.mjs"
     },
     "./monthpicker": {
+      "types": "./dist/components/MonthPicker/index.d.ts",
       "import": "./dist/monthpicker.mjs"
     },
     "./pagination": {
+      "types": "./dist/components/Pagination/index.d.ts",
       "import": "./dist/pagination.mjs"
     },
     "./passwordinput": {
+      "types": "./dist/components/PasswordInput/index.d.ts",
       "import": "./dist/passwordinput.mjs"
     },
     "./pininput": {
+      "types": "./dist/components/PinInput/index.d.ts",
       "import": "./dist/pininput.mjs"
     },
     "./progressbar": {
+      "types": "./dist/components/ProgressBar/index.d.ts",
       "import": "./dist/progressbar.mjs"
     },
     "./radialprogress": {
+      "types": "./dist/components/RadialProgress/index.d.ts",
       "import": "./dist/radialprogress.mjs"
     },
     "./radio": {
+      "types": "./dist/components/Radio/index.d.ts",
       "import": "./dist/radio.mjs"
     },
     "./seemorebutton": {
+      "types": "./dist/components/SeeMoreButton/index.d.ts",
       "import": "./dist/seemorebutton.mjs"
     },
     "./segmentedcontrol": {
+      "types": "./dist/components/SegmentedControl/index.d.ts",
       "import": "./dist/segmentedcontrol.mjs"
     },
     "./segmentedprogressbar": {
+      "types": "./dist/components/SegmentedProgressBar/index.d.ts",
       "import": "./dist/segmentedprogressbar.mjs"
     },
     "./select": {
+      "types": "./dist/components/Select/index.d.ts",
       "import": "./dist/select.mjs"
     },
     "./slider": {
+      "types": "./dist/components/Slider/index.d.ts",
       "import": "./dist/slider.mjs"
     },
     "./spinner": {
+      "types": "./dist/components/Spinner/index.d.ts",
       "import": "./dist/spinner.mjs"
     },
     "./switch": {
+      "types": "./dist/components/Switch/index.d.ts",
       "import": "./dist/switch.mjs"
     },
     "./table": {
+      "types": "./dist/components/Table/index.d.ts",
       "import": "./dist/table.mjs"
     },
     "./tabs": {
+      "types": "./dist/components/Tabs/index.d.ts",
       "import": "./dist/tabs.mjs"
     },
     "./tag": {
+      "types": "./dist/components/Tag/index.d.ts",
       "import": "./dist/tag.mjs"
     },
     "./textarea": {
+      "types": "./dist/components/Textarea/index.d.ts",
       "import": "./dist/textarea.mjs"
     },
     "./toast": {
+      "types": "./dist/components/Toast/index.d.ts",
       "import": "./dist/toast.mjs"
     },
     "./tooltip": {
+      "types": "./dist/components/Tooltip/index.d.ts",
       "import": "./dist/tooltip.mjs"
     },
     "./urlinput": {
+      "types": "./dist/components/UrlInput/index.d.ts",
       "import": "./dist/urlinput.mjs"
     },
     "./package.json": "./package.json"
@@ -216,7 +281,9 @@
     "url": "https://mindlogic-storybook.vercel.app"
   },
   "scripts": {
-    "build": "tsup || true",
+    "build": "yarn build:js && yarn build:types",
+    "build:js": "tsup",
+    "build:types": "tsc --emitDeclarationOnly --declaration --declarationMap",
     "build:watch": "tsup --watch",
     "prepublishOnly": "yarn build",
     "lint": "eslint src --ext .ts,.tsx && yarn run check-exports",
