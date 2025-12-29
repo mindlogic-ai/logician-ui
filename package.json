@@ -6,10 +6,33 @@
   "module": "dist/index.mjs",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
     },
     "./icons": {
-      "import": "./dist/icons.mjs"
+      "import": "./dist/icons.mjs",
+      "require": "./dist/icons.js"
+    },
+    "./accordion": {
+      "import": "./dist/accordion.mjs"
+    },
+    "./alert": {
+      "import": "./dist/alert.mjs"
+    },
+    "./autowidthinput": {
+      "import": "./dist/autowidthinput.mjs"
+    },
+    "./avatar": {
+      "import": "./dist/avatar.mjs"
+    },
+    "./badge": {
+      "import": "./dist/badge.mjs"
+    },
+    "./banner": {
+      "import": "./dist/banner.mjs"
+    },
+    "./breadcrumb": {
+      "import": "./dist/breadcrumb.mjs"
     },
     "./button": {
       "import": "./dist/button.mjs"
@@ -17,17 +40,167 @@
     "./card": {
       "import": "./dist/card.mjs"
     },
+    "./carousel": {
+      "import": "./dist/carousel.mjs"
+    },
+    "./carouselmodal": {
+      "import": "./dist/carouselmodal.mjs"
+    },
+    "./checkbox": {
+      "import": "./dist/checkbox.mjs"
+    },
+    "./chip": {
+      "import": "./dist/chip.mjs"
+    },
+    "./chipbutton": {
+      "import": "./dist/chipbutton.mjs"
+    },
+    "./code": {
+      "import": "./dist/code.mjs"
+    },
+    "./codetabs": {
+      "import": "./dist/codetabs.mjs"
+    },
+    "./container": {
+      "import": "./dist/container.mjs"
+    },
+    "./copyablecode": {
+      "import": "./dist/copyablecode.mjs"
+    },
+    "./crosspagetoasts": {
+      "import": "./dist/crosspagetoasts.mjs"
+    },
+    "./datafield": {
+      "import": "./dist/datafield.mjs"
+    },
+    "./datepicker": {
+      "import": "./dist/datepicker.mjs"
+    },
+    "./errorfallback": {
+      "import": "./dist/errorfallback.mjs"
+    },
+    "./expandabletext": {
+      "import": "./dist/expandabletext.mjs"
+    },
+    "./fileinput": {
+      "import": "./dist/fileinput.mjs"
+    },
+    "./fileitem": {
+      "import": "./dist/fileitem.mjs"
+    },
+    "./filelist": {
+      "import": "./dist/filelist.mjs"
+    },
+    "./formcontrol": {
+      "import": "./dist/formcontrol.mjs"
+    },
+    "./formlabel": {
+      "import": "./dist/formlabel.mjs"
+    },
+    "./guidecue": {
+      "import": "./dist/guidecue.mjs"
+    },
+    "./iconbutton": {
+      "import": "./dist/iconbutton.mjs"
+    },
+    "./infosprinkle": {
+      "import": "./dist/infosprinkle.mjs"
+    },
+    "./inlinecode": {
+      "import": "./dist/inlinecode.mjs"
+    },
     "./input": {
       "import": "./dist/input.mjs"
+    },
+    "./linegraph": {
+      "import": "./dist/linegraph.mjs"
+    },
+    "./loaders": {
+      "import": "./dist/loaders.mjs"
+    },
+    "./logicianprovider": {
+      "import": "./dist/logicianprovider.mjs"
+    },
+    "./markdown": {
+      "import": "./dist/markdown.mjs"
+    },
+    "./masonry": {
+      "import": "./dist/masonry.mjs"
+    },
+    "./maxlengthindicator": {
+      "import": "./dist/maxlengthindicator.mjs"
+    },
+    "./mdxeditor": {
+      "import": "./dist/mdxeditor.mjs"
+    },
+    "./menu": {
+      "import": "./dist/menu.mjs"
     },
     "./modal": {
       "import": "./dist/modal.mjs"
     },
+    "./monthpicker": {
+      "import": "./dist/monthpicker.mjs"
+    },
+    "./pagination": {
+      "import": "./dist/pagination.mjs"
+    },
+    "./passwordinput": {
+      "import": "./dist/passwordinput.mjs"
+    },
+    "./pininput": {
+      "import": "./dist/pininput.mjs"
+    },
+    "./progressbar": {
+      "import": "./dist/progressbar.mjs"
+    },
+    "./radialprogress": {
+      "import": "./dist/radialprogress.mjs"
+    },
+    "./radio": {
+      "import": "./dist/radio.mjs"
+    },
+    "./seemorebutton": {
+      "import": "./dist/seemorebutton.mjs"
+    },
+    "./segmentedcontrol": {
+      "import": "./dist/segmentedcontrol.mjs"
+    },
+    "./segmentedprogressbar": {
+      "import": "./dist/segmentedprogressbar.mjs"
+    },
     "./select": {
       "import": "./dist/select.mjs"
     },
+    "./slider": {
+      "import": "./dist/slider.mjs"
+    },
+    "./spinner": {
+      "import": "./dist/spinner.mjs"
+    },
+    "./switch": {
+      "import": "./dist/switch.mjs"
+    },
     "./table": {
       "import": "./dist/table.mjs"
+    },
+    "./tabs": {
+      "import": "./dist/tabs.mjs"
+    },
+    "./tag": {
+      "import": "./dist/tag.mjs"
+    },
+    "./textarea": {
+      "import": "./dist/textarea.mjs"
+    },
+    "./toast": {
+      "import": "./dist/toast.mjs"
+    },
+    "./tooltip": {
+      "import": "./dist/tooltip.mjs"
+    },
+    "./urlinput": {
+      "import": "./dist/urlinput.mjs"
     },
     "./package.json": "./package.json"
   },

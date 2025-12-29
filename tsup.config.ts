@@ -12,15 +12,8 @@ const componentEntries = Object.fromEntries(
   })
 );
 
-export default defineConfig({
-  entry: {
-    index: 'src/index.ts',
-    icons: 'src/icons.ts',
-    ...componentEntries, // Add all component entries (button.mjs, card.mjs, etc.)
-  },
-  format: ['esm'], // Only ESM to enable proper tree-shaking
+const sharedConfig = {
   dts: false, // Disabled temporarily due to memory issues
-  splitting: true, // Enable splitting to create shared chunks
   sourcemap: false, // Disabled to reduce memory usage during build
   clean: true,
   esbuildPlugins: [esbuildSvgr()], // Handle SVG files as React components
@@ -48,5 +41,26 @@ export default defineConfig({
   },
   treeshake: true,
   minify: false, // Keep readable for debugging, consumers can minify
-  onSuccess: 'echo "✅ tsup build completed successfully!"',
-});
+};
+
+export default defineConfig([
+  // Main exports: ESM + CJS for backward compatibility
+  {
+    ...sharedConfig,
+    entry: {
+      index: 'src/index.ts',
+      icons: 'src/icons.ts',
+    },
+    format: ['esm', 'cjs'],
+    splitting: false, // Disable splitting for main exports to avoid chunk conflicts
+    onSuccess: 'echo "✅ Main exports built (ESM + CJS)"',
+  },
+  // Component exports: ESM-only for tree-shaking
+  {
+    ...sharedConfig,
+    entry: componentEntries,
+    format: ['esm'],
+    splitting: true, // Enable splitting to create shared chunks
+    onSuccess: 'echo "✅ Component exports built (ESM only)"',
+  },
+]);
