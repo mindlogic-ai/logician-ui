@@ -13,8 +13,6 @@ const componentEntries = Object.fromEntries(
 );
 
 const sharedConfig = {
-  dts: false, // Disabled temporarily due to memory issues
-  sourcemap: false, // Disabled to reduce memory usage during build
   clean: true,
   esbuildPlugins: [esbuildSvgr()], // Handle SVG files as React components
   external: [
@@ -44,7 +42,7 @@ const sharedConfig = {
 };
 
 export default defineConfig([
-  // Main exports: ESM + CJS for backward compatibility
+  // Main exports: ESM + CJS for backward compatibility with full type definitions
   {
     ...sharedConfig,
     entry: {
@@ -52,15 +50,19 @@ export default defineConfig([
       icons: 'src/icons.ts',
     },
     format: ['esm', 'cjs'],
+    dts: true, // Generate type definitions for main exports
+    sourcemap: true, // Enable sourcemaps for main exports
     splitting: false, // Disable splitting for main exports to avoid chunk conflicts
-    onSuccess: 'echo "✅ Main exports built (ESM + CJS)"',
+    onSuccess: 'echo "✅ Main exports built (ESM + CJS + DTS)"',
   },
-  // Component exports: ESM-only for tree-shaking
+  // Component exports: ESM-only for tree-shaking (no DTS to avoid memory issues)
   {
     ...sharedConfig,
     entry: componentEntries,
     format: ['esm'],
+    dts: false, // Disabled: generating DTS for 63 components exhausts worker memory
+    sourcemap: false, // Disabled to reduce build size
     splitting: true, // Enable splitting to create shared chunks
-    onSuccess: 'echo "✅ Component exports built (ESM only)"',
+    onSuccess: 'echo "✅ Component exports built (ESM only, types from main export)"',
   },
 ]);
