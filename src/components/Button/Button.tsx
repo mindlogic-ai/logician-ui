@@ -43,7 +43,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         lineHeight="1.2"
         fontWeight="semibold"
         size={size}
-        fontSize={size === 'xs' ? 'sm' : size} // xs is too small
+        textStyle={size === 'xs' ? 'sm' : size} // xs is too small
         {...styles}
         _focus={{
           outline: 'none',

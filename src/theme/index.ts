@@ -21,23 +21,6 @@ const config = defineConfig({
           value: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif',
         },
       },
-      // Disable Chakra default fontSizes - use inherit to match v2 behavior
-      fontSizes: {
-        '2xs': { value: 'inherit' },
-        xs: { value: 'inherit' },
-        sm: { value: 'inherit' },
-        md: { value: 'inherit' },
-        lg: { value: 'inherit' },
-        xl: { value: 'inherit' },
-        '2xl': { value: 'inherit' },
-        '3xl': { value: 'inherit' },
-        '4xl': { value: 'inherit' },
-        '5xl': { value: 'inherit' },
-        '6xl': { value: 'inherit' },
-        '7xl': { value: 'inherit' },
-        '8xl': { value: 'inherit' },
-        '9xl': { value: 'inherit' },
-      },
       radii: {
         none: { value: '0' },
         sm: { value: '6px' },

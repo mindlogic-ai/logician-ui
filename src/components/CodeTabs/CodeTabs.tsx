@@ -10,25 +10,49 @@ import { IconButton } from '../IconButton';
 import { useTabsContext } from '../Tabs/TabsContext';
 import { Tooltip } from '../Tooltip';
 import { CodeTabsProps } from './CodeTabs.types';
+
 const CopyButton = ({
   onCopy,
   code,
 }: Pick<CodeTabsProps, 'onCopy' | 'code'>) => {
   const translate = useTranslate();
   const [tooltipText, setTooltipText] = useState(translate('copy'));
+  const [isTooltipOpen, setIsTooltipOpen] = useState<boolean | undefined>(
+    undefined
+  );
   const { selectedIndex } = useTabsContext();
 
-  const handleCopyClick = () => {
-    onCopy?.(code[Object.keys(code)[selectedIndex]]);
+  const handleCopyClick = async () => {
+    const codeToCopy = code[Object.keys(code)[selectedIndex]];
+
+    // Copy to clipboard
+    try {
+      await navigator.clipboard.writeText(codeToCopy || '');
+    } catch {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = codeToCopy || '';
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+    }
+
+    // Call onCopy callback if provided
+    onCopy?.(codeToCopy);
+
+    // Show "Copied!" tooltip
     setTooltipText(translate('copied'));
-    const t = setTimeout(() => {
+    setIsTooltipOpen(true);
+
+    setTimeout(() => {
       setTooltipText(translate('copy'));
+      setIsTooltipOpen(undefined);
     }, 1500);
-    return () => clearTimeout(t);
   };
 
   return (
-    <Tooltip label={tooltipText} placement="top">
+    <Tooltip label={tooltipText} placement="top" open={isTooltipOpen}>
       <IconButton
         aria-label="Copy"
         borderRadius="full"
@@ -65,7 +89,7 @@ export const CodeTabs = ({ code, onCopy, ...rest }: CodeTabsProps) => {
           {languages.map((language) => (
             <Tab
               key={`${language}-tab`}
-              color="gray.800"
+              bg="none"
               px={3}
               py={1}
               m={2}

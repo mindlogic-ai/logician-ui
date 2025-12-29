@@ -48,7 +48,7 @@ export const CarouselModal = ({
 
   return (
     <Modal
-      size={'2xl' as any}
+      size="lg"
       onOpenChange={onOpenChange}
       initialFocusEl={() => nextButtonRef.current}
       {...rest}

@@ -8,23 +8,21 @@ export const Checkbox = forwardRef<HTMLLabelElement, CheckboxProps>(
     return (
       <ChakraCheckbox.Root ref={ref} colorPalette="blue" {...rest}>
         <ChakraCheckbox.HiddenInput />
-        <ChakraCheckbox.Control {...({ asChild: true } as any)}>
-          <div
-            style={{
-              borderRadius: '4px',
-              borderColor: 'var(--chakra-colors-gray-400)',
-              borderWidth: '1px',
-              borderStyle: 'solid',
-            }}
-            data-peer
-          />
+        <ChakraCheckbox.Control
+          borderRadius="sm"
+          borderColor="gray.400"
+          borderWidth="1px"
+          _checked={{
+            bgColor: 'primary.main',
+            borderColor: 'primary.main',
+          }}
+          _hover={{
+            borderColor: 'gray.600',
+          }}
+        >
+          <ChakraCheckbox.Indicator />
         </ChakraCheckbox.Control>
-        <ChakraCheckbox.Indicator />
-        {children && (
-          <ChakraCheckbox.Label {...({ asChild: true } as any)}>
-            <span>{children}</span>
-          </ChakraCheckbox.Label>
-        )}
+        {children && <ChakraCheckbox.Label>{children}</ChakraCheckbox.Label>}
       </ChakraCheckbox.Root>
     );
   }

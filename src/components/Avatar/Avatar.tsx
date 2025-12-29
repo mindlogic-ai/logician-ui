@@ -16,14 +16,8 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>((props, ref) => {
       overflow="hidden"
       {...rest}
     >
-      <ChakraAvatar.Fallback {...({ asChild: true } as any)}>
-        <div>{name}</div>
-      </ChakraAvatar.Fallback>
-      {src && (
-        <ChakraAvatar.Image {...({ asChild: true } as any)}>
-          <img src={src} alt={name} />
-        </ChakraAvatar.Image>
-      )}
+      <ChakraAvatar.Fallback name={name} />
+      <ChakraAvatar.Image src={src} />
     </ChakraAvatar.Root>
   );
 });

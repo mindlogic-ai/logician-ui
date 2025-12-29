@@ -55,6 +55,34 @@ export const RangeDatePicker = ({
               '.chakra-button[aria-pressed="false"]:nth-child(7n)': {
                 borderRightRadius: 'sm',
               },
+              // Range start: modify the ::before pseudo-element for left border radius
+              '.chakra-button[aria-pressed="true"]:has(~ .chakra-button[data-in-range])::before':
+                {
+                  borderTopLeftRadius: 'md',
+                  borderBottomLeftRadius: 'md',
+                  borderTopRightRadius: 0,
+                  borderBottomRightRadius: 0,
+                },
+              // Range end: modify the ::before pseudo-element for right border radius
+              '.chakra-button[data-in-range] ~ .chakra-button[aria-pressed="true"]::before':
+                {
+                  borderTopRightRadius: 'md',
+                  borderBottomRightRadius: 'md',
+                  borderTopLeftRadius: 0,
+                  borderBottomLeftRadius: 0,
+                },
+              // First day in range
+              '.chakra-button[data-in-range]:not(.chakra-button[data-in-range] ~ .chakra-button[data-in-range])':
+                {
+                  borderTopLeftRadius: 'md',
+                  borderBottomLeftRadius: 'md',
+                },
+              // Last day in range
+              '.chakra-button[data-in-range]:not(:has(~ .chakra-button[data-in-range]))':
+                {
+                  borderTopRightRadius: 'md',
+                  borderBottomRightRadius: 'md',
+                },
             },
             ...propsConfigs?.popoverCompProps?.popoverContentProps,
           },

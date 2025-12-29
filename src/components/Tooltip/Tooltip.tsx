@@ -1,36 +1,77 @@
-import { ForwardedRef, forwardRef } from 'react';
-import { Tooltip as ChakraTooltip } from '@chakra-ui/react';
+import { cloneElement, ForwardedRef, forwardRef, isValidElement } from 'react';
+import { Portal, Tooltip as ChakraTooltip } from '@chakra-ui/react';
 
 import { TooltipProps } from './Tooltip.types';
 
 export const Tooltip = forwardRef(
   (
-    { children, label, open, onOpenChange, placement = 'top', ...rest }: TooltipProps,
+    {
+      children,
+      label,
+      content,
+      open,
+      onOpenChange,
+      placement = 'top',
+      disabled,
+      showArrow = false,
+      contentProps,
+      arrowProps,
+      // v2 backward compatibility
+      isDisabled,
+      isOpen,
+      hasArrow,
+      ...rest
+    }: TooltipProps,
     ref?: ForwardedRef<HTMLDivElement>
   ) => {
+    // Support both v2 and v3 prop names
+    const isTooltipDisabled = disabled ?? isDisabled;
+    const isTooltipOpen = open ?? isOpen;
+    const shouldShowArrow = hasArrow ?? showArrow;
+    const tooltipContent = content ?? label;
+
+    if (isTooltipDisabled) {
+      return <>{children}</>;
+    }
+
     return (
       <ChakraTooltip.Root
         positioning={{ placement }}
         closeOnScroll
-        open={open}
+        open={isTooltipOpen}
         onOpenChange={onOpenChange}
+        openDelay={200}
+        closeDelay={0}
         {...rest}
       >
-        <ChakraTooltip.Trigger asChild {...({} as any)}>
-          {children}
+        <ChakraTooltip.Trigger asChild>
+          {isValidElement(children)
+            ? cloneElement(children as React.ReactElement<any>)
+            : children}
         </ChakraTooltip.Trigger>
-        <ChakraTooltip.Content
-          ref={ref}
-          css={
-            {
-              '--tooltip-bg': 'var(--chakra-colors-gray-1200)',
-              fontSize: '0.875em',
-            } as any
-          }
-          {...({} as any)}
-        >
-          {label}
-        </ChakraTooltip.Content>
+        <Portal>
+          <ChakraTooltip.Positioner>
+            <ChakraTooltip.Content
+              ref={ref}
+              css={{ '--tooltip-bg': 'var(--chakra-colors-gray-1200)' }}
+              bgColor="gray.1200"
+              color="white"
+              fontSize="sm"
+              px={2}
+              py={1}
+              borderRadius="md"
+              maxW="320px"
+              {...contentProps}
+            >
+              {shouldShowArrow && (
+                <ChakraTooltip.Arrow {...arrowProps}>
+                  <ChakraTooltip.ArrowTip />
+                </ChakraTooltip.Arrow>
+              )}
+              {tooltipContent}
+            </ChakraTooltip.Content>
+          </ChakraTooltip.Positioner>
+        </Portal>
       </ChakraTooltip.Root>
     );
   }
