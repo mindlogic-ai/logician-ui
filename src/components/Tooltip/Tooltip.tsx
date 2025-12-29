@@ -5,17 +5,16 @@ import { TooltipProps } from './Tooltip.types';
 
 export const Tooltip = forwardRef(
   (
-    { children, label, open, onOpenChange, ...rest }: TooltipProps,
+    { children, label, open, onOpenChange, placement = 'top', ...rest }: TooltipProps,
     ref?: ForwardedRef<HTMLDivElement>
   ) => {
     return (
       <ChakraTooltip.Root
-        positioning={{ placement: 'top' } as any}
+        positioning={{ placement }}
         closeOnScroll
         open={open}
         onOpenChange={onOpenChange}
         {...rest}
-        {...({} as any)}
       >
         <ChakraTooltip.Trigger asChild {...({} as any)}>
           {children}

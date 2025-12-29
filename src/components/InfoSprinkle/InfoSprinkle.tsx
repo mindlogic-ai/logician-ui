@@ -14,8 +14,6 @@ export const InfoSprinkle = ({
 } & Popover.RootProps) => {
   return (
     <Popover.Root
-      openDelay={200}
-      closeDelay={200}
       positioning={{ placement: 'top' }}
       lazyMount
       {...rest}

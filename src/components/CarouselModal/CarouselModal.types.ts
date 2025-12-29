@@ -4,7 +4,7 @@ import { ModalProps } from '@/components/Modal';
 
 export type CarouselModalProps = Omit<
   ModalProps,
-  'children' | 'initialFocusRef'
+  'children' | 'initialFocusEl'
 > & {
   slides: Array<{
     /**

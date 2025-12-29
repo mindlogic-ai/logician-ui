@@ -115,7 +115,7 @@ export const GuideCue = ({
   const pulseDotAnimation = `${pulseDot} ${PULSE_TIME}ms cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s infinite`;
 
   return (
-    <Portal containerRef={containerRef}>
+    <Portal container={containerRef}>
       <Popover.Root
         open={isOpen}
         onOpenChange={(e) => {

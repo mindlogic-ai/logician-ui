@@ -1,8 +1,6 @@
-import { ComponentProps } from 'react';
-import { Tabs } from '@chakra-ui/react';
+import { TabsProps } from '@/components/Tabs';
 
-export interface CodeTabsProps
-  extends Omit<ComponentProps<typeof Tabs.Root>, 'children' | 'onCopy'> {
+export interface CodeTabsProps extends Omit<TabsProps, 'children' | 'onCopy'> {
   /**
    * Code samples to display in tabs
    * Each language contains code samples for different providers

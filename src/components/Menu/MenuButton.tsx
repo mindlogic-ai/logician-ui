@@ -9,7 +9,6 @@ export const MenuButton = ({
   ...rest
 }: CustomMenuButtonProps) => {
   return (
-    // @ts-expect-error - Menu.Trigger with asChild accepts children but types are incomplete
     <Menu.Trigger asChild>
       <Component {...rest}>{children}</Component>
     </Menu.Trigger>

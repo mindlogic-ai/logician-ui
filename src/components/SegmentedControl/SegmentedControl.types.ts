@@ -9,7 +9,7 @@ export type SegmentedControlOption = {
 
 export type SegmentedControlProps = Omit<
   SegmentGroup.RootProps,
-  'onValueChange' | 'defaultValue'
+  'onValueChange' | 'defaultValue' | 'onSelect'
 > & {
   options: Array<SegmentedControlOption>;
   onSelect?: (selectedValue: string) => void;

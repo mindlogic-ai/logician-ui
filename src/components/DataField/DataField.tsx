@@ -65,8 +65,11 @@ export const DataField = ({
     }
   };
 
+  const { onSubmit: editableOnSubmit, ...restEditableProps } =
+    editableProps ?? {};
+
   const handleSubmit = (details: { value: string }) => {
-    actIfAllowed(editableProps?.onSubmit, details.value);
+    actIfAllowed(editableOnSubmit, details.value);
   };
 
   const PreviewComponent = as ? as : (props: any) => <span {...props} />;
@@ -84,7 +87,7 @@ export const DataField = ({
           <Editable.Root
             value={value}
             {...editableStyles}
-            {...editableProps}
+            {...restEditableProps}
             onValueCommit={handleSubmit}
           >
             <PreviewComponent {...previewWrapperStyles}>

@@ -1,7 +1,10 @@
 import { ComponentProps } from 'react';
 import { ButtonProps, Tabs as ChakraTabs } from '@chakra-ui/react';
 
-export type TabsProps = ComponentProps<typeof ChakraTabs.Root> & {
+export type TabsProps = Omit<
+  ComponentProps<typeof ChakraTabs.Root>,
+  'onChange' | 'index'
+> & {
   /**
    * If provided, the selected tab will be synced with the provided url param
    */

@@ -50,7 +50,7 @@ export const CarouselModal = ({
     <Modal
       size={'2xl' as any}
       onOpenChange={onOpenChange}
-      initialFocusRef={nextButtonRef}
+      initialFocusEl={() => nextButtonRef.current}
       {...rest}
     >
       <ModalContent overflow="hidden" {...({} as any)}>

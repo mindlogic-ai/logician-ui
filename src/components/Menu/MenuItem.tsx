@@ -11,7 +11,6 @@ export const MenuItem = ({
   const isDangerVariant = variant === ItemVariant.Danger;
 
   return (
-    // @ts-expect-error - Menu.Item accepts children but types are incomplete
     <Menu.Item
       color={isDangerVariant ? 'danger.main' : 'gray.1000'}
       fontSize="p"

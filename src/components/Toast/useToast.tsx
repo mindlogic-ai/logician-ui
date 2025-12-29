@@ -69,9 +69,14 @@ export const useToast = () => {
     return toastId;
   };
 
+  const dismissAll = () => {
+    activeToasts.current.forEach((id) => toaster.dismiss(id));
+    activeToasts.current = [];
+  };
+
   return Object.assign(showToast, {
     dismiss: toaster.dismiss,
-    dismissAll: toaster.dismissAll,
+    dismissAll,
     update: toaster.update,
   });
 };
