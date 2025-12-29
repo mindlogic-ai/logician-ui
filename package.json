@@ -6,13 +6,30 @@
   "module": "dist/index.mjs",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": "./dist/index.mjs"
     },
     "./icons": {
-      "import": "./dist/icons.mjs",
-      "require": "./dist/icons.js"
-    }
+      "import": "./dist/icons.mjs"
+    },
+    "./button": {
+      "import": "./dist/button.mjs"
+    },
+    "./card": {
+      "import": "./dist/card.mjs"
+    },
+    "./input": {
+      "import": "./dist/input.mjs"
+    },
+    "./modal": {
+      "import": "./dist/modal.mjs"
+    },
+    "./select": {
+      "import": "./dist/select.mjs"
+    },
+    "./table": {
+      "import": "./dist/table.mjs"
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "dist",

@@ -1,12 +1,27 @@
 import { defineConfig } from 'tsup';
 import esbuildSvgr from 'esbuild-plugin-svgr';
+import { globSync } from 'glob';
+import path from 'path';
+
+// Generate entry points for each component
+const componentEntries = Object.fromEntries(
+  globSync('src/components/*/index.{ts,tsx}').map((file) => {
+    // Extract component name from path: src/components/Button/index.tsx -> button
+    const componentName = path.basename(path.dirname(file)).toLowerCase();
+    return [componentName, file];
+  })
+);
 
 export default defineConfig({
-  entry: ['src/index.ts', 'src/icons.ts'],
-  format: ['esm', 'cjs'],
-  dts: true, // ✅ Re-enabled now that TS errors are fixed!
-  splitting: true, // Enable code splitting for better memory usage
-  sourcemap: process.env.NODE_ENV !== 'production', // Only in dev
+  entry: {
+    index: 'src/index.ts',
+    icons: 'src/icons.ts',
+    ...componentEntries, // Add all component entries (button.mjs, card.mjs, etc.)
+  },
+  format: ['esm'], // Only ESM to enable proper tree-shaking
+  dts: false, // Disabled temporarily due to memory issues
+  splitting: true, // Enable splitting to create shared chunks
+  sourcemap: false, // Disabled to reduce memory usage during build
   clean: true,
   esbuildPlugins: [esbuildSvgr()], // Handle SVG files as React components
   external: [
