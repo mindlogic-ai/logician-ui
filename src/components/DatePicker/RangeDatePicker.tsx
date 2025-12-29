@@ -24,45 +24,34 @@ export const RangeDatePicker = ({
           fontWeight: 'regular',
           color: 'gray.1500',
           fontSize: 'md',
-          // TODO: Chakra v3 removed leftIcon prop. Waiting for chakra-dayzed-datepicker v3 update.
-          // Icon temporarily removed until library supports v3
-          // leftIcon: (
-          //   <MdOutlineCalendarToday
-          //     color="gray.600"
-          //     style={{ marginInlineEnd: 3 }}
-          //   />
-          // ),
-        } as any, // Suppress type error until chakra-dayzed-datepicker updates for v3
+          ...propsConfigs?.triggerBtnProps,
+        },
         inputProps: {
           color: 'primary.dark',
           ...propsConfigs?.inputProps,
         },
         popoverCompProps: {
           popoverContentProps: {
-            ...({ p: 2, borderRadius: 16 } as any),
-            border: '1px solid',
+            p: 2,
+            borderRadius: 16,
+            borderWidth: '1px',
             borderColor: 'primary.lightest',
             boxShadow: 'lg',
-            // bg: 'primary.lightest',
-            sx: {
+            css: {
               '.chakra-button[aria-pressed="true"]': {
                 borderRadius: 'full',
               },
-              // pressed="true" 직전의 pressed="false" 요소에 borderRight
               '.chakra-button[aria-pressed="false"]:has(+ .chakra-button[aria-pressed="true"])':
                 {
                   borderRightRadius: 'sm',
                 },
-              // pressed="true" 직후의 pressed="false" 요소에 borderLeft
               '.chakra-button[aria-pressed="true"] + .chakra-button[aria-pressed="false"]':
                 {
                   borderLeftRadius: 'sm',
                 },
-              // week row의 왼쪽 테두리
               '.chakra-button[aria-pressed="false"]:nth-child(7n + 1)': {
                 borderLeftRadius: 'sm',
               },
-              // week row 오른쪽 테두리
               '.chakra-button[aria-pressed="false"]:nth-child(7n)': {
                 borderRightRadius: 'sm',
               },
@@ -83,7 +72,7 @@ export const RangeDatePicker = ({
           contentProps: {
             px: 6,
             py: 4,
-            border: '1px solid',
+            borderWidth: '1px',
             borderColor: 'primary.lightest',
             borderRadius: 16,
             bg: 'white',
@@ -119,7 +108,6 @@ export const RangeDatePicker = ({
             },
             ...propsConfigs?.dayOfMonthBtnProps?.defaultBtnProps,
           },
-          // Today
           todayBtnProps: {
             fontWeight: 'semibold',
             ...propsConfigs?.dayOfMonthBtnProps?.todayBtnProps,

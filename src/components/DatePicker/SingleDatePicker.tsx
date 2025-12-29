@@ -24,23 +24,16 @@ export const SingleDatePicker = ({
           fontWeight: 'regular',
           color: 'gray.1500',
           fontSize: 'md',
-          // TODO: Chakra v3 removed leftIcon prop. Waiting for chakra-dayzed-datepicker v3 update.
-          // Icon temporarily removed until library supports v3
-          // leftIcon: (
-          //   <MdOutlineCalendarToday
-          //     color="gray.600"
-          //     style={{ marginInlineEnd: 3 }}
-          //   />
-          // ),
-        } as any, // Suppress type error until chakra-dayzed-datepicker updates for v3
+          ...propsConfigs?.triggerBtnProps,
+        },
         inputProps: {
           color: 'primary.dark',
           ...propsConfigs?.inputProps,
         },
         popoverCompProps: {
           popoverContentProps: {
-            ...({ borderRadius: 16 } as any),
-            border: '1px solid',
+            borderRadius: 16,
+            borderWidth: '1px',
             borderColor: 'primary.lightest',
             boxShadow: 'lg',
             ...propsConfigs?.popoverCompProps?.popoverContentProps,
@@ -58,7 +51,6 @@ export const SingleDatePicker = ({
           },
           contentProps: {
             p: 4,
-            border: 'none',
             ...propsConfigs?.calendarPanelProps?.contentProps,
           },
           bodyProps: {
@@ -91,7 +83,6 @@ export const SingleDatePicker = ({
             },
             ...propsConfigs?.dayOfMonthBtnProps?.defaultBtnProps,
           },
-          // Today
           todayBtnProps: {
             fontWeight: 'semibold',
             ...propsConfigs?.dayOfMonthBtnProps?.todayBtnProps,

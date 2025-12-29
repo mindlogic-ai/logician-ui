@@ -4259,12 +4259,12 @@ ccount@^2.0.0:
   resolved "https://registry.npmjs.org/ccount/-/ccount-2.0.1.tgz#17a3bf82302e0870d6da43a01311a8bc02a3ecf5"
   integrity sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==
 
-chakra-dayzed-datepicker@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.npmjs.org/chakra-dayzed-datepicker/-/chakra-dayzed-datepicker-0.3.1.tgz#bbe2cd3683d8934fdd4c5d875fbd1db77f984436"
-  integrity sha512-isF+u3qsC6F30bkiDw4T4T+WRki9KzP6mIzG0x8IPdCGu3id/0o2p1Bq0fMNeMj31TBvAhfaUAUCW3dm5lklCQ==
+chakra-dayzed-datepicker@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/chakra-dayzed-datepicker/-/chakra-dayzed-datepicker-3.0.0.tgz#19e9ca7927b4ee064de530cd4da46909a9941e0b"
+  integrity sha512-yJwDkTsDYPKLDir6B8JZrDtgc4UXbsnOfLV7DIDDsnVzMuEU5xmercXJMvwFtOY92h/SaC8qlH3a6ks268kSdQ==
   dependencies:
-    date-fns "^2.23.0"
+    date-fns "^4.1.0"
     react-focus-lock "^2.9.5"
 
 chalk@^4.0.0:
@@ -4637,12 +4637,17 @@ data-view-byte-offset@^1.0.1:
     es-errors "^1.3.0"
     is-data-view "^1.0.1"
 
-date-fns@^2.23.0, date-fns@^2.30.0:
+date-fns@^2.30.0:
   version "2.30.0"
   resolved "https://registry.npmjs.org/date-fns/-/date-fns-2.30.0.tgz#f367e644839ff57894ec6ac480de40cae4b0f4d0"
   integrity sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==
   dependencies:
     "@babel/runtime" "^7.21.0"
+
+date-fns@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-4.1.0.tgz#64b3d83fff5aa80438f5b1a633c2e83b8a1c2d14"
+  integrity sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==
 
 debug@^3.2.7:
   version "3.2.7"
