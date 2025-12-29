@@ -1,5 +1,5 @@
-import { defineConfig } from 'tsup';
 import esbuildSvgr from 'esbuild-plugin-svgr';
+import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: ['src/index.ts', 'src/icons.ts'],
@@ -20,13 +20,13 @@ export default defineConfig({
     'framer-motion',
     // Heavy dependencies - let consumers bundle them
     '@mdxeditor/editor',
-    'react-syntax-highlighter',
-    'recharts',
+    /^react-syntax-highlighter/,
+    /^react-icons/,
+    /^recharts/,
     'react-markdown',
     'katex',
-    // Other large deps
     'lodash',
-    'date-fns',
+    /^date-fns/,
   ],
   banner: {
     js: '"use client"',
