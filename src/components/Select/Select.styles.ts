@@ -37,16 +37,14 @@ export const optionStyles = ({
   fontSize: theme.fontSizes.p,
   backgroundColor:
     isSelected || isFocused || isDisabled
-      ? theme.colors.gray[50]
+      ? theme.colors.blue[300]
       : theme.colors.white,
   color: isSelected
-    ? theme.colors.gray[1500]
+    ? theme.colors.blue[1000]
     : isDisabled
       ? theme.colors.gray[800]
       : theme.colors.gray[1200],
-  fontWeight: isSelected
-    ? theme.fontWeights.semibold
-    : theme.fontWeights.normal,
+  fontWeight: isSelected ? theme.fontWeights.bold : theme.fontWeights.normal,
   '&:hover': {
     backgroundColor: theme.colors.gray[50],
   },
