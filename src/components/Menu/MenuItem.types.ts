@@ -14,4 +14,5 @@ export interface MenuItemProps
   onClick?: () => void;
   children?: React.ReactNode;
   icon?: React.ReactElement;
+  rightIcon?: React.ReactElement;
 }

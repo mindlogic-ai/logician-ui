@@ -1,5 +1,5 @@
 import { ComponentProps, ReactNode } from 'react';
-import { Menu, Portal, useToken } from '@chakra-ui/react';
+import { Menu, Portal } from '@chakra-ui/react';
 
 export interface MenuListProps
   extends Omit<ComponentProps<typeof Menu.Content>, 'children'> {
@@ -11,13 +11,11 @@ export const MenuList = ({ children, ...rest }: MenuListProps) => {
     <Portal>
       <Menu.Positioner>
         <Menu.Content
-          css={{
-            border: '1px solid',
-            borderColor: 'var(--chakra-colors-gray-200)',
-            borderRadius: 'var(--chakra-radii-md)',
-            boxShadow: `0 5px 20px 1px ${useToken('colors', 'gray.50')}`,
-            padding: 'var(--chakra-space-1.5)',
-          }}
+          border="1px solid"
+          borderColor="gray.200"
+          borderRadius="md"
+          boxShadow="0 5px 20px 1px var(--chakra-colors-gray-50)"
+          p="1.5"
           {...rest}
         >
           {children}

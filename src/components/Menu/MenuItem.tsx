@@ -1,4 +1,4 @@
-import { Menu } from '@chakra-ui/react';
+import { Menu, Spacer } from '@chakra-ui/react';
 
 import { ItemVariant, MenuItemProps } from './MenuItem.types';
 
@@ -6,6 +6,7 @@ export const MenuItem = ({
   variant = ItemVariant.Default,
   children,
   icon,
+  rightIcon,
   ...rest
 }: MenuItemProps) => {
   const isDangerVariant = variant === ItemVariant.Danger;
@@ -27,6 +28,8 @@ export const MenuItem = ({
     >
       {icon && icon}
       {children}
+      {rightIcon && <Spacer />}
+      {rightIcon && rightIcon}
     </Menu.Item>
   );
 };
