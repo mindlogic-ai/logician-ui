@@ -3,24 +3,13 @@ import json from '@rollup/plugin-json';
 import resolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 import svgr from '@svgr/rollup';
-import { glob } from 'glob';
-import path from 'path';
 import postcss from 'rollup-plugin-postcss';
-
-// Get all component entries
-const componentEntries = glob.sync('src/components/*/index.ts');
 
 // Create input object for all entries
 const input = {
   index: 'src/index.ts',
   icons: 'src/icons.ts',
 };
-
-// Add component entries
-componentEntries.forEach((entry) => {
-  const componentName = path.basename(path.dirname(entry));
-  input[`components/${componentName}/index`] = entry;
-});
 
 // External dependencies - don't bundle these
 const external = [
