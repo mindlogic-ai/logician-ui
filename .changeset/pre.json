@@ -1,0 +1,8 @@
+{
+  "mode": "exit",
+  "tag": "alpha",
+  "initialVersions": {
+    "@mindlogic-ai/logician-ui": "2.0.0"
+  },
+  "changesets": []
+}
