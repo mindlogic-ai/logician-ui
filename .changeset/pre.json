@@ -2,7 +2,7 @@
   "mode": "exit",
   "tag": "alpha",
   "initialVersions": {
-    "@mindlogic-ai/logician-ui": "2.0.0-alpha.23"
+    "@mindlogic-ai/logician-ui": "2.0.0-alpha.24"
   },
   "changesets": [
     "add-storybook",
