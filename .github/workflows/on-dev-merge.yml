@@ -20,8 +20,9 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'yarn'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -45,12 +46,9 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Publish to NPM (pre-release)
-        continue-on-error: true
+        run: yarn changeset publish
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-          yarn changeset publish
+          NPM_CONFIG_PROVENANCE: true
 
       - name: Exit pre-release mode
         run: yarn changeset pre exit
