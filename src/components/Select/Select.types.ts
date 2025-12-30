@@ -8,8 +8,6 @@ export type SelectProps<
   Group extends GroupBase<Option>,
 > = Props<Option, IsMulti, Group> & {
   variant?: SelectVariant;
-  optionHeight?: number;
-  maxHeight?: number;
 };
 
 export type SelectOption<T> = {

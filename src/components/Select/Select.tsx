@@ -1,23 +1,6 @@
-import React from 'react';
-import ReactSelect, {
-  components,
-  ControlProps,
-  GroupBase,
-  MenuListProps,
-  OptionProps,
-} from 'react-select';
-import { Box } from '@chakra-ui/react';
+import ReactSelect, { GroupBase } from 'react-select';
+import { useToken } from '@chakra-ui/react';
 
-import { resolveStyle } from './_utils/resolveStyle';
-import { VirtualizedMenuList } from './MenuList';
-import { VirtualizedMenuListProvider } from './MenuList/VirtualizedMenuListContext';
-import {
-  controlStyles,
-  getControlVariantStyles,
-  menuStyles,
-  optionStyles,
-  placeholderStyles,
-} from './Select.styles';
 import { SelectProps } from './Select.types';
 
 export const Select = <
@@ -25,179 +8,153 @@ export const Select = <
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>,
 >({
-  styles,
   variant = 'default',
-  optionHeight = 35,
-  onMenuScrollToBottom,
-  'data-testid': dataTestId,
+  styles,
   ...rest
-}: SelectProps<Option, IsMulti, Group> & { 'data-testid'?: string }) => {
-  const CustomOption = (props: OptionProps<Option, IsMulti, Group>) => {
-    const optionValue = (props.data as any)?.value || props.label || 'option';
-    return (
-      <Box
-        data-testid={
-          dataTestId ? `${dataTestId}-option-${optionValue}` : undefined
-        }
-      >
-        <components.Option {...props} />
-      </Box>
-    );
+}: SelectProps<Option, IsMulti, Group>) => {
+  const [
+    primaryColor,
+    dangerColor,
+    gray50,
+    gray300,
+    gray400,
+    gray500,
+    gray600,
+    gray1200,
+    gray1300,
+  ] = useToken('colors', [
+    'primary.main',
+    'danger.main',
+    'gray.50',
+    'gray.300',
+    'gray.400',
+    'gray.500',
+    'gray.600',
+    'gray.1200',
+    'gray.1300',
+  ]);
+
+  const getControlStyles = (state: any) => {
+    const baseStyles = {
+      borderRadius: '6px',
+      cursor: 'pointer',
+      minHeight: '40px',
+      fontSize: '14px',
+      fontWeight: 600,
+      paddingLeft: '16px',
+      paddingRight: '12px',
+    };
+
+    if (variant === 'danger') {
+      return {
+        ...baseStyles,
+        border: `1px solid ${dangerColor}`,
+        boxShadow: `0 0 0 1px ${dangerColor}`,
+      };
+    }
+
+    return {
+      ...baseStyles,
+      border: `1px solid ${state.isFocused ? primaryColor : gray300}`,
+      boxShadow: state.isFocused ? `0 0 0 1px ${primaryColor}` : 'none',
+      '&:hover': {
+        borderColor: state.isFocused ? primaryColor : gray400,
+      },
+    };
   };
 
-  // 커스텀 Control 컴포넌트
-  const CustomControl = (props: ControlProps<Option, IsMulti, Group>) => {
-    return (
-      <Box data-testid={dataTestId ? `${dataTestId}-control` : undefined}>
-        <components.Control {...props} />
-      </Box>
-    );
-  };
   return (
-    <VirtualizedMenuListProvider>
-      <Box data-testid={dataTestId}>
-        <ReactSelect<Option, IsMulti, Group>
-          closeMenuOnSelect
-          closeMenuOnScroll
-          isSearchable={false}
-          tabIndex={0}
-          classNamePrefix="react-select"
-          components={{
-            MenuList: (props: MenuListProps<Option, IsMulti, Group>) => (
-              <VirtualizedMenuList<Option, IsMulti, Group>
-                {...props}
-                onMenuScrollToBottom={onMenuScrollToBottom}
-                optionHeight={optionHeight}
-              />
-            ),
-            Option: CustomOption,
-            Control: CustomControl,
-            ...rest.components,
-          }}
-          styles={{
-            container: (base, state) => ({
-              ...resolveStyle(
-                {
-                  ...base,
-                  height: '100%',
-                },
-                styles?.container,
-                state
-              ),
-            }),
-            placeholder: (base, state) => ({
-              ...resolveStyle(
-                {
-                  ...base,
-                  ...placeholderStyles,
-                },
-                styles?.placeholder,
-                state
-              ),
-            }),
-            valueContainer: (base, state) => ({
-              ...resolveStyle(
-                {
-                  ...base,
-                  textAlign: 'left',
-                },
-                styles?.valueContainer,
-                state
-              ),
-            }),
-            singleValue: (base, state) => ({
-              ...resolveStyle(
-                {
-                  ...base,
-                  margin: 0,
-                  color: 'gray.1000',
-                },
-                styles?.singleValue,
-                state
-              ),
-            }),
-            menu: (base, state) => ({
-              ...resolveStyle(
-                {
-                  ...base,
-                  ...menuStyles,
-                },
-                styles?.menu,
-                state
-              ),
-            }),
-            menuList: (base, state) => ({
-              ...resolveStyle(
-                {
-                  ...base,
-                  padding: '0px 4px',
-                  // Important for the virtualized list - DON'T override overflow
-                  // as we need the default 'auto' from react-select for scrolling to work
-                },
-                styles?.menuList,
-                state
-              ),
-            }),
-            option: (base, state) => ({
-              ...resolveStyle(
-                {
-                  ...base,
-                  textAlign: 'left',
-                  padding: '2px 4px',
-                  ...optionStyles(state),
-                },
-                styles?.option,
-                state
-              ),
-            }),
-            menuPortal: (base, state) => ({
-              ...resolveStyle(
-                {
-                  ...base,
-                  zIndex: 9999,
-                },
-                styles?.menuPortal,
-                state
-              ),
-            }),
-            control: (base, state) => ({
-              ...resolveStyle(
-                {
-                  ...base,
-                  ...controlStyles,
-                  ...getControlVariantStyles(state, variant),
-                  ...(state.isDisabled && {
-                    bg: 'gray.50',
-                  }),
-                },
-                styles?.control,
-                state
-              ),
-            }),
-            indicatorSeparator: (base, state) => ({
-              ...resolveStyle(
-                {
-                  ...base,
-                  display: 'none',
-                },
-                styles?.indicatorSeparator,
-                state
-              ),
-            }),
-            dropdownIndicator: (base, state) => ({
-              ...resolveStyle(
-                {
-                  ...base,
-                  color: 'gray.800',
-                },
-                styles?.dropdownIndicator,
-                state
-              ),
-            }),
-          }}
-          {...rest}
-        />
-      </Box>
-    </VirtualizedMenuListProvider>
+    <ReactSelect<Option, IsMulti, Group>
+      closeMenuOnSelect
+      closeMenuOnScroll
+      isSearchable={false}
+      {...rest}
+      styles={{
+        control: (base, state) => ({
+          ...base,
+          ...getControlStyles(state),
+          ...(styles?.control ? styles.control(base, state) : {}),
+        }),
+        placeholder: (base) => ({
+          ...base,
+          color: gray600,
+          fontSize: '14px',
+          fontWeight: 600,
+          ...(styles?.placeholder ? styles.placeholder(base, {} as any) : {}),
+        }),
+        menu: (base) => ({
+          ...base,
+          width: 'max-content',
+          minWidth: '100%',
+          backgroundColor: 'white',
+          borderRadius: '6px',
+          border: `1px solid ${gray300}`,
+          marginTop: '12px',
+          boxShadow: '0px 5px 20px 0px rgba(0, 0, 0, 0.10)',
+          zIndex: 9,
+          ...(styles?.menu ? styles.menu(base, {} as any) : {}),
+        }),
+        menuList: (base) => ({
+          ...base,
+          padding: '0px 4px',
+          ...(styles?.menuList ? styles.menuList(base, {} as any) : {}),
+        }),
+        option: (base, state) => ({
+          ...base,
+          cursor: state.isDisabled ? 'not-allowed' : 'pointer',
+          height: '36px',
+          margin: '4px 0',
+          borderRadius: '4px',
+          fontSize: '14px',
+          padding: '2px 4px',
+          backgroundColor:
+            state.isSelected || state.isFocused || state.isDisabled
+              ? gray50
+              : 'white',
+          color: state.isSelected
+            ? gray1300
+            : state.isDisabled
+              ? gray500
+              : gray1200,
+          fontWeight: state.isSelected ? 600 : 400,
+          '&:hover': {
+            backgroundColor: gray50,
+          },
+          ...(styles?.option ? styles.option(base, state) : {}),
+        }),
+        singleValue: (base) => ({
+          ...base,
+          margin: 0,
+          color: gray1200,
+          ...(styles?.singleValue ? styles.singleValue(base, {} as any) : {}),
+        }),
+        valueContainer: (base) => ({
+          ...base,
+          textAlign: 'left',
+          ...(styles?.valueContainer
+            ? styles.valueContainer(base, {} as any)
+            : {}),
+        }),
+        indicatorSeparator: (base) => ({
+          ...base,
+          display: 'none',
+          ...(styles?.indicatorSeparator
+            ? styles.indicatorSeparator(base, {} as any)
+            : {}),
+        }),
+        dropdownIndicator: (base) => ({
+          ...base,
+          color: gray1200,
+          ...(styles?.dropdownIndicator
+            ? styles.dropdownIndicator(base, {} as any)
+            : {}),
+        }),
+        menuPortal: (base) => ({
+          ...base,
+          zIndex: 9999,
+          ...(styles?.menuPortal ? styles.menuPortal(base, {} as any) : {}),
+        }),
+      }}
+    />
   );
 };

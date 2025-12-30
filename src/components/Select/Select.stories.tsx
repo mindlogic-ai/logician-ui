@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 
 import { Select } from '.';
@@ -38,43 +37,11 @@ export const Combobox: Story = {
   },
 };
 
-export const OnScrollToBottom: Story = {
+export const ManyOptions: Story = {
   args: {
-    options: Array.from({ length: 50 }, (_, i) => ({
+    options: Array.from({ length: 100 }, (_, i) => ({
       label: `Option ${i + 1}`,
       value: `option${i + 1}`,
     })),
-    onMenuScrollToBottom: () => {
-      console.log('scrolled to bottom');
-    },
-  },
-};
-
-export const OnScrollToBottomNewItems: Story = {
-  render: (args) => {
-    const [options, setOptions] = useState(
-      Array.from({ length: 500 }, (_, i) => ({
-        label: `Option ${i + 1}`,
-        value: `option${i + 1}`,
-      }))
-    );
-    return (
-      <Select
-        {...args}
-        options={options}
-        isMulti={true}
-        isSearchable={true}
-        onMenuScrollToBottom={() => {
-          console.log('scrolled to bottom');
-          setOptions((prev) => [
-            ...prev,
-            ...Array.from({ length: 500 }, (_, i) => ({
-              label: `Option ${prev.length + i + 1}`,
-              value: `option${prev.length + i + 1}`,
-            })),
-          ]);
-        }}
-      />
-    );
   },
 };
