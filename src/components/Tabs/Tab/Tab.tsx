@@ -32,9 +32,16 @@ export const Tab = ({ name, children, ...props }: TabProps) => {
     >
       <Button
         ref={tabRef}
+        variant="ghost"
+        colorPalette="neutral"
+        borderRadius="none"
         {...(orientation === 'vertical' && verticalStyles)}
         color="gray.800"
         py={3}
+        _hover={{
+          bg: 'transparent',
+          color: 'gray.1000',
+        }}
         _selected={{
           ...(orientation === 'vertical'
             ? verticalSelectedStyles

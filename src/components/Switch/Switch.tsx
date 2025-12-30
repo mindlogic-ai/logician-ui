@@ -3,13 +3,18 @@ import { Switch as ChakraSwitch } from '@chakra-ui/react';
 
 export const Switch = ({ children, ...rest }: any) => {
   return (
-    <ChakraSwitch.Root {...rest}>
+    <ChakraSwitch.Root colorPalette="primary" {...rest}>
       <ChakraSwitch.HiddenInput />
-      <ChakraSwitch.Control {...({} as any)}>
+      <ChakraSwitch.Control
+        bg="gray.200"
+        _checked={{
+          bg: 'primary.main',
+        }}
+      >
         <ChakraSwitch.Thumb />
       </ChakraSwitch.Control>
       {children && (
-        <ChakraSwitch.Label {...({} as any)}>{children}</ChakraSwitch.Label>
+        <ChakraSwitch.Label>{children}</ChakraSwitch.Label>
       )}
     </ChakraSwitch.Root>
   );

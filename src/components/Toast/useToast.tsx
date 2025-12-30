@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { createToaster } from '@chakra-ui/react';
+import { Toaster as ChakraToaster, createToaster } from '@chakra-ui/react';
 
 import { Toast } from './Toast';
 import { toastStyles } from './Toast.styles';
@@ -12,6 +12,13 @@ const toaster = createToaster({
   placement: 'top',
   duration: 5000,
 });
+
+// Export Toaster component for rendering in app
+export const Toaster = () => (
+  <ChakraToaster toaster={toaster as any} insetInline={{ mdDown: '4' }}>
+    {(toast: any) => toast.render?.({ id: toast.id })}
+  </ChakraToaster>
+);
 
 export const useToast = () => {
   const activeToasts = useRef<string[]>([]); // Track active toast IDs

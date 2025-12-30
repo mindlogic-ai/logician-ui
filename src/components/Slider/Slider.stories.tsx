@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import {
   Slider,
+  SliderControl,
   SliderFilledTrack,
   SliderThumb,
   SliderTrack,
@@ -18,7 +19,12 @@ const meta = {
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <span>Value: {value[0]}</span>
           <div style={{ flex: 1 }}>
-            <Story args={{ onValueChange: (details: any) => setValue(details.value), value }} />
+            <Story
+              args={{
+                onValueChange: (details: any) => setValue(details.value),
+                value,
+              }}
+            />
           </div>
         </div>
       );
@@ -39,9 +45,12 @@ export const Default: Story = {
   },
   render: (args) => (
     <Slider {...args}>
-      <SliderTrack />
-      <SliderFilledTrack />
-      <SliderThumb />
+      <SliderControl>
+        <SliderTrack>
+          <SliderFilledTrack />
+        </SliderTrack>
+        <SliderThumb index={0} />
+      </SliderControl>
     </Slider>
   ),
 };
@@ -55,9 +64,12 @@ export const Customized: Story = {
   },
   render: (args) => (
     <Slider {...args}>
-      <SliderTrack />
-      <SliderFilledTrack />
-      <SliderThumb />
+      <SliderControl>
+        <SliderTrack>
+          <SliderFilledTrack />
+        </SliderTrack>
+        <SliderThumb index={0} />
+      </SliderControl>
     </Slider>
   ),
 };
@@ -71,9 +83,12 @@ export const WithCustomThumb: Story = {
   },
   render: (args) => (
     <Slider {...args}>
-      <SliderTrack />
-      <SliderFilledTrack />
-      <SliderThumb {...({} as any)} />
+      <SliderControl>
+        <SliderTrack>
+          <SliderFilledTrack />
+        </SliderTrack>
+        <SliderThumb index={0} />
+      </SliderControl>
     </Slider>
   ),
 };
