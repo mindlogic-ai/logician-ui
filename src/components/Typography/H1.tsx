@@ -9,6 +9,7 @@ export const H1 = forwardRef<HTMLHeadingElement, HeadingProps>((props, ref) => {
       as="h1"
       fontSize={theme.fontSizes.h1}
       fontWeight="bold"
+      wordBreak="keep-all"
       {...props}
     />
   );

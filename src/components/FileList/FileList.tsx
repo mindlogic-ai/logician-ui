@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Button, List, useTheme } from '@chakra-ui/react';
+import { useState } from 'react';
+import { Button, List } from '@chakra-ui/react';
 
 import { FileItem } from '@/components/FileItem';
 import { FileGroupProps } from '@/components/FileList/FileList.types';
-import { Icon, IconTypes } from '@/components/Icon';
+import { IoChevronDownOutline } from '@/components/Icon';
 import { Subtitle } from '@/components/Typography';
 import { useTranslate } from '@/hooks/useTranslate';
 
@@ -14,28 +14,27 @@ export const FileList = ({
   visibleCount = 3,
 }: FileGroupProps) => {
   const [currentVisibleCount, setCurrentVisibleCount] = useState<number>(
-    visibleCount ?? 3,
+    visibleCount ?? 3
   );
   const [deletingFileIds, setDeletingFileIds] = useState<Set<number | null>>(
-    new Set(),
+    new Set()
   );
-  const theme = useTheme();
   const translate = useTranslate();
   const shouldShowLoadMoreButton = files && files.length > currentVisibleCount;
 
   const handleFileLoadMore = () => {
-    setCurrentVisibleCount(prev => prev + 3);
+    setCurrentVisibleCount((prev) => prev + 3);
   };
 
   const handleFileDelete = async (file: FileGroupProps['files'][0]) => {
     if (!onFileDelete || deletingFileIds.has(file.id)) return;
 
-    setDeletingFileIds(prev => new Set(prev).add(file.id));
+    setDeletingFileIds((prev) => new Set(prev).add(file.id));
 
     try {
       await onFileDelete(file);
     } finally {
-      setDeletingFileIds(prev => {
+      setDeletingFileIds((prev) => {
         const newSet = new Set(prev);
         newSet.delete(file.id);
         return newSet;
@@ -53,29 +52,25 @@ export const FileList = ({
       borderRadius="md"
       overflow="hidden"
     >
-      {files
-        ?.slice(0, currentVisibleCount)
-        .map(file => (
-          <FileItem
-            key={file.id}
-            fileName={file.name}
-            onFileDelete={
-              onFileDelete ? () => handleFileDelete(file) : undefined
-            }
-            onFileDownload={
-              onFileDownload && file.fileUrl
-                ? () => onFileDownload?.(file)
-                : undefined
-            }
-            border={0}
-            borderBottom="1px solid"
-            borderBottomColor="gray.50"
-            progress={file.progress}
-            error={file.error}
-            fileSize={file.size}
-            isDeleting={deletingFileIds.has(file.id)}
-          />
-        ))}
+      {files?.slice(0, currentVisibleCount).map((file) => (
+        <FileItem
+          key={file.id}
+          fileName={file.name}
+          onFileDelete={onFileDelete ? () => handleFileDelete(file) : undefined}
+          onFileDownload={
+            onFileDownload && file.fileUrl
+              ? () => onFileDownload?.(file)
+              : undefined
+          }
+          border={0}
+          borderBottom="1px solid"
+          borderBottomColor="gray.50"
+          progress={file.progress}
+          error={file.error}
+          fileSize={file.size}
+          isDeleting={deletingFileIds.has(file.id)}
+        />
+      ))}
       {shouldShowLoadMoreButton && (
         <Button
           onClick={handleFileLoadMore}
@@ -88,10 +83,7 @@ export const FileList = ({
           <Subtitle color="gray.600">
             {translate('see_more')} ({visibleCount}/{files.length})
           </Subtitle>
-          <Icon
-            icon={IconTypes.IoChevronDownOutline}
-            color={theme.colors.gray[600]}
-          />
+          <IoChevronDownOutline color="gray.600" />
         </Button>
       )}
     </List>

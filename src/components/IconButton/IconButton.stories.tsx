@@ -1,50 +1,53 @@
-import React from "react";
-import { Meta, StoryFn } from "@storybook/react";
-import { IconButtonProps, IconButtonVariant } from "./IconButton.types";
-import { IconButton } from "./IconButton";
-import { variantStyles as buttonVariantStyles } from "../Button/Button.styles";
-import { Icon } from "../Icon/Icon";
+import { Meta, StoryObj } from '@storybook/react';
 
-const meta: Meta<typeof IconButton> = {
-  title: "Components/IconButton",
+import { Box, Flex } from '@chakra-ui/react';
+import { variantStyles as buttonVariantStyles } from '../Button/Button.styles';
+import { FaUniversity } from '../Icon';
+import { IconButton } from './IconButton';
+import { IconButtonVariant } from './IconButton.types';
+
+const meta = {
+  title: 'Components/IconButton',
   component: IconButton,
   args: {
-    icon: <Icon icon="FaUniversity" />,
+    icon: <FaUniversity />,
   },
   argTypes: {
     variant: {
-      control: "select",
+      control: 'select',
       options: Object.keys(buttonVariantStyles),
     },
   },
-};
+} satisfies Meta<typeof IconButton>;
 
 export default meta;
 
-const Template: StoryFn<IconButtonProps> = (args: IconButtonProps) => (
-  <IconButton {...args} />
-);
+type Story = StoryObj<typeof IconButton>;
 
-export const Basic: StoryFn<IconButtonProps> = Template.bind({});
-Basic.args = {
-  variant: "primary",
+export const Basic: Story = {
+  args: {
+    variant: 'primary',
+  },
 };
 
-export const Round: StoryFn<IconButtonProps> = Template.bind({});
-Round.args = {
-  isRound: true,
+export const Round: Story = {
+  args: {
+    isRound: true,
+  },
 };
 
-export const AllIconButtonVariants: StoryFn<IconButtonProps> = (args) => {
-  const variants = Object.keys(buttonVariantStyles);
-  return (
-    <div>
-      {variants.map((variant) => (
-        <div key={variant}>
-          <p>{variant}</p>
-          <IconButton {...args} variant={variant as IconButtonVariant} />
-        </div>
-      ))}
-    </div>
-  );
+export const AllIconButtonVariants: Story = {
+  render: (args) => {
+    const variants = Object.keys(buttonVariantStyles);
+    return (
+      <Flex gap={4}>
+        {variants.map((variant) => (
+          <Box key={variant}>
+            <p>{variant}</p>
+            <IconButton {...args} variant={variant as IconButtonVariant} />
+          </Box>
+        ))}
+      </Flex>
+    );
+  },
 };

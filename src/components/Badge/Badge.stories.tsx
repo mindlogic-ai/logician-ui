@@ -1,9 +1,8 @@
-import React from 'react';
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { Badge } from '.';
 
-const meta: Meta<typeof Badge> = {
+const meta = {
   title: 'Components/Badge',
   component: Badge,
   args: {
@@ -15,9 +14,9 @@ const meta: Meta<typeof Badge> = {
       options: ['none', 'uppercase'],
     },
   },
-};
-
+} satisfies Meta<typeof Badge>;
 export default meta;
-type Story = StoryFn<typeof Badge>;
 
-export const Basic: Story = args => <Badge {...args} />;
+type Story = StoryObj<typeof meta>;
+
+export const Basic: Story = {};

@@ -7,8 +7,10 @@ export const H3 = forwardRef<HTMLHeadingElement, HeadingProps>((props, ref) => {
     <Heading
       ref={ref}
       as="h3"
+      color="gray.1500"
       fontSize={theme.fontSizes.h3}
       fontWeight="semibold"
+      wordBreak="keep-all"
       {...props}
     />
   );

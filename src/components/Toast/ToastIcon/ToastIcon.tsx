@@ -1,26 +1,19 @@
-import { useTheme, useToken } from '@chakra-ui/react';
+import {
+  IoIosCheckmarkCircle,
+  IoWarning,
+  LuInfo,
+  MdError,
+} from '@/components/Icon';
 
-import { Icon, IconProps } from '../../Icon';
 import { ToastProps } from '../Toast.types';
 
 export const ToastIcon = ({ status }: Required<Pick<ToastProps, 'status'>>) => {
-  const theme = useTheme();
-
-  const iconProps: { [K in typeof status]: Omit<IconProps, 'ref'> } = {
-    success: {
-      icon: 'IoIosCheckmarkCircle',
-      color: useToken('colors', theme.semanticTokens.colors.success.main),
-    },
-    error: {
-      icon: 'MdError',
-      color: useToken('colors', theme.semanticTokens.colors.danger.main),
-    },
-    info: {
-      icon: 'LuInfo',
-      color: useToken('colors', theme.semanticTokens.colors.primary.main),
-      boxSize: 'md',
-    },
+  const iconProps: { [K in typeof status]: React.ReactNode } = {
+    info: <LuInfo boxSize="md" color="primary.main" />,
+    warning: <IoWarning boxSize="lg" color="warning.main" />,
+    success: <IoIosCheckmarkCircle boxSize="lg" color="success.main" />,
+    error: <MdError boxSize="lg" color="danger.main" />,
   };
 
-  return <Icon boxSize="lg" {...iconProps[status]} />;
+  return iconProps[status];
 };

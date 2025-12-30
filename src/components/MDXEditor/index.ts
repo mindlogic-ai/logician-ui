@@ -1,1 +1,2 @@
-export { MDXEditor } from './MDXEditor';
+export * from './MDXEditor';
+export * from './MDXEditor.types';

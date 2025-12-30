@@ -1,14 +1,18 @@
-import { Meta, StoryFn } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import { AutowidthInput } from './AutowidthInput';
 
-const meta: Meta<typeof AutowidthInput> = {
+const meta = {
   title: 'Components/AutowidthInput',
   component: AutowidthInput,
-};
+  args: {
+    value: 'test',
+  },
+} satisfies Meta<typeof AutowidthInput>;
 
 export default meta;
-type Story = StoryFn<typeof AutowidthInput>;
+
+type Story = StoryObj<typeof meta>;
 
 export const Basic: Story = {
   args: {
@@ -18,6 +22,6 @@ export const Basic: Story = {
 
 export const AsHeading: Story = {
   args: {
-    value: 'test',
+    value: 'Heading Text',
   },
 };

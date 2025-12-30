@@ -1,15 +1,14 @@
-import React from 'react';
-import { PasswordInput } from './PasswordInput';
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
-export default {
+import { PasswordInput } from './PasswordInput';
+
+const meta = {
   title: 'Components/PasswordInput',
   component: PasswordInput,
-} as Meta<typeof PasswordInput>;
+} satisfies Meta<typeof PasswordInput>;
 
-const Template: StoryFn<typeof PasswordInput> = args => (
-  <PasswordInput {...args} />
-);
+export default meta;
 
-export const Default = Template.bind({});
-Default.args = {};
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};

@@ -8,7 +8,7 @@ export const AutowidthInput = ({
   widthMeasureProps,
   ...rest
 }: InputProps & { widthMeasureProps?: any }) => {
-  const valueWidthMeasureRef = useRef(null);
+  const valueWidthMeasureRef = useRef<HTMLDivElement>(null);
   const [inputWidth, setInputWidth] = useState<number>();
 
   useEffect(() => {

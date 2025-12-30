@@ -2,17 +2,18 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { CodeTabs } from './CodeTabs';
 
-const meta: Meta<typeof CodeTabs> = {
+const meta = {
   title: 'Components/CodeTabs',
   component: CodeTabs,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
   },
-};
+} satisfies Meta<typeof CodeTabs>;
 
 export default meta;
-type Story = StoryObj<typeof CodeTabs>;
+
+type Story = StoryObj<typeof meta>;
 
 const CODE_SAMPLES = {
   javascript: `

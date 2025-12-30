@@ -1,30 +1,48 @@
-import type { Preview } from "@storybook/react";
-import { ChakraProvider } from "@chakra-ui/react";
-import React from "react";
-
-import theme from "../src/theme/index";
+import React from 'react';
+import type { Preview } from '@storybook/react';
+import { LogicianProvider } from '../src/components/LogicianProvider/LogicianProvider';
 
 const preview: Preview = {
   parameters: {
-    actions: { argTypesRegex: "^on[A-Z].*" },
+    // Global parameters for all stories
     controls: {
+      expanded: true,
       matchers: {
         color: /(background|color)$/i,
-        date: /Date$/,
+        date: /Date$/i,
       },
     },
-    docs: {
-      description: {
-        component: "Logician Design System Component",
+    darkMode: {
+      stylePreview: true,
+    },
+    nextjs: {
+      appDirectory: true,
+    },
+    options: {
+      storySort: {
+        method: 'alphabetical',
+        order: ['Setup', 'Theme', 'Components', 'Chat', '*'],
+        locales: 'en-US',
+        includeName: true,
       },
     },
   },
   decorators: [
-    (Story) => (
-      <ChakraProvider theme={theme}>
-        <Story />
-      </ChakraProvider>
-    ),
+    (Story, context) => {
+      // Check if the story has disabled the LogicianProvider
+      // To disable for a specific story, add: parameters: { disableLogicianProvider: true }
+      const disableProvider = context.parameters?.disableLogicianProvider;
+
+      if (disableProvider) {
+        return <Story />;
+      }
+
+      return (
+        <LogicianProvider>
+          <Story />
+        </LogicianProvider>
+      );
+    },
   ],
 };
 

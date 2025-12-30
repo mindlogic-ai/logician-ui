@@ -1,9 +1,10 @@
-import React from 'react';
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
+
 import { Pagination } from './Pagination';
 import { PaginationProps } from './Pagination.types';
+import { useState } from 'react';
 
-export default {
+const meta = {
   title: 'Components/Pagination',
   component: Pagination,
   args: {
@@ -12,39 +13,39 @@ export default {
     itemsPerPageOptions: [30, 40, 50],
     itemsPerPage: 30,
   },
-  argTypes: {
-    currentPage: { control: 'number' },
-    maxPage: { control: 'number' },
+} satisfies Meta<typeof Pagination>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  render: (args) => {
+    const [currentPage, setCurrentPage] = useState(args.currentPage ?? 0);
+    const [itemsPerPage, setItemsPerPage] = useState(args.itemsPerPage);
+
+    return (
+      <Pagination
+        {...args}
+        currentPage={currentPage}
+        onCurrentPageChange={setCurrentPage}
+        onBack={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+        onNext={() =>
+          setCurrentPage((prev) =>
+            Math.min(prev + 1, Math.ceil(args.numTotalItems / itemsPerPage))
+          )
+        }
+        numTotalItems={args.numTotalItems}
+        itemsPerPageOptions={args.itemsPerPageOptions}
+        itemsPerPage={itemsPerPage}
+        onItemsPerPageOptionChange={setItemsPerPage}
+      />
+    );
   },
-} as Meta<typeof Pagination>;
-
-export const Default: StoryFn<PaginationProps> = args => {
-  const [currentPage, setCurrentPage] = React.useState(args.currentPage ?? 0);
-  const [itemsPerPage, setItemsPerPage] = React.useState(args.itemsPerPage);
-
-  return (
-    <Pagination
-      {...args}
-      currentPage={currentPage}
-      onCurrentPageChange={setCurrentPage}
-      onBack={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-      onNext={() =>
-        setCurrentPage(prev =>
-          Math.min(prev + 1, Math.ceil(args.numTotalItems / itemsPerPage)),
-        )
-      }
-      numTotalItems={args.numTotalItems}
-      itemsPerPageOptions={args.itemsPerPageOptions}
-      itemsPerPage={itemsPerPage}
-      onItemsPerPageOptionChange={setItemsPerPage}
-    />
-  );
 };
 
-export const NoItemsPerPageOptions: StoryFn<PaginationProps> = args => {
-  return <Pagination {...args} />;
-};
-
-NoItemsPerPageOptions.args = {
-  itemsPerPageOptions: undefined,
+export const NoItemsPerPageOptions: Story = {
+  args: {
+    itemsPerPageOptions: undefined,
+  },
 };

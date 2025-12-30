@@ -1,16 +1,15 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import { FileItem } from './FileItem';
-import { FileItemProps } from '@/components/FileItem/FileItem.types';
 
-const meta: Meta<typeof FileItem> = {
+const meta = {
   title: 'Components/FileItem',
   component: FileItem,
-};
+} satisfies Meta<typeof FileItem>;
 
 export default meta;
 
-type Story = StoryObj<FileItemProps>;
+type Story = StoryObj<typeof FileItem>;
 
 export const Basic: Story = {
   args: {
@@ -22,5 +21,19 @@ export const WithProgress: Story = {
   args: {
     fileName: 'Test File',
     progress: 30,
+  },
+};
+
+export const WithDownload: Story = {
+  args: {
+    fileName: 'Test File',
+    onFileDownload: () => {},
+  },
+};
+
+export const WithDelete: Story = {
+  args: {
+    fileName: 'Test File',
+    onFileDelete: () => {},
   },
 };

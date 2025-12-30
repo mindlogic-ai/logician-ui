@@ -10,7 +10,7 @@ export const useVirtualizedMenuListState = () => {
   const context = useContext(VirtualizedMenuListStateContext);
   if (!context) {
     throw new Error(
-      'useVirtualizedMenuListState must be used within a VirtualizedMenuListProvider',
+      'useVirtualizedMenuListState must be used within a VirtualizedMenuListProvider'
     );
   }
   return context;

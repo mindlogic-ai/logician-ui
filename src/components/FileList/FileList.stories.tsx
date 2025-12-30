@@ -1,59 +1,55 @@
-import React, { useState } from 'react';
-import { Meta, StoryFn } from '@storybook/react';
-import { FileList } from './FileList';
-import { FileItemData } from '@/components/FileList/FileList.types';
-import { FileGroupProps } from '@/components/FileList/FileList.types';
+import { useState } from 'react';
+import { Meta, StoryObj } from '@storybook/react';
 
-export default {
+import { FileItemData } from '@/components/FileList/FileList.types';
+
+import { FileList } from './FileList';
+
+const meta = {
   title: 'Components/FileList',
   component: FileList,
-} as Meta;
+} satisfies Meta<typeof FileList>;
 
-const Template: StoryFn<FileGroupProps> = ({ ...args }) => {
-  const [files, setFiles] = useState<FileItemData[]>(args.files);
-  const [visibleCount, setVisibleCount] = useState(3);
+export default meta;
 
-  const handleFileDelete = (currentFile: FileItemData) => {
-    setFiles(prevFiles => prevFiles.filter(file => file.id !== currentFile.id));
-  };
+type Story = StoryObj<typeof FileList>;
 
-  return (
-    <FileList
-      {...args}
-      files={files}
-      onFileDelete={handleFileDelete}
-      visibleCount={visibleCount}
-    />
-  );
-};
+export const Default: Story = {
+  args: {
+    files: [
+      {
+        id: 1,
+        name: 'File1.pdf',
+        progress: 100,
+      },
+      {
+        id: 2,
+        name: 'Image.png',
+        progress: 70,
+      },
+      {
+        id: 3,
+        name: 'Document.docx',
+        progress: 45,
+        error: 'Upload failed',
+      },
+      {
+        id: 4,
+        name: 'Presentation.pptx',
+        progress: 80,
+      },
+    ],
+    visibleCount: 3,
+  },
+  render: (args) => {
+    const [files, setFiles] = useState<FileItemData[]>(args.files);
 
-export const Default = Template.bind({});
-Default.args = {
-  files: [
-    {
-      id: 1,
-      name: 'File1.pdf',
-      progress: 100,
-      error: false,
-    },
-    {
-      id: 2,
-      name: 'Image.png',
-      progress: 70,
-      error: false,
-    },
-    {
-      id: 3,
-      name: 'Document.docx',
-      progress: 45,
-      error: true,
-    },
-    {
-      id: 4,
-      name: 'Presentation.pptx',
-      progress: 80,
-      error: false,
-    },
-  ],
-  visibleCount: 3,
+    const handleFileDelete = (currentFile: FileItemData) => {
+      setFiles((prevFiles) =>
+        prevFiles.filter((file) => file.id !== currentFile.id)
+      );
+    };
+
+    return <FileList {...args} files={files} onFileDelete={handleFileDelete} />;
+  },
 };

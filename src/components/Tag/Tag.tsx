@@ -7,7 +7,7 @@ import { TagProps } from './Tag.types';
 export const Tag = forwardRef(
   (
     { variant = 'default', ...rest }: TagProps,
-    ref?: ForwardedRef<HTMLDivElement>,
+    ref?: ForwardedRef<HTMLDivElement>
   ) => {
     return (
       <ChakraTag
@@ -17,7 +17,7 @@ export const Tag = forwardRef(
         ref={ref}
       />
     );
-  },
+  }
 );
 
 Tag.displayName = 'Tag';

@@ -1,6 +1,6 @@
 import { ForwardedRef, forwardRef, useState } from 'react';
 
-import { Icon } from '../Icon';
+import { FaRegEye, FaRegEyeSlash } from '../Icon';
 import { IconButton } from '../IconButton';
 import { Input } from '../Input';
 import { PasswordInputProps } from './PasswordInput.types';
@@ -8,7 +8,7 @@ import { PasswordInputProps } from './PasswordInput.types';
 export const PasswordInput = forwardRef(
   (
     { wrapperProps, rightElementProps, ...rest }: PasswordInputProps,
-    ref?: ForwardedRef<HTMLInputElement>,
+    ref?: ForwardedRef<HTMLInputElement>
   ) => {
     const [show, setShow] = useState<boolean>(false);
     const handleClick = () => setShow(!show);
@@ -23,11 +23,11 @@ export const PasswordInput = forwardRef(
         rightIcon={
           <IconButton
             icon={
-              <Icon
-                icon={show ? 'FaRegEye' : 'FaRegEyeSlash'}
-                fill="gray.900"
-                boxSize="sm"
-              />
+              show ? (
+                <FaRegEye fill="gray.900" boxSize="sm" />
+              ) : (
+                <FaRegEyeSlash fill="gray.900" boxSize="sm" />
+              )
             }
             onClick={handleClick}
             aria-label="Toggle password visibility"
@@ -36,7 +36,7 @@ export const PasswordInput = forwardRef(
         rightElementProps={{ ...rightElementProps }}
       />
     );
-  },
+  }
 );
 
 PasswordInput.displayName = 'PasswordInput';

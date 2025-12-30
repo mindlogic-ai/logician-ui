@@ -62,7 +62,7 @@ const RadialProgress: React.FC<RadialProgressProps> = ({
   // Add gray segment for remaining space if needed
   const allSegments: Segment[] =
     segments.length === 0
-      ? [{ color: theme.colors.gray[200], value: total }] // Full gray circle if no segments
+      ? [{ color: 'gray.200', value: total }] // Full gray circle if no segments
       : remainingValue > 0
         ? [
             ...segments,
@@ -75,7 +75,7 @@ const RadialProgress: React.FC<RadialProgressProps> = ({
   const availableDegrees = 360 - totalGaps;
 
   // First pass: calculate raw degrees and identify segments needing minimum
-  const rawSegments: ProcessedSegment[] = allSegments.map(segment => {
+  const rawSegments: ProcessedSegment[] = allSegments.map((segment) => {
     // Prevent division by zero when calculating raw degrees
     const rawDegrees =
       total > 0 ? (segment.value / total) * availableDegrees : 0;
@@ -91,7 +91,7 @@ const RadialProgress: React.FC<RadialProgressProps> = ({
   // Calculate total degrees needed vs available
   const totalDegreesNeeded = rawSegments.reduce(
     (sum, seg) => sum + seg.actualDegrees,
-    0,
+    0
   );
   // Prevent division by zero when calculating scale factor
   const scaleFactor =
@@ -101,7 +101,7 @@ const RadialProgress: React.FC<RadialProgressProps> = ({
 
   // Calculate segment angles with proper scaling
   let currentAngle = -90; // Start from top
-  const segmentAngles: SegmentAngle[] = rawSegments.map(segment => {
+  const segmentAngles: SegmentAngle[] = rawSegments.map((segment) => {
     const segmentDegrees = segment.actualDegrees * scaleFactor;
 
     // For a single full circle segment, don't add gaps

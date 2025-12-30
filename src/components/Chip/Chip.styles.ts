@@ -1,14 +1,14 @@
-import * as CSS from "csstype";
+import * as CSS from 'csstype';
 
-import theme from "@/theme/index";
+import theme from '@/theme/index';
 
-import { ChipProps, ChipUseCase } from "./Chip.types";
+import { ChipProps, ChipUseCase } from './Chip.types';
 
 export const baseStyles = {
-  borderRadius: "32px", // large border radius to round it
+  borderRadius: '32px', // large border radius to round it
   px: 3,
   py: 2, // Use direct spacing value instead of theme.spacing[2]
-  textTransform: "none" as CSS.Property.TextTransform,
+  textTransform: 'none' as CSS.Property.TextTransform,
 };
 
 export const useCaseStyles: Record<
@@ -18,16 +18,16 @@ export const useCaseStyles: Record<
   primary: {
     solid: {
       bgColor: theme.semanticTokens.colors.primary.main,
-      color: "white",
+      color: 'white',
     },
     outline: {
-      border: "1px solid",
+      border: '1px solid',
       borderColor: theme.semanticTokens.colors.primary.main,
       color: theme.semanticTokens.colors.primary.main,
-      bgColor: "white",
+      bgColor: 'white',
     },
     subtle: {
-      bgColor: "#EBF0FB",
+      bgColor: '#EBF0FB',
       color: theme.semanticTokens.colors.primary.main,
     },
   },
@@ -37,10 +37,10 @@ export const useCaseStyles: Record<
       color: theme.colors.white,
     },
     outline: {
-      border: "1px solid",
+      border: '1px solid',
       borderColor: theme.colors.blue[700],
       color: theme.colors.blue[700],
-      bgColor: "white",
+      bgColor: 'white',
     },
     subtle: {
       bgColor: theme.colors.blue[50],
@@ -50,13 +50,13 @@ export const useCaseStyles: Record<
   success: {
     solid: {
       bgColor: theme.semanticTokens.colors.success.main,
-      color: "white",
+      color: 'white',
     },
     outline: {
-      border: "1px solid",
+      border: '1px solid',
       borderColor: theme.semanticTokens.colors.success.main,
       color: theme.semanticTokens.colors.success.main,
-      bgColor: "white",
+      bgColor: 'white',
     },
     subtle: {
       bgColor: theme.colors.green[50],
@@ -66,13 +66,13 @@ export const useCaseStyles: Record<
   danger: {
     solid: {
       bgColor: theme.semanticTokens.colors.danger.main,
-      color: "white",
+      color: 'white',
     },
     outline: {
-      border: "1px solid",
+      border: '1px solid',
       borderColor: theme.semanticTokens.colors.danger.main,
       color: theme.semanticTokens.colors.danger.main,
-      bgColor: "white",
+      bgColor: 'white',
     },
     subtle: {
       bgColor: theme.semanticTokens.colors.danger.lighter,
@@ -82,11 +82,11 @@ export const useCaseStyles: Record<
   dark: {
     solid: {
       bgColor: theme.colors.gray[800],
-      color: "white",
+      color: 'white',
     },
     outline: {
-      border: "1px solid",
-      backgroundColor: "transparent",
+      border: '1px solid',
+      backgroundColor: 'transparent',
       borderColor: theme.colors.gray[700],
       color: theme.colors.gray[700],
     },
@@ -98,11 +98,11 @@ export const useCaseStyles: Record<
   highlight: {
     solid: {
       bgColor: theme.colors.purple[600],
-      color: "white",
+      color: 'white',
     },
     outline: {
-      border: "1px solid",
-      backgroundColor: "transparent",
+      border: '1px solid',
+      backgroundColor: 'transparent',
       borderColor: theme.colors.purple[600],
       color: theme.colors.purple[600],
     },

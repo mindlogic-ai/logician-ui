@@ -1,9 +1,8 @@
-import React from 'react';
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { MaxLengthIndicator } from '.';
 
-const meta: Meta<typeof MaxLengthIndicator> = {
+const meta = {
   title: 'Components/MaxLengthIndicator',
   component: MaxLengthIndicator,
   args: {
@@ -18,9 +17,10 @@ const meta: Meta<typeof MaxLengthIndicator> = {
       control: 'number',
     },
   },
-};
+} satisfies Meta<typeof MaxLengthIndicator>;
 
 export default meta;
-type Story = StoryFn<typeof MaxLengthIndicator>;
 
-export const Basic: Story = args => <MaxLengthIndicator {...args} />;
+type Story = StoryObj<typeof MaxLengthIndicator>;
+
+export const Basic: Story = {};

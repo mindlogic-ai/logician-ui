@@ -1,5 +1,5 @@
 ---
-"logician-ui": major
+"@mindlogic-ai/logician-ui": major
 ---
 
 Clean up dependencies and remove unused components

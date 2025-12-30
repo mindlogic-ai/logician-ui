@@ -1,0 +1,164 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+
+permissions:
+  id-token: write # Required for OIDC
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'yarn'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build package
+        run: yarn build
+        env:
+          NODE_ENV: production
+          NODE_OPTIONS: '--max-old-space-size=4096'
+
+      # dev 브랜치: prerelease 모드 진입
+      - name: Enter prerelease mode
+        if: github.ref_name == 'dev'
+        run: yarn changeset pre enter alpha
+
+      - name: Apply changeset version
+        run: yarn changeset version
+
+      - name: Get current version from package.json
+        id: get_version
+        shell: bash
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Publish to NPM
+        run: yarn changeset publish
+        env:
+          NPM_CONFIG_PROVENANCE: true
+
+      # dev 브랜치: prerelease 모드 종료
+      - name: Exit prerelease mode
+        if: github.ref_name == 'dev'
+        run: yarn changeset pre exit
+
+      - name: Commit version changes
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Release ${{ github.ref_name == 'dev' && 'dev ' || '' }}version ${{ steps.get_version.outputs.version }}" || exit 0
+          git push origin ${{ github.ref_name }}
+
+      - name: Create GitHub Release
+        continue-on-error: true
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: 'v${{ steps.get_version.outputs.version }}'
+          release_name: "${{ github.ref_name == 'dev' && 'Pre-release' || 'Release' }} v${{ steps.get_version.outputs.version }}"
+          draft: false
+          prerelease: ${{ github.ref_name == 'dev' }}
+
+      # dev 브랜치: main으로 PR 생성
+      - name: Create Pull Request to Main
+        if: github.ref_name == 'dev'
+        continue-on-error: true
+        run: |
+          gh pr create --base main --head dev --title "Release: v${{ steps.get_version.outputs.version }}" --body "Automated PR to merge dev changes into main for release." || echo "PR already exists"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify Success
+        if: success()
+        uses: 8398a7/action-slack@v3
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:
+          status: custom
+          custom_payload: |
+            {
+              "text": "${{ github.ref_name == 'dev' && '🚀' || '✅' }} logician-ui v${{ steps.get_version.outputs.version }} ${{ github.ref_name == 'dev' && 'pre-release deployed' || 'released' }}!",
+              "attachments": [
+                {
+                  "color": "${{ github.ref_name == 'dev' && 'warning' || 'good' }}",
+                  "fields": [
+                    {
+                      "title": "Package",
+                      "value": "@mindlogic-ai/logician-ui",
+                      "short": true
+                    },
+                    {
+                      "title": "Version",
+                      "value": "v${{ steps.get_version.outputs.version }}${{ github.ref_name == 'dev' && ' (alpha)' || '' }}",
+                      "short": true
+                    },
+                    {
+                      "title": "NPM",
+                      "value": "<https://www.npmjs.com/package/@mindlogic-ai/logician-ui|View on NPM>",
+                      "short": true
+                    },
+                    {
+                      "title": "Install",
+                      "value": "`yarn add @mindlogic-ai/logician-ui@${{ steps.get_version.outputs.version }}`",
+                      "short": true
+                    }
+                  ]
+                }
+              ]
+            }
+
+      - name: Notify Failure
+        if: failure()
+        uses: 8398a7/action-slack@v3
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:
+          status: custom
+          custom_payload: |
+            {
+              "text": "❌ logician-ui v${{ steps.get_version.outputs.version }} ${{ github.ref_name == 'dev' && 'pre-release' || 'release' }} failed!",
+              "attachments": [
+                {
+                  "color": "danger",
+                  "fields": [
+                    {
+                      "title": "Package",
+                      "value": "@mindlogic-ai/logician-ui",
+                      "short": true
+                    },
+                    {
+                      "title": "Version",
+                      "value": "v${{ steps.get_version.outputs.version }}",
+                      "short": true
+                    },
+                    {
+                      "title": "Workflow",
+                      "value": "<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Workflow>",
+                      "short": true
+                    }
+                  ]
+                }
+              ]
+            }

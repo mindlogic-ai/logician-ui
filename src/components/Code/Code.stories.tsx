@@ -1,27 +1,32 @@
-import React from "react";
-import { Meta, StoryFn } from "@storybook/react";
-import { Code } from "./Code";
-import { CodeProps } from "./Code.types";
+import { Meta, StoryObj } from '@storybook/react';
 
-const meta: Meta<typeof Code> = {
-  title: "Components/Code",
+import { Code } from './Code';
+import { CodeProps } from './Code.types';
+
+const meta = {
+  title: 'Components/Code',
   component: Code,
+  args: {
+    children: `const t = 'test';`,
+  },
+} satisfies Meta<typeof Code>;
+
+export default meta;
+
+type Story = StoryObj<typeof Code>;
+
+export const Basic: Story = {
   args: {
     children: `const t = 'test';`,
   },
 };
 
-export default meta;
-
-const Template: StoryFn<CodeProps> = (args: CodeProps) => <Code {...args} />;
-
-export const Basic: StoryFn<CodeProps> = Template.bind({});
-Basic.args = {};
-
-export const Copyable: StoryFn<CodeProps> = Template.bind({});
-Copyable.args = {
-  onCopy: (str) => {
-    navigator.clipboard.writeText(str);
-    console.log(str);
+export const Copyable: Story = {
+  args: {
+    children: `const t = 'test';`,
+    onCopy: (str) => {
+      navigator.clipboard.writeText(str);
+      console.log(str);
+    },
   },
 };

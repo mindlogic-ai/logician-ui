@@ -34,6 +34,13 @@
     "ja": "もっと見る",
     "es": "Ver más"
   },
+  "see_less": {
+    "ko": "접기",
+    "en": "See less",
+    "zh": "折叠",
+    "ja": "折りたたむ",
+    "es": "Doblar"
+  },
   "previous": {
     "ko": "이전",
     "en": "Previous",
@@ -96,5 +103,117 @@
     "zh": "文件上传",
     "ja": "ファイルをアップロード",
     "es": "Subir archivo"
+  },
+  "error_boundary_title": {
+    "ko": "앗! 문제가 발생했습니다.",
+    "en": "Oops! A problem has occurred.",
+    "zh": "哎呀！出现了问题。",
+    "ja": "あっ！問題が発生しました。",
+    "es": "¡Vaya! Ha ocurrido un problema."
+  },
+  "error_boundary_subtitle": {
+    "ko": "불편을 드려 죄송합니다. 저희 팀이 자동으로 알림을 받았으며 수정 작업을 진행하고 있습니다.",
+    "en": "We apologize for the inconvenience. Our team has been automatically notified and is working on a fix.",
+    "zh": "对给您带来的不便深表歉意。我们的团队已自动收到通知，并正在进行修复工作。",
+    "ja": "ご不便をおかけして申し訳ありません。私たちのチームは自動的に通知を受け、修正作業を進めています。",
+    "es": "Pedimos disculpas por las molestias. Nuestro equipo ha sido notificado automáticamente y está trabajando en una solución."
+  },
+  "error_boundary_default_message": {
+    "ko": "예상치 못한 오류가 발생했습니다.",
+    "en": "An unexpected error has occurred.",
+    "zh": "发生了意外错误。",
+    "ja": "予期しないエラーが発生しました。",
+    "es": "Ha ocurrido un error inesperado."
+  },
+  "support_information": {
+    "ko": "지원 정보",
+    "en": "Support Information",
+    "zh": "支持信息",
+    "ja": "サポート情報",
+    "es": "Información de soporte"
+  },
+  "error_id": {
+    "ko": "오류 ID",
+    "en": "Error ID",
+    "zh": "错误 ID",
+    "ja": "エラーID",
+    "es": "ID de error"
+  },
+  "time": {
+    "ko": "시간",
+    "en": "Time",
+    "zh": "时间",
+    "ja": "時間",
+    "es": "Tiempo"
+  },
+  "component": {
+    "ko": "컴포넌트",
+    "en": "Component",
+    "zh": "组件",
+    "ja": "コンポーネント",
+    "es": "Componente"
+  },
+  "user_id": {
+    "ko": "사용자 ID",
+    "en": "User ID",
+    "zh": "用户 ID",
+    "ja": "ユーザーID",
+    "es": "ID de usuario"
+  },
+  "page": {
+    "ko": "페이지",
+    "en": "Page",
+    "zh": "页面",
+    "ja": "ページ",
+    "es": "Página"
+  },
+  "anonymous": {
+    "ko": "익명",
+    "en": "Anonymous",
+    "zh": "匿名",
+    "ja": "匿名",
+    "es": "Anónimo"
+  },
+  "unknown": {
+    "ko": "알 수 없음",
+    "en": "Unknown",
+    "zh": "알 수 없음",
+    "ja": "알 수 없음",
+    "es": "Desconocido"
+  },
+  "try_again": {
+    "ko": "다시 시도",
+    "en": "Try again",
+    "zh": "再试一次",
+    "ja": "もう一度試してください",
+    "es": "Inténtalo de nuevo"
+  },
+  "refresh_page": {
+    "ko": "페이지 새로고침",
+    "en": "Refresh the page",
+    "zh": "刷新页面",
+    "ja": "ページを更新",
+    "es": "Actualizar la página"
+  },
+  "copy_error_details": {
+    "ko": "오류 세부사항 복사",
+    "en": "Copy error details",
+    "zh": "复制错误详情",
+    "ja": "エラーの詳細をコピー",
+    "es": "Copiar detalles del error"
+  },
+  "support_help_text": {
+    "ko": "이 문제가 지속되면 위의 오류 ID와 함께 지원팀에 문의해 주세요.",
+    "en": "If this issue persists, please contact support with the error ID above.",
+    "zh": "如果此问题持续存在，请联系支持团队并提供上述错误 ID。",
+    "ja": "この問題が続く場合は、上記のエラーIDを添えてサポートチームにお問い合わせください。",
+    "es": "Si este problema persiste, por favor contacte al soporte con el ID de error mencionado arriba."
+  },
+  "error_details_copied": {
+    "ko": "오류 세부사항이 클립보드에 복사되었습니다.",
+    "en": "Error details have been copied to the clipboard.",
+    "zh": "错误详情已复制到剪贴板。",
+    "ja": "エラーの詳細がクリップボードにコピーされました。",
+    "es": "Los detalles del error se han copiado al portapapeles."
   }
 }

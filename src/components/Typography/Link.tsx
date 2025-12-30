@@ -16,11 +16,14 @@ export const Link = forwardRef<HTMLAnchorElement, LinkCustomProps>(
     const theme = useTheme();
     const defaultColor = theme.semanticTokens.colors.primary.main;
     const errorColor = theme.semanticTokens.colors.danger.main;
+    const tokenKey =
+      variant === 'error'
+        ? errorColor
+        : (typeof color === 'string' ? color : undefined) || defaultColor;
+
     const linkColor =
-      useToken(
-        'colors',
-        variant === 'error' ? errorColor : color || defaultColor,
-      ) ?? color;
+      useToken('colors', tokenKey) ??
+      (typeof color === 'string' ? color : defaultColor);
 
     const getHoverColor = () => {
       let hoverColor;
@@ -36,6 +39,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkCustomProps>(
       <ChakraLink
         ref={ref}
         fontWeight="semibold"
+        wordBreak="keep-all"
         color={linkColor}
         _hover={{
           color: getHoverColor(),
@@ -43,7 +47,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkCustomProps>(
         {...rest}
       />
     );
-  },
+  }
 );
 
 Link.displayName = 'Link';

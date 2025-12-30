@@ -16,7 +16,7 @@ export const SliderThumb = forwardRef(
         ref={ref}
       />
     );
-  },
+  }
 );
 
 SliderThumb.displayName = 'SliderThumb';

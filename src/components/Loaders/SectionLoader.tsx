@@ -1,7 +1,7 @@
 import DotLoader from 'react-spinners/DotLoader';
 import { Flex, FlexProps, useToken } from '@chakra-ui/react';
 
-import theme from '@/theme';
+import theme from '../../theme';
 
 export const SectionLoader = ({
   isLoading,

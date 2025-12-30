@@ -32,7 +32,10 @@ export const VirtualizedMenuList = <
     getScrollElement: () => menuListRef.current,
     estimateSize: () => optionHeight,
     overscan: 5,
-    getItemKey: index => childrenArray[index].key, // Use stable keys
+    getItemKey: (index) => {
+      const child = childrenArray[index];
+      return React.isValidElement(child) && child.key ? child.key : index;
+    }, // Use stable keys
     measureElement: (_, entry, instance) => {
       if (entry) {
         instance.measure();
@@ -102,7 +105,7 @@ export const VirtualizedMenuList = <
           position: 'relative',
         }}
       >
-        {virtualizer.getVirtualItems().map(virtualRow => (
+        {virtualizer.getVirtualItems().map((virtualRow) => (
           <div
             key={virtualRow.index}
             data-index={virtualRow.index}
@@ -118,7 +121,7 @@ export const VirtualizedMenuList = <
               cursor: baseOptionStyle.cursor,
               borderRadius: baseOptionStyle.borderRadius,
               // Add some necessary styles for proper display
-              padding: `${theme.spacing[2]} ${theme.spacing[4]}`,
+              padding: `${theme.space[0.5]} ${theme.space[1]}`,
               userSelect: 'none',
               WebkitTapHighlightColor: 'rgba(0, 0, 0, 0)',
               display: 'block',

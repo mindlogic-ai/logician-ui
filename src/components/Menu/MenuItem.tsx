@@ -13,10 +13,11 @@ export const MenuItem = ({
   return (
     <ChakraMenuItem
       color={
-        isDangerVariant ? theme.semanticTokens.colors.danger.main : 'gray.800'
+        isDangerVariant ? theme.semanticTokens.colors.danger.main : 'gray.1000'
       }
       iconSpacing={0}
       fontSize="md"
+      borderRadius="sm"
       py={2}
       minW="fit-content"
       fontWeight="semibold"
@@ -24,7 +25,7 @@ export const MenuItem = ({
       _hover={{
         color: isDangerVariant
           ? theme.semanticTokens.colors.danger.main
-          : 'gray.1200',
+          : 'gray.1500',
         backgroundColor: 'gray.50',
       }}
       {...rest}

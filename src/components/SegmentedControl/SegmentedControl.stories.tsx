@@ -1,9 +1,11 @@
-import React, { useRef, useState } from 'react';
-import { Meta, StoryFn } from '@storybook/react';
+import { HStack, Icon, Text } from '@chakra-ui/react';
+import { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
+import { FiHome, FiSettings, FiUser } from 'react-icons/fi';
 
 import { SegmentedControl } from './SegmentedControl';
 
-const meta: Meta<typeof SegmentedControl> = {
+const meta = {
   title: 'Components/SegmentedControl',
   component: SegmentedControl,
   args: {
@@ -28,69 +30,106 @@ const meta: Meta<typeof SegmentedControl> = {
       options: ['xs', 'sm', 'md', 'lg', 'xl'],
     },
   },
-};
+} satisfies Meta<typeof SegmentedControl>;
 
 export default meta;
-type Story = StoryFn<typeof SegmentedControl>;
+type Story = StoryObj<typeof SegmentedControl>;
 
-const Template: Story = (props: any) => <SegmentedControl {...props} />;
-
-export const Uncontrolled = Template.bind({});
-Uncontrolled.args = {
-  options: [
-    {
-      label: 'Complete',
-      value: 'complete',
-    },
-    {
-      label: 'Incomplete',
-      value: 'incomplete',
-    },
-    {
-      label: 'Pending',
-      value: 'pending',
-    },
-  ],
+export const Uncontrolled = {
+  args: {
+    options: [
+      {
+        label: 'Complete',
+        value: 'complete',
+      },
+      {
+        label: 'Incomplete',
+        value: 'incomplete',
+      },
+      {
+        label: 'Pending',
+        value: 'pending',
+      },
+    ],
+  },
 };
 
-export const Controlled: Story = (props: any) => {
-  const [selectedValue, setSelectedValue] = useState<string>('complete');
-  return (
-    <SegmentedControl
-      {...props}
-      value={selectedValue}
-      onSelect={(val: string) => {
-        setSelectedValue(val);
-        console.log('changed to ', val);
-      }}
-    />
-  );
-};
-Controlled.args = {
-  options: [
-    {
-      label: 'Complete',
-      value: 'complete',
-    },
-    {
-      label: 'Incomplete',
-      value: 'incomplete',
-    },
-    {
-      label: 'Pending',
-      value: 'pending',
-    },
-  ],
-};
-
-export const Rounded = Template.bind({});
-Rounded.args = {
-  borderRadius: 'full',
+export const Controlled: Story = {
+  args: {
+    options: [
+      {
+        label: 'Complete',
+        value: 'complete',
+      },
+      {
+        label: 'Incomplete',
+        value: 'incomplete',
+      },
+      {
+        label: 'Pending',
+        value: 'pending',
+      },
+    ],
+  },
+  render: (props) => {
+    const [selectedValue, setSelectedValue] = useState<string>('complete');
+    return (
+      <SegmentedControl
+        {...props}
+        value={selectedValue}
+        onSelect={(val: string) => {
+          setSelectedValue(val);
+          console.log('changed to ', val);
+        }}
+      />
+    );
+  },
 };
 
-export const Small = Template.bind({});
-Small.args = {
-  size: 'sm',
-  borderRadius: 'full',
-  w: 'fit-content',
+export const Rounded: Story = {
+  args: {
+    borderRadius: 'full',
+  },
+};
+
+export const Small: Story = {
+  args: {
+    size: 'sm',
+    borderRadius: 'full',
+    w: 'fit-content',
+  },
+};
+
+export const WithCustomContent = {
+  args: {
+    options: [
+      {
+        label: (
+          <HStack spacing={2}>
+            <Icon as={FiHome} />
+            <Text>Home</Text>
+          </HStack>
+        ),
+        value: 'home',
+      },
+      {
+        label: (
+          <HStack spacing={2}>
+            <Icon as={FiUser} />
+            <Text>Profile</Text>
+          </HStack>
+        ),
+        value: 'profile',
+      },
+      {
+        label: (
+          <HStack spacing={2}>
+            <Icon as={FiSettings} />
+            <Text>Settings</Text>
+          </HStack>
+        ),
+        value: 'settings',
+      },
+    ],
+  },
 };

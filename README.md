@@ -112,7 +112,6 @@ function App() {
 
 - **Icon** - Comprehensive icon system
 - **Logo** - Brand logo components
-- **Lottie** - Animated Lottie components
 
 ## Development
 
@@ -127,6 +126,18 @@ yarn lint
 
 # Fix linting issues
 yarn lint:fix
+
+# Type checking
+yarn type-check
+
+# Build the library
+yarn build
+
+# Build in watch mode
+yarn build:watch
+
+# Validate component exports
+yarn check-exports
 ```
 
 ### Storybook Development
@@ -179,12 +190,32 @@ yarn changeset:publish
 │   ├── utils/           # Utility functions
 │   ├── hooks/           # React hooks
 │   ├── theme/           # Chakra UI theme
+│   ├── translations/    # i18n support
+│   ├── types/           # Shared TypeScript types
 │   └── index.ts         # Main export file
 ├── package.json
 ├── tsconfig.json
 ├── vite.config.ts
 └── README.md
 ```
+
+### Path Aliases
+
+The project uses TypeScript path aliases for cleaner imports:
+
+```typescript
+import { Button } from '@/components/Button';
+import { useCustomHook } from '@/hooks/useCustomHook';
+import { formatDate } from '@/utils/formatDate';
+import { theme } from '@/theme';
+```
+
+Available aliases:
+- `@/components/*` → `src/components/*`
+- `@/utils/*` → `src/utils/*`
+- `@/hooks/*` → `src/hooks/*`
+- `@/theme/*` → `src/theme/*`
+- `@/translations/*` → `src/translations/*`
 
 ### Adding New Components
 

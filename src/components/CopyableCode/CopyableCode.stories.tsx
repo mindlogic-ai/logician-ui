@@ -1,9 +1,9 @@
-import React from 'react';
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
+
 import { CopyableCode } from './CopyableCode';
 import { CopyableCodeProps } from './CopyableCode.types';
 
-const meta: Meta<typeof CopyableCode> = {
+const meta = {
   title: 'Components/CopyableCode',
   component: CopyableCode,
   args: {
@@ -13,13 +13,10 @@ console.log(example);`,
       console.log('Code copied to clipboard');
     },
   },
-};
+} satisfies Meta<typeof CopyableCode>;
 
 export default meta;
 
-const Template: StoryFn<CopyableCodeProps> = (args: CopyableCodeProps) => (
-  <CopyableCode {...args} />
-);
+type Story = StoryObj<typeof CopyableCode>;
 
-export const Basic: StoryFn<CopyableCodeProps> = Template.bind({});
-Basic.args = {};
+export const Basic: Story = {};

@@ -4,7 +4,7 @@
  */
 export const useLocale = () => {
   return {
-    language: "en", // Default to English
+    language: 'en', // Default to English
   };
 };
 

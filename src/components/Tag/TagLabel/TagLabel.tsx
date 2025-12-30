@@ -6,7 +6,7 @@ import { TagLabelProps } from './TagLabel.types';
 export const TagLabel = forwardRef(
   ({ ...rest }: TagLabelProps, ref?: ForwardedRef<HTMLDivElement>) => {
     return <ChakraTagLabel {...rest} ref={ref} />;
-  },
+  }
 );
 
 TagLabel.displayName = 'TagLabel';

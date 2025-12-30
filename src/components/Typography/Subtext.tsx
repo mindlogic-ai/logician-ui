@@ -9,6 +9,8 @@ export const Subtext = forwardRef<HTMLSpanElement, TextProps>((props, ref) => {
       ref={ref}
       fontSize={theme.fontSizes.subtext}
       fontWeight="regular"
+      color="gray.1500"
+      wordBreak="keep-all"
       {...props}
     />
   );

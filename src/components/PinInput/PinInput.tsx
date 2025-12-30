@@ -29,7 +29,7 @@ export const PinInput = ({
       type={isNumberOnly ? 'numeric' : 'custom'}
       inputMode={isNumberOnly ? 'number' : 'text'}
       inputStyle={{
-        borderColor: theme.colors.gray[200],
+        borderColor: 'gray.200',
         borderRadius: theme.radii.md,
         width: theme.sizes[12],
         height: theme.sizes[12],
@@ -38,7 +38,7 @@ export const PinInput = ({
       inputFocusStyle={{
         borderColor: useToken(
           'colors',
-          theme.semanticTokens.colors.primary.main,
+          theme.semanticTokens.colors.primary.main
         ),
         boxShadow: `0 0 0 1px ${useToken('colors', theme.semanticTokens.colors.primary.main)}`,
       }}

@@ -1,10 +1,11 @@
 import { BoxProps } from '@chakra-ui/react';
+import { IconProps } from 'src/icons';
 
-import { IconProps } from '../Icon';
+import { IoIosCheckmarkCircle, IoWarning, LuInfo, MdError } from '../Icon';
 import { TypographyProps } from '../Typography';
-import { BannerProps } from './Banner.types';
+import { BannerProps, BannerSize } from './Banner.types';
 
-type VariantType = keyof BannerProps['variant'];
+type VariantType = NonNullable<BannerProps['variant']>;
 
 export const bannerStyles: Record<VariantType, BoxProps> = {
   info: {
@@ -44,23 +45,14 @@ export const accentStyles: Record<VariantType, BoxProps['_before']> = {
   },
 };
 
-export const iconStyles: Record<VariantType, IconProps> = {
-  info: {
-    icon: 'LuInfo',
-    color: 'primary.main',
-  },
-  success: {
-    icon: 'IoIosCheckmarkCircle',
-    color: 'success.main',
-  },
-  warning: {
-    icon: 'IoWarning',
-    color: 'warning.main',
-  },
-  danger: {
-    icon: 'MdError',
-    color: 'danger.main',
-  },
+export const iconConfig: Record<
+  VariantType,
+  { Icon: React.ComponentType<IconProps>; color: string }
+> = {
+  info: { Icon: LuInfo, color: 'primary.main' },
+  success: { Icon: IoIosCheckmarkCircle, color: 'success.main' },
+  warning: { Icon: IoWarning, color: 'warning.main' },
+  danger: { Icon: MdError, color: 'danger.main' },
 };
 
 export const textStyles: Record<VariantType, TypographyProps> = {
@@ -75,5 +67,64 @@ export const textStyles: Record<VariantType, TypographyProps> = {
   },
   danger: {
     color: 'danger.dark',
+  },
+};
+
+export const sizeStyles: Record<
+  BannerSize,
+  {
+    container: BoxProps;
+    icon: Pick<IconProps, 'boxSize'>;
+    text: TypographyProps;
+    accentWidth: string;
+  }
+> = {
+  sm: {
+    container: {
+      px: 3,
+      py: 1.5,
+      borderTopLeftRadius: '3px',
+      borderBottomLeftRadius: '3px',
+    },
+    icon: {
+      boxSize: 'sm', // 20px
+    },
+    text: {
+      fontSize: 'subtext', // theme.fontSizes.subtext (~13-14px)
+      lineHeight: '1.4',
+    },
+    accentWidth: '3px',
+  },
+  md: {
+    container: {
+      px: 4,
+      py: 2,
+      borderTopLeftRadius: '4px',
+      borderBottomLeftRadius: '4px',
+    },
+    icon: {
+      boxSize: 'md', // 24px
+    },
+    text: {
+      fontSize: 'p', // theme.fontSizes.p (~14px)
+      lineHeight: '1.5',
+    },
+    accentWidth: '4px',
+  },
+  lg: {
+    container: {
+      px: 5,
+      py: 3,
+      borderTopLeftRadius: '5px',
+      borderBottomLeftRadius: '5px',
+    },
+    icon: {
+      boxSize: 'lg', // 32px
+    },
+    text: {
+      fontSize: 'h5', // theme.fontSizes.h5 (~15-17px)
+      lineHeight: '1.6',
+    },
+    accentWidth: '5px',
   },
 };

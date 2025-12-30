@@ -1,19 +1,17 @@
-import React from 'react';
-import { TextProps } from '@chakra-ui/react';
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
-import { H1, H2, H3, H4, H5, Subtitle, Subtext, Text, Link } from '.';
+import { H1, H2, H3, H4, H5, Link, Subtext, Subtitle, Text } from '.';
 
-const meta: Meta<typeof Text> = {
+const meta = {
   title: 'Components/Typography',
   component: Text,
-};
+} satisfies Meta<typeof Text>;
 
 export default meta;
-type Story = StoryFn<typeof Text>;
+type Story = StoryObj<typeof Text>;
 
-export const AllTextStyles: Story = (props: TextProps) => {
-  return (
+export const AllTextStyles: Story = {
+  render: (props) => (
     <>
       <H1 {...props}>
         H1 - Lorem ipsum dolor sit amet,{' '}
@@ -50,5 +48,5 @@ export const AllTextStyles: Story = (props: TextProps) => {
         <Link href="https://example.com">consectetur adipiscing elit</Link>
       </Subtext>
     </>
-  );
+  ),
 };

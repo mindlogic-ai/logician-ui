@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { SingleValue } from 'react-select';
 import { Flex, useTheme } from '@chakra-ui/react';
 
-import { Icon } from '@/components/Icon';
+import { IoChevronForward, IoIosArrowBack } from '@/components/Icon';
 import { IconButton } from '@/components/IconButton';
 import { Subtext, Subtitle } from '@/components/Typography';
 import { useTranslate } from '@/hooks/useTranslate';
@@ -42,12 +42,12 @@ export const Pagination = ({
     useState<number>(1);
   const maxPage = useMemo(
     () => Math.ceil(numTotalItems / itemsPerPage),
-    [numTotalItems, itemsPerPage],
+    [numTotalItems, itemsPerPage]
   );
 
   const currentPage = controlledCurrentPage ?? uncontrolledCurrentPage; // Use controlled or internal number state
   const handleBack = () => {
-    setUncontrolledCurrentPage(prev => Math.max(prev - 1, 1));
+    setUncontrolledCurrentPage((prev) => Math.max(prev - 1, 1));
     if (onBack && currentPage > 1) {
       // Controlled mode: call the provided onBack
       onBack();
@@ -55,7 +55,7 @@ export const Pagination = ({
   };
 
   const handleNext = () => {
-    setUncontrolledCurrentPage(prev => Math.min(prev + 1, maxPage));
+    setUncontrolledCurrentPage((prev) => Math.min(prev + 1, maxPage));
     if (onNext && currentPage < maxPage) {
       // Controlled mode: call the provided onNext
       onNext();
@@ -63,7 +63,7 @@ export const Pagination = ({
   };
 
   const handleItemsPerPageOptionChange = (
-    newValue: SingleValue<SelectOption<number>>,
+    newValue: SingleValue<SelectOption<number>>
   ) => {
     if (newValue) {
       const newItemsPerPage = newValue.value;
@@ -97,7 +97,7 @@ export const Pagination = ({
                   padding: `0 ${theme.space[1]}`,
                 }),
               }}
-              options={itemsPerPageOptions.map(option => ({
+              options={itemsPerPageOptions.map((option) => ({
                 label: option.toString(),
                 value: option,
               }))}
@@ -128,14 +128,14 @@ export const Pagination = ({
             </Subtitle>
             <Flex align="center">
               <IconButton
-                icon={<Icon icon="IoIosArrowBack" boxSize="sm" />}
+                icon={<IoIosArrowBack boxSize="sm" />}
                 aria-label={translate('previous') as string}
                 onClick={handleBack}
                 isDisabled={currentPage <= 1}
                 color={currentPage === 1 ? 'gray.400' : 'gray.1500'}
               />
               <IconButton
-                icon={<Icon icon="IoChevronForward" boxSize="sm" />}
+                icon={<IoChevronForward boxSize="sm" />}
                 aria-label={translate('go_next_page_button') as string}
                 onClick={handleNext}
                 isDisabled={currentPage >= maxPage}

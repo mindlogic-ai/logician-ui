@@ -1,54 +1,61 @@
-import React, { useState } from "react";
-import { Meta, StoryFn } from "@storybook/react";
+import { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
 
-import { Input, InputDataProps } from "./Input";
-import { Icon } from "@/components/Icon";
+import { IoCall, IoSearch } from '@/components/Icon';
 
-const meta: Meta<typeof Input> = {
-  title: "Components/Input",
+import { Input } from './Input';
+
+const meta = {
+  title: 'Components/Input',
   component: Input,
   argTypes: {
-    placeholder: { control: "text" },
+    placeholder: { control: 'text' },
     size: {
       control: {
-        type: "select",
-        options: ["sm", "md", "lg"],
+        type: 'select',
+        options: ['sm', 'md', 'lg'],
       },
     },
-    isDisabled: { control: "boolean" },
-    isInvalid: { control: "boolean" },
-    maxLength: { control: "number" },
+    isDisabled: { control: 'boolean' },
+    isInvalid: { control: 'boolean' },
+    maxLength: { control: 'number' },
   },
-};
+  render: (args) => {
+    const [value, setValue] = useState('');
+
+    return (
+      <Input
+        {...args}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+    );
+  },
+} satisfies Meta<typeof Input>;
 
 export default meta;
 
-const Template: StoryFn<InputDataProps> = (args) => {
-  const [value, setValue] = useState("");
+type Story = StoryObj<typeof Input>;
 
-  return (
-    <Input {...args} value={value} onChange={(e) => setValue(e.target.value)} />
-  );
+export const Basic: Story = {};
+
+export const LeftIcon: Story = {
+  args: {
+    placeholder: 'Phone number',
+    size: 'md',
+    isDisabled: false,
+    isInvalid: false,
+    leftIcon: <IoCall color="gray.300" />,
+  },
 };
 
-export const Basic: StoryFn<InputDataProps> = Template.bind({});
-Basic.args = {};
-
-export const LeftIcon: StoryFn<InputDataProps> = Template.bind({});
-LeftIcon.args = {
-  placeholder: "Phone number",
-  size: "md",
-  isDisabled: false,
-  isInvalid: false,
-  leftIcon: <Icon icon="IoCall" color="gray.300" />,
-};
-
-export const RightIcon: StoryFn<InputDataProps> = Template.bind({});
-RightIcon.args = {
-  placeholder: "Search...",
-  size: "md",
-  isDisabled: false,
-  isInvalid: false,
-  rightIcon: <Icon icon="IoSearch" color="gray.300" />,
-  maxLength: 20,
+export const RightIcon: Story = {
+  args: {
+    placeholder: 'Search...',
+    size: 'md',
+    isDisabled: false,
+    isInvalid: false,
+    rightIcon: <IoSearch color="gray.300" />,
+    maxLength: 20,
+  },
 };

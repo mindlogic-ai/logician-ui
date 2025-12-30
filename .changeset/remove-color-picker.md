@@ -1,5 +1,5 @@
 ---
-"logician-ui": minor
+"@mindlogic-ai/logician-ui": minor
 ---
 
 Remove ColorPicker component

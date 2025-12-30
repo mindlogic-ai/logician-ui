@@ -1,13 +1,16 @@
 import { Progress as ChakraProgress } from '@chakra-ui/react';
 
-import { baseStyles } from './ProgressBar.styles';
+import { sizeStyles } from './ProgressBar.styles';
 import { ProgressBarProps } from './ProgressBar.types';
 
 export const ProgressBar = ({
   filledTrackColor,
   value,
+  size = 'md',
   ...rest
 }: ProgressBarProps) => {
+  const styles = sizeStyles[size];
+
   return (
     <ChakraProgress
       sx={{
@@ -18,7 +21,7 @@ export const ProgressBar = ({
         bg: 'gray.200',
       }}
       value={value}
-      {...baseStyles}
+      {...styles}
       {...rest}
     />
   );

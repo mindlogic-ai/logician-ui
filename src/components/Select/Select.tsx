@@ -83,7 +83,7 @@ export const Select = <
                   height: '100%',
                 },
                 styles?.container,
-                state,
+                state
               ),
             }),
             placeholder: (base, state) => ({
@@ -93,7 +93,7 @@ export const Select = <
                   ...placeholderStyles,
                 },
                 styles?.placeholder,
-                state,
+                state
               ),
             }),
             valueContainer: (base, state) => ({
@@ -103,7 +103,7 @@ export const Select = <
                   textAlign: 'left',
                 },
                 styles?.valueContainer,
-                state,
+                state
               ),
             }),
             singleValue: (base, state) => ({
@@ -111,10 +111,10 @@ export const Select = <
                 {
                   ...base,
                   margin: 0,
-                  color: theme.colors.gray[1000],
+                  color: 'gray.1000',
                 },
                 styles?.singleValue,
-                state,
+                state
               ),
             }),
             menu: (base, state) => ({
@@ -124,19 +124,19 @@ export const Select = <
                   ...menuStyles,
                 },
                 styles?.menu,
-                state,
+                state
               ),
             }),
             menuList: (base, state) => ({
               ...resolveStyle(
                 {
                   ...base,
-                  padding: `0px ${theme.spacing[4]}`,
+                  padding: `0px ${theme.space[1]}`,
                   // Important for the virtualized list - DON'T override overflow
                   // as we need the default 'auto' from react-select for scrolling to work
                 },
                 styles?.menuList,
-                state,
+                state
               ),
             }),
             option: (base, state) => ({
@@ -144,11 +144,11 @@ export const Select = <
                 {
                   ...base,
                   textAlign: 'left',
-                  padding: `${theme.spacing[2]} ${theme.spacing[4]}`,
+                  padding: `${theme.space[0.5]} ${theme.space[1]}`,
                   ...optionStyles(state),
                 },
                 styles?.option,
-                state,
+                state
               ),
             }),
             menuPortal: (base, state) => ({
@@ -158,7 +158,7 @@ export const Select = <
                   zIndex: 9999,
                 },
                 styles?.menuPortal,
-                state,
+                state
               ),
             }),
             control: (base, state) => ({
@@ -168,11 +168,11 @@ export const Select = <
                   ...controlStyles,
                   ...getControlVariantStyles(state, variant),
                   ...(state.isDisabled && {
-                    bg: theme.colors.gray[50],
+                    bg: 'gray.50',
                   }),
                 },
                 styles?.control,
-                state,
+                state
               ),
             }),
             indicatorSeparator: (base, state) => ({
@@ -182,17 +182,17 @@ export const Select = <
                   display: 'none',
                 },
                 styles?.indicatorSeparator,
-                state,
+                state
               ),
             }),
             dropdownIndicator: (base, state) => ({
               ...resolveStyle(
                 {
                   ...base,
-                  color: theme.colors.gray[800],
+                  color: 'gray.800',
                 },
                 styles?.dropdownIndicator,
-                state,
+                state
               ),
             }),
           }}

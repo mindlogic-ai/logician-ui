@@ -1,9 +1,15 @@
-import React from 'react';
-import { Meta, StoryFn } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import { LineGraph } from '.';
+import type { DatumBase } from './LineGraph.types';
 
-const TEST_DATA = [
+type TestDataType = {
+  uv?: number;
+  pv?: number;
+  amt?: number;
+};
+
+const TEST_DATA: Array<{ name: string } & TestDataType> = [
   {
     name: 'Page A',
     uv: 4000,
@@ -48,9 +54,9 @@ const TEST_DATA = [
   },
 ];
 
-const meta: Meta<typeof LineGraph> = {
+const meta = {
   title: 'Components/LineGraph',
-  component: LineGraph,
+  component: LineGraph<TestDataType>,
   args: {
     data: TEST_DATA,
     dataKeys: [
@@ -60,39 +66,42 @@ const meta: Meta<typeof LineGraph> = {
       },
     ],
   },
-};
+} satisfies Meta<typeof LineGraph<TestDataType>>;
 
 export default meta;
-type Story = StoryFn<typeof LineGraph>;
 
-export const Basic: Story = args => <LineGraph {...args} />;
+type Story = StoryObj<typeof meta>;
 
-export const TwoSeries: Story = args => <LineGraph {...args} />;
-TwoSeries.args = {
-  dataKeys: [
-    {
-      key: 'uv',
-      label: 'UV Stuff',
-    },
-    {
-      key: 'pv',
-      label: 'PV Stuff',
-    },
-  ],
+export const Basic: Story = {};
+
+export const TwoSeries: Story = {
+  args: {
+    dataKeys: [
+      {
+        key: 'uv',
+        label: 'UV Stuff',
+      },
+      {
+        key: 'pv',
+        label: 'PV Stuff',
+      },
+    ],
+  },
 };
 
-export const CustomColors: Story = args => <LineGraph {...args} />;
-CustomColors.args = {
-  dataKeys: [
-    {
-      key: 'uv',
-      label: 'UV Stuff',
-      color: 'red',
-    },
-    {
-      key: 'pv',
-      label: 'PV Stuff',
-      color: 'purple',
-    },
-  ],
+export const CustomColors: Story = {
+  args: {
+    dataKeys: [
+      {
+        key: 'uv',
+        label: 'UV Stuff',
+        color: 'red',
+      },
+      {
+        key: 'pv',
+        label: 'PV Stuff',
+        color: 'purple',
+      },
+    ],
+  },
 };
