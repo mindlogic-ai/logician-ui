@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0-alpha.24
+
+### Patch Changes
+
+- d51e509: Migrate build system from tsup to Rollup with preserveModules for improved tree-shaking support
+
 ## 2.0.0-alpha.23
 
 ### Minor Changes
