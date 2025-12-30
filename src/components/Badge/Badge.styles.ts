@@ -8,7 +8,7 @@ import { BadgeVariant } from './Badge.types';
 export const baseStyles = {
   borderRadius: '2xl',
   px: 2.5,
-  fontSize: 'subtitle',
+  textStyle: 'subtitle',
   fontWeight: 'medium',
   display: 'flex',
   alignItems: 'center',

@@ -203,8 +203,8 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
   }, [onChange]);
 
   const popoverContent = (
-    <Popover.Content width="320px" {...({ asChild: true } as any)}>
-      <div>
+    <Popover.Positioner>
+      <Popover.Content width="320px">
         <Popover.Body>
           <VStack gap={4} align="stretch">
             {/* Year Navigation */}
@@ -220,7 +220,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
                 <IoIosArrowBack />
               </Button>
 
-              <Text fontWeight="semibold" fontSize="h5">
+              <Text fontWeight="semibold" textStyle="h5">
                 {currentYear}
               </Text>
 
@@ -269,8 +269,8 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
             </HStack>
           </VStack>
         </Popover.Body>
-      </div>
-    </Popover.Content>
+      </Popover.Content>
+    </Popover.Positioner>
   );
 
   return (

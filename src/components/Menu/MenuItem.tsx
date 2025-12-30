@@ -14,7 +14,7 @@ export const MenuItem = ({
   return (
     <Menu.Item
       color={isDangerVariant ? 'danger.main' : 'gray.1000'}
-      fontSize="p"
+      textStyle="p"
       borderRadius="sm"
       py={2}
       minW="fit-content"

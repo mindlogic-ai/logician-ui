@@ -132,7 +132,7 @@ export const Th = forwardRef<
       <Table.ColumnHeader
         color="inherit"
         fontWeight="inherit"
-        fontSize="subtitle"
+        textStyle="subtitle"
         overflow="hidden"
         textOverflow="ellipsis"
         ref={setRefs}

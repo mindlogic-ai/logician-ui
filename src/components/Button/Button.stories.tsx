@@ -59,7 +59,7 @@ export const AllCombinations: Story = {
         <Box w="100px" />
         {buttonVariants.map((variant) => (
           <Box key={variant} w="120px" textAlign="center">
-            <Text fontSize="subtext" fontWeight="bold" color="gray.600">
+            <Text fontWeight="bold" color="gray.600">
               {variant}
             </Text>
           </Box>
@@ -70,7 +70,7 @@ export const AllCombinations: Story = {
       {buttonColorPalettes.map((colorPalette) => (
         <HStack key={colorPalette} gap={4}>
           <Box w="100px">
-            <Text fontSize="subtext" fontWeight="bold" color="gray.600">
+            <Text fontWeight="bold" color="gray.600">
               {colorPalette}
             </Text>
           </Box>
@@ -97,7 +97,7 @@ export const AllWithIcons: Story = {
         <Box w="100px" />
         {buttonVariants.map((variant) => (
           <Box key={variant} w="140px" textAlign="center">
-            <Text fontSize="subtext" fontWeight="bold" color="gray.600">
+            <Text fontWeight="bold" color="gray.600">
               {variant}
             </Text>
           </Box>
@@ -107,7 +107,7 @@ export const AllWithIcons: Story = {
       {buttonColorPalettes.map((colorPalette) => (
         <HStack key={colorPalette} gap={4}>
           <Box w="100px">
-            <Text fontSize="subtext" fontWeight="bold" color="gray.600">
+            <Text fontWeight="bold" color="gray.600">
               {colorPalette}
             </Text>
           </Box>
@@ -132,7 +132,7 @@ export const Primary: Story = {
     <Flex gap={4} wrap="wrap">
       {buttonVariants.map((variant) => (
         <VStack key={variant} gap={1}>
-          <Text fontSize="subtext" color="gray.600">{variant}</Text>
+          <Text color="gray.600">{variant}</Text>
           <Button colorPalette="primary" variant={variant}>
             Primary
           </Button>
@@ -150,7 +150,7 @@ export const Secondary: Story = {
     <Flex gap={4} wrap="wrap">
       {buttonVariants.map((variant) => (
         <VStack key={variant} gap={1}>
-          <Text fontSize="subtext" color="gray.600">{variant}</Text>
+          <Text color="gray.600">{variant}</Text>
           <Button colorPalette="secondary" variant={variant}>
             Secondary
           </Button>
@@ -168,7 +168,7 @@ export const Danger: Story = {
     <Flex gap={4} wrap="wrap">
       {buttonVariants.map((variant) => (
         <VStack key={variant} gap={1}>
-          <Text fontSize="subtext" color="gray.600">{variant}</Text>
+          <Text color="gray.600">{variant}</Text>
           <Button colorPalette="danger" variant={variant}>
             Danger
           </Button>
@@ -186,7 +186,7 @@ export const Success: Story = {
     <Flex gap={4} wrap="wrap">
       {buttonVariants.map((variant) => (
         <VStack key={variant} gap={1}>
-          <Text fontSize="subtext" color="gray.600">{variant}</Text>
+          <Text color="gray.600">{variant}</Text>
           <Button colorPalette="success" variant={variant}>
             Success
           </Button>
@@ -204,7 +204,7 @@ export const Warning: Story = {
     <Flex gap={4} wrap="wrap">
       {buttonVariants.map((variant) => (
         <VStack key={variant} gap={1}>
-          <Text fontSize="subtext" color="gray.600">{variant}</Text>
+          <Text color="gray.600">{variant}</Text>
           <Button colorPalette="warning" variant={variant}>
             Warning
           </Button>
@@ -222,7 +222,7 @@ export const Neutral: Story = {
     <Flex gap={4} wrap="wrap">
       {buttonVariants.map((variant) => (
         <VStack key={variant} gap={1}>
-          <Text fontSize="subtext" color="gray.600">{variant}</Text>
+          <Text color="gray.600">{variant}</Text>
           <Button colorPalette="neutral" variant={variant}>
             Neutral
           </Button>
@@ -240,7 +240,7 @@ export const SolidVariant: Story = {
     <Flex gap={4} wrap="wrap">
       {buttonColorPalettes.map((colorPalette) => (
         <VStack key={colorPalette} gap={1}>
-          <Text fontSize="subtext" color="gray.600">{colorPalette}</Text>
+          <Text color="gray.600">{colorPalette}</Text>
           <Button colorPalette={colorPalette} variant="solid">
             Solid
           </Button>
@@ -258,7 +258,7 @@ export const SoftVariant: Story = {
     <Flex gap={4} wrap="wrap">
       {buttonColorPalettes.map((colorPalette) => (
         <VStack key={colorPalette} gap={1}>
-          <Text fontSize="subtext" color="gray.600">{colorPalette}</Text>
+          <Text color="gray.600">{colorPalette}</Text>
           <Button colorPalette={colorPalette} variant="soft">
             Soft
           </Button>
@@ -276,7 +276,7 @@ export const OutlineVariant: Story = {
     <Flex gap={4} wrap="wrap">
       {buttonColorPalettes.map((colorPalette) => (
         <VStack key={colorPalette} gap={1}>
-          <Text fontSize="subtext" color="gray.600">{colorPalette}</Text>
+          <Text color="gray.600">{colorPalette}</Text>
           <Button colorPalette={colorPalette} variant="outline">
             Outline
           </Button>
@@ -294,7 +294,7 @@ export const GhostVariant: Story = {
     <Flex gap={4} wrap="wrap">
       {buttonColorPalettes.map((colorPalette) => (
         <VStack key={colorPalette} gap={1}>
-          <Text fontSize="subtext" color="gray.600">{colorPalette}</Text>
+          <Text color="gray.600">{colorPalette}</Text>
           <Button colorPalette={colorPalette} variant="ghost">
             Ghost
           </Button>

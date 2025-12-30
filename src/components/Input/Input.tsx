@@ -55,9 +55,7 @@ export const Input = forwardRef(
   (
     {
       leftIcon,
-      leftElementProps,
       rightIcon,
-      rightElementProps,
       onKeyDown,
       onCompositionEnd,
       onCompositionStart,
@@ -295,17 +293,15 @@ export const Input = forwardRef(
 
     return (
       <InputGroup
-        size={size as any}
-        startElement={leftIcon as any}
+        startElement={leftIcon}
         endElement={
           rightIcon ? <div ref={rightElementRef}>{rightIcon}</div> : undefined
         }
         {...wrapperProps}
-        {...({} as any)}
       >
         <ChakraInput
           ref={ref}
-          {...({} as any)}
+          size={size}
           maxLength={maxLength}
           value={currentValue}
           onChange={handleChange}
@@ -315,16 +311,14 @@ export const Input = forwardRef(
           onKeyDown={handleKeyDown}
           type={inputType}
           borderColor="gray.400"
-          bgColor="white"
           _hover={{
-            borderColor: 'gray.600',
+            borderColor: 'primary.lighter',
             ..._hover,
           }}
           _focus={{
             borderColor: 'primary.main',
             ..._focus,
           }}
-          focusBorderColor="primary.main"
           _readOnly={{
             opacity: 1,
             cursor: 'not-allowed',
@@ -341,8 +335,9 @@ export const Input = forwardRef(
           }}
           css={{
             paddingInlineEnd: rightElementWidth,
+            '--focus-color': 'var(--chakra-colors-primary-main)',
+            '--error-color': 'var(--chakra-colors-danger-main)',
           }}
-          errorBorderColor="danger.main"
           {...rest}
         />
       </InputGroup>

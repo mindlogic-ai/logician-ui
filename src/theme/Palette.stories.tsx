@@ -162,14 +162,14 @@ const ColorCard = ({
               w="100%"
               borderRadius="md"
             >
-              <Text color="inherit" fontSize="subtext">
+              <Text color="inherit" textStyle="subtext">
                 {hexCode}
               </Text>
             </Box>
           )}
         </Flex>
       </Tooltip>
-      <Text color="gray.1200" mt={2} fontSize="subtext">
+      <Text color="gray.1200" mt={2} textStyle="subtext">
         {color}.{shade}
       </Text>
       <Subtext color="gray.700">{shadeValue !== hexCode && shadeValue}</Subtext>
@@ -218,7 +218,7 @@ const PrimitiveColorCard = ({
           }}
         >
           {wasCopied ? (
-            <Text color={readableColor(hex)} fontSize="subtext">
+            <Text color={readableColor(hex)} textStyle="subtext">
               Copied!
             </Text>
           ) : (
@@ -228,7 +228,7 @@ const PrimitiveColorCard = ({
           )}
         </Flex>
       </Tooltip>
-      <Text color="gray.1200" mt={1} fontSize="subtext">
+      <Text color="gray.1200" mt={1} textStyle="subtext">
         {name}.{shade}
       </Text>
     </Flex>
@@ -525,7 +525,7 @@ export const ContrastReference: Story = {
               >
                 <Subtext color="gray.800">{pair.label}</Subtext>
                 <Flex align="center" gap={2}>
-                  <Text fontFamily="mono" fontSize="subtext" color="gray.700">
+                  <Text fontFamily="mono" textStyle="subtext" color="gray.700">
                     {pair.ratio}
                   </Text>
                   <Box
@@ -671,13 +671,13 @@ export const FontSizes: Story = {
                   bg="primary.lightest"
                   borderRadius="md"
                   fontFamily="mono"
-                  fontSize="subtext"
+                  textStyle="subtext"
                   color="primary.dark"
                   textAlign="center"
                 >
                   {item.token}
                 </Box>
-                <Text w="120px" fontFamily="mono" fontSize="subtext" color="gray.600" textAlign="right">
+                <Text w="120px" fontFamily="mono" textStyle="subtext" color="gray.600" textAlign="right">
                   {item.base} → {item.md}
                 </Text>
               </Flex>
@@ -695,7 +695,7 @@ export const FontSizes: Story = {
             bg="gray.800"
             color="gray.100"
             borderRadius="md"
-            fontSize="subtext"
+            textStyle="subtext"
             overflow="auto"
           >
             {`// Using Typography components (recommended)
@@ -705,8 +705,8 @@ import { H1, Text, Subtext } from '@mindlogic-ai/logician-ui';
 <Text>Body content</Text>
 
 // Using tokens on any Chakra component
-<Box fontSize="h1">Large text</Box>
-<ChakraText fontSize="subtext">Small helper</ChakraText>`}
+<Box textStyle="h1">Large text</Box>
+<ChakraText textStyle="subtext">Small helper</ChakraText>`}
           </Box>
         </Box>
       </VStack>

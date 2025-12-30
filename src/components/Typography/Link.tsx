@@ -1,6 +1,5 @@
 import { forwardRef } from 'react';
-import { Link as ChakraLink, LinkProps, useToken } from '@chakra-ui/react';
-import { darken } from 'polished';
+import { Link as ChakraLink, LinkProps } from '@chakra-ui/react';
 
 export interface LinkCustomProps extends Omit<LinkProps, 'variant'> {
   variant?: 'error';
@@ -10,24 +9,16 @@ export const Link = forwardRef<HTMLAnchorElement, LinkCustomProps>(
   ({ color, variant, ...rest }, ref) => {
     const defaultColor = 'primary.main';
     const errorColor = 'danger.main';
-    const tokenKey =
+    const defaultHoverColor = 'primary.dark';
+    const errorHoverColor = 'danger.dark';
+
+    const linkColor =
       variant === 'error'
         ? errorColor
         : (typeof color === 'string' ? color : undefined) || defaultColor;
 
-    const linkColor =
-      useToken('colors', tokenKey)[0] ??
-      (typeof color === 'string' ? color : defaultColor);
-
-    const getHoverColor = () => {
-      let hoverColor;
-      try {
-        hoverColor = darken(0.1, linkColor);
-      } catch (e) {
-        hoverColor = 'inherit';
-      }
-      return hoverColor;
-    };
+    const hoverColor =
+      variant === 'error' ? errorHoverColor : defaultHoverColor;
 
     return (
       <ChakraLink
@@ -36,7 +27,8 @@ export const Link = forwardRef<HTMLAnchorElement, LinkCustomProps>(
         wordBreak="keep-all"
         color={linkColor}
         _hover={{
-          color: getHoverColor(),
+          color: hoverColor,
+          textDecor: 'none',
         }}
         {...rest}
         {...({} as any)}

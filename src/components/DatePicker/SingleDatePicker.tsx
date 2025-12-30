@@ -20,7 +20,6 @@ export const SingleDatePicker = ({
       propsConfigs={{
         triggerBtnProps: {
           justifyContent: 'left',
-          pl: 2,
           fontWeight: 'regular',
           color: 'gray.1500',
           fontSize: 'md',
@@ -32,9 +31,6 @@ export const SingleDatePicker = ({
         },
         popoverCompProps: {
           popoverContentProps: {
-            borderRadius: 16,
-            borderWidth: '1px',
-            borderColor: 'primary.lightest',
             boxShadow: 'lg',
             ...propsConfigs?.popoverCompProps?.popoverContentProps,
           },
@@ -46,10 +42,11 @@ export const SingleDatePicker = ({
             ...propsConfigs?.calendarPanelProps?.wrapperProps,
           },
           dividerProps: {
-            borderStyle: 'none',
+            display: 'none',
             ...propsConfigs?.calendarPanelProps?.dividerProps,
           },
           contentProps: {
+            borderWidth: 0,
             p: 4,
             ...propsConfigs?.calendarPanelProps?.contentProps,
           },
@@ -67,7 +64,6 @@ export const SingleDatePicker = ({
         weekdayLabelProps: {
           mb: 2,
           color: 'gray.1000',
-          fontSize: 'sm',
           fontWeight: 'regular',
           ...propsConfigs?.weekdayLabelProps,
         },
@@ -76,6 +72,7 @@ export const SingleDatePicker = ({
             width: 34,
             height: 34,
             color: 'gray.1500',
+            fontSize: 'sm',
             fontWeight: 'regular',
             _hover: {
               background: 'primary.lightest',
@@ -89,6 +86,7 @@ export const SingleDatePicker = ({
           },
           selectedBtnProps: {
             color: 'white',
+            border: 'none',
             background: 'primary.main',
             borderRadius: 'full',
             ...propsConfigs?.dayOfMonthBtnProps?.selectedBtnProps,

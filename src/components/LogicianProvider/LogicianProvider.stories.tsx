@@ -17,7 +17,7 @@ type Story = StoryObj<typeof meta>;
 const SampleContent = () => (
   <VStack gap={6} p={8} align="start">
     <H1 size="lg">Logician Design System</H1>
-    <Text fontSize="p">
+    <Text>
       This is a sample application wrapped in LogicianProvider. The provider
       automatically applies the Logician theme to all Chakra UI components.
     </Text>
@@ -29,7 +29,7 @@ const SampleContent = () => (
         Secondary Button
       </Button>
     </Box>
-    <Text fontSize="subtitle" color="gray.1200">
+    <Text color="gray.1200">
       This text uses the custom font sizes and colors from the Logician theme.
     </Text>
   </VStack>

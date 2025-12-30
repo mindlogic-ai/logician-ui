@@ -81,7 +81,7 @@ export const FileItem = ({
                 <IconButton
                   aria-label={'remove uploading file button'}
                   onClick={onFileDelete}
-                  size="xs"
+                  size="2xs"
                   disabled={isDeleting}
                   colorPalette="neutral"
                   variant="ghost"
@@ -99,7 +99,7 @@ export const FileItem = ({
               <IconButton
                 aria-label={'download uploaded file button'}
                 onClick={onFileDownload}
-                size="xs"
+                size="2xs"
                 colorPalette="neutral"
                 variant="ghost"
               >
@@ -110,7 +110,7 @@ export const FileItem = ({
               <IconButton
                 aria-label={'remove uploaded file button'}
                 onClick={onFileDelete}
-                size="xs"
+                size="2xs"
                 disabled={isDeleting}
                 colorPalette="neutral"
                 variant="ghost"

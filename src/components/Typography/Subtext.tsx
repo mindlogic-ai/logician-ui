@@ -3,15 +3,18 @@ import { Text, TextProps } from '@chakra-ui/react';
 
 export const Subtext = forwardRef<HTMLParagraphElement, TextProps>(
   (props, ref) => {
+    const { fontSize, ...rest } = props;
+
     return (
       <Text
         ref={ref}
-        fontSize="subtext"
+        textStyle={fontSize ? undefined : 'subtext'}
+        fontSize={fontSize}
         lineHeight="1.5"
         fontWeight="regular"
         color="gray.1500"
         wordBreak="keep-all"
-        {...props}
+        {...rest}
       />
     );
   }

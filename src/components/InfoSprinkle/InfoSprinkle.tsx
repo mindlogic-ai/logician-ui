@@ -13,34 +13,19 @@ export const InfoSprinkle = ({
   iconButtonProps?: Partial<IconButtonProps>;
 } & Popover.RootProps) => {
   return (
-    <Popover.Root
-      positioning={{ placement: 'top' }}
-      lazyMount
-      {...rest}
-    >
-      <Popover.Trigger {...({ asChild: true } as any)}>
+    <Popover.Root positioning={{ placement: 'top' }} lazyMount {...rest}>
+      <Popover.Trigger>
         <IconButton aria-label="Info" {...iconButtonProps}>
           <LuInfo boxSize="sm" color="inherit" />
         </IconButton>
       </Popover.Trigger>
       <Portal>
-        <Popover.Content {...({ asChild: true } as any)}>
-          <div
-            style={{
-              backgroundColor: 'white',
-              borderRadius: '8px',
-              boxShadow:
-                '0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)',
-            }}
-          >
+        <Popover.Positioner>
+          <Popover.Content fontSize="1em">
             <Popover.Arrow />
-            <Popover.Body {...({ asChild: true } as any)}>
-              <div style={{ padding: '16px', width: 'fit-content' }}>
-                {children}
-              </div>
-            </Popover.Body>
-          </div>
-        </Popover.Content>
+            <Popover.Body p={2}>{children}</Popover.Body>
+          </Popover.Content>
+        </Popover.Positioner>
       </Portal>
     </Popover.Root>
   );

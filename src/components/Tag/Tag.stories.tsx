@@ -123,7 +123,7 @@ export const AllCombinations: Story = {
         <Box w="100px" />
         {tagVariants.map((variant) => (
           <Box key={variant} w="100px" textAlign="center">
-            <Text fontWeight="bold" fontSize="subtext">
+            <Text fontWeight="bold" textStyle="subtext">
               {variant}
             </Text>
           </Box>
@@ -134,7 +134,7 @@ export const AllCombinations: Story = {
       {tagColorSchemes.map((colorPalette) => (
         <Flex key={colorPalette} mb={4} gap={4} align="center">
           <Box w="100px">
-            <Text fontWeight="medium" fontSize="subtext">
+            <Text fontWeight="medium" textStyle="subtext">
               {colorPalette}
             </Text>
           </Box>

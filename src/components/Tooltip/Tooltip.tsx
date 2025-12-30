@@ -53,7 +53,6 @@ export const Tooltip = forwardRef(
           <ChakraTooltip.Positioner>
             <ChakraTooltip.Content
               ref={ref}
-              css={{ '--tooltip-bg': 'var(--chakra-colors-gray-1200)' }}
               bgColor="gray.1200"
               color="white"
               fontSize="sm"

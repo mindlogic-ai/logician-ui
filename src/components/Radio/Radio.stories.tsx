@@ -216,7 +216,7 @@ export const FormExample: RadioGroupStory = {
           <Box fontWeight="semibold" mb={2}>
             Current Settings:
           </Box>
-          <Box fontSize="subtext">
+          <Box textStyle="subtext">
             <Box>Notifications: {notifications}</Box>
             <Box>Theme: {theme}</Box>
           </Box>

@@ -44,6 +44,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         fontWeight="semibold"
         size={size}
         textStyle={size === 'xs' ? 'sm' : size} // xs is too small
+        borderRadius="md"
         {...styles}
         _focus={{
           outline: 'none',

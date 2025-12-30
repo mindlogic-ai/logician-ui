@@ -9,7 +9,7 @@ export const InlineCode = ({ children, ...rest }: ChakraCodeProps) => {
       bg="gray.50"
       color="primary.dark"
       borderRadius="sm"
-      fontSize="p"
+      textStyle="p"
       {...rest}
     >
       {children}

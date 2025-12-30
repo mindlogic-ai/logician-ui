@@ -4,9 +4,8 @@ import {
   SystemStyleObject,
 } from '@chakra-ui/react';
 
-export interface BreadcrumbProps extends ComponentProps<
-  typeof ChakraBreadcrumb.Root
-> {
+export interface BreadcrumbProps
+  extends ComponentProps<typeof ChakraBreadcrumb.Root> {
   /** Custom separator to display between breadcrumb items */
   separator?: ReactNode;
   /** Gap between breadcrumb items and separators */
