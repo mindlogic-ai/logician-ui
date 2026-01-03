@@ -27,11 +27,15 @@ export const useToast = () => {
     status = 'success',
     title,
     description,
-    placement = 'top',
+    placement,
+    position, // v2 backward compatibility
+    isClosable, // v2 backward compatibility (ignored, always closable)
     styles: stylesProp,
     duration = 5000,
     ...rest
   }: UseToastOptions) => {
+    // v2 backward compatibility: position -> placement
+    const toastPlacement = placement ?? position ?? 'top';
     const styles = {
       ...toastStyles[status],
       ...stylesProp,
@@ -49,7 +53,7 @@ export const useToast = () => {
     // Create a new toast and capture its ID
     const toastId = toaster.create({
       duration,
-      placement,
+      placement: toastPlacement,
       render: ({ id }) => (
         <Toast
           title={title || ''}
