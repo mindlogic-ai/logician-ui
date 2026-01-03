@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import { IconButtonProps as ChakraIconButtonProps } from '@chakra-ui/react';
 
 // Re-export Button types for consistency
@@ -42,7 +43,7 @@ export type IconButtonVariant = 'solid' | 'soft' | 'outline' | 'ghost';
  */
 export type IconButtonProps = Omit<
   ChakraIconButtonProps,
-  'variant' | 'colorPalette' | 'icon'
+  'variant' | 'colorPalette' | 'colorScheme' | 'icon'
 > & {
   /**
    * The color scheme of the icon button (semantic color family).
@@ -51,9 +52,26 @@ export type IconButtonProps = Omit<
    */
   colorPalette?: IconButtonColorPalette;
   /**
+   * @deprecated Use colorPalette instead. Maintained for v2 backward compatibility.
+   */
+  colorScheme?: IconButtonColorPalette;
+  /**
    * The visual variant of the icon button (fill style).
    * Overrides Chakra UI's variant prop.
    * @default 'solid'
    */
   variant?: IconButtonVariant;
+  /**
+   * @deprecated Use `loading` instead. Maintained for v2 backward compatibility.
+   */
+  isLoading?: boolean;
+  /**
+   * @deprecated Use `disabled` instead. Maintained for v2 backward compatibility.
+   */
+  isDisabled?: boolean;
+  /**
+   * @deprecated Render icon as child instead. Maintained for v2 backward compatibility.
+   * Example: <IconButton><Icon /></IconButton>
+   */
+  icon?: ReactElement;
 };

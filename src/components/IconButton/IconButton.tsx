@@ -20,20 +20,36 @@ import { IconButtonProps } from './IconButton.types';
 export const IconButton = forwardRef(
   (
     {
-      colorPalette = 'primary',
+      colorPalette,
+      colorScheme,
       variant = 'soft',
       css,
+      loading,
+      disabled,
+      children,
+      // v2 backward compatibility props
+      isLoading,
+      isDisabled,
+      icon,
       ...rest
     }: IconButtonProps,
     ref?: ForwardedRef<HTMLButtonElement>
   ) => {
-    const styles = getIconButtonStyles(colorPalette, variant);
+    // v2 backward compatibility: colorScheme -> colorPalette
+    const palette = colorPalette ?? colorScheme ?? 'primary';
+    // v2 backward compatibility: isLoading -> loading, isDisabled -> disabled
+    const loadingState = loading ?? isLoading;
+    const disabledState = disabled ?? isDisabled;
+
+    const styles = getIconButtonStyles(palette, variant);
 
     return (
       <ChakraIconButton
         border="1px solid"
         borderRadius="full"
         {...styles}
+        loading={loadingState}
+        disabled={disabledState}
         {...rest}
         ref={ref}
         css={{
@@ -47,7 +63,10 @@ export const IconButton = forwardRef(
             ...(css as any)?.['& svg *'],
           },
         }}
-      />
+      >
+        {/* v2 backward compatibility: icon prop -> children */}
+        {icon || children}
+      </ChakraIconButton>
     );
   }
 );

@@ -1,9 +1,28 @@
 import React from 'react';
 import { Switch as ChakraSwitch } from '@chakra-ui/react';
 
-export const Switch = ({ children, ...rest }: any) => {
+import { SwitchProps } from './Switch.types';
+
+export const Switch = ({
+  children,
+  checked,
+  disabled,
+  // v2 backward compatibility props
+  isChecked,
+  isDisabled,
+  ...rest
+}: SwitchProps) => {
+  // v2 backward compatibility: isChecked -> checked, isDisabled -> disabled
+  const checkedState = checked ?? isChecked;
+  const disabledState = disabled ?? isDisabled;
+
   return (
-    <ChakraSwitch.Root colorPalette="primary" {...rest}>
+    <ChakraSwitch.Root
+      colorPalette="primary"
+      checked={checkedState}
+      disabled={disabledState}
+      {...rest}
+    >
       <ChakraSwitch.HiddenInput />
       <ChakraSwitch.Control
         bg="gray.200"
@@ -13,9 +32,7 @@ export const Switch = ({ children, ...rest }: any) => {
       >
         <ChakraSwitch.Thumb />
       </ChakraSwitch.Control>
-      {children && (
-        <ChakraSwitch.Label>{children}</ChakraSwitch.Label>
-      )}
+      {children && <ChakraSwitch.Label>{children}</ChakraSwitch.Label>}
     </ChakraSwitch.Root>
   );
 };

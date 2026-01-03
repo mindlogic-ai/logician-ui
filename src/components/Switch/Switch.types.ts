@@ -1,17 +1,15 @@
 import { ComponentProps } from 'react';
-import { Checkbox } from '@chakra-ui/react';
+import { Switch } from '@chakra-ui/react';
 
-export interface CheckboxProps
+export interface SwitchProps
   extends Omit<
-    ComponentProps<typeof Checkbox.Root>,
-    'checked' | 'disabled' | 'invalid'
+    ComponentProps<typeof Switch.Root>,
+    'checked' | 'disabled'
   > {
   /** v3 prop: controls checked state */
   checked?: boolean;
   /** v3 prop: controls disabled state */
   disabled?: boolean;
-  /** v3 prop: controls invalid state */
-  invalid?: boolean;
   /**
    * @deprecated Use `checked` instead. Maintained for v2 backward compatibility.
    */
@@ -20,8 +18,4 @@ export interface CheckboxProps
    * @deprecated Use `disabled` instead. Maintained for v2 backward compatibility.
    */
   isDisabled?: boolean;
-  /**
-   * @deprecated Use `invalid` instead. Maintained for v2 backward compatibility.
-   */
-  isInvalid?: boolean;
 }

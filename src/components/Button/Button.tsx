@@ -10,6 +10,12 @@ import { ButtonProps } from './Button.types';
  * Combines `colorPalette` (semantic color) with `variant` (visual appearance)
  * for flexible, consistent button styling.
  *
+ * Supports v2 backward compatibility:
+ * - `colorScheme` → `colorPalette`
+ * - `isLoading` → `loading`
+ * - `isDisabled` → `disabled`
+ * - `leftIcon` / `rightIcon` → rendered as children
+ *
  * @example
  * ```tsx
  * <Button colorPalette="primary" variant="soft">Submit</Button>
@@ -26,6 +32,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       variant = 'soft',
       _focus,
       size,
+      // v2 backward compatibility props
+      isLoading,
+      isDisabled,
+      leftIcon,
+      rightIcon,
+      loading,
+      disabled,
+      children,
       ...rest
     },
     ref
@@ -36,6 +50,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const palette = colorPalette ?? colorScheme ?? 'primary';
 
     const styles = getButtonStyles(palette, variant);
+
+    // v2 → v3 prop mapping
+    const isLoadingState = loading ?? isLoading;
+    const isDisabledState = disabled ?? isDisabled;
 
     return (
       <ChakraButton
@@ -53,8 +71,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         }}
         transition="all 0.25s ease-in-out"
         ref={ref}
+        loading={isLoadingState}
+        disabled={isDisabledState}
         {...rest}
-      />
+      >
+        {leftIcon}
+        {children}
+        {rightIcon}
+      </ChakraButton>
     );
   }
 );

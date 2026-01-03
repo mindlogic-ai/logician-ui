@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import { ButtonProps as ChakraButtonProps } from '@chakra-ui/react';
 
 /**
@@ -76,4 +77,22 @@ export type ButtonProps = Omit<
    * @default 'solid'
    */
   variant?: ButtonVariant;
+  /**
+   * @deprecated Use `loading` instead. Maintained for v2 backward compatibility.
+   */
+  isLoading?: boolean;
+  /**
+   * @deprecated Use `disabled` instead. Maintained for v2 backward compatibility.
+   */
+  isDisabled?: boolean;
+  /**
+   * @deprecated Render icon as child instead. Maintained for v2 backward compatibility.
+   * Example: <Button><Icon /> Text</Button>
+   */
+  leftIcon?: ReactElement;
+  /**
+   * @deprecated Render icon as child instead. Maintained for v2 backward compatibility.
+   * Example: <Button>Text <Icon /></Button>
+   */
+  rightIcon?: ReactElement;
 };
