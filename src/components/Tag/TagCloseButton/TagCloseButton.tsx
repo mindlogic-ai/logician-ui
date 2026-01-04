@@ -5,7 +5,11 @@ import { TagCloseButtonProps } from './TagCloseButton.types';
 
 export const TagCloseButton = forwardRef(
   ({ ...rest }: TagCloseButtonProps, ref?: ForwardedRef<HTMLButtonElement>) => {
-    return <Tag.CloseTrigger {...rest} ref={ref} />;
+    return (
+      <Tag.EndElement>
+        <Tag.CloseTrigger {...rest} ref={ref} />
+      </Tag.EndElement>
+    );
   }
 );
 

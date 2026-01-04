@@ -1,11 +1,11 @@
 import { ForwardedRef, forwardRef } from 'react';
-import { TagLabel as ChakraTagLabel } from '@chakra-ui/react';
+import { Tag } from '@chakra-ui/react';
 
 import { TagLabelProps } from './TagLabel.types';
 
 export const TagLabel = forwardRef(
   ({ ...rest }: TagLabelProps, ref?: ForwardedRef<HTMLDivElement>) => {
-    return <ChakraTagLabel {...rest} ref={ref} />;
+    return <Tag.Label {...rest} ref={ref} />;
   }
 );
 

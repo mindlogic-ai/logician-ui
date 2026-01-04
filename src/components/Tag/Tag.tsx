@@ -25,7 +25,7 @@ import { TagProps } from './Tag.types';
  */
 export const Tag = forwardRef(
   (
-    { colorPalette = 'neutral', variant = 'soft', ...rest }: TagProps,
+    { colorPalette = 'neutral', variant = 'soft', children, ...rest }: TagProps,
     ref?: ForwardedRef<HTMLDivElement>
   ) => {
     const styles = getTagStyles(colorPalette, variant);
@@ -33,11 +33,15 @@ export const Tag = forwardRef(
     return (
       <ChakraTag.Root
         border="1px solid"
-        borderRadius="full"
+        borderRadius="md"
+        boxShadow="none"
+        fontSize="sm"
         {...styles}
         {...rest}
         ref={ref}
-      />
+      >
+        {children}
+      </ChakraTag.Root>
     );
   }
 );
