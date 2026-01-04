@@ -31,7 +31,13 @@ export const Tag = forwardRef(
     const styles = getTagStyles(colorPalette, variant);
 
     return (
-      <ChakraTag.Root border="1px solid" {...styles} {...rest} ref={ref} />
+      <ChakraTag.Root
+        border="1px solid"
+        borderRadius="full"
+        {...styles}
+        {...rest}
+        ref={ref}
+      />
     );
   }
 );
