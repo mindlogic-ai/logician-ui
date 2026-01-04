@@ -53,21 +53,22 @@ export const Disabled: Story = {
 export const Invalid: Story = {
   args: {
     placeholder: 'Invalid state',
+    invalid: true,
   },
-};
-
-export const Autosize: Story = {
-  args: {},
   render: (args) => {
     const [value, setValue] = useState('');
 
     return (
-      <AutosizeTextarea
-        {...args}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        placeholder={args.placeholder ?? 'Autosize textarea...'}
-      />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <Textarea
+          {...args}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
+        <span style={{ color: '#D01721', fontSize: '14px' }}>
+          This field contains an error. Please fix it.
+        </span>
+      </div>
     );
   },
 };

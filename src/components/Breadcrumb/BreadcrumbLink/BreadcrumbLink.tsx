@@ -18,6 +18,9 @@ export const BreadcrumbLink = forwardRef(
     return (
       <Breadcrumb.Link
         color="primary.dark"
+        _hover={{
+          textDecoration: 'underline',
+        }}
         asChild={!!NextLink}
         href={href}
         {...rest}

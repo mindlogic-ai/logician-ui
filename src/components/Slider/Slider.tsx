@@ -1,10 +1,4 @@
-import {
-  Children,
-  ForwardedRef,
-  forwardRef,
-  isValidElement,
-  ReactNode,
-} from 'react';
+import { Children, ForwardedRef, forwardRef, isValidElement } from 'react';
 import { Slider as ChakraSlider } from '@chakra-ui/react';
 
 import { SliderProps } from './Slider.types';

@@ -44,7 +44,7 @@ export const Tooltip = forwardRef(
         closeDelay={0}
         {...rest}
       >
-        <ChakraTooltip.Trigger asChild>
+        <ChakraTooltip.Trigger>
           {isValidElement(children)
             ? cloneElement(children as React.ReactElement<any>)
             : children}

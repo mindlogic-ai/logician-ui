@@ -33,12 +33,6 @@ export const Toast = ({
       )}
       <Text color="inherit">{description}</Text>
     </Box>
-    <CloseButton
-      onClick={onClose}
-      size="sm"
-      _hover={{
-        bg: 'transparent',
-      }}
-    />
+    <CloseButton onClick={onClose} size="sm" />
   </Flex>
 );
