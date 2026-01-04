@@ -53,13 +53,15 @@ export const Tooltip = forwardRef(
           <ChakraTooltip.Positioner>
             <ChakraTooltip.Content
               ref={ref}
-              bgColor="gray.1200"
               color="white"
               fontSize="sm"
               px={2}
               py={1}
               borderRadius="md"
               maxW="320px"
+              css={{
+                '--tooltip-bg': 'var(--chakra-colors-gray-1200)',
+              }}
               {...contentProps}
             >
               {shouldShowArrow && (
