@@ -12,6 +12,7 @@ export interface MenuItemProps extends Omit<
   ComponentProps<typeof Menu.Item>,
   'children'
 > {
+  value: string; // Required in Chakra v3 for menu item identification
   variant?: ItemVariant | null;
   onClick?: () => void;
   children?: React.ReactNode;

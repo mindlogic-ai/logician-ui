@@ -4,6 +4,7 @@ import { ItemVariant, MenuItemProps } from './MenuItem.types';
 
 export const MenuItem = ({
   variant = ItemVariant.Default,
+  value,
   children,
   icon,
   rightIcon,
@@ -13,6 +14,7 @@ export const MenuItem = ({
 
   return (
     <Menu.Item
+      value={value}
       color={isDangerVariant ? 'danger.main' : 'gray.1000'}
       textStyle="p"
       borderRadius="sm"

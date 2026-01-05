@@ -105,17 +105,17 @@ export const WithStripes: Story = {
           <ProgressSegment
             value={45}
             filledTrackColor="primary.main"
-            hasStripe
+            striped
           />
           <ProgressSegment
             value={30}
             filledTrackColor="success.main"
-            hasStripe
+            striped
           />
           <ProgressSegment
             value={15}
             filledTrackColor="danger.main"
-            hasStripe
+            striped
           />
         </SegmentedProgressBar>
         <Flex justify="space-between" mt={2} textStyle="subtext" color="gray.600">
@@ -179,12 +179,12 @@ export const RealWorldExample: Story = {
           <ProgressSegment
             value={1200}
             filledTrackColor="success.main"
-            hasStripe
+            striped
           />
           <ProgressSegment
             value={150}
             filledTrackColor="danger.main"
-            hasStripe
+            striped
           />
         </SegmentedProgressBar>
 
