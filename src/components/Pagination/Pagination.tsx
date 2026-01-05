@@ -85,13 +85,13 @@ export const Pagination = ({
           <Flex align="center" gap={2}>
             <Select
               styles={{
-                control: (base, state) => ({
+                control: (base, _state) => ({
                   ...base,
                   fontSize: '0.875rem',
                   padding: 0,
                   minHeight: '28px',
                 }),
-                dropdownIndicator: (base, props) => ({
+                dropdownIndicator: (base, _props) => ({
                   ...base,
                   padding: '0 4px',
                 }),

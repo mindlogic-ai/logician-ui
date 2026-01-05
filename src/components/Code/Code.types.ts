@@ -4,8 +4,10 @@ import { BoxProps } from '@chakra-ui/react';
 /**
  * Code component props
  */
-export interface CodeProps
-  extends Omit<SyntaxHighlighterProps, 'style' | 'customStyle'> {
+export interface CodeProps extends Omit<
+  SyntaxHighlighterProps,
+  'style' | 'customStyle'
+> {
   children: string;
   /**
    * Callback for when the copy button is clicked. No copy button is rendered if this prop is not provided.

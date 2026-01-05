@@ -9,7 +9,7 @@ export const ExpandingTr: React.FC<ExpandingTrProps> = ({
   children,
   expandedContent,
   isExpanded,
-  onExpandChange,
+  onExpandChange: _onExpandChange,
   expandedRowProps,
   ...rest
 }) => {

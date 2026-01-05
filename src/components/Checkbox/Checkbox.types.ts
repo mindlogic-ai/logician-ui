@@ -1,11 +1,10 @@
 import { ComponentProps } from 'react';
 import { Checkbox } from '@chakra-ui/react';
 
-export interface CheckboxProps
-  extends Omit<
-    ComponentProps<typeof Checkbox.Root>,
-    'checked' | 'disabled' | 'invalid'
-  > {
+export interface CheckboxProps extends Omit<
+  ComponentProps<typeof Checkbox.Root>,
+  'checked' | 'disabled' | 'invalid'
+> {
   /** v3 prop: controls checked state */
   checked?: boolean;
   /** v3 prop: controls disabled state */

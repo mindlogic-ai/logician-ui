@@ -70,7 +70,7 @@ export const baseMarkdownComponents = {
   // Make the pre tag a no-op that just renders children
   pre: ({ children }: any) => <Box>{children}</Box>,
   p: (props: any) => <Text color="inherit" {...props} />,
-  a: ({ style, ...rest }: any) => (
+  a: ({ style: _style, ...rest }: any) => (
     //  `children` should be inside ...rest
     <Link target="_blank" {...rest} />
   ),

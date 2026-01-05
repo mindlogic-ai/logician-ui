@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Toaster as ChakraToaster, createToaster } from '@chakra-ui/react';
+import { createToaster, Toaster as ChakraToaster } from '@chakra-ui/react';
 
 import { Toast } from './Toast';
 import { toastStyles } from './Toast.styles';
@@ -29,7 +29,7 @@ export const useToast = () => {
     description,
     placement,
     position, // v2 backward compatibility
-    isClosable, // v2 backward compatibility (ignored, always closable)
+    isClosable: _isClosable, // v2 backward compatibility (ignored, always closable)
     styles: stylesProp,
     duration = 5000,
     ...rest

@@ -1,6 +1,5 @@
 // Core Components
 export * from './components/Accordion';
-export * from './components/AutowidthInput';
 export * from './components/Avatar';
 export * from './components/Badge';
 export * from './components/Banner';
@@ -26,7 +25,6 @@ export * from './components/FileList';
 // Form Components
 export * from './components/FormControl';
 export * from './components/FormLabel';
-export * from './components/GuideCue';
 
 // Icon Components (wrapper only, individual icons available via @mindlogic-ai/logician-ui/icons)
 export type { IconProps } from './components/Icon/_utils/createIcon';

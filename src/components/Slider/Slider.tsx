@@ -20,7 +20,7 @@ export const Slider = forwardRef(
       defaultValue,
       onChange,
       onValueChange,
-      focusThumbOnChange,
+      focusThumbOnChange: _focusThumbOnChange,
       children,
       ...rest
     }: SliderProps,

@@ -1,11 +1,10 @@
 import { ReactNode } from 'react';
 import { Slider } from '@chakra-ui/react';
 
-export interface SliderProps
-  extends Omit<
-    Slider.RootProps,
-    'value' | 'defaultValue' | 'onValueChange' | 'onChange'
-  > {
+export interface SliderProps extends Omit<
+  Slider.RootProps,
+  'value' | 'defaultValue' | 'onValueChange' | 'onChange'
+> {
   /** v2 compatibility: single number value */
   value?: number | number[];
   /** v2 compatibility: single number default value */

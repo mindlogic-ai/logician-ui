@@ -53,7 +53,13 @@ export const ExpandableText = ({
     <Component {...rest}>
       {displayText}
       {isLong && (
-        <Link as="button" textDecor="none" _hover={{ color: 'primary.dark'}} onClick={handleToggle} aria-expanded={isExpanded}>
+        <Link
+          as="button"
+          textDecor="none"
+          _hover={{ color: 'primary.dark' }}
+          onClick={handleToggle}
+          aria-expanded={isExpanded}
+        >
           {isExpanded ? translate('see_less') : translate('see_more')}
         </Link>
       )}

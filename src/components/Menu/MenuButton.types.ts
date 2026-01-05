@@ -4,16 +4,20 @@ import { IconButton } from '@/components/IconButton';
 import type { IconButtonProps as CustomIconButtonProps } from '@/components/IconButton/IconButton.types';
 
 // as 속성에 들어갈 `Button`과 `IconButton`에 따른 조건부 타입
-interface ButtonMenuButtonProps
-  extends Omit<ButtonProps, 'as' | 'colorScheme'> {
+interface ButtonMenuButtonProps extends Omit<
+  ButtonProps,
+  'as' | 'colorScheme'
+> {
   as: typeof Button;
   rightIcon?: React.ReactElement;
   icon?: never;
   children?: React.ReactNode;
 }
 
-interface IconButtonMenuButtonProps
-  extends Omit<CustomIconButtonProps, 'as' | 'colorScheme'> {
+interface IconButtonMenuButtonProps extends Omit<
+  CustomIconButtonProps,
+  'as' | 'colorScheme'
+> {
   as: typeof IconButton;
   icon?: React.ReactElement;
   rightIcon?: never;

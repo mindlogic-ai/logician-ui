@@ -1,8 +1,10 @@
 import { ComponentProps, ReactNode } from 'react';
 import { Tooltip as ChakraTooltip } from '@chakra-ui/react';
 
-export interface TooltipProps
-  extends Omit<ComponentProps<typeof ChakraTooltip.Root>, 'positioning'> {
+export interface TooltipProps extends Omit<
+  ComponentProps<typeof ChakraTooltip.Root>,
+  'positioning'
+> {
   /** Tooltip content (v3 style) */
   content?: ReactNode;
   /** @deprecated Use `content` instead. Tooltip content (v2 compatibility) */

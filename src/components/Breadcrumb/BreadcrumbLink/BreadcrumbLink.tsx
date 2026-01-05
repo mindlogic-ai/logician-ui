@@ -5,6 +5,7 @@ import { BreadcrumbLinkProps } from './BreadcrumbLink.types';
 // Optional Next.js Link import
 let NextLink: any;
 try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   NextLink = require('next/link').default;
 } catch {
   NextLink = null;

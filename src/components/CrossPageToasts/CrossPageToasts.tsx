@@ -6,6 +6,7 @@ import { useToast } from '../Toast/useToast';
 // Optional Next.js navigation import
 let useSearchParams: any;
 try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   useSearchParams = require('next/navigation').useSearchParams;
 } catch {
   useSearchParams = () => ({ get: () => null });

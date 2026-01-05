@@ -62,8 +62,8 @@ export const MonthButton: React.FC<MonthButtonProps> = memo(
       selectedRange?: MonthRange | null,
       selectionStart?: Date | null,
       hoveredMonth?: { month: number; year: number } | null,
-      minMonth?: Date,
-      maxMonth?: Date
+      _minMonth?: Date,
+      _maxMonth?: Date
     ): MonthButtonStyle => {
       // Selected months get solid primary
       if (isMonthSelected(month, year, selectedRange)) {

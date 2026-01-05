@@ -20,37 +20,32 @@
  */
 
 export {
-  // Form Controls
-  Checkbox as V3Checkbox,
-  RadioGroup as V3RadioGroup,
-  Switch as V3Switch,
-  Slider as V3Slider,
-  Field as V3Field,
-  PinInput as V3PinInput,
-  NumberInput as V3NumberInput,
-
-  // Overlay & Dialogs
-  Dialog as V3Dialog,
-  Menu as V3Menu,
-  Popover as V3Popover,
-  Tooltip as V3Tooltip,
-
   // Disclosure
   Accordion as V3Accordion,
-  Collapsible as V3Collapsible,
-  Tabs as V3Tabs,
-
   // Data Display
   Avatar as V3Avatar,
   Badge as V3Badge,
-  Card as V3Card,
-  Table as V3Table,
-  Tag as V3Tag,
-  Progress as V3Progress,
-
   // Navigation
   Breadcrumb as V3Breadcrumb,
-
+  Card as V3Card,
+  // Form Controls
+  Checkbox as V3Checkbox,
+  Collapsible as V3Collapsible,
+  // Overlay & Dialogs
+  Dialog as V3Dialog,
+  Field as V3Field,
   // Layout
   List as V3List,
+  Menu as V3Menu,
+  NumberInput as V3NumberInput,
+  PinInput as V3PinInput,
+  Popover as V3Popover,
+  Progress as V3Progress,
+  RadioGroup as V3RadioGroup,
+  Slider as V3Slider,
+  Switch as V3Switch,
+  Table as V3Table,
+  Tabs as V3Tabs,
+  Tag as V3Tag,
+  Tooltip as V3Tooltip,
 } from '@chakra-ui/react';

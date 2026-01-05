@@ -20,13 +20,14 @@ let usePathname: (() => string) | null = null;
 
 try {
   // Try to import Next.js navigation hooks
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const nextNavigation = require('next/navigation');
   useRouter = nextNavigation.useRouter;
   usePathname = nextNavigation.usePathname;
 } catch (error) {
   // Next.js not available - create fallback implementations
   useRouter = () => ({
-    replace: (url: string, options?: any) => {
+    replace: (url: string, _options?: any) => {
       if (typeof window !== 'undefined') {
         window.history.replaceState(null, '', url);
       }
