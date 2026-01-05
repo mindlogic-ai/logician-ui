@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { GroupBase } from 'react-select';
 import { useVirtualizer } from '@tanstack/react-virtual';
 
-import { optionStyles } from '../Select.styles';
+import { getOptionStyles } from '../Select.styles';
 import { MenuList } from './MenuList';
 import { VirtualizedMenuListProps } from './MenuList.types';
 import { useVirtualizedMenuListState } from './VirtualizedMenuListContext';
@@ -73,7 +73,7 @@ export const VirtualizedMenuList = <
   }, [childrenArray.length, virtualizer]);
 
   // Default option styles with fallback values
-  const baseOptionStyle = optionStyles({
+  const baseOptionStyle = getOptionStyles({
     isDisabled: false,
     isFocused: false,
     isSelected: false,

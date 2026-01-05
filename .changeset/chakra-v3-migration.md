@@ -12,6 +12,9 @@ Complete migration to Chakra UI v3 with comprehensive design system overhaul and
 
 - **Chakra UI**: v2.8 → v3.3 (major upgrade)
 - **Removed peer dependencies**: `@emotion/styled`, `framer-motion` (no longer required in Chakra v3)
+- **Next.js**: Now supports Next.js 16 (peer dependency range extended to `^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0`)
+  - All Next.js navigation APIs (`useRouter`, `usePathname`, `useSearchParams`) and `next/link` remain fully compatible
+  - No breaking changes to Next.js integration in logician-ui components
 - **chakra-dayzed-datepicker**: upgraded to v3.0.0 for Chakra v3 compatibility
 
 ### Removed Components
