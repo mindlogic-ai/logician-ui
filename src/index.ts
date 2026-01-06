@@ -12,7 +12,6 @@ export * from './components/Code';
 export * from './components/CodeTabs';
 export * from './components/Container';
 export * from './components/CopyableCode';
-export * from './components/CrossPageToasts';
 export * from './components/DatePicker';
 export * from './components/ErrorFallback';
 export * from './components/ExpandableText';
