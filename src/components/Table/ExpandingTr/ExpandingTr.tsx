@@ -33,9 +33,7 @@ export const ExpandingTr: React.FC<ExpandingTrProps> = ({
       >
         <Td colSpan={childrenArray.length} p={0}>
           <Collapsible.Root open={isExpanded}>
-            <Collapsible.Content {...({} as any)}>
-              {expandedContent}
-            </Collapsible.Content>
+            <Collapsible.Content>{expandedContent}</Collapsible.Content>
           </Collapsible.Root>
         </Td>
       </Tr>

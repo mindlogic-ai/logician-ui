@@ -73,20 +73,20 @@ export const Select = <
           },
           ...(styles?.control ? styles.control(base, state) : {}),
         }),
-        placeholder: (base) => ({
+        placeholder: (base, state) => ({
           ...base,
           ...getPlaceholderStyles(colors),
-          ...(styles?.placeholder ? styles.placeholder(base, {} as any) : {}),
+          ...(styles?.placeholder ? styles.placeholder(base, state) : {}),
         }),
-        menu: (base) => ({
+        menu: (base, state) => ({
           ...base,
           ...getMenuStyles(colors),
-          ...(styles?.menu ? styles.menu(base, {} as any) : {}),
+          ...(styles?.menu ? styles.menu(base, state) : {}),
         }),
-        menuList: (base) => ({
+        menuList: (base, state) => ({
           ...base,
           padding: '0px 4px',
-          ...(styles?.menuList ? styles.menuList(base, {} as any) : {}),
+          ...(styles?.menuList ? styles.menuList(base, state) : {}),
         }),
         option: (base, state) => ({
           ...base,
@@ -98,37 +98,35 @@ export const Select = <
           }),
           ...(styles?.option ? styles.option(base, state) : {}),
         }),
-        singleValue: (base) => ({
+        singleValue: (base, state) => ({
           ...base,
           margin: 0,
           color: gray1200,
-          ...(styles?.singleValue ? styles.singleValue(base, {} as any) : {}),
+          ...(styles?.singleValue ? styles.singleValue(base, state) : {}),
         }),
-        valueContainer: (base) => ({
+        valueContainer: (base, state) => ({
           ...base,
           textAlign: 'left',
-          ...(styles?.valueContainer
-            ? styles.valueContainer(base, {} as any)
-            : {}),
+          ...(styles?.valueContainer ? styles.valueContainer(base, state) : {}),
         }),
-        indicatorSeparator: (base) => ({
+        indicatorSeparator: (base, state) => ({
           ...base,
           display: 'none',
           ...(styles?.indicatorSeparator
-            ? styles.indicatorSeparator(base, {} as any)
+            ? styles.indicatorSeparator(base, state)
             : {}),
         }),
-        dropdownIndicator: (base) => ({
+        dropdownIndicator: (base, state) => ({
           ...base,
           color: gray1200,
           ...(styles?.dropdownIndicator
-            ? styles.dropdownIndicator(base, {} as any)
+            ? styles.dropdownIndicator(base, state)
             : {}),
         }),
-        menuPortal: (base) => ({
+        menuPortal: (base, state) => ({
           ...base,
           zIndex: 9999,
-          ...(styles?.menuPortal ? styles.menuPortal(base, {} as any) : {}),
+          ...(styles?.menuPortal ? styles.menuPortal(base, state) : {}),
         }),
       }}
     />

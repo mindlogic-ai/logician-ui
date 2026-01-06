@@ -31,7 +31,6 @@ export const Link = forwardRef<HTMLAnchorElement, LinkCustomProps>(
           textDecor: 'none',
         }}
         {...rest}
-        {...({} as any)}
       />
     );
   }

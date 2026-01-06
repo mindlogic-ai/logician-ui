@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
-import { AutosizeTextarea, Textarea } from '.';
+import { Textarea } from '.';
 
 const meta = {
   title: 'Components/Textarea',
