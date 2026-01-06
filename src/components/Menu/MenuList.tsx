@@ -1,5 +1,8 @@
-import { MenuContentProps as ChakraMenuContentProps, Portal } from '@chakra-ui/react';
-import { Menu } from '@chakra-ui/react';
+import {
+  Menu,
+  MenuContentProps as ChakraMenuContentProps,
+  Portal,
+} from '@chakra-ui/react';
 
 export interface MenuListProps extends ChakraMenuContentProps {}
 
