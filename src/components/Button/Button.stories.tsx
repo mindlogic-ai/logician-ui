@@ -35,6 +35,87 @@ export const Basic: Story = {
 };
 
 /**
+ * All available button sizes.
+ *
+ * ## Sizes:
+ * - `2xs`: Extra extra small (h: 24px)
+ * - `xs`: Extra small (h: 32px) - fontSize bumped to 'sm' (14px) for readability
+ * - `sm`: Small (h: 36px)
+ * - `md`: Medium (h: 40px) - Default
+ * - `lg`: Large (h: 44px)
+ * - `xl`: Extra large (h: 48px)
+ * - `2xl`: Extra extra large (h: 64px)
+ *
+ * Note: xs size has a smaller height but uses the same fontSize as sm for better readability.
+ */
+export const Sizes: Story = {
+  render: () => {
+    const sizes = ['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'] as const;
+
+    return (
+      <VStack gap={8} align="stretch">
+        {/* Solid variant sizes */}
+        <Box>
+          <Text fontSize="lg" fontWeight="bold" mb={4} color="gray.700">
+            Solid Variant
+          </Text>
+          <Flex gap={4} wrap="wrap" align="center">
+            {sizes.map((size) => (
+              <VStack key={size} gap={2} align="center">
+                <Text fontSize="sm" color="gray.600" fontWeight="medium">
+                  {size}
+                </Text>
+                <Button colorPalette="primary" variant="solid" size={size}>
+                  Button
+                </Button>
+              </VStack>
+            ))}
+          </Flex>
+        </Box>
+
+        {/* Outline variant sizes */}
+        <Box>
+          <Text fontSize="lg" fontWeight="bold" mb={4} color="gray.700">
+            Outline Variant
+          </Text>
+          <Flex gap={4} wrap="wrap" align="center">
+            {sizes.map((size) => (
+              <VStack key={size} gap={2} align="center">
+                <Text fontSize="sm" color="gray.600" fontWeight="medium">
+                  {size}
+                </Text>
+                <Button colorPalette="primary" variant="outline" size={size}>
+                  Button
+                </Button>
+              </VStack>
+            ))}
+          </Flex>
+        </Box>
+
+        {/* With icons */}
+        <Box>
+          <Text fontSize="lg" fontWeight="bold" mb={4} color="gray.700">
+            With Icons
+          </Text>
+          <Flex gap={4} wrap="wrap" align="center">
+            {sizes.map((size) => (
+              <VStack key={size} gap={2} align="center">
+                <Text fontSize="sm" color="gray.600" fontWeight="medium">
+                  {size}
+                </Text>
+                <Button colorPalette="primary" variant="soft" size={size}>
+                  <Sparkles /> Button
+                </Button>
+              </VStack>
+            ))}
+          </Flex>
+        </Box>
+      </VStack>
+    );
+  },
+};
+
+/**
  * Complete button matrix showing all colorPalette × variant combinations.
  *
  * ## Color Palettes (rows):

@@ -9,7 +9,7 @@ export type SelectColors = Record<string, string>;
 
 export const getPlaceholderStyles = (colors: SelectColors) => ({
   color: colors.gray600,
-  fontSize: 'p',
+  fontSize: '14px',
   fontWeight: 'semibold',
 });
 

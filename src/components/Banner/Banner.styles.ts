@@ -96,7 +96,7 @@ export const sizeStyles: Record<
       boxSize: 'sm', // 20px
     },
     text: {
-      fontSize: 'subtext', // theme.fontSizes.subtext (~13-14px)
+      textStyle: 'subtext', // Use textStyle instead of fontSize
       lineHeight: '1.4',
     },
     accentWidth: '3px',
@@ -112,7 +112,7 @@ export const sizeStyles: Record<
       boxSize: 'md', // 24px
     },
     text: {
-      fontSize: 'p', // theme.fontSizes.p (~14px)
+      textStyle: 'p', // Use textStyle instead of fontSize
       lineHeight: '1.5',
     },
     accentWidth: '4px',
@@ -128,7 +128,7 @@ export const sizeStyles: Record<
       boxSize: 'lg', // 32px
     },
     text: {
-      fontSize: 'h5', // theme.fontSizes.h5 (~15-17px)
+      textStyle: 'h5', // Use textStyle instead of fontSize
       lineHeight: '1.6',
     },
     accentWidth: '5px',

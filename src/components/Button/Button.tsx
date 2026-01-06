@@ -55,13 +55,23 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const isLoadingState = loading ?? isLoading;
     const isDisabledState = disabled ?? isDisabled;
 
+    /**
+     * Chakra Button automatically maps size prop to textStyle:
+     * - 2xs, xs → textStyle="xs" (10.5px with 14px base)
+     * - sm, md → textStyle="sm" (12.25px with 14px base) ← default
+     * - lg, xl → textStyle="md" (14px with 14px base)
+     * - 2xl → textStyle="lg" (15.75px with 14px base)
+     *
+     * We override fontSize for xs size to 'sm' (12.25px) for better readability.
+     * Other sizes use Chakra's default textStyle mapping.
+     */
     return (
       <ChakraButton
         border="1px solid"
         lineHeight="1.2"
         fontWeight="semibold"
         size={size}
-        textStyle={size === 'xs' ? 'sm' : size} // xs is too small
+        fontSize={size === 'xs' ? 'sm' : undefined} // Override xs: 10.5px → 12.25px
         borderRadius="md"
         {...styles}
         _focus={{
