@@ -22,7 +22,7 @@ export const PageLoader = ({
     >
       <Box position="relative">
         <BounceLoader
-          color="var(--chakra-colors-blue-500)"
+          color="var(--chakra-colors-primary-main)"
           style={{ zIndex: 999 }}
         />
       </Box>

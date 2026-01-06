@@ -1,4 +1,5 @@
 import {
+  InputElementProps,
   InputGroupProps,
   InputProps as ChakraInputProps,
 } from '@chakra-ui/react';
@@ -7,8 +8,8 @@ export interface InputProps extends ChakraInputProps {
   leftIcon?: React.ReactElement;
   rightIcon?: React.ReactElement;
   wrapperProps?: InputGroupProps;
-  leftElementProps?: Record<string, any>;
-  rightElementProps?: Record<string, any>;
+  leftElementProps?: InputElementProps;
+  rightElementProps?: InputElementProps;
   maskNumber?: boolean;
   /** 빈값일 때 공백 입력 방지 및 복사 붙여넣기 시 앞뒤 공백 제거 */
   trimWhiteSpace?: boolean;

@@ -6,10 +6,8 @@ import { ModalContentProps } from './ModalContent.types';
 export const ModalContent = ({ children, ...rest }: ModalContentProps) => {
   return (
     <Portal>
-      <Dialog.Positioner {...({ asChild: true } as any)}>
-        <div>
-          <Dialog.Content {...rest}>{children}</Dialog.Content>
-        </div>
+      <Dialog.Positioner>
+        <Dialog.Content {...rest}>{children}</Dialog.Content>
       </Dialog.Positioner>
     </Portal>
   );

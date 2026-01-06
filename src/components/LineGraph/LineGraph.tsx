@@ -44,7 +44,7 @@ export const LineGraph = <T extends DatumBase>({
             // Props of text
             tick={{
               fill: 'gray.1200',
-              fontSize: '0.875rem',
+              fontSize: `${useToken('fontSizes', 'sm')}`,
             }}
             tickMargin={8}
           />
@@ -54,7 +54,7 @@ export const LineGraph = <T extends DatumBase>({
             // Props of text
             tick={{
               fill: 'gray.1200',
-              fontSize: '0.875rem',
+              fontSize: `${useToken('fontSizes', 'sm')}`,
             }}
             tickMargin={0}
           />

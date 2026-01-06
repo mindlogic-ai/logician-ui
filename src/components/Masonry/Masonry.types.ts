@@ -1,6 +1,6 @@
-import { FlexProps } from '@chakra-ui/react';
+import { GridProps } from '@chakra-ui/react';
 
-export interface MasonryProps extends Omit<FlexProps, 'gap'> {
+export interface MasonryProps extends Omit<GridProps, 'gap'> {
   /**
    * Number of columns in the masonry layout
    */
