@@ -1,8 +1,7 @@
-import { ComponentProps } from 'react';
-import { Switch } from '@chakra-ui/react';
+import { SwitchRootProps as ChakraSwitchRootProps } from '@chakra-ui/react';
 
 export interface SwitchProps extends Omit<
-  ComponentProps<typeof Switch.Root>,
+  ChakraSwitchRootProps,
   'checked' | 'disabled'
 > {
   /** v3 prop: controls checked state */

@@ -10,7 +10,11 @@ import { globalCss } from './global';
 
 /**
  * Text styles for consistent typography across the application
- * Names match fontSize tokens for easy migration: textStyle="h1" → textStyle="h1"
+ * Names match fontSize tokens for easy migration: fontStyle="h1" → textStyle="h1"
+ *
+ * NOTE: textStyles must be defined here in index.ts (theme entry point) to ensure
+ * proper integration with Chakra v3's type system and theme creation process.
+ * Moving to a separate file breaks the type inference and runtime style application.
  */
 export const textStyles = defineTextStyles({
   h1: {

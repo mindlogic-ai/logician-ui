@@ -1,12 +1,7 @@
-import { ComponentProps, ReactNode } from 'react';
-import { Menu, Portal } from '@chakra-ui/react';
+import { MenuContentProps as ChakraMenuContentProps, Portal } from '@chakra-ui/react';
+import { Menu } from '@chakra-ui/react';
 
-export interface MenuListProps extends Omit<
-  ComponentProps<typeof Menu.Content>,
-  'children'
-> {
-  children?: ReactNode;
-}
+export interface MenuListProps extends ChakraMenuContentProps {}
 
 export const MenuList = ({ children, ...rest }: MenuListProps) => {
   return (

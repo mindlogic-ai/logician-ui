@@ -1,12 +1,10 @@
-import { ComponentProps, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import {
-  Breadcrumb as ChakraBreadcrumb,
+  BreadcrumbRootProps as ChakraBreadcrumbRootProps,
   SystemStyleObject,
 } from '@chakra-ui/react';
 
-export interface BreadcrumbProps extends ComponentProps<
-  typeof ChakraBreadcrumb.Root
-> {
+export interface BreadcrumbProps extends ChakraBreadcrumbRootProps {
   /** Custom separator to display between breadcrumb items */
   separator?: ReactNode;
   /** Gap between breadcrumb items and separators */

@@ -1,9 +1,8 @@
-import { ComponentProps } from 'react';
-import { Progress } from '@chakra-ui/react';
+import { ProgressRootProps as ChakraProgressRootProps } from '@chakra-ui/react';
 
 export type ProgressBarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
-export interface ProgressBarProps extends ComponentProps<typeof Progress.Root> {
+export interface ProgressBarProps extends ChakraProgressRootProps {
   filledTrackColor?: string;
   size?: ProgressBarSize;
 }

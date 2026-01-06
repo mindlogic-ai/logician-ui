@@ -1,7 +1,9 @@
-import { ComponentProps } from 'react';
-import { Accordion as ChakraAccordion } from '@chakra-ui/react';
+import {
+  Accordion as ChakraAccordion,
+  AccordionRootProps as ChakraAccordionRootProps,
+} from '@chakra-ui/react';
 
-export type AccordionProps = ComponentProps<typeof ChakraAccordion.Root> & {
+export type AccordionProps = ChakraAccordionRootProps & {
   /**
    * @deprecated Use `collapsible` instead. Will be removed in next major version.
    */

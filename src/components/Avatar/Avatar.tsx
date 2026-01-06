@@ -1,7 +1,10 @@
-import { ComponentProps, forwardRef } from 'react';
-import { Avatar as ChakraAvatar } from '@chakra-ui/react';
+import { forwardRef } from 'react';
+import {
+  Avatar as ChakraAvatar,
+  AvatarRootProps as ChakraAvatarRootProps,
+} from '@chakra-ui/react';
 
-export type AvatarProps = ComponentProps<typeof ChakraAvatar.Root> & {
+export type AvatarProps = ChakraAvatarRootProps & {
   src?: string;
   name?: string;
 };

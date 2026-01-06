@@ -1,8 +1,7 @@
-import { ComponentProps } from 'react';
-import { Checkbox } from '@chakra-ui/react';
+import { CheckboxRootProps as ChakraCheckboxRootProps } from '@chakra-ui/react';
 
 export interface CheckboxProps extends Omit<
-  ComponentProps<typeof Checkbox.Root>,
+  ChakraCheckboxRootProps,
   'checked' | 'disabled' | 'invalid'
 > {
   /** v3 prop: controls checked state */
