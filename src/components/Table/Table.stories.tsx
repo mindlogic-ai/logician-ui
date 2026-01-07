@@ -140,7 +140,6 @@ export const ExpandedContent: Story = {
             return (
               <ExpandingTr
                 isExpanded={isExpanded}
-                onExpandChange={setIsExpanded}
                 expandedContent={
                   <Flex p={4} align="center" justify="center">
                     {item.expandedText}

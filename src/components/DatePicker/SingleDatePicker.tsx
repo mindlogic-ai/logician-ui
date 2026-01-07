@@ -1,7 +1,12 @@
+import { Popover } from '@chakra-ui/react';
 import {
   SingleDatepicker,
   SingleDatepickerProps,
 } from 'chakra-dayzed-datepicker';
+import { format } from 'date-fns';
+
+import { Button, ButtonProps } from '../Button';
+import { MdOutlineCalendarToday } from '../Icon';
 
 export const SingleDatePicker = ({
   propsConfigs,
@@ -9,13 +14,15 @@ export const SingleDatePicker = ({
   usePortal = true,
   ...rest
 }: SingleDatepickerProps) => {
+  const dateFormat = configs?.dateFormat ?? 'MM/dd/yyyy';
+
   return (
     <SingleDatepicker
       usePortal={usePortal}
       {...rest}
       configs={{
         ...configs,
-        dateFormat: configs?.dateFormat ?? 'MM/dd/yyyy',
+        dateFormat,
       }}
       propsConfigs={{
         triggerBtnProps: {
@@ -95,6 +102,23 @@ export const SingleDatePicker = ({
         },
         ...propsConfigs,
       }}
-    />
+    >
+      {(selectedDate) => (
+        <Popover.Trigger asChild>
+          <Button
+            pl={2}
+            colorPalette="neutral"
+            variant="outline"
+            {...(propsConfigs?.triggerBtnProps as ButtonProps)}
+          >
+            <MdOutlineCalendarToday
+              color="gray.400"
+              style={{ marginInlineEnd: 3 }}
+            />
+            {selectedDate ? format(selectedDate, dateFormat) : ''}
+          </Button>
+        </Popover.Trigger>
+      )}
+    </SingleDatepicker>
   );
 };

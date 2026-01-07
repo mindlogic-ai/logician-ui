@@ -59,16 +59,9 @@ export const Banner = forwardRef(
               {children}
             </Text>
           ) : (
-            <Box
-              w="100%"
-              display="flex"
-              flexDir="column"
-              justifyContent="center"
-              {...styles.text}
-              {...textStyles[variant]}
-            >
+            <Flex w="100%" flexDir="column" justify="center">
               {children}
-            </Box>
+            </Flex>
           )}
         </Flex>
       </Box>

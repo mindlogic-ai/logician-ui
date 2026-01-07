@@ -41,7 +41,7 @@ export const buttonColorPaletteStyles: Record<
         bgColor: 'blue.600', // #1241A6
       },
       _active: {
-        bgColor: 'blue.700', // #0D317D
+        bgColor: 'primary.dark', // #0D317D
       },
     },
     soft: {
@@ -93,7 +93,7 @@ export const buttonColorPaletteStyles: Record<
         bgColor: 'violet.600', // #7412A6
       },
       _active: {
-        bgColor: 'violet.700', // #570D7D
+        bgColor: 'secondary.dark', // #570D7D
       },
     },
     soft: {
@@ -145,7 +145,7 @@ export const buttonColorPaletteStyles: Record<
         bgColor: 'rose.600', // #A6121A
       },
       _active: {
-        bgColor: 'rose.700', // #7D0D14
+        bgColor: 'danger.dark', // #7D0D14
       },
     },
     soft: {
@@ -193,8 +193,8 @@ export const buttonColorPaletteStyles: Record<
       bgColor: 'success.main', // #1AA612
       color: 'white',
       _hover: {
-        borderColor: 'green.700',
-        bgColor: 'green.700', // #147D0D
+        borderColor: 'success.dark',
+        bgColor: 'success.dark', // #147D0D
       },
       _active: {
         bgColor: 'green.800', // #0D5309
@@ -249,7 +249,7 @@ export const buttonColorPaletteStyles: Record<
         bgColor: 'gold.600', // #A68112
       },
       _active: {
-        bgColor: 'gold.700', // #7D610D
+        bgColor: 'warning.dark', // #7D610D
       },
     },
     soft: {

@@ -10,7 +10,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       <ChakraCard.Root
         ref={ref}
         position="relative"
-        bgColor="inherit"
+        bg="white"
         color="inherit"
         boxShadow="none"
         border="1px solid"

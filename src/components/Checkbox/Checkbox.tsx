@@ -6,7 +6,6 @@ import { CheckboxProps } from './Checkbox.types';
 export const Checkbox = forwardRef<HTMLLabelElement, CheckboxProps>(
   (
     {
-      children,
       size = 'sm',
       checked,
       disabled,
@@ -46,7 +45,6 @@ export const Checkbox = forwardRef<HTMLLabelElement, CheckboxProps>(
         >
           <ChakraCheckbox.Indicator />
         </ChakraCheckbox.Control>
-        {children && <ChakraCheckbox.Label>{children}</ChakraCheckbox.Label>}
       </ChakraCheckbox.Root>
     );
   }

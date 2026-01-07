@@ -24,8 +24,8 @@ export const clickableStyles = {
 export const variantStyles = {
   default: {},
   gradient: {
-    bg: 'linear-gradient(180deg, var(--chakra-colors-gray-50) 0%, var(--chakra-colors-white) 100%)',
+    bg: 'linear-gradient(180deg, #F5F8FD 0%, #FFFFFF 100%)',
     border: '1px solid',
-    borderColor: 'blue.300', // #4A79DC
+    borderColor: 'blue.300', // #1241A6
   },
 };

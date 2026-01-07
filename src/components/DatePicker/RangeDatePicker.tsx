@@ -1,7 +1,12 @@
+import { Popover } from '@chakra-ui/react';
 import {
   RangeDatepicker as BaseRangeDatePicker,
   RangeDatepickerProps,
 } from 'chakra-dayzed-datepicker';
+import { format } from 'date-fns';
+
+import { Button, ButtonProps } from '../Button';
+import { MdOutlineCalendarToday } from '../Icon';
 
 export const RangeDatePicker = ({
   propsConfigs,
@@ -9,13 +14,15 @@ export const RangeDatePicker = ({
   usePortal = true,
   ...rest
 }: RangeDatepickerProps) => {
+  const dateFormat = configs?.dateFormat ?? 'MMM dd, yyyy';
+
   return (
     <BaseRangeDatePicker
       usePortal={usePortal}
       {...rest}
       configs={{
         ...configs,
-        dateFormat: configs?.dateFormat ?? 'MMM dd, yyyy',
+        dateFormat,
       }}
       propsConfigs={{
         triggerBtnProps: {
@@ -140,6 +147,27 @@ export const RangeDatePicker = ({
         },
         ...propsConfigs,
       }}
-    />
+    >
+      {(selectedDates) => (
+        <Popover.Trigger asChild>
+          <Button
+            pl={2}
+            colorPalette="neutral"
+            variant="outline"
+            {...(propsConfigs?.triggerBtnProps as ButtonProps)}
+          >
+            <MdOutlineCalendarToday
+              color="gray.400"
+              style={{ marginInlineEnd: 3 }}
+            />
+            {selectedDates && selectedDates.length > 0
+              ? selectedDates.length === 1
+                ? `${format(selectedDates[0], dateFormat)} - ${dateFormat}`
+                : `${format(selectedDates[0], dateFormat)} - ${format(selectedDates[1], dateFormat)}`
+              : ''}
+          </Button>
+        </Popover.Trigger>
+      )}
+    </BaseRangeDatePicker>
   );
 };

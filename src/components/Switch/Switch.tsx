@@ -4,7 +4,6 @@ import { Switch as ChakraSwitch } from '@chakra-ui/react';
 import { SwitchProps } from './Switch.types';
 
 export const Switch = ({
-  children,
   checked,
   disabled,
   // v2 backward compatibility props
@@ -32,7 +31,6 @@ export const Switch = ({
       >
         <ChakraSwitch.Thumb />
       </ChakraSwitch.Control>
-      {children && <ChakraSwitch.Label>{children}</ChakraSwitch.Label>}
     </ChakraSwitch.Root>
   );
 };

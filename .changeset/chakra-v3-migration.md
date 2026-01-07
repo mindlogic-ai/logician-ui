@@ -36,9 +36,9 @@ All components have been migrated to Chakra UI v3 APIs:
 - **Button & IconButton**: `colorScheme` → `colorPalette`, new two-dimensional variant system (solid/outline/soft/ghost × primary/secondary/danger/success/warning)
 - **Tag**: Enhanced with `colorPalette` prop and comprehensive variant support, replacing Chip functionality
 - **Accordion**: New composition pattern with AccordionPanel component
-- **Checkbox**: Updated to v3 composition API
+- **Checkbox**: Updated to v3 composition API, `children` prop removed (use explicit label patterns instead)
 - **Radio**: Updated to v3 composition API
-- **Switch**: Updated to v3 composition API with new props
+- **Switch**: Updated to v3 composition API, `children` prop removed (use explicit label patterns instead)
 - **Slider**: Updated to v3 composition API with SliderControl and SliderThumbs components
 - **Tabs**: Updated to v3 composition API and context management
 - **Toast**: New v3 API with backward compatibility wrapper
@@ -173,6 +173,18 @@ import { Tooltip } from '@mindlogic-ai/logician-ui';
 
 // Tag: New enhanced API
 <Tag colorPalette="success" variant="soft">Active</Tag>
+
+// Checkbox/Switch: children prop removed
+// Before: <Checkbox>Accept terms</Checkbox>
+// After: Use Chakra v3 primitives for labels
+import { V3Checkbox } from '@mindlogic-ai/logician-ui';
+<V3Checkbox.Root>
+  <V3Checkbox.HiddenInput />
+  <V3Checkbox.Control>
+    <V3Checkbox.Indicator />
+  </V3Checkbox.Control>
+  <V3Checkbox.Label>Accept terms</V3Checkbox.Label>
+</V3Checkbox.Root>
 
 // Slider: New composition pattern
 <Slider defaultValue={[50]}>

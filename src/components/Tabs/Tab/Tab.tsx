@@ -38,10 +38,6 @@ export const Tab = ({ name, children, ...props }: TabProps) => {
         {...(orientation === 'vertical' && verticalStyles)}
         color="gray.800"
         py={3}
-        _hover={{
-          bg: 'transparent',
-          color: 'gray.1000',
-        }}
         _selected={{
           ...(orientation === 'vertical'
             ? verticalSelectedStyles
