@@ -1,19 +1,26 @@
 import {
-  MenuList as ChakraMenuList,
-  MenuListProps as ChakraMenuListProps,
-  useTheme,
-  useToken,
+  Menu,
+  MenuContentProps as ChakraMenuContentProps,
+  Portal,
 } from '@chakra-ui/react';
 
-export const MenuList = ({ ...rest }: ChakraMenuListProps) => {
-  const theme = useTheme();
+export interface MenuListProps extends ChakraMenuContentProps {}
+
+export const MenuList = ({ children, ...rest }: MenuListProps) => {
   return (
-    <ChakraMenuList
-      border={`1px solid ${useToken('colors', 'gray.400')}`}
-      borderRadius="md"
-      boxShadow={`0 5px 20px 1px ${useToken('colors', 'gray.50')}`}
-      padding={1.5}
-      {...rest}
-    />
+    <Portal>
+      <Menu.Positioner>
+        <Menu.Content
+          border="1px solid"
+          borderColor="gray.200"
+          borderRadius="md"
+          boxShadow="0 5px 20px 1px var(--chakra-colors-gray-50)"
+          p="1.5"
+          {...rest}
+        >
+          {children}
+        </Menu.Content>
+      </Menu.Positioner>
+    </Portal>
   );
 };

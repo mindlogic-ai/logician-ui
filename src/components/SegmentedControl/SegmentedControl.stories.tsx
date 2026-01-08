@@ -95,8 +95,27 @@ export const Rounded: Story = {
 export const Small: Story = {
   args: {
     size: 'sm',
-    borderRadius: 'full',
     w: 'fit-content',
+  },
+};
+
+export const WithDisabledOption = {
+  args: {
+    options: [
+      {
+        label: 'Complete',
+        value: 'complete',
+      },
+      {
+        label: 'Incomplete',
+        value: 'incomplete',
+        disabled: true,
+      },
+      {
+        label: 'Pending',
+        value: 'pending',
+      },
+    ],
   },
 };
 
@@ -105,7 +124,7 @@ export const WithCustomContent = {
     options: [
       {
         label: (
-          <HStack spacing={2}>
+          <HStack gap={2}>
             <Icon as={FiHome} />
             <Text>Home</Text>
           </HStack>
@@ -114,7 +133,7 @@ export const WithCustomContent = {
       },
       {
         label: (
-          <HStack spacing={2}>
+          <HStack gap={2}>
             <Icon as={FiUser} />
             <Text>Profile</Text>
           </HStack>
@@ -123,7 +142,7 @@ export const WithCustomContent = {
       },
       {
         label: (
-          <HStack spacing={2}>
+          <HStack gap={2}>
             <Icon as={FiSettings} />
             <Text>Settings</Text>
           </HStack>

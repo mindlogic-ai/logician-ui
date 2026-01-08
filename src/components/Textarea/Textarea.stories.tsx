@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
-import { AutosizeTextarea, Textarea } from '.';
+import { Textarea } from '.';
 
 const meta = {
   title: 'Components/Textarea',
@@ -14,12 +14,8 @@ const meta = {
         options: ['sm', 'md', 'lg'],
       },
     },
-    isDisabled: { control: 'boolean' },
-    isInvalid: { control: 'boolean' },
+    disabled: { control: 'boolean' },
     maxLength: { control: 'number' },
-    minRows: { control: 'number' },
-    maxRows: { control: 'number' },
-    preFocusMaxRows: { control: 'number' },
   },
   render: (args) => {
     const [value, setValue] = useState('');
@@ -42,42 +38,37 @@ type Story = StoryObj<typeof Textarea>;
 export const Basic: Story = {
   args: {
     size: 'md',
-    isDisabled: false,
-    isInvalid: false,
+    disabled: false,
     maxLength: 200,
   },
 };
 
 export const Disabled: Story = {
   args: {
-    isDisabled: true,
+    disabled: true,
     placeholder: 'Disabled textarea',
   },
 };
 
 export const Invalid: Story = {
   args: {
-    isInvalid: true,
     placeholder: 'Invalid state',
-  },
-};
-
-export const Autosize: Story = {
-  args: {
-    minRows: 6,
-    preFocusMaxRows: 8,
-    maxRows: 12,
+    invalid: true,
   },
   render: (args) => {
     const [value, setValue] = useState('');
 
     return (
-      <AutosizeTextarea
-        {...args}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        placeholder={args.placeholder ?? 'Autosize textarea...'}
-      />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <Textarea
+          {...args}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
+        <span style={{ color: '#D01721', fontSize: '14px' }}>
+          This field contains an error. Please fix it.
+        </span>
+      </div>
     );
   },
 };

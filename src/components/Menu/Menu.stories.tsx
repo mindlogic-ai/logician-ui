@@ -12,6 +12,7 @@ interface StoryMenuItemProps {
   label: string;
   onClick?: () => void;
   itemIcon?: React.ReactElement;
+  rightItemIcon?: React.ReactElement;
   variant?: MenuItemProps['variant'];
 }
 
@@ -23,6 +24,7 @@ interface MenuStoryProps {
 
 const meta = {
   title: 'Components/Menu',
+  // @ts-expect-error - Menu is a namespace, not a component
   component: Menu,
   args: {
     label: 'Trigger',
@@ -51,18 +53,15 @@ export const DefaultMenu: Story = {
     ],
   },
   render: ({ label, menuItems }) => (
-    <Menu>
-      <MenuButton
-        aria-label={'storybook button menu'}
-        as={Button}
-        rightIcon={<IoChevronDownOutline />}
-      >
-        {label}
+    <Menu.Root>
+      <MenuButton aria-label={'storybook button menu'} as={Button}>
+        {label} <IoChevronDownOutline />
       </MenuButton>
       <MenuList>
         {menuItems.map((item: StoryMenuItemProps) => (
           <MenuItem
             key={item.label}
+            value={item.label}
             variant={item.variant}
             icon={item.itemIcon}
             onClick={item.onClick}
@@ -71,7 +70,7 @@ export const DefaultMenu: Story = {
           </MenuItem>
         ))}
       </MenuList>
-    </Menu>
+    </Menu.Root>
   ),
 };
 
@@ -91,18 +90,15 @@ export const IconMenu: Story = {
     ],
   },
   render: ({ label, menuItems }) => (
-    <Menu>
-      <MenuButton
-        aria-label={'storybook button menu'}
-        as={Button}
-        rightIcon={<IoChevronDownOutline />}
-      >
-        {label}
+    <Menu.Root>
+      <MenuButton aria-label={'storybook button menu'} as={Button}>
+        {label} <IoChevronDownOutline />
       </MenuButton>
       <MenuList>
         {menuItems.map((item: StoryMenuItemProps) => (
           <MenuItem
             key={item.label}
+            value={item.label}
             variant={item.variant}
             icon={item.itemIcon}
             onClick={item.onClick}
@@ -111,7 +107,84 @@ export const IconMenu: Story = {
           </MenuItem>
         ))}
       </MenuList>
-    </Menu>
+    </Menu.Root>
+  ),
+};
+
+export const RightIconMenu: Story = {
+  args: {
+    menuItems: [
+      {
+        label: 'Profile',
+        onClick: () => alert('Profile clicked'),
+        rightItemIcon: <SlSettings />,
+      },
+      {
+        label: 'Settings',
+        onClick: () => alert('Settings clicked'),
+        rightItemIcon: <SlSettings />,
+      },
+    ],
+  },
+  render: ({ label, menuItems }) => (
+    <Menu.Root>
+      <MenuButton aria-label={'storybook button menu'} as={Button}>
+        {label} <IoChevronDownOutline />
+      </MenuButton>
+      <MenuList>
+        {menuItems.map((item: StoryMenuItemProps) => (
+          <MenuItem
+            key={item.label}
+            value={item.label}
+            variant={item.variant}
+            rightIcon={item.rightItemIcon}
+            onClick={item.onClick}
+          >
+            {item.label}
+          </MenuItem>
+        ))}
+      </MenuList>
+    </Menu.Root>
+  ),
+};
+
+export const BothSideIconMenu: Story = {
+  args: {
+    menuItems: [
+      {
+        label: 'Profile',
+        onClick: () => alert('Profile clicked'),
+        itemIcon: <SlSettings />,
+        rightItemIcon: <IoChevronDownOutline />,
+      },
+      {
+        label: 'Settings',
+        onClick: () => alert('Settings clicked'),
+        itemIcon: <SlSettings />,
+        rightItemIcon: <IoChevronDownOutline />,
+      },
+    ],
+  },
+  render: ({ label, menuItems }) => (
+    <Menu.Root>
+      <MenuButton aria-label={'storybook button menu'} as={Button}>
+        {label} <IoChevronDownOutline />
+      </MenuButton>
+      <MenuList>
+        {menuItems.map((item: StoryMenuItemProps) => (
+          <MenuItem
+            key={item.label}
+            value={item.label}
+            variant={item.variant}
+            icon={item.itemIcon}
+            rightIcon={item.rightItemIcon}
+            onClick={item.onClick}
+          >
+            {item.label}
+          </MenuItem>
+        ))}
+      </MenuList>
+    </Menu.Root>
   ),
 };
 
@@ -128,18 +201,15 @@ export const DangerMenu: Story = {
     ],
   },
   render: ({ label, menuItems }) => (
-    <Menu>
-      <MenuButton
-        aria-label={'storybook button menu'}
-        as={Button}
-        rightIcon={<IoChevronDownOutline />}
-      >
-        {label}
+    <Menu.Root>
+      <MenuButton aria-label={'storybook button menu'} as={Button}>
+        {label} <IoChevronDownOutline />
       </MenuButton>
       <MenuList>
         {menuItems.map((item: StoryMenuItemProps) => (
           <MenuItem
             key={item.label}
+            value={item.label}
             variant={item.variant}
             icon={item.itemIcon}
             onClick={item.onClick}
@@ -148,7 +218,7 @@ export const DangerMenu: Story = {
           </MenuItem>
         ))}
       </MenuList>
-    </Menu>
+    </Menu.Root>
   ),
 };
 
@@ -167,16 +237,15 @@ export const IconButtonTriggerMenu: Story = {
     label: { table: { disable: true } },
   },
   render: ({ menuItems }) => (
-    <Menu>
-      <MenuButton
-        aria-label="storybook icon button menu"
-        as={IconButton}
-        icon={<IoChevronDownOutline />}
-      />
+    <Menu.Root>
+      <MenuButton aria-label="storybook icon button menu" as={IconButton}>
+        <IoChevronDownOutline />
+      </MenuButton>
       <MenuList>
         {menuItems.map((item: StoryMenuItemProps) => (
           <MenuItem
             key={item.label}
+            value={item.label}
             variant={item.variant}
             icon={item.itemIcon}
             onClick={item.onClick}
@@ -185,7 +254,7 @@ export const IconButtonTriggerMenu: Story = {
           </MenuItem>
         ))}
       </MenuList>
-    </Menu>
+    </Menu.Root>
   ),
 };
 
@@ -208,18 +277,15 @@ export const SelectiveIconMenu: Story = {
     };
 
     return (
-      <Menu>
-        <MenuButton
-          aria-label={'storybook button menu'}
-          as={Button}
-          rightIcon={<IoChevronDownOutline />}
-        >
-          {label}
+      <Menu.Root>
+        <MenuButton aria-label={'storybook button menu'} as={Button}>
+          {label} <IoChevronDownOutline />
         </MenuButton>
         <MenuList>
           {menuItems.map((item: StoryMenuItemProps) => (
             <MenuItem
               key={item.label}
+              value={item.label}
               onClick={() => handleItemClick(item.label, item.onClick)}
               icon={
                 selectedLabel === item.label ? <SlSettings /> : undefined
@@ -229,7 +295,7 @@ export const SelectiveIconMenu: Story = {
             </MenuItem>
           ))}
         </MenuList>
-      </Menu>
+      </Menu.Root>
     );
   },
 };

@@ -1,100 +1,77 @@
-import { useToken } from '@chakra-ui/react';
+/**
+ * Select component styles (Chakra v3 compatible)
+ *
+ * Note: These functions accept resolved color values from useToken()
+ * since Chakra v3 doesn't export useTheme() hook.
+ */
 
-import theme from '@/theme/index';
+export type SelectColors = Record<string, string>;
 
-import { SelectVariant } from './Select.types';
+export const getPlaceholderStyles = (colors: SelectColors) => ({
+  color: colors.gray600,
+  fontSize: '14px',
+  fontWeight: 'semibold',
+});
 
-export const placeholderStyles = {
-  color: theme.colors.gray[800],
-  fontSize: theme.fontSizes.p,
-  fontWeight: theme.fontWeights.semibold,
-};
-
-export const menuStyles = {
+export const getMenuStyles = (colors: SelectColors) => ({
   width: 'max-content',
   minWidth: '100%',
-  backgroundColor: theme.colors.white,
-  borderRadius: theme.radii.md,
-  border: `1px solid ${theme.colors.gray[400]}`,
-  marginTop: 3,
+  backgroundColor: 'white',
+  borderRadius: 8,
+  border: `1px solid ${colors.gray300}`,
+  marginTop: 12,
   boxShadow: '0px 5px 20px 0px rgba(0, 0, 0, 0.10)',
   zIndex: 9,
-};
+});
 
-export const optionStyles = ({
-  isDisabled,
-  isFocused,
+export const getOptionStyles = ({
   isSelected,
+  isFocused,
+  isDisabled,
+  colors,
 }: {
-  isDisabled: boolean;
-  isFocused: boolean;
   isSelected: boolean;
+  isFocused: boolean;
+  isDisabled: boolean;
+  colors?: SelectColors;
 }) => ({
   cursor: isDisabled ? 'not-allowed' : 'pointer',
-  height: theme.sizes[9],
-  margin: `${theme.space[1]} 0`,
-  borderRadius: theme.radii.sm,
-  fontSize: theme.fontSizes.p,
+  height: 36,
+  margin: '4px 0',
+  borderRadius: 4,
+  fontSize: 14,
+  // Note: No padding! react-select handles this internally
   backgroundColor:
-    isSelected || isFocused || isDisabled
-      ? theme.colors.gray[50]
-      : theme.colors.white,
+    isSelected || isFocused || isDisabled ? colors.primaryLightest : 'white',
   color: isSelected
-    ? theme.colors.gray[1500]
+    ? colors.primaryDark
     : isDisabled
-      ? theme.colors.gray[800]
-      : theme.colors.gray[1200],
-  fontWeight: isSelected
-    ? theme.fontWeights.semibold
-    : theme.fontWeights.normal,
+      ? colors.gray500
+      : colors.gray1200,
+  fontWeight: isSelected ? 700 : 400,
   '&:hover': {
-    backgroundColor: theme.colors.gray[50],
+    backgroundColor: colors.gray50,
   },
 });
 
-export const controlStyles = {
-  borderRadius: theme.radii.md,
-  cursor: 'pointer',
-  maxWidth: '100%',
-  height: '100%',
-  color: theme.colors.gray[1200],
-  fontSize: theme.fontSizes.p,
-  fontWeight: theme.fontWeights.semibold,
-  paddingLeft: 4,
-  paddingRight: 3,
-  border: `1px solid ${theme.colors.gray[400]}`,
-  boxShadow: 'none',
-};
+export const getControlStyles = (variant: string, colors: SelectColors) => {
+  const baseStyles = {
+    borderRadius: 6,
+    cursor: 'pointer',
+    minHeight: 40,
+    fontSize: 14,
+    fontWeight: 600,
+    paddingLeft: 4,
+    paddingRight: 3,
+  };
 
-export const getControlVariantStyles = (state: any, variant: SelectVariant) => {
-  const primaryColor = useToken(
-    'colors',
-    theme.semanticTokens.colors.primary.main
-  );
-  const dangerColor = useToken(
-    'colors',
-    theme.semanticTokens.colors.danger.main
-  );
-  switch (variant) {
-    case 'danger':
-      return {
-        border: `1px solid ${dangerColor}`,
-        boxShadow: `0 0 0 1px ${dangerColor}`,
-      };
-    default:
-      return {
-        fontWeight: theme.fontWeights.semibold,
-        border: `1px solid ${state.isFocused ? primaryColor : theme.colors.gray[400]}`,
-        boxShadow: state.isFocused
-          ? `0 0 0 1px ${primaryColor} !important`
-          : 'none',
-        '&:hover': state.isFocused
-          ? {
-              borderColor: primaryColor,
-            }
-          : {
-              borderColor: useToken('colors', 'gray.600'),
-            },
-      };
+  if (variant === 'danger') {
+    return {
+      ...baseStyles,
+      border: `1px solid ${colors.dangerColor}`,
+      boxShadow: `0 0 0 1px ${colors.dangerColor}`,
+    };
   }
+
+  return baseStyles;
 };

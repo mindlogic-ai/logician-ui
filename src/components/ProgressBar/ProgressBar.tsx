@@ -4,7 +4,7 @@ import { sizeStyles } from './ProgressBar.styles';
 import { ProgressBarProps } from './ProgressBar.types';
 
 export const ProgressBar = ({
-  filledTrackColor,
+  filledTrackColor = 'primary.main',
   value,
   size = 'md',
   ...rest
@@ -12,18 +12,20 @@ export const ProgressBar = ({
   const styles = sizeStyles[size];
 
   return (
-    <ChakraProgress
-      sx={{
-        '& > div': {
-          backgroundColor: filledTrackColor ?? 'primary.main', // filledTrack
-          transition: 'width 0.3s ease-in-out',
-        },
-        bg: 'gray.200',
-      }}
-      value={value}
-      {...styles}
-      {...rest}
-    />
+    <ChakraProgress.Root value={value} {...rest}>
+      <ChakraProgress.Track
+        bgColor="gray.200"
+        height={styles.height}
+        borderRadius={styles.borderRadius}
+        overflow="hidden"
+      >
+        <ChakraProgress.Range
+          bgColor={filledTrackColor}
+          borderRadius={styles.borderRadius}
+          transition="width 0.3s ease-in-out"
+        />
+      </ChakraProgress.Track>
+    </ChakraProgress.Root>
   );
 };
 

@@ -1,18 +1,27 @@
 import { forwardRef } from 'react';
 import {
   Avatar as ChakraAvatar,
-  AvatarProps as ChakraAvatarProps,
+  AvatarRootProps as ChakraAvatarRootProps,
 } from '@chakra-ui/react';
 
-export const Avatar = forwardRef(({ ...rest }: ChakraAvatarProps, ref) => {
+export type AvatarProps = ChakraAvatarRootProps & {
+  src?: string;
+  name?: string;
+};
+
+export const Avatar = forwardRef<HTMLDivElement, AvatarProps>((props, ref) => {
+  const { src, name, ...rest } = props;
   return (
-    <ChakraAvatar
+    <ChakraAvatar.Root
       ref={ref}
       borderWidth="1px"
       borderColor="gray.200"
       overflow="hidden"
       {...rest}
-    />
+    >
+      <ChakraAvatar.Fallback name={name} />
+      <ChakraAvatar.Image src={src} />
+    </ChakraAvatar.Root>
   );
 });
 

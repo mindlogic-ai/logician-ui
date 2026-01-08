@@ -51,7 +51,7 @@ export const Default: Story = {
 
 export const BasicUsage: Story = {
   render: () => (
-    <VStack spacing={6} align="stretch" width="400px">
+    <VStack gap={6} align="stretch" width="400px">
       <Box>
         <Text mb={2} fontWeight="semibold">
           Basic Two-Segment Progress
@@ -60,7 +60,7 @@ export const BasicUsage: Story = {
           <ProgressSegment value={60} filledTrackColor="primary.main" />
           <ProgressSegment value={25} filledTrackColor="success.main" />
         </SegmentedProgressBar>
-        <Flex justify="space-between" mt={1} fontSize="sm" color="gray.600">
+        <Flex justify="space-between" mt={1} textStyle="subtext" color="gray.600">
           <Text>Primary: 60</Text>
           <Text>Success: 25</Text>
           <Text>Remaining: 15</Text>
@@ -72,7 +72,7 @@ export const BasicUsage: Story = {
 
 export const MultipleSegments: Story = {
   render: () => (
-    <VStack spacing={6} align="stretch" width="400px">
+    <VStack gap={6} align="stretch" width="400px">
       <Box>
         <Text mb={2} fontWeight="semibold">
           Multiple Segments with Different Colors
@@ -83,7 +83,7 @@ export const MultipleSegments: Story = {
           <ProgressSegment value={30} filledTrackColor="warning.main" />
           <ProgressSegment value={25} filledTrackColor="danger.main" />
         </SegmentedProgressBar>
-        <Flex justify="space-between" mt={2} fontSize="sm" color="gray.600">
+        <Flex justify="space-between" mt={2} textStyle="subtext" color="gray.600">
           <Text>Primary: 80</Text>
           <Text>Success: 45</Text>
           <Text>Warning: 30</Text>
@@ -96,7 +96,7 @@ export const MultipleSegments: Story = {
 
 export const WithStripes: Story = {
   render: () => (
-    <VStack spacing={6} align="stretch" width="400px">
+    <VStack gap={6} align="stretch" width="400px">
       <Box>
         <Text mb={2} fontWeight="semibold">
           Progress Segments with Stripes
@@ -105,20 +105,20 @@ export const WithStripes: Story = {
           <ProgressSegment
             value={45}
             filledTrackColor="primary.main"
-            hasStripe
+            striped
           />
           <ProgressSegment
             value={30}
             filledTrackColor="success.main"
-            hasStripe
+            striped
           />
           <ProgressSegment
             value={15}
             filledTrackColor="danger.main"
-            hasStripe
+            striped
           />
         </SegmentedProgressBar>
-        <Flex justify="space-between" mt={2} fontSize="sm" color="gray.600">
+        <Flex justify="space-between" mt={2} textStyle="subtext" color="gray.600">
           <Text>Completed: 45</Text>
           <Text>In Progress: 30</Text>
           <Text>Failed: 15</Text>
@@ -130,7 +130,7 @@ export const WithStripes: Story = {
 
 export const DifferentSizes: Story = {
   render: () => (
-    <VStack spacing={6} align="stretch" width="400px">
+    <VStack gap={6} align="stretch" width="400px">
       <Box>
         <Text mb={2} fontWeight="semibold">
           Small Progress Bar (8px)
@@ -166,12 +166,12 @@ export const DifferentSizes: Story = {
 
 export const RealWorldExample: Story = {
   render: () => (
-    <VStack spacing={6} align="stretch" width="500px">
+    <VStack gap={6} align="stretch" width="500px">
       <Box>
         <Text mb={2} fontWeight="semibold">
           Member Invitation Progress
         </Text>
-        <Text mb={4} fontSize="sm" color="gray.600">
+        <Text mb={4} textStyle="subtext" color="gray.600">
           Inviting 1,500 members in batches of 100
         </Text>
 
@@ -179,16 +179,16 @@ export const RealWorldExample: Story = {
           <ProgressSegment
             value={1200}
             filledTrackColor="success.main"
-            hasStripe
+            striped
           />
           <ProgressSegment
             value={150}
             filledTrackColor="danger.main"
-            hasStripe
+            striped
           />
         </SegmentedProgressBar>
 
-        <Flex justify="space-between" mt={2} fontSize="sm" color="gray.600">
+        <Flex justify="space-between" mt={2} textStyle="subtext" color="gray.600">
           <Text color="success.600">✓ 1,200 successful</Text>
           <Text color="danger.600">✗ 150 failed</Text>
           <Text>90% complete</Text>
@@ -200,7 +200,7 @@ export const RealWorldExample: Story = {
 
 export const EmptyState: Story = {
   render: () => (
-    <VStack spacing={6} align="stretch" width="400px">
+    <VStack gap={6} align="stretch" width="400px">
       <Box>
         <Text mb={2} fontWeight="semibold">
           Empty Progress Bar
@@ -208,7 +208,7 @@ export const EmptyState: Story = {
         <SegmentedProgressBar max={100} height="12px">
           {/* No segments - shows empty state */}
         </SegmentedProgressBar>
-        <Text mt={2} fontSize="sm" color="gray.600">
+        <Text mt={2} textStyle="subtext" color="gray.600">
           No progress yet
         </Text>
       </Box>
@@ -218,7 +218,7 @@ export const EmptyState: Story = {
 
 export const SingleSegment: Story = {
   render: () => (
-    <VStack spacing={6} align="stretch" width="400px">
+    <VStack gap={6} align="stretch" width="400px">
       <Box>
         <Text mb={2} fontWeight="semibold">
           Single Segment Progress
@@ -226,7 +226,7 @@ export const SingleSegment: Story = {
         <SegmentedProgressBar max={100} height="12px">
           <ProgressSegment value={75} filledTrackColor="primary.main" />
         </SegmentedProgressBar>
-        <Text mt={2} fontSize="sm" color="gray.600">
+        <Text mt={2} textStyle="subtext" color="gray.600">
           75% complete
         </Text>
       </Box>
@@ -236,7 +236,7 @@ export const SingleSegment: Story = {
 
 export const CustomColors: Story = {
   render: () => (
-    <VStack spacing={6} align="stretch" width="400px">
+    <VStack gap={6} align="stretch" width="400px">
       <Box>
         <Text mb={2} fontWeight="semibold">
           Custom Color Segments
@@ -247,7 +247,7 @@ export const CustomColors: Story = {
           <ProgressSegment value={25} filledTrackColor="#45B7D1" />
           <ProgressSegment value={20} filledTrackColor="#96CEB4" />
         </SegmentedProgressBar>
-        <Flex justify="space-between" mt={2} fontSize="sm" color="gray.600">
+        <Flex justify="space-between" mt={2} textStyle="subtext" color="gray.600">
           <Text>Red: 25</Text>
           <Text>Teal: 25</Text>
           <Text>Blue: 25</Text>

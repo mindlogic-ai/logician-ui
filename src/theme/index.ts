@@ -1,61 +1,135 @@
 import {
-  extendTheme,
-  Theme as ChakraTheme,
-  ThemeOverride,
+  createSystem,
+  defaultConfig,
+  defineConfig,
+  defineTextStyles,
 } from '@chakra-ui/react';
 
 import { colors, semanticTokens } from './colors';
-import { global } from './global';
+import { globalCss } from './global';
 
-export const theme = {
-  colors,
-  styles: {
-    global,
-  },
-
-  components: {
-    Switch: {
-      baseStyle: {
-        track: {
-          _checked: {
-            bg: 'primary.main',
-          },
-        },
-      },
+/**
+ * Text styles for consistent typography across the application
+ * Names match fontSize tokens for easy migration: fontStyle="h1" → textStyle="h1"
+ *
+ * NOTE: textStyles must be defined here in index.ts (theme entry point) to ensure
+ * proper integration with Chakra v3's type system and theme creation process.
+ * Moving to a separate file breaks the type inference and runtime style application.
+ */
+export const textStyles = defineTextStyles({
+  h1: {
+    description: 'Main page heading - responsive (H1)',
+    value: {
+      fontFamily: 'heading',
+      fontSize: { base: '2.4em', md: '3em' },
+      fontWeight: 'bold',
+      lineHeight: { base: '1.2', md: '1.15' },
+      letterSpacing: '-0.02em',
     },
   },
-
-  fonts: {
-    body: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif',
-    heading: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif',
+  h2: {
+    description: 'Section heading - responsive (H2)',
+    value: {
+      fontFamily: 'heading',
+      fontSize: { base: '2em', md: '2.5em' },
+      fontWeight: 'bold',
+      lineHeight: { base: '1.25', md: '1.2' },
+      letterSpacing: '-0.01em',
+    },
   },
-
-  // 반응형 폰트 사이즈 - 모바일에서는 더 작은 폰트 크기, 데스크톱에서는 기존 크기 유지
-  fontSizes: {
-    // 커스텀 폰트 크기 토큰 (em 단위 사용)
-    // xs: { base: '0.7em', md: '0.7em' },
-    subtitle: { base: '0.92em', md: '1em' },
-    subtext: { base: '0.92em', md: '1em' },
-    p: { base: '1em', md: '1em' },
-    h5: { base: '1.1em', md: '1.2em' },
-    h4: { base: '1.25em', md: '1.44em' },
-    h3: { base: '1.5em', md: '1.75em' },
-    h2: { base: '2em', md: '2.5em' },
-    h1: { base: '2.4em', md: '3em' },
+  h3: {
+    description: 'Subsection heading - responsive (H3)',
+    value: {
+      fontFamily: 'heading',
+      fontSize: { base: '1.5em', md: '1.75em' },
+      fontWeight: 'semibold',
+      lineHeight: '1.3',
+      letterSpacing: '-0.01em',
+    },
   },
-  semanticTokens,
-  radii: {
-    none: '0',
-    sm: '6px',
-    md: '8px',
-    lg: '12px',
-    xl: '32px',
-    full: '9999px',
+  h4: {
+    description: 'Minor heading - responsive (H4)',
+    value: {
+      fontFamily: 'heading',
+      fontSize: { base: '1.25em', md: '1.44em' },
+      fontWeight: 'semibold',
+      lineHeight: '1.35',
+    },
   },
-} satisfies Omit<ThemeOverride, 'semanticTokens'> & {
-  semanticTokens: typeof semanticTokens;
-};
+  h5: {
+    description: 'Small heading - responsive (H5)',
+    value: {
+      fontFamily: 'heading',
+      fontSize: { base: '1.1em', md: '1.2em' },
+      fontWeight: 'semibold',
+      lineHeight: '1.4',
+    },
+  },
+  p: {
+    description: 'Body text for paragraphs - responsive',
+    value: {
+      fontFamily: 'body',
+      fontSize: { base: '1em', md: '1em' },
+      fontWeight: 'normal',
+      lineHeight: '1.6',
+    },
+  },
+  subtitle: {
+    description: 'Subtitle text - responsive',
+    value: {
+      fontFamily: 'body',
+      fontSize: { base: '0.92em', md: '1em' },
+      fontWeight: 'medium',
+      lineHeight: '1.5',
+    },
+  },
+  subtext: {
+    description: 'Small caption text - responsive',
+    value: {
+      fontFamily: 'body',
+      fontSize: { base: '0.92em', md: '1em' },
+      fontWeight: 'normal',
+      lineHeight: '1.4',
+    },
+  },
+});
 
-export type Theme = typeof theme & ChakraTheme;
+/**
+ * Chakra UI v3 theme configuration for Logician UI
+ *
+ * Uses the Golden Ratio color system with cool slate-based grays.
+ */
+const config = defineConfig({
+  globalCss,
+  theme: {
+    tokens: {
+      colors,
+      fonts: {
+        body: {
+          value: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif',
+        },
+        heading: {
+          value: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif',
+        },
+      },
+      radii: {
+        none: { value: '0' },
+        xs: { value: '4px' },
+        sm: { value: '6px' },
+        md: { value: '8px' },
+        lg: { value: '12px' },
+        xl: { value: '32px' },
+        full: { value: '9999px' },
+      },
+    },
+    semanticTokens: {
+      colors: semanticTokens.colors,
+    },
+    textStyles,
+  },
+});
 
-export default extendTheme(theme);
+export const system = createSystem(defaultConfig, config);
+// Re-export for backwards compatibility
+export const theme = system;
+export default system;

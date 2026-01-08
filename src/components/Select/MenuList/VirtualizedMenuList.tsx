@@ -1,9 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { GroupBase } from 'react-select';
-import { useTheme } from '@chakra-ui/react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 
-import { optionStyles } from '../Select.styles';
+import { getOptionStyles } from '../Select.styles';
 import { MenuList } from './MenuList';
 import { VirtualizedMenuListProps } from './MenuList.types';
 import { useVirtualizedMenuListState } from './VirtualizedMenuListContext';
@@ -22,7 +21,6 @@ export const VirtualizedMenuList = <
   const childrenArray = React.Children.toArray(children ?? []);
   const childrenCount = childrenArray.length;
   const menuListRef = useRef(null);
-  const theme = useTheme();
   const { isInitialRender, previousChildrenCount } =
     useVirtualizedMenuListState();
 
@@ -75,7 +73,7 @@ export const VirtualizedMenuList = <
   }, [childrenArray.length, virtualizer]);
 
   // Default option styles with fallback values
-  const baseOptionStyle = optionStyles({
+  const baseOptionStyle = getOptionStyles({
     isDisabled: false,
     isFocused: false,
     isSelected: false,
@@ -121,7 +119,7 @@ export const VirtualizedMenuList = <
               cursor: baseOptionStyle.cursor,
               borderRadius: baseOptionStyle.borderRadius,
               // Add some necessary styles for proper display
-              padding: `${theme.space[0.5]} ${theme.space[1]}`,
+              padding: '2px 4px',
               userSelect: 'none',
               WebkitTapHighlightColor: 'rgba(0, 0, 0, 0)',
               display: 'block',

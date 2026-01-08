@@ -1,4 +1,4 @@
-import createIcon, { IconProps } from './createIcon';
+import createIcon, { CreatedIcon } from './createIcon';
 
 /**
  * Creates multiple icon components at once
@@ -27,15 +27,11 @@ export const createIconGroup = <
   T extends Record<string, React.ComponentType<any>>,
 >(
   iconMap: T
-): {
-  [K in keyof T]: React.ForwardRefExoticComponent<
-    IconProps & React.RefAttributes<SVGSVGElement>
-  >;
-} => {
-  const result = {} as any;
+): Record<keyof T, CreatedIcon> => {
+  const result = {} as Record<keyof T, CreatedIcon>;
 
   Object.entries(iconMap).forEach(([name, IconComponent]) => {
-    result[name] = createIcon(IconComponent, name);
+    result[name as keyof T] = createIcon(IconComponent, name);
   });
 
   return result;

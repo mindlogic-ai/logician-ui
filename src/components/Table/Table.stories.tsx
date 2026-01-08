@@ -131,6 +131,7 @@ export const ExpandedContent: Story = {
             {columns.map((column) => (
               <Th key={column.key}>{column.label}</Th>
             ))}
+            <Th w={2}></Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -139,7 +140,6 @@ export const ExpandedContent: Story = {
             return (
               <ExpandingTr
                 isExpanded={isExpanded}
-                onExpandChange={setIsExpanded}
                 expandedContent={
                   <Flex p={4} align="center" justify="center">
                     {item.expandedText}
@@ -152,8 +152,10 @@ export const ExpandedContent: Story = {
                 <Td w={2}>
                   <IconButton
                     aria-label="Expand"
-                    icon={<IoChevronDownOutline />}
+                    {...({icon: <IoChevronDownOutline />} as any)}
                     onClick={() => setIsExpanded((e) => !e)}
+                    colorScheme="neutral"
+                    variant="ghost"
                   />
                 </Td>
               </ExpandingTr>

@@ -1,12 +1,9 @@
 import React from 'react';
-import {
-  ModalCloseButton as ChakraModalCloseButton,
-  ModalCloseButtonProps as ChakraModalCloseButtonProps,
-} from '@chakra-ui/react';
+import { Dialog } from '@chakra-ui/react';
 
-export const ModalCloseButton = ({ ...rest }: ChakraModalCloseButtonProps) => {
+export const ModalCloseButton = ({ ...rest }: Dialog.CloseTriggerProps) => {
   return (
-    <ChakraModalCloseButton
+    <Dialog.CloseTrigger
       color="gray.600"
       _hover={{
         color: 'primary.main',

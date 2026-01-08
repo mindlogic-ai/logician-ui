@@ -1,23 +1,28 @@
-import { ChangeEvent, useEffect, useState } from 'react';
-import {
-  forwardRef,
-  Textarea as ChakraTextarea,
-  TextareaProps,
-  useTheme,
-} from '@chakra-ui/react';
+import { ChangeEvent, forwardRef, useEffect, useState } from 'react';
+import { Textarea as ChakraTextarea, useToken } from '@chakra-ui/react';
 
-export const Textarea = forwardRef<TextareaProps, 'textarea'>(
+import { TextareaProps } from './Textarea.types';
+
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   (
     {
       placeholder,
       onChange,
       value: propValue,
       _focusVisible,
+      disabled,
+      invalid,
+      readOnly,
       ...props
-    }: TextareaProps,
-    ref?
+    },
+    ref
   ) => {
-    const theme = useTheme();
+    // Get resolved color values for boxShadow
+    const [primaryColor, dangerColor] = useToken('colors', [
+      'primary.main',
+      'danger.main',
+    ]);
+
     const [currentValue, setCurrentValue] = useState<
       string | number | readonly string[] | undefined
     >(propValue);
@@ -40,8 +45,20 @@ export const Textarea = forwardRef<TextareaProps, 'textarea'>(
         placeholder={placeholder}
         value={currentValue}
         onChange={handleChange}
+        disabled={disabled}
+        readOnly={readOnly}
+        data-invalid={invalid || undefined}
         resize="none"
-        focusBorderColor={theme.semanticTokens.colors.primary.main}
+        borderColor={invalid ? 'danger.main' : 'gray.400'}
+        _focus={{
+          borderColor: invalid ? 'danger.main' : 'primary.main',
+          boxShadow: invalid
+            ? `0 0 0 1px ${dangerColor}`
+            : `0 0 0 1px ${primaryColor}`,
+        }}
+        _hover={{
+          borderColor: invalid ? 'danger.main' : 'gray.600',
+        }}
         {...props}
       />
     );

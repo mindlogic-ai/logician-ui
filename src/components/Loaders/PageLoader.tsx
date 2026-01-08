@@ -1,8 +1,6 @@
 import BounceLoader from 'react-spinners/BounceLoader';
 import { Box, Flex, FlexProps } from '@chakra-ui/react';
 
-import theme from '../../theme';
-
 export const PageLoader = ({
   isLoading,
   ...rest
@@ -18,12 +16,15 @@ export const PageLoader = ({
       justify="center"
       opacity={isLoading ? 0.5 : 0}
       transition="0.3s opacity ease"
-      bg={theme.colors.white}
+      bg="white"
       zIndex={9999}
       {...rest}
     >
       <Box position="relative">
-        <BounceLoader color={theme.colors.blue[500]} style={{ zIndex: 999 }} />
+        <BounceLoader
+          color="var(--chakra-colors-primary-main)"
+          style={{ zIndex: 999 }}
+        />
       </Box>
     </Flex>
   );

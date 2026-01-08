@@ -1,14 +1,22 @@
-import { Accordion as ChakraAccordion, AccordionProps } from '@chakra-ui/react';
+import {
+  Accordion as ChakraAccordion,
+  AccordionRootProps as ChakraAccordionRootProps,
+} from '@chakra-ui/react';
 
-export const Accordion = (props: AccordionProps) => {
+export type AccordionProps = ChakraAccordionRootProps;
+
+export const Accordion = ({
+  collapsible,
+  multiple = true,
+  variant = 'enclosed',
+  ...rest
+}: AccordionProps) => {
   return (
-    <ChakraAccordion
-      allowMultiple
-      borderRadius={4}
-      overflow="hidden"
-      border="1px solid"
-      borderColor="gray.300"
-      {...props}
+    <ChakraAccordion.Root
+      collapsible={collapsible}
+      multiple={multiple}
+      variant={variant}
+      {...rest}
     />
   );
 };

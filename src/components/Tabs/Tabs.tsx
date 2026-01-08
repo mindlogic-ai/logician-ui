@@ -41,7 +41,8 @@ const TabsWithUrlSync = ({
     externalIndex !== undefined ? externalIndex : selectedIndex;
 
   // Handle tab changes
-  const handleTabChange = (newIndex: number) => {
+  const handleTabChange = (details: { value: string }) => {
+    const newIndex = parseInt(details.value, 10);
     // Update the context state
     setSelectedIndex(newIndex);
 
@@ -52,14 +53,14 @@ const TabsWithUrlSync = ({
   };
 
   return (
-    <ChakraTabs
+    <ChakraTabs.Root
       position="relative"
-      variant="unstyled"
-      index={actualIndex}
-      onChange={handleTabChange}
+      variant="plain"
+      value={actualIndex.toString()}
+      onValueChange={handleTabChange}
       {...rest}
     >
       {children}
-    </ChakraTabs>
+    </ChakraTabs.Root>
   );
 };

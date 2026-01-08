@@ -15,19 +15,21 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const SampleContent = () => (
-  <VStack spacing={6} p={8} align="start">
+  <VStack gap={6} p={8} align="start">
     <H1 size="lg">Logician Design System</H1>
-    <Text fontSize="p">
+    <Text>
       This is a sample application wrapped in LogicianProvider. The provider
       automatically applies the Logician theme to all Chakra UI components.
     </Text>
     <Box>
-      <Button variant="primary" mr={4}>
+      <Button colorPalette="primary" variant="soft" mr={4}>
         Primary Button
       </Button>
-      <Button variant="secondary">Secondary Button</Button>
+      <Button colorPalette="secondary" variant="soft">
+        Secondary Button
+      </Button>
     </Box>
-    <Text fontSize="subtitle" color="gray.1200">
+    <Text color="gray.1200">
       This text uses the custom font sizes and colors from the Logician theme.
     </Text>
   </VStack>
@@ -43,27 +45,8 @@ export const Default: Story = {
 
 export const WithCustomTheme: Story = {
   render: () => {
-    const customTheme = {
-      colors: {
-        primary: {
-          light: 'purple.300',
-          main: 'purple.500',
-          dark: 'purple.700',
-        },
-      },
-      semanticTokens: {
-        colors: {
-          primary: {
-            light: 'purple.300',
-            main: 'purple.500',
-            dark: 'purple.700',
-          },
-        },
-      },
-    };
-
     return (
-      <LogicianProvider theme={customTheme}>
+      <LogicianProvider>
         <SampleContent />
       </LogicianProvider>
     );

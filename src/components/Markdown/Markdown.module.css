@@ -23,6 +23,23 @@
   margin-top: 8px;
   padding-inline-start: 16px;
 }
+
+.markdownStyles ul {
+  list-style-type: disc;
+}
+
+.markdownStyles ol {
+  list-style-type: decimal;
+}
+
+.markdownStyles ul ul {
+  list-style-type: circle;
+}
+
+.markdownStyles ul ul ul {
+  list-style-type: square;
+}
+
 .markdownStyles li {
   /* 1.5x standard line height */
   line-height: calc(16px * 1.5);

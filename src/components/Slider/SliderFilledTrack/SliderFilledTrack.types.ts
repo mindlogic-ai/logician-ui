@@ -1,3 +1,3 @@
-import { SliderTrackProps as ChakraSliderFilledTrackProps } from '@chakra-ui/react';
+import { Slider } from '@chakra-ui/react';
 
-export interface SliderFilledTrackProps extends ChakraSliderFilledTrackProps {}
+export interface SliderFilledTrackProps extends Slider.RangeProps {}

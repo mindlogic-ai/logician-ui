@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { SingleValue } from 'react-select';
-import { Flex, useTheme } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 
 import { IoChevronForward, IoIosArrowBack } from '@/components/Icon';
 import { IconButton } from '@/components/IconButton';
@@ -36,7 +36,6 @@ export const Pagination = ({
   onItemsPerPageOptionChange,
   ...rest
 }: PaginationProps) => {
-  const theme = useTheme();
   const translate = useTranslate();
   const [uncontrolledCurrentPage, setUncontrolledCurrentPage] =
     useState<number>(1);
@@ -86,15 +85,15 @@ export const Pagination = ({
           <Flex align="center" gap={2}>
             <Select
               styles={{
-                control: (base, state) => ({
+                control: (base, _state) => ({
                   ...base,
-                  fontSize: theme.fontSizes.sm,
+                  fontSize: '0.875rem',
                   padding: 0,
                   minHeight: '28px',
                 }),
-                dropdownIndicator: (base, props) => ({
+                dropdownIndicator: (base, _props) => ({
                   ...base,
-                  padding: `0 ${theme.space[1]}`,
+                  padding: '0 4px',
                 }),
               }}
               options={itemsPerPageOptions.map((option) => ({
@@ -128,19 +127,25 @@ export const Pagination = ({
             </Subtitle>
             <Flex align="center">
               <IconButton
-                icon={<IoIosArrowBack boxSize="sm" />}
+                colorPalette="neutral"
+                variant="ghost"
                 aria-label={translate('previous') as string}
                 onClick={handleBack}
-                isDisabled={currentPage <= 1}
+                disabled={currentPage <= 1}
                 color={currentPage === 1 ? 'gray.400' : 'gray.1500'}
-              />
+              >
+                <IoIosArrowBack boxSize="sm" />
+              </IconButton>
               <IconButton
-                icon={<IoChevronForward boxSize="sm" />}
+                colorPalette="neutral"
+                variant="ghost"
                 aria-label={translate('go_next_page_button') as string}
                 onClick={handleNext}
-                isDisabled={currentPage >= maxPage}
+                disabled={currentPage >= maxPage}
                 color={currentPage === maxPage ? 'gray.400' : 'gray.1500'}
-              />
+              >
+                <IoChevronForward boxSize="sm" />
+              </IconButton>
             </Flex>
           </>
         )}

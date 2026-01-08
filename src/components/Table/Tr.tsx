@@ -1,5 +1,5 @@
-import { TableRowProps, Tr as ChakraTr } from '@chakra-ui/react';
+import { Table } from '@chakra-ui/react';
 
-export const Tr = ({ ...rest }: TableRowProps) => {
-  return <ChakraTr h={12} {...rest} />;
+export const Tr = ({ ...rest }: Table.RowProps) => {
+  return <Table.Row h={12} {...rest} />;
 };

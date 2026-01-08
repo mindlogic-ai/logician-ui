@@ -1,5 +1,22 @@
-import { TabPanel as ChakraTabPanel, TabPanelProps } from '@chakra-ui/react';
+import { useState } from 'react';
+import type { BoxProps } from '@chakra-ui/react';
+import { Box, Tabs } from '@chakra-ui/react';
 
-export const TabPanel = (props: TabPanelProps) => {
-  return <ChakraTabPanel p={0} {...props} />;
+import { useTabsContext } from './TabsContext';
+
+export const TabPanel = ({
+  children,
+  ...props
+}: BoxProps & { children?: React.ReactNode }) => {
+  const { getNextPanelIndex } = useTabsContext();
+  const [panelIndex] = useState(() => getNextPanelIndex());
+  const panelValue = panelIndex.toString();
+
+  return (
+    <Tabs.Content value={panelValue} {...({ asChild: true } as any)}>
+      <Box p={0} {...props}>
+        {children}
+      </Box>
+    </Tabs.Content>
+  );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, useTheme, useToken } from '@chakra-ui/react';
+import { Box, useToken } from '@chakra-ui/react';
 
 import { Text } from '../Typography';
 import {
@@ -18,13 +18,11 @@ const RadialProgress: React.FC<RadialProgressProps> = ({
   className,
   ...rest
 }) => {
-  const theme = useTheme();
-
   // Helper function to resolve color tokens
   const resolveColor = (color: string): string => {
     try {
       // Try to resolve as a token first
-      const resolvedColor = useToken('colors', color);
+      const resolvedColor = useToken('colors', color)[0];
       return resolvedColor || color;
     } catch {
       // If token resolution fails, return the original color

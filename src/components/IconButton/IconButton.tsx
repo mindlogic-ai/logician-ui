@@ -1,34 +1,52 @@
 import { ForwardedRef, forwardRef } from 'react';
 import { IconButton as ChakraIconButton } from '@chakra-ui/react';
 
-import { variantStyles } from './IconButton.styles';
+import { getIconButtonStyles } from './IconButton.styles';
 import { IconButtonProps } from './IconButton.types';
 
+/**
+ * IconButton component with two-dimensional variant system.
+ *
+ * Uses the same `colorPalette` and `variant` system as Button
+ * for consistent styling across the design system.
+ *
+ * @example
+ * ```tsx
+ * <IconButton colorPalette="primary" variant="soft"><Icon /></IconButton>
+ * <IconButton colorPalette="danger" variant="solid"><Icon /></IconButton>
+ * <IconButton colorPalette="neutral" variant="ghost"><Icon /></IconButton>
+ * ```
+ */
 export const IconButton = forwardRef(
   (
-    { variant = 'link', sx, ...rest }: IconButtonProps,
+    { colorPalette, variant = 'soft', css, children, ...rest }: IconButtonProps,
     ref?: ForwardedRef<HTMLButtonElement>
   ) => {
+    const palette = colorPalette ?? 'primary';
+
+    const styles = getIconButtonStyles(palette, variant);
+
     return (
       <ChakraIconButton
         border="1px solid"
         borderRadius="full"
-        background="transparent"
-        {...variantStyles[variant]}
+        {...styles}
         {...rest}
         ref={ref}
-        sx={{
-          ...sx,
+        css={{
+          ...css,
           '& svg': {
             pointerEvents: 'none',
-            ...(sx as any)?.['& svg'],
+            ...(css as any)?.['& svg'],
           },
           '& svg *': {
             pointerEvents: 'none',
-            ...(sx as any)?.['& svg *'],
+            ...(css as any)?.['& svg *'],
           },
         }}
-      />
+      >
+        {children}
+      </ChakraIconButton>
     );
   }
 );

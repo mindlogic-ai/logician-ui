@@ -1,5 +1,6 @@
-import { useState } from 'react';
 import { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
+import { Box, Text } from '@chakra-ui/react';
 
 import { Select } from '.';
 
@@ -38,43 +39,45 @@ export const Combobox: Story = {
   },
 };
 
-export const OnScrollToBottom: Story = {
+export const ManyOptions: Story = {
   args: {
-    options: Array.from({ length: 50 }, (_, i) => ({
+    options: Array.from({ length: 100 }, (_, i) => ({
       label: `Option ${i + 1}`,
       value: `option${i + 1}`,
     })),
-    onMenuScrollToBottom: () => {
-      console.log('scrolled to bottom');
-    },
   },
 };
 
-export const OnScrollToBottomNewItems: Story = {
-  render: (args) => {
-    const [options, setOptions] = useState(
-      Array.from({ length: 500 }, (_, i) => ({
-        label: `Option ${i + 1}`,
-        value: `option${i + 1}`,
-      }))
-    );
-    return (
+export const WithValueDisplay = () => {
+  const [selectedOption, setSelectedOption] = useState<{
+    label: string;
+    value: string;
+  } | null>({ label: 'Option 1', value: 'option1' });
+
+  const options = [
+    { label: 'Option 1', value: 'option1' },
+    { label: 'Option 2', value: 'option2' },
+    { label: 'Option 3', value: 'option3' },
+    { label: 'Option 4', value: 'option4' },
+  ];
+
+  return (
+    <Box>
       <Select
-        {...args}
         options={options}
-        isMulti={true}
-        isSearchable={true}
-        onMenuScrollToBottom={() => {
-          console.log('scrolled to bottom');
-          setOptions((prev) => [
-            ...prev,
-            ...Array.from({ length: 500 }, (_, i) => ({
-              label: `Option ${prev.length + i + 1}`,
-              value: `option${prev.length + i + 1}`,
-            })),
-          ]);
-        }}
+        value={selectedOption}
+        onChange={(newValue) => setSelectedOption(newValue)}
       />
-    );
-  },
+      <Box mt={4} p={4} borderWidth="1px" borderRadius="md" bg="gray.50">
+        <Text fontWeight="semibold" mb={2}>
+          Selected Value:
+        </Text>
+        <Text color="primary.dark" fontWeight="bold">
+          {selectedOption
+            ? `${selectedOption.label} (${selectedOption.value})`
+            : 'None selected'}
+        </Text>
+      </Box>
+    </Box>
+  );
 };

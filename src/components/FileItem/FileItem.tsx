@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Box, Flex, useTheme } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 
 import { FileItemProps } from '@/components/FileItem/FileItem.types';
 import {
@@ -27,7 +27,6 @@ export const FileItem = ({
   isDeleting = false,
   ...rest
 }: FileItemProps) => {
-  const theme = useTheme();
   const errorColor = 'danger.main';
 
   const isUploadingFile =
@@ -60,14 +59,14 @@ export const FileItem = ({
         <Box minW={5}>
           <CiFileOn color={error ? errorColor : 'gray.800'} />
         </Box>
-        <Text isTruncated color={error ? errorColor : undefined}>
+        <Text truncate color={error ? errorColor : undefined}>
           {fileName}
         </Text>
       </Flex>
       <Flex align="center" gap={2} flex={1}>
         {error ? (
           <Flex w="100%" justify="flex-end" align="center" gap={2}>
-            <Tooltip label={error} placement="top" shouldWrapChildren>
+            <Tooltip content={error} placement="top">
               <MdError color={errorColor} />
             </Tooltip>
             {/* TODO: implement retry button */}
@@ -82,10 +81,13 @@ export const FileItem = ({
                 <IconButton
                   aria-label={'remove uploading file button'}
                   onClick={onFileDelete}
-                  icon={<IoClose color="gray.600" boxSize="lg" />}
-                  size="xs"
-                  isDisabled={isDeleting}
-                />
+                  size="2xs"
+                  disabled={isDeleting}
+                  colorPalette="neutral"
+                  variant="ghost"
+                >
+                  <IoClose color="gray.600" boxSize="md" />
+                </IconButton>
               </Flex>
             )}
           </Box>
@@ -97,24 +99,28 @@ export const FileItem = ({
               <IconButton
                 aria-label={'download uploaded file button'}
                 onClick={onFileDownload}
-                icon={<LuDownload color="gray.800" />}
-                size="xs"
-              />
+                size="2xs"
+                colorPalette="neutral"
+                variant="ghost"
+              >
+                <LuDownload color="gray.800" />
+              </IconButton>
             )}
             {onFileDelete && (
               <IconButton
                 aria-label={'remove uploaded file button'}
                 onClick={onFileDelete}
-                icon={
-                  isDeleting ? (
-                    <Spinner size="xs" />
-                  ) : (
-                    <FaRegTrashAlt boxSize="sm" />
-                  )
-                }
-                size="xs"
-                isDisabled={isDeleting}
-              />
+                size="2xs"
+                disabled={isDeleting}
+                colorPalette="neutral"
+                variant="ghost"
+              >
+                {isDeleting ? (
+                  <Spinner size="xs" />
+                ) : (
+                  <FaRegTrashAlt boxSize="sm" color="gray.800" />
+                )}
+              </IconButton>
             )}
           </Fragment>
         )}

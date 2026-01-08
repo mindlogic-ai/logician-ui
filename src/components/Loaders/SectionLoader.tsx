@@ -1,7 +1,5 @@
 import DotLoader from 'react-spinners/DotLoader';
-import { Flex, FlexProps, useToken } from '@chakra-ui/react';
-
-import theme from '../../theme';
+import { Flex, FlexProps } from '@chakra-ui/react';
 
 export const SectionLoader = ({
   isLoading,
@@ -22,9 +20,7 @@ export const SectionLoader = ({
       zIndex={9999}
       {...rest}
     >
-      <DotLoader
-        color={useToken('colors', theme.semanticTokens.colors.primary.main)}
-      />
+      <DotLoader color="var(--chakra-colors-primary-main)" />
     </Flex>
   );
 };

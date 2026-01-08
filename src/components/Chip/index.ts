@@ -1,3 +1,8 @@
 export { Chip } from './Chip';
-export { useCaseStyles } from './Chip.styles';
-export type * from './Chip.types';
+export {
+  colorSchemes,
+  colorSchemeStyles,
+  getChipStyles,
+  variants,
+} from './Chip.styles';
+export type { ChipColorScheme, ChipProps, ChipVariant } from './Chip.types';

@@ -1,6 +1,7 @@
 'use client';
 
 import React, {
+  ComponentProps,
   createContext,
   PropsWithChildren,
   useCallback,
@@ -8,7 +9,7 @@ import React, {
   useLayoutEffect,
   useState,
 } from 'react';
-import { TabsProps as ChakraTabsProps } from '@chakra-ui/react';
+import { Tabs } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 
 // Optional Next.js navigation hooks with fallbacks
@@ -19,13 +20,14 @@ let usePathname: (() => string) | null = null;
 
 try {
   // Try to import Next.js navigation hooks
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const nextNavigation = require('next/navigation');
   useRouter = nextNavigation.useRouter;
   usePathname = nextNavigation.usePathname;
 } catch (error) {
   // Next.js not available - create fallback implementations
   useRouter = () => ({
-    replace: (url: string, options?: any) => {
+    replace: (url: string, _options?: any) => {
       if (typeof window !== 'undefined') {
         window.history.replaceState(null, '', url);
       }
@@ -36,13 +38,17 @@ try {
 }
 
 interface TabsContextProps {
-  orientation: ChakraTabsProps['orientation'];
+  orientation: ComponentProps<typeof Tabs.Root>['orientation'];
   urlParam?: string;
   tabNames: string[];
   setTabNames: React.Dispatch<React.SetStateAction<string[]>>;
   selectedIndex: number;
   setSelectedIndex: (index: number) => void;
   registerTabName: (index: number, name: string) => void;
+  getNextTriggerIndex: () => number;
+  getNextPanelIndex: () => number;
+  resetTriggerIndex: () => void;
+  resetPanelIndex: () => void;
 }
 
 const TabsContext = createContext<TabsContextProps>({
@@ -53,6 +59,10 @@ const TabsContext = createContext<TabsContextProps>({
   selectedIndex: 0,
   setSelectedIndex: () => {},
   registerTabName: () => {},
+  getNextTriggerIndex: () => 0,
+  getNextPanelIndex: () => 0,
+  resetTriggerIndex: () => {},
+  resetPanelIndex: () => {},
 });
 
 export const useTabsContext = () => useContext(TabsContext);
@@ -62,13 +72,33 @@ export function TabsProvider({
   orientation,
   urlParam,
 }: PropsWithChildren<{
-  orientation: ChakraTabsProps['orientation'];
+  orientation: ComponentProps<typeof Tabs.Root>['orientation'];
   urlParam?: string;
 }>) {
   const [tabNames, setTabNames] = useState<string[]>([]);
   const [selectedIndex, setSelectedIndexState] = useState(0);
+  const triggerIndexRef = React.useRef(0);
+  const panelIndexRef = React.useRef(0);
   const router = useRouter?.() || { replace: () => {} };
   const pathname = usePathname?.() || '/';
+
+  // Functions to manage tab trigger indices
+  const getNextTriggerIndex = useCallback(() => {
+    return triggerIndexRef.current++;
+  }, []);
+
+  const resetTriggerIndex = useCallback(() => {
+    triggerIndexRef.current = 0;
+  }, []);
+
+  // Functions to manage tab panel indices
+  const getNextPanelIndex = useCallback(() => {
+    return panelIndexRef.current++;
+  }, []);
+
+  const resetPanelIndex = useCallback(() => {
+    panelIndexRef.current = 0;
+  }, []);
 
   // A function to register a tab name at a specific index
   const registerTabName = useCallback((index: number, name: string) => {
@@ -147,6 +177,10 @@ export function TabsProvider({
         selectedIndex,
         setSelectedIndex,
         registerTabName,
+        getNextTriggerIndex,
+        getNextPanelIndex,
+        resetTriggerIndex,
+        resetPanelIndex,
       }}
     >
       {children}

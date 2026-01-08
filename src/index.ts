@@ -1,24 +1,17 @@
 // Core Components
 export * from './components/Accordion';
-export * from './components/Alert';
-export * from './components/AutowidthInput';
 export * from './components/Avatar';
 export * from './components/Badge';
 export * from './components/Banner';
 export * from './components/Breadcrumb';
 export * from './components/Button';
 export * from './components/Card';
-export * from './components/Carousel';
-export * from './components/CarouselModal';
 export * from './components/Checkbox';
 export * from './components/Chip';
-export * from './components/ChipButton';
 export * from './components/Code';
 export * from './components/CodeTabs';
 export * from './components/Container';
 export * from './components/CopyableCode';
-export * from './components/CrossPageToasts';
-export * from './components/DataField';
 export * from './components/DatePicker';
 export * from './components/ErrorFallback';
 export * from './components/ExpandableText';
@@ -31,7 +24,6 @@ export * from './components/FileList';
 // Form Components
 export * from './components/FormControl';
 export * from './components/FormLabel';
-export * from './components/GuideCue';
 
 // Icon Components (wrapper only, individual icons available via @mindlogic-ai/logician-ui/icons)
 export type { IconProps } from './components/Icon/_utils/createIcon';
@@ -104,4 +96,6 @@ export {
   Subtitle,
   Text,
 } from './components/Typography';
-export * from './components/UrlInput';
+
+// Chakra UI v3 Primitives (for advanced composition patterns)
+export * from './primitives';

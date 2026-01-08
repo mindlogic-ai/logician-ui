@@ -1,23 +1,32 @@
+import { ForwardedRef, forwardRef } from 'react';
 import { Badge as ChakraBadge } from '@chakra-ui/react';
 
-import { baseStyles, useCaseStyles } from './Chip.styles';
+import { baseStyles, getChipStyles } from './Chip.styles';
 import { ChipProps } from './Chip.types';
 
 /**
- * A component that wraps the Chakra Badge component, but styled to look like a Chip component
+ * A chip component for displaying tags, labels, or status indicators.
+ *
+ * Uses a two-dimensional variant system:
+ * - `colorScheme`: What semantic color (primary, secondary, danger, etc.)
+ * - `variant`: How it looks visually (solid, soft, outline)
+ *
+ * @example
+ * ```tsx
+ * <Chip colorScheme="primary" variant="solid">Active</Chip>
+ * <Chip colorScheme="danger" variant="soft">Error</Chip>
+ * <Chip colorScheme="success" variant="outline">Completed</Chip>
+ * ```
  */
-export const Chip = ({
-  useCase = 'primary', // default to secondary as they are less likely to cause bigger design issues
-  variant = 'subtle',
-  ...rest
-}: ChipProps) => {
-  return (
-    <ChakraBadge
-      {...baseStyles}
-      {...useCaseStyles[useCase][variant]}
-      {...rest}
-    />
-  );
-};
+export const Chip = forwardRef(
+  (
+    { colorScheme = 'primary', variant = 'soft', ...rest }: ChipProps,
+    ref?: ForwardedRef<HTMLButtonElement>
+  ) => {
+    const styles = getChipStyles(colorScheme, variant);
+
+    return <ChakraBadge {...baseStyles} {...styles} {...rest} ref={ref} />;
+  }
+);
 
 Chip.displayName = 'Chip';

@@ -1,5 +1,5 @@
-import { TableHeadProps, Thead as ChakraThead } from '@chakra-ui/react';
+import { Table } from '@chakra-ui/react';
 
-export const Thead = ({ ...rest }: TableHeadProps) => {
-  return <ChakraThead color="gray.800" fontWeight="medium" {...rest} />;
+export const Thead = ({ ...rest }: Table.HeaderProps) => {
+  return <Table.Header color="gray.800" fontWeight="medium" {...rest} />;
 };

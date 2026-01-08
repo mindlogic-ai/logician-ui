@@ -4,9 +4,8 @@ import { BoxProps } from '@chakra-ui/react';
 /**
  * Code component props
  */
-export interface CodeProps
-  extends Omit<SyntaxHighlighterProps, 'style' | 'customStyle'> {
-  children: string;
+export interface CodeProps extends SyntaxHighlighterProps {
+  children: string; // Restrict to string only (original allows string | string[])
   /**
    * Callback for when the copy button is clicked. No copy button is rendered if this prop is not provided.
    * The user is expected to handle the copying behavior.
@@ -14,14 +13,6 @@ export interface CodeProps
    * @param str The copied text
    */
   onCopy?: (str: string) => void;
-
-  language?: string;
-
-  // Style object from react-syntax-highlighter
-  style?: { [key: string]: React.CSSProperties };
-
-  // Custom style object for the syntax highlighter
-  customStyle?: React.CSSProperties;
 
   containerProps?: BoxProps;
 

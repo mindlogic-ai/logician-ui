@@ -1,7 +1,7 @@
 export const seeMoreButtonStyles = {
   alignSelf: 'stretch',
   w: '100%',
-  variant: 'unstyled',
+  variant: 'unstyled' as any,
   display: 'flex',
   borderTop: '1px solid',
   borderRadius: 'none',

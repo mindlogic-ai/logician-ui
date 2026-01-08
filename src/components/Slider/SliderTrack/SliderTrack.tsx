@@ -1,11 +1,18 @@
-import { ForwardedRef, forwardRef } from 'react';
-import { SliderTrack as ChakraSliderTrack } from '@chakra-ui/react';
+import { ForwardedRef, forwardRef, ReactNode } from 'react';
+import { Slider } from '@chakra-ui/react';
 
 import { SliderTrackProps } from './SliderTrack.types';
 
 export const SliderTrack = forwardRef(
-  ({ ...rest }: SliderTrackProps, ref?: ForwardedRef<HTMLDivElement>) => {
-    return <ChakraSliderTrack {...rest} ref={ref} />;
+  (
+    { children, ...rest }: SliderTrackProps & { children?: ReactNode },
+    ref?: ForwardedRef<HTMLDivElement>
+  ) => {
+    return (
+      <Slider.Track bg="gray.200" {...rest} ref={ref}>
+        {children}
+      </Slider.Track>
+    );
   }
 );
 

@@ -2,11 +2,10 @@ import { ButtonProps } from '@/components/Button/Button.types';
 
 import { MonthRange } from '../MonthPicker.types';
 
-export interface MonthButtonProps
-  extends Omit<
-    ButtonProps,
-    'onClick' | 'variant' | 'disabled' | 'onMouseEnter' | 'onMouseLeave'
-  > {
+export interface MonthButtonProps extends Omit<
+  ButtonProps,
+  'onClick' | 'variant' | 'disabled' | 'onMouseEnter' | 'onMouseLeave'
+> {
   /** The month index (0-11) */
   month: number;
 

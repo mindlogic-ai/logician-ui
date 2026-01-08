@@ -45,7 +45,7 @@ export const Danger: Story = {
 
 export const AllSizes: Story = {
   render: () => (
-    <VStack spacing={4} align="stretch">
+    <VStack gap={4} align="stretch">
       <Banner size="sm" variant="info">
         <Subtext color="inherit">Small banner with Subtext component</Subtext>
       </Banner>
@@ -55,6 +55,20 @@ export const AllSizes: Story = {
       <Banner size="lg" variant="warning">
         <H5>Large banner with H5 component</H5>
       </Banner>
+    </VStack>
+  ),
+};
+
+const variants = ['info', 'success', 'warning', 'danger'] as const;
+
+export const AllVariants: Story = {
+  render: () => (
+    <VStack gap={4} align="stretch">
+      {variants.map((variant) => (
+        <Banner key={variant} variant={variant}>
+          This is a {variant} banner message
+        </Banner>
+      ))}
     </VStack>
   ),
 };
