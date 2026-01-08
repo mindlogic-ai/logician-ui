@@ -4,5 +4,7 @@
   "initialVersions": {
     "@mindlogic-ai/logician-ui": "2.0.0"
   },
-  "changesets": []
+  "changesets": [
+    "chakra-v3-migration"
+  ]
 }
