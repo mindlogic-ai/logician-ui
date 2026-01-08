@@ -3,17 +3,13 @@ import { Slider } from '@chakra-ui/react';
 
 export interface SliderProps extends Omit<
   Slider.RootProps,
-  'value' | 'defaultValue' | 'onValueChange' | 'onChange'
+  'value' | 'defaultValue' | 'onValueChange'
 > {
-  /** v2 compatibility: single number value */
-  value?: number | number[];
-  /** v2 compatibility: single number default value */
-  defaultValue?: number | number[];
-  /** v2 compatibility: onChange receives single number */
-  onChange?: (value: number) => void;
-  /** v3 native: onValueChange receives details object */
+  /** Slider value as array */
+  value?: number[];
+  /** Default slider value as array */
+  defaultValue?: number[];
+  /** Callback when slider value changes */
   onValueChange?: Slider.RootProps['onValueChange'];
-  /** v2 compatibility: focus thumb on value change */
-  focusThumbOnChange?: boolean;
   children?: ReactNode;
 }

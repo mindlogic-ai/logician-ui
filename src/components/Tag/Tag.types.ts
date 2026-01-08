@@ -15,11 +15,6 @@ export type TagColorPalette =
   | 'neutral';
 
 /**
- * @deprecated Use TagColorPalette instead. Will be removed in next major version.
- */
-export type TagColorScheme = TagColorPalette;
-
-/**
  * Tag variants - determines the visual style of the tag.
  *
  * - soft: Light background tint with darker text (default)

@@ -1,7 +1,7 @@
 import { Box, Flex, Text, VStack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import { Tag, tagColorSchemes, tagVariants } from '.';
+import { Tag, tagColorPalettes, tagVariants } from '.';
 import { TagCloseButton } from './TagCloseButton';
 
 const meta = {
@@ -13,7 +13,7 @@ const meta = {
   argTypes: {
     colorPalette: {
       control: 'select',
-      options: tagColorSchemes,
+      options: tagColorPalettes,
       description: 'Semantic color of the tag',
     },
     variant: {
@@ -102,7 +102,7 @@ export const Outline: Story = {
 export const Closable: Story = {
   render: () => (
     <Flex gap={2} wrap="wrap">
-      {tagColorSchemes.map((colorPalette) => (
+      {tagColorPalettes.map((colorPalette) => (
         <Tag key={colorPalette} colorPalette={colorPalette} variant="soft">
           {colorPalette}
           <TagCloseButton />
@@ -131,7 +131,7 @@ export const AllCombinations: Story = {
       </Flex>
 
       {/* Color scheme rows */}
-      {tagColorSchemes.map((colorPalette) => (
+      {tagColorPalettes.map((colorPalette) => (
         <Flex key={colorPalette} mb={4} gap={4} align="center">
           <Box w="100px">
             <Text fontWeight="medium" textStyle="subtext">

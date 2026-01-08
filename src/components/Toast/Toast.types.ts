@@ -19,17 +19,8 @@ export type ToastPlacement =
 
 export interface UseToastOptions extends MLToastOptions {
   duration?: number;
-  /** v3 prop: toast placement */
+  /** Toast placement */
   placement?: ToastPlacement;
-  /**
-   * @deprecated Use `placement` instead. Maintained for v2 backward compatibility.
-   */
-  position?: ToastPlacement;
-  /**
-   * @deprecated No longer needed in v3. Toast always has close button.
-   * Maintained for v2 backward compatibility (ignored).
-   */
-  isClosable?: boolean;
   styles?: BoxProps;
   [key: string]: any;
 }

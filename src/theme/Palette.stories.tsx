@@ -125,7 +125,7 @@ const ColorCard = ({
 
   return (
     <Flex flexDir="column" align="center" key={shade} p={2}>
-      <Tooltip label="Copy hex code" placement="top">
+      <Tooltip content="Copy hex code" placement="top">
         <Flex
           w="100px"
           h="100px"
@@ -198,7 +198,7 @@ const PrimitiveColorCard = ({
 
   return (
     <Flex flexDir="column" align="center" p={1}>
-      <Tooltip label="Copy hex code" placement="top">
+      <Tooltip content="Copy hex code" placement="top">
         <Flex
           w="72px"
           h="56px"

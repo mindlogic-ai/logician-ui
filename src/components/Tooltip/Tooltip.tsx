@@ -7,7 +7,6 @@ export const Tooltip = forwardRef(
   (
     {
       children,
-      label,
       content,
       open,
       onOpenChange,
@@ -16,21 +15,11 @@ export const Tooltip = forwardRef(
       showArrow = false,
       contentProps,
       arrowProps,
-      // v2 backward compatibility
-      isDisabled,
-      isOpen,
-      hasArrow,
       ...rest
     }: TooltipProps,
     ref?: ForwardedRef<HTMLDivElement>
   ) => {
-    // Support both v2 and v3 prop names
-    const isTooltipDisabled = disabled ?? isDisabled;
-    const isTooltipOpen = open ?? isOpen;
-    const shouldShowArrow = hasArrow ?? showArrow;
-    const tooltipContent = content ?? label;
-
-    if (isTooltipDisabled) {
+    if (disabled) {
       return <>{children}</>;
     }
 
@@ -38,7 +27,7 @@ export const Tooltip = forwardRef(
       <ChakraTooltip.Root
         positioning={{ placement }}
         closeOnScroll
-        open={isTooltipOpen}
+        open={open}
         onOpenChange={onOpenChange}
         openDelay={200}
         closeDelay={0}
@@ -64,12 +53,12 @@ export const Tooltip = forwardRef(
               }}
               {...contentProps}
             >
-              {shouldShowArrow && (
+              {showArrow && (
                 <ChakraTooltip.Arrow {...arrowProps}>
                   <ChakraTooltip.ArrowTip />
                 </ChakraTooltip.Arrow>
               )}
-              {tooltipContent}
+              {content}
             </ChakraTooltip.Content>
           </ChakraTooltip.Positioner>
         </Portal>

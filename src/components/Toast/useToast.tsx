@@ -28,14 +28,11 @@ export const useToast = () => {
     title,
     description,
     placement,
-    position, // v2 backward compatibility
-    isClosable: _isClosable, // v2 backward compatibility (ignored, always closable)
     styles: stylesProp,
     duration = 5000,
     ...rest
   }: UseToastOptions) => {
-    // v2 backward compatibility: position -> placement
-    const toastPlacement = placement ?? position ?? 'top';
+    const toastPlacement = placement ?? 'top';
     const styles = {
       ...toastStyles[status],
       ...stylesProp,

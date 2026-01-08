@@ -6,13 +6,13 @@ import {
 } from '@chakra-ui/react';
 
 export interface TooltipProps extends ChakraTooltipRootProps {
-  /** Tooltip content (v3 style) */
+  /** Tooltip content */
   content?: ReactNode;
   /** Props to pass to the tooltip content element */
   contentProps?: ChakraTooltipContentProps;
   /** Props to pass to the tooltip arrow element */
   arrowProps?: ChakraTooltipArrowProps;
-  /** Disable the tooltip (v3) */
+  /** Disable the tooltip */
   disabled?: boolean;
   /** Tooltip placement */
   placement?:
@@ -28,14 +28,6 @@ export interface TooltipProps extends ChakraTooltipRootProps {
     | 'right'
     | 'right-start'
     | 'right-end';
-  /** Show arrow indicator (v3) */
+  /** Show arrow indicator */
   showArrow?: boolean;
-  /** @deprecated Use `showArrow` instead. Show arrow indicator (v2 compatibility) */
-  hasArrow?: boolean;
-  /** @deprecated Use `content` instead. Tooltip content (v2 compatibility) */
-  label?: ReactNode;
-  /** @deprecated Use `disabled` instead. Disable the tooltip (v2 compatibility) */
-  isDisabled?: boolean;
-  /** @deprecated Use `open` instead. Control tooltip visibility (v2 compatibility) */
-  isOpen?: boolean;
 }

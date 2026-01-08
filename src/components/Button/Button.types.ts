@@ -1,4 +1,3 @@
-import { ReactElement } from 'react';
 import { ButtonProps as ChakraButtonProps } from '@chakra-ui/react';
 
 /**
@@ -21,11 +20,6 @@ export type ButtonColorPalette =
   | 'success'
   | 'warning'
   | 'neutral';
-
-/**
- * @deprecated Use ButtonColorPalette instead. Will be removed in next major version.
- */
-export type ButtonColorScheme = ButtonColorPalette;
 
 /**
  * Button variant - defines the visual appearance/fill style.
@@ -68,31 +62,9 @@ export type ButtonProps = Omit<
    */
   colorPalette?: ButtonColorPalette;
   /**
-   * @deprecated Use colorPalette instead. Maintained for backward compatibility.
-   */
-  colorScheme?: ButtonColorPalette;
-  /**
    * The visual variant of the button (fill style).
    * Overrides Chakra UI's variant prop.
    * @default 'solid'
    */
   variant?: ButtonVariant;
-  /**
-   * @deprecated Use `loading` instead. Maintained for v2 backward compatibility.
-   */
-  isLoading?: boolean;
-  /**
-   * @deprecated Use `disabled` instead. Maintained for v2 backward compatibility.
-   */
-  isDisabled?: boolean;
-  /**
-   * @deprecated Render icon as child instead. Maintained for v2 backward compatibility.
-   * Example: <Button><Icon /> Text</Button>
-   */
-  leftIcon?: ReactElement;
-  /**
-   * @deprecated Render icon as child instead. Maintained for v2 backward compatibility.
-   * Example: <Button>Text <Icon /></Button>
-   */
-  rightIcon?: ReactElement;
 };

@@ -10,12 +10,6 @@ import { ButtonProps } from './Button.types';
  * Combines `colorPalette` (semantic color) with `variant` (visual appearance)
  * for flexible, consistent button styling.
  *
- * Supports v2 backward compatibility:
- * - `colorScheme` → `colorPalette`
- * - `isLoading` → `loading`
- * - `isDisabled` → `disabled`
- * - `leftIcon` / `rightIcon` → rendered as children
- *
  * @example
  * ```tsx
  * <Button colorPalette="primary" variant="soft">Submit</Button>
@@ -26,34 +20,14 @@ import { ButtonProps } from './Button.types';
  */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    {
-      colorPalette,
-      colorScheme, // Deprecated, but maintained for backward compatibility
-      variant = 'soft',
-      _focus,
-      size,
-      // v2 backward compatibility props
-      isLoading,
-      isDisabled,
-      leftIcon,
-      rightIcon,
-      loading,
-      disabled,
-      children,
-      ...rest
-    },
+    { colorPalette, variant = 'soft', _focus, size, children, ...rest },
     ref
   ) => {
     const primaryMainColor = useToken('colors', 'primary.main')[0];
 
-    // Support both colorPalette (v3) and colorScheme (v2) for backward compatibility
-    const palette = colorPalette ?? colorScheme ?? 'primary';
+    const palette = colorPalette ?? 'primary';
 
     const styles = getButtonStyles(palette, variant);
-
-    // v2 → v3 prop mapping
-    const isLoadingState = loading ?? isLoading;
-    const isDisabledState = disabled ?? isDisabled;
 
     /**
      * Chakra Button automatically maps size prop to textStyle:
@@ -81,13 +55,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         }}
         transition="all 0.25s ease-in-out"
         ref={ref}
-        loading={isLoadingState}
-        disabled={isDisabledState}
         {...rest}
       >
-        {leftIcon}
         {children}
-        {rightIcon}
       </ChakraButton>
     );
   }

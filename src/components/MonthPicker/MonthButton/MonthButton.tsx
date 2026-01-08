@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 
 import { Button } from '@/components/Button';
 import {
-  ButtonColorScheme,
+  ButtonColorPalette,
   ButtonVariant,
 } from '@/components/Button/Button.types';
 
@@ -17,7 +17,7 @@ import { MonthRange } from '../MonthPicker.types';
 import { MonthButtonProps } from './MonthButton.types';
 
 type MonthButtonStyle = {
-  colorScheme: ButtonColorScheme;
+  colorScheme: ButtonColorPalette;
   variant: ButtonVariant;
 };
 

@@ -13,10 +13,6 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       disabled,
       invalid,
       readOnly,
-      // v2 backward compatibility props
-      isDisabled,
-      isInvalid,
-      isReadOnly,
       ...props
     },
     ref
@@ -26,11 +22,6 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       'primary.main',
       'danger.main',
     ]);
-
-    // v2 backward compatibility: isDisabled -> disabled, isInvalid -> invalid, isReadOnly -> readOnly
-    const disabledState = disabled ?? isDisabled;
-    const invalidState = invalid ?? isInvalid;
-    const readOnlyState = readOnly ?? isReadOnly;
 
     const [currentValue, setCurrentValue] = useState<
       string | number | readonly string[] | undefined
@@ -54,19 +45,19 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         placeholder={placeholder}
         value={currentValue}
         onChange={handleChange}
-        disabled={disabledState}
-        readOnly={readOnlyState}
-        data-invalid={invalidState || undefined}
+        disabled={disabled}
+        readOnly={readOnly}
+        data-invalid={invalid || undefined}
         resize="none"
-        borderColor={invalidState ? 'danger.main' : 'gray.400'}
+        borderColor={invalid ? 'danger.main' : 'gray.400'}
         _focus={{
-          borderColor: invalidState ? 'danger.main' : 'primary.main',
-          boxShadow: invalidState
+          borderColor: invalid ? 'danger.main' : 'primary.main',
+          boxShadow: invalid
             ? `0 0 0 1px ${dangerColor}`
             : `0 0 0 1px ${primaryColor}`,
         }}
         _hover={{
-          borderColor: invalidState ? 'danger.main' : 'gray.600',
+          borderColor: invalid ? 'danger.main' : 'gray.600',
         }}
         {...props}
       />

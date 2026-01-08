@@ -52,7 +52,7 @@ const CopyButton = ({
   };
 
   return (
-    <Tooltip label={tooltipText} placement="top" open={isTooltipOpen}>
+    <Tooltip content={tooltipText} placement="top" open={isTooltipOpen}>
       <IconButton
         aria-label="Copy"
         borderRadius="full"

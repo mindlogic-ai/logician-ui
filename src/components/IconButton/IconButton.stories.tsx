@@ -2,8 +2,8 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import { Box, Flex, VStack, HStack, Text } from '@chakra-ui/react';
 import { FaUniversity } from '../Icon';
-import { IconButton, iconButtonColorSchemes, iconButtonVariants } from '.';
-import { IconButtonColorScheme, IconButtonVariant } from './IconButton.types';
+import { IconButton, iconButtonColorPalettes, iconButtonVariants } from '.';
+import { IconButtonColorPalette, IconButtonVariant } from './IconButton.types';
 
 const meta = {
   title: 'Components/IconButton',
@@ -15,7 +15,7 @@ const meta = {
   argTypes: {
     colorPalette: {
       control: 'select',
-      options: iconButtonColorSchemes,
+      options: iconButtonColorPalettes,
       description: 'Semantic color family (overrides Chakra colorPalette)',
     },
     variant: {
@@ -59,46 +59,7 @@ export const AllCombinations: Story = {
       </HStack>
 
       {/* Color scheme rows */}
-      {iconButtonColorSchemes.map((colorPalette) => (
-        <HStack key={colorPalette} gap={4}>
-          <Box w="100px">
-            <Text fontWeight="bold" color="gray.600">
-              {colorPalette}
-            </Text>
-          </Box>
-          {iconButtonVariants.map((variant) => (
-            <Box key={`${colorPalette}-${variant}`} w="80px" textAlign="center">
-              <IconButton
-                {...args}
-                colorPalette={colorPalette}
-                variant={variant}
-              />
-            </Box>
-          ))}
-        </HStack>
-      ))}
-    </VStack>
-  ),
-};
-
-/**
- * Round icon buttons showing all combinations.
- */
-export const RoundAllCombinations: Story = {
-  render: (args) => (
-    <VStack gap={6} align="stretch">
-      <HStack gap={4}>
-        <Box w="100px" />
-        {iconButtonVariants.map((variant) => (
-          <Box key={variant} w="80px" textAlign="center">
-            <Text fontWeight="bold" color="gray.600">
-              {variant}
-            </Text>
-          </Box>
-        ))}
-      </HStack>
-
-      {iconButtonColorSchemes.map((colorPalette) => (
+      {iconButtonColorPalettes.map((colorPalette) => (
         <HStack key={colorPalette} gap={4}>
           <Box w="100px">
             <Text fontWeight="bold" color="gray.600">
@@ -222,7 +183,7 @@ export const Neutral: Story = {
 export const SolidVariant: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
-      {iconButtonColorSchemes.map((colorPalette) => (
+      {iconButtonColorPalettes.map((colorPalette) => (
         <VStack key={colorPalette} gap={1}>
           <Text color="gray.600">{colorPalette}</Text>
           <IconButton {...args} colorPalette={colorPalette} variant="solid" />
@@ -238,7 +199,7 @@ export const SolidVariant: Story = {
 export const SoftVariant: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
-      {iconButtonColorSchemes.map((colorPalette) => (
+      {iconButtonColorPalettes.map((colorPalette) => (
         <VStack key={colorPalette} gap={1}>
           <Text color="gray.600">{colorPalette}</Text>
           <IconButton {...args} colorPalette={colorPalette} variant="soft" />
@@ -254,7 +215,7 @@ export const SoftVariant: Story = {
 export const OutlineVariant: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
-      {iconButtonColorSchemes.map((colorPalette) => (
+      {iconButtonColorPalettes.map((colorPalette) => (
         <VStack key={colorPalette} gap={1}>
           <Text color="gray.600">{colorPalette}</Text>
           <IconButton {...args} colorPalette={colorPalette} variant="outline" />
@@ -270,7 +231,7 @@ export const OutlineVariant: Story = {
 export const GhostVariant: Story = {
   render: (args) => (
     <Flex gap={4} wrap="wrap">
-      {iconButtonColorSchemes.map((colorPalette) => (
+      {iconButtonColorPalettes.map((colorPalette) => (
         <VStack key={colorPalette} gap={1}>
           <Text color="gray.600">{colorPalette}</Text>
           <IconButton {...args} colorPalette={colorPalette} variant="ghost" />

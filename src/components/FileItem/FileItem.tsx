@@ -66,7 +66,7 @@ export const FileItem = ({
       <Flex align="center" gap={2} flex={1}>
         {error ? (
           <Flex w="100%" justify="flex-end" align="center" gap={2}>
-            <Tooltip label={error} placement="top">
+            <Tooltip content={error} placement="top">
               <MdError color={errorColor} />
             </Tooltip>
             {/* TODO: implement retry button */}

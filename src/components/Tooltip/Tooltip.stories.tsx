@@ -9,7 +9,7 @@ const meta = {
   title: 'Components/Tooltip',
   component: Tooltip,
   args: {
-    label: 'This is a tooltip',
+    content: 'This is a tooltip',
     children: <Button>Hover me</Button>,
   },
   argTypes: {
@@ -35,16 +35,16 @@ export const DifferentPlacements: Story = {
   render: () => (
     <VStack gap={8} p={8}>
       <HStack gap={8}>
-        <Tooltip label="Top tooltip" placement="top">
+        <Tooltip content="Top tooltip" placement="top">
           <Button>Top</Button>
         </Tooltip>
-        <Tooltip label="Bottom tooltip" placement="bottom">
+        <Tooltip content="Bottom tooltip" placement="bottom">
           <Button>Bottom</Button>
         </Tooltip>
-        <Tooltip label="Left tooltip" placement="left">
+        <Tooltip content="Left tooltip" placement="left">
           <Button>Left</Button>
         </Tooltip>
-        <Tooltip label="Right tooltip" placement="right">
+        <Tooltip content="Right tooltip" placement="right">
           <Button>Right</Button>
         </Tooltip>
       </HStack>
@@ -59,7 +59,7 @@ export const LongTooltipContent: Story = {
   render: (args) => (
     <Box p={8} display="flex" justifyContent="center">
       <Tooltip
-        label="This is a much longer tooltip content that demonstrates how the tooltip handles wrapping and longer text content. It should display nicely even with multiple lines."
+        content="This is a much longer tooltip content that demonstrates how the tooltip handles wrapping and longer text content. It should display nicely even with multiple lines."
         placement="top"
         {...args}
       />
@@ -87,7 +87,7 @@ export const CopyButtonExample: Story = {
 
     return (
       <Box p={8} display="flex" justifyContent="center">
-        <Tooltip label={tooltipLabel} open={isTooltipOpen}>
+        <Tooltip content={tooltipLabel} open={isTooltipOpen}>
           <IconButton
             aria-label="Copy text"
             onClick={handleCopy}

@@ -35,7 +35,7 @@ export const CopyButton = ({
   };
 
   return (
-    <Tooltip label={labelText} open={isTooltipOpen} placement="top">
+    <Tooltip content={labelText} open={isTooltipOpen} placement="top">
       <IconButton
         aria-label="Copy code"
         onClick={handleClick}

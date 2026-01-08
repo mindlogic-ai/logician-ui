@@ -3,23 +3,12 @@ import { Switch as ChakraSwitch } from '@chakra-ui/react';
 
 import { SwitchProps } from './Switch.types';
 
-export const Switch = ({
-  checked,
-  disabled,
-  // v2 backward compatibility props
-  isChecked,
-  isDisabled,
-  ...rest
-}: SwitchProps) => {
-  // v2 backward compatibility: isChecked -> checked, isDisabled -> disabled
-  const checkedState = checked ?? isChecked;
-  const disabledState = disabled ?? isDisabled;
-
+export const Switch = ({ checked, disabled, ...rest }: SwitchProps) => {
   return (
     <ChakraSwitch.Root
       colorPalette="primary"
-      checked={checkedState}
-      disabled={disabledState}
+      checked={checked}
+      disabled={disabled}
       {...rest}
     >
       <ChakraSwitch.HiddenInput />

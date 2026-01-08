@@ -48,6 +48,23 @@ All components have been migrated to Chakra UI v3 APIs:
 - **Select**: Updated styling for v3 compatibility
 - **PasswordInput**: Enhanced stories and v3 compatibility
 
+### Removed Deprecated v2 Props
+
+All deprecated Chakra UI v2 props have been removed. TypeScript will now error for any usage of old prop names, forcing migration to v3 syntax:
+
+- **Button**: Removed `colorScheme`, `isLoading`, `isDisabled`, `leftIcon`, `rightIcon`
+- **IconButton**: Removed `colorScheme`, `isLoading`, `isDisabled`, `icon`
+- **Input**: Removed `isDisabled`, `isInvalid`, `isReadOnly`
+- **Checkbox**: Removed `isChecked`, `isDisabled`, `isInvalid`
+- **Switch**: Removed `isChecked`, `isDisabled`
+- **Textarea**: Removed `isDisabled`, `isInvalid`, `isReadOnly`
+- **Tooltip**: Removed `label`, `hasArrow`, `isDisabled`, `isOpen`
+- **Modal**: Removed `isOpen`, `onClose`
+- **Toast**: Removed `position`, `isClosable`
+- **Accordion**: Removed `allowToggle`, `allowMultiple`
+- **Tag**: Removed `TagColorScheme` type alias
+- **Slider**: Removed `onChange`, `focusThumbOnChange`; changed `value`/`defaultValue` types to `number[]` only
+
 ## New Features
 
 ### Chakra UI v3 Primitives

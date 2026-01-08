@@ -115,7 +115,7 @@ export const WithStates: Story = {
           <Text fontSize="sm" fontWeight="medium" mb={2}>
             Invalid (with error border)
           </Text>
-          <Input placeholder="Invalid state" aria-invalid="true" />
+          <Input placeholder="Invalid state" invalid />
         </Box>
       </Stack>
     );

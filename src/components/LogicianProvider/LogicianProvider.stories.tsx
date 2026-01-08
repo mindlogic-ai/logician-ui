@@ -22,10 +22,10 @@ const SampleContent = () => (
       automatically applies the Logician theme to all Chakra UI components.
     </Text>
     <Box>
-      <Button colorScheme="primary" variant="soft" mr={4}>
+      <Button colorPalette="primary" variant="soft" mr={4}>
         Primary Button
       </Button>
-      <Button colorScheme="secondary" variant="soft">
+      <Button colorPalette="secondary" variant="soft">
         Secondary Button
       </Button>
     </Box>

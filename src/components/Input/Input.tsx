@@ -73,18 +73,10 @@ export const Input = forwardRef(
       disabled,
       invalid,
       readOnly,
-      // v2 backward compatibility props
-      isDisabled,
-      isInvalid,
-      isReadOnly,
       ...rest
     }: InputProps,
     ref?: ForwardedRef<HTMLInputElement>
   ) => {
-    // v2 backward compatibility: isDisabled -> disabled, isInvalid -> invalid, isReadOnly -> readOnly
-    const disabledState = disabled ?? isDisabled;
-    const invalidState = invalid ?? isInvalid;
-    const readOnlyState = readOnly ?? isReadOnly;
     const rightElementRef = useRef<HTMLDivElement>(null);
     const [rightElementWidth, setRightElementWidth] = useState(0);
     const isComposing = useRef(false);
@@ -321,16 +313,16 @@ export const Input = forwardRef(
           onCompositionEnd={handleCompositionEnd}
           onKeyDown={handleKeyDown}
           type={inputType}
-          disabled={disabledState}
-          readOnly={readOnlyState}
-          data-invalid={invalidState || undefined}
-          borderColor={invalidState ? 'danger.main' : 'gray.400'}
+          disabled={disabled}
+          readOnly={readOnly}
+          data-invalid={invalid || undefined}
+          borderColor={invalid ? 'danger.main' : 'gray.400'}
           _hover={{
-            borderColor: 'primary.lighter',
+            borderColor: invalid ? 'danger.main' : 'primary.lighter',
             ..._hover,
           }}
           _focus={{
-            borderColor: 'primary.main',
+            borderColor: invalid ? 'danger.main' : 'primary.main',
             ..._focus,
           }}
           _readOnly={{
