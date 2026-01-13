@@ -2,9 +2,10 @@
   "mode": "exit",
   "tag": "alpha",
   "initialVersions": {
-    "@mindlogic-ai/logician-ui": "2.0.0"
+    "@mindlogic-ai/logician-ui": "3.0.0-alpha.0"
   },
   "changesets": [
-    "chakra-v3-migration"
+    "chakra-v3-migration",
+    "gentle-panthers-remain"
   ]
 }
