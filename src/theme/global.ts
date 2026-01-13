@@ -18,7 +18,7 @@ export const globalCss = defineGlobalStyles({
 
   html: {
     height: 'var(--chakra-vh)',
-    fontSize: 14,
+    fontSize: 16,
     fontFamily: [
       pretendard.style.fontFamily,
       inter.style.fontFamily,

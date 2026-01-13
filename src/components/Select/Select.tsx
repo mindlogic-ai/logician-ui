@@ -16,6 +16,7 @@ export const Select = <
   Group extends GroupBase<Option> = GroupBase<Option>,
 >({
   variant = 'default',
+  invalid = false,
   styles,
   ...rest
 }: SelectProps<Option, IsMulti, Group>) => {
@@ -56,6 +57,9 @@ export const Select = <
     gray1200,
   };
 
+  // invalid prop이 true이면 variant를 'danger'로 오버라이드
+  const effectiveVariant = invalid ? 'danger' : variant;
+
   return (
     <ReactSelect<Option, IsMulti, Group>
       closeMenuOnSelect
@@ -63,13 +67,25 @@ export const Select = <
       isSearchable={false}
       {...rest}
       styles={{
+        container: (base, state) => ({
+          ...base,
+          width: '100%',
+          ...(styles?.container ? styles.container(base, state) : {}),
+        }),
         control: (base, state) => ({
           ...base,
-          ...getControlStyles(variant, colors),
-          border: `1px solid ${state.isFocused ? primaryColor : gray300}`,
-          boxShadow: state.isFocused ? `0 0 0 1px ${primaryColor}` : 'none',
+          ...getControlStyles(effectiveVariant, colors),
+          width: '100%',
+          border: `1px solid ${
+            invalid ? dangerColor : state.isFocused ? primaryColor : gray300
+          }`,
+          boxShadow: 'none',
           '&:hover': {
-            borderColor: state.isFocused ? primaryColor : gray400,
+            borderColor: invalid
+              ? dangerColor
+              : state.isFocused
+                ? primaryColor
+                : gray400,
           },
           ...(styles?.control ? styles.control(base, state) : {}),
         }),
@@ -106,6 +122,8 @@ export const Select = <
         }),
         valueContainer: (base, state) => ({
           ...base,
+          display: 'flex',
+          alignItems: 'center',
           textAlign: 'left',
           ...(styles?.valueContainer ? styles.valueContainer(base, state) : {}),
         }),
@@ -121,6 +139,14 @@ export const Select = <
           color: gray1200,
           ...(styles?.dropdownIndicator
             ? styles.dropdownIndicator(base, state)
+            : {}),
+        }),
+        indicatorsContainer: (base, state) => ({
+          ...base,
+          display: 'flex',
+          alignItems: 'center',
+          ...(styles?.indicatorsContainer
+            ? styles.indicatorsContainer(base, state)
             : {}),
         }),
         menuPortal: (base, state) => ({

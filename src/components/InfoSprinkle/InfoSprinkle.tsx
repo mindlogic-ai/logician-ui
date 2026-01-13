@@ -1,4 +1,4 @@
-import { Popover, Portal } from '@chakra-ui/react';
+import { HoverCard, Portal } from '@chakra-ui/react';
 
 import { LuInfo } from '../Icon';
 import { IconButton } from '../IconButton';
@@ -7,26 +7,30 @@ import { IconButtonProps } from '../IconButton/IconButton.types';
 export const InfoSprinkle = ({
   children,
   iconButtonProps,
+  contentProps,
   ...rest
 }: {
   children: React.ReactNode;
   iconButtonProps?: Partial<IconButtonProps>;
-} & Popover.RootProps) => {
+  contentProps?: HoverCard.ContentProps;
+} & HoverCard.RootProps) => {
   return (
-    <Popover.Root positioning={{ placement: 'top' }} lazyMount {...rest}>
-      <Popover.Trigger>
+    <HoverCard.Root positioning={{ placement: 'top' }} lazyMount {...rest}>
+      <HoverCard.Trigger asChild>
         <IconButton aria-label="Info" {...iconButtonProps}>
-          <LuInfo boxSize="sm" color="inherit" />
+          <LuInfo color="inherit" boxSize={iconButtonProps.size} />
         </IconButton>
-      </Popover.Trigger>
+      </HoverCard.Trigger>
       <Portal>
-        <Popover.Positioner>
-          <Popover.Content fontSize="1em">
-            <Popover.Arrow />
-            <Popover.Body p={2}>{children}</Popover.Body>
-          </Popover.Content>
-        </Popover.Positioner>
+        <HoverCard.Positioner>
+          <HoverCard.Content p={2} {...contentProps}>
+            <HoverCard.Arrow>
+              <HoverCard.ArrowTip />
+            </HoverCard.Arrow>
+            {children}
+          </HoverCard.Content>
+        </HoverCard.Positioner>
       </Portal>
-    </Popover.Root>
+    </HoverCard.Root>
   );
 };

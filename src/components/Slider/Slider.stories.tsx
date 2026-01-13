@@ -173,3 +173,73 @@ export const CustomStyledThumbs: Story = {
     );
   },
 };
+
+/**
+ * Slider Sizes
+ * Demonstrates different size variations: sm, md, lg
+ */
+export const Sizes: Story = {
+  render: () => {
+    const [smallValue, setSmallValue] = useState([30]);
+    const [mediumValue, setMediumValue] = useState([50]);
+    const [largeValue, setLargeValue] = useState([70]);
+
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+        <div>
+          <div style={{ marginBottom: '0.5rem', fontSize: '0.875rem', color: '#666' }}>
+            Small (sm) - Value: {smallValue[0]}
+          </div>
+          <Slider
+            size="sm"
+            value={smallValue}
+            min={0}
+            max={100}
+            onValueChange={(details) => setSmallValue(details.value)}
+          >
+            <SliderTrack>
+              <SliderFilledTrack />
+            </SliderTrack>
+            <SliderThumb index={0} />
+          </Slider>
+        </div>
+
+        <div>
+          <div style={{ marginBottom: '0.5rem', fontSize: '0.875rem', color: '#666' }}>
+            Medium (md) - Value: {mediumValue[0]}
+          </div>
+          <Slider
+            size="md"
+            value={mediumValue}
+            min={0}
+            max={100}
+            onValueChange={(details) => setMediumValue(details.value)}
+          >
+            <SliderTrack>
+              <SliderFilledTrack />
+            </SliderTrack>
+            <SliderThumb index={0} />
+          </Slider>
+        </div>
+
+        <div>
+          <div style={{ marginBottom: '0.5rem', fontSize: '0.875rem', color: '#666' }}>
+            Large (lg) - Value: {largeValue[0]}
+          </div>
+          <Slider
+            size="lg"
+            value={largeValue}
+            min={0}
+            max={100}
+            onValueChange={(details) => setLargeValue(details.value)}
+          >
+            <SliderTrack>
+              <SliderFilledTrack />
+            </SliderTrack>
+            <SliderThumb index={0} />
+          </Slider>
+        </div>
+      </div>
+    );
+  },
+};

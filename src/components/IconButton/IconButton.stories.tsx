@@ -41,6 +41,40 @@ export const Basic: Story = {
 };
 
 /**
+ * Different sizes of icon buttons.
+ */
+export const Sizes: Story = {
+  render: (args) => (
+    <HStack gap={4} align="center">
+      <VStack gap={1}>
+        <Text fontSize="sm" color="gray.600">xs</Text>
+        <IconButton {...args} size="xs" colorPalette="primary" variant="solid" />
+      </VStack>
+      <VStack gap={1}>
+        <Text fontSize="sm" color="gray.600">sm</Text>
+        <IconButton {...args} size="sm" colorPalette="primary" variant="solid" />
+      </VStack>
+      <VStack gap={1}>
+        <Text fontSize="sm" color="gray.600">md</Text>
+        <IconButton {...args} size="md" colorPalette="primary" variant="solid" />
+      </VStack>
+      <VStack gap={1}>
+        <Text fontSize="sm" color="gray.600">lg</Text>
+        <IconButton {...args} size="lg" colorPalette="primary" variant="solid" />
+      </VStack>
+      <VStack gap={1}>
+        <Text fontSize="sm" color="gray.600">xl</Text>
+        <IconButton {...args} size="xl" colorPalette="primary" variant="solid" />
+      </VStack>
+      <VStack gap={1}>
+        <Text fontSize="sm" color="gray.600">2xl</Text>
+        <IconButton {...args} size="2xl" colorPalette="primary" variant="solid" />
+      </VStack>
+    </HStack>
+  ),
+};
+
+/**
  * Complete icon button matrix showing all colorPalette × variant combinations.
  */
 export const AllCombinations: Story = {

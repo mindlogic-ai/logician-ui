@@ -74,6 +74,7 @@ export const Code = ({
     <Card
       p={0}
       borderRadius="none"
+      textStyle="p"
       {...containerProps}
       className={['ml-code', containerProps?.className].join(' ')}
     >

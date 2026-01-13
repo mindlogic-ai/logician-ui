@@ -1,5 +1,5 @@
 import { ChangeEvent, forwardRef, useEffect, useState } from 'react';
-import { Textarea as ChakraTextarea, useToken } from '@chakra-ui/react';
+import { Textarea as ChakraTextarea } from '@chakra-ui/react';
 
 import { TextareaProps } from './Textarea.types';
 
@@ -17,12 +17,6 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     },
     ref
   ) => {
-    // Get resolved color values for boxShadow
-    const [primaryColor, dangerColor] = useToken('colors', [
-      'primary.main',
-      'danger.main',
-    ]);
-
     const [currentValue, setCurrentValue] = useState<
       string | number | readonly string[] | undefined
     >(propValue);
@@ -52,12 +46,18 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         borderColor={invalid ? 'danger.main' : 'gray.400'}
         _focus={{
           borderColor: invalid ? 'danger.main' : 'primary.main',
-          boxShadow: invalid
-            ? `0 0 0 1px ${dangerColor}`
-            : `0 0 0 1px ${primaryColor}`,
         }}
         _hover={{
           borderColor: invalid ? 'danger.main' : 'gray.600',
+        }}
+        _invalid={{
+          borderColor: 'danger.main',
+          _hover: {
+            borderColor: 'danger.main',
+          },
+          _focus: {
+            borderColor: 'danger.main',
+          },
         }}
         {...props}
       />

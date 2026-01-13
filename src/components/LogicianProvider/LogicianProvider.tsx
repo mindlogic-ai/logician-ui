@@ -1,10 +1,50 @@
 'use client';
-import React from 'react';
-import { ChakraProvider } from '@chakra-ui/react';
+import React, { useMemo } from 'react';
+import type { SystemConfig } from '@chakra-ui/react';
+import { ChakraProvider, createSystem, defaultConfig } from '@chakra-ui/react';
 
-import { system } from '../../theme';
+import { logicianConfig, system as defaultSystem } from '../../theme';
+import { Toaster } from '../Toast/useToast';
 
 export interface LogicianProviderProps {
+  /**
+   * Optional custom configuration to extend or override the default Logician UI system.
+   * Your config will be merged with the default Logician config.
+   *
+   * @example
+   * ```tsx
+   * import { LogicianProvider } from '@mindlogic/logician-ui';
+   * import { defineConfig } from '@chakra-ui/react';
+   *
+   * // Option 1: Use default Logician system
+   * <LogicianProvider>
+   *   <App />
+   * </LogicianProvider>
+   *
+   * // Option 2: Extend/override specific parts
+   * <LogicianProvider
+   *   config={defineConfig({
+   *     theme: {
+   *       tokens: {
+   *         colors: {
+   *           brand: { value: '#FF5733' }
+   *         }
+   *       },
+   *       semanticTokens: {
+   *         colors: {
+   *           primary: {
+   *             main: 'brand'
+   *           }
+   *         }
+   *       }
+   *     }
+   *   })}
+   * >
+   *   <App />
+   * </LogicianProvider>
+   * ```
+   */
+  config?: SystemConfig;
   children?: React.ReactNode;
 }
 
@@ -28,9 +68,23 @@ export interface LogicianProviderProps {
  * ```
  */
 export const LogicianProvider: React.FC<LogicianProviderProps> = ({
+  config,
   children,
 }) => {
-  return <ChakraProvider value={system}>{children}</ChakraProvider>;
+  const system = useMemo(() => {
+    if (!config) {
+      return defaultSystem;
+    }
+    // Merge defaultConfig, logicianConfig, and user config
+    return createSystem(defaultConfig, logicianConfig, config);
+  }, [config]);
+
+  return (
+    <ChakraProvider value={system}>
+      {children}
+      <Toaster />
+    </ChakraProvider>
+  );
 };
 
 LogicianProvider.displayName = 'LogicianProvider';
