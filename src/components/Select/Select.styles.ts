@@ -36,11 +36,10 @@ export const getOptionStyles = ({
   colors?: SelectColors;
 }) => ({
   cursor: isDisabled ? 'not-allowed' : 'pointer',
-  height: 36,
+  minHeight: 36,
   margin: '4px 0',
   borderRadius: 4,
   fontSize: 14,
-  // Note: No padding! react-select handles this internally
   backgroundColor:
     isSelected || isFocused || isDisabled ? colors.primaryLightest : 'white',
   color: isSelected

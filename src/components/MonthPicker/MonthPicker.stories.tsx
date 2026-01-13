@@ -90,7 +90,7 @@ export const WithConstraints: Story = {
   parameters: {
     additionalContent: (
       <Box>
-        <Text textStyle="p" fontWeight="semibold" mb={2}>
+        <Text fontWeight="semibold" mb={2}>
           With Date Constraints
         </Text>
         <Text textStyle="subtext" color="gray.600" mb={4}>
@@ -108,7 +108,7 @@ export const Disabled: Story = {
   parameters: {
     additionalContent: (
       <Box>
-        <Text textStyle="p" fontWeight="semibold" mb={2}>
+        <Text fontWeight="semibold" mb={2}>
           Disabled State
         </Text>
         <Text textStyle="subtext" color="gray.600" mb={4}>
@@ -127,7 +127,7 @@ export const CustomFormat: Story = {
   parameters: {
     additionalContent: (
       <Box>
-        <Text textStyle="p" fontWeight="semibold" mb={2}>
+        <Text fontWeight="semibold" mb={2}>
           Custom Date Format
         </Text>
         <Text textStyle="subtext" color="gray.600" mb={4}>
@@ -142,7 +142,7 @@ export const CrossYearSelection: Story = {
   parameters: {
     additionalContent: (
       <Box>
-        <Text textStyle="p" fontWeight="semibold" mb={2}>
+        <Text fontWeight="semibold" mb={2}>
           Cross-Year Range Selection
         </Text>
         <Text textStyle="subtext" color="gray.600" mb={4}>

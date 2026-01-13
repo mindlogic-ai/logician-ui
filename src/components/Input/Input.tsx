@@ -325,6 +325,15 @@ export const Input = forwardRef(
             borderColor: invalid ? 'danger.main' : 'primary.main',
             ..._focus,
           }}
+          _invalid={{
+            borderColor: 'danger.main',
+            _hover: {
+              borderColor: 'danger.main',
+            },
+            _focus: {
+              borderColor: 'danger.main',
+            },
+          }}
           _readOnly={{
             opacity: 1,
             cursor: 'not-allowed',

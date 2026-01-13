@@ -111,7 +111,6 @@ export const Td = ({
   return (
     <Table.Cell
       color="inherit"
-      textStyle="p"
       py={3}
       overflow="hidden"
       textOverflow="ellipsis"

@@ -8,6 +8,7 @@ export type SelectProps<
   Group extends GroupBase<Option>,
 > = Props<Option, IsMulti, Group> & {
   variant?: SelectVariant;
+  invalid?: boolean;
 };
 
 export type SelectOption<T> = {

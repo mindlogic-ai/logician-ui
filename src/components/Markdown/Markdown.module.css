@@ -41,7 +41,7 @@
 }
 
 .markdownStyles li {
-  /* 1.5x standard line height */
-  line-height: calc(16px * 1.5);
+  /* 1.5x standard line height (14px base) */
+  line-height: calc(14px * 1.5);
   margin-bottom: 8px;
 }

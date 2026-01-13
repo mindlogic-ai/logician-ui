@@ -76,13 +76,23 @@ export const baseMarkdownComponents = {
   ),
   ol: ({ style, ...rest }: any) => (
     <ol
-      style={{ paddingInlineStart: '22px', color: 'inherit', ...style }}
+      style={{
+        paddingInlineStart: '22px',
+        color: 'inherit',
+        fontSize: '0.875rem',
+        ...style,
+      }}
       {...rest}
     />
   ),
   ul: ({ style, ...rest }: any) => (
     <ul
-      style={{ paddingInlineStart: '22px', color: 'inherit', ...style }}
+      style={{
+        paddingInlineStart: '22px',
+        color: 'inherit',
+        fontSize: '0.875rem',
+        ...style,
+      }}
       {...rest}
     />
   ),
