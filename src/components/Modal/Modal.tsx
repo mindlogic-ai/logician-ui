@@ -2,7 +2,6 @@ import React from 'react';
 import { Dialog } from '@chakra-ui/react';
 
 import { ModalProps } from './Modal.types';
-import { ModalOverlay } from './ModalOverlay';
 
 export const Modal = ({
   children,
@@ -18,7 +17,6 @@ export const Modal = ({
       closeOnInteractOutside
       {...rest}
     >
-      <ModalOverlay />
       {children}
     </Dialog.Root>
   );
