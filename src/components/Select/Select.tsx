@@ -33,7 +33,7 @@ export const Select = <
     gray1200,
   ] = useToken('colors', [
     'primary.main',
-    'primary.lightest',
+    'primary.extralight',
     'primary.dark',
     'danger.main',
     'gray.50',

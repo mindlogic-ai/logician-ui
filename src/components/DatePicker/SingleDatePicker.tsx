@@ -82,7 +82,7 @@ export const SingleDatePicker = ({
             fontSize: 'sm',
             fontWeight: 'regular',
             _hover: {
-              background: 'primary.lightest',
+              background: 'primary.extralight',
               ...propsConfigs?.dayOfMonthBtnProps?.defaultBtnProps?._hover,
             },
             ...propsConfigs?.dayOfMonthBtnProps?.defaultBtnProps,
