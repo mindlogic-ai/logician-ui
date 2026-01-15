@@ -31,7 +31,8 @@ Primary brand color for interactive elements.
 
 | Token | Hex | Usage |
 |-------|-----|-------|
-| `blue.50` | `#E8EEFB` | Lightest backgrounds |
+| `blue.25` | `#F4F7FD` | Lightest backgrounds |
+| `blue.50` | `#E8EEFB` | Extra-light backgrounds |
 | `blue.100` | `#B9CBF3` | Light backgrounds, subtle fills |
 | `blue.200` | `#7DA0E8` | Hover states, focus rings |
 | `blue.300` | `#4A79DC` | Medium accents, borders |
@@ -46,7 +47,8 @@ Error and destructive action states.
 
 | Token | Hex | Usage |
 |-------|-----|-------|
-| `rose.50` | `#FBE8E9` | Error backgrounds |
+| `rose.25` | `#FDF5F5` | Lightest backgrounds |
+| `rose.50` | `#FBE8E9` | Extra-light backgrounds |
 | `rose.100` | `#F3B9BD` | Light error fills |
 | `rose.200` | `#E87D84` | Error borders, icons |
 | `rose.300` | `#DC4A53` | Error accents |
@@ -61,7 +63,8 @@ Success and confirmation states.
 
 | Token | Hex | Usage |
 |-------|-----|-------|
-| `green.50` | `#E9FBE8` | Success backgrounds |
+| `green.25` | `#F4FDF4` | Lightest backgrounds |
+| `green.50` | `#E9FBE8` | Extra-light backgrounds |
 | `green.100` | `#BDF3B9` | Light success fills |
 | `green.200` | `#84E87D` | Success borders, icons |
 | `green.300` | `#53DC4A` | Success accents |
@@ -76,7 +79,8 @@ Secondary accent and highlight elements.
 
 | Token | Hex | Usage |
 |-------|-----|-------|
-| `violet.50` | `#F4E8FB` | Accent backgrounds |
+| `violet.25` | `#FAF4FD` | Lightest backgrounds |
+| `violet.50` | `#F4E8FB` | Extra-light backgrounds |
 | `violet.100` | `#DEB9F3` | Light accent fills |
 | `violet.200` | `#C17DE8` | Accent borders |
 | `violet.300` | `#A84ADC` | Accent elements |
@@ -91,7 +95,8 @@ Warning and caution states.
 
 | Token | Hex | Usage |
 |-------|-----|-------|
-| `gold.50` | `#FBF6E8` | Warning backgrounds |
+| `gold.25` | `#FDFBF4` | Lightest backgrounds |
+| `gold.50` | `#FBF6E8` | Extra-light backgrounds |
 | `gold.100` | `#F3E4B9` | Light warning fills |
 | `gold.200` | `#E8CD7D` | Warning borders, icons |
 | `gold.300` | `#DCB84A` | Warning accents |
@@ -132,44 +137,49 @@ Semantic tokens provide meaning-based color references that should be used inste
 semanticTokens: {
   colors: {
     primary: {
-      lightest: 'blue.50',   // #E8EEFB - Very light backgrounds
-      lighter: 'blue.100',   // #B9CBF3 - Light backgrounds
-      light: 'blue.200',     // #7DA0E8 - Hover states
-      main: 'blue.500',      // #1751D0 - Primary actions
-      dark: 'blue.700',      // #0D317D - Text on light bg
-      darker: 'blue.900',    // #04102A - High contrast text
+      lightest: 'blue.25',     // #F4F7FD - Lightest backgrounds
+      extralight: 'blue.50',   // #E8EEFB - Extra-light backgrounds
+      lighter: 'blue.100',     // #B9CBF3 - Light backgrounds
+      light: 'blue.200',       // #7DA0E8 - Hover states
+      main: 'blue.500',        // #1751D0 - Primary actions
+      dark: 'blue.700',        // #0D317D - Text on light bg
+      darker: 'blue.900',      // #04102A - High contrast text
     },
     secondary: {
-      lightest: 'violet.50',
-      lighter: 'violet.100',
-      light: 'violet.200',
-      main: 'violet.500',    // #9117D0 - Accent actions
-      dark: 'violet.700',
-      darker: 'violet.900',
+      lightest: 'violet.25',   // #FAF4FD - Lightest backgrounds
+      extralight: 'violet.50', // #F4E8FB - Extra-light backgrounds
+      lighter: 'violet.100',   // #DEB9F3 - Light backgrounds
+      light: 'violet.200',     // #C17DE8 - Hover states
+      main: 'violet.500',      // #9117D0 - Accent actions
+      dark: 'violet.700',      // #570D7D - Text on light bg
+      darker: 'violet.900',    // #1D042A - High contrast text
     },
     danger: {
-      lightest: 'rose.50',
-      lighter: 'rose.100',
-      light: 'rose.200',
-      main: 'rose.500',      // #D01721 - Error states
-      dark: 'rose.700',
-      darker: 'rose.900',
+      lightest: 'rose.25',     // #FDF5F5 - Lightest backgrounds
+      extralight: 'rose.50',   // #FBE8E9 - Extra-light backgrounds
+      lighter: 'rose.100',     // #F3B9BD - Light error fills
+      light: 'rose.200',       // #E87D84 - Error borders
+      main: 'rose.500',        // #D01721 - Error states
+      dark: 'rose.700',        // #7D0D14 - Error text on light bg
+      darker: 'rose.900',      // #2A0407 - High contrast error text
     },
     success: {
-      lightest: 'green.50',
-      lighter: 'green.100',
-      light: 'green.200',
-      main: 'green.600',     // #1AA612 - Success states
-      dark: 'green.700',
-      darker: 'green.900',
+      lightest: 'green.25',    // #F4FDF4 - Lightest backgrounds
+      extralight: 'green.50',  // #E9FBE8 - Extra-light backgrounds
+      lighter: 'green.100',    // #BDF3B9 - Light success fills
+      light: 'green.200',      // #84E87D - Success borders
+      main: 'green.600',       // #1AA612 - Success states
+      dark: 'green.700',       // #147D0D - Success text on light bg
+      darker: 'green.900',     // #072A04 - High contrast success text
     },
     warning: {
-      lightest: 'gold.50',
-      lighter: 'gold.100',
-      light: 'gold.200',
-      main: 'gold.500',      // #D0A117 - Warning states
-      dark: 'gold.700',
-      darker: 'gold.900',
+      lightest: 'gold.25',     // #FDFBF4 - Lightest backgrounds
+      extralight: 'gold.50',   // #FBF6E8 - Extra-light backgrounds
+      lighter: 'gold.100',     // #F3E4B9 - Light warning fills
+      light: 'gold.200',       // #E8CD7D - Warning borders
+      main: 'gold.500',        // #D0A117 - Warning states
+      dark: 'gold.700',        // #7D610D - Warning text on light bg
+      darker: 'gold.900',      // #2A2004 - High contrast warning text
     },
   },
 }

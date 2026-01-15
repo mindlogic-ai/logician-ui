@@ -424,9 +424,9 @@ export const ContrastReference: Story = {
   render: () => {
     const contrastPairs = [
       {
-        bg: 'primary.lightest',
+        bg: 'primary.extralight',
         text: 'primary.dark',
-        label: 'primary.lightest + dark',
+        label: 'primary.extralight + dark',
         ratio: '7.2:1',
         badge: 'AAA',
       },
@@ -438,9 +438,9 @@ export const ContrastReference: Story = {
         badge: 'AA',
       },
       {
-        bg: 'danger.lightest',
+        bg: 'danger.extralight',
         text: 'danger.dark',
-        label: 'danger.lightest + dark',
+        label: 'danger.extralight + dark',
         ratio: '7.4:1',
         badge: 'AAA',
       },
@@ -452,16 +452,16 @@ export const ContrastReference: Story = {
         badge: 'AA',
       },
       {
-        bg: 'success.lightest',
+        bg: 'success.extralight',
         text: 'success.dark',
-        label: 'success.lightest + dark',
+        label: 'success.extralight + dark',
         ratio: '6.1:1',
         badge: 'AA',
       },
       {
-        bg: 'warning.lightest',
+        bg: 'warning.extralight',
         text: 'warning.dark',
-        label: 'warning.lightest + dark',
+        label: 'warning.extralight + dark',
         ratio: '5.8:1',
         badge: 'AA',
       },
@@ -532,7 +532,7 @@ export const ContrastReference: Story = {
                     px={2}
                     py={0.5}
                     borderRadius="sm"
-                    bg={pair.badge === 'AAA' ? 'success.lightest' : 'gold.100'}
+                    bg={pair.badge === 'AAA' ? 'success.extralight' : 'gold.100'}
                     color={pair.badge === 'AAA' ? 'success.dark' : 'gold.700'}
                   >
                     <Text fontSize="10px" fontWeight="bold">
@@ -668,7 +668,7 @@ export const FontSizes: Story = {
                   w="80px"
                   px={2}
                   py={1}
-                  bg="primary.lightest"
+                  bg="primary.extralight"
                   borderRadius="md"
                   fontFamily="mono"
                   textStyle="subtext"
