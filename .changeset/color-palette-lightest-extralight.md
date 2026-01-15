@@ -2,7 +2,9 @@
 "@mindlogic-ai/logician-ui": minor
 ---
 
-Add lightest (25 shade) and rename semantic tokens for expanded color palette
+Color palette expansion, responsive typography, and component improvements
+
+## Color Palette Expansion
 
 **New Color Levels:**
 - Added 25 shade to all primitive color palettes (blue, rose, green, violet, gold)
@@ -14,7 +16,7 @@ Add lightest (25 shade) and rename semantic tokens for expanded color palette
 - `lighter`, `light`, `main`, `dark`, `darker` remain unchanged
 
 **Migration Guide:**
-Replace all instances of `.lightest` with `.extralight` in your codebase:
+Replace all instances of `.lightest` with `.extralight`:
 ```tsx
 // Before
 <Badge bgColor="primary.lightest" />
@@ -25,18 +27,57 @@ Replace all instances of `.lightest` with `.extralight` in your codebase:
 
 Or use the new `lightest` for even lighter backgrounds:
 ```tsx
-<Badge bgColor="primary.lightest" /> // Now uses 25 shade (lighter than before)
+<Badge bgColor="primary.lightest" /> // Now uses 25 shade
 ```
 
 **Component Updates:**
-- Badge, Chip, Tag: Updated to use `extralight` (maintains previous visual appearance)
-- Toast, Banner: Updated to use `extralight` (maintains previous visual appearance)
-- Button soft variant: Updated to use `extralight` (maintains previous visual appearance)
+- Badge, Chip, Tag: Updated to use `extralight`
+- Toast, Banner: Updated to use `extralight`
+- Button soft variant: Updated to use `extralight`
 
-**Documentation Updates:**
+## Responsive Typography System
+
+**Typography Updates:**
+- Override Chakra v3 default textStyles (2xs-7xl) with responsive scaling
+- Mobile: base size, Desktop (md+): one size up for better readability
+- Update custom Logician textStyles (h1-h5, p, subtitle, subtext) with consistent scaling
+- Update Palette storybook to reflect actual theme values
+
+## Modal Component API Changes (BREAKING)
+
+**API Changes:**
+- Remove auto-rendered `<ModalOverlay />` from Modal component
+- Remove Portal wrapper from ModalContent for simpler composition
+- Users must now explicitly add `<ModalOverlay />` when using Modal
+
+**Migration:**
+```tsx
+// Before
+<Modal open={isOpen}>
+  <ModalContent>...</ModalContent>
+</Modal>
+
+// After
+<Modal open={isOpen}>
+  <ModalOverlay />
+  <ModalContent>...</ModalContent>
+</Modal>
+```
+
+## Component Improvements
+
+**Bug Fixes:**
+- Button: Remove fontSize override for xs size (now handled by theme)
+- InfoSprinkle: Add optional chaining for iconButtonProps.size
+- Markdown: Reduce gap from 1.2em to 1em for better spacing
+- Pagination: Add whiteSpace="nowrap" to items per page label
+
+## Documentation Updates
+
 - Updated theme/CLAUDE.md with new color tables and semantic token mappings
 - Updated all inline comments in colors.ts
-- Palette Storybook will automatically display new lightest shade
+- Palette Storybook automatically displays new lightest shade
 
-**WCAG Compliance:**
+## WCAG Compliance
+
 All existing WCAG AA compliance maintained - no changes to `main`, `dark`, or `darker` mappings
