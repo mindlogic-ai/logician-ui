@@ -26,7 +26,7 @@ export const colorSchemeStyles: Record<
       color: 'white',
     },
     soft: {
-      bgColor: 'primary.lightest',
+      bgColor: 'primary.extralight',
       color: 'primary.dark',
     },
     outline: {
@@ -42,7 +42,7 @@ export const colorSchemeStyles: Record<
       color: 'white',
     },
     soft: {
-      bgColor: 'secondary.lightest',
+      bgColor: 'secondary.extralight',
       color: 'secondary.dark',
     },
     outline: {
@@ -58,7 +58,7 @@ export const colorSchemeStyles: Record<
       color: 'white',
     },
     soft: {
-      bgColor: 'danger.lightest',
+      bgColor: 'danger.extralight',
       color: 'danger.dark',
     },
     outline: {
@@ -74,7 +74,7 @@ export const colorSchemeStyles: Record<
       color: 'white',
     },
     soft: {
-      bgColor: 'success.lightest',
+      bgColor: 'success.extralight',
       color: 'success.dark',
     },
     outline: {
@@ -90,7 +90,7 @@ export const colorSchemeStyles: Record<
       color: 'white',
     },
     soft: {
-      bgColor: 'warning.lightest',
+      bgColor: 'warning.extralight',
       color: 'warning.dark',
     },
     outline: {

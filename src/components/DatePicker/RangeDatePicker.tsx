@@ -74,7 +74,7 @@ export const RangeDatePicker = ({
             px: 6,
             py: 4,
             borderWidth: '1px',
-            borderColor: 'primary.lightest',
+            borderColor: 'primary.extralight',
             borderRadius: 16,
             bg: 'white',
             ...propsConfigs?.calendarPanelProps?.contentProps,
@@ -104,7 +104,7 @@ export const RangeDatePicker = ({
             color: 'gray.1500',
             fontWeight: 'regular',
             _hover: {
-              background: 'primary.lightest',
+              background: 'primary.extralight',
               ...propsConfigs?.dayOfMonthBtnProps?.defaultBtnProps?._hover,
             },
             ...propsConfigs?.dayOfMonthBtnProps?.defaultBtnProps,
@@ -139,7 +139,7 @@ export const RangeDatePicker = ({
           },
           isInRangeBtnProps: {
             color: 'primary.dark',
-            background: 'primary.lightest',
+            background: 'primary.extralight',
             borderRadius: 'md',
             ...propsConfigs?.dayOfMonthBtnProps?.isInRangeBtnProps,
           },

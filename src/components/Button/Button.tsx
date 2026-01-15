@@ -45,7 +45,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         lineHeight="1.2"
         fontWeight="semibold"
         size={size}
-        fontSize={size === 'xs' ? 'sm' : undefined} // Override xs: 10.5px → 12.25px
         borderRadius="md"
         {...styles}
         _focus={{

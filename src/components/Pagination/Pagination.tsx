@@ -106,7 +106,9 @@ export const Pagination = ({
               }}
               onChange={handleItemsPerPageOptionChange}
             />
-            <Subtext>{translate('pagination_items_per_page')}</Subtext>
+            <Subtext whiteSpace="nowrap">
+              {translate('pagination_items_per_page')}
+            </Subtext>
           </Flex>
         )}
       </Flex>

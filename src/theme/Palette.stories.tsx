@@ -424,9 +424,9 @@ export const ContrastReference: Story = {
   render: () => {
     const contrastPairs = [
       {
-        bg: 'primary.lightest',
+        bg: 'primary.extralight',
         text: 'primary.dark',
-        label: 'primary.lightest + dark',
+        label: 'primary.extralight + dark',
         ratio: '7.2:1',
         badge: 'AAA',
       },
@@ -438,9 +438,9 @@ export const ContrastReference: Story = {
         badge: 'AA',
       },
       {
-        bg: 'danger.lightest',
+        bg: 'danger.extralight',
         text: 'danger.dark',
-        label: 'danger.lightest + dark',
+        label: 'danger.extralight + dark',
         ratio: '7.4:1',
         badge: 'AAA',
       },
@@ -452,16 +452,16 @@ export const ContrastReference: Story = {
         badge: 'AA',
       },
       {
-        bg: 'success.lightest',
+        bg: 'success.extralight',
         text: 'success.dark',
-        label: 'success.lightest + dark',
+        label: 'success.extralight + dark',
         ratio: '6.1:1',
         badge: 'AA',
       },
       {
-        bg: 'warning.lightest',
+        bg: 'warning.extralight',
         text: 'warning.dark',
-        label: 'warning.lightest + dark',
+        label: 'warning.extralight + dark',
         ratio: '5.8:1',
         badge: 'AA',
       },
@@ -532,7 +532,7 @@ export const ContrastReference: Story = {
                     px={2}
                     py={0.5}
                     borderRadius="sm"
-                    bg={pair.badge === 'AAA' ? 'success.lightest' : 'gold.100'}
+                    bg={pair.badge === 'AAA' ? 'success.extralight' : 'gold.100'}
                     color={pair.badge === 'AAA' ? 'success.dark' : 'gold.700'}
                   >
                     <Text fontSize="10px" fontWeight="bold">
@@ -561,57 +561,57 @@ export const FontSizes: Story = {
         component: <H1 color="gray.1200">H1 - Page titles</H1>,
         name: 'H1',
         token: 'h1',
-        base: '2.4em',
-        md: '3em',
+        base: '2.4rem',
+        md: '3rem',
       },
       {
         component: <H2 color="gray.1200">H2 - Section headers</H2>,
         name: 'H2',
         token: 'h2',
-        base: '2em',
-        md: '2.5em',
+        base: '2rem',
+        md: '2.5rem',
       },
       {
         component: <H3 color="gray.1200">H3 - Subsection headers</H3>,
         name: 'H3',
         token: 'h3',
-        base: '1.5em',
-        md: '1.75em',
+        base: '1.5rem',
+        md: '1.75rem',
       },
       {
         component: <H4 color="gray.1200">H4 - Card titles</H4>,
         name: 'H4',
         token: 'h4',
-        base: '1.25em',
-        md: '1.44em',
+        base: '1.25rem',
+        md: '1.44rem',
       },
       {
         component: <H5 color="gray.1200">H5 - Small headings</H5>,
         name: 'H5',
         token: 'h5',
-        base: '1.1em',
-        md: '1.2em',
+        base: '1.1rem',
+        md: '1.2rem',
       },
       {
         component: <Text color="gray.1200">Text - Body text</Text>,
         name: 'Text',
         token: 'p',
-        base: '1em',
-        md: '1em',
+        base: '0.875rem',
+        md: '1rem',
       },
       {
         component: <Subtitle color="gray.1200">Subtitle - Subtitle text</Subtitle>,
         name: 'Subtitle',
         token: 'subtitle',
-        base: '0.92em',
-        md: '1em',
+        base: '0.875rem',
+        md: '1rem',
       },
       {
         component: <Subtext color="gray.800">Subtext - Helper text, captions</Subtext>,
         name: 'Subtext',
         token: 'subtext',
-        base: '0.92em',
-        md: '1em',
+        base: '0.805rem',
+        md: '0.875rem',
       },
     ];
 
@@ -668,7 +668,7 @@ export const FontSizes: Story = {
                   w="80px"
                   px={2}
                   py={1}
-                  bg="primary.lightest"
+                  bg="primary.extralight"
                   borderRadius="md"
                   fontFamily="mono"
                   textStyle="subtext"

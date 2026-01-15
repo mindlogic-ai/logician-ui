@@ -27,7 +27,7 @@
  *
  * 1. **Accessibility First**: All semantic color combinations meet WCAG 2.1 AA standards
  * 2. **Cool Gray Foundation**: Slate-based grays with blue undertone for modern feel
- * 3. **Consistent Scale**: Each color has 50/100/200/300/500/600/700/800/900 steps
+ * 3. **Consistent Scale**: Each color has 25/50/100/200/300/500/600/700/800/900 steps
  * 4. **Light Mode Optimized**: Designed for light mode with semantic token flexibility
  *
  * @see https://www.w3.org/TR/WCAG21/#contrast-minimum
@@ -45,7 +45,8 @@
  * - `danger.*`: Error messages, destructive actions
  *
  * Each category includes:
- * - `lightest`: Very light backgrounds (badges, subtle fills)
+ * - `lightest`: Lightest backgrounds (ghost states, very subtle fills)
+ * - `extralight`: Extra-light backgrounds (badges, subtle fills)
  * - `lighter`: Light backgrounds (toast backgrounds, subtle fills)
  * - `light`: Medium backgrounds (hover states, medium fills)
  * - `main`: Primary color (buttons, text, icons)
@@ -70,7 +71,8 @@ export const semanticTokens = {
      * - dark (#0D317D): 9.4:1 ✓ AAA
      */
     primary: {
-      lightest: { value: '{colors.blue.50}' }, // #E8EEFB - Very light backgrounds
+      lightest: { value: '{colors.blue.25}' }, // #F4F7FD - Lightest backgrounds
+      extralight: { value: '{colors.blue.50}' }, // #E8EEFB - Extra-light backgrounds
       lighter: { value: '{colors.blue.100}' }, // #B9CBF3 - Light backgrounds
       light: { value: '{colors.blue.200}' }, // #7DA0E8 - Hover states, subtle fills
       main: { value: '{colors.blue.500}' }, // #1751D0 - Primary actions
@@ -87,7 +89,8 @@ export const semanticTokens = {
      * - dark (#570D7D): 9.2:1 ✓ AAA
      */
     secondary: {
-      lightest: { value: '{colors.violet.50}' }, // #F4E8FB - Very light backgrounds
+      lightest: { value: '{colors.violet.25}' }, // #FAF4FD - Lightest backgrounds
+      extralight: { value: '{colors.violet.50}' }, // #F4E8FB - Extra-light backgrounds
       lighter: { value: '{colors.violet.100}' }, // #DEB9F3 - Light backgrounds
       light: { value: '{colors.violet.200}' }, // #C17DE8 - Hover states
       main: { value: '{colors.violet.500}' }, // #9117D0 - Accent actions
@@ -104,7 +107,8 @@ export const semanticTokens = {
      * - dark (#7D0D14): 9.6:1 ✓ AAA
      */
     danger: {
-      lightest: { value: '{colors.rose.50}' }, // #FBE8E9 - Error backgrounds
+      lightest: { value: '{colors.rose.25}' }, // #FDF5F5 - Lightest backgrounds
+      extralight: { value: '{colors.rose.50}' }, // #FBE8E9 - Extra-light backgrounds
       lighter: { value: '{colors.rose.100}' }, // #F3B9BD - Light error fills
       light: { value: '{colors.rose.200}' }, // #E87D84 - Error borders, icons
       main: { value: '{colors.rose.500}' }, // #D01721 - Error text, buttons
@@ -121,7 +125,8 @@ export const semanticTokens = {
      * - dark (#147D0D): 6.1:1 ✓ AA
      */
     success: {
-      lightest: { value: '{colors.green.50}' }, // #E9FBE8 - Success backgrounds
+      lightest: { value: '{colors.green.25}' }, // #F4FDF4 - Lightest backgrounds
+      extralight: { value: '{colors.green.50}' }, // #E9FBE8 - Extra-light backgrounds
       lighter: { value: '{colors.green.100}' }, // #BDF3B9 - Light success fills
       light: { value: '{colors.green.200}' }, // #84E87D - Success borders, icons
       main: { value: '{colors.green.600}' }, // #1AA612 - Success text, buttons
@@ -138,7 +143,8 @@ export const semanticTokens = {
      * - dark (#7D610D): 5.8:1 ✓ AA
      */
     warning: {
-      lightest: { value: '{colors.gold.50}' }, // #FBF6E8 - Warning backgrounds
+      lightest: { value: '{colors.gold.25}' }, // #FDFBF4 - Lightest backgrounds
+      extralight: { value: '{colors.gold.50}' }, // #FBF6E8 - Extra-light backgrounds
       lighter: { value: '{colors.gold.100}' }, // #F3E4B9 - Light warning fills
       light: { value: '{colors.gold.200}' }, // #E8CD7D - Warning borders, icons
       main: { value: '{colors.gold.500}' }, // #D0A117 - Warning icons, accents
@@ -156,6 +162,7 @@ export const semanticTokens = {
  * of these primitive values directly.
  *
  * ### Scale explanation:
+ * - **25**: Lightest backgrounds, ghost states
  * - **50-200**: Light shades for backgrounds, subtle fills
  * - **300**: Medium shade for borders, hover states
  * - **500**: Base color, primary usage
@@ -186,6 +193,7 @@ export const colors = {
    * Used for: primary semantic tokens, interactive elements
    */
   blue: {
+    25: { value: '#F4F7FD' }, // Ultra-light - ghost backgrounds
     50: { value: '#E8EEFB' }, // Lightest - backgrounds
     100: { value: '#B9CBF3' }, // Lighter - subtle fills
     200: { value: '#7DA0E8' }, // Light - hover, focus rings
@@ -202,6 +210,7 @@ export const colors = {
    * Used for: danger semantic tokens, error states, destructive actions
    */
   rose: {
+    25: { value: '#FDF5F5' }, // Ultra-light - ghost backgrounds
     50: { value: '#FBE8E9' }, // Lightest - error backgrounds
     100: { value: '#F3B9BD' }, // Lighter - subtle error fills
     200: { value: '#E87D84' }, // Light - error borders
@@ -218,6 +227,7 @@ export const colors = {
    * Used for: success semantic tokens, confirmations, positive feedback
    */
   green: {
+    25: { value: '#F4FDF4' }, // Ultra-light - ghost backgrounds
     50: { value: '#E9FBE8' }, // Lightest - success backgrounds
     100: { value: '#BDF3B9' }, // Lighter - subtle success fills
     200: { value: '#84E87D' }, // Light - success borders
@@ -234,6 +244,7 @@ export const colors = {
    * Used for: secondary semantic tokens, highlights, tags
    */
   violet: {
+    25: { value: '#FAF4FD' }, // Ultra-light - ghost backgrounds
     50: { value: '#F4E8FB' }, // Lightest - accent backgrounds
     100: { value: '#DEB9F3' }, // Lighter - subtle accent fills
     200: { value: '#C17DE8' }, // Light - accent borders
@@ -250,6 +261,7 @@ export const colors = {
    * Used for: warning semantic tokens, caution states
    */
   gold: {
+    25: { value: '#FDFBF4' }, // Ultra-light - ghost backgrounds
     50: { value: '#FBF6E8' }, // Lightest - warning backgrounds
     100: { value: '#F3E4B9' }, // Lighter - subtle warning fills
     200: { value: '#E8CD7D' }, // Light - warning borders

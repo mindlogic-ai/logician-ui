@@ -75,17 +75,17 @@ export const Default: Story = {
         {/* Container showcase */}
         <VStack gap={4} w="100%" align="start">
           <Text fontWeight="bold">Container Sizes:</Text>
-          <Container maxW="xs" bg="primary.lightest" p={4} borderRadius="md">
+          <Container maxW="xs" bg="primary.extralight" p={4} borderRadius="md">
             <Text fontSize="sm" color="primary.dark">
               Container xs (480px max)
             </Text>
           </Container>
-          <Container maxW="sm" bg="secondary.lightest" p={4} borderRadius="md">
+          <Container maxW="sm" bg="secondary.extralight" p={4} borderRadius="md">
             <Text fontSize="sm" color="secondary.dark">
               Container sm (640px max)
             </Text>
           </Container>
-          <Container maxW="md" bg="success.lightest" p={4} borderRadius="md">
+          <Container maxW="md" bg="success.extralight" p={4} borderRadius="md">
             <Text fontSize="sm" color="success.dark">
               Container md (768px max)
             </Text>
@@ -95,7 +95,7 @@ export const Default: Story = {
         {/* Typography showcase */}
         <Box
           p={4}
-          bg="primary.lightest"
+          bg="primary.extralight"
           borderRadius="lg"
           borderWidth="2px"
           borderColor="primary.light"
@@ -116,11 +116,11 @@ export const Default: Story = {
             borderRadius="md"
             borderWidth="2px"
             bg={{
-              base: 'danger.lightest',
-              sm: 'warning.lightest',
-              md: 'success.lightest',
-              lg: 'primary.lightest',
-              xl: 'secondary.lightest',
+              base: 'danger.extralight',
+              sm: 'warning.extralight',
+              md: 'success.extralight',
+              lg: 'primary.extralight',
+              xl: 'secondary.extralight',
             }}
             borderColor={{
               base: 'danger.main',
@@ -249,14 +249,14 @@ export const WithCustomConfig: Story = {
           {/* Container showcase */}
           <VStack gap={4} w="100%" align="start">
             <Text fontWeight="bold">Container Sizes (Custom):</Text>
-            <Container maxW="xs" bg="primary.lightest" p={4} borderRadius="md">
+            <Container maxW="xs" bg="primary.extralight" p={4} borderRadius="md">
               <Text fontSize="sm" color="primary.dark">
                 Container xs (300px max) - Much smaller!
               </Text>
             </Container>
             <Container
               maxW="sm"
-              bg="secondary.lightest"
+              bg="secondary.extralight"
               p={4}
               borderRadius="md"
             >
@@ -264,7 +264,7 @@ export const WithCustomConfig: Story = {
                 Container sm (500px max) - Smaller
               </Text>
             </Container>
-            <Container maxW="md" bg="success.lightest" p={4} borderRadius="md">
+            <Container maxW="md" bg="success.extralight" p={4} borderRadius="md">
               <Text fontSize="sm" color="success.dark">
                 Container md (900px max) - Larger!
               </Text>
@@ -274,7 +274,7 @@ export const WithCustomConfig: Story = {
           {/* Typography showcase */}
           <Box
             p={4}
-            bg="primary.lightest"
+            bg="primary.extralight"
             borderRadius="lg"
             borderWidth="2px"
             borderColor="primary.light"
@@ -298,11 +298,11 @@ export const WithCustomConfig: Story = {
               borderRadius="md"
               borderWidth="2px"
               bg={{
-                base: 'danger.lightest',
-                sm: 'warning.lightest',
-                md: 'success.lightest',
-                lg: 'primary.lightest',
-                xl: 'secondary.lightest',
+                base: 'danger.extralight',
+                sm: 'warning.extralight',
+                md: 'success.extralight',
+                lg: 'primary.extralight',
+                xl: 'secondary.extralight',
               }}
               borderColor={{
                 base: 'danger.main',

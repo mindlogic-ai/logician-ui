@@ -18,10 +18,10 @@ export const baseStyles = {
 /**
  * Badge variant styles using the Golden Ratio color system.
  *
- * Each variant uses the `lightest` background shade with `dark` text
+ * Each variant uses the `extralight` background shade with `dark` text
  * for optimal readability and WCAG AA compliance.
  *
- * Pattern: bg = `*.lightest`, color = `*.dark`
+ * Pattern: bg = `*.extralight`, color = `*.dark`
  * This matches the Alert/Toast/Banner component styling.
  */
 export const variantStyles: Record<
@@ -30,46 +30,46 @@ export const variantStyles: Record<
 > = {
   /**
    * Primary badge - Default, general purpose
-   * Blue lightest background with dark blue text
+   * Blue extralight background with dark blue text
    */
   primary: {
-    bgColor: 'primary.lightest', // #E8EEFB
+    bgColor: 'primary.extralight', // #E8EEFB
     color: 'primary.dark', // #0D317D
   },
 
   /**
    * Secondary badge - Accent, highlight
-   * Violet lightest background with dark violet text
+   * Violet extralight background with dark violet text
    */
   secondary: {
-    bgColor: 'secondary.lightest', // #F4E8FB
+    bgColor: 'secondary.extralight', // #F4E8FB
     color: 'secondary.dark', // #570D7D
   },
 
   /**
    * Success badge - Positive states
-   * Green lightest background with dark green text
+   * Green extralight background with dark green text
    */
   success: {
-    bgColor: 'success.lightest', // #E9FBE8
+    bgColor: 'success.extralight', // #E9FBE8
     color: 'success.dark', // #147D0D
   },
 
   /**
    * Warning badge - Caution states
-   * Gold lightest background with dark gold text
+   * Gold extralight background with dark gold text
    */
   warning: {
-    bgColor: 'warning.lightest', // #FBF6E8
+    bgColor: 'warning.extralight', // #FBF6E8
     color: 'warning.dark', // #7D610D
   },
 
   /**
    * Danger badge - Error/negative states
-   * Rose lightest background with dark rose text
+   * Rose extralight background with dark rose text
    */
   danger: {
-    bgColor: 'danger.lightest', // #FBE8E9
+    bgColor: 'danger.extralight', // #FBE8E9
     color: 'danger.dark', // #7D0D14
   },
 

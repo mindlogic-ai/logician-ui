@@ -15,22 +15,22 @@ type VariantType = NonNullable<BannerProps['variant']>;
  */
 export const bannerStyles: Record<VariantType, BoxProps> = {
   info: {
-    bg: 'primary.lightest', // #E8EEFB
+    bg: 'primary.extralight', // #E8EEFB
     borderColor: 'primary.lighter', // #B9CBF3
     color: 'primary.dark', // #0D317D
   },
   success: {
-    bg: 'success.lightest', // #E9FBE8
+    bg: 'success.extralight', // #E9FBE8
     borderColor: 'success.lighter', // #BDF3B9
     color: 'success.dark', // #147D0D
   },
   warning: {
-    bg: 'warning.lightest', // #FBF6E8
+    bg: 'warning.extralight', // #FBF6E8
     borderColor: 'warning.lighter', // #F3E4B9
     color: 'warning.dark', // #7D610D
   },
   danger: {
-    bg: 'danger.lightest', // #FBE8E9
+    bg: 'danger.extralight', // #FBE8E9
     borderColor: 'danger.lighter', // #F3B9BD
     color: 'danger.dark', // #7D0D14
   },

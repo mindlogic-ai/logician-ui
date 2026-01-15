@@ -18,7 +18,7 @@ export const InfoSprinkle = ({
     <HoverCard.Root positioning={{ placement: 'top' }} lazyMount {...rest}>
       <HoverCard.Trigger asChild>
         <IconButton aria-label="Info" {...iconButtonProps}>
-          <LuInfo color="inherit" boxSize={iconButtonProps.size} />
+          <LuInfo color="inherit" boxSize={iconButtonProps?.size} />
         </IconButton>
       </HoverCard.Trigger>
       <Portal>

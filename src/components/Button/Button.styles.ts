@@ -46,7 +46,7 @@ export const buttonColorPaletteStyles: Record<
     },
     soft: {
       borderColor: 'primary.lighter', // #B9CBF3
-      bgColor: 'primary.lightest', // #E8EEFB
+      bgColor: 'primary.extralight', // #E8EEFB
       color: 'primary.dark', // #0D317D
       _hover: {
         borderColor: 'primary.light',
@@ -61,7 +61,7 @@ export const buttonColorPaletteStyles: Record<
       bgColor: 'transparent',
       color: 'primary.main',
       _hover: {
-        bgColor: 'primary.lightest', // #E8EEFB
+        bgColor: 'primary.extralight', // #E8EEFB
       },
       _active: {
         bgColor: 'primary.lighter', // #B9CBF3
@@ -72,7 +72,7 @@ export const buttonColorPaletteStyles: Record<
       bgColor: 'transparent',
       color: 'primary.main',
       _hover: {
-        bgColor: 'primary.lightest', // #E8EEFB
+        bgColor: 'primary.extralight', // #E8EEFB
       },
       _active: {
         bgColor: 'primary.lighter', // #B9CBF3
@@ -98,7 +98,7 @@ export const buttonColorPaletteStyles: Record<
     },
     soft: {
       borderColor: 'secondary.lighter', // #DEB9F3
-      bgColor: 'secondary.lightest', // #F4E8FB
+      bgColor: 'secondary.extralight', // #F4E8FB
       color: 'secondary.dark', // #570D7D
       _hover: {
         borderColor: 'secondary.light',
@@ -113,7 +113,7 @@ export const buttonColorPaletteStyles: Record<
       bgColor: 'transparent',
       color: 'secondary.main',
       _hover: {
-        bgColor: 'secondary.lightest', // #F4E8FB
+        bgColor: 'secondary.extralight', // #F4E8FB
       },
       _active: {
         bgColor: 'secondary.lighter', // #DEB9F3
@@ -124,7 +124,7 @@ export const buttonColorPaletteStyles: Record<
       bgColor: 'transparent',
       color: 'secondary.main',
       _hover: {
-        bgColor: 'secondary.lightest', // #F4E8FB
+        bgColor: 'secondary.extralight', // #F4E8FB
       },
       _active: {
         bgColor: 'secondary.lighter', // #DEB9F3
@@ -150,7 +150,7 @@ export const buttonColorPaletteStyles: Record<
     },
     soft: {
       borderColor: 'danger.lighter', // #F3B9BD
-      bgColor: 'danger.lightest', // #FBE8E9
+      bgColor: 'danger.extralight', // #FBE8E9
       color: 'danger.dark', // #7D0D14
       _hover: {
         borderColor: 'danger.light',
@@ -165,7 +165,7 @@ export const buttonColorPaletteStyles: Record<
       bgColor: 'transparent',
       color: 'danger.main',
       _hover: {
-        bgColor: 'danger.lightest', // #FBE8E9
+        bgColor: 'danger.extralight', // #FBE8E9
       },
       _active: {
         bgColor: 'danger.lighter', // #F3B9BD
@@ -176,7 +176,7 @@ export const buttonColorPaletteStyles: Record<
       bgColor: 'transparent',
       color: 'danger.main',
       _hover: {
-        bgColor: 'danger.lightest', // #FBE8E9
+        bgColor: 'danger.extralight', // #FBE8E9
       },
       _active: {
         bgColor: 'danger.lighter', // #F3B9BD
@@ -202,7 +202,7 @@ export const buttonColorPaletteStyles: Record<
     },
     soft: {
       borderColor: 'success.lighter', // #BDF3B9
-      bgColor: 'success.lightest', // #E9FBE8
+      bgColor: 'success.extralight', // #E9FBE8
       color: 'success.dark', // #147D0D
       _hover: {
         borderColor: 'success.light',
@@ -217,7 +217,7 @@ export const buttonColorPaletteStyles: Record<
       bgColor: 'transparent',
       color: 'success.main',
       _hover: {
-        bgColor: 'success.lightest', // #E9FBE8
+        bgColor: 'success.extralight', // #E9FBE8
       },
       _active: {
         bgColor: 'success.lighter', // #BDF3B9
@@ -228,7 +228,7 @@ export const buttonColorPaletteStyles: Record<
       bgColor: 'transparent',
       color: 'success.main',
       _hover: {
-        bgColor: 'success.lightest', // #E9FBE8
+        bgColor: 'success.extralight', // #E9FBE8
       },
       _active: {
         bgColor: 'success.lighter', // #BDF3B9
@@ -254,7 +254,7 @@ export const buttonColorPaletteStyles: Record<
     },
     soft: {
       borderColor: 'warning.lighter', // #F3E4B9
-      bgColor: 'warning.lightest', // #FBF6E8
+      bgColor: 'warning.extralight', // #FBF6E8
       color: 'warning.dark', // #7D610D
       _hover: {
         borderColor: 'warning.light',
@@ -269,7 +269,7 @@ export const buttonColorPaletteStyles: Record<
       bgColor: 'transparent',
       color: 'warning.dark', // Use dark for better contrast
       _hover: {
-        bgColor: 'warning.lightest', // #FBF6E8
+        bgColor: 'warning.extralight', // #FBF6E8
       },
       _active: {
         bgColor: 'warning.lighter', // #F3E4B9
@@ -280,7 +280,7 @@ export const buttonColorPaletteStyles: Record<
       bgColor: 'transparent',
       color: 'warning.dark', // Use dark for better contrast
       _hover: {
-        bgColor: 'warning.lightest', // #FBF6E8
+        bgColor: 'warning.extralight', // #FBF6E8
       },
       _active: {
         bgColor: 'warning.lighter', // #F3E4B9
