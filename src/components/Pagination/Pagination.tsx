@@ -84,6 +84,7 @@ export const Pagination = ({
         {itemsPerPageOptions && (
           <Flex align="center" gap={2}>
             <Select
+              menuPlacement="auto"
               styles={{
                 control: (base, _state) => ({
                   ...base,

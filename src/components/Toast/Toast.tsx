@@ -1,6 +1,7 @@
 import { Box, CloseButton, Flex } from '@chakra-ui/react';
 
 import { H5, Text } from '../Typography';
+import { closeButtonStyles } from './Toast.styles';
 import { ToastProps } from './Toast.types';
 import { ToastIcon } from './ToastIcon/ToastIcon';
 
@@ -20,8 +21,10 @@ export const Toast = ({
     boxShadow="lg"
     whiteSpace="pre-line"
     position="relative"
-    animationName="slide-from-top, fade-in"
-    animationDuration="0.3s"
+    pointerEvents="auto"
+    animationName="fade-in, slide-from-top"
+    animationDuration="400ms"
+    animationTimingFunction="cubic-bezier(0.4, 0, 0.2, 1)"
     {...(rest as any)}
   >
     <ToastIcon status={status} />
@@ -33,6 +36,6 @@ export const Toast = ({
       )}
       <Text color="inherit">{description}</Text>
     </Box>
-    <CloseButton onClick={onClose} size="sm" />
+    <CloseButton onClick={onClose} size="sm" {...closeButtonStyles[status]} />
   </Flex>
 );
