@@ -1,4 +1,4 @@
-import { BoxProps } from '@chakra-ui/react';
+import { BoxProps, CloseButtonProps } from '@chakra-ui/react';
 
 import type { MLToastOptions } from './Toast.types';
 
@@ -30,3 +30,34 @@ export const toastStyles = {
     borderColor: 'danger.lighter', // #F3B9BD
   },
 } satisfies Record<MLToastOptions['status'], BoxProps>;
+
+/**
+ * CloseButton styles for each toast status.
+ * Ensures visual consistency with the toast's color scheme.
+ */
+export const closeButtonStyles = {
+  info: {
+    color: 'primary.dark',
+    _hover: {
+      bg: 'primary.lighter',
+    },
+  },
+  warning: {
+    color: 'warning.dark',
+    _hover: {
+      bg: 'warning.lighter',
+    },
+  },
+  success: {
+    color: 'success.dark',
+    _hover: {
+      bg: 'success.lighter',
+    },
+  },
+  error: {
+    color: 'danger.dark',
+    _hover: {
+      bg: 'danger.lighter',
+    },
+  },
+} satisfies Record<MLToastOptions['status'], CloseButtonProps>;

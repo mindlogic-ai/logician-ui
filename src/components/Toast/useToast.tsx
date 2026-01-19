@@ -15,7 +15,12 @@ const toaster = createToaster({
 
 // Export Toaster component for rendering in app
 export const Toaster = () => (
-  <ChakraToaster toaster={toaster as any} insetInline={{ mdDown: '4' }}>
+  <ChakraToaster
+    toaster={toaster as any}
+    insetInline={{ mdDown: '4' }}
+    pointerEvents="none"
+    gap={3}
+  >
     {(toast: any) => toast.render?.({ id: toast.id })}
   </ChakraToaster>
 );
