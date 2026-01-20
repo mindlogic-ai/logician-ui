@@ -97,8 +97,5 @@ export {
   Text,
 } from './components/Typography';
 
-// Chakra UI v3 Primitives (for advanced composition patterns)
-export * from './primitives';
-
 // Theme exports
 export { logicianConfig, system, theme } from './theme';
