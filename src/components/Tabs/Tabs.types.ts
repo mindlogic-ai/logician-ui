@@ -24,8 +24,4 @@ export type TabProps = ButtonProps & {
    * @default `tab-${index}`
    */
   name?: string;
-  /**
-   * The content of the tab
-   */
-  children?: React.ReactNode;
 };
