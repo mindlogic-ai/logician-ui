@@ -13,8 +13,6 @@ export const Text = forwardRef<HTMLParagraphElement, TextProps>(
         // If fontSize is provided, disable textStyle to allow fontSize override
         textStyle={fontSize ? undefined : 'p'}
         fontSize={fontSize}
-        lineHeight="1.5"
-        fontWeight="medium"
         color="gray.1200"
         wordBreak="keep-all"
         {...rest}

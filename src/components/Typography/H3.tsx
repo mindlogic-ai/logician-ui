@@ -11,8 +11,6 @@ export const H3 = forwardRef<HTMLHeadingElement, HeadingProps>((props, ref) => {
       color="gray.1500"
       textStyle={fontSize ? undefined : 'h3'}
       fontSize={fontSize}
-      lineHeight="1.33"
-      fontWeight="semibold"
       wordBreak="keep-all"
       {...rest}
     />

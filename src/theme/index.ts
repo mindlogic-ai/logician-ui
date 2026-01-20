@@ -123,7 +123,7 @@ export const textStyles = defineTextStyles({
       fontFamily: 'heading',
       fontSize: { base: '2.4rem', md: '3rem' }, // 38.4px → 48px
       fontWeight: 'bold',
-      lineHeight: '1.2',
+      lineHeight: '1.33',
       letterSpacing: '-0.02em',
     },
   },
@@ -132,8 +132,8 @@ export const textStyles = defineTextStyles({
     value: {
       fontFamily: 'heading',
       fontSize: { base: '2rem', md: '2.5rem' }, // 32px → 40px
-      fontWeight: 'bold',
-      lineHeight: '1.25',
+      fontWeight: 'semibold',
+      lineHeight: '1.33',
       letterSpacing: '-0.01em',
     },
   },
@@ -143,7 +143,7 @@ export const textStyles = defineTextStyles({
       fontFamily: 'heading',
       fontSize: { base: '1.5rem', md: '1.75rem' }, // 24px → 28px
       fontWeight: 'semibold',
-      lineHeight: '1.3',
+      lineHeight: '1.33',
       letterSpacing: '-0.01em',
     },
   },
@@ -153,7 +153,7 @@ export const textStyles = defineTextStyles({
       fontFamily: 'heading',
       fontSize: { base: '1.25rem', md: '1.44rem' }, // 20px → 23px
       fontWeight: 'semibold',
-      lineHeight: '1.35',
+      lineHeight: '1.4',
     },
   },
   h5: {
@@ -161,7 +161,7 @@ export const textStyles = defineTextStyles({
     value: {
       fontFamily: 'heading',
       fontSize: { base: '1.1rem', md: '1.2rem' }, // 17.6px → 19.2px
-      fontWeight: 'semibold',
+      fontWeight: 'bold',
       lineHeight: '1.4',
     },
   },
@@ -170,8 +170,8 @@ export const textStyles = defineTextStyles({
     value: {
       fontFamily: 'body',
       fontSize: { base: '0.875rem', md: '1rem' }, // 14px → 16px
-      fontWeight: 'normal',
-      lineHeight: '1.6',
+      fontWeight: 'medium',
+      lineHeight: '1.5',
     },
   },
   subtitle: {
@@ -189,7 +189,7 @@ export const textStyles = defineTextStyles({
       fontFamily: 'body',
       fontSize: { base: '0.805rem', md: '0.875rem' }, // 12.88px → 14px
       fontWeight: 'normal',
-      lineHeight: '1.4',
+      lineHeight: '1.5',
     },
   },
 });
