@@ -1,41 +1,49 @@
-import { Box, CloseButton, Flex } from '@chakra-ui/react';
+import { Flex, Stack, Toast as ChakraToast } from '@chakra-ui/react';
 
-import { H5, Text } from '../Typography';
 import { closeButtonStyles } from './Toast.styles';
 import { ToastProps } from './Toast.types';
 import { ToastIcon } from './ToastIcon/ToastIcon';
 
+/**
+ * Toast component using Chakra UI v3 composition pattern
+ *
+ * Uses Toast.Root, Toast.Title, Toast.Description, and Toast.CloseTrigger
+ * for better composition and customization.
+ */
 export const Toast = ({
   title,
   description,
   status = 'success',
   onClose,
   ...rest
-}: ToastProps & { onClose?: () => void }) => (
-  <Flex
-    align="center"
-    p={4}
-    gap={3}
+}: ToastProps) => (
+  <ChakraToast.Root
+    width={{ md: 'sm' }}
     borderWidth="1px"
     borderRadius="md"
     boxShadow="lg"
-    whiteSpace="pre-line"
-    position="relative"
     pointerEvents="auto"
-    animationName="fade-in, slide-from-top"
-    animationDuration="400ms"
-    animationTimingFunction="cubic-bezier(0.4, 0, 0.2, 1)"
-    {...(rest as any)}
+    {...rest}
   >
-    <ToastIcon status={status} />
-    <Box flex={1}>
-      {title && (
-        <H5 fontWeight="bold" mb={2}>
-          {title}
-        </H5>
-      )}
-      <Text color="inherit">{description}</Text>
-    </Box>
-    <CloseButton onClick={onClose} size="sm" {...closeButtonStyles[status]} />
-  </Flex>
+    <Flex align="center" gap={2}>
+      {/* Custom icon based on status */}
+      <ToastIcon status={status} />
+      <Stack gap={1} flex={1} maxWidth="100%">
+        {title && (
+          <ChakraToast.Title fontWeight="bold" fontSize="h5">
+            {title}
+          </ChakraToast.Title>
+        )}
+        {description && (
+          <ChakraToast.Description color="inherit">
+            {description}
+          </ChakraToast.Description>
+        )}
+      </Stack>
+    </Flex>
+    <ChakraToast.CloseTrigger
+      onClick={onClose}
+      {...(closeButtonStyles[status] as any)}
+    />
+  </ChakraToast.Root>
 );
