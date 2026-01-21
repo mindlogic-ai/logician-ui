@@ -1,6 +1,10 @@
+export type { TabProps } from './Tab';
 export { Tab } from './Tab';
+export type { TabListProps } from './TabList';
 export { TabList } from './TabList';
+export type { TabPanelProps } from './TabPanel';
 export { TabPanel } from './TabPanel';
+export type { TabPanelsProps } from './TabPanels';
 export { TabPanels } from './TabPanels';
 export { Tabs } from './Tabs';
-export type * from './Tabs.types';
+export type { TabsProps } from './Tabs.types';

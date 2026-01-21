@@ -1,19 +1,15 @@
-import { useState } from 'react';
-import type { BoxProps } from '@chakra-ui/react';
+import type { BoxProps, TabsContentProps } from '@chakra-ui/react';
 import { Box, Tabs } from '@chakra-ui/react';
 
-import { useTabsContext } from './TabsContext';
+export type TabPanelProps = TabsContentProps & Omit<BoxProps, 'value'>;
 
-export const TabPanel = ({
-  children,
-  ...props
-}: BoxProps & { children?: React.ReactNode }) => {
-  const { getNextPanelIndex } = useTabsContext();
-  const [panelIndex] = useState(() => getNextPanelIndex());
-  const panelValue = panelIndex.toString();
+export const TabPanel = ({ value, children, ...props }: TabPanelProps) => {
+  if (!value) {
+    throw new Error('TabPanel component requires a "value" prop');
+  }
 
   return (
-    <Tabs.Content value={panelValue} {...({ asChild: true } as any)}>
+    <Tabs.Content value={value} asChild>
       <Box p={0} {...props}>
         {children}
       </Box>

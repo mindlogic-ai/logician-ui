@@ -7,23 +7,22 @@ import { useTranslate } from '@/hooks/useTranslate';
 
 import { FaRegCopy } from '../Icon';
 import { IconButton } from '../IconButton';
-import { useTabsContext } from '../Tabs/TabsContext';
 import { Tooltip } from '../Tooltip';
 import { CodeTabsProps } from './CodeTabs.types';
 
 const CopyButton = ({
   onCopy,
   code,
-}: Pick<CodeTabsProps, 'onCopy' | 'code'>) => {
+  selectedValue,
+}: Pick<CodeTabsProps, 'onCopy' | 'code'> & { selectedValue: string }) => {
   const translate = useTranslate();
   const [tooltipText, setTooltipText] = useState(translate('copy'));
   const [isTooltipOpen, setIsTooltipOpen] = useState<boolean | undefined>(
     undefined
   );
-  const { selectedIndex } = useTabsContext();
 
   const handleCopyClick = async () => {
-    const codeToCopy = code[Object.keys(code)[selectedIndex]];
+    const codeToCopy = code[selectedValue] || code[Object.keys(code)[0]];
 
     // Copy to clipboard
     try {
@@ -77,18 +76,26 @@ const CopyButton = ({
 export const CodeTabs = ({ code, onCopy, ...rest }: CodeTabsProps) => {
   // Extract languages from code samples
   const languages = Object.keys(code);
+  const [selectedValue, setSelectedValue] = useState(languages[0] || '');
 
   if (languages.length === 0) {
     return null;
   }
 
   return (
-    <Tabs bgColor="gray.1500" borderRadius="md" {...rest}>
+    <Tabs
+      bgColor="gray.1500"
+      borderRadius="md"
+      value={selectedValue}
+      onValueChange={(details) => setSelectedValue(details.value)}
+      {...rest}
+    >
       <TabList px={2} alignItems="center">
         <Flex w="100%" flex={1}>
           {languages.map((language) => (
             <Tab
               key={`${language}-tab`}
+              value={language}
               bg="none"
               px={3}
               py={1}
@@ -105,11 +112,17 @@ export const CodeTabs = ({ code, onCopy, ...rest }: CodeTabsProps) => {
             </Tab>
           ))}
         </Flex>
-        {onCopy && <CopyButton onCopy={onCopy} code={code} />}
+        {onCopy && (
+          <CopyButton
+            onCopy={onCopy}
+            code={code}
+            selectedValue={selectedValue}
+          />
+        )}
       </TabList>
       <TabPanels>
         {languages.map((language) => (
-          <TabPanel key={`${language}-tab-panel`}>
+          <TabPanel key={`${language}-tab-panel`} value={language}>
             <Code
               language={language}
               hideHeader
