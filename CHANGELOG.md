@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.0-alpha.5
+
+### Patch Changes
+
+- 070588f: Fix Icon color to use currentColor, add default color/colorPalette to IconButton, update global fontWeight to 500
+
 ## 3.0.0-alpha.4
 
 ### Patch Changes
