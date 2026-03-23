@@ -2,7 +2,7 @@
   "mode": "exit",
   "tag": "alpha",
   "initialVersions": {
-    "@mindlogic-ai/logician-ui": "3.0.0-alpha.5"
+    "@mindlogic-ai/logician-ui": "3.0.0-alpha.6"
   },
   "changesets": [
     "chakra-v3-migration",
@@ -11,6 +11,7 @@
     "fix-radial-progress-hooks",
     "gentle-panthers-remain",
     "icon-button-color-theme-patch",
-    "icon-default-color"
+    "icon-default-color",
+    "modal-baked-in-overlay"
   ]
 }

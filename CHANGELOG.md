@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0.0-alpha.7
+
+### Patch Changes
+
+- d971f4c: feat(Modal): bake in Dialog.Backdrop overlay by default
+
+  Modal now renders the backdrop overlay internally, matching the Chakra v2 behavior where the overlay was included automatically. Users no longer need to render `<ModalOverlay />` manually inside `<Modal>`.
+
 ## 3.0.0-alpha.6
 
 ### Patch Changes
