@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.0.0-alpha.6
+
+### Patch Changes
+
+- 7ca7b1d: Fix RadialProgress useToken hooks rule violation
+  - Resolve "Rendered fewer hooks" error by calling useToken at component top level instead of inside map callbacks
+
 ## 3.0.0-alpha.5
 
 ### Patch Changes
