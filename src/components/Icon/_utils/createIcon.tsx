@@ -56,7 +56,6 @@ export const createIcon = (
           ref={ref}
           width={resolvedSize}
           height={resolvedSize}
-          color={color}
           {...props}
         />
       );
