@@ -15,10 +15,25 @@ export const InfoSprinkle = ({
   contentProps?: HoverCard.ContentProps;
 } & HoverCard.RootProps) => {
   return (
-    <HoverCard.Root positioning={{ placement: 'top' }} lazyMount {...rest}>
+    <HoverCard.Root
+      positioning={{ placement: 'top' }}
+      openDelay={0}
+      closeDelay={0}
+      lazyMount
+      {...rest}
+    >
       <HoverCard.Trigger asChild>
-        <IconButton aria-label="Info" {...iconButtonProps}>
-          <LuInfo color="inherit" boxSize={iconButtonProps?.size} />
+        <IconButton
+          aria-label="Info"
+          opacity={0.5}
+          transition="opacity 0.2s"
+          _hover={{ opacity: 1 }}
+          {...iconButtonProps}
+        >
+          <LuInfo
+            color={(iconButtonProps?.color as string) ?? 'gray.400'}
+            boxSize={iconButtonProps?.size}
+          />
         </IconButton>
       </HoverCard.Trigger>
       <Portal>
