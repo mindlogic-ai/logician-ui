@@ -11,8 +11,6 @@ export const Subtitle = forwardRef<HTMLParagraphElement, TextProps>(
         as="h6"
         textStyle={fontSize ? undefined : 'subtitle'}
         fontSize={fontSize}
-        lineHeight="1.5"
-        fontWeight="medium"
         color="gray.1000"
         wordBreak="keep-all"
         {...rest}

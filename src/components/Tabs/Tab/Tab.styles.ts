@@ -1,12 +1,10 @@
-import * as CSS from 'csstype';
-
 // TODO: investigate why these TS issues are coming up
 export const verticalStyles = {
   borderInlineStart: 'none',
-  position: 'relative' as CSS.Property.Position,
+  position: 'relative',
   justifyContent: 'flex-start',
   alignItems: 'center',
-  textAlign: 'left' as CSS.Property.TextAlign,
+  textAlign: 'left',
   p: 4,
   width: '100%',
 };

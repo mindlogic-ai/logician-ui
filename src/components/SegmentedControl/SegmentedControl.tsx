@@ -27,19 +27,10 @@ export const SegmentedControl = forwardRef<
     disabled: option.disabled,
   }));
 
-  // Map borderRadius values to actual pixel values for indicator
-  const borderRadiusMap: Record<string, string> = {
-    none: '0',
-    sm: '6px',
-    md: '8px',
-    lg: '12px',
-    xl: '32px',
-    full: '9999px',
-  };
-
+  // Use theme borderRadius token directly via CSS variable
   const indicatorRadius =
     typeof borderRadius === 'string'
-      ? borderRadiusMap[borderRadius] || borderRadius
+      ? `var(--chakra-radii-${borderRadius})`
       : borderRadius;
 
   return (
@@ -60,9 +51,8 @@ export const SegmentedControl = forwardRef<
       w="100%"
       css={{
         // Chakra v3 CSS variables for styling
-        '--segment-indicator-bg': 'white',
-        '--segment-indicator-shadow':
-          '0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)',
+        '--segment-indicator-bg': `var(--chakra-colors-gray-0)`,
+        '--segment-indicator-shadow': `var(--chakra-shadows-md)`,
         // Apply borderRadius to indicator
         '& [data-part="indicator"]': {
           borderRadius: indicatorRadius,

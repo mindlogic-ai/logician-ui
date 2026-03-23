@@ -1,30 +1,21 @@
-import { useEffect } from 'react';
-import type { BoxProps } from '@chakra-ui/react';
+import type { TabsListProps as ChakraTabsListProps } from '@chakra-ui/react';
 import { Box, Tabs } from '@chakra-ui/react';
-
-import { useTabsContext } from '@/components/Tabs/TabsContext';
 
 import { tabListStyles, verticalStyles } from './TabList.styles';
 
-export const TabList = ({
-  children,
-  ...props
-}: BoxProps & { children?: React.ReactNode }) => {
-  const { orientation, resetTriggerIndex } = useTabsContext();
+export type TabListProps = ChakraTabsListProps;
 
-  // Reset tab trigger index counter when TabList renders
-  useEffect(() => {
-    resetTriggerIndex();
-  }, [resetTriggerIndex]);
-
+export const TabList = ({ children, ...props }: TabListProps) => {
   return (
-    <Tabs.List {...({ asChild: true } as any)}>
+    <Tabs.List asChild>
       <Box
         width="100%"
         borderBottom="1px solid"
         borderColor="gray.100"
         {...tabListStyles}
-        {...(orientation === 'vertical' && verticalStyles)}
+        css={{
+          '&[data-orientation=vertical]': verticalStyles,
+        }}
         {...props}
       >
         {children}

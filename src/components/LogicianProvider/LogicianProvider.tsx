@@ -4,7 +4,6 @@ import type { SystemConfig } from '@chakra-ui/react';
 import { ChakraProvider, createSystem, defaultConfig } from '@chakra-ui/react';
 
 import { logicianConfig, system as defaultSystem } from '../../theme';
-import { Toaster } from '../Toast/useToast';
 
 export interface LogicianProviderProps {
   /**
@@ -79,12 +78,7 @@ export const LogicianProvider: React.FC<LogicianProviderProps> = ({
     return createSystem(defaultConfig, logicianConfig, config);
   }, [config]);
 
-  return (
-    <ChakraProvider value={system}>
-      {children}
-      <Toaster />
-    </ChakraProvider>
-  );
+  return <ChakraProvider value={system}>{children}</ChakraProvider>;
 };
 
 LogicianProvider.displayName = 'LogicianProvider';

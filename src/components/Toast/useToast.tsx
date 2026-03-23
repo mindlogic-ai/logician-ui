@@ -1,30 +1,19 @@
 import { useRef } from 'react';
-import { createToaster, Toaster as ChakraToaster } from '@chakra-ui/react';
 
-import { Toast } from './Toast';
 import { toastStyles } from './Toast.styles';
-import { UseToastOptions } from './Toast.types';
+import {
+  ToasterCreateOptions,
+  ToastStatusChangeDetails,
+  UseToastOptions,
+} from './Toast.types';
+import { toaster } from './Toaster';
 
 const MAX_TOASTS = 3;
 
-// Create a toaster instance
-const toaster = createToaster({
-  placement: 'top',
-  duration: 5000,
-});
-
-// Export Toaster component for rendering in app
-export const Toaster = () => (
-  <ChakraToaster
-    toaster={toaster as any}
-    insetInline={{ mdDown: '4' }}
-    pointerEvents="none"
-    gap={3}
-  >
-    {(toast: any) => toast.render?.({ id: toast.id })}
-  </ChakraToaster>
-);
-
+/**
+ * Custom hook for managing toast notifications
+ * @returns Toast management functions
+ */
 export const useToast = () => {
   const activeToasts = useRef<string[]>([]); // Track active toast IDs
 
@@ -32,12 +21,11 @@ export const useToast = () => {
     status = 'success',
     title,
     description,
-    placement,
     styles: stylesProp,
     duration = 5000,
     ...rest
   }: UseToastOptions) => {
-    const toastPlacement = placement ?? 'top';
+    // NOTE: placement is not supported - must be configured in Toaster.tsx createToaster()
     const styles = {
       ...toastStyles[status],
       ...stylesProp,
@@ -55,18 +43,16 @@ export const useToast = () => {
     // Create a new toast and capture its ID
     const toastId = toaster.create({
       duration,
-      placement: toastPlacement,
-      render: ({ id }) => (
-        <Toast
-          title={title || ''}
-          description={description}
-          status={status}
-          onClose={() => toaster.dismiss(id)} // Close this specific toast
-          {...styles} // Apply status-specific styles
-        />
-      ),
-      onStatusChange: ({ status: toastStatus }) => {
-        if (toastStatus === 'unmounted') {
+      title,
+      description,
+      type: status, // Maps to our status
+      meta: {
+        // Pass custom data through meta
+        styles, // for custom toast style
+        onClose: () => toaster.dismiss(toastId), // Custom close handler
+      },
+      onStatusChange: (details: ToastStatusChangeDetails) => {
+        if (details.status === 'unmounted') {
           // Remove the toast ID from the active list once closed
           activeToasts.current = activeToasts.current.filter(
             (id) => id !== toastId
@@ -74,7 +60,7 @@ export const useToast = () => {
         }
       },
       ...rest,
-    } as any);
+    } as ToasterCreateOptions);
 
     // Add the new toast ID to the active list
     activeToasts.current.push(toastId);
