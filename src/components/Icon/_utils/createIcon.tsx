@@ -54,6 +54,7 @@ export const createIcon = (
       return (
         <ChakraIcon
           ref={ref}
+          color={color}
           width={resolvedSize}
           height={resolvedSize}
           {...props}
