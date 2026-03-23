@@ -7,6 +7,7 @@
   "changesets": [
     "chakra-v3-migration",
     "color-palette-lightest-extralight",
+    "fix-pr55-release",
     "gentle-panthers-remain"
   ]
 }

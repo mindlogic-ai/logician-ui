@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.0-alpha.3
+
+### Patch Changes
+
+- 9a9c8e7: fix: PR #55 review feedback - Tabs v3 migration, createIcon optimization, SegmentedControl theme tokens, LogicianProvider Toaster removal
+
 ## 3.0.0-alpha.2
 
 ### Minor Changes
