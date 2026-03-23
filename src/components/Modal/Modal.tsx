@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dialog } from '@chakra-ui/react';
+import { Dialog, Portal } from '@chakra-ui/react';
 
 import { ModalProps } from './Modal.types';
 
@@ -7,6 +7,7 @@ export const Modal = ({
   children,
   open,
   onOpenChange,
+  portalProps,
   ...rest
 }: ModalProps) => {
   return (
@@ -17,7 +18,10 @@ export const Modal = ({
       closeOnInteractOutside
       {...rest}
     >
-      {children}
+      <Portal {...portalProps}>
+        <Dialog.Backdrop />
+        {children}
+      </Portal>
     </Dialog.Root>
   );
 };
