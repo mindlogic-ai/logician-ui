@@ -2,11 +2,13 @@
   "mode": "exit",
   "tag": "alpha",
   "initialVersions": {
-    "@mindlogic-ai/logician-ui": "3.0.0-alpha.2"
+    "@mindlogic-ai/logician-ui": "3.0.0-alpha.3"
   },
   "changesets": [
     "chakra-v3-migration",
     "color-palette-lightest-extralight",
-    "gentle-panthers-remain"
+    "fix-pr55-release",
+    "gentle-panthers-remain",
+    "icon-default-color"
   ]
 }

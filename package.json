@@ -1,6 +1,6 @@
 {
   "name": "@mindlogic-ai/logician-ui",
-  "version": "3.0.0-alpha.2",
+  "version": "3.0.0-alpha.4",
   "description": "A comprehensive React design system built on Chakra UI",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
