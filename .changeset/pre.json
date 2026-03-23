@@ -2,7 +2,7 @@
   "mode": "exit",
   "tag": "alpha",
   "initialVersions": {
-    "@mindlogic-ai/logician-ui": "3.0.0-alpha.6"
+    "@mindlogic-ai/logician-ui": "3.0.0-alpha.7"
   },
   "changesets": [
     "chakra-v3-migration",
