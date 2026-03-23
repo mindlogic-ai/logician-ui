@@ -57,7 +57,7 @@ export const AtPageTop: Story = {
     const [itemsPerPage, setItemsPerPage] = useState(args.itemsPerPage);
 
     return (
-      <VStack align="stretch" spacing={4} h="100vh">
+      <VStack align="stretch" gap={4} h="100vh">
         <Box>
           <Pagination
             {...args}
@@ -90,7 +90,7 @@ export const AtPageBottom: Story = {
     const [itemsPerPage, setItemsPerPage] = useState(args.itemsPerPage);
 
     return (
-      <VStack align="stretch" spacing={4} h="100vh">
+      <VStack align="stretch" gap={4} h="100vh">
         <Box flex={1} bg="gray.50" p={4}>
           페이지 하단에 위치한 Pagination입니다. Select 드롭다운이 위로
           열립니다.
@@ -130,7 +130,7 @@ export const InScrollableContainer: Story = {
 
     return (
       <Box h="100vh" overflow="auto" bg="gray.50">
-        <VStack align="stretch" spacing={8} p={4}>
+        <VStack align="stretch" gap={8} p={4}>
           <Box bg="white" p={4} borderRadius="md" shadow="sm">
             <Pagination
               {...args}
