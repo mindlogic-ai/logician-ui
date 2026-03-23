@@ -5,7 +5,6 @@
  *
  * ## 주요 구성 요소
  * - Modal (Dialog.Root): 모달의 루트 컨테이너
- * - ModalOverlay (Dialog.Backdrop): 모달 뒤의 어두운 배경
  * - ModalContent (Dialog.Content): 모달의 실제 콘텐츠 영역
  * - ModalHeader (Dialog.Header): 모달 헤더
  * - ModalCloseButton (Dialog.CloseTrigger + CloseButton): 닫기 버튼
@@ -28,7 +27,6 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
 } from '.';
 import { Button } from '../Button';
 import { ButtonVariant } from '../Button/Button.types';
@@ -69,7 +67,6 @@ export const Default: Story = {
       <>
         <Button onClick={() => setIsOpen(true)}>Open Confirm Modal</Button>
         <Modal {...args} open={isOpen} onOpenChange={(e) => setIsOpen(e.open)}>
-          <ModalOverlay />
           <ModalContent>
             {args.headerTitle && <ModalHeader>{args.headerTitle}</ModalHeader>}
             {args.hasCloseButton && <ModalCloseButton />}
@@ -101,7 +98,6 @@ export const WithHeader: Story = {
       <>
         <Button onClick={() => setIsOpen(true)}>Open Confirm Modal</Button>
         <Modal {...args} open={isOpen} onOpenChange={(e) => setIsOpen(e.open)}>
-          <ModalOverlay />
           <ModalContent>
             {args.headerTitle && <ModalHeader>{args.headerTitle}</ModalHeader>}
             {args.hasCloseButton && <ModalCloseButton />}
@@ -134,7 +130,6 @@ export const WithFooterButton: Story = {
       <>
         <Button onClick={() => setIsOpen(true)}>Open Confirm Modal</Button>
         <Modal {...args} open={isOpen} onOpenChange={(e) => setIsOpen(e.open)}>
-          <ModalOverlay />
           <ModalContent>
             {args.headerTitle && <ModalHeader>{args.headerTitle}</ModalHeader>}
             {args.hasCloseButton && <ModalCloseButton />}
@@ -169,7 +164,6 @@ export const TwoButtons: Story = {
       <>
         <Button onClick={() => setIsOpen(true)}>Open Confirm Modal</Button>
         <Modal {...args} open={isOpen} onOpenChange={(e) => setIsOpen(e.open)}>
-          <ModalOverlay />
           <ModalContent>
             {args.headerTitle && <ModalHeader>{args.headerTitle}</ModalHeader>}
             {args.hasCloseButton && <ModalCloseButton />}
@@ -208,7 +202,6 @@ export const WithCloseButton: Story = {
       <>
         <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
         <Modal {...args} open={isOpen} onOpenChange={(e) => setIsOpen(e.open)}>
-          <ModalOverlay />
           <ModalContent>
             <ModalHeader>{args.headerTitle}</ModalHeader>
             {/* ModalCloseButton: Dialog.CloseTrigger + CloseButton 조합 */}
@@ -241,7 +234,6 @@ export const WithoutCloseButton: Story = {
       <>
         <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
         <Modal {...args} open={isOpen} onOpenChange={(e) => setIsOpen(e.open)}>
-          <ModalOverlay />
           <ModalContent>
             <ModalHeader>{args.headerTitle}</ModalHeader>
             {/* ModalCloseButton이 없음 - 닫기 버튼 X 아이콘이 표시되지 않음 */}
@@ -265,7 +257,6 @@ export const WithoutHeader: Story = {
       <>
         <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
         <Modal {...args} open={isOpen} onOpenChange={(e) => setIsOpen(e.open)}>
-          <ModalOverlay />
           <ModalContent>
             <ModalCloseButton />
             <ModalBody>
@@ -297,7 +288,6 @@ export const WithoutFooter: Story = {
       <>
         <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
         <Modal {...args} open={isOpen} onOpenChange={(e) => setIsOpen(e.open)}>
-          <ModalOverlay />
           <ModalContent>
             <ModalHeader>{args.headerTitle}</ModalHeader>
             <ModalCloseButton />
@@ -328,7 +318,6 @@ export const FullFeatured: Story = {
       <>
         <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
         <Modal {...args} open={isOpen} onOpenChange={(e) => setIsOpen(e.open)}>
-          <ModalOverlay />
           <ModalContent>
             <ModalHeader>{args.headerTitle}</ModalHeader>
             <ModalCloseButton />
@@ -363,7 +352,6 @@ export const MinimalModal: Story = {
       <>
         <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
         <Modal {...args} open={isOpen} onOpenChange={(e) => setIsOpen(e.open)}>
-          <ModalOverlay />
           <ModalContent>
             <ModalBody>
               헤더, 푸터, 닫기 버튼이 모두 없는 가장 단순한 형태의 모달입니다.
@@ -401,7 +389,6 @@ export const DifferentSizes: Story = {
           onOpenChange={(e) => !e.open && setOpenSize(null)}
           size={openSize as any}
         >
-          <ModalOverlay />
           <ModalContent>
             <ModalHeader>Modal Size: {openSize?.toUpperCase()}</ModalHeader>
             <ModalCloseButton />
@@ -439,7 +426,6 @@ export const DifferentPlacements: Story = {
           onOpenChange={(e) => !e.open && setOpenPlacement(null)}
           placement={openPlacement as any}
         >
-          <ModalOverlay />
           <ModalContent>
             <ModalHeader>
               Placement: {openPlacement?.charAt(0).toUpperCase()}
@@ -452,34 +438,6 @@ export const DifferentPlacements: Story = {
             </ModalBody>
             <ModalFooter>
               <Button onClick={() => setOpenPlacement(null)}>Close</Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-      </>
-    );
-  },
-};
-
-export const WithoutOverlay: Story = {
-  args: {
-    headerTitle: 'Modal without Overlay',
-  },
-  render: (args) => {
-    const [isOpen, setIsOpen] = useState(false);
-
-    return (
-      <>
-        <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
-        <Modal {...args} open={isOpen} onOpenChange={(e) => setIsOpen(e.open)}>
-          <ModalContent>
-            <ModalHeader>{args.headerTitle}</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              이 모달은 Overlay(배경 어둡게 처리)가 없습니다. 뒤의 콘텐츠를 볼 수
-              있습니다.
-            </ModalBody>
-            <ModalFooter>
-              <Button onClick={() => setIsOpen(false)}>Close</Button>
             </ModalFooter>
           </ModalContent>
         </Modal>
@@ -504,7 +462,6 @@ export const PreventOutsideClick: Story = {
           onOpenChange={(e) => setIsOpen(e.open)}
           closeOnInteractOutside={false}
         >
-          <ModalOverlay />
           <ModalContent>
             <ModalHeader>{args.headerTitle}</ModalHeader>
             <ModalCloseButton />
