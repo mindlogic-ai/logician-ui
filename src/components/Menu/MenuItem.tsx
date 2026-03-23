@@ -16,11 +16,11 @@ export const MenuItem = ({
     <Menu.Item
       value={value}
       color={isDangerVariant ? 'danger.main' : 'gray.1000'}
-      borderRadius="sm"
       py={2}
       minW="fit-content"
       fontWeight="semibold"
       gap={3}
+      cursor="pointer"
       _hover={{
         color: isDangerVariant ? 'danger.main' : 'gray.1500',
         backgroundColor: 'gray.50',

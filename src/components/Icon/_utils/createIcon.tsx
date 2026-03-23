@@ -44,7 +44,7 @@ export const createIcon = (
   const ChakraIcon = chakra(IconComponent);
 
   const WrappedIcon = forwardRef<SVGSVGElement, IconProps>(
-    ({ boxSize = 'md', color = 'gray.600', ...props }, ref) => {
+    ({ boxSize = 'md', ...props }, ref) => {
       // Map boxSize to actual pixel values
       const resolvedSize =
         typeof boxSize === 'string' && boxSize in sizeMapping
@@ -54,6 +54,7 @@ export const createIcon = (
       return (
         <ChakraIcon
           ref={ref}
+          color="currentColor"
           width={resolvedSize}
           height={resolvedSize}
           {...props}
