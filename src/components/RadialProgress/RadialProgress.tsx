@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Box, useToken } from '@chakra-ui/react';
 
 import { Text } from '../Typography';
@@ -18,17 +18,28 @@ const RadialProgress: React.FC<RadialProgressProps> = ({
   className,
   ...rest
 }) => {
-  // Helper function to resolve color tokens
-  const resolveColor = (color: string): string => {
-    try {
-      // Try to resolve as a token first
-      const resolvedColor = useToken('colors', color)[0];
-      return resolvedColor || color;
-    } catch {
-      // If token resolution fails, return the original color
-      return color;
+  // Collect all unique color tokens from segments + gray.200 (used for remaining/empty)
+  const allColorTokens = useMemo(() => {
+    const colors = segments.map((s) => s.color);
+    if (!colors.includes('gray.200')) {
+      colors.push('gray.200');
     }
-  };
+    return colors;
+  }, [segments]);
+
+  // Resolve all color tokens at once at the top level (hooks rule safe)
+  const resolvedColors = useToken('colors', allColorTokens);
+
+  // Build a lookup map from token → resolved CSS color
+  const colorMap = useMemo(() => {
+    const map: Record<string, string> = {};
+    allColorTokens.forEach((token, i) => {
+      map[token] = resolvedColors[i] || token;
+    });
+    return map;
+  }, [allColorTokens, resolvedColors]);
+
+  const resolveColor = (color: string): string => colorMap[color] || color;
 
   // Early return if total is 0 or negative to prevent division by zero
   if (total <= 0) {
