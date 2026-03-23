@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.0-alpha.4
+
+### Patch Changes
+
+- 5361a87: Set default icon color to `gray.600`
+
 ## 3.0.0-alpha.3
 
 ### Patch Changes
