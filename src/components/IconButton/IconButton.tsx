@@ -19,12 +19,16 @@ import { IconButtonProps } from './IconButton.types';
  */
 export const IconButton = forwardRef(
   (
-    { colorPalette, variant = 'ghost', children, ...rest }: IconButtonProps,
+    {
+      colorPalette = 'neutral',
+      variant = 'ghost',
+      color = 'gray.600',
+      children,
+      ...rest
+    }: IconButtonProps,
     ref?: ForwardedRef<HTMLButtonElement>
   ) => {
-    const palette = colorPalette ?? 'neutral';
-
-    const styles = getIconButtonStyles(palette, variant);
+    const styles = getIconButtonStyles(colorPalette, variant);
 
     return (
       <ChakraIconButton

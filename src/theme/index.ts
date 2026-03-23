@@ -56,7 +56,7 @@ const SHARED_TEXT_STYLE_VALUES = {
   subtext: {
     fontFamily: 'body',
     fontSize: { base: '0.805rem', md: '0.875rem' }, // 12.88px → 14px
-    fontWeight: 'normal',
+    fontWeight: '500',
     lineHeight: '1.5',
   },
 } as const;
