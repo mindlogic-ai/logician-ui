@@ -18,17 +18,11 @@ const RadialProgress: React.FC<RadialProgressProps> = ({
   className,
   ...rest
 }) => {
-  // Helper function to resolve color tokens
-  const resolveColor = (color: string): string => {
-    try {
-      // Try to resolve as a token first
-      const resolvedColor = useToken('colors', color)[0];
-      return resolvedColor || color;
-    } catch {
-      // If token resolution fails, return the original color
-      return color;
-    }
-  };
+  // useToken은 hook이므로 map 안이 아닌 최상위에서 호출
+  const colorTokens = segments.map((s) => s.color).concat('gray.200');
+  const resolvedColors = useToken('colors', colorTokens);
+  const resolveColor = (token: string) =>
+    resolvedColors[colorTokens.indexOf(token)] || token;
 
   // Early return if total is 0 or negative to prevent division by zero
   if (total <= 0) {
