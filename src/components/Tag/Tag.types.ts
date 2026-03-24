@@ -40,7 +40,10 @@ export type TagVariant = 'soft' | 'solid' | 'outline';
  * </Tag>
  * ```
  */
-export interface TagProps extends Omit<TagRootProps, 'colorPalette' | 'variant'> {
+export interface TagProps extends Omit<
+  TagRootProps,
+  'colorPalette' | 'variant'
+> {
   colorPalette?: TagColorPalette;
   variant?: TagVariant;
 }
