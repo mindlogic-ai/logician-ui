@@ -1,4 +1,3 @@
-import React from 'react';
 import { Dialog } from '@chakra-ui/react';
 
 import styles from './ModalFooter.module.css';

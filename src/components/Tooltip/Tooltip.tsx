@@ -1,4 +1,4 @@
-import { cloneElement, ForwardedRef, forwardRef, isValidElement } from 'react';
+import { ForwardedRef, forwardRef } from 'react';
 import { Portal, Tooltip as ChakraTooltip } from '@chakra-ui/react';
 
 import { TooltipProps } from './Tooltip.types';
@@ -35,9 +35,7 @@ export const Tooltip = forwardRef(
         {...rest}
       >
         <ChakraTooltip.Trigger {...triggerProps}>
-          {isValidElement(children)
-            ? cloneElement(children as React.ReactElement<any>)
-            : children}
+          {children}
         </ChakraTooltip.Trigger>
         <Portal>
           <ChakraTooltip.Positioner>
