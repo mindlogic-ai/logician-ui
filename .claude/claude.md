@@ -1,6 +1,6 @@
 # Logician UI - Claude Code Instructions
 
-React component library built on Chakra UI v2.8+. Published to npm as `@mindlogic-ai/logician-ui`.
+React component library built on Chakra UI v3.3+. Published to npm as `@mindlogic-ai/logician-ui`.
 
 **Stack**: TypeScript, tsup (esbuild), Storybook 8.5, Changesets, Yarn
 
