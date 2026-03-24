@@ -1,4 +1,4 @@
-import { BoxProps } from '@chakra-ui/react';
+import { TagRootProps } from '@chakra-ui/react';
 
 /**
  * Tag color schemes - determines the semantic color of the tag.
@@ -40,7 +40,7 @@ export type TagVariant = 'soft' | 'solid' | 'outline';
  * </Tag>
  * ```
  */
-export interface TagProps extends Omit<BoxProps, 'colorPalette' | 'variant'> {
+export interface TagProps extends Omit<TagRootProps, 'colorPalette' | 'variant'> {
   colorPalette?: TagColorPalette;
   variant?: TagVariant;
 }
