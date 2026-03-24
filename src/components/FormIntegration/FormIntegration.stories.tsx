@@ -8,7 +8,10 @@ import { Button } from '../Button';
 import { FormLabel } from '../FormLabel';
 import { Input } from '../Input';
 import { Textarea } from '../Textarea';
-import { Select } from '../Select';
+import { createListCollection, Select as ChakraSelect } from '@chakra-ui/react';
+import { SelectTrigger } from '../Select/SelectTrigger';
+import { SelectContent } from '../Select/SelectContent';
+import { SelectItem } from '../Select/SelectItem';
 import { FileInput } from '../FileInput';
 import { Radio } from '../Radio';
 import { RadioGroup } from '../Radio/RadioGroup';
@@ -47,6 +50,8 @@ const countryOptions = [
   { value: 'jp', label: '일본' },
   { value: 'cn', label: '중국' },
 ];
+
+const countryCollection = createListCollection({ items: countryOptions });
 
 // Validation Schema
 const validationSchema = Yup.object({
@@ -231,14 +236,29 @@ export const FormikFormExample: StoryObj = {
                   <FormLabel>
                     국가 <Field.RequiredIndicator />
                   </FormLabel>
-                  <Select
-                    name="country"
-                    options={countryOptions}
-                    value={values.country}
-                    onChange={(value) => setFieldValue('country', value)}
-                    placeholder="국가를 선택하세요"
+                  <ChakraSelect.Root
+                    collection={countryCollection}
+                    value={values.country ? [values.country.value] : []}
+                    onValueChange={(details) => {
+                      const item = countryOptions.find(
+                        (o) => o.value === details.value[0]
+                      );
+                      setFieldValue('country', item || null);
+                    }}
                     invalid={!!(touched.country && errors.country)}
-                  />
+                    size="sm"
+                  >
+                    <SelectTrigger>
+                      <ChakraSelect.ValueText placeholder="국가를 선택하세요" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {countryOptions.map((item) => (
+                        <SelectItem key={item.value} item={item}>
+                          {item.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </ChakraSelect.Root>
                   <Field.ErrorText>
                     {touched.country &&
                       typeof errors.country === 'string' &&
@@ -561,18 +581,31 @@ export const RegularFormExample: StoryObj = {
               <FormLabel>
                 국가 <Field.RequiredIndicator />
               </FormLabel>
-              <Select
-                name="country"
-                options={countryOptions}
-                value={formData.country}
-                onChange={(value) => {
-                  setFormData({ ...formData, country: value });
+              <ChakraSelect.Root
+                collection={countryCollection}
+                value={formData.country ? [formData.country.value] : []}
+                onValueChange={(details) => {
+                  const item = countryOptions.find(
+                    (o) => o.value === details.value[0]
+                  );
+                  setFormData({ ...formData, country: item || null });
                   if (errors.country)
                     setErrors({ ...errors, country: undefined });
                 }}
-                placeholder="국가를 선택하세요"
                 invalid={!!errors.country}
-              />
+                size="sm"
+              >
+                <SelectTrigger>
+                  <ChakraSelect.ValueText placeholder="국가를 선택하세요" />
+                </SelectTrigger>
+                <SelectContent>
+                  {countryOptions.map((item) => (
+                    <SelectItem key={item.value} item={item}>
+                      {item.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </ChakraSelect.Root>
               <Field.ErrorText>{errors.country}</Field.ErrorText>
             </Field.Root>
 

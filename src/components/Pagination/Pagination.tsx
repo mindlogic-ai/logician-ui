@@ -1,30 +1,16 @@
 import { useMemo, useState } from 'react';
-import { SingleValue } from 'react-select';
-import { Flex } from '@chakra-ui/react';
+import { createListCollection, Flex, Select } from '@chakra-ui/react';
 
 import { IoChevronForward, IoIosArrowBack } from '@/components/Icon';
 import { IconButton } from '@/components/IconButton';
+import { SelectContent } from '@/components/Select/SelectContent';
+import { SelectItem } from '@/components/Select/SelectItem';
+import { SelectTrigger } from '@/components/Select/SelectTrigger';
 import { Subtext, Subtitle } from '@/components/Typography';
 import { useTranslate } from '@/hooks/useTranslate';
 
-import { Select } from '../Select';
-import { SelectOption } from '../Select/Select.types';
 import { PaginationProps } from './Pagination.types';
 
-/**
- * A pagination component that allows users to navigate through pages.
- * Displays the current page number and the maximum page count.
- * Supports both controlled and uncontrolled modes.
- *
- * - **Controlled Mode**: Pass `currentPage` and `onBack`/`onNext` props to fully control the pagination behavior.
- * - **Uncontrolled Mode**: If `currentPage` is not provided, the component manages its own internal state for the current page.
- *
- * @param {PaginationProps} props - Props for the Pagination component.
- * @param {number} [props.currentPage] - The current page number (controlled mode).
- * @param {number} props.maxPage - The maximum number of pages available.
- * @param {() => void} [props.onBack] - Callback triggered when the "Back" button is clicked.
- * @param {() => void} [props.onNext] - Callback triggered when the "Next" button is clicked.
- */
 export const Pagination = ({
   currentPage: controlledCurrentPage,
   onCurrentPageChange,
@@ -44,11 +30,10 @@ export const Pagination = ({
     [numTotalItems, itemsPerPage]
   );
 
-  const currentPage = controlledCurrentPage ?? uncontrolledCurrentPage; // Use controlled or internal number state
+  const currentPage = controlledCurrentPage ?? uncontrolledCurrentPage;
   const handleBack = () => {
     setUncontrolledCurrentPage((prev) => Math.max(prev - 1, 1));
     if (onBack && currentPage > 1) {
-      // Controlled mode: call the provided onBack
       onBack();
     }
   };
@@ -56,57 +41,55 @@ export const Pagination = ({
   const handleNext = () => {
     setUncontrolledCurrentPage((prev) => Math.min(prev + 1, maxPage));
     if (onNext && currentPage < maxPage) {
-      // Controlled mode: call the provided onNext
       onNext();
     }
   };
 
-  const handleItemsPerPageOptionChange = (
-    newValue: SingleValue<SelectOption<number>>
-  ) => {
-    if (newValue) {
-      const newItemsPerPage = newValue.value;
-      onItemsPerPageOptionChange?.(newItemsPerPage);
-
-      const newMaxPage = Math.ceil(numTotalItems / newItemsPerPage);
-
-      // If this makes the current page out of range, set the current page to the last page
-      if (currentPage > newMaxPage) {
-        setUncontrolledCurrentPage(newMaxPage);
-        onCurrentPageChange?.(newMaxPage);
-      }
-    }
-  };
+  const perPageCollection = useMemo(() => {
+    if (!itemsPerPageOptions) return null;
+    return createListCollection({
+      items: itemsPerPageOptions.map((option) => ({
+        label: option.toString(),
+        value: String(option),
+      })),
+    });
+  }, [itemsPerPageOptions]);
 
   return (
     <Flex align="center" justify="space-between" w="100%" {...rest}>
       <Flex align="center" gap={2}>
-        {itemsPerPageOptions && (
+        {itemsPerPageOptions && perPageCollection && (
           <Flex align="center" gap={2}>
-            <Select
-              menuPlacement="auto"
-              styles={{
-                control: (base, _state) => ({
-                  ...base,
-                  fontSize: '0.875rem',
-                  padding: 0,
-                  minHeight: '28px',
-                }),
-                dropdownIndicator: (base, _props) => ({
-                  ...base,
-                  padding: '0 4px',
-                }),
+            <Select.Root
+              collection={perPageCollection}
+              value={[String(itemsPerPage)]}
+              onValueChange={(details) => {
+                const val = details.value[0];
+                if (val) {
+                  const newItemsPerPage = Number(val);
+                  onItemsPerPageOptionChange?.(newItemsPerPage);
+
+                  const newMaxPage = Math.ceil(numTotalItems / newItemsPerPage);
+                  if (currentPage > newMaxPage) {
+                    setUncontrolledCurrentPage(newMaxPage);
+                    onCurrentPageChange?.(newMaxPage);
+                  }
+                }
               }}
-              options={itemsPerPageOptions.map((option) => ({
-                label: option.toString(),
-                value: option,
-              }))}
-              value={{
-                label: itemsPerPage.toString(),
-                value: itemsPerPage,
-              }}
-              onChange={handleItemsPerPageOptionChange}
-            />
+              size="xs"
+              width="70px"
+            >
+              <SelectTrigger>
+                <Select.ValueText />
+              </SelectTrigger>
+              <SelectContent>
+                {perPageCollection.items.map((item) => (
+                  <SelectItem key={item.value} item={item}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select.Root>
             <Subtext whiteSpace="nowrap">
               {translate('pagination_items_per_page')}
             </Subtext>

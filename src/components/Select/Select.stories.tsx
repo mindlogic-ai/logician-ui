@@ -1,431 +1,438 @@
-import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import { Box, Text } from '@chakra-ui/react';
+import { Meta, StoryFn } from '@storybook/react';
+import { Badge, Box, Flex, Stack, Text } from '@chakra-ui/react';
 
-import { Select } from '.';
+import { createListCollection } from './index';
+import { SelectTrigger } from './SelectTrigger';
+import { SelectContent } from './SelectContent';
+import { SelectItem } from './SelectItem';
+import { Select } from './index';
 
-const meta = {
+const meta: Meta = {
   title: 'Components/Select',
-  component: Select,
-  args: {
-    options: [
-      { label: 'Option 1', value: 'option1' },
-      { label: 'Option 2', value: 'option2' },
-      { label: 'Option 3', value: 'option3' },
-      { label: 'Disabled', value: 'option4', isDisabled: true },
-    ],
-    defaultValue: { label: 'Option 1', value: 'option1' },
-  },
-  argTypes: {
-    isMulti: { control: 'boolean' },
-  },
-} satisfies Meta<typeof Select>;
+};
 
 export default meta;
-type Story = StoryObj<typeof Select>;
 
-export const Basic: Story = {};
+// ── Shared collections ──
 
-export const Multiselect: Story = {
-  args: {
-    isMulti: true,
-  },
-};
+const frameworks = createListCollection({
+  items: [
+    { label: 'React', value: 'react' },
+    { label: 'Vue', value: 'vue' },
+    { label: 'Angular', value: 'angular' },
+    { label: 'Svelte', value: 'svelte' },
+  ],
+});
 
-export const Combobox: Story = {
-  args: {
-    isMulti: true,
-    isSearchable: true,
-  },
-};
+const animals = createListCollection({
+  items: [
+    { label: 'Red Panda', value: 'red-panda' },
+    { label: 'Cat', value: 'cat', disabled: true },
+    { label: 'Dog', value: 'dog' },
+    { label: 'Aardvark', value: 'aardvark', disabled: true },
+    { label: 'Kangaroo', value: 'kangaroo' },
+    { label: 'Snake', value: 'snake' },
+  ],
+});
 
-export const ManyOptions: Story = {
-  args: {
-    options: Array.from({ length: 100 }, (_, i) => ({
-      label: `Option ${i + 1}`,
-      value: `option${i + 1}`,
-    })),
-  },
-};
+// ── Stories ──
 
-export const WithValueDisplay = () => {
-  const [selectedOption, setSelectedOption] = useState<{
-    label: string;
-    value: string;
-  } | null>({ label: 'Option 1', value: 'option1' });
+/**
+ * Basic single select — simplest usage.
+ */
+export const Basic: StoryFn = () => (
+  <Select.Root collection={frameworks} size="sm" width="320px">
+    <SelectTrigger>
+      <Select.ValueText placeholder="Select framework" />
+    </SelectTrigger>
+    <SelectContent>
+      {frameworks.items.map(item => (
+        <SelectItem key={item.value} item={item}>
+          {item.label}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select.Root>
+);
 
-  const options = [
-    { label: 'Option 1', value: 'option1' },
-    { label: 'Option 2', value: 'option2' },
-    { label: 'Option 3', value: 'option3' },
-    { label: 'Option 4', value: 'option4' },
-  ];
+/**
+ * Controlled value with state management.
+ */
+export const Controlled: StoryFn = () => {
+  const [value, setValue] = useState<string[]>([]);
 
   return (
-    <Box>
-      <Select
-        options={options}
-        value={selectedOption}
-        onChange={(newValue) => setSelectedOption(newValue)}
-      />
-      <Box mt={4} p={4} borderWidth="1px" borderRadius="md" bg="gray.50">
-        <Text fontWeight="semibold" mb={2}>
-          Selected Value:
-        </Text>
-        <Text color="primary.dark" fontWeight="bold">
-          {selectedOption
-            ? `${selectedOption.label} (${selectedOption.value})`
-            : 'None selected'}
-        </Text>
-      </Box>
-    </Box>
+    <Stack gap={4}>
+      <Text>Selected: {value.length > 0 ? value.join(', ') : 'None'}</Text>
+      <Select.Root
+        collection={frameworks}
+        value={value}
+        onValueChange={e => setValue(e.value)}
+        size="sm"
+        width="320px"
+      >
+        <SelectTrigger>
+          <Select.ValueText placeholder="Select framework" />
+        </SelectTrigger>
+        <SelectContent>
+          {frameworks.items.map(item => (
+            <SelectItem key={item.value} item={item}>
+              {item.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select.Root>
+    </Stack>
   );
 };
 
-export const CustomWidth: Story = {
-  render: () => {
-    const options = [
-      { label: 'Option 1', value: 'option1' },
-      { label: 'Option 2', value: 'option2' },
-      { label: 'Option 3', value: 'option3' },
-    ];
+/**
+ * Multi-select — select multiple items.
+ */
+export const Multiple: StoryFn = () => (
+  <Select.Root
+    multiple
+    collection={frameworks}
+    size="sm"
+    width="320px"
+  >
+    <SelectTrigger>
+      <Select.ValueText placeholder="Select frameworks" />
+    </SelectTrigger>
+    <SelectContent>
+      {frameworks.items.map(item => (
+        <SelectItem key={item.value} item={item}>
+          {item.label}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select.Root>
+);
 
-    return (
-      <Box>
-        <Text mb={2} fontWeight="semibold">
-          Width: 200px
-        </Text>
-        <Select
-          options={options}
-          defaultValue={options[0]}
-          styles={{
-            container: (base) => ({
-              ...base,
-              width: 200,
-            }),
-          }}
-        />
+/**
+ * Disabled options — some items cannot be selected.
+ */
+export const DisabledOptions: StoryFn = () => (
+  <Select.Root collection={animals} size="sm" width="320px">
+    <SelectTrigger>
+      <Select.ValueText placeholder="Select animal" />
+    </SelectTrigger>
+    <SelectContent>
+      {animals.items.map(item => (
+        <SelectItem key={item.value} item={item}>
+          {item.label}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select.Root>
+);
 
-        <Text mb={2} mt={6} fontWeight="semibold">
-          Width: 300px
-        </Text>
-        <Select
-          options={options}
-          defaultValue={options[0]}
-          styles={{
-            container: (base) => ({
-              ...base,
-              width: 300,
-            }),
-          }}
-        />
+/**
+ * Disabled select — entire select is non-interactive.
+ */
+export const Disabled: StoryFn = () => (
+  <Select.Root
+    disabled
+    collection={frameworks}
+    size="sm"
+    width="320px"
+    defaultValue={['react']}
+  >
+    <SelectTrigger>
+      <Select.ValueText placeholder="Select framework" />
+    </SelectTrigger>
+    <SelectContent>
+      {frameworks.items.map(item => (
+        <SelectItem key={item.value} item={item}>
+          {item.label}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select.Root>
+);
 
-        <Text mb={2} mt={6} fontWeight="semibold">
-          Width: 400px
-        </Text>
-        <Select
-          options={options}
-          defaultValue={options[0]}
-          styles={{
-            container: (base) => ({
-              ...base,
-              width: 400,
-            }),
-          }}
-        />
+/**
+ * Invalid state — for form validation errors.
+ */
+export const Invalid: StoryFn = () => (
+  <Select.Root
+    invalid
+    collection={frameworks}
+    size="sm"
+    width="320px"
+  >
+    <SelectTrigger>
+      <Select.ValueText placeholder="Select framework" />
+    </SelectTrigger>
+    <SelectContent>
+      {frameworks.items.map(item => (
+        <SelectItem key={item.value} item={item}>
+          {item.label}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select.Root>
+);
 
-        <Text mb={2} mt={6} fontWeight="semibold">
-          Width: 50%
-        </Text>
-        <Select
-          options={options}
-          defaultValue={options[0]}
-          styles={{
-            container: (base) => ({
-              ...base,
-              width: '50%',
-            }),
-          }}
-        />
-      </Box>
-    );
-  },
+/**
+ * Sizes — xs, sm, md, lg variants.
+ */
+export const Sizes: StoryFn = () => (
+  <Stack gap={5} width="320px">
+    {(['xs', 'sm', 'md', 'lg'] as const).map(size => (
+      <Select.Root key={size} size={size} collection={frameworks}>
+        <Select.Label>size = {size}</Select.Label>
+        <SelectTrigger>
+          <Select.ValueText placeholder="Select framework" />
+        </SelectTrigger>
+        <SelectContent>
+          {frameworks.items.map(item => (
+            <SelectItem key={item.value} item={item}>
+              {item.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select.Root>
+    ))}
+  </Stack>
+);
+
+/**
+ * Clearable — show a clear button when value is selected.
+ */
+export const Clearable: StoryFn = () => (
+  <Select.Root
+    collection={frameworks}
+    size="sm"
+    width="320px"
+    defaultValue={['react']}
+  >
+    <SelectTrigger clearable>
+      <Select.ValueText placeholder="Select framework" />
+    </SelectTrigger>
+    <SelectContent>
+      {frameworks.items.map(item => (
+        <SelectItem key={item.value} item={item}>
+          {item.label}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select.Root>
+);
+
+/**
+ * Grouped options — items organized by category.
+ */
+export const GroupedOptions: StoryFn = () => {
+  const groups = [
+    {
+      label: 'Frontend',
+      items: [
+        { label: 'React', value: 'react' },
+        { label: 'Vue', value: 'vue' },
+        { label: 'Svelte', value: 'svelte' },
+      ],
+    },
+    {
+      label: 'Backend',
+      items: [
+        { label: 'Express', value: 'express' },
+        { label: 'Fastify', value: 'fastify' },
+        { label: 'NestJS', value: 'nestjs' },
+      ],
+    },
+  ];
+
+  const allItems = groups.flatMap(g => g.items);
+  const collection = createListCollection({ items: allItems });
+
+  return (
+    <Select.Root collection={collection} size="sm" width="320px">
+      <SelectTrigger>
+        <Select.ValueText placeholder="Select framework" />
+      </SelectTrigger>
+      <SelectContent>
+        {groups.map(group => (
+          <Select.ItemGroup key={group.label}>
+            <Select.ItemGroupLabel>
+              {group.label}
+            </Select.ItemGroupLabel>
+            {group.items.map(item => (
+              <SelectItem key={item.value} item={item}>
+                {item.label}
+              </SelectItem>
+            ))}
+          </Select.ItemGroup>
+        ))}
+      </SelectContent>
+    </Select.Root>
+  );
 };
 
-export const CustomHeight: Story = {
-  render: () => {
-    const options = [
-      { label: 'Option 1', value: 'option1' },
-      { label: 'Option 2', value: 'option2' },
-      { label: 'Option 3', value: 'option3' },
-    ];
+/**
+ * Custom item rendering — render rich content inside each option.
+ */
+export const CustomItemRendering: StoryFn = () => {
+  const models = createListCollection({
+    items: [
+      { label: 'GPT-4o', value: 'gpt4o', platform: 'OpenAI', tier: 'high' },
+      {
+        label: 'GPT-4o mini',
+        value: 'gpt4o-mini',
+        platform: 'OpenAI',
+        tier: 'low',
+      },
+      {
+        label: 'Claude Sonnet',
+        value: 'sonnet',
+        platform: 'Anthropic',
+        tier: 'high',
+      },
+      {
+        label: 'Claude Haiku',
+        value: 'haiku',
+        platform: 'Anthropic',
+        tier: 'low',
+      },
+    ],
+    itemToString: item => item.label,
+    itemToValue: item => item.value,
+  });
 
-    return (
-      <Box>
-        <Text mb={2} fontWeight="semibold">
-          Height: 32px (Compact)
-        </Text>
-        <Select
-          options={options}
-          defaultValue={options[0]}
-          styles={{
-            control: (base) => ({
-              ...base,
-              minHeight: '32px',
-              height: '32px',
-            }),
-            valueContainer: (base) => ({
-              ...base,
-              height: '32px',
-              padding: '0 8px',
-            }),
-            input: (base) => ({
-              ...base,
-              margin: '0px',
-            }),
-            indicatorsContainer: (base) => ({
-              ...base,
-              height: '32px',
-            }),
-          }}
-        />
-
-        <Text mb={2} mt={6} fontWeight="semibold">
-          Height: 48px (Default)
-        </Text>
-        <Select options={options} defaultValue={options[0]} />
-
-        <Text mb={2} mt={6} fontWeight="semibold">
-          Height: 64px (Large)
-        </Text>
-        <Select
-          options={options}
-          defaultValue={options[0]}
-          styles={{
-            control: (base) => ({
-              ...base,
-              minHeight: '64px',
-              height: '64px',
-            }),
-            valueContainer: (base) => ({
-              ...base,
-              height: '64px',
-              padding: '0 16px',
-            }),
-            input: (base) => ({
-              ...base,
-              margin: '0px',
-            }),
-            indicatorsContainer: (base) => ({
-              ...base,
-              height: '64px',
-            }),
-          }}
-        />
-      </Box>
-    );
-  },
+  return (
+    <Select.Root collection={models} size="sm" width="360px">
+      <SelectTrigger>
+        <Select.ValueText placeholder="Select model" />
+      </SelectTrigger>
+      <SelectContent>
+        {models.items.map(item => (
+          <SelectItem key={item.value} item={item}>
+            <Flex align="center" gap={2} flex={1}>
+              <Text>{item.label}</Text>
+              <Badge
+                colorPalette={item.tier === 'high' ? 'blue' : 'gray'}
+                size="sm"
+              >
+                {item.platform}
+              </Badge>
+            </Flex>
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select.Root>
+  );
 };
 
-export const CustomFontSize: Story = {
-  render: () => {
-    const options = [
-      { label: 'Option 1', value: 'option1' },
-      { label: 'Option 2', value: 'option2' },
-      { label: 'Option 3', value: 'option3' },
-    ];
+/**
+ * Custom value display — customize how the selected value appears.
+ */
+export const CustomValueDisplay: StoryFn = () => {
+  interface StatusOption {
+    label: string;
+    value: string;
+    color: string;
+  }
 
-    return (
-      <Box>
-        <Text mb={2} fontWeight="semibold">
-          Font Size: 12px (Small)
-        </Text>
-        <Select
-          options={options}
-          defaultValue={options[0]}
-          styles={{
-            control: (base) => ({
-              ...base,
-              fontSize: '12px',
-            }),
-            menu: (base) => ({
-              ...base,
-              fontSize: '12px',
-            }),
-            option: (base) => ({
-              ...base,
-              fontSize: '12px',
-            }),
-          }}
-        />
+  const statuses = createListCollection<StatusOption>({
+    items: [
+      { label: 'Active', value: 'active', color: 'green' },
+      { label: 'Pending', value: 'pending', color: 'yellow' },
+      { label: 'Inactive', value: 'inactive', color: 'red' },
+    ],
+  });
 
-        <Text mb={2} mt={6} fontWeight="semibold">
-          Font Size: 14px (Default)
-        </Text>
-        <Select options={options} defaultValue={options[0]} />
-
-        <Text mb={2} mt={6} fontWeight="semibold">
-          Font Size: 18px (Large)
-        </Text>
-        <Select
-          options={options}
-          defaultValue={options[0]}
-          styles={{
-            control: (base) => ({
-              ...base,
-              fontSize: '18px',
-            }),
-            menu: (base) => ({
-              ...base,
-              fontSize: '18px',
-            }),
-            option: (base) => ({
-              ...base,
-              fontSize: '18px',
-            }),
-          }}
-        />
-
-        <Text mb={2} mt={6} fontWeight="semibold">
-          Font Size: 24px (Extra Large)
-        </Text>
-        <Select
-          options={options}
-          defaultValue={options[0]}
-          styles={{
-            control: (base) => ({
-              ...base,
-              fontSize: '24px',
-              minHeight: '56px',
-            }),
-            menu: (base) => ({
-              ...base,
-              fontSize: '24px',
-            }),
-            option: (base) => ({
-              ...base,
-              fontSize: '24px',
-              padding: '12px',
-            }),
-            valueContainer: (base) => ({
-              ...base,
-              padding: '0 16px',
-            }),
-          }}
-        />
-      </Box>
-    );
-  },
+  return (
+    <Select.Root
+      collection={statuses}
+      size="sm"
+      width="240px"
+      defaultValue={['active']}
+    >
+      <SelectTrigger>
+        <Select.ValueText placeholder="Select status">
+          <Select.Context>
+            {select => {
+              const items = select.selectedItems as StatusOption[];
+              if (items.length === 0) return 'Select status';
+              const item = items[0];
+              return (
+                <Flex align="center" gap={2}>
+                  <Box
+                    w="8px"
+                    h="8px"
+                    borderRadius="full"
+                    bg={`${item.color}.500`}
+                  />
+                  {item.label}
+                </Flex>
+              );
+            }}
+          </Select.Context>
+        </Select.ValueText>
+      </SelectTrigger>
+      <SelectContent>
+        {statuses.items.map(item => (
+          <SelectItem key={item.value} item={item}>
+            <Flex align="center" gap={2}>
+              <Box
+                w="8px"
+                h="8px"
+                borderRadius="full"
+                bg={`${item.color}.500`}
+              />
+              {item.label}
+            </Flex>
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select.Root>
+  );
 };
 
-export const FullyCustomized: Story = {
-  render: () => {
-    const options = [
-      { label: 'Apple', value: 'apple' },
-      { label: 'Banana', value: 'banana' },
-      { label: 'Cherry', value: 'cherry' },
-      { label: 'Date', value: 'date' },
-    ];
+/**
+ * With label and form integration.
+ */
+export const WithLabel: StoryFn = () => (
+  <Select.Root collection={frameworks} size="sm" width="320px">
+    <Select.HiddenSelect name="framework" />
+    <Select.Label>Framework</Select.Label>
+    <SelectTrigger>
+      <Select.ValueText placeholder="Select framework" />
+    </SelectTrigger>
+    <SelectContent>
+      {frameworks.items.map(item => (
+        <SelectItem key={item.value} item={item}>
+          {item.label}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select.Root>
+);
 
-    return (
-      <Box>
-        <Text mb={2} fontWeight="semibold">
-          Compact Select with Custom Styling
-        </Text>
-        <Select
-          options={options}
-          defaultValue={options[0]}
-          placeholder="Select a fruit..."
-          styles={{
-            container: (base) => ({
-              ...base,
-              width: '250px',
-            }),
-            control: (base) => ({
-              ...base,
-              minHeight: '36px',
-              height: '36px',
-              fontSize: '13px',
-              borderRadius: '8px',
-              backgroundColor: '#f8f9fa',
-            }),
-            valueContainer: (base) => ({
-              ...base,
-              height: '36px',
-              padding: '0 12px',
-            }),
-            input: (base) => ({
-              ...base,
-              margin: '0px',
-            }),
-            indicatorsContainer: (base) => ({
-              ...base,
-              height: '36px',
-            }),
-            menu: (base) => ({
-              ...base,
-              fontSize: '13px',
-              borderRadius: '8px',
-              marginTop: '4px',
-            }),
-            option: (base) => ({
-              ...base,
-              fontSize: '13px',
-              padding: '8px 12px',
-            }),
-          }}
-        />
+/**
+ * Many options — demonstrates scrollable dropdown.
+ */
+export const ManyOptions: StoryFn = () => {
+  const countries = createListCollection({
+    items: Array.from({ length: 50 }, (_, i) => ({
+      label: `Country ${i + 1}`,
+      value: `country-${i + 1}`,
+    })),
+  });
 
-        <Text mb={2} mt={8} fontWeight="semibold">
-          Large Select with Bold Typography
-        </Text>
-        <Select
-          options={options}
-          defaultValue={options[1]}
-          styles={{
-            container: (base) => ({
-              ...base,
-              width: '100%',
-            }),
-            control: (base) => ({
-              ...base,
-              minHeight: '60px',
-              height: '60px',
-              fontSize: '20px',
-              fontWeight: '600',
-              borderRadius: '12px',
-              borderWidth: '2px',
-            }),
-            valueContainer: (base) => ({
-              ...base,
-              height: '60px',
-              padding: '0 20px',
-            }),
-            input: (base) => ({
-              ...base,
-              margin: '0px',
-              fontWeight: '600',
-            }),
-            indicatorsContainer: (base) => ({
-              ...base,
-              height: '60px',
-            }),
-            menu: (base) => ({
-              ...base,
-              fontSize: '18px',
-              borderRadius: '12px',
-              marginTop: '8px',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-            }),
-            option: (base) => ({
-              ...base,
-              fontSize: '18px',
-              fontWeight: '500',
-              padding: '14px 20px',
-            }),
-          }}
-        />
-      </Box>
-    );
-  },
+  return (
+    <Select.Root collection={countries} size="sm" width="320px">
+      <SelectTrigger>
+        <Select.ValueText placeholder="Select country" />
+      </SelectTrigger>
+      <SelectContent maxH="240px" overflowY="auto">
+        {countries.items.map(item => (
+          <SelectItem key={item.value} item={item}>
+            {item.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select.Root>
+  );
 };
