@@ -17,6 +17,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>((props, ref) => {
       borderWidth="1px"
       borderColor="gray.200"
       overflow="hidden"
+      bgColor="transparent"
       {...rest}
     >
       <ChakraAvatar.Fallback name={name} />

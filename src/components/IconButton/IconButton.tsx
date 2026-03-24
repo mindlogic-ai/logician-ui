@@ -35,8 +35,8 @@ export const IconButton = forwardRef(
         ref={ref}
         border="1px solid"
         rounded="full"
-        color={color}
         {...styles}
+        color={color}
         {...rest}
       >
         {children}
