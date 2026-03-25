@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.0-alpha.10
+
+### Patch Changes
+
+- cc60a0d: fix: remove borders from soft button variants; improve Toast close button contrast and description styling
+
 ## 3.0.0-alpha.9
 
 ### Patch Changes
