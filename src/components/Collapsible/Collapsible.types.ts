@@ -1,15 +1,15 @@
 import {
-  CollapsibleRootProps,
-  CollapsibleTriggerProps,
   CollapsibleContentProps,
   CollapsibleIndicatorProps,
   CollapsibleOpenChangeDetails,
+  CollapsibleRootProps,
+  CollapsibleTriggerProps,
 } from '@chakra-ui/react';
 
 export type {
-  CollapsibleRootProps,
-  CollapsibleTriggerProps,
   CollapsibleContentProps,
   CollapsibleIndicatorProps,
   CollapsibleOpenChangeDetails,
+  CollapsibleRootProps,
+  CollapsibleTriggerProps,
 };

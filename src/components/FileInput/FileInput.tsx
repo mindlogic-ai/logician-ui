@@ -3,7 +3,7 @@ import { Box, Flex, Input } from '@chakra-ui/react';
 
 import { LuUpload } from '@/components/Icon';
 import { Spinner } from '@/components/Spinner';
-import { Subtext, Text } from '@/components/Typography';
+import { Text } from '@/components/Typography';
 import { useTranslate } from '@/hooks/useTranslate';
 
 import { FileInputProps } from './FileInput.types';

@@ -1,5 +1,6 @@
 import React from 'react';
 import { CloseButton, Dialog } from '@chakra-ui/react';
+
 import { IconButton } from '../IconButton';
 
 /**

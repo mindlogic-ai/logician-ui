@@ -1,4 +1,4 @@
-import { ReactNode, forwardRef } from 'react';
+import { forwardRef, ReactNode } from 'react';
 import { Collapsible as ChakraCollapsible, HStack } from '@chakra-ui/react';
 
 import { CollapsibleTriggerProps } from './Collapsible.types';
