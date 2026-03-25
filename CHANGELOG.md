@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.0.0-alpha.9
+
+### Patch Changes
+
+- aa5e009: Various component fixes
+  - SegmentedControl: fix sizing, layout shift on selection, and font size scaling with size prop
+  - FileInput: use Text instead of Subtext for upload label
+  - MenuItem: apply danger.lightest hover background for danger variant
+  - ModalCloseButton: simplify using IconButton
+
 ## 3.0.0-alpha.8
 
 ### Minor Changes

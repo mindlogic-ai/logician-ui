@@ -2,7 +2,7 @@
   "mode": "exit",
   "tag": "alpha",
   "initialVersions": {
-    "@mindlogic-ai/logician-ui": "3.0.0-alpha.7"
+    "@mindlogic-ai/logician-ui": "3.0.0-alpha.8"
   },
   "changesets": [
     "add-collapsible-component",
@@ -14,6 +14,7 @@
     "gentle-panthers-remain",
     "icon-button-color-theme-patch",
     "icon-default-color",
-    "modal-baked-in-overlay"
+    "modal-baked-in-overlay",
+    "segmented-control-sizing-fixes"
   ]
 }
