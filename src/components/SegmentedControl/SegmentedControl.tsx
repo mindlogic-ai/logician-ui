@@ -48,7 +48,7 @@ export const SegmentedControl = forwardRef<
       p="1"
       borderRadius={borderRadius}
       boxShadow="none"
-      w="100%"
+      w="fit-content"
       css={{
         // Chakra v3 CSS variables for styling
         '--segment-indicator-bg': `var(--chakra-colors-gray-0)`,
@@ -59,6 +59,7 @@ export const SegmentedControl = forwardRef<
         },
         // Make all items equal width
         '& [data-part="item"]': {
+          cursor: 'pointer',
           flex: 1,
           _hover: {
             bg: 'transparent',
@@ -66,18 +67,40 @@ export const SegmentedControl = forwardRef<
         },
         // Item text colors - matching original design
         '& [data-part="item-text"]': {
-          color: 'gray.600',
+          color: 'gray.800',
           fontWeight: '500',
+          whiteSpace: 'nowrap',
+          display: 'inline-flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          '&::after': {
+            content: 'attr(data-text)',
+            fontWeight: '600',
+            height: '0',
+            visibility: 'hidden',
+            overflow: 'hidden',
+            userSelect: 'none',
+            pointerEvents: 'none',
+          },
         },
         '& [data-part="item"][data-state="checked"] [data-part="item-text"]': {
-          color: 'gray.1300',
+          color: 'gray.1500',
           fontWeight: '600',
         },
       }}
       {...rest}
     >
       <SegmentGroup.Indicator />
-      <SegmentGroup.Items items={items} />
+      {items.map((item) => (
+        <SegmentGroup.Item key={item.value} value={item.value} disabled={item.disabled}>
+          <SegmentGroup.ItemText
+            data-text={typeof item.label === 'string' ? item.label : undefined}
+          >
+            {item.label}
+          </SegmentGroup.ItemText>
+          <SegmentGroup.ItemHiddenInput />
+        </SegmentGroup.Item>
+      ))}
     </SegmentGroup.Root>
   );
 });

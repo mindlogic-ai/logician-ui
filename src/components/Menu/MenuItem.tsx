@@ -23,7 +23,7 @@ export const MenuItem = ({
       cursor="pointer"
       _hover={{
         color: isDangerVariant ? 'danger.main' : 'gray.1500',
-        backgroundColor: 'gray.50',
+        backgroundColor: isDangerVariant ? 'danger.lightest' : 'gray.50',
       }}
       {...rest}
     >
