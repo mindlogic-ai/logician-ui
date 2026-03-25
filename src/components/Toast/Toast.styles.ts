@@ -38,25 +38,25 @@ export const toastStyles: Record<ToastStatus, BoxProps> = {
  */
 export const closeButtonStyles: Record<ToastStatus, BoxProps> = {
   info: {
-    color: 'primary.dark',
+    color: 'primary.darker',
     _hover: {
       bg: 'primary.lighter',
     },
   },
   warning: {
-    color: 'warning.dark',
+    color: 'warning.darker',
     _hover: {
       bg: 'warning.lighter',
     },
   },
   success: {
-    color: 'success.dark',
+    color: 'success.darker',
     _hover: {
       bg: 'success.lighter',
     },
   },
   error: {
-    color: 'danger.dark',
+    color: 'danger.darker',
     _hover: {
       bg: 'danger.lighter',
     },

@@ -35,7 +35,7 @@ export const Toast = ({
           </ChakraToast.Title>
         )}
         {description && (
-          <ChakraToast.Description color="inherit">
+          <ChakraToast.Description color="inherit" fontWeight="semibold">
             {description}
           </ChakraToast.Description>
         )}
@@ -43,6 +43,7 @@ export const Toast = ({
     </Flex>
     <ChakraToast.CloseTrigger
       onClick={onClose}
+      cursor="pointer"
       {...(closeButtonStyles[status] as any)}
     />
   </ChakraToast.Root>

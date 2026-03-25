@@ -45,11 +45,11 @@ export const buttonColorPaletteStyles: Record<
       },
     },
     soft: {
-      borderColor: 'primary.lighter', // #B9CBF3
+      borderColor: 'transparent',
       bgColor: 'primary.extralight', // #E8EEFB
       color: 'primary.dark', // #0D317D
       _hover: {
-        borderColor: 'primary.light',
+        borderColor: 'transparent',
         bgColor: 'primary.lighter', // #B9CBF3
       },
       _active: {
@@ -97,11 +97,11 @@ export const buttonColorPaletteStyles: Record<
       },
     },
     soft: {
-      borderColor: 'secondary.lighter', // #DEB9F3
+      borderColor: 'transparent',
       bgColor: 'secondary.extralight', // #F4E8FB
       color: 'secondary.dark', // #570D7D
       _hover: {
-        borderColor: 'secondary.light',
+        borderColor: 'transparent',
         bgColor: 'secondary.lighter', // #DEB9F3
       },
       _active: {
@@ -149,11 +149,11 @@ export const buttonColorPaletteStyles: Record<
       },
     },
     soft: {
-      borderColor: 'danger.lighter', // #F3B9BD
+      borderColor: 'transparent',
       bgColor: 'danger.extralight', // #FBE8E9
       color: 'danger.dark', // #7D0D14
       _hover: {
-        borderColor: 'danger.light',
+        borderColor: 'transparent',
         bgColor: 'danger.lighter', // #F3B9BD
       },
       _active: {
@@ -201,11 +201,11 @@ export const buttonColorPaletteStyles: Record<
       },
     },
     soft: {
-      borderColor: 'success.lighter', // #BDF3B9
+      borderColor: 'transparent',
       bgColor: 'success.extralight', // #E9FBE8
       color: 'success.dark', // #147D0D
       _hover: {
-        borderColor: 'success.light',
+        borderColor: 'transparent',
         bgColor: 'success.lighter', // #BDF3B9
       },
       _active: {
@@ -253,11 +253,11 @@ export const buttonColorPaletteStyles: Record<
       },
     },
     soft: {
-      borderColor: 'warning.lighter', // #F3E4B9
+      borderColor: 'transparent',
       bgColor: 'warning.extralight', // #FBF6E8
       color: 'warning.dark', // #7D610D
       _hover: {
-        borderColor: 'warning.light',
+        borderColor: 'transparent',
         bgColor: 'warning.lighter', // #F3E4B9
       },
       _active: {
@@ -305,11 +305,11 @@ export const buttonColorPaletteStyles: Record<
       },
     },
     soft: {
-      borderColor: 'gray.200', // #E2E6F0
+      borderColor: 'transparent',
       bgColor: 'gray.100', // #F0F3F9
       color: 'gray.1200', // #2A3142
       _hover: {
-        borderColor: 'gray.300',
+        borderColor: 'transparent',
         bgColor: 'gray.200', // #E2E6F0
       },
       _active: {
