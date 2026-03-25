@@ -9,3 +9,5 @@ Fix SegmentedControl sizing and layout shift issues
 - Prevent text wrapping in item labels (`whiteSpace: nowrap`)
 - Prevent layout shift when `fontWeight` changes on selection (pseudo-element trick)
 - Add `cursor: pointer` on items
+- Font size now scales with `size` prop to match equivalent Chakra button sizes
+- Refactor: styles moved from root CSS selectors onto individual sub-components
