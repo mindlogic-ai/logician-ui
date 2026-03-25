@@ -34,7 +34,10 @@ export const Tooltip = forwardRef(
         closeDelay={0}
         {...rest}
       >
-        <ChakraTooltip.Trigger {...triggerProps}>
+        {/* asChild merges trigger behavior onto the child element instead of
+            wrapping it in an extra <button>. This avoids layout issues where
+            the inline button doesn't inherit the parent's width. */}
+        <ChakraTooltip.Trigger asChild {...triggerProps}>
           {children}
         </ChakraTooltip.Trigger>
         <Portal>
