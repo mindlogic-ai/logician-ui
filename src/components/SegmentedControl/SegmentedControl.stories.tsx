@@ -26,7 +26,7 @@ const meta = {
   },
   argTypes: {
     size: {
-      control: 'select',
+      control: { type: 'select' },
       options: ['xs', 'sm', 'md', 'lg', 'xl'],
     },
   },
@@ -117,6 +117,28 @@ export const WithDisabledOption = {
       },
     ],
   },
+};
+
+export const EditableLabel: Story = {
+  args: {
+    firstLabel: 'Complete',
+  },
+  argTypes: {
+    firstLabel: {
+      control: 'text',
+      name: 'First item label',
+    },
+  },
+  render: ({ firstLabel, ...props }) => (
+    <SegmentedControl
+      {...props}
+      options={[
+        { label: firstLabel as string, value: 'complete' },
+        { label: 'Incomplete', value: 'incomplete' },
+        { label: 'Pending', value: 'pending' },
+      ]}
+    />
+  ),
 };
 
 export const WithCustomContent = {

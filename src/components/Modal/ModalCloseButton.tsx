@@ -1,6 +1,8 @@
 import React from 'react';
 import { CloseButton, Dialog } from '@chakra-ui/react';
 
+import { IconButton } from '../IconButton';
+
 /**
  * Modal Close Button Component
  *
@@ -19,21 +21,8 @@ import { CloseButton, Dialog } from '@chakra-ui/react';
  */
 export const ModalCloseButton = ({ ...rest }: Dialog.CloseTriggerProps) => {
   return (
-    <Dialog.CloseTrigger
-      position="absolute"
-      top="2"
-      insetEnd="2"
-      {...rest}
-      asChild
-    >
-      <CloseButton
-        size="sm"
-        color="gray.600"
-        _hover={{
-          color: 'primary.main',
-          backgroundColor: 'transparent',
-        }}
-      />
+    <Dialog.CloseTrigger asChild {...rest}>
+      <CloseButton as={IconButton} />
     </Dialog.CloseTrigger>
   );
 };

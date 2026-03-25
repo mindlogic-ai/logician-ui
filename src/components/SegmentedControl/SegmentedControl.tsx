@@ -6,6 +6,14 @@ import {
   SegmentedControlProps,
 } from './SegmentedControl.types';
 
+// Match font sizes to the equivalent Chakra button sizes
+const fontSizeBySize: Record<string, string> = {
+  xs: 'xs',
+  sm: 'xs',
+  md: 'sm',
+  lg: 'md',
+};
+
 export const SegmentedControl = forwardRef<
   HTMLDivElement,
   SegmentedControlProps
@@ -19,6 +27,8 @@ export const SegmentedControl = forwardRef<
     borderRadius = 'md',
     ...rest
   } = props;
+
+  const fontSize = fontSizeBySize[size as string] ?? 'sm';
 
   // Normalize options to the format expected by SegmentGroup.Items
   const items = options.map((option: SegmentedControlOption) => ({
@@ -48,36 +58,53 @@ export const SegmentedControl = forwardRef<
       p="1"
       borderRadius={borderRadius}
       boxShadow="none"
-      w="100%"
+      w="fit-content"
       css={{
-        // Chakra v3 CSS variables for styling
         '--segment-indicator-bg': `var(--chakra-colors-gray-0)`,
         '--segment-indicator-shadow': `var(--chakra-shadows-md)`,
-        // Apply borderRadius to indicator
-        '& [data-part="indicator"]': {
-          borderRadius: indicatorRadius,
-        },
-        // Make all items equal width
-        '& [data-part="item"]': {
-          flex: 1,
-          _hover: {
-            bg: 'transparent',
-          },
-        },
-        // Item text colors - matching original design
-        '& [data-part="item-text"]': {
-          color: 'gray.600',
-          fontWeight: '500',
-        },
-        '& [data-part="item"][data-state="checked"] [data-part="item-text"]': {
-          color: 'gray.1300',
-          fontWeight: '600',
-        },
       }}
       {...rest}
     >
-      <SegmentGroup.Indicator />
-      <SegmentGroup.Items items={items} />
+      <SegmentGroup.Indicator borderRadius={indicatorRadius} />
+      {items.map((item) => (
+        <SegmentGroup.Item
+          key={item.value}
+          value={item.value}
+          disabled={item.disabled}
+          cursor="pointer"
+          flex="1"
+          _hover={{ bg: 'transparent' }}
+        >
+          <SegmentGroup.ItemText
+            data-text={typeof item.label === 'string' ? item.label : undefined}
+            color="gray.800"
+            fontWeight="500"
+            fontSize={fontSize}
+            whiteSpace="nowrap"
+            display="inline-flex"
+            flexDirection="column"
+            alignItems="center"
+            css={{
+              '&::after': {
+                content: 'attr(data-text)',
+                fontWeight: '600',
+                height: '0',
+                visibility: 'hidden',
+                overflow: 'hidden',
+                userSelect: 'none',
+                pointerEvents: 'none',
+              },
+              '[data-state="checked"] &': {
+                color: 'var(--chakra-colors-gray-1500)',
+                fontWeight: '600',
+              },
+            }}
+          >
+            {item.label}
+          </SegmentGroup.ItemText>
+          <SegmentGroup.ItemHiddenInput />
+        </SegmentGroup.Item>
+      ))}
     </SegmentGroup.Root>
   );
 });
