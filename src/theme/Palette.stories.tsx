@@ -124,7 +124,7 @@ const ColorCard = ({
   };
 
   return (
-    <Flex flexDir="column" align="center" key={shade} p={2}>
+    <Flex flexDir="column" align="center" key={shade} p={3}>
       <Tooltip content="Copy hex code" placement="top">
         <Flex
           w="100px"
@@ -169,10 +169,10 @@ const ColorCard = ({
           )}
         </Flex>
       </Tooltip>
-      <Text color="gray.1200" mt={2} textStyle="subtext">
+      <Text color="gray.1200" mt={2} textStyle="subtext" textAlign="center" wordBreak="break-word">
         {color}.{shade}
       </Text>
-      <Subtext color="gray.700">{shadeValue !== hexCode && shadeValue}</Subtext>
+      <Subtext color="gray.700" textAlign="center" wordBreak="break-word">{shadeValue !== hexCode && shadeValue}</Subtext>
     </Flex>
   );
 };
@@ -259,16 +259,17 @@ export const SemanticTokens: Story = {
         {Object.entries(semanticTokens.colors)
           .filter(([color]) => !color.startsWith('chakra'))
           .map(([color, shades]) => (
-            <Flex key={color} gap={4} align="center" wrap="wrap">
+            <Flex key={color} gap={4} align="flex-start" wrap="wrap" w="full">
               <H4
-                mb={2}
-                w="100px"
+                mt={2}
+                w="120px"
+                flexShrink={0}
                 textTransform="capitalize"
                 color="gray.1200"
               >
                 {color}
               </H4>
-              <Flex gap={2} wrap="wrap">
+              <Grid templateColumns="repeat(auto-fill, minmax(132px, 1fr))" gap={2} flex="1" minW="0">
                 {Object.entries(shades).map(([shade, shadeValue]) => (
                   <ColorCard
                     key={shade}
@@ -277,7 +278,7 @@ export const SemanticTokens: Story = {
                     shadeValue={(shadeValue as any).value as string}
                   />
                 ))}
-              </Flex>
+              </Grid>
             </Flex>
           ))}
       </VStack>
@@ -718,15 +719,15 @@ import { H1, Text, Subtext } from '@mindlogic-ai/logician-ui';
 export const Default: Story = {
   render: () => {
     return (
-      <VStack gap={4} align="flex-start">
+      <VStack gap={4} align="flex-start" w="full">
         {Object.entries(semanticTokens.colors)
           .filter(([color]) => !color.startsWith('chakra'))
           .map(([color, shades]) => (
-            <Flex key={color} gap={4} align="center">
-              <H4 mb={2} w="100px" textTransform="capitalize" color="gray.1200">
+            <Flex key={color} gap={4} align="flex-start" w="full">
+              <H4 mt={2} w="120px" flexShrink={0} textTransform="capitalize" color="gray.1200">
                 {color}
               </H4>
-              <Flex gap={2}>
+              <Grid templateColumns="repeat(auto-fill, minmax(132px, 1fr))" gap={2} flex="1" minW="0">
                 {Object.entries(shades).map(([shade, shadeValue]) => (
                   <ColorCard
                     key={shade}
@@ -735,7 +736,7 @@ export const Default: Story = {
                     shadeValue={(shadeValue as any).value as string}
                   />
                 ))}
-              </Flex>
+              </Grid>
             </Flex>
           ))}
       </VStack>
