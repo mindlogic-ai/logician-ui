@@ -7,7 +7,7 @@ export const TagCloseButton = forwardRef(
   ({ ...rest }: TagCloseButtonProps, ref?: ForwardedRef<HTMLButtonElement>) => {
     return (
       <Tag.EndElement>
-        <Tag.CloseTrigger {...rest} ref={ref} />
+        <Tag.CloseTrigger cursor="pointer" {...rest} ref={ref} />
       </Tag.EndElement>
     );
   }
