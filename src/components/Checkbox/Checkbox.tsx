@@ -23,6 +23,10 @@ export const Checkbox = forwardRef<HTMLLabelElement, CheckboxProps>(
             bgColor: 'primary.main',
             borderColor: 'primary.main',
           }}
+          _indeterminate={{
+            bgColor: 'primary.main',
+            borderColor: 'primary.main',
+          }}
           cursor="pointer"
         >
           <ChakraCheckbox.Indicator />
