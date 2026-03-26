@@ -21,17 +21,10 @@ export type BadgeVariant =
   | 'danger'
   | 'neutral';
 
-export type BadgeSize = 'sm' | 'md' | 'lg';
-
-export interface BadgeProps extends Omit<ChakraBadgeProps, 'variant' | 'size'> {
+export interface BadgeProps extends Omit<ChakraBadgeProps, 'variant'> {
   /**
    * The color variant of the badge.
    * @default 'primary'
    */
   variant?: BadgeVariant;
-  /**
-   * The size of the badge.
-   * @default 'md'
-   */
-  size?: BadgeSize;
 }

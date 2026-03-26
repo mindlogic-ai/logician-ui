@@ -18,8 +18,8 @@ const meta = {
     },
     size: {
       control: 'select',
-      options: ['sm', 'md', 'lg'],
-      description: 'Size of the badge',
+      options: ['xs', 'sm', 'md', 'lg'],
+      description: 'Size of the badge (Chakra UI built-in)',
     },
     textTransform: {
       control: 'radio',
@@ -99,6 +99,7 @@ export const Neutral: Story = {
 export const Sizes: Story = {
   render: () => (
     <Flex gap={4} align="center">
+      <Badge size="xs">XSmall</Badge>
       <Badge size="sm">Small</Badge>
       <Badge size="md">Medium</Badge>
       <Badge size="lg">Large</Badge>
