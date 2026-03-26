@@ -124,7 +124,7 @@ export const textStyles = defineTextStyles({
     description: 'Chakra 6xl override - responsive 60-72px (original)',
     value: {
       fontSize: { base: '6xl', md: '7xl' }, // 60px → 72px (기존 유지 - 최대 크기)
-      lineHeight: '5.75em',
+      lineHeight: '1.533', // 92px / 60px — preserves original 5.75rem output
       letterSpacing: '-0.025em',
     },
   },
