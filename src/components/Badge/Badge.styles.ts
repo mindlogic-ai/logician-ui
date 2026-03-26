@@ -7,7 +7,6 @@ import { BadgeSize, BadgeVariant } from './Badge.types';
  */
 export const baseStyles = {
   borderRadius: '2xl',
-  textStyle: 'subtitle',
   fontWeight: 'medium',
   display: 'flex',
   alignItems: 'center',
