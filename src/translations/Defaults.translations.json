@@ -229,5 +229,19 @@
     "zh": "删除",
     "ja": "削除",
     "es": "Eliminar"
+  },
+  "downloading": {
+    "ko": "다운로드 중",
+    "en": "Downloading",
+    "zh": "下载中",
+    "ja": "ダウンロード中",
+    "es": "Descargando"
+  },
+  "deleting": {
+    "ko": "삭제 중",
+    "en": "Deleting",
+    "zh": "删除中",
+    "ja": "削除中",
+    "es": "Eliminando"
   }
 }

@@ -12,9 +12,8 @@ import {
 import { IconButton } from '@/components/IconButton';
 import { ProgressBar } from '@/components/ProgressBar';
 import { Subtext, Subtitle, Text } from '@/components/Typography';
-import { formatFileSize } from '@/utils/formatFileSize';
-
 import { useTranslate } from '@/hooks/useTranslate';
+import { formatFileSize } from '@/utils/formatFileSize';
 
 import { Spinner } from '../Spinner';
 import { Tooltip } from '../Tooltip';
@@ -100,9 +99,16 @@ export const FileItem = ({
           <Fragment>
             {fileSize && <Subtitle mr={4}>{formatFileSize(fileSize)}</Subtitle>}
             {onFileDownload && !error && (
-              <Tooltip content={translate('download')} placement="top">
+              <Tooltip
+                content={translate(isDownloading ? 'downloading' : 'download')}
+                placement="top"
+              >
                 <IconButton
-                  aria-label={translate('download') as string}
+                  aria-label={
+                    translate(
+                      isDownloading ? 'downloading' : 'download'
+                    ) as string
+                  }
                   onClick={onFileDownload}
                   size="2xs"
                   disabled={isDownloading}
@@ -118,9 +124,14 @@ export const FileItem = ({
               </Tooltip>
             )}
             {onFileDelete && (
-              <Tooltip content={translate('delete')} placement="top">
+              <Tooltip
+                content={translate(isDeleting ? 'deleting' : 'delete')}
+                placement="top"
+              >
                 <IconButton
-                  aria-label={translate('delete') as string}
+                  aria-label={
+                    translate(isDeleting ? 'deleting' : 'delete') as string
+                  }
                   onClick={onFileDelete}
                   size="2xs"
                   disabled={isDeleting}
