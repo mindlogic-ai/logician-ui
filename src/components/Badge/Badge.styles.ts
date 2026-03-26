@@ -7,23 +7,12 @@ import { BadgeVariant } from './Badge.types';
  */
 export const baseStyles = {
   borderRadius: '2xl',
-  px: 2.5,
-  textStyle: 'subtitle',
   fontWeight: 'medium',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
 };
 
-/**
- * Badge variant styles using the Golden Ratio color system.
- *
- * Each variant uses the `extralight` background shade with `dark` text
- * for optimal readability and WCAG AA compliance.
- *
- * Pattern: bg = `*.extralight`, color = `*.dark`
- * This matches the Alert/Toast/Banner component styling.
- */
 export const variantStyles: Record<
   BadgeVariant,
   { bgColor: string; color: string }

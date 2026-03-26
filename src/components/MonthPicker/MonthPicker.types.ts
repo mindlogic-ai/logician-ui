@@ -38,4 +38,7 @@ export interface MonthPickerProps extends Omit<BoxProps, 'onChange'> {
 
   /** Name attribute for form usage */
   name?: string;
+
+  /** Whether to show the reset button (default: true) */
+  showClearButton?: boolean;
 }

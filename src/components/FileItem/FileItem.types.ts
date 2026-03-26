@@ -8,4 +8,5 @@ export interface FileItemProps extends FlexProps {
   progress?: number;
   fileSize?: number; // in bytes
   isDeleting?: boolean;
+  isDownloading?: boolean;
 }

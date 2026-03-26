@@ -316,6 +316,7 @@ export const Input = forwardRef(
           disabled={disabled}
           readOnly={readOnly}
           data-invalid={invalid || undefined}
+          bg="white"
           borderColor={invalid ? 'danger.main' : 'gray.400'}
           _hover={{
             borderColor: invalid ? 'danger.main' : 'primary.lighter',
