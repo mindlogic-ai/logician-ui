@@ -27,6 +27,7 @@ export const FileItem = ({
   progress,
   fileSize,
   isDeleting = false,
+  isDownloading = false,
   ...rest
 }: FileItemProps) => {
   const translate = useTranslate();
@@ -104,10 +105,15 @@ export const FileItem = ({
                   aria-label={translate('download') as string}
                   onClick={onFileDownload}
                   size="2xs"
+                  disabled={isDownloading}
                   colorPalette="neutral"
                   variant="ghost"
                 >
-                  <LuDownload color="gray.800" />
+                  {isDownloading ? (
+                    <Spinner size="xs" />
+                  ) : (
+                    <LuDownload color="gray.800" />
+                  )}
                 </IconButton>
               </Tooltip>
             )}
