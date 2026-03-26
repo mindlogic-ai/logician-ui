@@ -1,7 +1,7 @@
 import { ForwardedRef, forwardRef } from 'react';
 import { Badge as ChakraBadge } from '@chakra-ui/react';
 
-import { baseStyles, variantStyles } from './Badge.styles';
+import { baseStyles, sizeStyles, variantStyles } from './Badge.styles';
 import { BadgeProps } from './Badge.types';
 
 /**
@@ -19,12 +19,13 @@ import { BadgeProps } from './Badge.types';
  */
 export const Badge = forwardRef(
   (
-    { textTransform = 'none', variant = 'primary', ...rest }: BadgeProps,
+    { textTransform = 'none', variant = 'primary', size = 'md', ...rest }: BadgeProps,
     ref?: ForwardedRef<HTMLButtonElement>
   ) => {
     return (
       <ChakraBadge
         {...baseStyles}
+        {...sizeStyles[size]}
         {...variantStyles[variant]}
         w="fit-content"
         textTransform={textTransform}

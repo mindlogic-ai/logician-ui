@@ -1,4 +1,4 @@
-import { BadgeVariant } from './Badge.types';
+import { BadgeSize, BadgeVariant } from './Badge.types';
 
 /**
  * Badge base styles using the Golden Ratio color system.
@@ -7,7 +7,6 @@ import { BadgeVariant } from './Badge.types';
  */
 export const baseStyles = {
   borderRadius: '2xl',
-  px: 2.5,
   textStyle: 'subtitle',
   fontWeight: 'medium',
   display: 'flex',
@@ -24,6 +23,12 @@ export const baseStyles = {
  * Pattern: bg = `*.extralight`, color = `*.dark`
  * This matches the Alert/Toast/Banner component styling.
  */
+export const sizeStyles: Record<BadgeSize, { px: number; py: number; fontSize: string }> = {
+  sm: { px: 1.5, py: 0, fontSize: '11px' },
+  md: { px: 2.5, py: 0.5, fontSize: '12px' },
+  lg: { px: 3, py: 1, fontSize: '14px' },
+};
+
 export const variantStyles: Record<
   BadgeVariant,
   { bgColor: string; color: string }

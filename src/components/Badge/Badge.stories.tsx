@@ -16,6 +16,11 @@ const meta = {
       options: Object.keys(badgeVariantStyles),
       description: 'Color variant of the badge',
     },
+    size: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+      description: 'Size of the badge',
+    },
     textTransform: {
       control: 'radio',
       options: ['none', 'uppercase'],
@@ -89,4 +94,14 @@ export const Neutral: Story = {
     variant: 'neutral',
     children: 'Draft',
   },
+};
+
+export const Sizes: Story = {
+  render: () => (
+    <Flex gap={4} align="center">
+      <Badge size="sm">Small</Badge>
+      <Badge size="md">Medium</Badge>
+      <Badge size="lg">Large</Badge>
+    </Flex>
+  ),
 };
