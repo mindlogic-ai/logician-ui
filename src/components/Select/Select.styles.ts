@@ -26,12 +26,10 @@ export const getMenuStyles = (colors: SelectColors) => ({
 
 export const getOptionStyles = ({
   isSelected,
-  _isFocused,
   isDisabled,
   colors,
 }: {
   isSelected: boolean;
-  _isFocused: boolean;
   isDisabled: boolean;
   colors?: SelectColors;
 }) => ({
