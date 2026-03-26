@@ -8,4 +8,5 @@ export const seeMoreButtonStyles = {
   borderColor: 'gray.300',
   color: 'gray.600',
   fontSize: 'subtitle',
+  cursor: 'pointer',
 };
