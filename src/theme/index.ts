@@ -16,46 +16,46 @@ import { globalCss } from './global';
 const SHARED_TEXT_STYLE_VALUES = {
   h1: {
     fontFamily: 'heading',
-    fontSize: { base: '2.4rem', md: '3rem' }, // 38.4px → 48px
+    fontSize: { base: '2.4em', md: '3em' }, // 38.4px → 48px
     fontWeight: 'bold',
     lineHeight: '1.33',
     letterSpacing: '-0.02em',
   },
   h2: {
     fontFamily: 'heading',
-    fontSize: { base: '2rem', md: '2.5rem' }, // 32px → 40px
+    fontSize: { base: '2em', md: '2.5em' }, // 32px → 40px
     fontWeight: 'semibold',
     lineHeight: '1.33',
     letterSpacing: '-0.01em',
   },
   h3: {
     fontFamily: 'heading',
-    fontSize: { base: '1.5rem', md: '1.75rem' }, // 24px → 28px
+    fontSize: { base: '1.5em', md: '1.75em' }, // 24px → 28px
     fontWeight: 'semibold',
     lineHeight: '1.33',
     letterSpacing: '-0.01em',
   },
   h4: {
     fontFamily: 'heading',
-    fontSize: { base: '1.25rem', md: '1.44rem' }, // 20px → 23px
+    fontSize: { base: '1.25em', md: '1.44em' }, // 20px → 23px
     fontWeight: 'semibold',
     lineHeight: '1.4',
   },
   h5: {
     fontFamily: 'heading',
-    fontSize: { base: '1.1rem', md: '1.2rem' }, // 17.6px → 19.2px
+    fontSize: { base: '1.1em', md: '1.2em' }, // 17.6px → 19.2px
     fontWeight: 'bold',
     lineHeight: '1.4',
   },
   subtitleAndP: {
     fontFamily: 'body',
-    fontSize: { base: '0.875rem', md: '1rem' }, // 14px → 16px
+    fontSize: { base: '0.875em', md: '1em' }, // 14px → 16px
     fontWeight: 'medium',
     lineHeight: '1.5',
   },
   subtext: {
     fontFamily: 'body',
-    fontSize: { base: '0.805rem', md: '0.875rem' }, // 12.88px → 14px
+    fontSize: { base: '0.805em', md: '0.875em' }, // 12.88px → 14px
     fontWeight: '500',
     lineHeight: '1.5',
   },
@@ -66,7 +66,7 @@ const SHARED_TEXT_STYLE_VALUES = {
  * Names match fontSize tokens for easy migration: fontStyle="h1" → textStyle="h1"
  *
  * Base font size: 16px (set in global.ts)
- * Responsive scaling using rem units:
+ * Responsive scaling using em units (relative to nearest ancestor font-size):
  * - Mobile (base): Slightly smaller for better readability on small screens
  * - Desktop (md+): Original design sizes
  *
@@ -124,7 +124,7 @@ export const textStyles = defineTextStyles({
     description: 'Chakra 6xl override - responsive 60-72px (original)',
     value: {
       fontSize: { base: '6xl', md: '7xl' }, // 60px → 72px (기존 유지 - 최대 크기)
-      lineHeight: '5.75rem',
+      lineHeight: '5.75em',
       letterSpacing: '-0.025em',
     },
   },
