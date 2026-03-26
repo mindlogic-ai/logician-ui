@@ -40,8 +40,7 @@ export const getOptionStyles = ({
   margin: '4px 0',
   borderRadius: 4,
   fontSize: 14,
-  backgroundColor:
-    isSelected || isFocused || isDisabled ? colors.primaryLightest : 'white',
+  backgroundColor: isSelected ? colors.primaryLightest : 'white',
   color: isSelected
     ? colors.primaryDark
     : isDisabled
@@ -49,7 +48,7 @@ export const getOptionStyles = ({
       : colors.gray1200,
   fontWeight: isSelected ? 700 : 400,
   '&:hover': {
-    backgroundColor: colors.gray50,
+    backgroundColor: isSelected ? colors.primaryLightest : colors.gray50,
   },
 });
 
