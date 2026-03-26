@@ -11,6 +11,7 @@ export const FormLabel = (props: Field.LabelProps) => (
       }}
     >
       {props.children}
+      {/* 부모 FormControl(Field.Root)에 required prop이 있을 때만 필수 표시(*) 렌더링 */}
       <Field.RequiredIndicator />
     </Field.Label>
   </Box>
