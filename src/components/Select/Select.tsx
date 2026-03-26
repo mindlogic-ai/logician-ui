@@ -111,7 +111,7 @@ export const Select = <
             ...base,
             ...getOptionStyles({
               isSelected: state.isSelected,
-              isFocused: state.isFocused,
+              _isFocused: state.isFocused,
               isDisabled: state.isDisabled,
               colors,
             }),

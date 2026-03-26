@@ -31,7 +31,7 @@ export const getOptionStyles = ({
   colors,
 }: {
   isSelected: boolean;
-  isFocused: boolean;
+  _isFocused: boolean;
   isDisabled: boolean;
   colors?: SelectColors;
 }) => ({
