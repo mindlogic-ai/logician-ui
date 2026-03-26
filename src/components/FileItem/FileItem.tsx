@@ -101,7 +101,9 @@ export const FileItem = ({
             {onFileDownload && !error && (
               <>
                 {isDownloading ? (
-                  <Spinner size="xs" />
+                  <Tooltip content={translate('downloading')} placement="top">
+                    <Spinner size="xs" />
+                  </Tooltip>
                 ) : (
                   <Tooltip content={translate('download')} placement="top">
                     <IconButton
@@ -120,7 +122,9 @@ export const FileItem = ({
             {onFileDelete && (
               <>
                 {isDeleting ? (
-                  <Spinner size="xs" />
+                  <Tooltip content={translate('deleting')} placement="top">
+                    <Spinner size="xs" />
+                  </Tooltip>
                 ) : (
                   <Tooltip content={translate('delete')} placement="top">
                     <IconButton
