@@ -1,3 +1,3 @@
 export * from './constants';
 export { MonthPicker } from './MonthPicker';
-export type { MonthPickerProps } from './MonthPicker.types';
+export type { MonthPickerProps, MonthRange } from './MonthPicker.types';
