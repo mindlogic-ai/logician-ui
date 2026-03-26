@@ -22,7 +22,10 @@ export const baseStyles = {
  * Pattern: bg = `*.extralight`, color = `*.dark`
  * This matches the Alert/Toast/Banner component styling.
  */
-export const sizeStyles: Record<BadgeSize, { px: number; py: number; textStyle: string }> = {
+export const sizeStyles: Record<
+  BadgeSize,
+  { px: number; py: number; textStyle: string }
+> = {
   sm: { px: 1.5, py: 0, textStyle: 'subtext' },
   md: { px: 2.5, py: 0.5, textStyle: 'subtitle' },
   lg: { px: 3, py: 1, textStyle: 'subtitle' },

@@ -1,7 +1,7 @@
 export { Badge } from './Badge';
 export {
-  baseStyles as badgeStyles,
   sizeStyles as badgeSizeStyles,
+  baseStyles as badgeStyles,
   variantStyles as badgeVariantStyles,
 } from './Badge.styles';
 export type { BadgeProps, BadgeSize, BadgeVariant } from './Badge.types';

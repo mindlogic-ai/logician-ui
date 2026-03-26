@@ -19,7 +19,12 @@ import { BadgeProps } from './Badge.types';
  */
 export const Badge = forwardRef(
   (
-    { textTransform = 'none', variant = 'primary', size = 'md', ...rest }: BadgeProps,
+    {
+      textTransform = 'none',
+      variant = 'primary',
+      size = 'md',
+      ...rest
+    }: BadgeProps,
     ref?: ForwardedRef<HTMLButtonElement>
   ) => {
     return (
