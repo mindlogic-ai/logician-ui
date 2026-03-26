@@ -330,7 +330,7 @@ export const buttonColorPaletteStyles: Record<
     ghost: {
       borderColor: 'transparent',
       bgColor: 'transparent',
-      color: 'gray.600', // #2A3142
+      color: 'gray.1200', // #2A3142
       _hover: {
         bgColor: 'gray.50', // #F7F9FC
       },
