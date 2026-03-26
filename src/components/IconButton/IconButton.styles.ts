@@ -1,14 +1,41 @@
-/**
- * IconButton styles - reuses Button styles for consistency.
- *
- * Since IconButton and Button share the same two-dimensional variant system
- * (colorPalette × variant), we simply re-export the Button styles.
- */
-export {
-  getButtonStyles as getIconButtonStyles,
-  buttonColorPalettes as iconButtonColorPalettes,
-  buttonColorPaletteStyles as iconButtonColorPaletteStyles,
-  buttonColorSchemes as iconButtonColorSchemes, // Deprecated
-  buttonColorSchemeStyles as iconButtonColorSchemeStyles, // Deprecated
-  buttonVariants as iconButtonVariants,
+import {
+  buttonColorPalettes,
+  buttonColorPaletteStyles,
+  buttonVariants,
 } from '../Button/Button.styles';
+import { ButtonColorPalette, ButtonVariant } from '../Button/Button.types';
+import { ButtonProps as ChakraButtonProps } from '@chakra-ui/react';
+
+export {
+  buttonColorPalettes as iconButtonColorPalettes,
+  buttonColorPalettes as iconButtonColorSchemes, // Deprecated
+  buttonVariants as iconButtonVariants,
+};
+
+type StyleProps = Partial<ChakraButtonProps>;
+
+/**
+ * Override certain Button styles that don't apply to IconButton.
+ */
+export const iconButtonColorPaletteStyles: Record<
+  ButtonColorPalette,
+  Record<ButtonVariant, StyleProps>
+> = {
+  ...buttonColorPaletteStyles,
+  neutral: {
+    ...buttonColorPaletteStyles.neutral,
+    ghost: {
+      ...buttonColorPaletteStyles.neutral.ghost,
+      color: 'gray.600',
+    },
+  },
+};
+
+export {
+  iconButtonColorPaletteStyles as iconButtonColorSchemeStyles, // Deprecated
+};
+
+export const getIconButtonStyles = (
+  colorPalette: ButtonColorPalette = 'neutral',
+  variant: ButtonVariant = 'ghost'
+): StyleProps => iconButtonColorPaletteStyles[colorPalette][variant];

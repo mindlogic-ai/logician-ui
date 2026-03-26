@@ -87,7 +87,6 @@ export const Select = <
                 ? primaryColor
                 : gray400,
           },
-          cursor: state.isDisabled ? 'not-allowed' : 'pointer',
           ...(styles?.control ? styles.control(base, state) : {}),
         }),
         placeholder: (base, state) => ({
