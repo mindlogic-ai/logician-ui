@@ -9,6 +9,9 @@ export const FormLabel = (props: Field.LabelProps) => (
         marginInlineEnd: 0,
         ...(props.style || {}),
       }}
-    />
+    >
+      {props.children}
+      <Field.RequiredIndicator />
+    </Field.Label>
   </Box>
 );
