@@ -22,7 +22,6 @@ export const IconButton = forwardRef(
     {
       colorPalette = 'neutral',
       variant = 'ghost',
-      color = 'gray.600',
       children,
       ...rest
     }: IconButtonProps,
@@ -36,7 +35,6 @@ export const IconButton = forwardRef(
         border="1px solid"
         rounded="full"
         {...styles}
-        color={color}
         {...rest}
       >
         {children}

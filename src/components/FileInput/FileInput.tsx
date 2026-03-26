@@ -87,7 +87,7 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
                   borderRadius="lg"
                   bgColor={bgImage ? 'transparent' : 'gray.100'}
                   p={3}
-                  mb={1}
+                  mb={2}
                   w="fit-content"
                 >
                   <LuUpload color={bgImage ? 'gray.1200' : 'gray.600'} />

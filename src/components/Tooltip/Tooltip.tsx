@@ -30,7 +30,7 @@ export const Tooltip = forwardRef(
         closeOnScroll
         open={open}
         onOpenChange={onOpenChange}
-        openDelay={200}
+        openDelay={300}
         closeDelay={0}
         {...rest}
       >
