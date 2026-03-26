@@ -84,9 +84,7 @@ export const getDayNames = (
  * @param language Language code (ko, en, zh, ja, es)
  * @returns Appropriate date format string for the locale
  */
-export const getDefaultFullDateFormat = (
-  language: string = 'en'
-): string => {
+export const getDefaultFullDateFormat = (language: string = 'en'): string => {
   const formats: Record<string, string> = {
     ko: 'yy년 MM월 dd일',
     en: 'MMM dd, yy',

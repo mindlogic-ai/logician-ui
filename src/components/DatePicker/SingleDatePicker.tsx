@@ -11,8 +11,8 @@ import { Button, ButtonProps } from '../Button';
 import { MdOutlineCalendarToday } from '../Icon';
 import {
   getDateFnsLocale,
-  getDefaultFullDateFormat,
   getDayNames,
+  getDefaultFullDateFormat,
   getMonthNames,
 } from '../MonthPicker/constants';
 
