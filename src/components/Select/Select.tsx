@@ -69,9 +69,7 @@ export const Select = <
       styles={{
         container: (base, state) => {
           const merged = { ...base, width: '100%' };
-          return styles?.container
-            ? styles.container(merged, state)
-            : merged;
+          return styles?.container ? styles.container(merged, state) : merged;
         },
         control: (base, state) => {
           const merged = {
@@ -104,9 +102,7 @@ export const Select = <
         },
         menuList: (base, state) => {
           const merged = { ...base, padding: '0px 4px' };
-          return styles?.menuList
-            ? styles.menuList(merged, state)
-            : merged;
+          return styles?.menuList ? styles.menuList(merged, state) : merged;
         },
         option: (base, state) => {
           const merged = {
@@ -161,9 +157,7 @@ export const Select = <
         },
         menuPortal: (base, state) => {
           const merged = { ...base, zIndex: 9999 };
-          return styles?.menuPortal
-            ? styles.menuPortal(merged, state)
-            : merged;
+          return styles?.menuPortal ? styles.menuPortal(merged, state) : merged;
         },
       }}
     />
