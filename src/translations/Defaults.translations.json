@@ -215,5 +215,19 @@
     "zh": "错误详情已复制到剪贴板。",
     "ja": "エラーの詳細がクリップボードにコピーされました。",
     "es": "Los detalles del error se han copiado al portapapeles."
+  },
+  "download": {
+    "ko": "다운로드",
+    "en": "Download",
+    "zh": "下载",
+    "ja": "ダウンロード",
+    "es": "Descargar"
+  },
+  "delete": {
+    "ko": "삭제",
+    "en": "Delete",
+    "zh": "删除",
+    "ja": "削除",
+    "es": "Eliminar"
   }
 }

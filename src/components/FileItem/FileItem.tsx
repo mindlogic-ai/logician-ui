@@ -14,6 +14,8 @@ import { ProgressBar } from '@/components/ProgressBar';
 import { Subtext, Subtitle, Text } from '@/components/Typography';
 import { formatFileSize } from '@/utils/formatFileSize';
 
+import { useTranslate } from '@/hooks/useTranslate';
+
 import { Spinner } from '../Spinner';
 import { Tooltip } from '../Tooltip';
 
@@ -27,6 +29,7 @@ export const FileItem = ({
   isDeleting = false,
   ...rest
 }: FileItemProps) => {
+  const translate = useTranslate();
   const errorColor = 'danger.main';
 
   const isUploadingFile =
@@ -96,31 +99,35 @@ export const FileItem = ({
           <Fragment>
             {fileSize && <Subtitle mr={4}>{formatFileSize(fileSize)}</Subtitle>}
             {onFileDownload && !error && (
-              <IconButton
-                aria-label={'download uploaded file button'}
-                onClick={onFileDownload}
-                size="2xs"
-                colorPalette="neutral"
-                variant="ghost"
-              >
-                <LuDownload color="gray.800" />
-              </IconButton>
+              <Tooltip content={translate('download')} placement="top">
+                <IconButton
+                  aria-label={translate('download') as string}
+                  onClick={onFileDownload}
+                  size="2xs"
+                  colorPalette="neutral"
+                  variant="ghost"
+                >
+                  <LuDownload color="gray.800" />
+                </IconButton>
+              </Tooltip>
             )}
             {onFileDelete && (
-              <IconButton
-                aria-label={'remove uploaded file button'}
-                onClick={onFileDelete}
-                size="2xs"
-                disabled={isDeleting}
-                colorPalette="neutral"
-                variant="ghost"
-              >
-                {isDeleting ? (
-                  <Spinner size="xs" />
-                ) : (
-                  <FaRegTrashAlt boxSize="sm" color="gray.800" />
-                )}
-              </IconButton>
+              <Tooltip content={translate('delete')} placement="top">
+                <IconButton
+                  aria-label={translate('delete') as string}
+                  onClick={onFileDelete}
+                  size="2xs"
+                  disabled={isDeleting}
+                  colorPalette="neutral"
+                  variant="ghost"
+                >
+                  {isDeleting ? (
+                    <Spinner size="xs" />
+                  ) : (
+                    <FaRegTrashAlt boxSize="sm" color="gray.800" />
+                  )}
+                </IconButton>
+              </Tooltip>
             )}
           </Fragment>
         )}
