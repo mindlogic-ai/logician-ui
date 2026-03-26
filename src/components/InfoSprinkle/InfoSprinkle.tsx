@@ -27,11 +27,11 @@ export const InfoSprinkle = ({
           aria-label="Info"
           opacity={0.5}
           transition="opacity 0.2s"
-          _hover={{ opacity: 1 }}
+          _hover={{ opacity: 1, ...(iconButtonProps?._hover as any) }}
           {...iconButtonProps}
         >
           <LuInfo
-            color={(iconButtonProps?.color as string) ?? 'gray.400'}
+            color={(iconButtonProps?.color as string) ?? 'gray.1000'}
             boxSize={iconButtonProps?.size}
           />
         </IconButton>

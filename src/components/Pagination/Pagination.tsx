@@ -113,44 +113,33 @@ export const Pagination = ({
           </Flex>
         )}
       </Flex>
-      <Flex>
-        <Subtitle>
-          {translate('pagination_range_text', {
-            range_start: (currentPage - 1) * itemsPerPage + 1,
-            range_end: Math.min(numTotalItems, currentPage * itemsPerPage),
-            num_total_items: numTotalItems,
-          })}
-        </Subtitle>
-      </Flex>
       <Flex align="center" gap={2}>
+        <Subtitle>
+          {currentPage} / {maxPage}
+        </Subtitle>
         {maxPage > 1 && (
-          <>
-            <Subtitle>
-              {currentPage} / {maxPage}
-            </Subtitle>
-            <Flex align="center">
-              <IconButton
-                colorPalette="neutral"
-                variant="ghost"
-                aria-label={translate('previous') as string}
-                onClick={handleBack}
-                disabled={currentPage <= 1}
-                color={currentPage === 1 ? 'gray.400' : 'gray.1500'}
-              >
-                <IoIosArrowBack boxSize="sm" />
-              </IconButton>
-              <IconButton
-                colorPalette="neutral"
-                variant="ghost"
-                aria-label={translate('go_next_page_button') as string}
-                onClick={handleNext}
-                disabled={currentPage >= maxPage}
-                color={currentPage === maxPage ? 'gray.400' : 'gray.1500'}
-              >
-                <IoChevronForward boxSize="sm" />
-              </IconButton>
-            </Flex>
-          </>
+          <Flex align="center">
+            <IconButton
+              colorPalette="neutral"
+              variant="ghost"
+              aria-label={translate('previous') as string}
+              onClick={handleBack}
+              disabled={currentPage <= 1}
+              color={currentPage === 1 ? 'gray.400' : 'gray.1000'}
+            >
+              <IoIosArrowBack boxSize="sm" />
+            </IconButton>
+            <IconButton
+              colorPalette="neutral"
+              variant="ghost"
+              aria-label={translate('go_next_page_button') as string}
+              onClick={handleNext}
+              disabled={currentPage >= maxPage}
+              color={currentPage === maxPage ? 'gray.400' : 'gray.1000'}
+            >
+              <IoChevronForward boxSize="sm" />
+            </IconButton>
+          </Flex>
         )}
       </Flex>
     </Flex>
