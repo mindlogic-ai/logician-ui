@@ -66,6 +66,8 @@ export const Select = <
       closeMenuOnScroll
       isSearchable={false}
       {...rest}
+      // 사용자 styles 콜백에 react-select 원본 base 대신 Logician 스타일이 적용된
+      // merged를 넘겨서, 사용자가 ...base로 spread해도 Logician 스타일이 유지되도록 함
       styles={{
         container: (base, state) => {
           const merged = { ...base, width: '100%' };
