@@ -44,7 +44,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
   usePortal = true,
   popoverProps,
   name,
-  showResetButton = true,
+  showClearButton = true,
   ...boxProps
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -258,7 +258,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
             </Grid>
 
             {/* Action Buttons */}
-            {showResetButton && (
+            {showClearButton && (
               <HStack gap={2} justify="flex-end">
                 <Button
                   size="sm"
