@@ -12,11 +12,10 @@ export const FormLabel = (props: Field.LabelProps) => (
     >
       {props.children}
       {/*
-        Field.RequiredIndicator는 props 없이 사용되지만,
-        Chakra UI v3 Field context를 통해 부모 FormControl(Field.Root)의
-        required 상태를 읽어 조건부로 렌더링됩니다.
-        - FormControl에 required prop이 있으면 '*' 표시
-        - required가 없으면 아무것도 렌더링하지 않음
+        Field.RequiredIndicator는 내부적으로 useFieldContext()를 호출하여
+        부모 Field.Root(FormControl)의 required 상태를 React Context로 읽습니다.
+        field.required가 falsy면 null을 반환하므로, props 없이도 조건부 렌더링됩니다.
+        @see node_modules/@chakra-ui/react/dist/esm/components/field/field.js
       */}
       <Field.RequiredIndicator />
     </Field.Label>
