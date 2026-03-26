@@ -2,12 +2,15 @@
   "mode": "exit",
   "tag": "alpha",
   "initialVersions": {
-    "@mindlogic-ai/logician-ui": "3.0.0-alpha.10"
+    "@mindlogic-ai/logician-ui": "3.0.0-alpha.11"
   },
   "changesets": [
     "add-collapsible-component",
     "chakra-v3-migration",
     "color-palette-lightest-extralight",
+    "em-spacing-scale",
+    "em-units-theme",
+    "fix-6xl-lineheight-em-compounding",
     "fix-button-soft-borders-toast-styles",
     "fix-pr55-release",
     "fix-radial-progress-hooks",

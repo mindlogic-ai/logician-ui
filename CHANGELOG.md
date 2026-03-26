@@ -1,5 +1,27 @@
 # Changelog
 
+## 3.0.0-alpha.12
+
+### Patch Changes
+
+- 1595e85: fix: override Chakra spacing scale with em units
+
+  Numeric spacing tokens (p: 4, gap: 2, etc.) now resolve to em values
+  instead of rem, so spacing cascades from the nearest ancestor font-size
+  alongside text — enabling consistent contextual scaling.
+
+- 5edf7a7: fix: switch theme textStyles font sizes from rem to em for contextual scaling
+
+  em units inherit from the nearest ancestor font-size, enabling components inside
+  containers like Popover to scale from a local base (e.g. 14px) rather than
+  always deferring to the html root.
+
+- e7627c9: fix: replace compounding em lineHeight on 6xl textStyle with unitless ratio
+
+  `lineHeight: '5.75em'` resolved against the element's own font-size (60px),
+  producing 345px instead of the intended 92px. Replaced with unitless `1.533`
+  (92 ÷ 60) to preserve the original rendered output.
+
 ## 3.0.0-alpha.11
 
 ### Minor Changes
