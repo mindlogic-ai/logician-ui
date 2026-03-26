@@ -99,52 +99,42 @@ export const FileItem = ({
           <Fragment>
             {fileSize && <Subtitle mr={4}>{formatFileSize(fileSize)}</Subtitle>}
             {onFileDownload && !error && (
-              <Tooltip
-                content={translate(isDownloading ? 'downloading' : 'download')}
-                placement="top"
-              >
-                <IconButton
-                  aria-label={
-                    translate(
-                      isDownloading ? 'downloading' : 'download'
-                    ) as string
-                  }
-                  onClick={onFileDownload}
-                  size="2xs"
-                  disabled={isDownloading}
-                  colorPalette="neutral"
-                  variant="ghost"
-                >
-                  {isDownloading ? (
-                    <Spinner size="xs" />
-                  ) : (
-                    <LuDownload color="gray.800" />
-                  )}
-                </IconButton>
-              </Tooltip>
+              <>
+                {isDownloading ? (
+                  <Spinner size="xs" />
+                ) : (
+                  <Tooltip content={translate('download')} placement="top">
+                    <IconButton
+                      aria-label={translate('download') as string}
+                      onClick={onFileDownload}
+                      size="2xs"
+                      colorPalette="neutral"
+                      variant="ghost"
+                    >
+                      <LuDownload color="gray.800" />
+                    </IconButton>
+                  </Tooltip>
+                )}
+              </>
             )}
             {onFileDelete && (
-              <Tooltip
-                content={translate(isDeleting ? 'deleting' : 'delete')}
-                placement="top"
-              >
-                <IconButton
-                  aria-label={
-                    translate(isDeleting ? 'deleting' : 'delete') as string
-                  }
-                  onClick={onFileDelete}
-                  size="2xs"
-                  disabled={isDeleting}
-                  colorPalette="neutral"
-                  variant="ghost"
-                >
-                  {isDeleting ? (
-                    <Spinner size="xs" />
-                  ) : (
-                    <FaRegTrashAlt boxSize="sm" color="gray.800" />
-                  )}
-                </IconButton>
-              </Tooltip>
+              <>
+                {isDeleting ? (
+                  <Spinner size="xs" />
+                ) : (
+                  <Tooltip content={translate('delete')} placement="top">
+                    <IconButton
+                      aria-label={translate('delete') as string}
+                      onClick={onFileDelete}
+                      size="2xs"
+                      colorPalette="neutral"
+                      variant="ghost"
+                    >
+                      <FaRegTrashAlt boxSize="sm" color="gray.800" />
+                    </IconButton>
+                  </Tooltip>
+                )}
+              </>
             )}
           </Fragment>
         )}
