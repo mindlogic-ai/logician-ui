@@ -67,93 +67,104 @@ export const Select = <
       isSearchable={false}
       {...rest}
       styles={{
-        container: (base, state) => ({
-          ...base,
-          width: '100%',
-          ...(styles?.container ? styles.container(base, state) : {}),
-        }),
-        control: (base, state) => ({
-          ...base,
-          ...getControlStyles(effectiveVariant, colors),
-          width: '100%',
-          border: `1px solid ${
-            invalid ? dangerColor : state.isFocused ? primaryColor : gray300
-          }`,
-          boxShadow: 'none',
-          '&:hover': {
-            borderColor: invalid
-              ? dangerColor
-              : state.isFocused
-                ? primaryColor
-                : gray400,
-          },
-          ...(styles?.control ? styles.control(base, state) : {}),
-        }),
-        placeholder: (base, state) => ({
-          ...base,
-          ...getPlaceholderStyles(colors),
-          ...(styles?.placeholder ? styles.placeholder(base, state) : {}),
-        }),
-        menu: (base, state) => ({
-          ...base,
-          ...getMenuStyles(colors),
-          ...(styles?.menu ? styles.menu(base, state) : {}),
-        }),
-        menuList: (base, state) => ({
-          ...base,
-          padding: '0px 4px',
-          ...(styles?.menuList ? styles.menuList(base, state) : {}),
-        }),
-        option: (base, state) => ({
-          ...base,
-          ...getOptionStyles({
-            isSelected: state.isSelected,
-            isFocused: state.isFocused,
-            isDisabled: state.isDisabled,
-            colors,
-          }),
-          ...(styles?.option ? styles.option(base, state) : {}),
-        }),
-        singleValue: (base, state) => ({
-          ...base,
-          margin: 0,
-          color: gray1200,
-          ...(styles?.singleValue ? styles.singleValue(base, state) : {}),
-        }),
-        valueContainer: (base, state) => ({
-          ...base,
-          display: 'flex',
-          alignItems: 'center',
-          textAlign: 'left',
-          ...(styles?.valueContainer ? styles.valueContainer(base, state) : {}),
-        }),
-        indicatorSeparator: (base, state) => ({
-          ...base,
-          display: 'none',
-          ...(styles?.indicatorSeparator
-            ? styles.indicatorSeparator(base, state)
-            : {}),
-        }),
-        dropdownIndicator: (base, state) => ({
-          ...base,
-          color: gray1200,
-          ...(styles?.dropdownIndicator
-            ? styles.dropdownIndicator(base, state)
-            : {}),
-        }),
-        indicatorsContainer: (base, state) => ({
-          ...base,
-          display: 'flex',
-          alignItems: 'center',
-          ...(styles?.indicatorsContainer
-            ? styles.indicatorsContainer(base, state)
-            : {}),
-        }),
-        menuPortal: (base, state) => ({
-          ...base,
-          zIndex: 9999,
-          ...(styles?.menuPortal ? styles.menuPortal(base, state) : {}),
-        }),
+        container: (base, state) => {
+          const merged = { ...base, width: '100%' };
+          return styles?.container
+            ? styles.container(merged, state)
+            : merged;
+        },
+        control: (base, state) => {
+          const merged = {
+            ...base,
+            ...getControlStyles(effectiveVariant, colors),
+            width: '100%',
+            border: `1px solid ${
+              invalid ? dangerColor : state.isFocused ? primaryColor : gray300
+            }`,
+            boxShadow: 'none',
+            '&:hover': {
+              borderColor: invalid
+                ? dangerColor
+                : state.isFocused
+                  ? primaryColor
+                  : gray400,
+            },
+          };
+          return styles?.control ? styles.control(merged, state) : merged;
+        },
+        placeholder: (base, state) => {
+          const merged = { ...base, ...getPlaceholderStyles(colors) };
+          return styles?.placeholder
+            ? styles.placeholder(merged, state)
+            : merged;
+        },
+        menu: (base, state) => {
+          const merged = { ...base, ...getMenuStyles(colors) };
+          return styles?.menu ? styles.menu(merged, state) : merged;
+        },
+        menuList: (base, state) => {
+          const merged = { ...base, padding: '0px 4px' };
+          return styles?.menuList
+            ? styles.menuList(merged, state)
+            : merged;
+        },
+        option: (base, state) => {
+          const merged = {
+            ...base,
+            ...getOptionStyles({
+              isSelected: state.isSelected,
+              isFocused: state.isFocused,
+              isDisabled: state.isDisabled,
+              colors,
+            }),
+          };
+          return styles?.option ? styles.option(merged, state) : merged;
+        },
+        singleValue: (base, state) => {
+          const merged = { ...base, margin: 0, color: gray1200 };
+          return styles?.singleValue
+            ? styles.singleValue(merged, state)
+            : merged;
+        },
+        valueContainer: (base, state) => {
+          const merged = {
+            ...base,
+            display: 'flex',
+            alignItems: 'center',
+            textAlign: 'left' as const,
+          };
+          return styles?.valueContainer
+            ? styles.valueContainer(merged, state)
+            : merged;
+        },
+        indicatorSeparator: (base, state) => {
+          const merged = { ...base, display: 'none' };
+          return styles?.indicatorSeparator
+            ? styles.indicatorSeparator(merged, state)
+            : merged;
+        },
+        dropdownIndicator: (base, state) => {
+          const merged = { ...base, color: gray1200 };
+          return styles?.dropdownIndicator
+            ? styles.dropdownIndicator(merged, state)
+            : merged;
+        },
+        indicatorsContainer: (base, state) => {
+          const merged = {
+            ...base,
+            display: 'flex',
+            alignItems: 'center',
+          };
+          return styles?.indicatorsContainer
+            ? styles.indicatorsContainer(merged, state)
+            : merged;
+        },
+        menuPortal: (base, state) => {
+          const merged = { ...base, zIndex: 9999 };
+          return styles?.menuPortal
+            ? styles.menuPortal(merged, state)
+            : merged;
+        },
       }}
     />
   );

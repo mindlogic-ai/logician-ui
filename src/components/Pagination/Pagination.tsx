@@ -86,12 +86,14 @@ export const Pagination = ({
             <Select
               menuPlacement="auto"
               styles={{
-                control: (_base, _state) => ({
+                control: (base, _state) => ({
+                  ...base,
                   fontSize: '0.875rem',
                   padding: 0,
                   minHeight: '28px',
                 }),
-                dropdownIndicator: (_base, _props) => ({
+                dropdownIndicator: (base, _props) => ({
+                  ...base,
                   padding: '0 4px',
                 }),
               }}
