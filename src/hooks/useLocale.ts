@@ -1,11 +1,15 @@
-/**
- * Simple locale hook
- * This is a stub implementation - replace with your actual locale logic
- */
-export const useLocale = () => {
-  return {
-    language: 'en', // Default to English
-  };
-};
+'use client';
+
+import { createContext, useContext } from 'react';
+
+export interface LocaleContextValue {
+  language: string;
+}
+
+export const LocaleContext = createContext<LocaleContextValue>({
+  language: 'en',
+});
+
+export const useLocale = () => useContext(LocaleContext);
 
 export default useLocale;

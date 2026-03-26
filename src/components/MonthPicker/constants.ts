@@ -59,5 +59,43 @@ export const getDateFnsLocale = (language: string = 'en') => {
   return LOCALE_MAP[language as keyof typeof LOCALE_MAP] || LOCALE_MAP.en;
 };
 
+/**
+ * Generate day names for the given locale
+ * @param language Language code (ko, en, zh, ja, es)
+ * @param dayFormat Format string for day names (default: 'EEEEEE' for 2-letter abbreviated)
+ * @returns Array of day names in the specified locale (starting from Sunday)
+ */
+export const getDayNames = (
+  language: string = 'en',
+  dayFormat: string = 'EEEEEE'
+): string[] => {
+  const locale =
+    LOCALE_MAP[language as keyof typeof LOCALE_MAP] || LOCALE_MAP.en;
+
+  // 2024-01-07 is a Sunday
+  return Array.from({ length: 7 }, (_, dayIndex) => {
+    const date = new Date(2024, 0, 7 + dayIndex);
+    return format(date, dayFormat, { locale });
+  });
+};
+
+/**
+ * Get the default date format (with day) for a given locale
+ * @param language Language code (ko, en, zh, ja, es)
+ * @returns Appropriate date format string for the locale
+ */
+export const getDefaultFullDateFormat = (
+  language: string = 'en'
+): string => {
+  const formats: Record<string, string> = {
+    ko: 'yy년 MM월 dd일',
+    en: 'MMM dd, yy',
+    zh: 'yy年MM月dd日',
+    ja: 'yy年MM月dd日',
+    es: 'dd MMM yy',
+  };
+  return formats[language] || formats.en;
+};
+
 // Legacy export for backward compatibility (English abbreviated months)
 export const MONTHS = getMonthNames('en', 'MMM');

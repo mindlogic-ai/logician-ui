@@ -5,8 +5,16 @@ import {
 } from 'chakra-dayzed-datepicker';
 import { format } from 'date-fns';
 
+import useLocale from '@/hooks/useLocale';
+
 import { Button, ButtonProps } from '../Button';
 import { MdOutlineCalendarToday } from '../Icon';
+import {
+  getDateFnsLocale,
+  getDefaultFullDateFormat,
+  getDayNames,
+  getMonthNames,
+} from '../MonthPicker/constants';
 
 export const SingleDatePicker = ({
   propsConfigs,
@@ -14,13 +22,17 @@ export const SingleDatePicker = ({
   usePortal = true,
   ...rest
 }: SingleDatepickerProps) => {
-  const dateFormat = configs?.dateFormat ?? 'MM/dd/yyyy';
+  const { language } = useLocale();
+  const dateFormat = configs?.dateFormat ?? getDefaultFullDateFormat(language);
+  const dateFnsLocale = getDateFnsLocale(language);
 
   return (
     <SingleDatepicker
       usePortal={usePortal}
       {...rest}
       configs={{
+        monthNames: getMonthNames(language, 'LLLL'),
+        dayNames: getDayNames(language),
         ...configs,
         dateFormat,
       }}
@@ -115,7 +127,9 @@ export const SingleDatePicker = ({
               color="gray.400"
               style={{ marginInlineEnd: 3 }}
             />
-            {selectedDate ? format(selectedDate, dateFormat) : ''}
+            {selectedDate
+              ? format(selectedDate, dateFormat, { locale: dateFnsLocale })
+              : ''}
           </Button>
         </Popover.Trigger>
       )}

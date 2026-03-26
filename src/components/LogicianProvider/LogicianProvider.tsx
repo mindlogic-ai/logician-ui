@@ -3,6 +3,8 @@ import React, { useMemo } from 'react';
 import type { SystemConfig } from '@chakra-ui/react';
 import { ChakraProvider, createSystem, defaultConfig } from '@chakra-ui/react';
 
+import { LocaleContext } from '@/hooks/useLocale';
+
 import { logicianConfig, system as defaultSystem } from '../../theme';
 
 export interface LogicianProviderProps {
@@ -44,6 +46,21 @@ export interface LogicianProviderProps {
    * ```
    */
   config?: SystemConfig;
+
+  /**
+   * Locale language code for internationalization.
+   * Used by date pickers, month pickers, and other locale-aware components.
+   *
+   * @default 'en'
+   * @example
+   * ```tsx
+   * <LogicianProvider locale="ko">
+   *   <App />
+   * </LogicianProvider>
+   * ```
+   */
+  locale?: string;
+
   children?: React.ReactNode;
 }
 
@@ -68,6 +85,7 @@ export interface LogicianProviderProps {
  */
 export const LogicianProvider: React.FC<LogicianProviderProps> = ({
   config,
+  locale = 'en',
   children,
 }) => {
   const system = useMemo(() => {
@@ -78,7 +96,13 @@ export const LogicianProvider: React.FC<LogicianProviderProps> = ({
     return createSystem(defaultConfig, logicianConfig, config);
   }, [config]);
 
-  return <ChakraProvider value={system}>{children}</ChakraProvider>;
+  const localeValue = useMemo(() => ({ language: locale }), [locale]);
+
+  return (
+    <LocaleContext.Provider value={localeValue}>
+      <ChakraProvider value={system}>{children}</ChakraProvider>
+    </LocaleContext.Provider>
+  );
 };
 
 LogicianProvider.displayName = 'LogicianProvider';

@@ -5,8 +5,16 @@ import {
 } from 'chakra-dayzed-datepicker';
 import { format } from 'date-fns';
 
+import useLocale from '@/hooks/useLocale';
+
 import { Button, ButtonProps } from '../Button';
 import { MdOutlineCalendarToday } from '../Icon';
+import {
+  getDateFnsLocale,
+  getDefaultFullDateFormat,
+  getDayNames,
+  getMonthNames,
+} from '../MonthPicker/constants';
 
 export const RangeDatePicker = ({
   propsConfigs,
@@ -14,13 +22,17 @@ export const RangeDatePicker = ({
   usePortal = true,
   ...rest
 }: RangeDatepickerProps) => {
-  const dateFormat = configs?.dateFormat ?? 'MMM dd, yyyy';
+  const { language } = useLocale();
+  const dateFormat = configs?.dateFormat ?? getDefaultFullDateFormat(language);
+  const dateFnsLocale = getDateFnsLocale(language);
 
   return (
     <BaseRangeDatePicker
       usePortal={usePortal}
       {...rest}
       configs={{
+        monthNames: getMonthNames(language, 'LLLL'),
+        dayNames: getDayNames(language),
         ...configs,
         dateFormat,
       }}
@@ -162,8 +174,8 @@ export const RangeDatePicker = ({
             />
             {selectedDates && selectedDates.length > 0
               ? selectedDates.length === 1
-                ? `${format(selectedDates[0], dateFormat)} - ${dateFormat}`
-                : `${format(selectedDates[0], dateFormat)} - ${format(selectedDates[1], dateFormat)}`
+                ? `${format(selectedDates[0], dateFormat, { locale: dateFnsLocale })} - ${dateFormat}`
+                : `${format(selectedDates[0], dateFormat, { locale: dateFnsLocale })} - ${format(selectedDates[1], dateFormat, { locale: dateFnsLocale })}`
               : ''}
           </Button>
         </Popover.Trigger>
