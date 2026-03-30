@@ -2,6 +2,8 @@ import { ReactNode } from 'react';
 import type { AccordionItemTriggerProps } from '@chakra-ui/react';
 import { Accordion, HStack } from '@chakra-ui/react';
 
+import { focusRing } from '@/utils/focusRing';
+
 export type AccordionButtonProps = AccordionItemTriggerProps & {
   children?: ReactNode;
   customIcon?: ReactNode;
@@ -13,7 +15,7 @@ export const AccordionButton = ({
   ...rest
 }: AccordionButtonProps) => {
   return (
-    <Accordion.ItemTrigger fontWeight="bold" {...rest}>
+    <Accordion.ItemTrigger fontWeight="bold" {...focusRing} {...rest}>
       <HStack flex="1">{children}</HStack>
       {customIcon ?? <Accordion.ItemIndicator />}
     </Accordion.ItemTrigger>

@@ -1,6 +1,8 @@
 import { ForwardedRef, forwardRef } from 'react';
 import { Slider } from '@chakra-ui/react';
 
+import { focusRing } from '@/utils/focusRing';
+
 import { SliderThumbProps } from './SliderThumb.types';
 
 export const SliderThumb = forwardRef(
@@ -21,6 +23,7 @@ export const SliderThumb = forwardRef(
           borderColor: 'gray.400',
           cursor: 'not-allowed',
         }}
+        {...focusRing}
         {...rest}
         ref={ref}
       />
