@@ -1,5 +1,21 @@
 # Changelog
 
+## 3.0.0-alpha.13
+
+### Minor Changes
+
+- de10bd4: feat: add consistent keyboard focus ring across interactive components
+
+  Introduces a shared `focusRing` utility (`src/utils/focusRing.ts`) and applies the standard double-ring focus style (white inner + primary blue outer) to all keyboard-navigable components: Button, IconButton, Checkbox, Radio, Switch, SliderThumb, AccordionButton, MenuItem, BreadcrumbLink, and Chip.
+
+  Focus ring now only shows on keyboard navigation (`_focusVisible`) rather than on mouse click (`_focus`), following the CSS `:focus-visible` standard used by GitHub, Radix, and Material Design.
+
+### Patch Changes
+
+- 7f3d81d: fix: load Pretendard Variable and Inter fonts from CDN in LogicianProvider
+
+  Previously no fonts were loaded by the library, causing browsers to fall back to system fonts (Arial/Helvetica) which rendered English text noticeably thicker than intended. LogicianProvider now automatically injects stylesheet links for Pretendard Variable (jsDelivr, dynamic subset) and Inter (Bunny Fonts) on mount. A `loadFonts` prop (default `true`) allows consumers to opt out if they manage fonts themselves. Also adds `-webkit-font-smoothing: antialiased` to global styles for consistent rendering across OS.
+
 ## 3.0.0-alpha.12
 
 ### Patch Changes
