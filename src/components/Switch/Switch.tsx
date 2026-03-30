@@ -1,6 +1,8 @@
 import React from 'react';
 import { Switch as ChakraSwitch } from '@chakra-ui/react';
 
+import { focusRing } from '@/utils/focusRing';
+
 import { SwitchProps } from './Switch.types';
 
 export const Switch = ({ checked, disabled, ...rest }: SwitchProps) => {
@@ -17,6 +19,7 @@ export const Switch = ({ checked, disabled, ...rest }: SwitchProps) => {
         _checked={{
           bg: 'primary.main',
         }}
+        {...focusRing}
       >
         <ChakraSwitch.Thumb />
       </ChakraSwitch.Control>

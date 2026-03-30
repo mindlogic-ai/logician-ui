@@ -1,6 +1,8 @@
 import { ForwardedRef, forwardRef } from 'react';
 import { Breadcrumb } from '@chakra-ui/react';
 
+import { focusRing } from '@/utils/focusRing';
+
 import { BreadcrumbLinkProps } from './BreadcrumbLink.types';
 // Optional Next.js Link import
 let NextLink: any;
@@ -24,6 +26,7 @@ export const BreadcrumbLink = forwardRef(
         }}
         asChild={!!NextLink}
         href={href}
+        {...focusRing}
         {...rest}
         ref={ref}
       >

@@ -1,6 +1,8 @@
 import { ForwardedRef, forwardRef } from 'react';
 import { IconButton as ChakraIconButton } from '@chakra-ui/react';
 
+import { focusRing } from '@/utils/focusRing';
+
 import { getIconButtonStyles } from './IconButton.styles';
 import { IconButtonProps } from './IconButton.types';
 
@@ -35,6 +37,7 @@ export const IconButton = forwardRef(
         border="1px solid"
         rounded="full"
         {...styles}
+        {...focusRing}
         {...rest}
       >
         {children}

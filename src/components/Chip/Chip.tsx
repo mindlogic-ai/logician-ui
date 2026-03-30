@@ -1,6 +1,8 @@
 import { ForwardedRef, forwardRef } from 'react';
 import { Badge as ChakraBadge } from '@chakra-ui/react';
 
+import { focusRing } from '@/utils/focusRing';
+
 import { baseStyles, getChipStyles } from './Chip.styles';
 import { ChipProps } from './Chip.types';
 
@@ -25,7 +27,7 @@ export const Chip = forwardRef(
   ) => {
     const styles = getChipStyles(colorScheme, variant);
 
-    return <ChakraBadge {...baseStyles} {...styles} {...rest} ref={ref} />;
+    return <ChakraBadge {...baseStyles} {...styles} {...focusRing} {...rest} ref={ref} />;
   }
 );
 
