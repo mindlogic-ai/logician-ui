@@ -24,6 +24,8 @@ export const globalCss = defineGlobalStyles({
       inter.style.fontFamily,
       noto.style.fontFamily,
     ].join(','),
+    WebkitFontSmoothing: 'antialiased',
+    MozOsxFontSmoothing: 'grayscale',
     overflow: 'auto',
   },
 
