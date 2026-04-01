@@ -2,7 +2,7 @@
   "mode": "exit",
   "tag": "alpha",
   "initialVersions": {
-    "@mindlogic-ai/logician-ui": "3.0.0-alpha.12"
+    "@mindlogic-ai/logician-ui": "3.0.0-alpha.13"
   },
   "changesets": [
     "add-collapsible-component",
@@ -17,6 +17,7 @@
     "fix-pr55-release",
     "fix-radial-progress-hooks",
     "fix-tag-close-button-cursor",
+    "fix-vertical-tab-styles",
     "gentle-panthers-remain",
     "icon-button-color-theme-patch",
     "icon-default-color",
