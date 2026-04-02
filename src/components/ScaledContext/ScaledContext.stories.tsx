@@ -6,7 +6,7 @@ import { Checkbox } from '../Checkbox';
 import { ScaledContext } from './ScaledContext';
 
 const meta = {
-  title: 'Components/ScaledContext',
+  title: 'Setup/ScaledContext',
   component: ScaledContext,
   parameters: { layout: 'centered' },
   argTypes: {
@@ -18,28 +18,32 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+const SampleContent = () => (
+  <Stack gap={3} p={3} borderWidth="1px" borderColor="gray.300" borderRadius="md">
+    <Button variant="outline">Button</Button>
+    <Checkbox>
+      <Checkbox.Control />
+      <Checkbox.Label>Checkbox</Checkbox.Label>
+    </Checkbox>
+  </Stack>
+);
+
 export const Default: Story = {
   args: { fontSize: '1rem' },
   render: args => (
     <ScaledContext {...args}>
-      <Stack gap={4} p={4} borderWidth="1px" borderColor="gray.200" borderRadius="md" minW="200px">
-        <Text>Content inside ScaledContext</Text>
-        <Button variant="outline">Action</Button>
-        <Checkbox>
-          <Checkbox.Control />
-          <Checkbox.Label>Option</Checkbox.Label>
-        </Checkbox>
-      </Stack>
+      <SampleContent />
     </ScaledContext>
   ),
 };
 
-export const Scaling: Story = {
+export const ScalingRem: Story = {
+  args: { fontSize: '1rem' },
   parameters: {
     docs: {
       description: {
         story:
-          'Spacing and size tokens are converted from `rem` to `em`, so they scale proportionally with `fontSize`. The same content looks identical in structure but grows/shrinks with the font size.',
+          'Spacing and size tokens are converted from `rem` to `em`, so they scale proportionally with `fontSize`.',
       },
     },
   },
@@ -48,22 +52,35 @@ export const Scaling: Story = {
       {(['0.75rem', '1rem', '1.25rem', '1.5rem'] as const).map(size => (
         <Box key={size}>
           <Text fontSize="xs" color="gray.500" mb={2} fontFamily="mono">
-            fontSize="{size}"
+            {size}
           </Text>
           <ScaledContext fontSize={size}>
-            <Stack
-              gap={3}
-              p={3}
-              borderWidth="1px"
-              borderColor="gray.300"
-              borderRadius="md"
-            >
-              <Button variant="outline">Button</Button>
-              <Checkbox>
-                <Checkbox.Control />
-                <Checkbox.Label>Checkbox</Checkbox.Label>
-              </Checkbox>
-            </Stack>
+            <SampleContent />
+          </ScaledContext>
+        </Box>
+      ))}
+    </HStack>
+  ),
+};
+
+export const ScalingPx: Story = {
+  args: { fontSize: '16px' },
+  parameters: {
+    docs: {
+      description: {
+        story: 'px values work too — spacing tokens still scale relative to the given font size.',
+      },
+    },
+  },
+  render: () => (
+    <HStack align="start" gap={8} flexWrap="wrap">
+      {(['12px', '14px', '16px', '20px', '24px'] as const).map(size => (
+        <Box key={size}>
+          <Text fontSize="xs" color="gray.500" mb={2} fontFamily="mono">
+            {size}
+          </Text>
+          <ScaledContext fontSize={size}>
+            <SampleContent />
           </ScaledContext>
         </Box>
       ))}
@@ -72,6 +89,7 @@ export const Scaling: Story = {
 };
 
 export const NestedScaling: Story = {
+  args: { fontSize: '0.875rem' },
   parameters: {
     docs: {
       description: {
@@ -81,27 +99,37 @@ export const NestedScaling: Story = {
     },
   },
   render: () => (
-    <Stack gap={6}>
-      <ScaledContext fontSize="0.875rem" p={4} borderWidth="1px" borderColor="gray.200" borderRadius="md">
-        <Stack gap={3}>
-          <Text fontSize="sm" color="gray.500" fontFamily="mono">
-            Outer: 0.875rem (compact)
-          </Text>
-          <Button variant="outline">Outer Button</Button>
-          <ScaledContext fontSize="1.25rem" p={3} borderWidth="1px" borderColor="primary.light" borderRadius="md">
-            <Stack gap={3}>
-              <Text fontSize="sm" color="gray.500" fontFamily="mono">
-                Inner: 1.25rem (spacious)
-              </Text>
-              <Button variant="outline">Inner Button</Button>
-              <Checkbox>
-                <Checkbox.Control />
-                <Checkbox.Label>Inner Checkbox</Checkbox.Label>
-              </Checkbox>
-            </Stack>
-          </ScaledContext>
-        </Stack>
-      </ScaledContext>
-    </Stack>
+    <ScaledContext
+      fontSize="0.875rem"
+      p={4}
+      borderWidth="1px"
+      borderColor="gray.200"
+      borderRadius="md"
+    >
+      <Stack gap={3}>
+        <Text fontSize="xs" color="gray.500" fontFamily="mono">
+          Outer: 0.875rem (compact)
+        </Text>
+        <Button variant="outline">Outer Button</Button>
+        <ScaledContext
+          fontSize="1.25rem"
+          p={3}
+          borderWidth="1px"
+          borderColor="primary.light"
+          borderRadius="md"
+        >
+          <Stack gap={3}>
+            <Text fontSize="xs" color="gray.500" fontFamily="mono">
+              Inner: 1.25rem (spacious)
+            </Text>
+            <Button variant="outline">Inner Button</Button>
+            <Checkbox>
+              <Checkbox.Control />
+              <Checkbox.Label>Inner Checkbox</Checkbox.Label>
+            </Checkbox>
+          </Stack>
+        </ScaledContext>
+      </Stack>
+    </ScaledContext>
   ),
 };
