@@ -1,26 +1,34 @@
-import {
-  Menu,
-  MenuContentProps as ChakraMenuContentProps,
-  Portal,
-} from '@chakra-ui/react';
+import { forwardRef } from 'react';
+import { Menu, MenuContentProps as ChakraMenuContentProps, Portal } from '@chakra-ui/react';
 
-export interface MenuListProps extends ChakraMenuContentProps {}
+import { ScaledContext } from '../ScaledContext';
+import { useMenuContext } from './Menu.types';
 
-export const MenuList = ({ children, ...rest }: MenuListProps) => {
-  return (
-    <Portal>
+export type MenuListProps = ChakraMenuContentProps & {
+  portalled?: boolean;
+};
+
+export const MenuList = forwardRef<HTMLDivElement, MenuListProps>(
+  ({ children, portalled = true, ...rest }, ref) => {
+    const { baseFontSize } = useMenuContext();
+
+    const content = (
       <Menu.Positioner>
         <Menu.Content
+          ref={ref}
           border="1px solid"
           borderColor="gray.200"
           borderRadius="md"
-          boxShadow="0 5px 20px 1px var(--chakra-colors-gray-50)"
+          boxShadow="0 5px 20px 1px {colors.gray.50}"
           p="1.5"
           {...rest}
         >
-          {children}
+          <ScaledContext fontSize={baseFontSize}>{children}</ScaledContext>
         </Menu.Content>
       </Menu.Positioner>
-    </Portal>
-  );
-};
+    );
+
+    return portalled ? <Portal>{content}</Portal> : content;
+  }
+);
+MenuList.displayName = 'Menu.List';
