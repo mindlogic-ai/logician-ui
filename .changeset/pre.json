@@ -2,7 +2,7 @@
   "mode": "exit",
   "tag": "alpha",
   "initialVersions": {
-    "@mindlogic-ai/logician-ui": "3.0.0-alpha.15"
+    "@mindlogic-ai/logician-ui": "3.0.0-alpha.16"
   },
   "changesets": [
     "add-collapsible-component",
@@ -25,6 +25,7 @@
     "locale-type-safety-fixes",
     "logician-bugfix-032626",
     "modal-baked-in-overlay",
-    "segmented-control-sizing-fixes"
+    "segmented-control-sizing-fixes",
+    "seven-oranges-think"
   ]
 }
