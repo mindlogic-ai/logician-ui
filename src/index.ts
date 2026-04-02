@@ -55,6 +55,7 @@ export * from './components/MaxLengthIndicator';
 export * from './components/MDXEditor';
 export * from './components/Menu';
 export * from './components/Modal';
+export * from './components/Popover';
 export * from './components/MonthPicker';
 
 // Navigation Components
