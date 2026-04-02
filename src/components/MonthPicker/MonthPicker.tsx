@@ -15,7 +15,7 @@ import {
 import { format, isAfter, isSameMonth } from 'date-fns';
 
 import { Text } from '@/components/Typography';
-import useLocale from '@/hooks/useLocale';
+import useLanguage from '@/hooks/useLanguage';
 import { useTranslate } from '@/hooks/useTranslate';
 
 import {
@@ -50,7 +50,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const onOpen = () => setIsOpen(true);
   const onClose = () => setIsOpen(false);
-  const { language: locale } = useLocale();
+  const { language: locale } = useLanguage();
   const translate = useTranslate();
 
   const [currentYear, setCurrentYear] = useState(() =>

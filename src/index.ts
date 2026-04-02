@@ -98,5 +98,9 @@ export {
   Text,
 } from './components/Typography';
 
+// Hooks
+export type { LanguageContextValue } from './hooks/useLanguage';
+export { LanguageContext, useLanguage } from './hooks/useLanguage';
+
 // Theme exports
 export { logicianConfig, system, theme } from './theme';

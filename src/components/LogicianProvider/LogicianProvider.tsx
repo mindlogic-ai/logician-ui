@@ -3,6 +3,9 @@ import React, { useEffect, useMemo } from 'react';
 import type { SystemConfig } from '@chakra-ui/react';
 import { ChakraProvider, createSystem, defaultConfig } from '@chakra-ui/react';
 
+import type { SupportedLanguage } from '@/components/MonthPicker/constants';
+import { LanguageContext } from '@/hooks/useLanguage';
+
 import { logicianConfig, system as defaultSystem } from '../../theme';
 
 const FONT_STYLESHEETS = [
@@ -61,6 +64,21 @@ export interface LogicianProviderProps {
    * ```
    */
   config?: SystemConfig;
+
+  /**
+   * Language code for internationalization.
+   * Used by date pickers, month pickers, and other locale-aware components.
+   *
+   * @default 'en'
+   * @example
+   * ```tsx
+   * <LogicianProvider language="ko">
+   *   <App />
+   * </LogicianProvider>
+   * ```
+   */
+  language?: SupportedLanguage;
+
   /**
    * Whether to automatically load Pretendard Variable and Inter fonts from CDN.
    * Set to false if your app already loads these fonts to avoid duplicate requests.
@@ -91,6 +109,7 @@ export interface LogicianProviderProps {
  */
 export const LogicianProvider: React.FC<LogicianProviderProps> = ({
   config,
+  language = 'en',
   loadFonts = true,
   children,
 }) => {
@@ -108,7 +127,13 @@ export const LogicianProvider: React.FC<LogicianProviderProps> = ({
     return createSystem(defaultConfig, logicianConfig, config);
   }, [config]);
 
-  return <ChakraProvider value={system}>{children}</ChakraProvider>;
+  const languageValue = useMemo(() => ({ language }), [language]);
+
+  return (
+    <LanguageContext.Provider value={languageValue}>
+      <ChakraProvider value={system}>{children}</ChakraProvider>
+    </LanguageContext.Provider>
+  );
 };
 
 LogicianProvider.displayName = 'LogicianProvider';
