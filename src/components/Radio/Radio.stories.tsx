@@ -2,7 +2,8 @@ import { Box, HStack, Stack, VStack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
-import { Radio, RadioGroup } from '.';
+import { Radio } from './Radio';
+import { RadioGroup } from './RadioGroup';
 
 const meta = {
   title: 'Components/Radio',
@@ -118,7 +119,7 @@ export const BasicGroup: RadioGroupStory = {
         <RadioGroup value={value} onValueChange={e => setValue(e.value)}>
           <Stack gap={3}>
             {['First option', 'Second option', 'Third option'].map((label, i) => (
-              <Radio key={i} value={`option${i + 1}`}>
+              <Radio key={`option${i + 1}`} value={`option${i + 1}`}>
                 <Radio.Control />
                 <Radio.Text>{label}</Radio.Text>
               </Radio>
