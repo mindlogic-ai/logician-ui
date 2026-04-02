@@ -24,7 +24,6 @@ const meta = {
     },
   },
   args: {
-    children: 'Radio option',
     value: 'option1',
   },
 } satisfies Meta<typeof Radio>;
@@ -34,33 +33,38 @@ export default meta;
 type Story = StoryObj<typeof Radio>;
 
 export const Default: Story = {
-  render: (args) => (
+  render: args => (
     <RadioGroup defaultValue="option1">
-      <Radio {...args} />
+      <Radio {...args}>
+        <Radio.Indicator />
+        <Radio.Text>Radio option</Radio.Text>
+      </Radio>
     </RadioGroup>
   ),
 };
 
 export const Checked: Story = {
-  args: {
-    children: 'Selected option',
-  },
-  render: (args) => (
+  render: args => (
     <RadioGroup defaultValue="option1">
-      <Radio {...args} value="option1" />
+      <Radio {...args} value="option1">
+        <Radio.Indicator />
+        <Radio.Text>Selected option</Radio.Text>
+      </Radio>
     </RadioGroup>
   ),
 };
 
 export const Disabled: Story = {
-  render: (args) => (
+  render: args => (
     <RadioGroup defaultValue="disabled-checked">
       <Stack gap={3}>
         <Radio {...args} value="disabled-unchecked" disabled>
-          Disabled unchecked
+          <Radio.Indicator />
+          <Radio.Text>Disabled unchecked</Radio.Text>
         </Radio>
         <Radio {...args} value="disabled-checked" disabled>
-          Disabled checked
+          <Radio.Indicator />
+          <Radio.Text>Disabled checked</Radio.Text>
         </Radio>
       </Stack>
     </RadioGroup>
@@ -68,43 +72,35 @@ export const Disabled: Story = {
 };
 
 export const Sizes: Story = {
-  render: (args) => (
+  render: args => (
     <Stack gap={4}>
-      <RadioGroup size="sm" defaultValue="sm">
-        <Radio {...args} value="sm">
-          Small radio
-        </Radio>
-      </RadioGroup>
-      <RadioGroup size="md" defaultValue="md">
-        <Radio {...args} value="md">
-          Medium radio
-        </Radio>
-      </RadioGroup>
-      <RadioGroup size="lg" defaultValue="lg">
-        <Radio {...args} value="lg">
-          Large radio
-        </Radio>
-      </RadioGroup>
+      {(['sm', 'md', 'lg'] as const).map(size => (
+        <RadioGroup key={size} size={size} defaultValue={size}>
+          <Radio {...args} value={size}>
+            <Radio.Indicator />
+            <Radio.Text>{size.toUpperCase()} radio</Radio.Text>
+          </Radio>
+        </RadioGroup>
+      ))}
     </Stack>
   ),
 };
 
 export const States: Story = {
-  render: (args) => (
+  render: args => (
     <RadioGroup defaultValue="checked">
       <Stack gap={3}>
-        <Radio {...args} value="default">
-          Default state
-        </Radio>
-        <Radio {...args} value="checked">
-          Checked state
-        </Radio>
-        <Radio {...args} value="disabled" disabled>
-          Disabled state
-        </Radio>
-        <Radio {...args} value="disabled-checked" disabled>
-          Disabled checked state
-        </Radio>
+        {[
+          { value: 'default', label: 'Default state' },
+          { value: 'checked', label: 'Checked state' },
+          { value: 'disabled', label: 'Disabled state', disabled: true },
+          { value: 'disabled-checked', label: 'Disabled checked state', disabled: true },
+        ].map(({ value, label, disabled }) => (
+          <Radio key={value} {...args} value={value} disabled={disabled}>
+            <Radio.Indicator />
+            <Radio.Text>{label}</Radio.Text>
+          </Radio>
+        ))}
       </Stack>
     </RadioGroup>
   ),
@@ -119,11 +115,14 @@ export const BasicGroup: RadioGroupStory = {
     return (
       <VStack align="flex-start" gap={4}>
         <Box>Selected value: {value}</Box>
-        <RadioGroup value={value} onValueChange={(e) => setValue(e.value)}>
+        <RadioGroup value={value} onValueChange={e => setValue(e.value)}>
           <Stack gap={3}>
-            <Radio value="option1">First option</Radio>
-            <Radio value="option2">Second option</Radio>
-            <Radio value="option3">Third option</Radio>
+            {['First option', 'Second option', 'Third option'].map((label, i) => (
+              <Radio key={i} value={`option${i + 1}`}>
+                <Radio.Indicator />
+                <Radio.Text>{label}</Radio.Text>
+              </Radio>
+            ))}
           </Stack>
         </RadioGroup>
       </VStack>
@@ -138,11 +137,18 @@ export const HorizontalGroup: RadioGroupStory = {
     return (
       <VStack align="flex-start" gap={4}>
         <Box>Preferred contact method: {value}</Box>
-        <RadioGroup value={value} onValueChange={(e) => setValue(e.value)}>
+        <RadioGroup value={value} onValueChange={e => setValue(e.value)}>
           <HStack gap={6}>
-            <Radio value="email">Email</Radio>
-            <Radio value="sms">SMS</Radio>
-            <Radio value="phone">Phone call</Radio>
+            {[
+              { value: 'email', label: 'Email' },
+              { value: 'sms', label: 'SMS' },
+              { value: 'phone', label: 'Phone call' },
+            ].map(({ value, label }) => (
+              <Radio key={value} value={value}>
+                <Radio.Indicator />
+                <Radio.Text>{label}</Radio.Text>
+              </Radio>
+            ))}
           </HStack>
         </RadioGroup>
       </VStack>
@@ -156,18 +162,24 @@ export const WithLongLabels: RadioGroupStory = {
 
     return (
       <Box maxW="400px">
-        <RadioGroup value={value} onValueChange={(e) => setValue(e.value)}>
+        <RadioGroup value={value} onValueChange={e => setValue(e.value)}>
           <Stack gap={4}>
             <Radio value="option1">
-              This is a very long label that demonstrates how radio buttons
-              handle longer text content
+              <Radio.Indicator />
+              <Radio.Text>
+                This is a very long label that demonstrates how radio buttons handle longer
+                text content
+              </Radio.Text>
             </Radio>
             <Radio value="option2">
-              Another option with extended descriptive text that might wrap to
-              multiple lines
+              <Radio.Indicator />
+              <Radio.Text>
+                Another option with extended descriptive text that might wrap to multiple lines
+              </Radio.Text>
             </Radio>
             <Radio value="option3">
-              A third choice with substantial explanatory content
+              <Radio.Indicator />
+              <Radio.Text>A third choice with substantial explanatory content</Radio.Text>
             </Radio>
           </Stack>
         </RadioGroup>
@@ -187,14 +199,18 @@ export const FormExample: RadioGroupStory = {
           <Box fontWeight="semibold" mb={2}>
             Notification Preferences
           </Box>
-          <RadioGroup
-            value={notifications}
-            onValueChange={(e) => setNotifications(e.value)}
-          >
+          <RadioGroup value={notifications} onValueChange={e => setNotifications(e.value)}>
             <Stack gap={3}>
-              <Radio value="all">All notifications</Radio>
-              <Radio value="important">Important only</Radio>
-              <Radio value="none">No notifications</Radio>
+              {[
+                { value: 'all', label: 'All notifications' },
+                { value: 'important', label: 'Important only' },
+                { value: 'none', label: 'No notifications' },
+              ].map(({ value, label }) => (
+                <Radio key={value} value={value}>
+                  <Radio.Indicator />
+                  <Radio.Text>{label}</Radio.Text>
+                </Radio>
+              ))}
             </Stack>
           </RadioGroup>
         </Box>
@@ -203,11 +219,18 @@ export const FormExample: RadioGroupStory = {
           <Box fontWeight="semibold" mb={2}>
             Theme Preference
           </Box>
-          <RadioGroup value={theme} onValueChange={(e) => setTheme(e.value)}>
+          <RadioGroup value={theme} onValueChange={e => setTheme(e.value)}>
             <HStack gap={4}>
-              <Radio value="light">Light theme</Radio>
-              <Radio value="dark">Dark theme</Radio>
-              <Radio value="auto">Auto (system preference)</Radio>
+              {[
+                { value: 'light', label: 'Light theme' },
+                { value: 'dark', label: 'Dark theme' },
+                { value: 'auto', label: 'Auto (system preference)' },
+              ].map(({ value, label }) => (
+                <Radio key={value} value={value}>
+                  <Radio.Indicator />
+                  <Radio.Text>{label}</Radio.Text>
+                </Radio>
+              ))}
             </HStack>
           </RadioGroup>
         </Box>
