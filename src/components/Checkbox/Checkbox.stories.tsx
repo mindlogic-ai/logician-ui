@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HStack, Stack, Text, VStack } from '@chakra-ui/react';
+import { HStack, Stack, VStack } from '@chakra-ui/react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { Checkbox } from './Checkbox';
@@ -28,46 +28,65 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {},
+  render: args => (
+    <Checkbox {...args}>
+      <Checkbox.Control />
+    </Checkbox>
+  ),
 };
 
 export const Checked: Story = {
-  args: {
-    checked: true,
-  },
+  render: args => (
+    <Checkbox {...args}>
+      <Checkbox.Control />
+    </Checkbox>
+  ),
+  args: { checked: true },
 };
 
 export const Indeterminate: Story = {
-  args: {
-    checked: 'indeterminate',
-  },
+  render: args => (
+    <Checkbox {...args}>
+      <Checkbox.Control />
+    </Checkbox>
+  ),
+  args: { checked: 'indeterminate' },
 };
 
 export const Disabled: Story = {
-  args: {
-    disabled: true,
-  },
+  render: args => (
+    <Checkbox {...args}>
+      <Checkbox.Control />
+    </Checkbox>
+  ),
+  args: { disabled: true },
 };
 
 export const DisabledChecked: Story = {
-  args: {
-    disabled: true,
-    checked: true,
-  },
+  render: args => (
+    <Checkbox {...args}>
+      <Checkbox.Control />
+    </Checkbox>
+  ),
+  args: { disabled: true, checked: true },
 };
 
 export const DisabledIndeterminate: Story = {
-  args: {
-    disabled: true,
-    checked: 'indeterminate',
-  },
+  render: args => (
+    <Checkbox {...args}>
+      <Checkbox.Control />
+    </Checkbox>
+  ),
+  args: { disabled: true, checked: 'indeterminate' },
 };
 
 export const WithLabel: Story = {
-  render: (args) => (
-    <Checkbox {...args}>Accept terms and conditions</Checkbox>
+  render: args => (
+    <Checkbox {...args}>
+      <Checkbox.Control />
+      <Checkbox.Label>Accept terms and conditions</Checkbox.Label>
+    </Checkbox>
   ),
-  args: {},
 };
 
 export const Sizes: Story = {
@@ -76,12 +95,35 @@ export const Sizes: Story = {
       {(['xs', 'sm', 'md', 'lg'] as const).map(size => (
         <VStack key={size} gap={2}>
           <Checkbox size={size} checked={true}>
-            {size}
+            <Checkbox.Control />
+            <Checkbox.Label>{size}</Checkbox.Label>
           </Checkbox>
         </VStack>
       ))}
     </HStack>
   ),
+};
+
+export const LeftLabel: Story = {
+  render: args => (
+    <Checkbox {...args}>
+      <Checkbox.Label>Label on the left</Checkbox.Label>
+      <Checkbox.Control />
+    </Checkbox>
+  ),
+  args: { checked: false },
+};
+
+export const RichLabel: Story = {
+  render: args => (
+    <Checkbox {...args}>
+      <Checkbox.Control />
+      <Checkbox.Label>
+        Accept our <a href="/terms">Terms of Service</a>
+      </Checkbox.Label>
+    </Checkbox>
+  ),
+  args: { checked: false },
 };
 
 export const Group: Story = {
@@ -102,9 +144,7 @@ export const Group: Story = {
 
     const handleToggle = (item: string) => {
       setSelected(prev =>
-        prev.includes(item)
-          ? prev.filter(i => i !== item)
-          : [...prev, item]
+        prev.includes(item) ? prev.filter(i => i !== item) : [...prev, item]
       );
     };
 
@@ -114,7 +154,8 @@ export const Group: Story = {
           checked={allSelected ? true : someSelected ? 'indeterminate' : false}
           onCheckedChange={handleSelectAll}
         >
-          Select All
+          <Checkbox.Control />
+          <Checkbox.Label>Select All</Checkbox.Label>
         </Checkbox>
         <Stack gap={2} pl={6}>
           {items.map(item => (
@@ -123,7 +164,8 @@ export const Group: Story = {
               checked={selected.includes(item)}
               onCheckedChange={() => handleToggle(item)}
             >
-              {item}
+              <Checkbox.Control />
+              <Checkbox.Label>{item}</Checkbox.Label>
             </Checkbox>
           ))}
         </Stack>
