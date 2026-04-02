@@ -228,6 +228,25 @@ Available aliases:
    - `index.tsx` - Exports
 3. Add export to main `index.ts`
 
+## Technical Notes & TODOs
+
+### `createScaledContext()` factory
+
+`Popover`, `Menu`, and similar floating components each define a structurally identical context (`{ baseFontSize }`) to pass a font size down to their content wrapper for use with `ScaledContext`. This is currently duplicated across `Popover.types.ts` and `Menu.types.ts`.
+
+If a third component (e.g. Tooltip, Dialog) adopts this pattern, extract a shared factory:
+
+```ts
+// utils/createScaledContext.ts
+export function createScaledContext(defaultFontSize: string | number = '14px') {
+  const Context = React.createContext({ baseFontSize: defaultFontSize });
+  const useContext = () => React.useContext(Context);
+  return { Context, useContext };
+}
+```
+
+This is intentionally deferred — two instances don't justify the abstraction yet.
+
 ## Contributing
 
 1. Fork the repository
