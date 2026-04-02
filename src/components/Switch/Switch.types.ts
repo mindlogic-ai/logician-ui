@@ -1,3 +1,3 @@
 import { SwitchRootProps as ChakraSwitchRootProps } from '@chakra-ui/react';
 
-export interface SwitchProps extends ChakraSwitchRootProps {}
+export type SwitchProps = ChakraSwitchRootProps & { id?: string };

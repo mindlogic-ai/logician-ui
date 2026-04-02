@@ -1,5 +1,75 @@
 # Changelog
 
+## 3.0.0-alpha.15
+
+### Major Changes
+
+- 61646cf: **Breaking: Checkbox, Switch, and Radio are now compound components**
+
+  `Checkbox`, `Switch`, and `Radio` no longer render their internal controls automatically. You must now compose them explicitly using sub-components.
+
+  **Checkbox**
+  - `Checkbox` is now the root element (replaces `Checkbox.Root`)
+  - `Checkbox.Control` renders the styled checkbox box
+  - `Checkbox.Label` renders the label text
+
+  **Switch**
+  - `Switch` is now the root element
+  - `Switch.Control` renders the styled toggle (includes thumb)
+  - `Switch.Label` renders the label text
+
+  **Radio**
+  - `Radio` is now the root element (replaces the internal `RadioGroup.Item` wrapper)
+  - `Radio.Indicator` renders the styled radio circle
+  - `Radio.Text` renders the label text
+  - `rootRef` and `inputProps` props removed
+
+## 3.0.0-alpha.14
+
+### Patch Changes
+
+- 2eec3f8: Fix vertical Tabs missing selected indicator and bottom border bleed
+
+  Vertical selected tab now shows a right-side 2px primary indicator (matching horizontal's bottom indicator). TabList no longer renders a bottom border in vertical orientation.
+
+## 3.0.0-alpha.13
+
+### Minor Changes
+
+- de10bd4: feat: add consistent keyboard focus ring across interactive components
+
+  Introduces a shared `focusRing` utility (`src/utils/focusRing.ts`) and applies the standard double-ring focus style (white inner + primary blue outer) to all keyboard-navigable components: Button, IconButton, Checkbox, Radio, Switch, SliderThumb, AccordionButton, MenuItem, BreadcrumbLink, and Chip.
+
+  Focus ring now only shows on keyboard navigation (`_focusVisible`) rather than on mouse click (`_focus`), following the CSS `:focus-visible` standard used by GitHub, Radix, and Material Design.
+
+### Patch Changes
+
+- 7f3d81d: fix: load Pretendard Variable and Inter fonts from CDN in LogicianProvider
+
+  Previously no fonts were loaded by the library, causing browsers to fall back to system fonts (Arial/Helvetica) which rendered English text noticeably thicker than intended. LogicianProvider now automatically injects stylesheet links for Pretendard Variable (jsDelivr, dynamic subset) and Inter (Bunny Fonts) on mount. A `loadFonts` prop (default `true`) allows consumers to opt out if they manage fonts themselves. Also adds `-webkit-font-smoothing: antialiased` to global styles for consistent rendering across OS.
+
+## 3.0.0-alpha.12
+
+### Patch Changes
+
+- 1595e85: fix: override Chakra spacing scale with em units
+
+  Numeric spacing tokens (p: 4, gap: 2, etc.) now resolve to em values
+  instead of rem, so spacing cascades from the nearest ancestor font-size
+  alongside text — enabling consistent contextual scaling.
+
+- 5edf7a7: fix: switch theme textStyles font sizes from rem to em for contextual scaling
+
+  em units inherit from the nearest ancestor font-size, enabling components inside
+  containers like Popover to scale from a local base (e.g. 14px) rather than
+  always deferring to the html root.
+
+- e7627c9: fix: replace compounding em lineHeight on 6xl textStyle with unitless ratio
+
+  `lineHeight: '5.75em'` resolved against the element's own font-size (60px),
+  producing 345px instead of the intended 92px. Replaced with unitless `1.533`
+  (92 ÷ 60) to preserve the original rendered output.
+
 ## 3.0.0-alpha.11
 
 ### Minor Changes

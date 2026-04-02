@@ -1,18 +1,22 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { RadioGroup } from '@chakra-ui/react';
 
 import { RadioProps } from './Radio.types';
+import { RadioControl } from './RadioControl';
+import { RadioText } from './RadioText';
 
-export const Radio = forwardRef<HTMLInputElement, RadioProps>((props, ref) => {
-  const { children, inputProps, rootRef, ...rest } = props;
+const RadioBase = forwardRef<
+  React.ComponentRef<typeof RadioGroup.Item>,
+  RadioProps
+>(({ id, children, ...props }, ref) => (
+  <RadioGroup.Item ref={ref} cursor="pointer" _disabled={{ cursor: 'not-allowed' }} {...props}>
+    <RadioGroup.ItemHiddenInput id={id} />
+    {children}
+  </RadioGroup.Item>
+));
+RadioBase.displayName = 'Radio';
 
-  return (
-    <RadioGroup.Item ref={rootRef} {...rest}>
-      <RadioGroup.ItemHiddenInput ref={ref} {...inputProps} />
-      <RadioGroup.ItemIndicator />
-      {children && <RadioGroup.ItemText>{children}</RadioGroup.ItemText>}
-    </RadioGroup.Item>
-  );
+export const Radio = Object.assign(RadioBase, {
+  Control: RadioControl,
+  Text: RadioText,
 });
-
-Radio.displayName = 'Radio';

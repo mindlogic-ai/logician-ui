@@ -1,5 +1,7 @@
 import { forwardRef } from 'react';
-import { Button as ChakraButton, useToken } from '@chakra-ui/react';
+import { Button as ChakraButton } from '@chakra-ui/react';
+
+import { focusRing } from '@/utils/focusRing';
 
 import { getButtonStyles } from './Button.styles';
 import { ButtonProps } from './Button.types';
@@ -20,11 +22,9 @@ import { ButtonProps } from './Button.types';
  */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { colorPalette, variant = 'soft', _focus, size, children, ...rest },
+    { colorPalette, variant = 'soft', size, children, ...rest },
     ref
   ) => {
-    const primaryMainColor = useToken('colors', 'primary.main')[0];
-
     const palette = colorPalette ?? 'primary';
 
     const styles = getButtonStyles(palette, variant);
@@ -47,11 +47,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         size={size}
         borderRadius="md"
         {...styles}
-        _focus={{
-          outline: 'none',
-          boxShadow: `rgb(255, 255, 255) 0px 0px 0px 2px, ${primaryMainColor} 0px 0px 0px 4px`,
-          ..._focus,
-        }}
+        {...focusRing}
         transition="all 0.25s ease-in-out"
         ref={ref}
         {...rest}

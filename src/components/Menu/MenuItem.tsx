@@ -1,5 +1,7 @@
 import { Menu, Spacer } from '@chakra-ui/react';
 
+import { focusRing } from '@/utils/focusRing';
+
 import { ItemVariant, MenuItemProps } from './MenuItem.types';
 
 export const MenuItem = ({
@@ -25,6 +27,7 @@ export const MenuItem = ({
         color: isDangerVariant ? 'danger.main' : 'gray.1500',
         backgroundColor: isDangerVariant ? 'danger.lightest' : 'gray.50',
       }}
+      {...focusRing}
       {...rest}
     >
       {icon && icon}

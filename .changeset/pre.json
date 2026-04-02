@@ -2,16 +2,23 @@
   "mode": "exit",
   "tag": "alpha",
   "initialVersions": {
-    "@mindlogic-ai/logician-ui": "3.0.0-alpha.10"
+    "@mindlogic-ai/logician-ui": "3.0.0-alpha.14"
   },
   "changesets": [
     "add-collapsible-component",
     "chakra-v3-migration",
     "color-palette-lightest-extralight",
+    "common-squids-decide",
+    "em-spacing-scale",
+    "em-units-theme",
+    "feat-focus-ring",
+    "fix-6xl-lineheight-em-compounding",
     "fix-button-soft-borders-toast-styles",
+    "fix-font-loading",
     "fix-pr55-release",
     "fix-radial-progress-hooks",
     "fix-tag-close-button-cursor",
+    "fix-vertical-tab-styles",
     "gentle-panthers-remain",
     "icon-button-color-theme-patch",
     "icon-default-color",
