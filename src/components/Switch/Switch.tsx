@@ -9,7 +9,7 @@ const SwitchBase = forwardRef<
   React.ComponentRef<typeof ChakraSwitch.Root>,
   SwitchProps
 >(({ id, children, ...props }, ref) => (
-  <ChakraSwitch.Root ref={ref} colorPalette="primary" {...props}>
+  <ChakraSwitch.Root ref={ref} colorPalette="primary" cursor="pointer" _disabled={{ cursor: 'not-allowed' }} {...props}>
     <ChakraSwitch.HiddenInput id={id} />
     {children}
   </ChakraSwitch.Root>

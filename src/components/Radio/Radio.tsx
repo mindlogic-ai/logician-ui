@@ -9,7 +9,7 @@ const RadioBase = forwardRef<
   React.ComponentRef<typeof RadioGroup.Item>,
   RadioProps
 >(({ id, children, ...props }, ref) => (
-  <RadioGroup.Item ref={ref} {...props}>
+  <RadioGroup.Item ref={ref} cursor="pointer" _disabled={{ cursor: 'not-allowed' }} {...props}>
     <RadioGroup.ItemHiddenInput id={id} />
     {children}
   </RadioGroup.Item>
