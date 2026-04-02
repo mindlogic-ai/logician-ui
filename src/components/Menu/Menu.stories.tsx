@@ -3,12 +3,11 @@ import { useState } from 'react';
 
 import { IoChevronDownOutline, SlSettings } from '../Icon';
 import { IconButton } from '../IconButton';
-import { Menu, MenuButton, MenuItem, MenuList } from '.';
-import { MenuItemProps } from './MenuItem.types';
 import { Button } from '../Button/Button';
+import { Menu } from './Menu';
+import { MenuItemProps } from './MenuItem.types';
 
-// Interface for story-specific menu item data
-interface StoryMenuItemProps {
+interface StoryMenuItemData {
   label: string;
   onClick?: () => void;
   itemIcon?: React.ReactElement;
@@ -16,24 +15,26 @@ interface StoryMenuItemProps {
   variant?: MenuItemProps['variant'];
 }
 
-// Props for the story templates
 interface MenuStoryProps {
   label?: string;
-  menuItems: StoryMenuItemProps[];
+  baseFontSize?: string;
+  menuItems: StoryMenuItemData[];
 }
 
 const meta = {
   title: 'Components/Menu',
-  // @ts-expect-error - Menu is a namespace, not a component
   component: Menu,
+  parameters: { layout: 'centered' },
   args: {
     label: 'Trigger',
+    baseFontSize: '14px',
     menuItems: [
       { label: 'Profile', onClick: () => alert('Profile clicked') },
       { label: 'Settings', onClick: () => alert('Settings clicked') },
     ],
   },
   argTypes: {
+    baseFontSize: { control: 'text' },
     menuItems: { control: 'object' },
   },
 } satisfies Meta<MenuStoryProps>;
@@ -42,260 +43,145 @@ export default meta;
 
 type Story = StoryObj<MenuStoryProps>;
 
-export const DefaultMenu: Story = {
+const renderItems = (items: StoryMenuItemData[]) =>
+  items.map(item => (
+    <Menu.Item
+      key={item.label}
+      value={item.label}
+      variant={item.variant}
+      icon={item.itemIcon}
+      rightIcon={item.rightItemIcon}
+      onClick={item.onClick}
+    >
+      {item.label}
+    </Menu.Item>
+  ));
+
+export const Default: Story = {
+  render: ({ label, baseFontSize, menuItems }) => (
+    <Menu baseFontSize={baseFontSize}>
+      <Menu.Trigger asChild>
+        <Button variant="outline">
+          {label} <IoChevronDownOutline />
+        </Button>
+      </Menu.Trigger>
+      <Menu.List>{renderItems(menuItems)}</Menu.List>
+    </Menu>
+  ),
+};
+
+export const WithIcons: Story = {
+  args: {
+    menuItems: [
+      { label: 'Profile', onClick: () => alert('Profile clicked'), itemIcon: <SlSettings /> },
+      { label: 'Settings', onClick: () => alert('Settings clicked'), itemIcon: <SlSettings /> },
+    ],
+  },
+  render: ({ label, baseFontSize, menuItems }) => (
+    <Menu baseFontSize={baseFontSize}>
+      <Menu.Trigger asChild>
+        <Button variant="outline">
+          {label} <IoChevronDownOutline />
+        </Button>
+      </Menu.Trigger>
+      <Menu.List>{renderItems(menuItems)}</Menu.List>
+    </Menu>
+  ),
+};
+
+export const WithRightIcons: Story = {
+  args: {
+    menuItems: [
+      { label: 'Profile', onClick: () => alert('Profile clicked'), rightItemIcon: <SlSettings /> },
+      { label: 'Settings', onClick: () => alert('Settings clicked'), rightItemIcon: <SlSettings /> },
+    ],
+  },
+  render: ({ label, baseFontSize, menuItems }) => (
+    <Menu baseFontSize={baseFontSize}>
+      <Menu.Trigger asChild>
+        <Button variant="outline">
+          {label} <IoChevronDownOutline />
+        </Button>
+      </Menu.Trigger>
+      <Menu.List>{renderItems(menuItems)}</Menu.List>
+    </Menu>
+  ),
+};
+
+export const WithBothIcons: Story = {
+  args: {
+    menuItems: [
+      { label: 'Profile', itemIcon: <SlSettings />, rightItemIcon: <IoChevronDownOutline />, onClick: () => alert('Profile clicked') },
+      { label: 'Settings', itemIcon: <SlSettings />, rightItemIcon: <IoChevronDownOutline />, onClick: () => alert('Settings clicked') },
+    ],
+  },
+  render: ({ label, baseFontSize, menuItems }) => (
+    <Menu baseFontSize={baseFontSize}>
+      <Menu.Trigger asChild>
+        <Button variant="outline">
+          {label} <IoChevronDownOutline />
+        </Button>
+      </Menu.Trigger>
+      <Menu.List>{renderItems(menuItems)}</Menu.List>
+    </Menu>
+  ),
+};
+
+export const WithDangerItem: Story = {
   args: {
     menuItems: [
       { label: 'Profile', onClick: () => alert('Profile clicked') },
-      {
-        label: 'Settings',
-        onClick: () => alert('Settings clicked'),
-      },
+      { label: 'Delete', onClick: () => alert('Delete clicked'), itemIcon: <SlSettings />, variant: 'danger' },
     ],
   },
-  render: ({ label, menuItems }) => (
-    <Menu.Root>
-      <MenuButton aria-label={'storybook button menu'} as={Button}>
-        {label} <IoChevronDownOutline />
-      </MenuButton>
-      <MenuList>
-        {menuItems.map((item: StoryMenuItemProps) => (
-          <MenuItem
-            key={item.label}
-            value={item.label}
-            variant={item.variant}
-            icon={item.itemIcon}
-            onClick={item.onClick}
-          >
-            {item.label}
-          </MenuItem>
-        ))}
-      </MenuList>
-    </Menu.Root>
+  render: ({ label, baseFontSize, menuItems }) => (
+    <Menu baseFontSize={baseFontSize}>
+      <Menu.Trigger asChild>
+        <Button variant="outline">
+          {label} <IoChevronDownOutline />
+        </Button>
+      </Menu.Trigger>
+      <Menu.List>{renderItems(menuItems)}</Menu.List>
+    </Menu>
   ),
 };
 
-export const IconMenu: Story = {
-  args: {
-    menuItems: [
-      {
-        label: 'Profile',
-        onClick: () => alert('Profile clicked'),
-        itemIcon: <SlSettings />,
-      },
-      {
-        label: 'Settings',
-        onClick: () => alert('Settings clicked'),
-        itemIcon: <SlSettings />,
-      },
-    ],
-  },
-  render: ({ label, menuItems }) => (
-    <Menu.Root>
-      <MenuButton aria-label={'storybook button menu'} as={Button}>
-        {label} <IoChevronDownOutline />
-      </MenuButton>
-      <MenuList>
-        {menuItems.map((item: StoryMenuItemProps) => (
-          <MenuItem
-            key={item.label}
-            value={item.label}
-            variant={item.variant}
-            icon={item.itemIcon}
-            onClick={item.onClick}
-          >
-            {item.label}
-          </MenuItem>
-        ))}
-      </MenuList>
-    </Menu.Root>
+export const IconButtonTrigger: Story = {
+  argTypes: { label: { table: { disable: true } } },
+  render: ({ baseFontSize, menuItems }) => (
+    <Menu baseFontSize={baseFontSize}>
+      <Menu.Trigger asChild>
+        <IconButton aria-label="Open menu"><IoChevronDownOutline /></IconButton>
+      </Menu.Trigger>
+      <Menu.List>{renderItems(menuItems)}</Menu.List>
+    </Menu>
   ),
 };
 
-export const RightIconMenu: Story = {
-  args: {
-    menuItems: [
-      {
-        label: 'Profile',
-        onClick: () => alert('Profile clicked'),
-        rightItemIcon: <SlSettings />,
-      },
-      {
-        label: 'Settings',
-        onClick: () => alert('Settings clicked'),
-        rightItemIcon: <SlSettings />,
-      },
-    ],
-  },
-  render: ({ label, menuItems }) => (
-    <Menu.Root>
-      <MenuButton aria-label={'storybook button menu'} as={Button}>
-        {label} <IoChevronDownOutline />
-      </MenuButton>
-      <MenuList>
-        {menuItems.map((item: StoryMenuItemProps) => (
-          <MenuItem
-            key={item.label}
-            value={item.label}
-            variant={item.variant}
-            rightIcon={item.rightItemIcon}
-            onClick={item.onClick}
-          >
-            {item.label}
-          </MenuItem>
-        ))}
-      </MenuList>
-    </Menu.Root>
-  ),
-};
-
-export const BothSideIconMenu: Story = {
-  args: {
-    menuItems: [
-      {
-        label: 'Profile',
-        onClick: () => alert('Profile clicked'),
-        itemIcon: <SlSettings />,
-        rightItemIcon: <IoChevronDownOutline />,
-      },
-      {
-        label: 'Settings',
-        onClick: () => alert('Settings clicked'),
-        itemIcon: <SlSettings />,
-        rightItemIcon: <IoChevronDownOutline />,
-      },
-    ],
-  },
-  render: ({ label, menuItems }) => (
-    <Menu.Root>
-      <MenuButton aria-label={'storybook button menu'} as={Button}>
-        {label} <IoChevronDownOutline />
-      </MenuButton>
-      <MenuList>
-        {menuItems.map((item: StoryMenuItemProps) => (
-          <MenuItem
-            key={item.label}
-            value={item.label}
-            variant={item.variant}
-            icon={item.itemIcon}
-            rightIcon={item.rightItemIcon}
-            onClick={item.onClick}
-          >
-            {item.label}
-          </MenuItem>
-        ))}
-      </MenuList>
-    </Menu.Root>
-  ),
-};
-
-export const DangerMenu: Story = {
-  args: {
-    menuItems: [
-      { label: 'Profile', onClick: () => alert('Profile clicked') },
-      {
-        label: 'Settings',
-        onClick: () => alert('Settings clicked'),
-        itemIcon: <SlSettings />,
-        variant: 'danger',
-      },
-    ],
-  },
-  render: ({ label, menuItems }) => (
-    <Menu.Root>
-      <MenuButton aria-label={'storybook button menu'} as={Button}>
-        {label} <IoChevronDownOutline />
-      </MenuButton>
-      <MenuList>
-        {menuItems.map((item: StoryMenuItemProps) => (
-          <MenuItem
-            key={item.label}
-            value={item.label}
-            variant={item.variant}
-            icon={item.itemIcon}
-            onClick={item.onClick}
-          >
-            {item.label}
-          </MenuItem>
-        ))}
-      </MenuList>
-    </Menu.Root>
-  ),
-};
-
-export const IconButtonTriggerMenu: Story = {
-  args: {
-    menuItems: [
-      { label: 'Profile', onClick: () => alert('Profile clicked') },
-      {
-        label: 'Settings',
-        onClick: () => alert('Settings clicked'),
-        itemIcon: <SlSettings />,
-      },
-    ],
-  },
-  argTypes: {
-    label: { table: { disable: true } },
-  },
-  render: ({ menuItems }) => (
-    <Menu.Root>
-      <MenuButton aria-label="storybook icon button menu" as={IconButton}>
-        <IoChevronDownOutline />
-      </MenuButton>
-      <MenuList>
-        {menuItems.map((item: StoryMenuItemProps) => (
-          <MenuItem
-            key={item.label}
-            value={item.label}
-            variant={item.variant}
-            icon={item.itemIcon}
-            onClick={item.onClick}
-          >
-            {item.label}
-          </MenuItem>
-        ))}
-      </MenuList>
-    </Menu.Root>
-  ),
-};
-
-export const SelectiveIconMenu: Story = {
-  args: {
-    menuItems: [
-      { label: 'Profile', onClick: () => alert('Profile clicked') },
-      { label: 'Settings', onClick: () => alert('Settings clicked') },
-      { label: 'Logout', onClick: () => alert('Logout clicked') },
-    ],
-  },
-  render: function SelectiveIconRender({ label, menuItems }) {
-    const [selectedLabel, setSelectedLabel] = useState<string | null>(
-      menuItems[0].label
-    );
-
-    const handleItemClick = (label: string, onClick?: () => void) => {
-      setSelectedLabel(label);
-      onClick && onClick();
-    };
+export const SelectiveIcon: Story = {
+  render: function SelectiveIconRender({ label, baseFontSize, menuItems }) {
+    const [selectedLabel, setSelectedLabel] = useState<string | null>(menuItems[0].label);
 
     return (
-      <Menu.Root>
-        <MenuButton aria-label={'storybook button menu'} as={Button}>
-          {label} <IoChevronDownOutline />
-        </MenuButton>
-        <MenuList>
-          {menuItems.map((item: StoryMenuItemProps) => (
-            <MenuItem
+      <Menu baseFontSize={baseFontSize}>
+        <Menu.Trigger asChild>
+          <Button variant="outline">
+            {label} <IoChevronDownOutline />
+          </Button>
+        </Menu.Trigger>
+        <Menu.List>
+          {menuItems.map(item => (
+            <Menu.Item
               key={item.label}
               value={item.label}
-              onClick={() => handleItemClick(item.label, item.onClick)}
-              icon={
-                selectedLabel === item.label ? <SlSettings /> : undefined
-              }
+              onClick={() => { setSelectedLabel(item.label); item.onClick?.(); }}
+              icon={selectedLabel === item.label ? <SlSettings /> : undefined}
             >
               {item.label}
-            </MenuItem>
+            </Menu.Item>
           ))}
-        </MenuList>
-      </Menu.Root>
+        </Menu.List>
+      </Menu>
     );
   },
 };

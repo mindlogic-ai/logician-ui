@@ -1,12 +1,13 @@
-import {
-  Menu,
-  MenuContentProps as ChakraMenuContentProps,
-  Portal,
-} from '@chakra-ui/react';
+import { Menu, MenuContentProps as ChakraMenuContentProps, Portal } from '@chakra-ui/react';
+
+import { ScaledContext } from '../ScaledContext';
+import { useMenuContext } from './Menu.types';
 
 export interface MenuListProps extends ChakraMenuContentProps {}
 
 export const MenuList = ({ children, ...rest }: MenuListProps) => {
+  const { baseFontSize } = useMenuContext();
+
   return (
     <Portal>
       <Menu.Positioner>
@@ -18,7 +19,7 @@ export const MenuList = ({ children, ...rest }: MenuListProps) => {
           p="1.5"
           {...rest}
         >
-          {children}
+          <ScaledContext fontSize={baseFontSize}>{children}</ScaledContext>
         </Menu.Content>
       </Menu.Positioner>
     </Portal>
