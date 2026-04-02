@@ -2,7 +2,7 @@ import { forwardRef } from 'react';
 import { RadioGroup } from '@chakra-ui/react';
 
 import { RadioProps } from './Radio.types';
-import { RadioIndicator } from './RadioIndicator';
+import { RadioControl } from './RadioControl';
 import { RadioText } from './RadioText';
 
 const RadioBase = forwardRef<
@@ -17,6 +17,6 @@ const RadioBase = forwardRef<
 RadioBase.displayName = 'Radio';
 
 export const Radio = Object.assign(RadioBase, {
-  Indicator: RadioIndicator,
+  Control: RadioControl,
   Text: RadioText,
 });

@@ -13,6 +13,7 @@ export const CheckboxControl = forwardRef<HTMLDivElement, CheckboxControlProps>(
       _checked={{ bgColor: 'primary.main', borderColor: 'primary.main' }}
       _indeterminate={{ bgColor: 'primary.main', borderColor: 'primary.main' }}
       cursor="pointer"
+      _disabled={{ cursor: 'not-allowed' }}
       {...focusRing}
       {...props}
     >
