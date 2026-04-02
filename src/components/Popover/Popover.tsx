@@ -15,11 +15,14 @@ const PopoverBase = ({
 PopoverBase.displayName = 'Popover';
 
 export const Popover = Object.assign(PopoverBase, {
+  Anchor: ChakraPopover.Anchor,
   Trigger: ChakraPopover.Trigger,
   Content: PopoverContent,
   Arrow: ChakraPopover.Arrow,
   ArrowTip: ChakraPopover.ArrowTip,
   CloseTrigger: ChakraPopover.CloseTrigger,
+  Header: ChakraPopover.Header,
+  Body: ChakraPopover.Body,
   Title: ChakraPopover.Title,
   Description: ChakraPopover.Description,
   Footer: ChakraPopover.Footer,
