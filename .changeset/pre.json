@@ -2,7 +2,7 @@
   "mode": "exit",
   "tag": "alpha",
   "initialVersions": {
-    "@mindlogic-ai/logician-ui": "3.0.0-alpha.17"
+    "@mindlogic-ai/logician-ui": "3.0.0-alpha.18"
   },
   "changesets": [
     "add-collapsible-component",
@@ -20,6 +20,7 @@
     "fix-tag-close-button-cursor",
     "fix-vertical-tab-styles",
     "gentle-panthers-remain",
+    "goofy-shirts-grab",
     "icon-button-color-theme-patch",
     "icon-default-color",
     "locale-type-safety-fixes",
