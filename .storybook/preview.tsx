@@ -4,10 +4,10 @@ import { LogicianProvider } from '../src/components/LogicianProvider/LogicianPro
 
 const preview: Preview = {
   globalTypes: {
-    locale: {
-      description: 'Locale for internationalization',
+    language: {
+      description: 'Language for internationalization',
       toolbar: {
-        title: 'Locale',
+        title: 'Language',
         icon: 'globe',
         items: [
           { value: 'en', title: 'English' },
@@ -21,7 +21,7 @@ const preview: Preview = {
     },
   },
   initialGlobals: {
-    locale: 'en',
+    language: 'en',
   },
   parameters: {
     // Global parameters for all stories
@@ -52,14 +52,14 @@ const preview: Preview = {
       // Check if the story has disabled the LogicianProvider
       // To disable for a specific story, add: parameters: { disableLogicianProvider: true }
       const disableProvider = context.parameters?.disableLogicianProvider;
-      const locale = context.globals?.locale || 'en';
+      const language = context.globals?.language || 'en';
 
       if (disableProvider) {
         return <Story />;
       }
 
       return (
-        <LogicianProvider locale={locale}>
+        <LogicianProvider language={language}>
           <Story />
         </LogicianProvider>
       );

@@ -5,7 +5,7 @@ import {
 } from 'chakra-dayzed-datepicker';
 import { format } from 'date-fns';
 
-import useLocale from '@/hooks/useLocale';
+import useLanguage from '@/hooks/useLanguage';
 
 import { Button, ButtonProps } from '../Button';
 import { MdOutlineCalendarToday } from '../Icon';
@@ -22,7 +22,7 @@ export const SingleDatePicker = ({
   usePortal = true,
   ...rest
 }: SingleDatepickerProps) => {
-  const { language } = useLocale();
+  const { language } = useLanguage();
   const dateFormat = configs?.dateFormat ?? getDefaultFullDateFormat(language);
   const dateFnsLocale = getDateFnsLocale(language);
 

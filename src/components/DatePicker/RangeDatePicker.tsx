@@ -5,7 +5,7 @@ import {
 } from 'chakra-dayzed-datepicker';
 import { format } from 'date-fns';
 
-import useLocale from '@/hooks/useLocale';
+import useLanguage from '@/hooks/useLanguage';
 
 import { Button, ButtonProps } from '../Button';
 import { MdOutlineCalendarToday } from '../Icon';
@@ -22,7 +22,7 @@ export const RangeDatePicker = ({
   usePortal = true,
   ...rest
 }: RangeDatepickerProps) => {
-  const { language } = useLocale();
+  const { language } = useLanguage();
   const dateFormat = configs?.dateFormat ?? getDefaultFullDateFormat(language);
   const dateFnsLocale = getDateFnsLocale(language);
 
@@ -174,7 +174,7 @@ export const RangeDatePicker = ({
             />
             {selectedDates && selectedDates.length > 0
               ? selectedDates.length === 1
-                ? `${format(selectedDates[0], dateFormat, { locale: dateFnsLocale })} - ${dateFormat}`
+                ? `${format(selectedDates[0], dateFormat, { locale: dateFnsLocale })} - `
                 : `${format(selectedDates[0], dateFormat, { locale: dateFnsLocale })} - ${format(selectedDates[1], dateFormat, { locale: dateFnsLocale })}`
               : ''}
           </Button>
