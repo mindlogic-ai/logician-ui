@@ -1,58 +1,22 @@
 import { forwardRef } from 'react';
 import { Checkbox as ChakraCheckbox } from '@chakra-ui/react';
 
-import { focusRing } from '@/utils/focusRing';
-
 import { CheckboxProps } from './Checkbox.types';
+import { CheckboxControl } from './CheckboxControl';
+import { CheckboxLabel } from './CheckboxLabel';
 
-export const Checkbox = forwardRef<HTMLLabelElement, CheckboxProps>(
-  (
-    {
-      id,
-      size = 'sm',
-      checked,
-      disabled,
-      invalid,
-      onCheckedChange,
-      children,
-      cursor,
-      ...controlRest
-    },
-    ref
-  ) => {
-    return (
-      <ChakraCheckbox.Root
-        ref={ref}
-        size={size}
-        checked={checked}
-        disabled={disabled}
-        invalid={invalid}
-        cursor={cursor || (disabled ? 'not-allowed' : 'pointer')}
-        onCheckedChange={onCheckedChange}
-      >
-        <ChakraCheckbox.HiddenInput id={id} />
-        <ChakraCheckbox.Control
-          borderRadius="xs"
-          borderColor="gray.400"
-          borderWidth="1px"
-          _checked={{
-            bgColor: 'primary.main',
-            borderColor: 'primary.main',
-          }}
-          _indeterminate={{
-            bgColor: 'primary.main',
-            borderColor: 'primary.main',
-          }}
-          cursor="pointer"
-          {...focusRing}
-          {...controlRest}
-        >
-          <ChakraCheckbox.Indicator />
-        </ChakraCheckbox.Control>
-        {children}
-      </ChakraCheckbox.Root>
-    );
-  }
-);
+const CheckboxBase = forwardRef<
+  React.ComponentRef<typeof ChakraCheckbox.Root>,
+  CheckboxProps
+>(({ id, size = 'sm', children, ...props }, ref) => (
+  <ChakraCheckbox.Root ref={ref} size={size} cursor="pointer" _disabled={{ cursor: 'not-allowed' }} {...props}>
+    <ChakraCheckbox.HiddenInput id={id} />
+    {children}
+  </ChakraCheckbox.Root>
+));
+CheckboxBase.displayName = 'Checkbox';
 
-Checkbox.displayName = 'Checkbox';
+export const Checkbox = Object.assign(CheckboxBase, {
+  Control: CheckboxControl,
+  Label: CheckboxLabel,
+});
