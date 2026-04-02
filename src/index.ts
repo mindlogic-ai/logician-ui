@@ -73,6 +73,7 @@ export * from './components/Radio';
 export * from './components/SeeMoreButton';
 export * from './components/SegmentedControl';
 export * from './components/SegmentedProgressBar';
+export * from './components/ScaledContext';
 export * from './components/Select';
 export * from './components/Slider';
 export * from './components/Spinner';
