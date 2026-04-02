@@ -30,10 +30,10 @@ export const MenuItem = ({
       {...focusRing}
       {...rest}
     >
-      {icon && icon}
+      {icon}
       {children}
       {rightIcon && <Spacer />}
-      {rightIcon && rightIcon}
+      {rightIcon}
     </Menu.Item>
   );
 };
