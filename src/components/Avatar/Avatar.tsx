@@ -11,33 +11,37 @@ import {
   AvatarRootProps as ChakraAvatarRootProps,
 } from '@chakra-ui/react';
 
-import { Face } from '@/components/Icon';
-
-export type { AvatarFallbackProps, AvatarGroupProps, AvatarIconProps, AvatarImageProps, AvatarRootProps, AvatarRootProviderProps } from '@chakra-ui/react';
+export type {
+  AvatarFallbackProps,
+  AvatarGroupProps,
+  AvatarIconProps,
+  AvatarImageProps,
+  AvatarRootProps,
+} from '@chakra-ui/react';
 
 export type AvatarProps = ChakraAvatarRootProps & {
   src?: string;
   name?: string;
 };
 
-const AvatarComponent = forwardRef<HTMLDivElement, AvatarProps>((props, ref) => {
-  const { src, name, ...rest } = props;
-  return (
-    <ChakraAvatar.Root
-      ref={ref}
-      borderWidth="1px"
-      borderColor="gray.200"
-      overflow="hidden"
-      bgColor="transparent"
-      {...rest}
-    >
-      <ChakraAvatar.Fallback name={name}>
-        {!name && <Face color="gray.400" boxSize="60%" />}
-      </ChakraAvatar.Fallback>
-      <ChakraAvatar.Image src={src} />
-    </ChakraAvatar.Root>
-  );
-});
+const AvatarComponent = forwardRef<HTMLDivElement, AvatarProps>(
+  (props, ref) => {
+    const { src, name, ...rest } = props;
+    return (
+      <ChakraAvatar.Root
+        ref={ref}
+        borderWidth="1px"
+        borderColor="gray.200"
+        overflow="hidden"
+        bgColor="transparent"
+        {...rest}
+      >
+        <ChakraAvatar.Fallback name={name} />
+        <ChakraAvatar.Image src={src} />
+      </ChakraAvatar.Root>
+    );
+  }
+);
 
 AvatarComponent.displayName = 'Avatar';
 
