@@ -54,11 +54,6 @@ jobs:
         env:
           NPM_CONFIG_PROVENANCE: true
 
-      # dev 브랜치: prerelease 모드 종료
-      - name: Exit prerelease mode
-        if: github.ref_name == 'dev'
-        run: yarn changeset pre exit
-
       - name: Commit version changes
         continue-on-error: true
         env:

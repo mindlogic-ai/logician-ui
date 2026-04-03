@@ -27,7 +27,15 @@ export const Chip = forwardRef(
   ) => {
     const styles = getChipStyles(colorScheme, variant);
 
-    return <ChakraBadge {...baseStyles} {...styles} {...focusRing} {...rest} ref={ref} />;
+    return (
+      <ChakraBadge
+        {...baseStyles}
+        {...styles}
+        {...focusRing}
+        {...rest}
+        ref={ref}
+      />
+    );
   }
 );
 

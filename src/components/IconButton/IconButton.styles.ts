@@ -1,10 +1,11 @@
+import { ButtonProps as ChakraButtonProps } from '@chakra-ui/react';
+
 import {
   buttonColorPalettes,
   buttonColorPaletteStyles,
   buttonVariants,
 } from '../Button/Button.styles';
 import { ButtonColorPalette, ButtonVariant } from '../Button/Button.types';
-import { ButtonProps as ChakraButtonProps } from '@chakra-ui/react';
 
 export {
   buttonColorPalettes as iconButtonColorPalettes,

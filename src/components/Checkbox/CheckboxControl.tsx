@@ -1,5 +1,8 @@
 import { forwardRef } from 'react';
-import { Checkbox as ChakraCheckbox, CheckboxControlProps } from '@chakra-ui/react';
+import {
+  Checkbox as ChakraCheckbox,
+  CheckboxControlProps,
+} from '@chakra-ui/react';
 
 import { focusRing } from '@/utils/focusRing';
 

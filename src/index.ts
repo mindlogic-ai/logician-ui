@@ -55,8 +55,8 @@ export * from './components/MaxLengthIndicator';
 export * from './components/MDXEditor';
 export * from './components/Menu';
 export * from './components/Modal';
-export * from './components/Popover';
 export * from './components/MonthPicker';
+export * from './components/Popover';
 
 // Navigation Components
 export * from './components/Pagination';
@@ -71,10 +71,10 @@ export * from './components/RadialProgress';
 
 // Interactive Components
 export * from './components/Radio';
+export * from './components/ScaledContext';
 export * from './components/SeeMoreButton';
 export * from './components/SegmentedControl';
 export * from './components/SegmentedProgressBar';
-export * from './components/ScaledContext';
 export * from './components/Select';
 export * from './components/Slider';
 export * from './components/Spinner';

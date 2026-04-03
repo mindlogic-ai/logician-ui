@@ -1,7 +1,7 @@
 import { Menu as ChakraMenu } from '@chakra-ui/react';
 
-import { MenuItem } from './MenuItem';
 import { MenuContext, MenuProps } from './Menu.types';
+import { MenuItem } from './MenuItem';
 import { MenuList } from './MenuList';
 
 const MenuBase = ({ baseFontSize = '14px', children, ...props }: MenuProps) => (

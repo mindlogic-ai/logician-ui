@@ -21,10 +21,7 @@ import { ButtonProps } from './Button.types';
  * ```
  */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    { colorPalette, variant = 'soft', size, children, ...rest },
-    ref
-  ) => {
+  ({ colorPalette, variant = 'soft', size, children, ...rest }, ref) => {
     const palette = colorPalette ?? 'primary';
 
     const styles = getButtonStyles(palette, variant);

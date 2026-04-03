@@ -9,7 +9,13 @@ const CheckboxBase = forwardRef<
   React.ComponentRef<typeof ChakraCheckbox.Root>,
   CheckboxProps
 >(({ id, size = 'sm', children, ...props }, ref) => (
-  <ChakraCheckbox.Root ref={ref} size={size} cursor="pointer" _disabled={{ cursor: 'not-allowed' }} {...props}>
+  <ChakraCheckbox.Root
+    ref={ref}
+    size={size}
+    cursor="pointer"
+    _disabled={{ cursor: 'not-allowed' }}
+    {...props}
+  >
     <ChakraCheckbox.HiddenInput id={id} />
     {children}
   </ChakraCheckbox.Root>
