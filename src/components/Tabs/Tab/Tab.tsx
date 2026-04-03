@@ -21,7 +21,6 @@ export const Tab = forwardRef<HTMLButtonElement, TabProps>(
           ref={ref}
           variant="ghost"
           colorPalette="neutral"
-          borderRadius="none"
           color="gray.800"
           py={3}
           _selected={horizontalSelectedStyles}

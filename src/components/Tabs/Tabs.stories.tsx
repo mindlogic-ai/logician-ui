@@ -42,7 +42,7 @@ export const Vertical: Story = {
     defaultValue: 'tab1',
     children: (
       <>
-        <TabList>
+        <TabList maxW="300px">
           <Tab value="tab1">Tab 1</Tab>
           <Tab value="tab2">Tab 2</Tab>
           <Tab value="tab3">Tab 3</Tab>
@@ -146,13 +146,7 @@ export const CustomStyles: Story = {
             Manage your profile information and preferences.
           </Text>
         </TabPanel>
-        <TabPanel
-          value="settings"
-          bg="green.50"
-          p={6}
-          borderRadius="md"
-          mt={4}
-        >
+        <TabPanel value="settings" bg="green.50" p={6} borderRadius="md" mt={4}>
           <Heading size="md" mb={3} color="green.900">
             General Settings
           </Heading>

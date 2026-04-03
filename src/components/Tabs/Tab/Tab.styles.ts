@@ -28,13 +28,13 @@ export const verticalSelectedStyles = {
   backgroundColor: 'primary.extralight', // #E8EEFB
   color: 'primary.dark', // #0D317D
   fontWeight: 'bold',
-  _after: {
+  _before: {
     content: '""',
     position: 'absolute',
-    top: 0,
-    right: 0,
-    width: '2px',
-    height: '100%',
+    insetInlineStart: 'var(--indicator-offset-x, 0)',
+    insetInlineEnd: 'unset',
+    insetBlock: 'var(--indicator-offset-y, 0)',
+    width: 'var(--indicator-thickness, 2px)',
     background: 'primary.main',
   },
 };
