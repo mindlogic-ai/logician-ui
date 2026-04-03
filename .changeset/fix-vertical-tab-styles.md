@@ -2,6 +2,6 @@
 "@mindlogic-ai/logician-ui": patch
 ---
 
-Fix vertical Tab indicator: replace custom _after with Chakra-native left-side indicator
+Fix vertical Tab indicator: use Chakra-native left-side indicator; suppress horizontal _after
 
-Vertical selected tab now shows a left-side 2px indicator using Chakra's built-in `--indicator-offset-x`, `--indicator-offset-y`, and `--indicator-thickness` CSS variables (via `indicator.start` approach). Removes the custom `_after` pseudo-element that caused a duplicate indicator when the host app uses the `line` variant recipe.
+Vertical selected tab now shows a left-side 2px indicator using Chakra's built-in `--indicator-offset-x`, `--indicator-offset-y`, and `--indicator-thickness` CSS variables. Adds `_after: { content: 'none' }` to `verticalSelectedStyles` so the horizontal bottom-bar pseudo-element (from `_selected`) does not bleed through on vertical tabs.

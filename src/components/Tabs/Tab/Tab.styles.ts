@@ -28,6 +28,7 @@ export const verticalSelectedStyles = {
   backgroundColor: 'primary.extralight', // #E8EEFB
   color: 'primary.dark', // #0D317D
   fontWeight: 'bold',
+  _after: { content: 'none' },
   _before: {
     content: '""',
     position: 'absolute',
