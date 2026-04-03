@@ -32,10 +32,11 @@ export const verticalSelectedStyles = {
   _before: {
     content: '""',
     position: 'absolute',
-    insetInlineStart: 'var(--indicator-offset-x, 0)',
+    insetInlineStart: 0,
+    // Prevents the "line" variant's _before from rendering a right-side indicator
     insetInlineEnd: 'unset',
-    insetBlock: 'var(--indicator-offset-y, 0)',
-    width: 'var(--indicator-thickness, 2px)',
+    insetBlock: 0,
+    width: '2px',
     background: 'primary.main',
   },
 };
