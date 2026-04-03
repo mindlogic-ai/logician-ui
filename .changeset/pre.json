@@ -17,6 +17,7 @@
     "fix-font-loading",
     "fix-pr55-release",
     "fix-radial-progress-hooks",
+    "fix-release-workflow-pre-mode",
     "fix-tag-close-button-cursor",
     "fix-vertical-tab-styles",
     "gentle-panthers-remain",
