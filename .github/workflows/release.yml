@@ -37,7 +37,7 @@ jobs:
       # dev 브랜치: prerelease 모드 진입
       - name: Enter prerelease mode
         if: github.ref_name == 'dev'
-        run: yarn changeset pre enter alpha
+        run: yarn changeset pre enter alpha || true
 
       - name: Apply changeset version
         run: yarn changeset version
