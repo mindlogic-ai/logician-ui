@@ -23,6 +23,7 @@ export const Tab = forwardRef<HTMLButtonElement, TabProps>(
           colorPalette="neutral"
           color="gray.800"
           py={3}
+          border="none"
           _selected={horizontalSelectedStyles}
           css={{
             '&[data-orientation=vertical]': {

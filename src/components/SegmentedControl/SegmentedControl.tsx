@@ -9,9 +9,17 @@ import {
 // Match font sizes to the equivalent Chakra button sizes
 const fontSizeBySize: Record<string, string> = {
   xs: 'xs',
-  sm: 'xs',
+  sm: 'sm',
   md: 'sm',
   lg: 'md',
+};
+
+// Item heights so that itemHeight + 2×root-padding(p="1") equals the Button height for each size
+const itemHeightBySize: Record<string, string> = {
+  xs: '6', // 32 - 8 = 24px
+  sm: '7', // 36 - 8 = 28px
+  md: '8', // 40 - 8 = 32px
+  lg: '9', // 44 - 8 = 36px
 };
 
 export const SegmentedControl = forwardRef<
@@ -29,6 +37,7 @@ export const SegmentedControl = forwardRef<
   } = props;
 
   const fontSize = fontSizeBySize[size as string] ?? 'sm';
+  const itemHeight = itemHeightBySize[size as string] ?? '8';
 
   // Normalize options to the format expected by SegmentGroup.Items
   const items = options.map((option: SegmentedControlOption) => ({
@@ -71,8 +80,9 @@ export const SegmentedControl = forwardRef<
           key={item.value}
           value={item.value}
           disabled={item.disabled}
-          cursor="pointer"
+          cursor={item.disabled ? 'not-allowed' : 'pointer'}
           flex="1"
+          height={itemHeight}
           _hover={{ bg: 'transparent' }}
         >
           <SegmentGroup.ItemText
