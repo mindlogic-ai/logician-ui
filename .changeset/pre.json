@@ -2,7 +2,7 @@
   "mode": "exit",
   "tag": "alpha",
   "initialVersions": {
-    "@mindlogic-ai/logician-ui": "3.0.0-alpha.18"
+    "@mindlogic-ai/logician-ui": "3.0.0-alpha.19"
   },
   "changesets": [
     "add-collapsible-component",
