@@ -1,5 +1,8 @@
 import { forwardRef } from 'react';
-import { Popover as ChakraPopover, PopoverContentProps } from '@chakra-ui/react';
+import {
+  Popover as ChakraPopover,
+  PopoverContentProps,
+} from '@chakra-ui/react';
 
 import { ScaledContext } from '../ScaledContext';
 import { usePopoverContext } from './Popover.types';

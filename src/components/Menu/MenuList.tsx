@@ -1,5 +1,9 @@
 import { forwardRef } from 'react';
-import { Menu, MenuContentProps as ChakraMenuContentProps, Portal } from '@chakra-ui/react';
+import {
+  Menu,
+  MenuContentProps as ChakraMenuContentProps,
+  Portal,
+} from '@chakra-ui/react';
 
 import { ScaledContext } from '../ScaledContext';
 import { useMenuContext } from './Menu.types';

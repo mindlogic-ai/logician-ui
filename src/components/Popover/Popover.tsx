@@ -1,7 +1,7 @@
 import { Popover as ChakraPopover } from '@chakra-ui/react';
 
-import { PopoverContent } from './PopoverContent';
 import { PopoverContext, PopoverProps } from './Popover.types';
+import { PopoverContent } from './PopoverContent';
 
 const PopoverBase = ({
   baseFontSize = '14px',

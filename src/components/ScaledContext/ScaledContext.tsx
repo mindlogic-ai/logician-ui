@@ -13,7 +13,7 @@ const LENGTH_RE = /^(-?[\d.]+)(r?em)$/;
 // future release, getScopedVars will return {} and scaling will silently stop
 // working. The null-check on `base` below guards the most likely failure mode.
 function getScopedVars(
-  system: ReturnType<typeof useChakraContext>,
+  system: ReturnType<typeof useChakraContext>
 ): React.CSSProperties {
   const base = system.tokens.cssVarMap.get('base');
   if (!base) return {};
