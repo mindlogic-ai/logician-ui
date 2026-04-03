@@ -11,6 +11,8 @@ import {
   AvatarRootProps as ChakraAvatarRootProps,
 } from '@chakra-ui/react';
 
+import { Face } from '@/components/Icon';
+
 export type { AvatarFallbackProps, AvatarGroupProps, AvatarIconProps, AvatarImageProps, AvatarRootProps, AvatarRootProviderProps } from '@chakra-ui/react';
 
 export type AvatarProps = ChakraAvatarRootProps & {
@@ -29,7 +31,9 @@ const AvatarComponent = forwardRef<HTMLDivElement, AvatarProps>((props, ref) => 
       bgColor="transparent"
       {...rest}
     >
-      <ChakraAvatar.Fallback name={name} />
+      <ChakraAvatar.Fallback name={name}>
+        {!name && <Face color="gray.400" boxSize="60%" />}
+      </ChakraAvatar.Fallback>
       <ChakraAvatar.Image src={src} />
     </ChakraAvatar.Root>
   );
