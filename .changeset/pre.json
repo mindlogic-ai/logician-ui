@@ -1,5 +1,5 @@
 {
-  "mode": "exit",
+  "mode": "pre",
   "tag": "alpha",
   "initialVersions": {
     "@mindlogic-ai/logician-ui": "3.0.0-alpha.13"
