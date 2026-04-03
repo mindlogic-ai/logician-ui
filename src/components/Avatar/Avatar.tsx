@@ -1,15 +1,24 @@
 import { forwardRef } from 'react';
 import {
   Avatar as ChakraAvatar,
+  AvatarContext,
+  AvatarFallback,
+  AvatarGroup,
+  AvatarIcon,
+  AvatarImage,
+  AvatarRoot,
+  AvatarRootProvider,
   AvatarRootProps as ChakraAvatarRootProps,
 } from '@chakra-ui/react';
+
+export type { AvatarFallbackProps, AvatarGroupProps, AvatarIconProps, AvatarImageProps, AvatarRootProps, AvatarRootProviderProps } from '@chakra-ui/react';
 
 export type AvatarProps = ChakraAvatarRootProps & {
   src?: string;
   name?: string;
 };
 
-export const Avatar = forwardRef<HTMLDivElement, AvatarProps>((props, ref) => {
+const AvatarComponent = forwardRef<HTMLDivElement, AvatarProps>((props, ref) => {
   const { src, name, ...rest } = props;
   return (
     <ChakraAvatar.Root
@@ -26,4 +35,14 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>((props, ref) => {
   );
 });
 
-Avatar.displayName = 'Avatar';
+AvatarComponent.displayName = 'Avatar';
+
+export const Avatar = Object.assign(AvatarComponent, {
+  Root: AvatarRoot,
+  RootProvider: AvatarRootProvider,
+  Fallback: AvatarFallback,
+  Image: AvatarImage,
+  Icon: AvatarIcon,
+  Group: AvatarGroup,
+  Context: AvatarContext,
+});
