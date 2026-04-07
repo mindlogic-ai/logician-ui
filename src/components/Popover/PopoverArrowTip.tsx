@@ -8,7 +8,7 @@ export const PopoverArrowTip = forwardRef<HTMLDivElement, PopoverArrowTipProps>(
   (props, ref) => (
     <ChakraPopover.ArrowTip
       ref={ref}
-      borderColor="var(--popover-border-color, var(--chakra-colors-gray-200))"
+      borderColor="gray.200"
       {...props}
     />
   )

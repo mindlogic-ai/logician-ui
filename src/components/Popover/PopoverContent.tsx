@@ -17,7 +17,6 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
           ref={ref}
           borderWidth="1px"
           borderColor="gray.200"
-          css={{ '--popover-border-color': 'var(--chakra-colors-gray-200)' }}
           {...props}
         >
           <ScaledContext fontSize={baseFontSize}>{children}</ScaledContext>
