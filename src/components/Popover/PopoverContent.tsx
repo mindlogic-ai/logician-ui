@@ -13,7 +13,13 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
 
     return (
       <ChakraPopover.Positioner>
-        <ChakraPopover.Content ref={ref} {...props}>
+        <ChakraPopover.Content
+          ref={ref}
+          borderWidth="1px"
+          borderColor="gray.200"
+          css={{ '--popover-border-color': 'var(--chakra-colors-gray-200)' }}
+          {...props}
+        >
           <ScaledContext fontSize={baseFontSize}>{children}</ScaledContext>
         </ChakraPopover.Content>
       </ChakraPopover.Positioner>

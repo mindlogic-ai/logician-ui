@@ -1,6 +1,7 @@
 import { Popover as ChakraPopover } from '@chakra-ui/react';
 
 import { PopoverContext, PopoverProps } from './Popover.types';
+import { PopoverArrowTip } from './PopoverArrowTip';
 import { PopoverContent } from './PopoverContent';
 
 const PopoverBase = ({
@@ -19,7 +20,7 @@ export const Popover = Object.assign(PopoverBase, {
   Trigger: ChakraPopover.Trigger,
   Content: PopoverContent,
   Arrow: ChakraPopover.Arrow,
-  ArrowTip: ChakraPopover.ArrowTip,
+  ArrowTip: PopoverArrowTip,
   CloseTrigger: ChakraPopover.CloseTrigger,
   Header: ChakraPopover.Header,
   Body: ChakraPopover.Body,

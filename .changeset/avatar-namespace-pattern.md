@@ -12,3 +12,7 @@ Avatar now exposes subcomponents as namespace properties following the Chakra UI
 - `Avatar.Icon`
 - `Avatar.Group`
 - `Avatar.Context`
+
+fix(Popover): match arrow tip border color to content border color
+
+`Popover.Content` now renders with an explicit `1px gray.200` border and sets a `--popover-border-color` CSS variable. `Popover.ArrowTip` reads that variable so the arrow border stays in sync with the content border.
