@@ -42,6 +42,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'primary.dark', // #0D317D
+        transform: 'scale(0.97)',
       },
     },
     soft: {
@@ -53,7 +54,8 @@ export const buttonColorPaletteStyles: Record<
         bgColor: 'primary.lighter', // #B9CBF3
       },
       _active: {
-        bgColor: 'primary.light', // #7DA0E8
+        bgColor: 'primary.lighter', // #B9CBF3 — same as hover, scale provides pressed feedback
+        transform: 'scale(0.97)',
       },
     },
     outline: {
@@ -65,6 +67,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'primary.lighter', // #B9CBF3
+        transform: 'scale(0.97)',
       },
     },
     ghost: {
@@ -76,6 +79,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'primary.lighter', // #B9CBF3
+        transform: 'scale(0.97)',
       },
     },
   },
@@ -94,6 +98,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'secondary.dark', // #570D7D
+        transform: 'scale(0.97)',
       },
     },
     soft: {
@@ -105,7 +110,8 @@ export const buttonColorPaletteStyles: Record<
         bgColor: 'secondary.lighter', // #DEB9F3
       },
       _active: {
-        bgColor: 'secondary.light', // #C17DE8
+        bgColor: 'secondary.lighter', // #DEB9F3 — same as hover, scale provides pressed feedback
+        transform: 'scale(0.97)',
       },
     },
     outline: {
@@ -117,6 +123,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'secondary.lighter', // #DEB9F3
+        transform: 'scale(0.97)',
       },
     },
     ghost: {
@@ -128,6 +135,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'secondary.lighter', // #DEB9F3
+        transform: 'scale(0.97)',
       },
     },
   },
@@ -146,6 +154,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'danger.dark', // #7D0D14
+        transform: 'scale(0.97)',
       },
     },
     soft: {
@@ -157,7 +166,8 @@ export const buttonColorPaletteStyles: Record<
         bgColor: 'danger.lighter', // #F3B9BD
       },
       _active: {
-        bgColor: 'danger.light', // #E87D84
+        bgColor: 'danger.lighter', // #F3B9BD — same as hover, scale provides pressed feedback
+        transform: 'scale(0.97)',
       },
     },
     outline: {
@@ -169,6 +179,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'danger.lighter', // #F3B9BD
+        transform: 'scale(0.97)',
       },
     },
     ghost: {
@@ -180,6 +191,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'danger.lighter', // #F3B9BD
+        transform: 'scale(0.97)',
       },
     },
   },
@@ -198,6 +210,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'green.800', // #0D5309
+        transform: 'scale(0.97)',
       },
     },
     soft: {
@@ -209,7 +222,8 @@ export const buttonColorPaletteStyles: Record<
         bgColor: 'success.lighter', // #BDF3B9
       },
       _active: {
-        bgColor: 'success.light', // #84E87D
+        bgColor: 'success.lighter', // #BDF3B9 — same as hover, scale provides pressed feedback
+        transform: 'scale(0.97)',
       },
     },
     outline: {
@@ -221,6 +235,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'success.lighter', // #BDF3B9
+        transform: 'scale(0.97)',
       },
     },
     ghost: {
@@ -232,6 +247,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'success.lighter', // #BDF3B9
+        transform: 'scale(0.97)',
       },
     },
   },
@@ -250,6 +266,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'warning.dark', // #7D610D
+        transform: 'scale(0.97)',
       },
     },
     soft: {
@@ -261,7 +278,8 @@ export const buttonColorPaletteStyles: Record<
         bgColor: 'warning.lighter', // #F3E4B9
       },
       _active: {
-        bgColor: 'warning.light', // #E8CD7D
+        bgColor: 'warning.lighter', // #F3E4B9 — same as hover, scale provides pressed feedback
+        transform: 'scale(0.97)',
       },
     },
     outline: {
@@ -273,6 +291,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'warning.lighter', // #F3E4B9
+        transform: 'scale(0.97)',
       },
     },
     ghost: {
@@ -284,6 +303,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'warning.lighter', // #F3E4B9
+        transform: 'scale(0.97)',
       },
     },
   },
@@ -302,6 +322,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'gray.900', // #505A74
+        transform: 'scale(0.97)',
       },
     },
     soft: {
@@ -313,7 +334,8 @@ export const buttonColorPaletteStyles: Record<
         bgColor: 'gray.200', // #E2E6F0
       },
       _active: {
-        bgColor: 'gray.300', // #CDD3E0
+        bgColor: 'gray.200', // #E2E6F0 — same as hover, scale provides pressed feedback
+        transform: 'scale(0.97)',
       },
     },
     outline: {
@@ -325,6 +347,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'gray.100', // #F0F3F9
+        transform: 'scale(0.97)',
       },
     },
     ghost: {
@@ -336,6 +359,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'gray.100', // #F0F3F9
+        transform: 'scale(0.97)',
       },
     },
   },

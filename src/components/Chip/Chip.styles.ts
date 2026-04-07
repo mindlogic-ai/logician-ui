@@ -103,15 +103,17 @@ export const colorSchemeStyles: Record<
   neutral: {
     solid: {
       bgColor: 'gray.800',
+      borderColor: 'gray.800',
       color: 'white',
     },
     soft: {
       bgColor: 'gray.100',
+      borderColor: 'gray.300',
       color: 'gray.800',
     },
     outline: {
       border: '1px solid',
-      borderColor: 'gray.700',
+      borderColor: 'gray.500',
       color: 'gray.700',
       bgColor: 'transparent',
     },
