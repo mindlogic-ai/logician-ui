@@ -1,4 +1,3 @@
-export { Avatar } from './Avatar';
 export type {
   AvatarFallbackProps,
   AvatarGroupProps,
@@ -7,3 +6,4 @@ export type {
   AvatarProps,
   AvatarRootProps,
 } from './Avatar';
+export { Avatar } from './Avatar';

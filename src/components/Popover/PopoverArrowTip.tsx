@@ -1,5 +1,8 @@
 import { forwardRef } from 'react';
-import { Popover as ChakraPopover, PopoverArrowTipProps } from '@chakra-ui/react';
+import {
+  Popover as ChakraPopover,
+  PopoverArrowTipProps,
+} from '@chakra-ui/react';
 
 export const PopoverArrowTip = forwardRef<HTMLDivElement, PopoverArrowTipProps>(
   (props, ref) => (

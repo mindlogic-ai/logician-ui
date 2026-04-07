@@ -7,8 +7,8 @@ import {
   AvatarIcon,
   AvatarImage,
   AvatarRoot,
-  AvatarRootProvider,
   AvatarRootProps as ChakraAvatarRootProps,
+  AvatarRootProvider,
 } from '@chakra-ui/react';
 
 export type {
