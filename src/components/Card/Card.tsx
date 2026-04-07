@@ -5,7 +5,11 @@ import { clickableStyles, variantStyles } from './Card.styles';
 import { CardProps } from './Card.types';
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(
-  ({ clickable, variant = 'default', ...rest }, ref) => {
+  ({ clickable, variant = 'default', _hover, ...rest }, ref) => {
+    const mergedHover = clickable
+      ? { ...clickableStyles._hover, ..._hover }
+      : _hover;
+
     return (
       <ChakraCard.Root
         ref={ref}
@@ -16,11 +20,12 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         border="1px solid"
         borderColor="gray.200"
         borderRadius="lg"
-        transition="0.3s all"
+        css={{ transition: '0.3s all' }}
         p={8}
-        {...(clickable ? clickableStyles : {})}
+        {...(clickable ? { cursor: clickableStyles.cursor } : {})}
         {...variantStyles[variant]}
         {...rest}
+        _hover={mergedHover}
       />
     );
   }
