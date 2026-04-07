@@ -6,6 +6,7 @@
   },
   "changesets": [
     "add-collapsible-component",
+    "avatar-namespace-pattern",
     "chakra-v3-migration",
     "color-palette-lightest-extralight",
     "common-squids-decide",
@@ -14,6 +15,7 @@
     "feat-focus-ring",
     "fix-6xl-lineheight-em-compounding",
     "fix-button-soft-borders-toast-styles",
+    "fix-card-chip-button-checkbox-styles",
     "fix-font-loading",
     "fix-pr55-release",
     "fix-radial-progress-hooks",
