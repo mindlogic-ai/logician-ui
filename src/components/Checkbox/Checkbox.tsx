@@ -8,7 +8,7 @@ import { CheckboxLabel } from './CheckboxLabel';
 const CheckboxBase = forwardRef<
   React.ComponentRef<typeof ChakraCheckbox.Root>,
   CheckboxProps
->(({ id, size = 'sm', children, ...props }, ref) => (
+>(({ id, size = 'sm', children, inputRef, ...props }, ref) => (
   <ChakraCheckbox.Root
     ref={ref}
     size={size}
@@ -16,7 +16,7 @@ const CheckboxBase = forwardRef<
     _disabled={{ cursor: 'not-allowed' }}
     {...props}
   >
-    <ChakraCheckbox.HiddenInput id={id} />
+    <ChakraCheckbox.HiddenInput id={id} ref={inputRef} />
     {children}
   </ChakraCheckbox.Root>
 ));
