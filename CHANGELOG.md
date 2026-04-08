@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.0-alpha.25
+
+### Patch Changes
+
+- dda5b3d: fix(MenuItem): remove narrowed onClick override, inherit correct type from ChakraMenuItemProps
+
 ## 3.0.0-alpha.24
 
 ### Patch Changes
