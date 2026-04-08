@@ -13,7 +13,7 @@ const CheckboxBase = forwardRef<
     ref={ref}
     size={size}
     cursor="pointer"
-    _disabled={{ cursor: 'not-allowed', bgColor: 'gray.300' }}
+    _disabled={{ cursor: 'not-allowed' }}
     {...props}
   >
     <ChakraCheckbox.HiddenInput id={id} />
