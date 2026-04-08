@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.0.0-alpha.22
+
+### Patch Changes
+
+- 0641e41: feat(Checkbox): add inputRef prop to forward ref to the hidden input element
+- c4fb34e: fix(Checkbox): move disabled fill styling to CheckboxControl for correct visual targeting
+
 ## 3.0.0-alpha.21
 
 ### Minor Changes
