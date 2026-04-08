@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.0-alpha.24
+
+### Patch Changes
+
+- 272e59f: fix(ModalHeader): restore default textStyle="h4" on ModalHeader
+
 ## 3.0.0-alpha.23
 
 ### Patch Changes
