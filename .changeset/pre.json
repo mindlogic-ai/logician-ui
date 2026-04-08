@@ -19,6 +19,7 @@
     "fix-card-chip-button-checkbox-styles",
     "fix-checkbox-disabled-fill",
     "fix-font-loading",
+    "fix-modal-header-text-style",
     "fix-pr55-release",
     "fix-radial-progress-hooks",
     "fix-release-workflow-pre-mode",

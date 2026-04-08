@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.0-alpha.23
+
+### Patch Changes
+
+- 1630c8e: fix(ModalHeader): remove hardcoded textStyle from ModalHeader to allow consumers to control typography
+
 ## 3.0.0-alpha.22
 
 ### Patch Changes
