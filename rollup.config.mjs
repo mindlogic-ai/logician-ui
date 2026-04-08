@@ -75,6 +75,7 @@ export default {
       banner: '"use client";',
       sourcemap: true,
       exports: 'named',
+      interop: 'auto',
     },
   ],
   external: isExternal,
