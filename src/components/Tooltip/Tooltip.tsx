@@ -34,7 +34,7 @@ export const Tooltip = forwardRef(
         closeDelay={0}
         {...rest}
       >
-        <ChakraTooltip.Trigger {...triggerProps}>
+        <ChakraTooltip.Trigger asChild {...triggerProps}>
           {children}
         </ChakraTooltip.Trigger>
         <Portal>
