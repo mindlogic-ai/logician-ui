@@ -1,5 +1,6 @@
 export { Modal } from './Modal';
 export { type ModalProps } from './Modal.types';
+export { useModalContext } from './ModalContext';
 export { ModalBody } from './ModalBody';
 export { ModalCloseButton } from './ModalCloseButton';
 export { ModalContent } from './ModalContent';

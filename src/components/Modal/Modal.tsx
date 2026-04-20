@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Dialog, Portal } from '@chakra-ui/react';
 
+import { ModalContext } from './ModalContext';
 import { ModalProps } from './Modal.types';
 
 export const Modal = ({
@@ -8,8 +9,14 @@ export const Modal = ({
   open,
   onOpenChange,
   portalProps,
+  fullScreenOnMobile = true,
   ...rest
 }: ModalProps) => {
+  const ctx = useMemo(
+    () => ({ fullScreenOnMobile }),
+    [fullScreenOnMobile]
+  );
+
   return (
     <Dialog.Root
       open={open}
@@ -20,7 +27,7 @@ export const Modal = ({
     >
       <Portal {...portalProps}>
         <Dialog.Backdrop />
-        {children}
+        <ModalContext.Provider value={ctx}>{children}</ModalContext.Provider>
       </Portal>
     </Dialog.Root>
   );

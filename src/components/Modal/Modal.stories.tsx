@@ -478,3 +478,93 @@ export const PreventOutsideClick: Story = {
     );
   },
 };
+
+/**
+ * 모바일 풀스크린 모달 (기본값)
+ *
+ * fullScreenOnMobile이 true(기본값)이면 모바일 뷰포트에서
+ * 모달이 전체 화면으로 표시됩니다 (100vw × 100dvh, border-radius 0).
+ * 브라우저를 좁혀서 확인해보세요.
+ */
+export const FullScreenOnMobile: Story = {
+  args: {
+    headerTitle: 'Full Screen on Mobile (Default)',
+  },
+  render: (args) => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    return (
+      <>
+        <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
+        <Modal
+          {...args}
+          open={isOpen}
+          onOpenChange={(e) => setIsOpen(e.open)}
+          fullScreenOnMobile
+        >
+          <ModalContent>
+            <ModalHeader>{args.headerTitle}</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              모바일에서 이 모달은 전체 화면으로 표시됩니다. 브라우저 창을 좁혀서
+              확인해보세요. fullScreenOnMobile은 기본값이 true입니다.
+            </ModalBody>
+            <ModalFooter>
+              <Button variant="ghost" onClick={() => setIsOpen(false)}>
+                Cancel
+              </Button>
+              <Button variant="solid" onClick={() => setIsOpen(false)}>
+                Confirm
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </>
+    );
+  },
+};
+
+/**
+ * 모바일에서 인라인 모달
+ *
+ * fullScreenOnMobile={false}이면 모바일에서도 풀스크린이 아닌
+ * 일반 모달로 표시되며, 좌우 마진(mx: 4)이 적용됩니다.
+ * Confirm 모달 등 작은 모달에 적합합니다.
+ */
+export const NoFullScreenOnMobile: Story = {
+  args: {
+    headerTitle: 'Inline on Mobile',
+  },
+  render: (args) => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    return (
+      <>
+        <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
+        <Modal
+          {...args}
+          open={isOpen}
+          onOpenChange={(e) => setIsOpen(e.open)}
+          fullScreenOnMobile={false}
+        >
+          <ModalContent>
+            <ModalHeader>{args.headerTitle}</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              fullScreenOnMobile={'{false}'}로 설정하면 모바일에서도 풀스크린이 아닌
+              인라인 모달로 표시됩니다. 좌우에 마진이 적용됩니다.
+            </ModalBody>
+            <ModalFooter>
+              <Button variant="ghost" onClick={() => setIsOpen(false)}>
+                Cancel
+              </Button>
+              <Button variant="solid" onClick={() => setIsOpen(false)}>
+                Confirm
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </>
+    );
+  },
+};
