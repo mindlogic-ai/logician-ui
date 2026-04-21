@@ -1,22 +1,10 @@
-import { lazy, Suspense, useState } from 'react';
 import {
-  Box,
   CodeBlock as ChakraCodeBlock,
   createShikiAdapter,
-  Spinner,
 } from '@chakra-ui/react';
 import type { HighlighterGeneric } from 'shiki';
 
-import { useTranslate } from '@/hooks/useTranslate';
-
-import { InlineCode } from '../InlineCode';
-import { SegmentedControl } from '../SegmentedControl';
 import { CodeProps } from './Code.types';
-
-// Use dynamic import to break circular dependency
-const Markdown = lazy(() =>
-  import('../Markdown').then((module) => ({ default: module.Markdown }))
-);
 
 const shikiAdapter = createShikiAdapter<HighlighterGeneric<any, any>>({
   async load() {
@@ -57,15 +45,6 @@ export const Code = ({
 }: CodeProps) => {
   const language = languageProp === 'js' ? 'javascript' : languageProp;
 
-  const translate = useTranslate();
-
-  const [isMarkdownPreviewMode, setIsMarkdownPreviewMode] =
-    useState<boolean>(false);
-
-  const handleMarkdownModeChange = (selectedValue: string) => {
-    setIsMarkdownPreviewMode(selectedValue === 'preview');
-  };
-
   const handleCopy = () => {
     onCopy?.(children);
   };
@@ -104,22 +83,6 @@ export const Code = ({
               {language}
             </ChakraCodeBlock.Title>
             <ChakraCodeBlock.Control>
-              {language === 'markdown' && (
-                <SegmentedControl
-                  size="sm"
-                  options={[
-                    {
-                      label: translate('code_markdown_raw') as string,
-                      value: 'raw',
-                    },
-                    {
-                      label: translate('code_markdown_preview') as string,
-                      value: 'preview',
-                    },
-                  ]}
-                  onSelect={handleMarkdownModeChange}
-                />
-              )}
               {onCopy && (
                 <ChakraCodeBlock.CopyTrigger aria-label="Copy code">
                   <ChakraCodeBlock.CopyIndicator />
@@ -128,31 +91,11 @@ export const Code = ({
             </ChakraCodeBlock.Control>
           </ChakraCodeBlock.Header>
         )}
-        {isMarkdownPreviewMode ? (
-          <Box p={2}>
-            <Suspense fallback={<Spinner />}>
-              <Markdown
-                // Prevent infinite loop of markdown rendering
-                components={{
-                  code: ({ className, ...props }: any) => {
-                    // className denotes the language of the code block and only exists for block code
-                    if (!className) {
-                      return <InlineCode {...props} />;
-                    }
-                  },
-                }}
-              >
-                {children}
-              </Markdown>
-            </Suspense>
-          </Box>
-        ) : (
-          <ChakraCodeBlock.Content>
-            <ChakraCodeBlock.Code>
-              <ChakraCodeBlock.CodeText />
-            </ChakraCodeBlock.Code>
-          </ChakraCodeBlock.Content>
-        )}
+        <ChakraCodeBlock.Content>
+          <ChakraCodeBlock.Code>
+            <ChakraCodeBlock.CodeText />
+          </ChakraCodeBlock.Code>
+        </ChakraCodeBlock.Content>
       </ChakraCodeBlock.Root>
     </ChakraCodeBlock.AdapterProvider>
   );

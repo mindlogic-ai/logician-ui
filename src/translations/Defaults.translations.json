@@ -69,20 +69,6 @@
     "ja": "ページごとの項目数",
     "es": "elementos por página"
   },
-  "code_markdown_raw": {
-    "ko": "원문",
-    "en": "Raw",
-    "zh": "原文",
-    "ja": "原文",
-    "es": "Crudo"
-  },
-  "code_markdown_preview": {
-    "ko": "미리보기",
-    "en": "Preview",
-    "zh": "预览",
-    "ja": "プレビュー",
-    "es": "Vista previa"
-  },
   "month_range_placeholder": {
     "ko": "월 범위 선택",
     "en": "Select month range",
