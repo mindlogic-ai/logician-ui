@@ -1,102 +1,70 @@
-import {
-  CodeBlock as ChakraCodeBlock,
-  createShikiAdapter,
-} from '@chakra-ui/react';
-import type { HighlighterGeneric } from 'shiki';
+import { forwardRef } from 'react';
+import { CodeBlock as ChakraCodeBlock } from '@chakra-ui/react';
 
 import { CodeProps } from './Code.types';
+import { CodeAdapterProvider } from './CodeAdapterProvider';
+import { CodeCopyTrigger } from './CodeCopyTrigger';
+import { CodeHeader } from './CodeHeader';
+import { CodeRoot } from './CodeRoot';
+import { CodeTitle } from './CodeTitle';
 
-const shikiAdapter = createShikiAdapter<HighlighterGeneric<any, any>>({
-  async load() {
-    const { createHighlighter } = await import('shiki');
-    return createHighlighter({
-      langs: [
-        'bash',
-        'css',
-        'go',
-        'html',
-        'java',
-        'javascript',
-        'json',
-        'jsx',
-        'markdown',
-        'python',
-        'rust',
-        'shell',
-        'sql',
-        'tsx',
-        'typescript',
-        'xml',
-        'yaml',
-      ],
-      themes: ['github-dark'],
-    });
-  },
-  theme: 'github-dark',
+const CodeBase = forwardRef<React.ComponentRef<typeof CodeRoot>, CodeProps>(
+  (
+    {
+      children,
+      language: languageProp,
+      onCopy,
+      hideHeader = false,
+      containerProps,
+      ...rest
+    },
+    ref
+  ) => {
+    const language = languageProp === 'js' ? 'javascript' : languageProp;
+
+    const handleCopy = () => {
+      onCopy?.(children);
+    };
+
+    return (
+      <CodeAdapterProvider>
+        <CodeRoot
+          ref={ref}
+          code={children}
+          language={language}
+          {...containerProps}
+          {...rest}
+          onCopy={handleCopy}
+        >
+          {!hideHeader && language && (
+            <CodeHeader>
+              <CodeTitle>{language}</CodeTitle>
+              <ChakraCodeBlock.Control>
+                {onCopy && <CodeCopyTrigger />}
+              </ChakraCodeBlock.Control>
+            </CodeHeader>
+          )}
+          <ChakraCodeBlock.Content>
+            <ChakraCodeBlock.Code>
+              <ChakraCodeBlock.CodeText />
+            </ChakraCodeBlock.Code>
+          </ChakraCodeBlock.Content>
+        </CodeRoot>
+      </CodeAdapterProvider>
+    );
+  }
+);
+CodeBase.displayName = 'Code';
+
+export const Code = Object.assign(CodeBase, {
+  AdapterProvider: CodeAdapterProvider,
+  Root: CodeRoot,
+  Header: CodeHeader,
+  Title: CodeTitle,
+  Control: ChakraCodeBlock.Control,
+  Content: ChakraCodeBlock.Content,
+  Code: ChakraCodeBlock.Code,
+  CodeText: ChakraCodeBlock.CodeText,
+  CopyTrigger: CodeCopyTrigger,
+  CopyIndicator: ChakraCodeBlock.CopyIndicator,
 });
-
-export const Code = ({
-  children,
-  language: languageProp,
-  onCopy,
-  hideHeader = false,
-  containerProps,
-  ...rest
-}: CodeProps) => {
-  const language = languageProp === 'js' ? 'javascript' : languageProp;
-
-  const handleCopy = () => {
-    onCopy?.(children);
-  };
-
-  return (
-    <ChakraCodeBlock.AdapterProvider value={shikiAdapter}>
-      <ChakraCodeBlock.Root
-        code={children}
-        language={language}
-        borderRadius="none"
-        textStyle="p"
-        overflow="hidden"
-        {...containerProps}
-        {...rest}
-        onCopy={handleCopy}
-        className={['ml-code', containerProps?.className]
-          .filter(Boolean)
-          .join(' ')}
-      >
-        {!hideHeader && language && (
-          <ChakraCodeBlock.Header
-            className="ml-code-header"
-            px={4}
-            py={2}
-            bgColor="white"
-            borderBottom="1px solid"
-            borderColor="primary.light"
-            zIndex={2}
-          >
-            <ChakraCodeBlock.Title
-              fontFamily="mono"
-              fontWeight="bold"
-              color="gray.1200"
-              textStyle="xs"
-            >
-              {language}
-            </ChakraCodeBlock.Title>
-            <ChakraCodeBlock.Control>
-              {onCopy && (
-                <ChakraCodeBlock.CopyTrigger aria-label="Copy code">
-                  <ChakraCodeBlock.CopyIndicator />
-                </ChakraCodeBlock.CopyTrigger>
-              )}
-            </ChakraCodeBlock.Control>
-          </ChakraCodeBlock.Header>
-        )}
-        <ChakraCodeBlock.Content>
-          <ChakraCodeBlock.Code>
-            <ChakraCodeBlock.CodeText />
-          </ChakraCodeBlock.Code>
-        </ChakraCodeBlock.Content>
-      </ChakraCodeBlock.Root>
-    </ChakraCodeBlock.AdapterProvider>
-  );
-};
