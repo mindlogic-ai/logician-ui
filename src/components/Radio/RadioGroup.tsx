@@ -1,14 +1,18 @@
-import { RadioGroup as ChakraRadioGroup } from '@chakra-ui/react';
+import { RadioGroup as ChakraRadioGroup, mergeCss } from '@chakra-ui/react';
 
-export const RadioGroup = ({ ...rest }) => {
+export const RadioGroup = ({ css, ...rest }) => {
   return (
     <ChakraRadioGroup.Root
-      css={{
-        '--chakra-colors-color-palette-solid':
-          'var(--chakra-colors-primary-main)',
-        '--chakra-colors-color-palette-contrast': 'var(--chakra-colors-white)',
-      }}
       {...rest}
+      css={mergeCss(
+        {
+          '--chakra-colors-color-palette-solid':
+            'var(--chakra-colors-primary-main)',
+          '--chakra-colors-color-palette-contrast':
+            'var(--chakra-colors-white)',
+        },
+        css
+      )}
     />
   );
 };

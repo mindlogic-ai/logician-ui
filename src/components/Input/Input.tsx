@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Input as ChakraInput, InputGroup } from '@chakra-ui/react';
+import { Input as ChakraInput, InputGroup, mergeCss } from '@chakra-ui/react';
 
 import { formatNumber } from '@/utils/formatNumber';
 
@@ -73,6 +73,7 @@ export const Input = forwardRef(
       disabled,
       invalid,
       readOnly,
+      css,
       ...rest
     }: InputProps,
     ref?: ForwardedRef<HTMLInputElement>
@@ -349,12 +350,15 @@ export const Input = forwardRef(
             color: 'gray.1000',
             fontWeight: 'semibold',
           }}
-          css={{
-            paddingInlineEnd: rightElementWidth,
-            '--focus-color': 'var(--chakra-colors-primary-main)',
-            '--error-color': 'var(--chakra-colors-danger-main)',
-          }}
           {...rest}
+          css={mergeCss(
+            {
+              paddingInlineEnd: rightElementWidth,
+              '--focus-color': 'var(--chakra-colors-primary-main)',
+              '--error-color': 'var(--chakra-colors-danger-main)',
+            },
+            css
+          )}
         />
       </InputGroup>
     );
