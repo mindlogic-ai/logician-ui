@@ -1,7 +1,9 @@
 import { createShikiAdapter } from '@chakra-ui/react';
-import type { HighlighterGeneric } from 'shiki';
+import type { BundledLanguage, BundledTheme, HighlighterGeneric } from 'shiki';
 
-export const shikiAdapter = createShikiAdapter<HighlighterGeneric<any, any>>({
+export const shikiAdapter = createShikiAdapter<
+  HighlighterGeneric<BundledLanguage, BundledTheme>
+>({
   async load() {
     const { createHighlighter } = await import('shiki');
     return createHighlighter({

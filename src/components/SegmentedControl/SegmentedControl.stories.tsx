@@ -1,6 +1,6 @@
 import { HStack, Icon, Text } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { FiHome, FiSettings, FiUser } from 'react-icons/fi';
 
 import { SegmentedControl } from './SegmentedControl';
@@ -119,7 +119,9 @@ export const WithDisabledOption = {
   },
 };
 
-export const EditableLabel: Story = {
+export const EditableLabel: StoryObj<
+  React.ComponentProps<typeof SegmentedControl> & { firstLabel?: string }
+> = {
   args: {
     firstLabel: 'Complete',
   },

@@ -1,9 +1,12 @@
+import type { SystemStyleObject } from '@chakra-ui/react';
 import { merge } from 'lodash';
 
-export const mergeCss = (...styles: unknown[]): Record<string, unknown> =>
-  styles.reduce<Record<string, unknown>>((acc, style) => {
+export const mergeCss = (
+  ...styles: (SystemStyleObject | undefined | null | false)[]
+): SystemStyleObject =>
+  styles.reduce<SystemStyleObject>((acc, style) => {
     if (style && typeof style === 'object') {
       merge(acc, style);
     }
     return acc;
-  }, {});
+  }, {} as SystemStyleObject);
