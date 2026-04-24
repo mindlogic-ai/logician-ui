@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import { Dialog, Portal } from '@chakra-ui/react';
 
-import { ModalContext } from './ModalContext';
 import { ModalProps } from './Modal.types';
+import { ModalContext } from './ModalContext';
 
 export const Modal = ({
   children,
@@ -12,10 +12,7 @@ export const Modal = ({
   fullScreenOnMobile = true,
   ...rest
 }: ModalProps) => {
-  const ctx = useMemo(
-    () => ({ fullScreenOnMobile }),
-    [fullScreenOnMobile]
-  );
+  const ctx = useMemo(() => ({ fullScreenOnMobile }), [fullScreenOnMobile]);
 
   return (
     <Dialog.Root
