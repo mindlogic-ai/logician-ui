@@ -1,5 +1,46 @@
 # Changelog
 
+## 3.0.0-alpha.27
+
+### Minor Changes
+
+- e144f01: feat(Code): extract `shikiAdapter` into its own module and refine default surface
+  - Move the inline `createShikiAdapter` call out of `Code.tsx` into `src/components/Code/shikiAdapter.ts`, so the adapter can be reused across code-rendering components (e.g. `CodeTabs`) and is easier to type and swap.
+  - Type the adapter against `HighlighterGeneric<BundledLanguage, BundledTheme>` imported from `shiki` instead of `any, any`.
+  - Simplify the default Code header: drop the `primary.light` bottom border, drop the `textStyle="xs"` title override, and drop the `borderRadius="none"` override on the root so the component respects the token default.
+  - Switch the root `textStyle` default from `"p"` to `"Body"` and set `borderColor="gray.300"` so the component matches surrounding surfaces.
+  - Show a `FaCheck` success indicator in the copy trigger when copying succeeds.
+
+- e45787d: feat(Modal): add `fullScreenOnMobile` prop and scope base font to 14px
+  - Add `fullScreenOnMobile` prop to `Modal` (default: `true`). When true, the modal becomes fullscreen (100vw × 100dvh, no border-radius) on mobile viewports. When false, horizontal margin (`mx: 4`) is applied instead — suitable for confirm dialogs and small modals.
+  - Wrap `ModalContent` children in `ScaledContext fontSize="14px"` so all modal typography and spacing scales to a 14px base without affecting the global font size.
+  - Expose `useModalContext` hook for consuming `fullScreenOnMobile` in custom modal content components.
+
+### Patch Changes
+
+- 867370b: fix(Card): hoist `.card-image` transition and merge consumer `css`
+  - Move the `.card-image` transition onto the element itself so it animates on both enter and exit, not only while hovered
+  - Replace the hardcoded `transition: '0.3s all'` string (which the Chakra v3 style walker can't traverse as a value inside `_hover`) with token-backed `transitionProperty`/`transitionDuration`/`transitionTimingFunction` on the root and style-object form on `.card-image`
+  - Use `mergeCss` so consumer `css` composes with the library base styles instead of being overwritten by the trailing rest spread
+
+- e144f01: fix(CodeTabs): stabilize panel width and split `CopyButton`
+  - Stack all language panels inside a single CSS grid cell so the container sizes to the widest panel. Non-selected panels use `visibility: hidden` + `aria-hidden` so they still contribute to intrinsic width without being interactive or announced to assistive tech. This eliminates the width jitter that occurred when switching between tabs whose code samples have different maximum line lengths.
+  - Extract `CopyButton` into its own module (`CodeTabs/CopyButton.tsx`) and drop the inner `TabPanels`/`TabPanel` wiring in favor of rendering `Code` panels directly.
+
+- fe346a9: fix: preserve library `css` prop against consumer overwrite across components
+
+  Several components defined a library `css` prop (typically CSS custom properties or nested selector blocks) but applied it BEFORE `{...rest}`, letting a consumer's `css` silently clobber it. Switched every site to destructure `css` from props and compose via `mergeCss(libraryCss, css)` applied AFTER `{...rest}`, so consumer styles merge with library styles instead of replacing them.
+
+  Also replaces the hardcoded `css={{ transition: 'all 0.25s ease-in-out' }}` on `Button` with `transitionProperty`/`transitionDuration`/`transitionTimingFunction` props to avoid the Chakra v3 style walker choking on the shorthand transition string when combined with state pseudos.
+
+  Components fixed:
+  - Button: swap hardcoded transition string for token-backed transition props
+  - Input, RadioGroup, SegmentedControl, Spinner, Tab, TabList, Tbody, Tooltip: merge consumer `css` with library `css` instead of letting `{...rest}` overwrite it
+
+- e144f01: fix(RadialProgress): hide segments with zero value
+
+  Previously, zero-value segments were still rendered at the minimum arc size (and still consumed gap budget), producing visible slivers for categories that should not appear at all. Zero-value segments are now filtered out before layout, so only segments with `value > 0` contribute to the visible count, the gap calculation, and the arc layout.
+
 ## 3.0.0-alpha.26
 
 ### Major Changes
