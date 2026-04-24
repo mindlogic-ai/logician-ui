@@ -312,6 +312,38 @@ export const Fetcher = forwardRef(
   },
 };
 
+export const WithLineNumbers: Story = {
+  args: {
+    language: 'typescript',
+    showLineNumbers: true,
+    children: `type User = {
+  id: string;
+  name: string;
+  email: string;
+};
+
+const getUser = async (id: string): Promise<User> => {
+  const res = await fetch(\`/api/users/\${id}\`);
+  return res.json();
+};`,
+  },
+};
+
+export const WithLineNumbersAndCopy: Story = {
+  args: {
+    language: 'tsx',
+    showLineNumbers: true,
+    onCopy: (str) => navigator.clipboard.writeText(str),
+    children: `import { Code } from '@mindlogic-ai/logician-ui';
+
+export const Example = () => (
+  <Code language="tsx" showLineNumbers>
+    {'const greeting = "hello";'}
+  </Code>
+);`,
+  },
+};
+
 export const CustomContainer: Story = {
   args: {
     language: 'typescript',
