@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.0-alpha.28
+
+### Minor Changes
+
+- c5eb2f7: Add `showLineNumbers` prop to `Code`. When enabled, the underlying Chakra `CodeBlock` renders a line-number gutter via its shiki adapter.
+
 ## 3.0.0-alpha.27
 
 ### Minor Changes
