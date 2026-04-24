@@ -2,19 +2,19 @@
  * Card styles using the Golden Ratio color system.
  */
 
-// Light mode styles only - using semantic tokens
 export const cardStyles = {
-  bgColor: 'white',
-  color: 'gray.1300', // Primary text color
-  borderColor: 'gray.200', // #E2E6F0
+  '.card-image': {
+    transitionProperty: 'common',
+    transitionDuration: 'normal',
+    transitionTimingFunction: 'ease',
+  },
 };
 
 export const clickableStyles = {
   cursor: 'pointer',
   _hover: {
     boxShadow: 'lg',
-    ['.card-image']: {
-      transition: '0.3s all',
+    '.card-image': {
       transform: 'scale(1.05)',
       backgroundSize: '105%',
     },

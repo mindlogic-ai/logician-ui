@@ -46,7 +46,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {...styles}
         {...focusRing}
         cursor="pointer"
-        css={{ transition: 'all 0.25s ease-in-out' }}
+        transitionProperty="all"
+        transitionDuration="0.25s"
+        transitionTimingFunction="ease-in-out"
         ref={ref}
         {...rest}
       >

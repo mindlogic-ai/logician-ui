@@ -1,5 +1,5 @@
 import { ForwardedRef, forwardRef } from 'react';
-import { Portal, Tooltip as ChakraTooltip } from '@chakra-ui/react';
+import { mergeCss, Portal, Tooltip as ChakraTooltip } from '@chakra-ui/react';
 
 import { TooltipProps } from './Tooltip.types';
 
@@ -47,10 +47,11 @@ export const Tooltip = forwardRef(
               py={1}
               borderRadius="md"
               maxW="320px"
-              css={{
-                '--tooltip-bg': 'var(--chakra-colors-gray-1200)',
-              }}
               {...contentProps}
+              css={mergeCss(
+                { '--tooltip-bg': 'var(--chakra-colors-gray-1200)' },
+                contentProps?.css
+              )}
             >
               {showArrow && (
                 <ChakraTooltip.Arrow {...arrowProps}>
