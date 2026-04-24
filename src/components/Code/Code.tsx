@@ -9,6 +9,7 @@ export const Code = ({
   language: languageProp,
   onCopy,
   hideHeader = false,
+  showLineNumbers = false,
   containerProps,
   ...rest
 }: CodeProps) => {
@@ -23,6 +24,7 @@ export const Code = ({
       <ChakraCodeBlock.Root
         code={children}
         language={language}
+        meta={{ showLineNumbers }}
         textStyle="Body"
         overflow="hidden"
         borderColor="gray.300"

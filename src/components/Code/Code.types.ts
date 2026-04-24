@@ -38,4 +38,10 @@ export interface CodeProps extends Omit<
    * @default false
    */
   hideHeader?: boolean;
+
+  /**
+   * Whether to show line numbers in the code block.
+   * @default false
+   */
+  showLineNumbers?: boolean;
 }
