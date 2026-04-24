@@ -1,5 +1,7 @@
 import { ForwardedRef, forwardRef } from 'react';
-import { Spinner as ChakraSpinner, mergeCss } from '@chakra-ui/react';
+import { Spinner as ChakraSpinner } from '@chakra-ui/react';
+
+import { mergeCss } from '@/utils/mergeCss';
 
 import { SpinnerProps } from './Spinner.types';
 

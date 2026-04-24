@@ -1,5 +1,7 @@
 import { ForwardedRef, forwardRef } from 'react';
-import { mergeCss, Portal, Tooltip as ChakraTooltip } from '@chakra-ui/react';
+import { Portal, Tooltip as ChakraTooltip } from '@chakra-ui/react';
+
+import { mergeCss } from '@/utils/mergeCss';
 
 import { TooltipProps } from './Tooltip.types';
 

@@ -1,5 +1,7 @@
 import { forwardRef } from 'react';
-import { mergeCss, Table } from '@chakra-ui/react';
+import { Table } from '@chakra-ui/react';
+
+import { mergeCss } from '@/utils/mergeCss';
 
 export const Tbody = forwardRef<HTMLTableSectionElement, Table.BodyProps>(
   ({ css, ...props }, ref) => {

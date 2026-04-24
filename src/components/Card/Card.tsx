@@ -1,5 +1,7 @@
 import { forwardRef } from 'react';
-import { Card as ChakraCard, mergeCss } from '@chakra-ui/react';
+import { Card as ChakraCard } from '@chakra-ui/react';
+
+import { mergeCss } from '@/utils/mergeCss';
 
 import { cardStyles, clickableStyles, variantStyles } from './Card.styles';
 import { CardProps } from './Card.types';

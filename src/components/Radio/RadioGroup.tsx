@@ -1,4 +1,6 @@
-import { RadioGroup as ChakraRadioGroup, mergeCss } from '@chakra-ui/react';
+import { RadioGroup as ChakraRadioGroup } from '@chakra-ui/react';
+
+import { mergeCss } from '@/utils/mergeCss';
 
 export const RadioGroup = ({ css, ...rest }) => {
   return (

@@ -7,9 +7,10 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Input as ChakraInput, InputGroup, mergeCss } from '@chakra-ui/react';
+import { Input as ChakraInput, InputGroup } from '@chakra-ui/react';
 
 import { formatNumber } from '@/utils/formatNumber';
+import { mergeCss } from '@/utils/mergeCss';
 
 import { InputProps } from './Input.types';
 

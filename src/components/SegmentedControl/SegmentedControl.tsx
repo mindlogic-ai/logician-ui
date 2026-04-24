@@ -1,5 +1,7 @@
 import { forwardRef } from 'react';
-import { mergeCss, SegmentGroup } from '@chakra-ui/react';
+import { SegmentGroup } from '@chakra-ui/react';
+
+import { mergeCss } from '@/utils/mergeCss';
 
 import {
   SegmentedControlOption,

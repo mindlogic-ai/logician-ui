@@ -1,5 +1,7 @@
 import type { TabsListProps as ChakraTabsListProps } from '@chakra-ui/react';
-import { Box, mergeCss, Tabs } from '@chakra-ui/react';
+import { Box, Tabs } from '@chakra-ui/react';
+
+import { mergeCss } from '@/utils/mergeCss';
 
 import { tabListStyles, verticalStyles } from './TabList.styles';
 

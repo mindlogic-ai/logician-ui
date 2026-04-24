@@ -1,11 +1,7 @@
 import { forwardRef } from 'react';
-import {
-  Button,
-  ButtonProps,
-  mergeCss,
-  Tabs,
-  TabsTriggerProps,
-} from '@chakra-ui/react';
+import { Button, ButtonProps, Tabs, TabsTriggerProps } from '@chakra-ui/react';
+
+import { mergeCss } from '@/utils/mergeCss';
 
 import {
   horizontalSelectedStyles,
