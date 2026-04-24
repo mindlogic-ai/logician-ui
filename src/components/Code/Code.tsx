@@ -1,39 +1,8 @@
-import {
-  CodeBlock as ChakraCodeBlock,
-  createShikiAdapter,
-} from '@chakra-ui/react';
-import type { HighlighterGeneric } from 'shiki';
+import { CodeBlock as ChakraCodeBlock } from '@chakra-ui/react';
 
+import { FaCheck } from '../Icon';
 import { CodeProps } from './Code.types';
-
-const shikiAdapter = createShikiAdapter<HighlighterGeneric<any, any>>({
-  async load() {
-    const { createHighlighter } = await import('shiki');
-    return createHighlighter({
-      langs: [
-        'bash',
-        'css',
-        'go',
-        'html',
-        'java',
-        'javascript',
-        'json',
-        'jsx',
-        'markdown',
-        'python',
-        'rust',
-        'shell',
-        'sql',
-        'tsx',
-        'typescript',
-        'xml',
-        'yaml',
-      ],
-      themes: ['github-dark'],
-    });
-  },
-  theme: 'github-dark',
-});
+import { shikiAdapter } from './shikiAdapter';
 
 export const Code = ({
   children,
@@ -54,9 +23,9 @@ export const Code = ({
       <ChakraCodeBlock.Root
         code={children}
         language={language}
-        borderRadius="none"
-        textStyle="p"
+        textStyle="Body"
         overflow="hidden"
+        borderColor="gray.300"
         {...containerProps}
         {...rest}
         onCopy={handleCopy}
@@ -70,22 +39,25 @@ export const Code = ({
             px={4}
             py={2}
             bgColor="white"
-            borderBottom="1px solid"
-            borderColor="primary.light"
             zIndex={2}
           >
             <ChakraCodeBlock.Title
               fontFamily="mono"
               fontWeight="bold"
               color="gray.1200"
-              textStyle="xs"
             >
               {language}
             </ChakraCodeBlock.Title>
             <ChakraCodeBlock.Control>
               {onCopy && (
-                <ChakraCodeBlock.CopyTrigger aria-label="Copy code">
-                  <ChakraCodeBlock.CopyIndicator />
+                <ChakraCodeBlock.CopyTrigger
+                  aria-label="Copy code"
+                  color="gray.600"
+                  cursor="pointer"
+                >
+                  <ChakraCodeBlock.CopyIndicator
+                    copied={<FaCheck color="success.main" boxSize="xs" />}
+                  />
                 </ChakraCodeBlock.CopyTrigger>
               )}
             </ChakraCodeBlock.Control>

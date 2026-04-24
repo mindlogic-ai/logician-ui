@@ -62,23 +62,27 @@ const RadialProgress: React.FC<RadialProgressProps> = ({
           ]
         : segments;
 
+  // Filter out zero-value segments for visible count
+  const visibleSegments = allSegments.filter((s) => s.value > 0);
+
   // Calculate total available degrees after accounting for gaps
-  const totalGaps = gapDegrees * 2 * allSegments.length; // Each segment has gaps on both sides
+  const totalGaps = gapDegrees * 2 * visibleSegments.length; // Each segment has gaps on both sides
   const availableDegrees = 360 - totalGaps;
 
-  // First pass: calculate raw degrees and identify segments needing minimum
-  const rawSegments: ProcessedSegment[] = allSegments.map((segment) => {
-    // Prevent division by zero when calculating raw degrees
-    const rawDegrees =
-      total > 0 ? (segment.value / total) * availableDegrees : 0;
-    const needsMinimum = segment.value === 0 || rawDegrees < minSegmentDegrees;
-    return {
-      ...segment,
-      rawDegrees,
-      needsMinimum,
-      actualDegrees: needsMinimum ? minSegmentDegrees : rawDegrees,
-    };
-  });
+  // First pass: calculate raw degrees, filtering out zero-value segments
+  const rawSegments: ProcessedSegment[] = allSegments
+    .filter((segment) => segment.value > 0)
+    .map((segment) => {
+      const rawDegrees =
+        total > 0 ? (segment.value / total) * availableDegrees : 0;
+      const needsMinimum = rawDegrees < minSegmentDegrees;
+      return {
+        ...segment,
+        rawDegrees,
+        needsMinimum,
+        actualDegrees: needsMinimum ? minSegmentDegrees : rawDegrees,
+      };
+    });
 
   // Calculate total degrees needed vs available
   const totalDegreesNeeded = rawSegments.reduce(

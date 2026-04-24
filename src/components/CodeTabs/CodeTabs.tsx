@@ -1,86 +1,21 @@
 import { useState } from 'react';
-import { Flex } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 
 import { Code } from '@/components/Code';
-import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@/components/Tabs';
-import { useTranslate } from '@/hooks/useTranslate';
+import { Tab, TabList, Tabs } from '@/components/Tabs';
 
-import { FaRegCopy } from '../Icon';
-import { IconButton } from '../IconButton';
-import { Tooltip } from '../Tooltip';
 import { CodeTabsProps } from './CodeTabs.types';
-
-const CopyButton = ({
-  onCopy,
-  code,
-  selectedValue,
-}: Pick<CodeTabsProps, 'onCopy' | 'code'> & { selectedValue: string }) => {
-  const translate = useTranslate();
-  const [tooltipText, setTooltipText] = useState(translate('copy'));
-  const [isTooltipOpen, setIsTooltipOpen] = useState<boolean | undefined>(
-    undefined
-  );
-
-  const handleCopyClick = async () => {
-    const codeToCopy = code[selectedValue] || code[Object.keys(code)[0]];
-
-    // Copy to clipboard
-    try {
-      await navigator.clipboard.writeText(codeToCopy || '');
-    } catch {
-      // Fallback for older browsers
-      const textArea = document.createElement('textarea');
-      textArea.value = codeToCopy || '';
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textArea);
-    }
-
-    // Call onCopy callback if provided
-    onCopy?.(codeToCopy);
-
-    // Show "Copied!" tooltip
-    setTooltipText(translate('copied'));
-    setIsTooltipOpen(true);
-
-    setTimeout(() => {
-      setTooltipText(translate('copy'));
-      setIsTooltipOpen(undefined);
-    }, 1500);
-  };
-
-  return (
-    <Tooltip content={tooltipText} placement="top" open={isTooltipOpen}>
-      <IconButton
-        aria-label="Copy"
-        borderRadius="full"
-        size="sm"
-        colorPalette="neutral"
-        variant="ghost"
-        color="gray.800"
-        _hover={{
-          bgColor: 'whiteAlpha.400',
-        }}
-        _active={{
-          bgColor: 'whiteAlpha.400',
-        }}
-        onClick={handleCopyClick}
-      >
-        <FaRegCopy boxSize="xs" />
-      </IconButton>
-    </Tooltip>
-  );
-};
+import { CopyButton } from './CopyButton';
 
 export const CodeTabs = ({ code, onCopy, ...rest }: CodeTabsProps) => {
-  // Extract languages from code samples
   const languages = Object.keys(code);
   const [selectedValue, setSelectedValue] = useState(languages[0] || '');
 
   if (languages.length === 0) {
     return null;
   }
+
+  const currentCode = code[selectedValue]?.trim() || '';
 
   return (
     <Tabs
@@ -103,6 +38,7 @@ export const CodeTabs = ({ code, onCopy, ...rest }: CodeTabsProps) => {
               borderRadius="full"
               textTransform="uppercase"
               fontWeight="bold"
+              textStyle="subtext"
               _selected={{ color: 'white' }}
               _hover={{
                 bgColor: 'whiteAlpha.500',
@@ -112,31 +48,29 @@ export const CodeTabs = ({ code, onCopy, ...rest }: CodeTabsProps) => {
             </Tab>
           ))}
         </Flex>
-        {onCopy && (
-          <CopyButton
-            onCopy={onCopy}
-            code={code}
-            selectedValue={selectedValue}
-          />
-        )}
+        {onCopy && <CopyButton onCopy={onCopy} code={currentCode} />}
       </TabList>
-      <TabPanels>
-        {languages.map((language) => (
-          <TabPanel key={`${language}-tab-panel`} value={language}>
+      <Box display="grid">
+        {languages.map((language) => {
+          const isSelected = language === selectedValue;
+          return (
             <Code
+              key={`${language}-panel`}
               language={language}
               hideHeader
+              aria-hidden={!isSelected}
               containerProps={{
-                borderWidth: 0,
+                borderRadius: 'none',
                 borderBottomRadius: 'md',
-                overflow: 'hidden',
+                gridArea: '1 / 1',
+                visibility: isSelected ? 'visible' : 'hidden',
               }}
             >
               {code[language]?.trim() || ''}
             </Code>
-          </TabPanel>
-        ))}
-      </TabPanels>
+          );
+        })}
+      </Box>
     </Tabs>
   );
 };

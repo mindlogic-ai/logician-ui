@@ -1,6 +1,8 @@
 import { forwardRef } from 'react';
 import { Button, ButtonProps, Tabs, TabsTriggerProps } from '@chakra-ui/react';
 
+import { mergeCss } from '@/utils/mergeCss';
+
 import {
   horizontalSelectedStyles,
   verticalSelectedStyles,
@@ -10,7 +12,7 @@ import {
 export type TabProps = TabsTriggerProps & Omit<ButtonProps, 'value'>;
 
 export const Tab = forwardRef<HTMLButtonElement, TabProps>(
-  ({ value, children, ...props }, ref) => {
+  ({ value, children, css, ...props }, ref) => {
     if (!value) {
       throw new Error('Tab component requires a "value" prop');
     }
@@ -25,13 +27,16 @@ export const Tab = forwardRef<HTMLButtonElement, TabProps>(
           py={3}
           border="none"
           _selected={horizontalSelectedStyles}
-          css={{
-            '&[data-orientation=vertical]': {
-              ...verticalStyles,
-              '&[data-selected]': verticalSelectedStyles,
-            },
-          }}
           {...props}
+          css={mergeCss(
+            {
+              '&[data-orientation=vertical]': {
+                ...verticalStyles,
+                '&[data-selected]': verticalSelectedStyles,
+              },
+            },
+            css
+          )}
         >
           {children}
         </Button>

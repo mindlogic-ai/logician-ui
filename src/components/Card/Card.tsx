@@ -1,11 +1,13 @@
 import { forwardRef } from 'react';
 import { Card as ChakraCard } from '@chakra-ui/react';
 
-import { clickableStyles, variantStyles } from './Card.styles';
+import { mergeCss } from '@/utils/mergeCss';
+
+import { cardStyles, clickableStyles, variantStyles } from './Card.styles';
 import { CardProps } from './Card.types';
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(
-  ({ clickable, variant = 'default', _hover, ...rest }, ref) => {
+  ({ clickable, variant = 'default', _hover, css, ...rest }, ref) => {
     const mergedHover = clickable
       ? { ...clickableStyles._hover, ..._hover }
       : _hover;
@@ -20,11 +22,14 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         border="1px solid"
         borderColor="gray.200"
         borderRadius="lg"
-        css={{ transition: '0.3s all' }}
+        transitionProperty="common"
+        transitionDuration="normal"
+        transitionTimingFunction="ease"
         p={8}
         {...(clickable ? { cursor: clickableStyles.cursor } : {})}
         {...variantStyles[variant]}
         {...rest}
+        css={mergeCss(cardStyles, css)}
         _hover={mergedHover}
       />
     );

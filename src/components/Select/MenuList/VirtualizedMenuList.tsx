@@ -75,7 +75,6 @@ export const VirtualizedMenuList = <
   // Default option styles with fallback values
   const baseOptionStyle = getOptionStyles({
     isDisabled: false,
-    isFocused: false,
     isSelected: false,
   });
 

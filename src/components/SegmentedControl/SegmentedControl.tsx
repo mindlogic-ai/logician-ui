@@ -1,6 +1,8 @@
 import { forwardRef } from 'react';
 import { SegmentGroup } from '@chakra-ui/react';
 
+import { mergeCss } from '@/utils/mergeCss';
+
 import {
   SegmentedControlOption,
   SegmentedControlProps,
@@ -33,6 +35,7 @@ export const SegmentedControl = forwardRef<
     defaultValue,
     size = 'md',
     borderRadius = 'md',
+    css,
     ...rest
   } = props;
 
@@ -68,11 +71,14 @@ export const SegmentedControl = forwardRef<
       borderRadius={borderRadius}
       boxShadow="none"
       w="fit-content"
-      css={{
-        '--segment-indicator-bg': `var(--chakra-colors-gray-0)`,
-        '--segment-indicator-shadow': `var(--chakra-shadows-md)`,
-      }}
       {...rest}
+      css={mergeCss(
+        {
+          '--segment-indicator-bg': `var(--chakra-colors-gray-0)`,
+          '--segment-indicator-shadow': `var(--chakra-shadows-md)`,
+        },
+        css
+      )}
     >
       <SegmentGroup.Indicator borderRadius={indicatorRadius} />
       {items.map((item) => (
