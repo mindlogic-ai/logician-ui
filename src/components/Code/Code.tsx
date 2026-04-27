@@ -23,14 +23,17 @@ export const Code = ({
   const { meta: containerMeta, ...containerPropsRest } = containerProps ?? {};
   const { meta: restMeta, ...restWithoutMeta } = rest;
 
-  const mergedMeta: CodeBlockMeta | undefined =
-    containerMeta || restMeta || showLineNumbers !== undefined
-      ? {
-          ...containerMeta,
-          ...restMeta,
-          ...(showLineNumbers !== undefined && { showLineNumbers }),
-        }
-      : undefined;
+  const hasMeta =
+    Boolean(containerMeta) ||
+    Boolean(restMeta) ||
+    showLineNumbers !== undefined;
+  const mergedMeta: CodeBlockMeta | undefined = hasMeta
+    ? {
+        ...containerMeta,
+        ...restMeta,
+        ...(showLineNumbers !== undefined && { showLineNumbers }),
+      }
+    : undefined;
 
   const handleCopy = () => {
     onCopy?.(children);
