@@ -48,26 +48,17 @@ export const RangeDatePicker = ({
           ...propsConfigs?.inputProps,
         },
         popoverCompProps: {
+          popoverBodyProps: {
+            border: 'none',
+            ...propsConfigs?.popoverCompProps?.popoverBodyProps,
+          },
           popoverContentProps: {
-            css: {
-              '.chakra-button[aria-pressed="true"]': {
-                borderRadius: 'full',
-              },
-              '.chakra-button[aria-pressed="false"]:has(+ .chakra-button[aria-pressed="true"])':
-                {
-                  borderRightRadius: 'sm',
-                },
-              '.chakra-button[aria-pressed="true"] + .chakra-button[aria-pressed="false"]':
-                {
-                  borderLeftRadius: 'sm',
-                },
-              '.chakra-button[aria-pressed="false"]:nth-child(7n + 1)': {
-                borderLeftRadius: 'sm',
-              },
-              '.chakra-button[aria-pressed="false"]:nth-child(7n)': {
-                borderRightRadius: 'sm',
-              },
-            },
+            p: 2,
+            borderRadius: 16,
+            boxShadow: 'lg',
+            border: 'none',
+            borderWidth: 0,
+            bg: 'gray.0',
             ...propsConfigs?.popoverCompProps?.popoverContentProps,
           },
           ...propsConfigs?.popoverCompProps,
@@ -127,32 +118,35 @@ export const RangeDatePicker = ({
           },
           selectedBtnProps: {
             color: 'white',
-            background: 'none',
+            background: 'primary.main',
             fontWeight: 'semibold',
             position: 'relative',
             border: 'none',
-            zIndex: 1,
-            borderRadius: 0,
-            _hover: {
-              background: 'none',
-            },
-            _before: {
-              content: '""',
-              position: 'absolute',
-              top: 0,
-              bottom: 0,
-              left: 0,
-              right: 0,
-              background: 'primary.main',
-              borderRadius: 'full',
-              zIndex: -1,
-            },
+            borderRadius: 'full',
             ...propsConfigs?.dayOfMonthBtnProps?.selectedBtnProps,
           },
           isInRangeBtnProps: {
-            color: 'primary.dark',
+            color: 'primary.main',
             background: 'primary.extralight',
-            borderRadius: 'md',
+            borderRadius: 'none',
+            css: {
+              // pressed="true" 직전의 pressed="false" 요소에 borderRight
+              '&[aria-pressed="false"]:has(+ &[aria-pressed="true"])': {
+                borderRightRadius: 'sm',
+              },
+              // pressed="true" 직후의 pressed="false" 요소에 borderLeft
+              '&[aria-pressed="true"] + &[aria-pressed="false"]': {
+                borderLeftRadius: 'sm',
+              },
+              // week row의 왼쪽 테두리
+              '&[aria-pressed="false"]:nth-child(7n + 1)': {
+                borderLeftRadius: 'sm',
+              },
+              // week row 오른쪽 테두리
+              '&[aria-pressed="false"]:nth-child(7n)': {
+                borderRightRadius: 'sm',
+              },
+            },
             ...propsConfigs?.dayOfMonthBtnProps?.isInRangeBtnProps,
           },
           ...propsConfigs?.dayOfMonthBtnProps,
