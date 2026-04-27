@@ -12,9 +12,14 @@ const LENGTH_RE = /^(-?[\d.]+)(r?em)$/;
 // which are internal Chakra v3 APIs. If Chakra renames these structures in a
 // future release, getScopedVars will return {} and scaling will silently stop
 // working. The null-check on `base` below guards the most likely failure mode.
+const scopedVarsCache = new WeakMap<object, React.CSSProperties>();
+
 function getScopedVars(
   system: ReturnType<typeof useChakraContext>
 ): React.CSSProperties {
+  const cached = scopedVarsCache.get(system);
+  if (cached) return cached;
+
   const base = system.tokens.cssVarMap.get('base');
   if (!base) return {};
 
@@ -34,18 +39,22 @@ function getScopedVars(
     result[cssVar.var] = `${match[1]}em`;
   }
 
-  return result as React.CSSProperties;
+  const frozen = result as React.CSSProperties;
+  scopedVarsCache.set(system, frozen);
+  return frozen;
 }
 
 export const ScaledContext = forwardRef<HTMLDivElement, ScaledContextProps>(
   ({ style, children, ...rest }, ref) => {
     const system = useChakraContext();
-    // system is the Chakra context object, which is stable across renders
-    // (same reference for the lifetime of the provider). useMemo is correct here.
-    const scopedVars = React.useMemo(() => getScopedVars(system), [system]);
+    const scopedVars = getScopedVars(system);
+    const mergedStyle = React.useMemo(
+      () => ({ ...scopedVars, ...style }),
+      [scopedVars, style]
+    );
 
     return (
-      <Box ref={ref} style={{ ...scopedVars, ...style }} {...rest}>
+      <Box ref={ref} style={mergedStyle} {...rest}>
         {children}
       </Box>
     );

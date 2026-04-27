@@ -1,19 +1,39 @@
-import { CodeBlock as ChakraCodeBlock } from '@chakra-ui/react';
+import {
+  CodeBlock as ChakraCodeBlock,
+  CodeBlockRootProps,
+} from '@chakra-ui/react';
 
 import { FaCheck } from '../Icon';
 import { CodeProps } from './Code.types';
 import { shikiAdapter } from './shikiAdapter';
+
+type CodeBlockMeta = NonNullable<CodeBlockRootProps['meta']>;
 
 export const Code = ({
   children,
   language: languageProp,
   onCopy,
   hideHeader = false,
-  showLineNumbers = false,
+  showLineNumbers,
   containerProps,
   ...rest
 }: CodeProps) => {
   const language = languageProp === 'js' ? 'javascript' : languageProp;
+
+  const { meta: containerMeta, ...containerPropsRest } = containerProps ?? {};
+  const { meta: restMeta, ...restWithoutMeta } = rest;
+
+  const hasMeta =
+    Boolean(containerMeta) ||
+    Boolean(restMeta) ||
+    showLineNumbers !== undefined;
+  const mergedMeta: CodeBlockMeta | undefined = hasMeta
+    ? {
+        ...containerMeta,
+        ...restMeta,
+        ...(showLineNumbers !== undefined && { showLineNumbers }),
+      }
+    : undefined;
 
   const handleCopy = () => {
     onCopy?.(children);
@@ -24,12 +44,12 @@ export const Code = ({
       <ChakraCodeBlock.Root
         code={children}
         language={language}
-        meta={{ showLineNumbers }}
         textStyle="Body"
         overflow="hidden"
         borderColor="gray.300"
-        {...containerProps}
-        {...rest}
+        {...containerPropsRest}
+        {...restWithoutMeta}
+        meta={mergedMeta}
         onCopy={handleCopy}
         className={['ml-code', containerProps?.className]
           .filter(Boolean)

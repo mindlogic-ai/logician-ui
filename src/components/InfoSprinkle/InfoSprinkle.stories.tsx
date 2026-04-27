@@ -7,6 +7,16 @@ import { InfoSprinkle } from './InfoSprinkle';
 const meta = {
   title: 'Components/InfoSprinkle',
   component: InfoSprinkle,
+  argTypes: {
+    baseFontSize: {
+      control: 'text',
+      description:
+        'Base font size for the popover content. Spacing/sizing tokens with em units scale relative to this value.',
+    },
+  },
+  args: {
+    baseFontSize: '14px',
+  },
   render: (args) => {
     return (
       <Box p="128px">
@@ -23,3 +33,9 @@ export default meta;
 type Story = StoryObj<typeof InfoSprinkle>;
 
 export const Basic: Story = {};
+
+export const LargerBaseFontSize: Story = {
+  args: {
+    baseFontSize: '18px',
+  },
+};

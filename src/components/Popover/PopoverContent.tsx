@@ -5,7 +5,7 @@ import {
 } from '@chakra-ui/react';
 
 import { ScaledContext } from '../ScaledContext';
-import { usePopoverContext } from './Popover.types';
+import { usePopoverContext } from './Popover.context';
 
 export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
   ({ children, ...props }, ref) => {
