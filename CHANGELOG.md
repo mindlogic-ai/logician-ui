@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.0-alpha.30
+
+### Patch Changes
+
+- 676b42e: fix: DatePicker 스타일 수정
+
 ## 3.0.0-alpha.29
 
 ### Minor Changes
