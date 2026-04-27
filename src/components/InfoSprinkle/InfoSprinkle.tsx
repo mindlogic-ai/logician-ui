@@ -2,8 +2,8 @@ import { HoverCard, Portal } from '@chakra-ui/react';
 
 import { LuInfo } from '../Icon';
 import { IconButton } from '../IconButton';
-import { IconButtonProps } from '../IconButton/IconButton.types';
 import { ScaledContext } from '../ScaledContext';
+import { InfoSprinkleProps } from './InfoSprinkle.types';
 
 export const InfoSprinkle = ({
   children,
@@ -11,12 +11,7 @@ export const InfoSprinkle = ({
   contentProps,
   baseFontSize = '14px',
   ...rest
-}: {
-  children: React.ReactNode;
-  iconButtonProps?: Partial<IconButtonProps>;
-  contentProps?: HoverCard.ContentProps;
-  baseFontSize?: string | number;
-} & HoverCard.RootProps) => {
+}: InfoSprinkleProps) => {
   return (
     <HoverCard.Root
       positioning={{ placement: 'top' }}
