@@ -35,7 +35,7 @@ export const InfoSprinkle = ({
         >
           <LuInfo
             color={(iconButtonProps?.color as string) ?? 'gray.1000'}
-            boxSize={iconButtonProps?.size}
+            boxSize={iconButtonProps?.size ?? 'xs'}
           />
         </IconButton>
       </HoverCard.Trigger>
