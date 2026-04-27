@@ -1,50 +1,63 @@
-import React, { useEffect, useRef } from 'react';
-import ReactPinInput from 'react-pin-input';
-import { useToken } from '@chakra-ui/react';
+'use client';
+
+import React from 'react';
+import { PinInput as ChakraPinInput } from '@chakra-ui/react';
 
 import { PinInputProps } from './PinInput.types';
 
-// TODO: forwardRef
 export const PinInput = ({
-  value,
+  length,
+  value = '',
   onChange,
-  inputStyle,
-  autoFocus = true,
-  isNumberOnly = true,
+  onComplete,
+  type = 'numeric',
+  autoFocus = false,
+  otp = false,
+  disabled = false,
+  invalid = false,
+  placeholder = '',
+  style,
   ...rest
 }: PinInputProps) => {
-  const pinInputRef = useRef<ReactPinInput>(null);
-  const primaryColor = useToken('colors', 'primary.main')[0];
-  const grayColor = useToken('colors', 'gray.200')[0];
-
-  useEffect(() => {
-    // Automatically focus the PinInput component on mount
-    if (autoFocus) pinInputRef.current?.focus();
-  }, []);
+  const valueArray = Array.from({ length }, (_, i) => value[i] ?? '');
 
   return (
-    <ReactPinInput
-      ref={pinInputRef} // Attach the ref to the PinInput component
-      initialValue={value}
-      onChange={onChange}
-      type={isNumberOnly ? 'numeric' : 'custom'}
-      inputMode={isNumberOnly ? 'number' : 'text'}
-      inputStyle={{
-        borderColor: grayColor,
-        borderRadius: '8px',
-        width: '48px',
-        height: '48px',
-        ...inputStyle,
-      }}
-      inputFocusStyle={{
-        borderColor: primaryColor,
-        boxShadow: `0 0 0 1px ${primaryColor}`,
-      }}
-      onComplete={onChange}
-      autoSelect
-      regexCriteria={isNumberOnly ? /^[0-9]*$/ : undefined}
+    <ChakraPinInput.Root
+      count={length}
+      value={valueArray}
+      onValueChange={(d) => onChange?.(d.valueAsString, d.value.length - 1)}
+      onValueComplete={(d) => onComplete?.(d.valueAsString)}
+      type={type}
+      autoFocus={autoFocus}
+      otp={otp}
+      disabled={disabled}
+      invalid={invalid}
+      placeholder={placeholder}
       {...rest}
-    />
+    >
+      <ChakraPinInput.HiddenInput />
+      <ChakraPinInput.Control style={style}>
+        {valueArray.map((_, i) => (
+          <ChakraPinInput.Input
+            key={i}
+            index={i}
+            w="48px"
+            h="48px"
+            fontSize="lg"
+            borderRadius="md"
+            bg="white"
+            borderColor={invalid ? 'danger.main' : 'gray.400'}
+            _hover={{
+              borderColor: invalid ? 'danger.main' : 'primary.lighter',
+            }}
+            _focus={{
+              borderColor: invalid ? 'danger.main' : 'primary.main',
+            }}
+            _disabled={{ borderColor: 'gray.200', bg: 'gray.50' }}
+          />
+        ))}
+      </ChakraPinInput.Control>
+    </ChakraPinInput.Root>
   );
 };
 
