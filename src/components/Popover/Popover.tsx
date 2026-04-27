@@ -1,6 +1,7 @@
 import { Popover as ChakraPopover } from '@chakra-ui/react';
 
-import { PopoverContext, PopoverProps } from './Popover.types';
+import { PopoverContext } from './Popover.context';
+import { PopoverProps } from './Popover.types';
 import { PopoverArrowTip } from './PopoverArrowTip';
 import { PopoverContent } from './PopoverContent';
 

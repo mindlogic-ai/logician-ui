@@ -8,7 +8,7 @@ export const ModalHeader = ({ ...rest }: Dialog.HeaderProps) => {
       px={4}
       pt={4}
       pb={3}
-      borderTopRadius="inherit"
+      borderTopRadius="l3"
       {...rest}
     />
   );
