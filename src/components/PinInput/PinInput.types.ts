@@ -1,13 +1,20 @@
-export interface PinInputProps {
+import type { InputHTMLAttributes } from 'react';
+import type { PinInput as ChakraPinInput } from '@chakra-ui/react';
+
+export interface PinInputProps
+  extends Omit<
+    ChakraPinInput.RootProps,
+    | 'count'
+    | 'value'
+    | 'defaultValue'
+    | 'onValueChange'
+    | 'onValueComplete'
+    | 'onChange'
+    | 'children'
+  > {
   length: number;
   value?: string;
-  onChange?: (value: string, index: number) => void;
+  onChange?: (value: string) => void;
   onComplete?: (value: string) => void;
-  type?: 'numeric' | 'alphanumeric' | 'alphabetic';
-  autoFocus?: boolean;
-  otp?: boolean;
-  disabled?: boolean;
-  invalid?: boolean;
-  placeholder?: string;
-  style?: React.CSSProperties;
+  inputProps?: InputHTMLAttributes<HTMLInputElement>;
 }
