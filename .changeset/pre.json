@@ -7,9 +7,11 @@
   "changesets": [
     "add-collapsible-component",
     "avatar-namespace-pattern",
+    "card-remove-card-image-hook",
     "chakra-v3-migration",
     "checkbox-input-ref",
     "code-chakra-v3-migration",
+    "code-overlay-copy-when-header-hidden",
     "code-show-line-numbers",
     "color-palette-lightest-extralight",
     "common-squids-decide",

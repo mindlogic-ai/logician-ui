@@ -1,5 +1,26 @@
 # Changelog
 
+## 3.0.0-alpha.32
+
+### Patch Changes
+
+- 04b32cf: chore(Card): remove unused `.card-image` CSS hook
+
+  The `.card-image` selector was a consumer-facing CSS hook intended to be
+  applied to image children of `<Card>` for hover-scale and smooth-transition
+  effects, but no consumers ended up adopting it. Removing the dead styles
+  (and the now-unused `mergeCss` indirection in `Card.tsx`).
+
+- f52deaa: fix(Code): render copy button as floating overlay when `hideHeader` is true
+
+  Previously, setting `hideHeader` removed the entire header — including the copy
+  button — even when `onCopy` was provided. The copy trigger now renders as a
+  top-right overlay (`IconButton` ghost variant with a tooltip, matching the
+  `CodeTabs` copy button) whenever the header is hidden but `onCopy` is set.
+  Positioned at `top={2} right={3}` so the icon sits in the upper-right corner
+  without overlapping the first line of code. Exposes `.ml-code-copy` className
+  hook for consumer overrides.
+
 ## 3.0.0-alpha.31
 
 ### Minor Changes
