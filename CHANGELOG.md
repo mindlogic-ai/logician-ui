@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.0.0-alpha.33
+
+### Minor Changes
+
+- 4b689ee: feat(Code): bundle the Stata grammar
+
+  Adds `stata` to `shikiAdapter`'s preloaded `langs`. Several consumers
+  (notably FactChat / academic users) pass `language="stata"` to `<Code>`
+  and were hitting `ShikiError: Language not found`. Surfaces in the
+  Storybook language dropdown automatically via `BUNDLED_LANGUAGES`.
+
 ## 3.0.0-alpha.32
 
 ### Patch Changes
