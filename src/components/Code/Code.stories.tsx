@@ -3,8 +3,6 @@ import { Meta, StoryObj } from '@storybook/react';
 import { Code } from './Code';
 import { BUNDLED_LANGUAGES } from './shikiAdapter';
 
-const LANGUAGE_OPTIONS = [...BUNDLED_LANGUAGES, 'js'].sort();
-
 const meta = {
   title: 'Components/Code',
   component: Code,
@@ -14,7 +12,7 @@ const meta = {
   argTypes: {
     language: {
       control: 'select',
-      options: LANGUAGE_OPTIONS,
+      options: BUNDLED_LANGUAGES,
     },
   },
 } satisfies Meta<typeof Code>;
