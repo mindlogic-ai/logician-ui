@@ -1,38 +1,9 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import { Code } from './Code';
+import { BUNDLED_LANGUAGES } from './shikiAdapter';
 
-const BUNDLED_LANGUAGES = [
-  'bash',
-  'c',
-  'csharp',
-  'css',
-  'dart',
-  'dockerfile',
-  'go',
-  'html',
-  'java',
-  'javascript',
-  'js',
-  'json',
-  'jsx',
-  'kotlin',
-  'lua',
-  'markdown',
-  'matlab',
-  'mermaid',
-  'python',
-  'r',
-  'ruby',
-  'rust',
-  'shell',
-  'sql',
-  'toml',
-  'tsx',
-  'typescript',
-  'xml',
-  'yaml',
-];
+const LANGUAGE_OPTIONS = [...BUNDLED_LANGUAGES, 'js'].sort();
 
 const meta = {
   title: 'Components/Code',
@@ -43,7 +14,7 @@ const meta = {
   argTypes: {
     language: {
       control: 'select',
-      options: BUNDLED_LANGUAGES,
+      options: LANGUAGE_OPTIONS,
     },
   },
 } satisfies Meta<typeof Code>;

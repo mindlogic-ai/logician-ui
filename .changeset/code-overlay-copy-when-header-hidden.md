@@ -8,6 +8,6 @@ Previously, setting `hideHeader` removed the entire header — including the cop
 button — even when `onCopy` was provided. The copy trigger now renders as a
 top-right overlay (`IconButton` ghost variant with a tooltip, matching the
 `CodeTabs` copy button) whenever the header is hidden but `onCopy` is set.
-Positioned at `top={3} right={3}` so the icon visually aligns with the first
-line of code on the opposite side. Exposes `.ml-code-copy` className hook for
-consumer overrides.
+Positioned at `top={2} right={3}` so the icon sits in the upper-right corner
+without overlapping the first line of code. Exposes `.ml-code-copy` className
+hook for consumer overrides.

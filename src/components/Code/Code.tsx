@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   CodeBlock as ChakraCodeBlock,
   CodeBlockRootProps,
@@ -45,6 +45,16 @@ export const Code = ({
   const [isTooltipOpen, setIsTooltipOpen] = useState<boolean | undefined>(
     undefined
   );
+  const copyResetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(
+    () => () => {
+      if (copyResetTimerRef.current) {
+        clearTimeout(copyResetTimerRef.current);
+      }
+    },
+    []
+  );
 
   const showHeader = !hideHeader && language;
   const showOverlayCopy = !showHeader && Boolean(onCopy);
@@ -70,9 +80,13 @@ export const Code = ({
     setIsCopied(true);
     setIsTooltipOpen(true);
 
-    setTimeout(() => {
+    if (copyResetTimerRef.current) {
+      clearTimeout(copyResetTimerRef.current);
+    }
+    copyResetTimerRef.current = setTimeout(() => {
       setIsCopied(false);
       setIsTooltipOpen(undefined);
+      copyResetTimerRef.current = null;
     }, 1500);
   };
 
@@ -137,7 +151,11 @@ export const Code = ({
               top={2}
               right={3}
               zIndex={2}
-              aria-label="Copy code"
+              aria-label={
+                isCopied
+                  ? String(translate('copied'))
+                  : String(translate('copy'))
+              }
               size="sm"
               colorPalette="neutral"
               variant="ghost"
