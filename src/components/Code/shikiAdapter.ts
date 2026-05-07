@@ -25,6 +25,7 @@ export const BUNDLED_LANGUAGES: BundledLanguage[] = [
   'rust',
   'shell',
   'sql',
+  'stata',
   'toml',
   'tsx',
   'typescript',
