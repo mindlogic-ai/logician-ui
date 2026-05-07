@@ -39,6 +39,11 @@ export interface CodeProps extends Omit<
    */
   hideHeader?: boolean;
 
+  /** Hide the language label in the header while keeping the header itself
+   * (and the copy button) visible. Useful when rendering a fallback grammar
+   * whose ID would mislead the user (e.g. cpp source rendered as java). */
+  hideLanguageLabel?: boolean;
+
   /**
    * Whether to show line numbers in the code block.
    * @default false

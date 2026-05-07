@@ -260,6 +260,23 @@ export const HiddenHeader: Story = {
   },
 };
 
+export const HideLanguageLabel: Story = {
+  name: 'Code/HideLanguageLabel',
+  args: {
+    language: 'java',
+    hideLanguageLabel: true,
+    onCopy: (str) => navigator.clipboard.writeText(str),
+    children: `// C++ source rendered with the Java grammar as a best-effort fallback.
+// The "java" label would be misleading, so we hide it but keep the copy button.
+#include <iostream>
+
+int main() {
+  std::cout << "Hello, world!" << std::endl;
+  return 0;
+}`,
+  },
+};
+
 export const NoLanguage: Story = {
   args: {
     children: `Plain text without syntax highlighting.

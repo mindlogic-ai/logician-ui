@@ -14,6 +14,7 @@ export const Code = ({
   language: languageProp,
   onCopy,
   hideHeader = false,
+  hideLanguageLabel = false,
   showLineNumbers,
   containerProps,
   ...rest
@@ -63,13 +64,15 @@ export const Code = ({
             bgColor="white"
             zIndex={2}
           >
-            <ChakraCodeBlock.Title
-              fontFamily="mono"
-              fontWeight="bold"
-              color="gray.1200"
-            >
-              {language}
-            </ChakraCodeBlock.Title>
+            {!hideLanguageLabel && (
+              <ChakraCodeBlock.Title
+                fontFamily="mono"
+                fontWeight="bold"
+                color="gray.1200"
+              >
+                {language}
+              </ChakraCodeBlock.Title>
+            )}
             <ChakraCodeBlock.Control>
               {onCopy && (
                 <ChakraCodeBlock.CopyTrigger
