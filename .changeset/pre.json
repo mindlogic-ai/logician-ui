@@ -15,6 +15,7 @@
     "common-squids-decide",
     "em-spacing-scale",
     "em-units-theme",
+    "feat-code-expand-shiki-langs",
     "feat-code-shiki-adapter",
     "feat-focus-ring",
     "fix-6xl-lineheight-em-compounding",
