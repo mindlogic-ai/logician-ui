@@ -15,6 +15,11 @@
       "types": "./dist/icons.d.ts",
       "import": "./dist/icons.mjs",
       "require": "./dist/icons.js"
+    },
+    "./tokens": {
+      "types": "./dist/tokens.d.ts",
+      "import": "./dist/tokens.mjs",
+      "require": "./dist/tokens.js"
     }
   },
   "files": [
