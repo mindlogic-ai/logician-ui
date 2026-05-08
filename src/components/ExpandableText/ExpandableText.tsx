@@ -166,7 +166,7 @@ const ExpandableTextLineClamp = ({
   return (
     <Box>
       <Component
-        ref={ref}
+        ref={ref as unknown as React.Ref<HTMLHeadingElement>}
         {...rest}
         {...(!isExpanded && {
           overflow: 'hidden',

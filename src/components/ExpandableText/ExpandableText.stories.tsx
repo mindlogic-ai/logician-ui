@@ -134,28 +134,28 @@ export const ComponentComparison: Story = {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <div>
           <strong>Text Component:</strong>
-          <ExpandableText {...args} component="Text" charLimit={80}>
+          <ExpandableText component="Text" charLimit={80}>
             {longText}
           </ExpandableText>
         </div>
 
         <div>
           <strong>Subtitle Component:</strong>
-          <ExpandableText {...args} component="Subtitle" charLimit={80}>
+          <ExpandableText component="Subtitle" charLimit={80}>
             {longText}
           </ExpandableText>
         </div>
 
         <div>
           <strong>Subtext Component:</strong>
-          <ExpandableText {...args} component="Subtext" charLimit={80}>
+          <ExpandableText component="Subtext" charLimit={80}>
             {longText}
           </ExpandableText>
         </div>
 
         <div>
           <strong>H4 Component:</strong>
-          <ExpandableText {...args} component="H4" charLimit={80}>
+          <ExpandableText component="H4" charLimit={80}>
             {longText}
           </ExpandableText>
         </div>
