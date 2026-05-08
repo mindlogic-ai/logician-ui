@@ -15,13 +15,7 @@ export const CollapsibleRoot = forwardRef<HTMLDivElement, CollapsibleRootProps>(
           }
         : {};
 
-    return (
-      <ChakraCollapsible.Root
-        ref={ref}
-        {...cardStyles}
-        {...props}
-      />
-    );
+    return <ChakraCollapsible.Root ref={ref} {...cardStyles} {...props} />;
   }
 );
 CollapsibleRoot.displayName = 'CollapsibleRoot';
