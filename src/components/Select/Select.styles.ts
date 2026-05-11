@@ -1,16 +1,29 @@
 /**
  * Select component styles (Chakra v3 compatible)
  *
- * Note: These functions accept resolved color values from useToken()
- * since Chakra v3 doesn't export useTheme() hook.
+ * Defaults mirror the Input component (Chakra v3 `Input` recipe + Logician
+ * Input.tsx overrides) so the two controls share the same border, hover,
+ * focus, font, and disabled/readOnly behavior. When the Input component
+ * changes, update these values to match.
+ *
+ * Reference (kept in sync with Input.tsx):
+ *   borderColor: gray.400
+ *   _hover     : primary.lighter
+ *   _focus     : primary.main
+ *   _invalid   : danger.main
+ *   borderRadius: 6 (Chakra `l2` -> Logician `radii.sm`)
+ *   minHeight  : 40 (Chakra md, `sizes.10`)
+ *   fontSize   : 1em (Chakra textStyle `sm`, inherits responsively)
+ *   fontWeight : 500 (Chakra textStyle `sm` -> `subtitleAndP.medium`)
+ *   paddingX   : 12px (Chakra md, `px: 3`)
  */
 
 export type SelectColors = Record<string, string>;
 
 export const getPlaceholderStyles = (colors: SelectColors) => ({
-  color: colors.gray600,
-  fontSize: '14px',
-  fontWeight: 'semibold',
+  color: colors.gray500,
+  fontSize: '1em',
+  fontWeight: 500,
 });
 
 export const getMenuStyles = (colors: SelectColors) => ({
@@ -55,10 +68,11 @@ export const getControlStyles = (variant: string, colors: SelectColors) => {
     borderRadius: 6,
     cursor: 'pointer',
     minHeight: 40,
-    fontSize: 14,
-    fontWeight: 600,
-    paddingLeft: 4,
-    paddingRight: 3,
+    fontSize: '1em',
+    fontWeight: 500,
+    paddingLeft: 12,
+    paddingRight: 8,
+    backgroundColor: 'white',
   };
 
   if (variant === 'danger') {
