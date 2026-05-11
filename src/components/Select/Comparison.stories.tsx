@@ -13,7 +13,7 @@ import { Select } from '.';
  * Safe to delete once the unified style is no longer being iterated on.
  */
 const meta = {
-  title: 'Components/InputSelectComparison',
+  title: 'Components/Select/Comparison',
 } satisfies Meta;
 
 export default meta;
