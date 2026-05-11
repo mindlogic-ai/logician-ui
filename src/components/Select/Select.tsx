@@ -30,6 +30,7 @@ export const Select = <
     gray300,
     gray400,
     gray500,
+    gray600,
     gray1000,
     gray1200,
     gray1300,
@@ -43,6 +44,7 @@ export const Select = <
     'gray.300',
     'gray.400',
     'gray.500',
+    'gray.600',
     'gray.1000',
     'gray.1200',
     'gray.1300',
@@ -58,6 +60,7 @@ export const Select = <
     gray300,
     gray400,
     gray500,
+    gray600,
     gray1000,
     gray1200,
     gray1300,
@@ -179,7 +182,10 @@ export const Select = <
             : merged;
         },
         dropdownIndicator: (base, state) => {
-          const merged = { ...base, color: gray1300 };
+          // Lighter than the body text color so the chevron doesn't
+          // visually outweigh Input's right-side icons (which are
+          // typically outline-style and read as gray.600-ish).
+          const merged = { ...base, color: gray600 };
           return styles?.dropdownIndicator
             ? styles.dropdownIndicator(merged, state)
             : merged;
