@@ -174,6 +174,67 @@ export const textStyles = defineTextStyles({
 });
 
 /**
+ * Per-size fontSize for form controls (Input / Textarea / Select).
+ *
+ * Chakra v3 defaults pair sm/md and lg/xl onto two textStyles
+ * (`sm` → 14px, `md` → 16px). Our theme overrides both `textStyle.sm`
+ * and `textStyle.md` to the same `subtitleAndP` (14-16px responsive),
+ * which collapsed all four form-control sizes into one visible font.
+ *
+ * This override re-injects a modest fontSize progression per size,
+ * leaving fontWeight, height (`--input-height`) and padding intact.
+ * Values are responsive `{ base, md }` em tokens — the same shape the
+ * recipe's `textStyle` would have produced, which is what makes the
+ * merge actually win against the recipe's textStyle fontSize:
+ *
+ *   xs: 0.7em   → 0.75em    (9.8 → 12px on body-16)
+ *   sm: 0.805em → 0.875em   (11.27 → 14px on body-16)
+ *   md: 0.875em → 1em       (14 → 16px on body-16)         default
+ *   lg: 1em     → 1.125em   (16 → 18px on body-16)
+ *   xl: 1.125em → 1.25em    (18 → 20px on body-16)
+ *
+ * The progression matches Chakra's own intent (12 → 14 → 16 → 18 → 20
+ * on desktop). Heights still scale separately (32 / 36 / 40 / 44 / 48)
+ * so the visible differentiation comes from BOTH height and a modest
+ * 2px font step at each level.
+ *
+ * Select is react-select-based and doesn't consume Chakra recipes;
+ * it consumes the same `FORM_CONTROL_FONT_SIZES` (exported below) so
+ * the three controls stay aligned.
+ */
+const FORM_CONTROL_FONT_SIZES = {
+  xs: { base: '0.7em', md: '0.75em' },
+  sm: { base: '0.805em', md: '0.875em' },
+  md: { base: '0.875em', md: '1em' },
+  lg: { base: '1em', md: '1.125em' },
+  xl: { base: '1.125em', md: '1.25em' },
+} as const;
+
+export { FORM_CONTROL_FONT_SIZES };
+
+const formControlSizeOverride = {
+  variants: {
+    size: {
+      // Chakra default `px: 2` (0.5em = 6px at xs font 12) renders too
+      // tight on the smallest variant. Bump to an absolute 8px so xs
+      // has enough breathing room and the visual step from xs → sm
+      // (8 → 8.75px) doesn't feel inverted.
+      xs: { fontSize: FORM_CONTROL_FONT_SIZES.xs, paddingInline: '8px' },
+      sm: { fontSize: FORM_CONTROL_FONT_SIZES.sm },
+      md: { fontSize: FORM_CONTROL_FONT_SIZES.md },
+      // Chakra's default `px: 4` (1em) at lg and `px: 4.5` (1.125em)
+      // at xl cause the horizontal padding to grow disproportionately
+      // once fontSize also scales — sm→md is +3.25px but md→lg jumps
+      // +6px and lg→xl +4.5px. Cap both at `px: 3` (0.75em, same
+      // ratio as md) so the progression stays linear (~+1.5-2px per
+      // step) and lg/xl don't look suddenly chunky.
+      lg: { fontSize: FORM_CONTROL_FONT_SIZES.lg, px: '3' },
+      xl: { fontSize: FORM_CONTROL_FONT_SIZES.xl, px: '3' },
+    },
+  },
+};
+
+/**
  * Chakra UI v3 theme configuration for Logician UI
  *
  * Uses the Golden Ratio color system with cool slate-based grays.
@@ -181,6 +242,10 @@ export const textStyles = defineTextStyles({
 const config = defineConfig({
   globalCss,
   theme: {
+    recipes: {
+      input: formControlSizeOverride,
+      textarea: formControlSizeOverride,
+    },
     tokens: {
       colors,
       fonts: {
@@ -212,6 +277,11 @@ const config = defineConfig({
         '3': { value: '0.75em' },
         '3.5': { value: '0.875em' },
         '4': { value: '1em' },
+        // 4.5 is missing from Chakra's default spacing in this theme,
+        // but `Input` recipe `xl` uses `px: 4.5`. Without this token
+        // Chakra falls back to a rem-based default (1.125rem ≈ 18px),
+        // which breaks the em-scaled padding rhythm shared by sm/md/lg.
+        '4.5': { value: '1.125em' },
         '5': { value: '1.25em' },
         '6': { value: '1.5em' },
         '7': { value: '1.75em' },
