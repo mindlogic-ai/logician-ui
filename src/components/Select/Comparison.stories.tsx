@@ -8,12 +8,13 @@ import { FormLabel } from '../FormLabel';
 import { IoAddOutline, IoIosMail, IoSearch } from '../Icon';
 import { Input } from '../Input';
 import { PasswordInput } from '../PasswordInput';
+import { Textarea } from '../Textarea';
 
 import { Select } from '.';
 
 /**
- * Temporary visual comparison between Input and Select.
- * Used to verify the two controls share the same default look
+ * Temporary visual comparison between Input, Select and Textarea.
+ * Used to verify the three controls share the same default look
  * (border, hover, focus, font, padding, disabled/invalid states)
  * and look coherent inside real form layouts.
  *
@@ -52,10 +53,11 @@ const countryOptions = [
 ];
 
 /**
- * Component-level diff: every Input/Select state side-by-side.
+ * Component-level diff: every Input / Select / Textarea state side-by-side.
  */
 export const SideBySide = () => {
   const [text, setText] = useState('');
+  const [note, setNote] = useState('');
 
   return (
     <Stack gap={6} width="400px">
@@ -75,6 +77,16 @@ export const SideBySide = () => {
         </Text>
         <Select options={categoryOptions} placeholder="Placeholder text" />
       </Box>
+      <Box>
+        <Text mb={1} fontSize="sm" fontWeight="medium">
+          Textarea — placeholder
+        </Text>
+        <Textarea
+          placeholder="Placeholder text"
+          value={note}
+          onChange={e => setNote(e.target.value)}
+        />
+      </Box>
 
       <Box>
         <Text mb={1} fontSize="sm" fontWeight="medium">
@@ -88,6 +100,12 @@ export const SideBySide = () => {
         </Text>
         <Select options={categoryOptions} defaultValue={categoryOptions[0]} />
       </Box>
+      <Box>
+        <Text mb={1} fontSize="sm" fontWeight="medium">
+          Textarea — with value
+        </Text>
+        <Textarea defaultValue="Some value" />
+      </Box>
 
       <Box>
         <Text mb={1} fontSize="sm" fontWeight="medium">
@@ -100,6 +118,12 @@ export const SideBySide = () => {
           Select — invalid
         </Text>
         <Select options={categoryOptions} placeholder="Invalid select" invalid />
+      </Box>
+      <Box>
+        <Text mb={1} fontSize="sm" fontWeight="medium">
+          Textarea — invalid
+        </Text>
+        <Textarea placeholder="Invalid textarea" invalid />
       </Box>
 
       <Box>
@@ -118,12 +142,24 @@ export const SideBySide = () => {
           isDisabled
         />
       </Box>
+      <Box>
+        <Text mb={1} fontSize="sm" fontWeight="medium">
+          Textarea — disabled
+        </Text>
+        <Textarea disabled defaultValue="Disabled" />
+      </Box>
 
       <Box>
         <Text mb={1} fontSize="sm" fontWeight="medium">
           Input — readOnly
         </Text>
         <Input readOnly defaultValue="Read only" />
+      </Box>
+      <Box>
+        <Text mb={1} fontSize="sm" fontWeight="medium">
+          Textarea — readOnly
+        </Text>
+        <Textarea readOnly defaultValue="Read only" />
       </Box>
     </Stack>
   );
@@ -164,12 +200,14 @@ export const ChatbotListToolbar = () => {
 };
 
 /**
- * 회원가입 폼 — Input 과 Select 가 라벨과 함께 세로로 쌓이는 케이스.
- * 라벨/필드 정렬, 좌측 padding, 폰트 두께가 모두 일관되어야 합니다.
+ * 회원가입 폼 — Input, Select, Textarea 가 라벨과 함께 세로로 쌓이는
+ * 케이스. 라벨/필드 정렬, 좌측 padding, 폰트 두께가 모두 일관되어야
+ * 합니다.
  */
 export const SignUpForm = () => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
+  const [bio, setBio] = useState('');
 
   return (
     <Box width="400px">
@@ -206,6 +244,15 @@ export const SignUpForm = () => {
         <FormControl>
           <FormLabel>국가</FormLabel>
           <Select options={countryOptions} placeholder="국가를 선택하세요" />
+        </FormControl>
+        <FormControl>
+          <FormLabel>자기소개</FormLabel>
+          <Textarea
+            placeholder="간단한 자기소개를 입력해주세요"
+            rows={3}
+            value={bio}
+            onChange={e => setBio(e.target.value)}
+          />
         </FormControl>
         <Button colorPalette="primary" variant="solid" mt={2}>
           가입하기
