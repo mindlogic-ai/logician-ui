@@ -22,6 +22,7 @@ export const Select = <
 }: SelectProps<Option, IsMulti, Group>) => {
   const [
     primaryColor,
+    primaryLighter,
     primaryLightest,
     primaryDark,
     dangerColor,
@@ -30,9 +31,12 @@ export const Select = <
     gray400,
     gray500,
     gray600,
+    gray1000,
     gray1200,
+    gray1300,
   ] = useToken('colors', [
     'primary.main',
+    'primary.lighter',
     'primary.extralight',
     'primary.dark',
     'danger.main',
@@ -41,11 +45,14 @@ export const Select = <
     'gray.400',
     'gray.500',
     'gray.600',
+    'gray.1000',
     'gray.1200',
+    'gray.1300',
   ]);
 
   const colors: SelectColors = {
     primaryColor,
+    primaryLighter,
     primaryLightest,
     primaryDark,
     dangerColor,
@@ -54,7 +61,9 @@ export const Select = <
     gray400,
     gray500,
     gray600,
+    gray1000,
     gray1200,
+    gray1300,
   };
 
   // invalid prop이 true이면 variant를 'danger'로 오버라이드
@@ -74,21 +83,42 @@ export const Select = <
           return styles?.container ? styles.container(merged, state) : merged;
         },
         control: (base, state) => {
+          // Mirror Input.tsx: borderColor gray.400, _hover primary.lighter,
+          // _focus primary.main + 1px outline (Chakra Input recipe's
+          // `focusVisibleRing: "inside"`), _invalid danger.main,
+          // _disabled bg gray.50 / color gray.1000 / fontWeight semibold.
+          const focusOutlineColor = invalid ? dangerColor : primaryColor;
           const merged = {
             ...base,
             ...getControlStyles(effectiveVariant, colors),
             width: '100%',
             border: `1px solid ${
-              invalid ? dangerColor : state.isFocused ? primaryColor : gray300
+              invalid ? dangerColor : state.isFocused ? primaryColor : gray400
             }`,
             boxShadow: 'none',
+            outline: state.isFocused
+              ? `1px solid ${focusOutlineColor}`
+              : 'none',
+            outlineOffset: 0,
+            // react-select sets a 0.1s `transition: all` on the control,
+            // which causes the border-color and outline (none -> solid +
+            // transparent -> primary) to interpolate awkwardly — a brief
+            // dark blink during focus. Disable to match Input, which
+            // toggles its focus ring instantly via :focus-visible.
+            transition: 'none',
             '&:hover': {
               borderColor: invalid
                 ? dangerColor
                 : state.isFocused
                   ? primaryColor
-                  : gray400,
+                  : primaryLighter,
             },
+            ...(state.isDisabled && {
+              backgroundColor: gray50,
+              color: gray1000,
+              fontWeight: 600,
+              cursor: 'not-allowed',
+            }),
           };
           return styles?.control ? styles.control(merged, state) : merged;
         },
@@ -118,17 +148,28 @@ export const Select = <
           return styles?.option ? styles.option(merged, state) : merged;
         },
         singleValue: (base, state) => {
-          const merged = { ...base, margin: 0, color: gray1200 };
+          // Match Input text color (gray.1300, inherited from body in Input).
+          // When disabled, mirror Input's _disabled color (gray.1000).
+          const merged = {
+            ...base,
+            margin: 0,
+            color: state.isDisabled ? gray1000 : gray1300,
+          };
           return styles?.singleValue
             ? styles.singleValue(merged, state)
             : merged;
         },
         valueContainer: (base, state) => {
+          // Zero internal padding so the visible text starts after the
+          // control's own 12px paddingLeft (matches Input's `px: 3` =
+          // 12px). react-select's default valueContainer padding is
+          // `2px 8px`, which would otherwise stack on top.
           const merged = {
             ...base,
             display: 'flex',
             alignItems: 'center',
             textAlign: 'left' as const,
+            padding: 0,
           };
           return styles?.valueContainer
             ? styles.valueContainer(merged, state)
@@ -141,7 +182,10 @@ export const Select = <
             : merged;
         },
         dropdownIndicator: (base, state) => {
-          const merged = { ...base, color: gray1200 };
+          // Lighter than the body text color so the chevron doesn't
+          // visually outweigh Input's right-side icons (which are
+          // typically outline-style and read as gray.600-ish).
+          const merged = { ...base, color: gray600 };
           return styles?.dropdownIndicator
             ? styles.dropdownIndicator(merged, state)
             : merged;
