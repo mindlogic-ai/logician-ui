@@ -17,6 +17,7 @@ export const Select = <
 >({
   variant = 'default',
   invalid = false,
+  size = 'md',
   styles,
   ...rest
 }: SelectProps<Option, IsMulti, Group>) => {
@@ -90,7 +91,7 @@ export const Select = <
           const focusOutlineColor = invalid ? dangerColor : primaryColor;
           const merged = {
             ...base,
-            ...getControlStyles(effectiveVariant, colors),
+            ...getControlStyles(effectiveVariant, colors, size),
             width: '100%',
             border: `1px solid ${
               invalid ? dangerColor : state.isFocused ? primaryColor : gray400
@@ -143,6 +144,7 @@ export const Select = <
               isSelected: state.isSelected,
               isDisabled: state.isDisabled,
               colors,
+              size,
             }),
           };
           return styles?.option ? styles.option(merged, state) : merged;
