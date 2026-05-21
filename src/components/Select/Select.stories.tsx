@@ -10,7 +10,7 @@ import {
 import { Meta } from '@storybook/react';
 
 import { Badge } from '../Badge';
-import { IoCall, IoChatbubbleEllipses, IoIosMail } from '../Icon';
+import { IoCall, IoChatbubbleEllipses, IoClose, IoIosMail } from '../Icon';
 import { Select } from './Select';
 import { SelectField } from './SelectField';
 
@@ -442,10 +442,11 @@ const skillsCollection = createListCollection({
 /**
  * Multi-select rendering the selected options as custom tags inside the
  * trigger, with a remove "×" that disappears once a single tag is left.
+ * `closeOnSelect={false}` keeps the dropdown open across multiple picks.
  *
  * factchat parity: `SelectedMultiGroup` (custom react-select `MultiValue`)
- * and the admin `ModelSelect`, which hides `MultiValueRemove` when only one
- * model remains selected.
+ * and the admin `ModelSelect` / audit-log `MultiSelectWidget` — multi-pick
+ * keeps the menu open and `MultiValueRemove` is hidden at one selection.
  */
 export const MultiSelectCustomTags = () => {
   const [value, setValue] = useState<string[]>(['ts', 'react']);
@@ -454,6 +455,7 @@ export const MultiSelectCustomTags = () => {
     <Box maxW="360px">
       <Select.Root
         multiple
+        closeOnSelect={false}
         collection={skillsCollection}
         value={value}
         onValueChange={(details) => setValue(details.value)}
@@ -657,22 +659,29 @@ export const StyledParts = () => (
 );
 
 /**
- * `Select.Root`'s `onOpenChange` drives an external panel — the menu open
- * state is observable without lifting selection state.
+ * `Select.Root`'s `onOpenChange` reveals an external panel while the menu
+ * is open, and per-item `onMouseEnter` / `onMouseLeave` let the panel track
+ * the hovered option — selection state never has to be lifted.
  *
  * factchat parity: `LlmModelSelect`, which used react-select's
- * `onMenuOpen` / `onMenuClose` to reveal a model details panel next to the
- * control while the dropdown is open.
+ * `onMenuOpen` / `onMenuClose` plus a hover-tracking `Option` to reveal a
+ * model details panel next to the control.
  */
 export const WithOpenChange = () => {
   const [open, setOpen] = useState(false);
+  const [hovered, setHovered] = useState<
+    (typeof planCollection.items)[number] | null
+  >(null);
 
   return (
     <HStack align="flex-start" gap={4}>
       <Box w="280px">
         <Select.Root
           collection={planCollection}
-          onOpenChange={(details) => setOpen(details.open)}
+          onOpenChange={(details) => {
+            setOpen(details.open);
+            if (!details.open) setHovered(null);
+          }}
         >
           <Select.HiddenSelect />
           <Select.Label>Plan</Select.Label>
@@ -688,7 +697,12 @@ export const WithOpenChange = () => {
             <Select.Positioner>
               <Select.Content>
                 {planCollection.items.map((item) => (
-                  <Select.Item item={item} key={item.value}>
+                  <Select.Item
+                    item={item}
+                    key={item.value}
+                    onMouseEnter={() => setHovered(item)}
+                    onMouseLeave={() => setHovered(null)}
+                  >
                     <Select.ItemText>{item.label}</Select.ItemText>
                     <Select.ItemIndicator />
                   </Select.Item>
@@ -707,12 +721,63 @@ export const WithOpenChange = () => {
           borderRadius="8px"
           bg="gray.50"
         >
-          <Span fontSize="sm" color="gray.600">
-            Side panel — visible only while the dropdown is open, the same
-            way `LlmModelSelect` reveals its model details panel.
-          </Span>
+          {hovered ? (
+            <Stack gap={1}>
+              <Span fontWeight="medium" color="gray.1200">
+                {hovered.label}
+              </Span>
+              <Span fontSize="sm" color="gray.600">
+                {hovered.description}
+              </Span>
+            </Stack>
+          ) : (
+            <Span fontSize="sm" color="gray.600">
+              Hover an option — the panel tracks it, the same way
+              `LlmModelSelect` reveals its model details panel.
+            </Span>
+          )}
         </Box>
       )}
     </HStack>
   );
 };
+
+/**
+ * A clearable select — `Select.ClearTrigger` renders a reset control in the
+ * indicator group that returns the field to its empty state. Use it where a
+ * "no selection" state is meaningful.
+ *
+ * factchat parity: `ResourceCategorySelect`, where a resource's category is
+ * optional and must be resettable to "none".
+ */
+export const ClearableSelect = () => (
+  <Box maxW="320px">
+    <Select.Root collection={frameworkCollection} defaultValue={['react']}>
+      <Select.HiddenSelect />
+      <Select.Label>Framework</Select.Label>
+      <Select.Control>
+        <Select.Trigger>
+          <Select.ValueText placeholder="Select a framework" />
+        </Select.Trigger>
+        <Select.IndicatorGroup>
+          <Select.ClearTrigger>
+            <IoClose />
+          </Select.ClearTrigger>
+          <Select.Indicator />
+        </Select.IndicatorGroup>
+      </Select.Control>
+      <Portal>
+        <Select.Positioner>
+          <Select.Content>
+            {frameworkCollection.items.map((item) => (
+              <Select.Item item={item} key={item.value}>
+                <Select.ItemText>{item.label}</Select.ItemText>
+                <Select.ItemIndicator />
+              </Select.Item>
+            ))}
+          </Select.Content>
+        </Select.Positioner>
+      </Portal>
+    </Select.Root>
+  </Box>
+);
