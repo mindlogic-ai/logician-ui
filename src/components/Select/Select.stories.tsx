@@ -1,10 +1,7 @@
 import { useState } from 'react';
-import { Box, Portal, Stack } from '@chakra-ui/react';
+import { Box, createListCollection, Portal, Stack } from '@chakra-ui/react';
 import { Meta } from '@storybook/react';
 
-import { createListCollection } from '@chakra-ui/react';
-
-import { ComboboxField } from './ComboboxField';
 import { Select } from './Select';
 import { SelectField } from './SelectField';
 
@@ -81,21 +78,6 @@ export const ManyOptions = () => {
   return (
     <Box maxW="320px">
       <SelectField options={manyOptions} placeholder="100 options" />
-    </Box>
-  );
-};
-
-export const Combobox = () => {
-  const [value, setValue] = useState<string | null>(null);
-
-  return (
-    <Box maxW="320px">
-      <ComboboxField
-        options={options.filter((option) => !option.disabled)}
-        value={value}
-        onChange={setValue}
-        placeholder="Search options"
-      />
     </Box>
   );
 };
