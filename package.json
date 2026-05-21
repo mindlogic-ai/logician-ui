@@ -60,7 +60,6 @@
   },
   "dependencies": {
     "@mdxeditor/editor": "^3.45.1",
-    "@tanstack/react-virtual": "^3.0.0",
     "@types/lodash": "^4.17.20",
     "chakra-dayzed-datepicker": "3.0.0",
     "date-fns": "^2.30.0",
@@ -70,7 +69,6 @@
     "polished": "^4.3.0",
     "react-markdown": "^10.1.0",
     "react-pin-input": "^1.3.0",
-    "react-select": "^5.8.0",
     "react-spinners": "^0.17.0",
     "recharts": "^3.1.2",
     "rehype-katex": "^7.0.1",

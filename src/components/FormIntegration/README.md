@@ -49,7 +49,7 @@ Formik과 Yup을 사용한 폼 validation 예제입니다.
 
 #### 국가 (Select)
 - 필수 선택
-- react-select 사용
+- SelectField 사용
 
 #### 성별 (Radio)
 - 필수 선택

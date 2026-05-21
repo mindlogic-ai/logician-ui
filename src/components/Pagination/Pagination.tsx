@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import { SingleValue } from 'react-select';
 import { Flex } from '@chakra-ui/react';
 
 import { IoChevronForward, IoIosArrowBack } from '@/components/Icon';
@@ -7,8 +6,7 @@ import { IconButton } from '@/components/IconButton';
 import { Subtext, Subtitle } from '@/components/Typography';
 import { useTranslate } from '@/hooks/useTranslate';
 
-import { Select } from '../Select';
-import { SelectOption } from '../Select/Select.types';
+import { SelectField } from '../Select';
 import { PaginationProps } from './Pagination.types';
 
 /**
@@ -61,11 +59,8 @@ export const Pagination = ({
     }
   };
 
-  const handleItemsPerPageOptionChange = (
-    newValue: SingleValue<SelectOption<number>>
-  ) => {
-    if (newValue) {
-      const newItemsPerPage = newValue.value;
+  const handleItemsPerPageOptionChange = (newItemsPerPage: number | null) => {
+    if (newItemsPerPage != null) {
       onItemsPerPageOptionChange?.(newItemsPerPage);
 
       const newMaxPage = Math.ceil(numTotalItems / newItemsPerPage);
@@ -83,28 +78,14 @@ export const Pagination = ({
       <Flex align="center" gap={2}>
         {itemsPerPageOptions && (
           <Flex align="center" gap={2}>
-            <Select
-              menuPlacement="auto"
-              styles={{
-                control: (base, _state) => ({
-                  ...base,
-                  fontSize: '0.875rem',
-                  padding: 0,
-                  minHeight: '28px',
-                }),
-                dropdownIndicator: (base, _props) => ({
-                  ...base,
-                  padding: '0 4px',
-                }),
-              }}
+            <SelectField<number>
+              size="sm"
+              width="5.5rem"
               options={itemsPerPageOptions.map((option) => ({
                 label: option.toString(),
                 value: option,
               }))}
-              value={{
-                label: itemsPerPage.toString(),
-                value: itemsPerPage,
-              }}
+              value={itemsPerPage}
               onChange={handleItemsPerPageOptionChange}
             />
             <Subtext whiteSpace="nowrap">
