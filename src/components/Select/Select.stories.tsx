@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { Meta } from '@storybook/react';
 
+import { Badge } from '../Badge';
 import { IoCall, IoChatbubbleEllipses, IoIosMail } from '../Icon';
 import { Select } from './Select';
 import { SelectField } from './SelectField';
@@ -280,3 +281,438 @@ export const GroupedOptions = () => (
     </Select.Root>
   </Box>
 );
+
+/* -------------------------------------------------------------------------
+ * factchat parity
+ *
+ * factchat still consumes the previous `react-select`-based `Select`. The
+ * stories below recreate every custom-UI usage found there with the new
+ * compound primitives, so the upcoming update can be visually verified to
+ * cover them. Each story names the factchat component it maps to.
+ * ---------------------------------------------------------------------- */
+
+const groupTreeCollection = createListCollection({
+  items: [
+    { label: 'Engineering', value: 'eng', section: 'Department' },
+    { label: 'Design', value: 'design', section: 'Department', myGroup: true },
+    { label: 'Seoul Office', value: 'seoul', section: 'Location' },
+    {
+      label: 'Remote (archived)',
+      value: 'remote',
+      section: 'Location',
+      disabled: true,
+    },
+  ],
+  isItemDisabled: (item) => Boolean(item.disabled),
+});
+
+const groupTreeSections = ['Department', 'Location'];
+
+/**
+ * Tree-style options: non-selectable section headers, indented child rows,
+ * an inline `Badge`, and a disabled row.
+ *
+ * factchat parity: `HierarchicalGroupSelect` (`HierarchicalOption`) and the
+ * admin `ModelSelect` (`ModelSelectOption`) — both render group/platform
+ * header rows above indented child options via a react-select custom
+ * `Option` component.
+ */
+export const HierarchicalOptions = () => (
+  <Box maxW="320px">
+    <Select.Root collection={groupTreeCollection}>
+      <Select.HiddenSelect />
+      <Select.Label>Member group</Select.Label>
+      <Select.Control>
+        <Select.Trigger>
+          <Select.ValueText placeholder="Select a group" />
+        </Select.Trigger>
+        <Select.IndicatorGroup>
+          <Select.Indicator />
+        </Select.IndicatorGroup>
+      </Select.Control>
+      <Portal>
+        <Select.Positioner>
+          <Select.Content>
+            {groupTreeSections.map((section) => (
+              <Select.ItemGroup key={section}>
+                <Select.ItemGroupLabel>{section}</Select.ItemGroupLabel>
+                {groupTreeCollection.items
+                  .filter((item) => item.section === section)
+                  .map((item) => (
+                    <Select.Item item={item} key={item.value}>
+                      <HStack gap={1}>
+                        <Span color="gray.500" fontWeight="bold">
+                          ∟
+                        </Span>
+                        <Select.ItemText>{item.label}</Select.ItemText>
+                        {item.myGroup && (
+                          <Badge variant="primary">My group</Badge>
+                        )}
+                      </HStack>
+                      <Select.ItemIndicator />
+                    </Select.Item>
+                  ))}
+              </Select.ItemGroup>
+            ))}
+          </Select.Content>
+        </Select.Positioner>
+      </Portal>
+    </Select.Root>
+  </Box>
+);
+
+const memberCollection = createListCollection({
+  items: [
+    { label: 'Engineering', value: 'eng', groupType: 'Department' },
+    { label: 'Design', value: 'design', groupType: 'Department' },
+    { label: 'Seoul Office', value: 'seoul', groupType: 'Location' },
+  ],
+});
+
+/**
+ * Custom collapsed trigger value — render the selected option however you
+ * like instead of the plain `Select.ValueText`. Here the value is looked up
+ * from a controlled `value`, so no `Select.ValueText` is used in the trigger.
+ *
+ * factchat parity: `SelectedSingleGroup` ("GroupType > Label") and
+ * `ChatbotSelectValue` (model name + badge + warning) — both replace the
+ * react-select `SingleValue` component.
+ */
+export const CustomTriggerValue = () => {
+  const [value, setValue] = useState<string[]>(['design']);
+  const selected = memberCollection.items.find(
+    (item) => item.value === value[0]
+  );
+
+  return (
+    <Box maxW="320px">
+      <Select.Root
+        collection={memberCollection}
+        value={value}
+        onValueChange={(details) => setValue(details.value)}
+      >
+        <Select.HiddenSelect />
+        <Select.Label>Member group</Select.Label>
+        <Select.Control>
+          <Select.Trigger>
+            {selected ? (
+              <HStack gap={1}>
+                <Span color="gray.600">{selected.groupType}</Span>
+                <Span color="gray.500">&gt;</Span>
+                <Span color="gray.1200" fontWeight="medium">
+                  {selected.label}
+                </Span>
+              </HStack>
+            ) : (
+              <Span color="gray.500">Select a group</Span>
+            )}
+          </Select.Trigger>
+          <Select.IndicatorGroup>
+            <Select.Indicator />
+          </Select.IndicatorGroup>
+        </Select.Control>
+        <Portal>
+          <Select.Positioner>
+            <Select.Content>
+              {memberCollection.items.map((item) => (
+                <Select.Item item={item} key={item.value}>
+                  <Select.ItemText>
+                    {item.groupType} &gt; {item.label}
+                  </Select.ItemText>
+                  <Select.ItemIndicator />
+                </Select.Item>
+              ))}
+            </Select.Content>
+          </Select.Positioner>
+        </Portal>
+      </Select.Root>
+    </Box>
+  );
+};
+
+const skillsCollection = createListCollection({
+  items: [
+    { label: 'TypeScript', value: 'ts' },
+    { label: 'React', value: 'react' },
+    { label: 'Node.js', value: 'node' },
+    { label: 'GraphQL', value: 'graphql' },
+  ],
+});
+
+/**
+ * Multi-select rendering the selected options as custom tags inside the
+ * trigger, with a remove "×" that disappears once a single tag is left.
+ *
+ * factchat parity: `SelectedMultiGroup` (custom react-select `MultiValue`)
+ * and the admin `ModelSelect`, which hides `MultiValueRemove` when only one
+ * model remains selected.
+ */
+export const MultiSelectCustomTags = () => {
+  const [value, setValue] = useState<string[]>(['ts', 'react']);
+
+  return (
+    <Box maxW="360px">
+      <Select.Root
+        multiple
+        collection={skillsCollection}
+        value={value}
+        onValueChange={(details) => setValue(details.value)}
+      >
+        <Select.HiddenSelect />
+        <Select.Label>Skills</Select.Label>
+        <Select.Control>
+          <Select.Trigger>
+            {value.length === 0 ? (
+              <Span color="gray.500">Select skills</Span>
+            ) : (
+              <HStack gap={1} flexWrap="wrap">
+                {value.map((val) => {
+                  const item = skillsCollection.items.find(
+                    (option) => option.value === val
+                  );
+                  if (!item) return null;
+                  return (
+                    <HStack
+                      key={val}
+                      gap={1}
+                      bg="primary.extralight"
+                      color="primary.dark"
+                      borderRadius="4px"
+                      px={2}
+                      py={0.5}
+                      fontSize="sm"
+                    >
+                      <Span>{item.label}</Span>
+                      {value.length > 1 && (
+                        <Span
+                          cursor="pointer"
+                          fontWeight="bold"
+                          onPointerDown={(event) => event.stopPropagation()}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            setValue(value.filter((v) => v !== val));
+                          }}
+                        >
+                          ×
+                        </Span>
+                      )}
+                    </HStack>
+                  );
+                })}
+              </HStack>
+            )}
+          </Select.Trigger>
+          <Select.IndicatorGroup>
+            <Select.Indicator />
+          </Select.IndicatorGroup>
+        </Select.Control>
+        <Portal>
+          <Select.Positioner>
+            <Select.Content>
+              {skillsCollection.items.map((item) => (
+                <Select.Item item={item} key={item.value}>
+                  <Select.ItemText>{item.label}</Select.ItemText>
+                  <Select.ItemIndicator />
+                </Select.Item>
+              ))}
+            </Select.Content>
+          </Select.Positioner>
+        </Portal>
+      </Select.Root>
+    </Box>
+  );
+};
+
+interface InquiryCategory {
+  id: number;
+  name: string;
+}
+
+const inquiryCategories: InquiryCategory[] = [
+  { id: 101, name: 'Billing' },
+  { id: 102, name: 'Technical issue' },
+  { id: 103, name: 'Feature request' },
+];
+
+const inquiryCategoryCollection = createListCollection({
+  items: inquiryCategories,
+  itemToValue: (item) => String(item.id),
+  itemToString: (item) => item.name,
+});
+
+/**
+ * Options sourced from domain objects with no `label` / `value` fields.
+ * `createListCollection`'s `itemToValue` / `itemToString` map them — the
+ * role `getOptionLabel` / `getOptionValue` played in react-select.
+ *
+ * factchat parity: `InquiryModal`, which feeds `InquiryCategory`
+ * (`{ id, name }`) straight into Select.
+ */
+export const DomainObjectOptions = () => (
+  <Box maxW="320px">
+    <Select.Root collection={inquiryCategoryCollection}>
+      <Select.HiddenSelect />
+      <Select.Label>Category</Select.Label>
+      <Select.Control>
+        <Select.Trigger>
+          <Select.ValueText placeholder="Select a category" />
+        </Select.Trigger>
+        <Select.IndicatorGroup>
+          <Select.Indicator />
+        </Select.IndicatorGroup>
+      </Select.Control>
+      <Portal>
+        <Select.Positioner>
+          <Select.Content>
+            {inquiryCategoryCollection.items.map((item) => (
+              <Select.Item item={item} key={item.id}>
+                <Select.ItemText>{item.name}</Select.ItemText>
+                <Select.ItemIndicator />
+              </Select.Item>
+            ))}
+          </Select.Content>
+        </Select.Positioner>
+      </Portal>
+    </Select.Root>
+  </Box>
+);
+
+/**
+ * Select inside an `overflow: auto` container (e.g. a scrollable table
+ * row). `Select.Content` renders through a `Portal`, so the dropdown is
+ * never clipped by — or scrolled away with — the container.
+ *
+ * factchat parity: `AdminInquiryTableRow`, which had to set
+ * `menuPortalTarget` / `menuPosition="fixed"` / `zIndex: 9999` on
+ * react-select to escape the table's overflow.
+ */
+export const InsideScrollableContainer = () => (
+  <Box
+    maxW="360px"
+    maxH="140px"
+    overflow="auto"
+    borderWidth="1px"
+    borderColor="gray.300"
+    borderRadius="8px"
+    p={3}
+  >
+    <Stack gap={3}>
+      <Span fontSize="sm" color="gray.600">
+        Scrollable container — open the select, it escapes the clip.
+      </Span>
+      <SelectField options={options} placeholder="Select an option" />
+      <Span fontSize="sm" color="gray.600">
+        More rows below…
+      </Span>
+      <Span fontSize="sm" color="gray.600">
+        …to force the container to scroll.
+      </Span>
+      <Span fontSize="sm" color="gray.600">
+        …and a little more.
+      </Span>
+    </Stack>
+  </Box>
+);
+
+/**
+ * Per-part style overrides via the `css` prop. Every visual part of the
+ * `Select` namespace (`Trigger`, `Content`, `Item`, `Indicator`) merges a
+ * caller `css` on top of the design-system defaults.
+ *
+ * factchat parity: `HierarchicalGroupSelect` / `ModelSelect`, which passed
+ * a react-select `styles` callback to restyle the control, the menu and
+ * the options.
+ */
+export const StyledParts = () => (
+  <Box maxW="320px">
+    <Select.Root collection={frameworkCollection}>
+      <Select.HiddenSelect />
+      <Select.Label>Framework</Select.Label>
+      <Select.Control>
+        <Select.Trigger css={{ borderRadius: '999px' }}>
+          <Select.ValueText placeholder="Pill-shaped trigger" />
+        </Select.Trigger>
+        <Select.IndicatorGroup>
+          <Select.Indicator css={{ color: 'primary.main' }} />
+        </Select.IndicatorGroup>
+      </Select.Control>
+      <Portal>
+        <Select.Positioner>
+          <Select.Content css={{ bg: 'gray.50' }}>
+            {frameworkCollection.items.map((item) => (
+              <Select.Item
+                item={item}
+                key={item.value}
+                css={{ _highlighted: { bg: 'primary.extralight' } }}
+              >
+                <Select.ItemText>{item.label}</Select.ItemText>
+                <Select.ItemIndicator />
+              </Select.Item>
+            ))}
+          </Select.Content>
+        </Select.Positioner>
+      </Portal>
+    </Select.Root>
+  </Box>
+);
+
+/**
+ * `Select.Root`'s `onOpenChange` drives an external panel — the menu open
+ * state is observable without lifting selection state.
+ *
+ * factchat parity: `LlmModelSelect`, which used react-select's
+ * `onMenuOpen` / `onMenuClose` to reveal a model details panel next to the
+ * control while the dropdown is open.
+ */
+export const WithOpenChange = () => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <HStack align="flex-start" gap={4}>
+      <Box w="280px">
+        <Select.Root
+          collection={planCollection}
+          onOpenChange={(details) => setOpen(details.open)}
+        >
+          <Select.HiddenSelect />
+          <Select.Label>Plan</Select.Label>
+          <Select.Control>
+            <Select.Trigger>
+              <Select.ValueText placeholder="Select a plan" />
+            </Select.Trigger>
+            <Select.IndicatorGroup>
+              <Select.Indicator />
+            </Select.IndicatorGroup>
+          </Select.Control>
+          <Portal>
+            <Select.Positioner>
+              <Select.Content>
+                {planCollection.items.map((item) => (
+                  <Select.Item item={item} key={item.value}>
+                    <Select.ItemText>{item.label}</Select.ItemText>
+                    <Select.ItemIndicator />
+                  </Select.Item>
+                ))}
+              </Select.Content>
+            </Select.Positioner>
+          </Portal>
+        </Select.Root>
+      </Box>
+      {open && (
+        <Box
+          w="220px"
+          p={3}
+          borderWidth="1px"
+          borderColor="gray.300"
+          borderRadius="8px"
+          bg="gray.50"
+        >
+          <Span fontSize="sm" color="gray.600">
+            Side panel — visible only while the dropdown is open, the same
+            way `LlmModelSelect` reveals its model details panel.
+          </Span>
+        </Box>
+      )}
+    </HStack>
+  );
+};
