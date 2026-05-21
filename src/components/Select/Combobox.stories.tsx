@@ -1,7 +1,15 @@
 import { useState } from 'react';
-import { Box, Stack } from '@chakra-ui/react';
+import {
+  Box,
+  Portal,
+  Span,
+  Stack,
+  useFilter,
+  useListCollection,
+} from '@chakra-ui/react';
 import { Meta } from '@storybook/react';
 
+import { Combobox } from './Combobox';
 import { ComboboxField } from './ComboboxField';
 
 const meta = {
@@ -65,7 +73,11 @@ export const Sizes = () => (
 
 export const Invalid = () => (
   <Box maxW="320px">
-    <ComboboxField options={fruitOptions} placeholder="Invalid combobox" invalid />
+    <ComboboxField
+      options={fruitOptions}
+      placeholder="Invalid combobox"
+      invalid
+    />
   </Box>
 );
 
@@ -94,6 +106,67 @@ export const ManyOptions = () => {
   return (
     <Box maxW="320px">
       <ComboboxField options={manyOptions} placeholder="Search 100 items" />
+    </Box>
+  );
+};
+
+/* -------------------------------------------------------------------------
+ * Custom children
+ *
+ * `ComboboxField` takes a flat `options` array; for richer option content
+ * compose the `Combobox` primitives directly with `useListCollection` and
+ * `useFilter`. Keep `Combobox.ItemText` so filtering and the selected
+ * input value still resolve the option label.
+ * ---------------------------------------------------------------------- */
+
+const teamMembers = [
+  { label: 'Alice Kim', value: 'alice', role: 'Product Designer' },
+  { label: 'Brian Lee', value: 'brian', role: 'Frontend Engineer' },
+  { label: 'Chloe Park', value: 'chloe', role: 'Backend Engineer' },
+  { label: 'David Choi', value: 'david', role: 'Engineering Manager' },
+];
+
+/** Two-line options inside a filterable combobox. */
+export const CustomItems = () => {
+  const { contains } = useFilter({ sensitivity: 'base' });
+  const { collection, filter } = useListCollection({
+    initialItems: teamMembers,
+    filter: contains,
+  });
+
+  return (
+    <Box maxW="320px">
+      <Combobox.Root
+        collection={collection}
+        onInputValueChange={(details) => filter(details.inputValue)}
+      >
+        <Combobox.Label>Assignee</Combobox.Label>
+        <Combobox.Control>
+          <Combobox.Input placeholder="Search team members" />
+          <Combobox.IndicatorGroup>
+            <Combobox.ClearTrigger />
+            <Combobox.Trigger />
+          </Combobox.IndicatorGroup>
+        </Combobox.Control>
+        <Portal>
+          <Combobox.Positioner>
+            <Combobox.Content>
+              <Combobox.Empty>No members found</Combobox.Empty>
+              {collection.items.map((item) => (
+                <Combobox.Item item={item} key={item.value}>
+                  <Stack gap={0}>
+                    <Combobox.ItemText>{item.label}</Combobox.ItemText>
+                    <Span fontSize="xs" color="gray.600">
+                      {item.role}
+                    </Span>
+                  </Stack>
+                  <Combobox.ItemIndicator />
+                </Combobox.Item>
+              ))}
+            </Combobox.Content>
+          </Combobox.Positioner>
+        </Portal>
+      </Combobox.Root>
     </Box>
   );
 };

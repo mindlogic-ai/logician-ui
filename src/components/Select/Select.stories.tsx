@@ -1,7 +1,15 @@
 import { useState } from 'react';
-import { Box, createListCollection, Portal, Stack } from '@chakra-ui/react';
+import {
+  Box,
+  createListCollection,
+  HStack,
+  Portal,
+  Span,
+  Stack,
+} from '@chakra-ui/react';
 import { Meta } from '@storybook/react';
 
+import { IoCall, IoChatbubbleEllipses, IoIosMail } from '../Icon';
 import { Select } from './Select';
 import { SelectField } from './SelectField';
 
@@ -116,6 +124,155 @@ export const MultiSelect = () => (
                 <Select.ItemText>{item.label}</Select.ItemText>
                 <Select.ItemIndicator />
               </Select.Item>
+            ))}
+          </Select.Content>
+        </Select.Positioner>
+      </Portal>
+    </Select.Root>
+  </Box>
+);
+
+/* -------------------------------------------------------------------------
+ * Custom children
+ *
+ * `SelectField` takes a flat `options` array; for richer option content
+ * (icons, descriptions, groups) compose the `Select` primitives directly.
+ * `Select.Item` accepts any children — keep `Select.ItemText` so the
+ * trigger's `ValueText` and type-ahead still resolve the option label.
+ * ---------------------------------------------------------------------- */
+
+const contactCollection = createListCollection({
+  items: [
+    { label: 'Email', value: 'email', icon: <IoIosMail /> },
+    { label: 'Phone call', value: 'phone', icon: <IoCall /> },
+    { label: 'Live chat', value: 'chat', icon: <IoChatbubbleEllipses /> },
+  ],
+});
+
+/** Options with a leading icon. */
+export const OptionsWithIcons = () => (
+  <Box maxW="320px">
+    <Select.Root collection={contactCollection}>
+      <Select.HiddenSelect />
+      <Select.Label>Preferred contact</Select.Label>
+      <Select.Control>
+        <Select.Trigger>
+          <Select.ValueText placeholder="Select a contact method" />
+        </Select.Trigger>
+        <Select.IndicatorGroup>
+          <Select.Indicator />
+        </Select.IndicatorGroup>
+      </Select.Control>
+      <Portal>
+        <Select.Positioner>
+          <Select.Content>
+            {contactCollection.items.map((item) => (
+              <Select.Item item={item} key={item.value}>
+                <HStack gap={2}>
+                  {item.icon}
+                  <Select.ItemText>{item.label}</Select.ItemText>
+                </HStack>
+                <Select.ItemIndicator />
+              </Select.Item>
+            ))}
+          </Select.Content>
+        </Select.Positioner>
+      </Portal>
+    </Select.Root>
+  </Box>
+);
+
+const planCollection = createListCollection({
+  items: [
+    {
+      label: 'Starter',
+      value: 'starter',
+      description: 'Up to 1,000 messages / month',
+    },
+    {
+      label: 'Growth',
+      value: 'growth',
+      description: 'Up to 50,000 messages / month',
+    },
+    { label: 'Scale', value: 'scale', description: 'Unlimited messages' },
+  ],
+});
+
+/** Two-line options — a primary label with a muted description. */
+export const OptionsWithDescription = () => (
+  <Box maxW="360px">
+    <Select.Root collection={planCollection}>
+      <Select.HiddenSelect />
+      <Select.Label>Plan</Select.Label>
+      <Select.Control>
+        <Select.Trigger>
+          <Select.ValueText placeholder="Select a plan" />
+        </Select.Trigger>
+        <Select.IndicatorGroup>
+          <Select.Indicator />
+        </Select.IndicatorGroup>
+      </Select.Control>
+      <Portal>
+        <Select.Positioner>
+          <Select.Content>
+            {planCollection.items.map((item) => (
+              <Select.Item item={item} key={item.value}>
+                <Stack gap={0}>
+                  <Select.ItemText>{item.label}</Select.ItemText>
+                  <Span fontSize="xs" color="gray.600">
+                    {item.description}
+                  </Span>
+                </Stack>
+                <Select.ItemIndicator />
+              </Select.Item>
+            ))}
+          </Select.Content>
+        </Select.Positioner>
+      </Portal>
+    </Select.Root>
+  </Box>
+);
+
+const techCollection = createListCollection({
+  items: [
+    { label: 'React', value: 'react', group: 'Frontend' },
+    { label: 'Vue', value: 'vue', group: 'Frontend' },
+    { label: 'Node.js', value: 'node', group: 'Backend' },
+    { label: 'Django', value: 'django', group: 'Backend' },
+  ],
+});
+
+const techGroups = ['Frontend', 'Backend'];
+
+/** Grouped options using `Select.ItemGroup` and `Select.ItemGroupLabel`. */
+export const GroupedOptions = () => (
+  <Box maxW="320px">
+    <Select.Root collection={techCollection}>
+      <Select.HiddenSelect />
+      <Select.Label>Technology</Select.Label>
+      <Select.Control>
+        <Select.Trigger>
+          <Select.ValueText placeholder="Select a technology" />
+        </Select.Trigger>
+        <Select.IndicatorGroup>
+          <Select.Indicator />
+        </Select.IndicatorGroup>
+      </Select.Control>
+      <Portal>
+        <Select.Positioner>
+          <Select.Content>
+            {techGroups.map((group) => (
+              <Select.ItemGroup key={group}>
+                <Select.ItemGroupLabel>{group}</Select.ItemGroupLabel>
+                {techCollection.items
+                  .filter((item) => item.group === group)
+                  .map((item) => (
+                    <Select.Item item={item} key={item.value}>
+                      <Select.ItemText>{item.label}</Select.ItemText>
+                      <Select.ItemIndicator />
+                    </Select.Item>
+                  ))}
+              </Select.ItemGroup>
             ))}
           </Select.Content>
         </Select.Positioner>
