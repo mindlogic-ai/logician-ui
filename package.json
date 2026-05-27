@@ -63,6 +63,7 @@
     "@types/lodash": "^4.17.20",
     "chakra-dayzed-datepicker": "3.0.0",
     "date-fns": "^2.30.0",
+    "diff": "^9.0.0",
     "katex": "^0.16.22",
     "libphonenumber-js": "^1.10.0",
     "lodash": "^4.17.21",

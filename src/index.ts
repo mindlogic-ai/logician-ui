@@ -9,6 +9,7 @@ export * from './components/Card';
 export * from './components/Checkbox';
 export * from './components/Chip';
 export * from './components/Code';
+export * from './components/CodeDiff';
 export * from './components/CodeTabs';
 export * from './components/Collapsible';
 export * from './components/Container';
