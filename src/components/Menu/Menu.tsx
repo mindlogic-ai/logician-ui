@@ -1,15 +1,8 @@
 import { Menu as ChakraMenu } from '@chakra-ui/react';
 
-import { MenuContext, MenuProps } from './Menu.types';
+import { MenuBase } from './MenuBase';
 import { MenuItem } from './MenuItem';
 import { MenuList } from './MenuList';
-
-const MenuBase = ({ baseFontSize = '14px', children, ...props }: MenuProps) => (
-  <MenuContext.Provider value={{ baseFontSize }}>
-    <ChakraMenu.Root {...props}>{children}</ChakraMenu.Root>
-  </MenuContext.Provider>
-);
-MenuBase.displayName = 'Menu';
 
 export const Menu = Object.assign(MenuBase, {
   Trigger: ChakraMenu.Trigger,

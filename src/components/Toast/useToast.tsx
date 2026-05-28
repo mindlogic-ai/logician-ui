@@ -6,7 +6,7 @@ import {
   ToastStatusChangeDetails,
   UseToastOptions,
 } from './Toast.types';
-import { toaster } from './Toaster';
+import { toaster } from './toaster';
 
 const MAX_TOASTS = 3;
 
