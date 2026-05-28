@@ -27,6 +27,18 @@ export const Td = ({
   const fontSizeToken = useToken('fontSizes', 'p');
   const spacingToken = useToken('space', '4'); // spacing 4 for paddingInlineStart
 
+  const registerStickyColumn = tableContext?.registerStickyColumn;
+
+  // Update width when element is mounted and dimensions change.
+  // Hook is called unconditionally; the no-op case is guarded inside the body.
+  useEffect(() => {
+    if (!registerStickyColumn) return;
+    if (isSticky && cellRef.current) {
+      const width = cellRef.current.getBoundingClientRect().width;
+      registerStickyColumn(stickyDirection, stickyIndex, width);
+    }
+  }, [isSticky, registerStickyColumn, stickyDirection, stickyIndex]);
+
   // If not inside TableContext, render regular HTML td with same styles
   if (!tableContext) {
     // Extract only standard HTML props for the regular td element
@@ -76,19 +88,12 @@ export const Td = ({
   }
 
   const {
-    registerStickyColumn,
+    // already captured via tableContext?.registerStickyColumn above for the effect
+    registerStickyColumn: _registerStickyColumn,
     getStickyOffset,
     isLastStickyColumn,
     ...scrollState
   } = tableContext;
-
-  // Update width when element is mounted and dimensions change
-  useEffect(() => {
-    if (isSticky && cellRef.current) {
-      const width = cellRef.current.getBoundingClientRect().width;
-      registerStickyColumn(stickyDirection, stickyIndex, width);
-    }
-  }, [isSticky, registerStickyColumn, stickyDirection, stickyIndex]);
 
   // Get the sticky offset based on the column's position
   const stickyOffset = isSticky

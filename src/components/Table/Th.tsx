@@ -29,6 +29,35 @@ export const Th = forwardRef<
     const fontSizeToken = useToken('fontSizes', 'subtitle');
     const spacingToken = useToken('space', '4'); // spacing 4 for paddingInlineStart
 
+    // Combine refs (forwarded ref and internal ref). Called unconditionally so the
+    // hook order stays stable regardless of which render branch is taken below.
+    const setRefs = useCallback(
+      (node: HTMLTableCellElement | null) => {
+        // Set internal ref
+        measureNodeRef.current = node;
+
+        // Set forwarded ref
+        if (typeof forwardedRef === 'function') {
+          forwardedRef(node);
+        } else if (forwardedRef) {
+          forwardedRef.current = node;
+        }
+      },
+      [forwardedRef]
+    );
+
+    const registerStickyColumn = tableContext?.registerStickyColumn;
+
+    // Update width when element is mounted and dimensions change.
+    // Hook called unconditionally; the no-op case is guarded inside the body.
+    useEffect(() => {
+      if (!registerStickyColumn) return;
+      if (isSticky && measureNodeRef.current) {
+        const width = measureNodeRef.current.getBoundingClientRect().width;
+        registerStickyColumn(stickyDirection, stickyIndex, width);
+      }
+    }, [isSticky, registerStickyColumn, stickyDirection, stickyIndex]);
+
     // If not inside TableContext, render regular HTML th with same styles
     if (!tableContext) {
       // Extract only standard HTML props for the regular th element
@@ -40,25 +69,9 @@ export const Th = forwardRef<
         // Add other standard HTML props as needed
       };
 
-      // Combine refs for the regular th element
-      const setRefsForRegularTh = useCallback(
-        (node: HTMLTableCellElement | null) => {
-          // Set internal ref
-          measureNodeRef.current = node;
-
-          // Set forwarded ref
-          if (typeof forwardedRef === 'function') {
-            forwardedRef(node);
-          } else if (forwardedRef) {
-            forwardedRef.current = node;
-          }
-        },
-        [forwardedRef]
-      );
-
       return (
         <th
-          ref={setRefsForRegularTh}
+          ref={setRefs}
           style={{
             color: 'inherit',
             fontWeight: 'inherit',
@@ -80,35 +93,12 @@ export const Th = forwardRef<
     }
 
     const {
-      registerStickyColumn,
+      // already captured via tableContext?.registerStickyColumn above for the effect
+      registerStickyColumn: _registerStickyColumn,
       getStickyOffset,
       isLastStickyColumn,
       ...scrollState
     } = tableContext;
-
-    // Update width when element is mounted and dimensions change
-    useEffect(() => {
-      if (isSticky && measureNodeRef.current) {
-        const width = measureNodeRef.current.getBoundingClientRect().width;
-        registerStickyColumn(stickyDirection, stickyIndex, width);
-      }
-    }, [isSticky, registerStickyColumn, stickyDirection, stickyIndex]);
-
-    // Combine refs (forwarded ref and internal ref)
-    const setRefs = useCallback(
-      (node: HTMLTableCellElement | null) => {
-        // Set internal ref
-        measureNodeRef.current = node;
-
-        // Set forwarded ref
-        if (typeof forwardedRef === 'function') {
-          forwardedRef(node);
-        } else if (forwardedRef) {
-          forwardedRef.current = node;
-        }
-      },
-      [forwardedRef]
-    );
 
     // Get the sticky offset based on the column's position
     const stickyOffset = isSticky
