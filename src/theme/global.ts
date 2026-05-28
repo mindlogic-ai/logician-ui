@@ -38,6 +38,35 @@ export const globalCss = defineGlobalStyles({
   "body[data-lang='es']": {
     fontFamily: inter.style.fontFamily,
   },
+
+  /**
+   * Respect the user's `prefers-reduced-motion` setting (WCAG 2.3.3).
+   *
+   * When the OS-level "reduce motion" accessibility preference is enabled,
+   * we collapse all animations, transitions, and scroll behaviors to a
+   * near-instant duration. This applies globally to:
+   *   - CSS transitions / animations declared via Chakra style props
+   *     (e.g. `transition="opacity 0.3s"`, `animationDuration="0.65s"`)
+   *   - Chakra/Ark UI internal animations
+   *   - framer-motion animations (also respects the media query natively,
+   *     but this is a belt-and-suspenders fallback)
+   *
+   * The selector lives on the universal selectors (`*`, `*::before`,
+   * `*::after`) with the `@media` query nested inside so that Chakra v3's
+   * `defineGlobalStyles` typing (which expects `SystemStyleObject` values)
+   * accepts it.
+   *
+   * @see https://www.w3.org/WAI/WCAG21/Understanding/animation-from-interactions
+   * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion
+   */
+  '*, *::before, *::after': {
+    '@media (prefers-reduced-motion: reduce)': {
+      animationDuration: '0.01ms !important',
+      animationIterationCount: '1 !important',
+      transitionDuration: '0.01ms !important',
+      scrollBehavior: 'auto !important',
+    },
+  },
 });
 
 // Legacy export for backwards compatibility
