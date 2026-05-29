@@ -2,12 +2,14 @@ import { CodeBlockRootProps } from '@chakra-ui/react';
 
 export type CodeDiffMode = 'unified' | 'split';
 
+export type CodeDiffColorScheme = 'light' | 'dark';
+
 /**
  * CodeDiff component props
  */
 export interface CodeDiffProps extends Omit<
   CodeBlockRootProps,
-  'code' | 'children' | 'onCopy' | 'language'
+  'code' | 'children' | 'onCopy' | 'language' | 'colorScheme'
 > {
   /** Code before the change. */
   before: string;
@@ -33,6 +35,12 @@ export interface CodeDiffProps extends Omit<
    * @default 'unified'
    */
   mode?: CodeDiffMode;
+
+  /**
+   * Syntax theme — `dark` uses github-dark, `light` uses github-light.
+   * @default 'dark'
+   */
+  colorScheme?: CodeDiffColorScheme;
 
   /**
    * Show the `+N −N` stats in the header.

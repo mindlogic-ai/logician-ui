@@ -230,3 +230,66 @@ export const LongUnifiedDiff: Story = {
     ).join('\n'),
   },
 };
+
+// Plain text use case — omit `language` and CodeDiff renders the input as
+// plain text while keeping the same diff layout (dark, mono, line numbers,
+// +/− markers). Use `filename` as a free-form label.
+export const PlainTextUnified: Story = {
+  args: {
+    mode: 'unified',
+    language: undefined,
+    filename: 'AI 교정 제안',
+    before: `안녕하세요.
+저희 서비스는 누구나 손쉽게 사용할수 있는 인공지능 도구를 제공합니다.
+무엇이든 물어보면 빠르게 답변드릴께요.`,
+    after: `안녕하세요.
+저희 서비스는 누구나 손쉽게 사용할 수 있는 인공지능 도구를 제공합니다.
+무엇이든 물어보시면 빠르게 답변드릴게요.
+도움이 필요하시면 언제든 말씀해주세요.`,
+  },
+};
+
+export const PlainTextSplit: Story = {
+  args: {
+    mode: 'split',
+    language: undefined,
+    filename: 'AI 교정 제안',
+    before: `안녕하세요.
+저희 서비스는 누구나 손쉽게 사용할수 있는 인공지능 도구를 제공합니다.
+무엇이든 물어보면 빠르게 답변드릴께요.`,
+    after: `안녕하세요.
+저희 서비스는 누구나 손쉽게 사용할 수 있는 인공지능 도구를 제공합니다.
+무엇이든 물어보시면 빠르게 답변드릴게요.
+도움이 필요하시면 언제든 말씀해주세요.`,
+  },
+};
+
+export const LightTheme: Story = {
+  args: {
+    mode: 'unified',
+    colorScheme: 'light',
+  },
+};
+
+export const LightThemeSplit: Story = {
+  args: {
+    mode: 'split',
+    colorScheme: 'light',
+  },
+};
+
+export const LightThemePlainText: Story = {
+  args: {
+    mode: 'unified',
+    colorScheme: 'light',
+    language: undefined,
+    filename: 'AI 교정 제안',
+    before: `안녕하세요.
+저희 서비스는 누구나 손쉽게 사용할수 있는 인공지능 도구를 제공합니다.
+무엇이든 물어보면 빠르게 답변드릴께요.`,
+    after: `안녕하세요.
+저희 서비스는 누구나 손쉽게 사용할 수 있는 인공지능 도구를 제공합니다.
+무엇이든 물어보시면 빠르게 답변드릴게요.
+도움이 필요하시면 언제든 말씀해주세요.`,
+  },
+};

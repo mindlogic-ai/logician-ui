@@ -169,6 +169,7 @@ export const CodeDiff = ({
   language: languageProp,
   filename,
   mode = 'unified',
+  colorScheme = 'dark',
   showStats = true,
   showLineNumbers = true,
   hideHeader = false,
@@ -191,19 +192,13 @@ export const CodeDiff = ({
 
   const buildMeta = (
     extra: Partial<CodeBlockMeta>
-  ): CodeBlockMeta | undefined => {
-    const hasMeta =
-      Boolean(containerMeta) ||
-      Boolean(restMeta) ||
-      Object.keys(extra).length > 0;
-    if (!hasMeta) return undefined;
-    return {
-      ...containerMeta,
-      ...restMeta,
-      showLineNumbers,
-      ...extra,
-    };
-  };
+  ): CodeBlockMeta | undefined => ({
+    ...containerMeta,
+    ...restMeta,
+    showLineNumbers,
+    colorScheme,
+    ...extra,
+  });
 
   return (
     <Box

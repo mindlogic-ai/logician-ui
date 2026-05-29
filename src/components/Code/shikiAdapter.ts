@@ -40,8 +40,11 @@ export const shikiAdapter = createShikiAdapter<
     const { createHighlighter } = await import('shiki');
     return createHighlighter({
       langs: BUNDLED_LANGUAGES,
-      themes: ['github-dark'],
+      themes: ['github-dark', 'github-light'],
     });
   },
-  theme: 'github-dark',
+  theme: {
+    light: 'github-light',
+    dark: 'github-dark',
+  },
 });
