@@ -196,7 +196,7 @@ const RadialProgress: React.FC<RadialProgressProps> = ({
           <Text
             fontSize={`${fontSize}px`}
             fontWeight="500"
-            color="gray.600"
+            color="fg.subtle"
             fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
             lineHeight="1"
           >

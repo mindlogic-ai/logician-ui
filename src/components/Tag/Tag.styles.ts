@@ -102,7 +102,7 @@ export const tagColorPaletteStyles: Record<
     soft: {
       bgColor: 'gray.100',
       borderColor: 'gray.300',
-      color: 'gray.800',
+      color: 'fg.muted',
     },
     solid: {
       bgColor: 'gray.800',
@@ -112,7 +112,7 @@ export const tagColorPaletteStyles: Record<
     outline: {
       bgColor: 'transparent',
       borderColor: 'gray.500',
-      color: 'gray.700',
+      color: 'fg.subtle',
     },
   },
 };

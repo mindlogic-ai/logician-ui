@@ -60,7 +60,7 @@ export const FileItem = ({
     >
       <Flex w="60%" alignItems="center" gap={2}>
         <Box minW={5}>
-          <CiFileOn color={error ? errorColor : 'gray.800'} />
+          <CiFileOn color={error ? errorColor : 'fg.muted'} />
         </Box>
         <Text truncate color={error ? errorColor : undefined}>
           {fileName}
@@ -89,7 +89,7 @@ export const FileItem = ({
                   colorPalette="neutral"
                   variant="ghost"
                 >
-                  <IoClose color="gray.600" boxSize="md" />
+                  <IoClose color="fg.subtle" boxSize="md" />
                 </IconButton>
               </Flex>
             )}
@@ -113,7 +113,7 @@ export const FileItem = ({
                       colorPalette="neutral"
                       variant="ghost"
                     >
-                      <LuDownload color="gray.800" />
+                      <LuDownload color="fg.muted" />
                     </IconButton>
                   </Tooltip>
                 )}
@@ -134,7 +134,7 @@ export const FileItem = ({
                       colorPalette="neutral"
                       variant="ghost"
                     >
-                      <FaRegTrashAlt boxSize="sm" color="gray.800" />
+                      <FaRegTrashAlt boxSize="sm" color="fg.muted" />
                     </IconButton>
                   </Tooltip>
                 )}

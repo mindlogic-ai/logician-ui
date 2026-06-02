@@ -159,7 +159,7 @@ export const Code = ({
               size="sm"
               colorPalette="neutral"
               variant="ghost"
-              color="gray.800"
+              color="fg.muted"
               onClick={handleOverlayCopy}
             >
               {isCopied ? (

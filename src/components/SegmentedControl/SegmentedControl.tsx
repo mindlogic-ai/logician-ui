@@ -93,7 +93,7 @@ export const SegmentedControl = forwardRef<
         >
           <SegmentGroup.ItemText
             data-text={typeof item.label === 'string' ? item.label : undefined}
-            color="gray.800"
+            color="fg.muted"
             fontWeight="500"
             fontSize={fontSize}
             whiteSpace="nowrap"

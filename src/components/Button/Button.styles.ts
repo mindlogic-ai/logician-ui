@@ -328,7 +328,7 @@ export const buttonColorPaletteStyles: Record<
     soft: {
       borderColor: 'transparent',
       bgColor: 'gray.100', // #F0F3F9
-      color: 'gray.1200', // #2A3142
+      color: 'fg.default',
       _hover: {
         borderColor: 'transparent',
         bgColor: 'gray.200', // #E2E6F0
@@ -341,7 +341,7 @@ export const buttonColorPaletteStyles: Record<
     outline: {
       borderColor: 'gray.300', // #CDD3E0
       bgColor: 'transparent',
-      color: 'gray.1200', // #2A3142
+      color: 'fg.default',
       _hover: {
         bgColor: 'gray.50', // #F7F9FC
       },
@@ -353,7 +353,7 @@ export const buttonColorPaletteStyles: Record<
     ghost: {
       borderColor: 'transparent',
       bgColor: 'transparent',
-      color: 'gray.1200', // #2A3142
+      color: 'fg.default',
       _hover: {
         bgColor: 'gray.50', // #F7F9FC
       },

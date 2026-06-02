@@ -91,10 +91,10 @@ export const FileList = ({
             cursor: 'pointer',
           }}
         >
-          <Subtitle color="gray.600">
+          <Subtitle color="fg.subtle">
             {translate('see_more')} ({visibleCount}/{files.length})
           </Subtitle>
-          <IoChevronDownOutline color="gray.600" />
+          <IoChevronDownOutline color="fg.subtle" />
         </Button>
       )}
     </Box>

@@ -294,7 +294,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
           <Box>
             <InputGroup
               startElement={
-                <MdOutlineCalendarToday boxSize="xs" color="gray.800" />
+                <MdOutlineCalendarToday boxSize="xs" color="fg.muted" />
               }
             >
               <Input

@@ -109,12 +109,12 @@ export const colorSchemeStyles: Record<
     soft: {
       bgColor: 'gray.100',
       borderColor: 'gray.300',
-      color: 'gray.800',
+      color: 'fg.muted',
     },
     outline: {
       border: '1px solid',
       borderColor: 'gray.500',
-      color: 'gray.700',
+      color: 'fg.subtle',
       bgColor: 'transparent',
     },
   },

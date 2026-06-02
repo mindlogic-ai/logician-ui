@@ -39,7 +39,7 @@ export const RangeDatePicker = ({
       propsConfigs={{
         triggerBtnProps: {
           fontWeight: 'regular',
-          color: 'gray.1500',
+          color: 'fg.default',
           fontSize: 'md',
           ...propsConfigs?.triggerBtnProps,
         },
@@ -95,7 +95,7 @@ export const RangeDatePicker = ({
         },
         weekdayLabelProps: {
           mb: 2,
-          color: 'gray.1000',
+          color: 'fg.muted',
           fontSize: 'sm',
           fontWeight: 'regular',
           ...propsConfigs?.weekdayLabelProps,
@@ -104,7 +104,7 @@ export const RangeDatePicker = ({
           defaultBtnProps: {
             width: 34,
             height: 34,
-            color: 'gray.1500',
+            color: 'fg.default',
             fontWeight: 'regular',
             _hover: {
               background: 'primary.extralight',
