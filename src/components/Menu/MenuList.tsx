@@ -23,7 +23,12 @@ export const MenuList = forwardRef<HTMLDivElement, MenuListProps>(
           border="1px solid"
           borderColor="border.subtle"
           borderRadius="md"
-          boxShadow="0 5px 20px 1px {colors.gray.50}"
+          // Light keeps its original near-white halo; dark uses a real dark
+          // shadow so the menu doesn't glow against the dark canvas.
+          boxShadow={{
+            base: '0 5px 20px 1px {colors.gray.50}',
+            _dark: '0 5px 20px 1px rgba(0, 0, 0, 0.5)',
+          }}
           p="1.5"
           {...rest}
         >
