@@ -20,7 +20,9 @@ export const CheckboxControl = forwardRef<HTMLDivElement, CheckboxControlProps>(
       cursor="pointer"
       _disabled={{
         cursor: 'not-allowed',
-        bgColor: 'gray.300',
+        // Flip the disabled fill (was a flat light gray.300 that stayed bright
+        // on dark, unlike Input/Textarea whose disabled fills flip).
+        bgColor: { base: 'gray.300', _dark: 'gray.1200' },
         borderColor: 'border.subtle',
       }}
       {...focusRing}
