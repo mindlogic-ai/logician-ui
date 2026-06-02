@@ -87,7 +87,7 @@ export const colorSchemeStyles: Record<
   warning: {
     solid: {
       bgColor: 'gold.500',
-      color: 'white',
+      color: 'gold.900', // dark text: white/gold.500 was 2.39:1; gold.900 = 6.73:1
     },
     soft: {
       bgColor: 'warning.extralight',

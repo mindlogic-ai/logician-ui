@@ -259,13 +259,16 @@ export const buttonColorPaletteStyles: Record<
     solid: {
       borderColor: 'gold.500',
       bgColor: 'gold.500',
-      color: 'white',
+      // Dark text on gold (white/gold was 2.39:1 in BOTH modes). gold.900 on
+      // gold.500 = 6.73:1; active stays gold.600 (4.42:1) rather than gold.700
+      // (2.75:1) so dark text keeps contrast on press.
+      color: 'gold.900',
       _hover: {
         borderColor: 'gold.600',
         bgColor: 'gold.600',
       },
       _active: {
-        bgColor: 'gold.700',
+        bgColor: 'gold.600',
         transform: 'scale(0.97)',
       },
     },
