@@ -37,3 +37,19 @@ export const WithDelete: Story = {
     onFileDelete: () => {},
   },
 };
+
+export const Downloading: Story = {
+  args: {
+    fileName: 'Test File',
+    onFileDownload: () => {},
+    isDownloading: true,
+  },
+};
+
+export const Deleting: Story = {
+  args: {
+    fileName: 'Test File',
+    onFileDelete: () => {},
+    isDeleting: true,
+  },
+};

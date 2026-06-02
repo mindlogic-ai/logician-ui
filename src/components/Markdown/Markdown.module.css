@@ -2,7 +2,7 @@
   color: black;
   display: flex;
   flex-direction: column;
-  gap: 1.2em; /* Intended for longer form content like update modals */
+  gap: 1em; /* Intended for longer form content like update modals */
 }
 
 .markdownStyles > h1,
@@ -23,8 +23,25 @@
   margin-top: 8px;
   padding-inline-start: 16px;
 }
+
+.markdownStyles ul {
+  list-style-type: disc;
+}
+
+.markdownStyles ol {
+  list-style-type: decimal;
+}
+
+.markdownStyles ul ul {
+  list-style-type: circle;
+}
+
+.markdownStyles ul ul ul {
+  list-style-type: square;
+}
+
 .markdownStyles li {
-  /* 1.5x standard line height */
-  line-height: calc(16px * 1.5);
+  /* 1.5x standard line height (14px base) */
+  line-height: calc(14px * 1.5);
   margin-bottom: 8px;
 }

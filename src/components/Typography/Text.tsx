@@ -1,20 +1,21 @@
 import React, { forwardRef } from 'react';
-import { Text as ChakraText, TextProps, useTheme } from '@chakra-ui/react';
+import { Text as ChakraText, TextProps } from '@chakra-ui/react';
 
 export const Text = forwardRef<HTMLParagraphElement, TextProps>(
   (props, ref) => {
-    const theme = useTheme();
+    // Extract fontSize and textStyle to handle them conditionally
+    const { fontSize, ...rest } = props;
 
     return (
       <ChakraText
         ref={ref}
         as="p"
-        fontSize={theme.fontSizes.p}
-        lineHeight="1.5"
-        fontWeight="medium"
+        // If fontSize is provided, disable textStyle to allow fontSize override
+        textStyle={fontSize ? undefined : 'p'}
+        fontSize={fontSize}
         color="gray.1200"
         wordBreak="keep-all"
-        {...props}
+        {...rest}
       />
     );
   }

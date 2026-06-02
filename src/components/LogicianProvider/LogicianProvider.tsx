@@ -1,53 +1,95 @@
 'use client';
-import React from 'react';
-import { ChakraProvider, ChakraProviderProps } from '@chakra-ui/react';
+import React, { useEffect, useMemo } from 'react';
+import type { SystemConfig } from '@chakra-ui/react';
+import { ChakraProvider, createSystem, defaultConfig } from '@chakra-ui/react';
 
-import theme from '../../theme';
+import type { SupportedLanguage } from '@/components/MonthPicker/constants';
+import { LanguageContext } from '@/hooks/useLanguage';
 
-/**
- * Deep merge utility function that recursively merges objects
- */
-function deepMerge<T extends Record<string, any>>(
-  target: T,
-  source: Partial<T>
-): T {
-  const result = { ...target };
+import { logicianConfig, system as defaultSystem } from '../../theme';
 
-  for (const key in source) {
-    if (Object.prototype.hasOwnProperty.call(source, key)) {
-      const sourceValue = source[key];
-      const targetValue = result[key];
+const FONT_STYLESHEETS = [
+  // Pretendard Variable — covers Korean + Latin with dynamic subsetting
+  'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css',
+  // Inter — Latin fallback (Bunny Fonts, GDPR-friendly)
+  'https://fonts.bunny.net/css?family=inter:300,400,500,600,700&display=swap',
+];
 
-      if (
-        sourceValue &&
-        typeof sourceValue === 'object' &&
-        !Array.isArray(sourceValue) &&
-        targetValue &&
-        typeof targetValue === 'object' &&
-        !Array.isArray(targetValue)
-      ) {
-        // Recursively merge nested objects
-        result[key] = deepMerge(targetValue, sourceValue);
-      } else {
-        // Override primitive values, arrays, or null/undefined
-        result[key] = sourceValue;
-      }
-    }
-  }
-
-  return result;
+function injectFontLinks() {
+  FONT_STYLESHEETS.forEach((href) => {
+    if (document.querySelector(`link[href="${href}"]`)) return;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    document.head.appendChild(link);
+  });
 }
 
-export interface LogicianProviderProps
-  extends Omit<ChakraProviderProps, 'theme'> {
+export interface LogicianProviderProps {
   /**
-   * Custom theme to override the default Logician theme
+   * Optional custom configuration to extend or override the default Logician UI system.
+   * Your config will be merged with the default Logician config.
+   *
+   * @example
+   * ```tsx
+   * import { LogicianProvider } from '@mindlogic/logician-ui';
+   * import { defineConfig } from '@chakra-ui/react';
+   *
+   * // Option 1: Use default Logician system
+   * <LogicianProvider>
+   *   <App />
+   * </LogicianProvider>
+   *
+   * // Option 2: Extend/override specific parts
+   * <LogicianProvider
+   *   config={defineConfig({
+   *     theme: {
+   *       tokens: {
+   *         colors: {
+   *           brand: { value: '#FF5733' }
+   *         }
+   *       },
+   *       semanticTokens: {
+   *         colors: {
+   *           primary: {
+   *             main: 'brand'
+   *           }
+   *         }
+   *       }
+   *     }
+   *   })}
+   * >
+   *   <App />
+   * </LogicianProvider>
+   * ```
    */
-  theme?: ChakraProviderProps['theme'];
+  config?: SystemConfig;
+
+  /**
+   * Language code for internationalization.
+   * Used by date pickers, month pickers, and other locale-aware components.
+   *
+   * @default 'en'
+   * @example
+   * ```tsx
+   * <LogicianProvider language="ko">
+   *   <App />
+   * </LogicianProvider>
+   * ```
+   */
+  language?: SupportedLanguage;
+
+  /**
+   * Whether to automatically load Pretendard Variable and Inter fonts from CDN.
+   * Set to false if your app already loads these fonts to avoid duplicate requests.
+   * @default true
+   */
+  loadFonts?: boolean;
+  children?: React.ReactNode;
 }
 
 /**
- * LogicianProvider component that wraps ChakraProvider with the LogicianUI design system theme.
+ * LogicianProvider component that wraps ChakraProvider with the LogicianUI design system.
  *
  * This provider should be placed at the root of your application to provide
  * the Logician design system theme and styling to all child components.
@@ -66,16 +108,31 @@ export interface LogicianProviderProps
  * ```
  */
 export const LogicianProvider: React.FC<LogicianProviderProps> = ({
+  config,
+  language = 'en',
+  loadFonts = true,
   children,
-  theme: customTheme,
-  ...rest
 }) => {
-  const mergedTheme = customTheme ? deepMerge(theme, customTheme) : theme;
+  useEffect(() => {
+    if (loadFonts) {
+      injectFontLinks();
+    }
+  }, [loadFonts]);
+
+  const system = useMemo(() => {
+    if (!config) {
+      return defaultSystem;
+    }
+    // Merge defaultConfig, logicianConfig, and user config
+    return createSystem(defaultConfig, logicianConfig, config);
+  }, [config]);
+
+  const languageValue = useMemo(() => ({ language }), [language]);
 
   return (
-    <ChakraProvider theme={mergedTheme} {...rest}>
-      {children}
-    </ChakraProvider>
+    <LanguageContext.Provider value={languageValue}>
+      <ChakraProvider value={system}>{children}</ChakraProvider>
+    </LanguageContext.Provider>
   );
 };
 

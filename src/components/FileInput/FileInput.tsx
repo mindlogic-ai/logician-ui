@@ -1,5 +1,5 @@
 import { ChangeEventHandler, forwardRef } from 'react';
-import { Box, Flex, Input, useTheme } from '@chakra-ui/react';
+import { Box, Flex, Input } from '@chakra-ui/react';
 
 import { LuUpload } from '@/components/Icon';
 import { Spinner } from '@/components/Spinner';
@@ -20,7 +20,6 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
     },
     ref
   ) => {
-    const theme = useTheme();
     const translate = useTranslate();
 
     const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -37,7 +36,7 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
         align="center"
         justify="center"
         border="1px dashed"
-        borderColor="gray.500"
+        borderColor="gray.300"
         position="relative"
         overflow="hidden"
         borderRadius="md"
@@ -75,7 +74,7 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
             flexDir="column"
             justify="center"
             align="center"
-            bgColor={`${theme.colors.white}da`}
+            bgColor="rgba(255, 255, 255, 0.85)"
             opacity={bgImage ? 0 : 1}
             transition="ease-in"
             _groupHover={{ opacity: 1 }} // Set opacity to 1 on parent hover
@@ -86,14 +85,14 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
               <Flex w="100%" flexDir="column" align="center" justify="center">
                 <Box
                   borderRadius="lg"
-                  bgColor={bgImage ? 'transparent' : 'gray.50'}
+                  bgColor={bgImage ? 'transparent' : 'gray.100'}
                   p={3}
-                  mb={1}
+                  mb={2}
                   w="fit-content"
                 >
-                  <LuUpload color={bgImage ? 'gray.1200' : 'gray.800'} />
+                  <LuUpload color={bgImage ? 'gray.1200' : 'gray.600'} />
                 </Box>
-                <Text color={bgImage ? 'gray.1200' : 'gray.800'}>
+                <Text color={bgImage ? 'gray.1200' : 'gray.600'}>
                   {fileInputLabel || translate('upload_your_file')}
                 </Text>
               </Flex>

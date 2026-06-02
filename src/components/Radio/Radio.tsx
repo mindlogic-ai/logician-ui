@@ -1,35 +1,27 @@
-import React, { forwardRef } from 'react';
-import { Radio as ChakraRadio } from '@chakra-ui/react';
+import { forwardRef } from 'react';
+import { RadioGroup } from '@chakra-ui/react';
 
 import { RadioProps } from './Radio.types';
+import { RadioControl } from './RadioControl';
+import { RadioText } from './RadioText';
 
-export const Radio = forwardRef<HTMLInputElement, RadioProps>(
-  ({ children, ...rest }, ref) => {
-    return (
-      <ChakraRadio
-        ref={ref}
-        _checked={{
-          bg: 'primary.main',
-          borderColor: 'primary.main',
-          position: 'relative',
-          _before: {
-            content: '""',
-            bg: 'white',
-            w: '50%',
-            h: '50%',
-            borderRadius: 'full',
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-          },
-        }}
-        {...rest}
-      >
-        {children}
-      </ChakraRadio>
-    );
-  }
-);
+const RadioBase = forwardRef<
+  React.ComponentRef<typeof RadioGroup.Item>,
+  RadioProps
+>(({ id, children, ...props }, ref) => (
+  <RadioGroup.Item
+    ref={ref}
+    cursor="pointer"
+    _disabled={{ cursor: 'not-allowed' }}
+    {...props}
+  >
+    <RadioGroup.ItemHiddenInput id={id} />
+    {children}
+  </RadioGroup.Item>
+));
+RadioBase.displayName = 'Radio';
 
-Radio.displayName = 'Radio';
+export const Radio = Object.assign(RadioBase, {
+  Control: RadioControl,
+  Text: RadioText,
+});

@@ -1,67 +1,48 @@
-import { useLayoutEffect, useRef, useState } from 'react';
-import { Tab as ChakraTab } from '@chakra-ui/react';
+import { forwardRef } from 'react';
+import { Button, ButtonProps, Tabs, TabsTriggerProps } from '@chakra-ui/react';
 
-import { useTabsContext } from '@/components/Tabs/TabsContext';
+import { mergeCss } from '@/utils/mergeCss';
 
-import { TabProps } from '../Tabs.types';
 import {
   horizontalSelectedStyles,
   verticalSelectedStyles,
   verticalStyles,
 } from './Tab.styles';
 
-// A global counter to assign unique IDs to tabs for identification
-let nextTabId = 0;
+export type TabProps = TabsTriggerProps & Omit<ButtonProps, 'value'>;
 
-export const Tab = ({ name, ...props }: TabProps) => {
-  const { orientation, registerTabName } = useTabsContext();
-  const tabRef = useRef<HTMLButtonElement>(null);
-  const [tabId] = useState(() => `tab-${nextTabId++}`);
-
-  // Record when this tab was mounted in the DOM
-  useLayoutEffect(() => {
-    // After mounting, find this tab's position
-    if (!name || !tabRef.current) {
-      console.warn('[Tab] Missing name or tabRef.current');
-      return;
+export const Tab = forwardRef<HTMLButtonElement, TabProps>(
+  ({ value, children, css, ...props }, ref) => {
+    if (!value) {
+      throw new Error('Tab component requires a "value" prop');
     }
 
-    // Use a timeout to ensure tabs are properly rendered
-    const timeoutId = setTimeout(() => {
-      try {
-        // Find all tab elements within the same tablist
-        const tabList = tabRef.current?.closest('[role="tablist"]');
-        if (!tabList) return;
+    return (
+      <Tabs.Trigger value={value} asChild>
+        <Button
+          ref={ref}
+          variant="ghost"
+          colorPalette="neutral"
+          color="gray.800"
+          py={3}
+          border="none"
+          _selected={horizontalSelectedStyles}
+          {...props}
+          css={mergeCss(
+            {
+              '&[data-orientation=vertical]': {
+                ...verticalStyles,
+                '&[data-selected]': verticalSelectedStyles,
+              },
+            },
+            css
+          )}
+        >
+          {children}
+        </Button>
+      </Tabs.Trigger>
+    );
+  }
+);
 
-        const tabs = Array.from(tabList.querySelectorAll('[role="tab"]'));
-        const index = tabs.indexOf(tabRef.current!);
-
-        // Register this tab's name with the context
-        if (index !== -1) {
-          registerTabName(index, name);
-        }
-      } catch (error) {
-        console.error('[Tab] Error finding tab index:', error);
-      }
-    }, 50); // Short delay to ensure DOM is ready
-
-    return () => clearTimeout(timeoutId);
-  }, [name, registerTabName]);
-
-  return (
-    <ChakraTab
-      ref={tabRef}
-      id={tabId}
-      data-tab-name={name}
-      {...(orientation === 'vertical' && verticalStyles)}
-      color="gray.800"
-      py={3}
-      _selected={{
-        ...(orientation === 'vertical'
-          ? verticalSelectedStyles
-          : horizontalSelectedStyles),
-      }}
-      {...props}
-    />
-  );
-};
+Tab.displayName = 'Tab';

@@ -1,6 +1,6 @@
 {
   "name": "@mindlogic-ai/logician-ui",
-  "version": "2.0.0",
+  "version": "3.0.0-alpha.35",
   "description": "A comprehensive React design system built on Chakra UI",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -47,11 +47,9 @@
     "check-exports": "node check-component-exports.js"
   },
   "peerDependencies": {
-    "@chakra-ui/react": "^2.8.0",
+    "@chakra-ui/react": "^3.3.0",
     "@emotion/react": "^11.11.0",
-    "@emotion/styled": "^11.11.0",
-    "framer-motion": "^10.0.0",
-    "next": "^13.0.0 || ^14.0.0 || ^15.0.0",
+    "next": "^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
   },
@@ -62,10 +60,8 @@
   },
   "dependencies": {
     "@mdxeditor/editor": "^3.45.1",
-    "@tanstack/react-virtual": "^3.0.0",
     "@types/lodash": "^4.17.20",
-    "@types/react-syntax-highlighter": "^15.5.13",
-    "chakra-dayzed-datepicker": "^0.3.1",
+    "chakra-dayzed-datepicker": "3.0.0",
     "date-fns": "^2.30.0",
     "katex": "^0.16.22",
     "libphonenumber-js": "^1.10.0",
@@ -73,23 +69,20 @@
     "polished": "^4.3.0",
     "react-markdown": "^10.1.0",
     "react-pin-input": "^1.3.0",
-    "react-select": "^5.8.0",
     "react-spinners": "^0.17.0",
-    "react-syntax-highlighter": "^15.6.1",
-    "react-textarea-autosize": "^8.5.9",
     "recharts": "^3.1.2",
     "rehype-katex": "^7.0.1",
     "rehype-raw": "^7.0.0",
     "remark-breaks": "^4.0.0",
     "remark-flexible-markers": "^1.3.0",
     "remark-gfm": "^4.0.1",
-    "remark-math": "^6.0.0"
+    "remark-math": "^6.0.0",
+    "shiki": "^1.22.0"
   },
   "devDependencies": {
-    "@chakra-ui/react": "^2.8.0",
+    "@chakra-ui/react": "^3.3.0",
     "@changesets/cli": "^2.27.0",
     "@emotion/react": "^11.11.0",
-    "@emotion/styled": "^11.11.0",
     "@next/eslint-plugin-next": "^15.5.0",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-json": "^6.1.0",
@@ -115,6 +108,7 @@
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-storybook": "^9.1.2",
     "eslint-plugin-unused-imports": "^4.2.0",
+    "formik": "^2.4.9",
     "framer-motion": "^10.0.0",
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
@@ -129,7 +123,8 @@
     "tsc-alias": "^1.8.0",
     "typescript": "^5.2.0",
     "vite": "^5.0.0",
-    "vite-plugin-svgr": "^4.3.0"
+    "vite-plugin-svgr": "^4.3.0",
+    "yup": "^1.7.1"
   },
   "keywords": [
     "react",

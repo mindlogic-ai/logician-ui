@@ -1,40 +1,66 @@
-import { ForwardedRef, forwardRef, useState } from 'react';
+import { ForwardedRef, forwardRef } from 'react';
+import { LuEye, LuEyeOff } from 'react-icons/lu';
+import {
+  IconButton,
+  InputGroup,
+  mergeRefs,
+  useControllableState,
+} from '@chakra-ui/react';
 
-import { FaRegEye, FaRegEyeSlash } from '../Icon';
-import { IconButton } from '../IconButton';
 import { Input } from '../Input';
 import { PasswordInputProps } from './PasswordInput.types';
 
 export const PasswordInput = forwardRef(
   (
-    { wrapperProps, rightElementProps, ...rest }: PasswordInputProps,
+    {
+      rootProps,
+      defaultVisible = false,
+      visible: visibleProp,
+      onVisibleChange,
+      visibilityIcon = { on: <LuEye />, off: <LuEyeOff /> },
+      disabled,
+      ...rest
+    }: PasswordInputProps,
     ref?: ForwardedRef<HTMLInputElement>
   ) => {
-    const [show, setShow] = useState<boolean>(false);
-    const handleClick = () => setShow(!show);
+    const [visible, setVisible] = useControllableState({
+      value: visibleProp,
+      defaultValue: defaultVisible,
+      onChange: onVisibleChange,
+    });
+
+    const handleToggle = () => setVisible(!visible);
 
     return (
-      <Input
-        ref={ref}
-        wrapperProps={{ ...wrapperProps }}
-        trimWhiteSpace
-        {...rest}
-        type={show ? 'text' : 'password'}
-        rightIcon={
+      <InputGroup
+        endElement={
           <IconButton
-            icon={
-              show ? (
-                <FaRegEye fill="gray.900" boxSize="sm" />
-              ) : (
-                <FaRegEyeSlash fill="gray.900" boxSize="sm" />
-              )
-            }
-            onClick={handleClick}
+            tabIndex={-1}
+            me="-2"
+            aspectRatio="square"
+            size="sm"
+            variant="ghost"
+            height="calc(100% - {spacing.2})"
             aria-label="Toggle password visibility"
-          />
+            onPointerDown={(e) => {
+              if (disabled) return;
+              if (e.button !== 0) return;
+              e.preventDefault();
+              handleToggle();
+            }}
+          >
+            {visible ? visibilityIcon.off : visibilityIcon.on}
+          </IconButton>
         }
-        rightElementProps={{ ...rightElementProps }}
-      />
+        {...rootProps}
+      >
+        <Input
+          {...rest}
+          disabled={disabled}
+          ref={mergeRefs(ref as any)}
+          type={visible ? 'text' : 'password'}
+        />
+      </InputGroup>
     );
   }
 );

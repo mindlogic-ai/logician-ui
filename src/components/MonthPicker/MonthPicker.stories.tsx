@@ -30,7 +30,7 @@ const meta = {
       );
 
       return (
-        <VStack spacing={4} align="start" width="400px">
+        <VStack gap={4} align="start" width="400px">
           {context.parameters?.additionalContent}
           <Story
             args={{
@@ -48,10 +48,10 @@ const meta = {
               border="1px solid"
               borderColor="green.200"
             >
-              <Text fontSize="sm" fontWeight="semibold" color="green.700">
+              <Text textStyle="subtext" fontWeight="semibold" color="green.700">
                 ✓ Range Selected:
               </Text>
-              <Text fontSize="sm" color="green.600">
+              <Text textStyle="subtext" color="green.600">
                 {selectedRange.startMonth.toLocaleDateString()}
                 {selectedRange.endMonth ? (
                   <> - {selectedRange.endMonth.toLocaleDateString()}</>
@@ -90,10 +90,10 @@ export const WithConstraints: Story = {
   parameters: {
     additionalContent: (
       <Box>
-        <Text fontSize="md" fontWeight="semibold" mb={2}>
+        <Text fontWeight="semibold" mb={2}>
           With Date Constraints
         </Text>
-        <Text fontSize="sm" color="gray.600" mb={4}>
+        <Text textStyle="subtext" color="gray.600" mb={4}>
           Only allows selection 6 months before/after current date
         </Text>
       </Box>
@@ -108,10 +108,10 @@ export const Disabled: Story = {
   parameters: {
     additionalContent: (
       <Box>
-        <Text fontSize="md" fontWeight="semibold" mb={2}>
+        <Text fontWeight="semibold" mb={2}>
           Disabled State
         </Text>
-        <Text fontSize="sm" color="gray.600" mb={4}>
+        <Text textStyle="subtext" color="gray.600" mb={4}>
           The picker is disabled and cannot be interacted with
         </Text>
       </Box>
@@ -127,10 +127,10 @@ export const CustomFormat: Story = {
   parameters: {
     additionalContent: (
       <Box>
-        <Text fontSize="md" fontWeight="semibold" mb={2}>
+        <Text fontWeight="semibold" mb={2}>
           Custom Date Format
         </Text>
-        <Text fontSize="sm" color="gray.600" mb={4}>
+        <Text textStyle="subtext" color="gray.600" mb={4}>
           Uses full month names (MMMM yyyy) instead of abbreviated
         </Text>
       </Box>
@@ -142,14 +142,14 @@ export const CrossYearSelection: Story = {
   parameters: {
     additionalContent: (
       <Box>
-        <Text fontSize="md" fontWeight="semibold" mb={2}>
+        <Text fontWeight="semibold" mb={2}>
           Cross-Year Range Selection
         </Text>
-        <Text fontSize="sm" color="gray.600" mb={4}>
+        <Text textStyle="subtext" color="gray.600" mb={4}>
           Demonstrates selecting ranges across different years with immediate
           feedback.
         </Text>
-        <Box fontSize="sm" color="gray.700">
+        <Box textStyle="subtext" color="gray.700">
           <Text>
             • Click a month to start selection (shows immediately in input)
           </Text>

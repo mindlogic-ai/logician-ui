@@ -23,33 +23,33 @@ export const Basic: Story = {};
 // All sizes in one view
 export const AllSizes: Story = {
   render: () => (
-    <VStack spacing={4} align="stretch">
+    <VStack gap={4} align="stretch">
       <Box>
-        <Text mb={2} fontSize="sm" fontWeight="medium">
+        <Text mb={2} fontWeight="medium">
           Extra Small (xs) - 4px
         </Text>
         <ProgressBar size="xs" value={60} />
       </Box>
       <Box>
-        <Text mb={2} fontSize="sm" fontWeight="medium">
+        <Text mb={2} fontWeight="medium">
           Small (sm) - 8px
         </Text>
         <ProgressBar size="sm" value={60} />
       </Box>
       <Box>
-        <Text mb={2} fontSize="sm" fontWeight="medium">
+        <Text mb={2} fontWeight="medium">
           Medium (md) - 16px (Default)
         </Text>
         <ProgressBar size="md" value={60} />
       </Box>
       <Box>
-        <Text mb={2} fontSize="sm" fontWeight="medium">
+        <Text mb={2} fontWeight="medium">
           Large (lg) - 24px
         </Text>
         <ProgressBar size="lg" value={60} />
       </Box>
       <Box>
-        <Text mb={2} fontSize="sm" fontWeight="medium">
+        <Text mb={2} fontWeight="medium">
           Extra Large (xl) - 32px
         </Text>
         <ProgressBar size="xl" value={60} />

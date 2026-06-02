@@ -69,20 +69,6 @@
     "ja": "ページごとの項目数",
     "es": "elementos por página"
   },
-  "code_markdown_raw": {
-    "ko": "원문",
-    "en": "Raw",
-    "zh": "原文",
-    "ja": "原文",
-    "es": "Crudo"
-  },
-  "code_markdown_preview": {
-    "ko": "미리보기",
-    "en": "Preview",
-    "zh": "预览",
-    "ja": "プレビュー",
-    "es": "Vista previa"
-  },
   "month_range_placeholder": {
     "ko": "월 범위 선택",
     "en": "Select month range",
@@ -215,5 +201,33 @@
     "zh": "错误详情已复制到剪贴板。",
     "ja": "エラーの詳細がクリップボードにコピーされました。",
     "es": "Los detalles del error se han copiado al portapapeles."
+  },
+  "download": {
+    "ko": "다운로드",
+    "en": "Download",
+    "zh": "下载",
+    "ja": "ダウンロード",
+    "es": "Descargar"
+  },
+  "delete": {
+    "ko": "삭제",
+    "en": "Delete",
+    "zh": "删除",
+    "ja": "削除",
+    "es": "Eliminar"
+  },
+  "downloading": {
+    "ko": "다운로드 중",
+    "en": "Downloading",
+    "zh": "下载中",
+    "ja": "ダウンロード中",
+    "es": "Descargando"
+  },
+  "deleting": {
+    "ko": "삭제 중",
+    "en": "Deleting",
+    "zh": "删除中",
+    "ja": "削除中",
+    "es": "Eliminando"
   }
 }

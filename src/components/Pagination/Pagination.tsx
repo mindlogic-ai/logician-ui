@@ -1,14 +1,12 @@
 import { useMemo, useState } from 'react';
-import { SingleValue } from 'react-select';
-import { Flex, useTheme } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 
 import { IoChevronForward, IoIosArrowBack } from '@/components/Icon';
 import { IconButton } from '@/components/IconButton';
 import { Subtext, Subtitle } from '@/components/Typography';
 import { useTranslate } from '@/hooks/useTranslate';
 
-import { Select } from '../Select';
-import { SelectOption } from '../Select/Select.types';
+import { SelectField } from '../Select';
 import { PaginationProps } from './Pagination.types';
 
 /**
@@ -36,7 +34,6 @@ export const Pagination = ({
   onItemsPerPageOptionChange,
   ...rest
 }: PaginationProps) => {
-  const theme = useTheme();
   const translate = useTranslate();
   const [uncontrolledCurrentPage, setUncontrolledCurrentPage] =
     useState<number>(1);
@@ -62,11 +59,8 @@ export const Pagination = ({
     }
   };
 
-  const handleItemsPerPageOptionChange = (
-    newValue: SingleValue<SelectOption<number>>
-  ) => {
-    if (newValue) {
-      const newItemsPerPage = newValue.value;
+  const handleItemsPerPageOptionChange = (newItemsPerPage: number | null) => {
+    if (newItemsPerPage != null) {
       onItemsPerPageOptionChange?.(newItemsPerPage);
 
       const newMaxPage = Math.ceil(numTotalItems / newItemsPerPage);
@@ -84,65 +78,49 @@ export const Pagination = ({
       <Flex align="center" gap={2}>
         {itemsPerPageOptions && (
           <Flex align="center" gap={2}>
-            <Select
-              styles={{
-                control: (base, state) => ({
-                  ...base,
-                  fontSize: theme.fontSizes.sm,
-                  padding: 0,
-                  minHeight: '28px',
-                }),
-                dropdownIndicator: (base, props) => ({
-                  ...base,
-                  padding: `0 ${theme.space[1]}`,
-                }),
-              }}
+            <SelectField<number>
+              size="sm"
+              width="5.5rem"
               options={itemsPerPageOptions.map((option) => ({
                 label: option.toString(),
                 value: option,
               }))}
-              value={{
-                label: itemsPerPage.toString(),
-                value: itemsPerPage,
-              }}
+              value={itemsPerPage}
               onChange={handleItemsPerPageOptionChange}
             />
-            <Subtext>{translate('pagination_items_per_page')}</Subtext>
+            <Subtext whiteSpace="nowrap">
+              {translate('pagination_items_per_page')}
+            </Subtext>
           </Flex>
         )}
       </Flex>
-      <Flex>
-        <Subtitle>
-          {translate('pagination_range_text', {
-            range_start: (currentPage - 1) * itemsPerPage + 1,
-            range_end: Math.min(numTotalItems, currentPage * itemsPerPage),
-            num_total_items: numTotalItems,
-          })}
-        </Subtitle>
-      </Flex>
       <Flex align="center" gap={2}>
+        <Subtitle>
+          {currentPage} / {maxPage}
+        </Subtitle>
         {maxPage > 1 && (
-          <>
-            <Subtitle>
-              {currentPage} / {maxPage}
-            </Subtitle>
-            <Flex align="center">
-              <IconButton
-                icon={<IoIosArrowBack boxSize="sm" />}
-                aria-label={translate('previous') as string}
-                onClick={handleBack}
-                isDisabled={currentPage <= 1}
-                color={currentPage === 1 ? 'gray.400' : 'gray.1500'}
-              />
-              <IconButton
-                icon={<IoChevronForward boxSize="sm" />}
-                aria-label={translate('go_next_page_button') as string}
-                onClick={handleNext}
-                isDisabled={currentPage >= maxPage}
-                color={currentPage === maxPage ? 'gray.400' : 'gray.1500'}
-              />
-            </Flex>
-          </>
+          <Flex align="center">
+            <IconButton
+              colorPalette="neutral"
+              variant="ghost"
+              aria-label={translate('previous') as string}
+              onClick={handleBack}
+              disabled={currentPage <= 1}
+              color={currentPage === 1 ? 'gray.400' : 'gray.1000'}
+            >
+              <IoIosArrowBack boxSize="sm" />
+            </IconButton>
+            <IconButton
+              colorPalette="neutral"
+              variant="ghost"
+              aria-label={translate('go_next_page_button') as string}
+              onClick={handleNext}
+              disabled={currentPage >= maxPage}
+              color={currentPage === maxPage ? 'gray.400' : 'gray.1000'}
+            >
+              <IoChevronForward boxSize="sm" />
+            </IconButton>
+          </Flex>
         )}
       </Flex>
     </Flex>

@@ -40,6 +40,9 @@ export const createIcon = (
   IconComponent: React.ComponentType<any>,
   displayName?: string
 ) => {
+  // ✅ FIX: Wrap ONCE at creation time, not on every render
+  const ChakraIcon = chakra(IconComponent);
+
   const WrappedIcon = forwardRef<SVGSVGElement, IconProps>(
     ({ boxSize = 'md', ...props }, ref) => {
       // Map boxSize to actual pixel values
@@ -48,10 +51,10 @@ export const createIcon = (
           ? sizeMapping[boxSize]
           : boxSize;
 
-      const ChakraIcon = chakra(IconComponent);
       return (
         <ChakraIcon
           ref={ref}
+          color="currentColor"
           width={resolvedSize}
           height={resolvedSize}
           {...props}

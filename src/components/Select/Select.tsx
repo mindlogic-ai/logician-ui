@@ -1,204 +1,84 @@
-import React from 'react';
-import ReactSelect, {
-  components,
-  ControlProps,
-  GroupBase,
-  MenuListProps,
-  OptionProps,
-} from 'react-select';
-import { Box, useTheme } from '@chakra-ui/react';
+import { forwardRef } from 'react';
+import { Select as ChakraSelect } from '@chakra-ui/react';
 
-import { resolveStyle } from './_utils/resolveStyle';
-import { VirtualizedMenuList } from './MenuList';
-import { VirtualizedMenuListProvider } from './MenuList/VirtualizedMenuListContext';
+import { mergeCss } from '@/utils/mergeCss';
+
 import {
-  controlStyles,
-  getControlVariantStyles,
-  menuStyles,
-  optionStyles,
-  placeholderStyles,
+  contentStyles,
+  indicatorStyles,
+  itemStyles,
+  triggerStyles,
 } from './Select.styles';
-import { SelectProps } from './Select.types';
 
-export const Select = <
-  Option,
-  IsMulti extends boolean = false,
-  Group extends GroupBase<Option> = GroupBase<Option>,
->({
-  styles,
-  variant = 'default',
-  optionHeight = 35,
-  onMenuScrollToBottom,
-  'data-testid': dataTestId,
-  ...rest
-}: SelectProps<Option, IsMulti, Group> & { 'data-testid'?: string }) => {
-  const theme = useTheme();
-  const CustomOption = (props: OptionProps<Option, IsMulti, Group>) => {
-    const optionValue = (props.data as any)?.value || props.label || 'option';
+const Trigger = forwardRef<HTMLButtonElement, ChakraSelect.TriggerProps>(
+  function SelectTrigger({ css, ...props }, ref) {
     return (
-      <Box
-        data-testid={
-          dataTestId ? `${dataTestId}-option-${optionValue}` : undefined
-        }
-      >
-        <components.Option {...props} />
-      </Box>
+      <ChakraSelect.Trigger
+        ref={ref}
+        {...props}
+        css={mergeCss(triggerStyles, css)}
+      />
     );
-  };
+  }
+);
 
-  // 커스텀 Control 컴포넌트
-  const CustomControl = (props: ControlProps<Option, IsMulti, Group>) => {
+const Content = forwardRef<HTMLDivElement, ChakraSelect.ContentProps>(
+  function SelectContent({ css, ...props }, ref) {
     return (
-      <Box data-testid={dataTestId ? `${dataTestId}-control` : undefined}>
-        <components.Control {...props} />
-      </Box>
+      <ChakraSelect.Content
+        ref={ref}
+        {...props}
+        css={mergeCss(contentStyles, css)}
+      />
     );
-  };
-  return (
-    <VirtualizedMenuListProvider>
-      <Box data-testid={dataTestId}>
-        <ReactSelect<Option, IsMulti, Group>
-          closeMenuOnSelect
-          closeMenuOnScroll
-          isSearchable={false}
-          tabIndex={0}
-          classNamePrefix="react-select"
-          components={{
-            MenuList: (props: MenuListProps<Option, IsMulti, Group>) => (
-              <VirtualizedMenuList<Option, IsMulti, Group>
-                {...props}
-                onMenuScrollToBottom={onMenuScrollToBottom}
-                optionHeight={optionHeight}
-              />
-            ),
-            Option: CustomOption,
-            Control: CustomControl,
-            ...rest.components,
-          }}
-          styles={{
-            container: (base, state) => ({
-              ...resolveStyle(
-                {
-                  ...base,
-                  height: '100%',
-                },
-                styles?.container,
-                state
-              ),
-            }),
-            placeholder: (base, state) => ({
-              ...resolveStyle(
-                {
-                  ...base,
-                  ...placeholderStyles,
-                },
-                styles?.placeholder,
-                state
-              ),
-            }),
-            valueContainer: (base, state) => ({
-              ...resolveStyle(
-                {
-                  ...base,
-                  textAlign: 'left',
-                },
-                styles?.valueContainer,
-                state
-              ),
-            }),
-            singleValue: (base, state) => ({
-              ...resolveStyle(
-                {
-                  ...base,
-                  margin: 0,
-                  color: 'gray.1000',
-                },
-                styles?.singleValue,
-                state
-              ),
-            }),
-            menu: (base, state) => ({
-              ...resolveStyle(
-                {
-                  ...base,
-                  ...menuStyles,
-                },
-                styles?.menu,
-                state
-              ),
-            }),
-            menuList: (base, state) => ({
-              ...resolveStyle(
-                {
-                  ...base,
-                  padding: `0px ${theme.space[1]}`,
-                  // Important for the virtualized list - DON'T override overflow
-                  // as we need the default 'auto' from react-select for scrolling to work
-                },
-                styles?.menuList,
-                state
-              ),
-            }),
-            option: (base, state) => ({
-              ...resolveStyle(
-                {
-                  ...base,
-                  textAlign: 'left',
-                  padding: `${theme.space[0.5]} ${theme.space[1]}`,
-                  ...optionStyles(state),
-                },
-                styles?.option,
-                state
-              ),
-            }),
-            menuPortal: (base, state) => ({
-              ...resolveStyle(
-                {
-                  ...base,
-                  zIndex: 9999,
-                },
-                styles?.menuPortal,
-                state
-              ),
-            }),
-            control: (base, state) => ({
-              ...resolveStyle(
-                {
-                  ...base,
-                  ...controlStyles,
-                  ...getControlVariantStyles(state, variant),
-                  ...(state.isDisabled && {
-                    bg: 'gray.50',
-                  }),
-                },
-                styles?.control,
-                state
-              ),
-            }),
-            indicatorSeparator: (base, state) => ({
-              ...resolveStyle(
-                {
-                  ...base,
-                  display: 'none',
-                },
-                styles?.indicatorSeparator,
-                state
-              ),
-            }),
-            dropdownIndicator: (base, state) => ({
-              ...resolveStyle(
-                {
-                  ...base,
-                  color: 'gray.800',
-                },
-                styles?.dropdownIndicator,
-                state
-              ),
-            }),
-          }}
-          {...rest}
-        />
-      </Box>
-    </VirtualizedMenuListProvider>
-  );
+  }
+);
+
+const Item = forwardRef<HTMLDivElement, ChakraSelect.ItemProps>(
+  function SelectItem({ css, ...props }, ref) {
+    return (
+      <ChakraSelect.Item ref={ref} {...props} css={mergeCss(itemStyles, css)} />
+    );
+  }
+);
+
+const Indicator = forwardRef<HTMLDivElement, ChakraSelect.IndicatorProps>(
+  function SelectIndicator({ css, ...props }, ref) {
+    return (
+      <ChakraSelect.Indicator
+        ref={ref}
+        {...props}
+        css={mergeCss(indicatorStyles, css)}
+      />
+    );
+  }
+);
+
+/**
+ * Compound Select primitives — Chakra's `Select` namespace with the Logician
+ * design-system styling baked into the visual parts (`Trigger`, `Content`,
+ * `Item`, `Indicator`). Use these directly for full compositional control
+ * (multi-select, grouped options, custom layouts); use `SelectField` for the
+ * common single-select case.
+ */
+export const Select = {
+  Root: ChakraSelect.Root,
+  PropsProvider: ChakraSelect.PropsProvider,
+  Context: ChakraSelect.Context,
+  Label: ChakraSelect.Label,
+  Control: ChakraSelect.Control,
+  Trigger,
+  ValueText: ChakraSelect.ValueText,
+  IndicatorGroup: ChakraSelect.IndicatorGroup,
+  Indicator,
+  ClearTrigger: ChakraSelect.ClearTrigger,
+  HiddenSelect: ChakraSelect.HiddenSelect,
+  Positioner: ChakraSelect.Positioner,
+  Content,
+  ItemGroup: ChakraSelect.ItemGroup,
+  ItemGroupLabel: ChakraSelect.ItemGroupLabel,
+  Item,
+  ItemText: ChakraSelect.ItemText,
+  ItemIndicator: ChakraSelect.ItemIndicator,
+  ItemContext: ChakraSelect.ItemContext,
 };

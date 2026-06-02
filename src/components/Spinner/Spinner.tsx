@@ -1,17 +1,19 @@
 import { ForwardedRef, forwardRef } from 'react';
 import { Spinner as ChakraSpinner } from '@chakra-ui/react';
 
+import { mergeCss } from '@/utils/mergeCss';
+
 import { SpinnerProps } from './Spinner.types';
 
 export const Spinner = forwardRef(
-  ({ ...rest }: SpinnerProps, ref?: ForwardedRef<HTMLDivElement>) => {
+  ({ css, ...rest }: SpinnerProps, ref?: ForwardedRef<HTMLDivElement>) => {
     return (
       <ChakraSpinner
-        emptyColor="gray.200"
         color="primary.main"
-        speed="0.65s"
-        {...rest}
+        animationDuration="0.65s"
         ref={ref}
+        {...rest}
+        css={mergeCss({ '--spinner-track-color': 'colors.gray.200' }, css)}
       />
     );
   }

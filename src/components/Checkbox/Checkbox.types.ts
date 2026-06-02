@@ -1,3 +1,6 @@
-import { CheckboxProps as ChakraCheckboxProps } from '@chakra-ui/react';
+import { CheckboxRootProps as ChakraCheckboxRootProps } from '@chakra-ui/react';
 
-export interface CheckboxProps extends ChakraCheckboxProps {}
+export type CheckboxProps = ChakraCheckboxRootProps & {
+  id?: string;
+  inputRef?: React.Ref<HTMLInputElement>;
+};

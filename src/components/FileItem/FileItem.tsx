@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Box, Flex, useTheme } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 
 import { FileItemProps } from '@/components/FileItem/FileItem.types';
 import {
@@ -12,6 +12,7 @@ import {
 import { IconButton } from '@/components/IconButton';
 import { ProgressBar } from '@/components/ProgressBar';
 import { Subtext, Subtitle, Text } from '@/components/Typography';
+import { useTranslate } from '@/hooks/useTranslate';
 import { formatFileSize } from '@/utils/formatFileSize';
 
 import { Spinner } from '../Spinner';
@@ -25,9 +26,10 @@ export const FileItem = ({
   progress,
   fileSize,
   isDeleting = false,
+  isDownloading = false,
   ...rest
 }: FileItemProps) => {
-  const theme = useTheme();
+  const translate = useTranslate();
   const errorColor = 'danger.main';
 
   const isUploadingFile =
@@ -60,14 +62,14 @@ export const FileItem = ({
         <Box minW={5}>
           <CiFileOn color={error ? errorColor : 'gray.800'} />
         </Box>
-        <Text isTruncated color={error ? errorColor : undefined}>
+        <Text truncate color={error ? errorColor : undefined}>
           {fileName}
         </Text>
       </Flex>
       <Flex align="center" gap={2} flex={1}>
         {error ? (
           <Flex w="100%" justify="flex-end" align="center" gap={2}>
-            <Tooltip label={error} placement="top" shouldWrapChildren>
+            <Tooltip content={error} placement="top">
               <MdError color={errorColor} />
             </Tooltip>
             {/* TODO: implement retry button */}
@@ -82,10 +84,13 @@ export const FileItem = ({
                 <IconButton
                   aria-label={'remove uploading file button'}
                   onClick={onFileDelete}
-                  icon={<IoClose color="gray.600" boxSize="lg" />}
-                  size="xs"
-                  isDisabled={isDeleting}
-                />
+                  size="2xs"
+                  disabled={isDeleting}
+                  colorPalette="neutral"
+                  variant="ghost"
+                >
+                  <IoClose color="gray.600" boxSize="md" />
+                </IconButton>
               </Flex>
             )}
           </Box>
@@ -94,27 +99,46 @@ export const FileItem = ({
           <Fragment>
             {fileSize && <Subtitle mr={4}>{formatFileSize(fileSize)}</Subtitle>}
             {onFileDownload && !error && (
-              <IconButton
-                aria-label={'download uploaded file button'}
-                onClick={onFileDownload}
-                icon={<LuDownload color="gray.800" />}
-                size="xs"
-              />
+              <>
+                {isDownloading ? (
+                  <Tooltip content={translate('downloading')} placement="top">
+                    <Spinner size="xs" />
+                  </Tooltip>
+                ) : (
+                  <Tooltip content={translate('download')} placement="top">
+                    <IconButton
+                      aria-label={translate('download') as string}
+                      onClick={onFileDownload}
+                      size="2xs"
+                      colorPalette="neutral"
+                      variant="ghost"
+                    >
+                      <LuDownload color="gray.800" />
+                    </IconButton>
+                  </Tooltip>
+                )}
+              </>
             )}
             {onFileDelete && (
-              <IconButton
-                aria-label={'remove uploaded file button'}
-                onClick={onFileDelete}
-                icon={
-                  isDeleting ? (
+              <>
+                {isDeleting ? (
+                  <Tooltip content={translate('deleting')} placement="top">
                     <Spinner size="xs" />
-                  ) : (
-                    <FaRegTrashAlt boxSize="sm" />
-                  )
-                }
-                size="xs"
-                isDisabled={isDeleting}
-              />
+                  </Tooltip>
+                ) : (
+                  <Tooltip content={translate('delete')} placement="top">
+                    <IconButton
+                      aria-label={translate('delete') as string}
+                      onClick={onFileDelete}
+                      size="2xs"
+                      colorPalette="neutral"
+                      variant="ghost"
+                    >
+                      <FaRegTrashAlt boxSize="sm" color="gray.800" />
+                    </IconButton>
+                  </Tooltip>
+                )}
+              </>
             )}
           </Fragment>
         )}

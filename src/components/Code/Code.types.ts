@@ -1,40 +1,47 @@
-import { SyntaxHighlighterProps } from 'react-syntax-highlighter';
-import { BoxProps } from '@chakra-ui/react';
+import { CodeBlockRootProps } from '@chakra-ui/react';
 
 /**
  * Code component props
  */
-export interface CodeProps
-  extends Omit<SyntaxHighlighterProps, 'style' | 'customStyle'> {
+export interface CodeProps extends Omit<
+  CodeBlockRootProps,
+  'code' | 'onCopy' | 'language' | 'children'
+> {
   children: string;
+
   /**
-   * Callback for when the copy button is clicked. No copy button is rendered if this prop is not provided.
-   * The user is expected to handle the copying behavior.
+   * Language identifier for syntax highlighting (e.g. `typescript`, `json`).
+   * `js` is normalized to `javascript` for compatibility.
+   */
+  language?: string;
+
+  /**
+   * Callback fired after the copy action completes. When omitted, the copy
+   * button is not rendered. The clipboard write is handled automatically by
+   * the underlying CodeBlock; the callback receives the copied text for any
+   * additional side effects (e.g. analytics).
    *
    * @param str The copied text
    */
   onCopy?: (str: string) => void;
 
-  language?: string;
-
-  // Style object from react-syntax-highlighter
-  style?: { [key: string]: React.CSSProperties };
-
-  // Custom style object for the syntax highlighter
-  customStyle?: React.CSSProperties;
-
-  containerProps?: BoxProps;
-
   /**
-   * Threshold in pixels for when the header should become sticky.
-   * This is typically the height of any fixed header above this component.
-   * @default 48
+   * Additional props forwarded to the underlying CodeBlock root element.
    */
-  stickyHeaderThreshold?: number;
+  containerProps?: Omit<
+    CodeBlockRootProps,
+    'code' | 'onCopy' | 'language' | 'children'
+  >;
 
   /**
    * Whether to hide the header of the code block.
    * @default false
    */
   hideHeader?: boolean;
+
+  /**
+   * Whether to show line numbers in the code block.
+   * @default false
+   */
+  showLineNumbers?: boolean;
 }

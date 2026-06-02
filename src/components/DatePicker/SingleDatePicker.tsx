@@ -1,9 +1,20 @@
+import { Popover } from '@chakra-ui/react';
 import {
   SingleDatepicker,
   SingleDatepickerProps,
 } from 'chakra-dayzed-datepicker';
+import { format } from 'date-fns';
 
+import useLanguage from '@/hooks/useLanguage';
+
+import { Button, ButtonProps } from '../Button';
 import { MdOutlineCalendarToday } from '../Icon';
+import {
+  getDateFnsLocale,
+  getDayNames,
+  getDefaultFullDateFormat,
+  getMonthNames,
+} from '../MonthPicker/constants';
 
 export const SingleDatePicker = ({
   propsConfigs,
@@ -11,27 +22,27 @@ export const SingleDatePicker = ({
   usePortal = true,
   ...rest
 }: SingleDatepickerProps) => {
+  const { language } = useLanguage();
+  const dateFormat = configs?.dateFormat ?? getDefaultFullDateFormat(language);
+  const dateFnsLocale = getDateFnsLocale(language);
+
   return (
     <SingleDatepicker
       usePortal={usePortal}
       {...rest}
       configs={{
+        monthNames: getMonthNames(language, 'LLLL'),
+        dayNames: getDayNames(language),
         ...configs,
-        dateFormat: configs?.dateFormat ?? 'MM/dd/yyyy',
+        dateFormat,
       }}
       propsConfigs={{
         triggerBtnProps: {
           justifyContent: 'left',
-          pl: 2,
           fontWeight: 'regular',
           color: 'gray.1500',
           fontSize: 'md',
-          leftIcon: (
-            <MdOutlineCalendarToday
-              color="gray.600"
-              style={{ marginInlineEnd: 3 }}
-            />
-          ),
+          ...propsConfigs?.triggerBtnProps,
         },
         inputProps: {
           color: 'primary.dark',
@@ -39,9 +50,6 @@ export const SingleDatePicker = ({
         },
         popoverCompProps: {
           popoverContentProps: {
-            borderRadius: 16,
-            border: '1px solid',
-            borderColor: 'blue.300',
             boxShadow: 'lg',
             ...propsConfigs?.popoverCompProps?.popoverContentProps,
           },
@@ -53,17 +61,17 @@ export const SingleDatePicker = ({
             ...propsConfigs?.calendarPanelProps?.wrapperProps,
           },
           dividerProps: {
-            borderStyle: 'none',
+            display: 'none',
             ...propsConfigs?.calendarPanelProps?.dividerProps,
           },
           contentProps: {
+            borderWidth: 0,
             p: 4,
-            border: 'none',
             ...propsConfigs?.calendarPanelProps?.contentProps,
           },
           bodyProps: {
             gap: 0,
-            spacingY: 1,
+            rowGap: 1,
             ...propsConfigs?.calendarPanelProps?.bodyProps,
           },
           ...propsConfigs?.calendarPanelProps,
@@ -75,7 +83,6 @@ export const SingleDatePicker = ({
         weekdayLabelProps: {
           mb: 2,
           color: 'gray.1000',
-          fontSize: 'xs',
           fontWeight: 'regular',
           ...propsConfigs?.weekdayLabelProps,
         },
@@ -84,20 +91,21 @@ export const SingleDatePicker = ({
             width: 34,
             height: 34,
             color: 'gray.1500',
+            fontSize: 'sm',
             fontWeight: 'regular',
             _hover: {
-              background: 'primary.light',
+              background: 'primary.extralight',
               ...propsConfigs?.dayOfMonthBtnProps?.defaultBtnProps?._hover,
             },
             ...propsConfigs?.dayOfMonthBtnProps?.defaultBtnProps,
           },
-          // Today
           todayBtnProps: {
             fontWeight: 'semibold',
             ...propsConfigs?.dayOfMonthBtnProps?.todayBtnProps,
           },
           selectedBtnProps: {
             color: 'white',
+            border: 'none',
             background: 'primary.main',
             borderRadius: 'full',
             ...propsConfigs?.dayOfMonthBtnProps?.selectedBtnProps,
@@ -106,6 +114,25 @@ export const SingleDatePicker = ({
         },
         ...propsConfigs,
       }}
-    />
+    >
+      {(selectedDate) => (
+        <Popover.Trigger asChild>
+          <Button
+            pl={2}
+            colorPalette="neutral"
+            variant="outline"
+            {...(propsConfigs?.triggerBtnProps as ButtonProps)}
+          >
+            <MdOutlineCalendarToday
+              color="gray.400"
+              style={{ marginInlineEnd: 3 }}
+            />
+            {selectedDate
+              ? format(selectedDate, dateFormat, { locale: dateFnsLocale })
+              : ''}
+          </Button>
+        </Popover.Trigger>
+      )}
+    </SingleDatepicker>
   );
 };

@@ -37,7 +37,7 @@ jobs:
       # dev 브랜치: prerelease 모드 진입
       - name: Enter prerelease mode
         if: github.ref_name == 'dev'
-        run: yarn changeset pre enter alpha
+        run: yarn changeset pre enter alpha || true
 
       - name: Apply changeset version
         run: yarn changeset version
@@ -53,11 +53,6 @@ jobs:
         run: yarn changeset publish
         env:
           NPM_CONFIG_PROVENANCE: true
-
-      # dev 브랜치: prerelease 모드 종료
-      - name: Exit prerelease mode
-        if: github.ref_name == 'dev'
-        run: yarn changeset pre exit
 
       - name: Commit version changes
         continue-on-error: true

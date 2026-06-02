@@ -1,16 +1,17 @@
 import { ReactNode } from 'react';
-import { FlexProps, theme } from '@chakra-ui/react';
+import { SegmentGroup } from '@chakra-ui/react';
 
 export type SegmentedControlOption = {
   label: ReactNode;
   value: string;
+  disabled?: boolean;
 };
 
-export type SegmentedControlProps = Omit<FlexProps, 'onSelect'> & {
+export type SegmentedControlProps = Omit<
+  SegmentGroup.RootProps,
+  'onValueChange' | 'defaultValue' | 'onSelect'
+> & {
   options: Array<SegmentedControlOption>;
-  value?: string;
   onSelect?: (selectedValue: string) => void;
-  // Value is key in Chakra theme
-  borderRadius?: string;
-  size?: Extract<keyof typeof theme.sizes, 'xs' | 'sm' | 'md' | 'lg' | 'xl'>;
+  defaultValue?: string;
 };

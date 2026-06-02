@@ -23,12 +23,9 @@ export const SeeMoreButton = ({
   const translate = useTranslate();
 
   return (
-    <Button
-      rightIcon={<IoChevronDownOutline color="inherit" />}
-      {...seeMoreButtonStyles}
-      {...rest}
-    >
-      {translate('see_more')} ({currentCount}/{maxCount})
+    <Button {...seeMoreButtonStyles} {...rest}>
+      {translate('see_more')} ({currentCount}/{maxCount}){' '}
+      <IoChevronDownOutline color="inherit" />
     </Button>
   );
 };

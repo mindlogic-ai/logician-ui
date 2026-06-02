@@ -1,14 +1,31 @@
-import React from 'react';
-import { Modal as ChakraModal } from '@chakra-ui/react';
+import React, { useMemo } from 'react';
+import { Dialog, Portal } from '@chakra-ui/react';
 
 import { ModalProps } from './Modal.types';
-import { ModalOverlay } from './ModalOverlay';
+import { ModalContext } from './ModalContext';
 
-export const Modal = ({ children, ...rest }: ModalProps) => {
+export const Modal = ({
+  children,
+  open,
+  onOpenChange,
+  portalProps,
+  fullScreenOnMobile = true,
+  ...rest
+}: ModalProps) => {
+  const ctx = useMemo(() => ({ fullScreenOnMobile }), [fullScreenOnMobile]);
+
   return (
-    <ChakraModal isCentered closeOnOverlayClick {...rest}>
-      <ModalOverlay />
-      {children}
-    </ChakraModal>
+    <Dialog.Root
+      open={open}
+      onOpenChange={onOpenChange}
+      placement="center"
+      closeOnInteractOutside
+      {...rest}
+    >
+      <Portal {...portalProps}>
+        <Dialog.Backdrop />
+        <ModalContext.Provider value={ctx}>{children}</ModalContext.Provider>
+      </Portal>
+    </Dialog.Root>
   );
 };

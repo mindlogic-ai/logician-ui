@@ -1,10 +1,26 @@
 import { forwardRef } from 'react';
-import { TableBodyProps, Tbody as ChakraTbody } from '@chakra-ui/react';
+import { Table } from '@chakra-ui/react';
 
-export const Tbody = forwardRef<HTMLTableSectionElement, TableBodyProps>(
-  (props, ref) => {
+import { mergeCss } from '@/utils/mergeCss';
+
+export const Tbody = forwardRef<HTMLTableSectionElement, Table.BodyProps>(
+  ({ css, ...props }, ref) => {
     return (
-      <ChakraTbody ref={ref} color="gray.1500" fontWeight="medium" {...props} />
+      <Table.Body
+        ref={ref}
+        color="gray.1500"
+        fontWeight="medium"
+        {...props}
+        css={mergeCss(
+          {
+            // Remove bottom border from last row to prevent overlap with container border
+            '& > tr:last-of-type > td': {
+              borderBottom: 'none',
+            },
+          },
+          css
+        )}
+      />
     );
   }
 );

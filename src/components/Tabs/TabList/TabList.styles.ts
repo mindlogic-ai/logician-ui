@@ -8,4 +8,5 @@ export const tabListStyles = {
 export const verticalStyles = {
   borderInlineEnd: '1px solid',
   borderInlineStart: 'none',
+  borderBottom: 'none',
 };

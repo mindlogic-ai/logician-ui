@@ -1,6 +1,6 @@
 import { HStack, Icon, Text } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { FiHome, FiSettings, FiUser } from 'react-icons/fi';
 
 import { SegmentedControl } from './SegmentedControl';
@@ -26,7 +26,7 @@ const meta = {
   },
   argTypes: {
     size: {
-      control: 'select',
+      control: { type: 'select' },
       options: ['xs', 'sm', 'md', 'lg', 'xl'],
     },
   },
@@ -95,9 +95,52 @@ export const Rounded: Story = {
 export const Small: Story = {
   args: {
     size: 'sm',
-    borderRadius: 'full',
     w: 'fit-content',
   },
+};
+
+export const WithDisabledOption = {
+  args: {
+    options: [
+      {
+        label: 'Complete',
+        value: 'complete',
+      },
+      {
+        label: 'Incomplete',
+        value: 'incomplete',
+        disabled: true,
+      },
+      {
+        label: 'Pending',
+        value: 'pending',
+      },
+    ],
+  },
+};
+
+export const EditableLabel: StoryObj<
+  React.ComponentProps<typeof SegmentedControl> & { firstLabel?: string }
+> = {
+  args: {
+    firstLabel: 'Complete',
+  },
+  argTypes: {
+    firstLabel: {
+      control: 'text',
+      name: 'First item label',
+    },
+  },
+  render: ({ firstLabel, ...props }) => (
+    <SegmentedControl
+      {...props}
+      options={[
+        { label: firstLabel as string, value: 'complete' },
+        { label: 'Incomplete', value: 'incomplete' },
+        { label: 'Pending', value: 'pending' },
+      ]}
+    />
+  ),
 };
 
 export const WithCustomContent = {
@@ -105,7 +148,7 @@ export const WithCustomContent = {
     options: [
       {
         label: (
-          <HStack spacing={2}>
+          <HStack gap={2}>
             <Icon as={FiHome} />
             <Text>Home</Text>
           </HStack>
@@ -114,7 +157,7 @@ export const WithCustomContent = {
       },
       {
         label: (
-          <HStack spacing={2}>
+          <HStack gap={2}>
             <Icon as={FiUser} />
             <Text>Profile</Text>
           </HStack>
@@ -123,7 +166,7 @@ export const WithCustomContent = {
       },
       {
         label: (
-          <HStack spacing={2}>
+          <HStack gap={2}>
             <Icon as={FiSettings} />
             <Text>Settings</Text>
           </HStack>

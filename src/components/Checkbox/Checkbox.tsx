@@ -2,28 +2,27 @@ import { forwardRef } from 'react';
 import { Checkbox as ChakraCheckbox } from '@chakra-ui/react';
 
 import { CheckboxProps } from './Checkbox.types';
+import { CheckboxControl } from './CheckboxControl';
+import { CheckboxLabel } from './CheckboxLabel';
 
-export const Checkbox = forwardRef(({ sx, ...rest }: CheckboxProps, ref) => {
-  return (
-    <ChakraCheckbox
-      ref={ref}
-      {...rest}
-      sx={{
-        '.chakra-checkbox__control': {
-          borderRadius: '4px',
-          borderColor: 'gray.400',
-          _checked: {
-            bg: 'primary.main',
-            borderColor: 'primary.main',
-          },
-          _indeterminate: {
-            bg: 'primary.main',
-            borderColor: 'primary.main',
-          },
-        },
-      }}
-    />
-  );
+const CheckboxBase = forwardRef<
+  React.ComponentRef<typeof ChakraCheckbox.Root>,
+  CheckboxProps
+>(({ id, size = 'sm', children, inputRef, ...props }, ref) => (
+  <ChakraCheckbox.Root
+    ref={ref}
+    size={size}
+    cursor="pointer"
+    _disabled={{ cursor: 'not-allowed' }}
+    {...props}
+  >
+    <ChakraCheckbox.HiddenInput id={id} ref={inputRef} />
+    {children}
+  </ChakraCheckbox.Root>
+));
+CheckboxBase.displayName = 'Checkbox';
+
+export const Checkbox = Object.assign(CheckboxBase, {
+  Control: CheckboxControl,
+  Label: CheckboxLabel,
 });
-
-Checkbox.displayName = 'Checkbox';

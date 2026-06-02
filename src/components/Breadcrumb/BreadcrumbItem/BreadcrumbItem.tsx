@@ -1,11 +1,18 @@
 import { ForwardedRef, forwardRef } from 'react';
-import { BreadcrumbItem as ChakraBreadcrumbItem } from '@chakra-ui/react';
+import { Breadcrumb } from '@chakra-ui/react';
 
 import { BreadcrumbItemProps } from './BreadcrumbItem.types';
 
 export const BreadcrumbItem = forwardRef(
-  ({ ...rest }: BreadcrumbItemProps, ref?: ForwardedRef<HTMLDivElement>) => {
-    return <ChakraBreadcrumbItem {...rest} ref={ref} />;
+  (
+    { children, ...rest }: BreadcrumbItemProps,
+    ref?: ForwardedRef<HTMLLIElement>
+  ) => {
+    return (
+      <Breadcrumb.Item {...rest} ref={ref}>
+        {children}
+      </Breadcrumb.Item>
+    );
   }
 );
 

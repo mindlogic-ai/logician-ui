@@ -1,24 +1,35 @@
+import { defineGlobalStyles } from '@chakra-ui/react';
+
 import { inter, noto, pretendard } from './font';
 
-export const global = {
+/**
+ * Global styles for the design system.
+ *
+ * Uses the Golden Ratio color system with cool slate-based grays.
+ * Primary text color is gray.1300 (#1E2433) for optimal readability.
+ *
+ * @see ./colors.ts for full color palette documentation
+ */
+export const globalCss = defineGlobalStyles({
   ':root': {
-    '--chakra-colors-chakra-body-text': '#121315', // gray.1500 hex value
-    '--chakra-colors-chakra-body-bg': '#FFFFFF',
+    '--chakra-colors-chakra-body-text': '#1E2433', // gray.1300 - Primary text
+    '--chakra-colors-chakra-body-bg': '#FDFDFF', // gray.0 - Background
   },
 
   html: {
     height: 'var(--chakra-vh)',
-    fontSize: 14,
+    fontSize: 16,
     fontFamily: [
       pretendard.style.fontFamily,
       inter.style.fontFamily,
       noto.style.fontFamily,
     ].join(','),
     overflow: 'auto',
+    fontSmooth: 'antialiased',
   },
 
   'html, body': {
-    color: 'gray.1500', // Set the default body color
+    color: 'gray.1300', // Primary text color (Golden Ratio palette)
   },
 
   '#__next': {
@@ -27,4 +38,7 @@ export const global = {
   "body[data-lang='es']": {
     fontFamily: inter.style.fontFamily,
   },
-} as const;
+});
+
+// Legacy export for backwards compatibility
+export const global = globalCss;

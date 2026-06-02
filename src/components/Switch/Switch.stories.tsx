@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { Stack, Switch, Text } from '@chakra-ui/react';
+import { Stack, Text } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
+
+import { Switch } from './Switch';
 
 const meta = {
   title: 'Components/Switch',
   component: Switch,
   argTypes: {
-    isChecked: { control: 'boolean' },
-    isDisabled: { control: 'boolean' },
+    checked: { control: 'boolean' },
+    disabled: { control: 'boolean' },
     size: {
       control: { type: 'select' },
-      options: ['sm', 'md', 'lg'], // Available sizes in Chakra's Switch
+      options: ['sm', 'md', 'lg'],
     },
   },
 } satisfies Meta<typeof Switch>;
@@ -19,45 +21,58 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-// Uncontrolled Story: Allows toggling without external state management
 export const Uncontrolled: Story = {
+  render: args => (
+    <Switch {...args}>
+      <Switch.Control />
+    </Switch>
+  ),
   args: {
     size: 'md',
-    isDisabled: false,
+    disabled: false,
   },
 };
 
-// Controlled Story: Manage state externally
 export const Controlled: Story = {
-  render: (args) => {
-    const [isChecked, setIsChecked] = useState(false);
-
-    const handleToggle = () => {
-      setIsChecked(!isChecked);
-    };
+  render: args => {
+    const [checked, setChecked] = useState(false);
 
     return (
-      <Stack direction="row" align="center" spacing={4}>
-        <Switch
-          {...args}
-          isChecked={isChecked} // Controlled isChecked state
-          onChange={handleToggle} // Toggling state
-        />
-        <Text>{isChecked ? 'On' : 'Off'}</Text>
+      <Stack direction="row" align="center" gap={4}>
+        <Switch {...args} checked={checked} onCheckedChange={e => setChecked(e.checked)}>
+          <Switch.Control />
+        </Switch>
+        <Text>{checked ? 'On' : 'Off'}</Text>
       </Stack>
     );
   },
   args: {
     size: 'md',
-    isDisabled: false,
+    disabled: false,
   },
 };
 
-// Disabled Story: Switch in a disabled state
 export const Disabled: Story = {
+  render: args => (
+    <Switch {...args}>
+      <Switch.Control />
+    </Switch>
+  ),
   args: {
     size: 'md',
-    isDisabled: true,
-    isChecked: true,
+    disabled: true,
+    checked: true,
+  },
+};
+
+export const WithLabel: Story = {
+  render: args => (
+    <Switch {...args}>
+      <Switch.Control />
+      <Switch.Label>Enable notifications</Switch.Label>
+    </Switch>
+  ),
+  args: {
+    size: 'md',
   },
 };

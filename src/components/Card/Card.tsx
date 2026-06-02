@@ -5,22 +5,29 @@ import { clickableStyles, variantStyles } from './Card.styles';
 import { CardProps } from './Card.types';
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(
-  ({ clickable, variant = 'default', ...rest }, ref) => {
+  ({ clickable, variant = 'default', _hover, ...rest }, ref) => {
+    const mergedHover = clickable
+      ? { ...clickableStyles._hover, ..._hover }
+      : _hover;
+
     return (
-      <ChakraCard
+      <ChakraCard.Root
         ref={ref}
         position="relative"
-        bgColor="inherit"
+        bg="white"
         color="inherit"
         boxShadow="none"
         border="1px solid"
-        borderColor="gray.300"
+        borderColor="gray.200"
         borderRadius="lg"
-        transition="0.3s all"
+        transitionProperty="common"
+        transitionDuration="normal"
+        transitionTimingFunction="ease"
         p={8}
-        {...(clickable ? clickableStyles : {})}
+        {...(clickable ? { cursor: clickableStyles.cursor } : {})}
         {...variantStyles[variant]}
         {...rest}
+        _hover={mergedHover}
       />
     );
   }

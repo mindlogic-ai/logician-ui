@@ -19,19 +19,19 @@ const CODE_SAMPLES = {
   javascript: `
 const response = await openai.chat.completions.create({
   model: "gpt-3.5-turbo",
-  messages: [{ role: "user", content: "Hello, how are you?" }],
+  messages: [{ role: "user", content: "Hello, javascript?" }],
 });
 `,
   python: `
 response = openai.chat.completions.create(
     model="gpt-3.5-turbo",
-    messages=[{"role": "user", "content": "Hello, how are you?"}]
+    messages=[{"role": "user", "content": "Hello, python?"}]
 )
 `,
   typescript: `
 const response = await openai.chat.completions.create({
   model: "gpt-3.5-turbo",
-  messages: [{ role: "user", content: "Hello, how are you?" }],
+  messages: [{ role: "user", content: "Hello, typescript?" }],
 });
 `,
 };

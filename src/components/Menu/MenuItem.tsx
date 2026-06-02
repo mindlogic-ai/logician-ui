@@ -1,36 +1,39 @@
-import { MenuItem as ChakraMenuItem, useTheme } from '@chakra-ui/react';
+import { Menu, Spacer } from '@chakra-ui/react';
+
+import { focusRing } from '@/utils/focusRing';
 
 import { ItemVariant, MenuItemProps } from './MenuItem.types';
 
 export const MenuItem = ({
   variant = ItemVariant.Default,
+  value,
   children,
+  icon,
+  rightIcon,
   ...rest
 }: MenuItemProps) => {
-  const theme = useTheme();
   const isDangerVariant = variant === ItemVariant.Danger;
 
   return (
-    <ChakraMenuItem
-      color={
-        isDangerVariant ? theme.semanticTokens.colors.danger.main : 'gray.1000'
-      }
-      iconSpacing={0}
-      fontSize="md"
-      borderRadius="sm"
+    <Menu.Item
+      value={value}
+      color={isDangerVariant ? 'danger.main' : 'gray.1000'}
       py={2}
       minW="fit-content"
       fontWeight="semibold"
       gap={3}
+      cursor="pointer"
       _hover={{
-        color: isDangerVariant
-          ? theme.semanticTokens.colors.danger.main
-          : 'gray.1500',
-        backgroundColor: 'gray.50',
+        color: isDangerVariant ? 'danger.main' : 'gray.1500',
+        backgroundColor: isDangerVariant ? 'danger.lightest' : 'gray.50',
       }}
+      {...focusRing}
       {...rest}
     >
+      {icon}
       {children}
-    </ChakraMenuItem>
+      {rightIcon && <Spacer />}
+      {rightIcon}
+    </Menu.Item>
   );
 };

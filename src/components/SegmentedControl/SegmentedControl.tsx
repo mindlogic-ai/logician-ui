@@ -1,89 +1,128 @@
-import { useState } from 'react';
-import { Button, Flex, useTheme } from '@chakra-ui/react';
-import { motion } from 'framer-motion';
+import { forwardRef } from 'react';
+import { SegmentGroup } from '@chakra-ui/react';
 
-import { OptionStyles } from './SegmentedControl.styles';
-import { SegmentedControlProps } from './SegmentedControl.types';
+import { mergeCss } from '@/utils/mergeCss';
 
-export const SegmentedControl = ({
-  options,
-  value,
-  onSelect,
-  borderRadius = 'md',
-  size,
-  ...rest
-}: SegmentedControlProps) => {
-  const [internalValue, setInternalValue] = useState(options[0].value);
-  const theme = useTheme();
+import {
+  SegmentedControlOption,
+  SegmentedControlProps,
+} from './SegmentedControl.types';
 
-  // Use the controlled value if provided, otherwise use the internal state
-  const activeValue = value !== undefined ? value : internalValue;
-  const activeIndex = options.findIndex(
-    (option) => option.value === activeValue
-  );
+// Match font sizes to the equivalent Chakra button sizes
+const fontSizeBySize: Record<string, string> = {
+  xs: 'xs',
+  sm: 'sm',
+  md: 'sm',
+  lg: 'md',
+};
 
-  const getControlPadding: (
-    size: SegmentedControlProps['size']
-  ) => SegmentedControlProps['padding'] = (size = 'md') => {
-    const paddings = {
-      xs: theme.space[1],
-      sm: theme.space[1],
-      md: theme.space[1],
-      lg: {},
-      xl: {},
-    };
-    return paddings[size];
-  };
+// Item heights so that itemHeight + 2×root-padding(p="1") equals the Button height for each size
+const itemHeightBySize: Record<string, string> = {
+  xs: '6', // 32 - 8 = 24px
+  sm: '7', // 36 - 8 = 28px
+  md: '8', // 40 - 8 = 32px
+  lg: '9', // 44 - 8 = 36px
+};
 
-  const handleSelect = (selectedValue: string) => {
-    if (value === undefined) {
-      setInternalValue(selectedValue);
-    }
-    if (onSelect) onSelect(selectedValue);
-  };
+export const SegmentedControl = forwardRef<
+  HTMLDivElement,
+  SegmentedControlProps
+>(function SegmentedControl(props, ref) {
+  const {
+    options,
+    value,
+    onSelect,
+    defaultValue,
+    size = 'md',
+    borderRadius = 'md',
+    css,
+    ...rest
+  } = props;
+
+  const fontSize = fontSizeBySize[size as string] ?? 'sm';
+  const itemHeight = itemHeightBySize[size as string] ?? '8';
+
+  // Normalize options to the format expected by SegmentGroup.Items
+  const items = options.map((option: SegmentedControlOption) => ({
+    value: option.value,
+    label: option.label,
+    disabled: option.disabled,
+  }));
+
+  // Use theme borderRadius token directly via CSS variable
+  const indicatorRadius =
+    typeof borderRadius === 'string'
+      ? `var(--chakra-radii-${borderRadius})`
+      : borderRadius;
 
   return (
-    <Flex
-      position="relative"
-      borderRadius={borderRadius}
+    <SegmentGroup.Root
+      ref={ref}
+      value={value}
+      defaultValue={defaultValue ?? options[0]?.value}
+      onValueChange={(details: { value: string }) => {
+        if (onSelect) {
+          onSelect(details.value);
+        }
+      }}
+      size={size}
       bg="gray.50"
-      // p="1"
+      p="1"
+      borderRadius={borderRadius}
+      boxShadow="none"
+      w="fit-content"
       {...rest}
+      css={mergeCss(
+        {
+          '--segment-indicator-bg': `var(--chakra-colors-gray-0)`,
+          '--segment-indicator-shadow': `var(--chakra-shadows-md)`,
+        },
+        css
+      )}
     >
-      <motion.div
-        initial={false}
-        animate={{
-          x: `calc(${100 * activeIndex}% + ${getControlPadding(size)})`,
-        }}
-        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        style={{
-          position: 'absolute',
-          // @ts-expect-error - Chakra UI responsive values in Framer Motion styles
-          top: getControlPadding(size),
-          // @ts-expect-error - Chakra UI responsive values in Framer Motion styles
-          bottom: getControlPadding(size),
-          left: `calc(${activeIndex * 2} * ${getControlPadding(size)})`,
-          width: `calc(${100 / options.length}% - 2 * ${getControlPadding(size)})`,
-          borderRadius: theme.radii[borderRadius],
-          background: theme.colors.white,
-          boxShadow: theme.shadows.md,
-        }}
-      />
-
-      {options.map((option) => (
-        <Button
-          key={option.value}
-          flex={1}
-          variant="ghost"
-          color={activeValue === option.value ? 'gray.1200' : 'gray.600'}
-          onClick={() => handleSelect(option.value)}
+      <SegmentGroup.Indicator borderRadius={indicatorRadius} />
+      {items.map((item) => (
+        <SegmentGroup.Item
+          key={item.value}
+          value={item.value}
+          disabled={item.disabled}
+          cursor={item.disabled ? 'not-allowed' : 'pointer'}
+          flex="1"
+          height={itemHeight}
           _hover={{ bg: 'transparent' }}
-          fontSize={size}
-          {...OptionStyles[size ?? 'md']}
         >
-          {option.label}
-        </Button>
+          <SegmentGroup.ItemText
+            data-text={typeof item.label === 'string' ? item.label : undefined}
+            color="gray.800"
+            fontWeight="500"
+            fontSize={fontSize}
+            whiteSpace="nowrap"
+            display="inline-flex"
+            flexDirection="column"
+            alignItems="center"
+            css={{
+              '&::after': {
+                content: 'attr(data-text)',
+                fontWeight: '600',
+                height: '0',
+                visibility: 'hidden',
+                overflow: 'hidden',
+                userSelect: 'none',
+                pointerEvents: 'none',
+              },
+              '[data-state="checked"] &': {
+                color: 'var(--chakra-colors-gray-1500)',
+                fontWeight: '600',
+              },
+            }}
+          >
+            {item.label}
+          </SegmentGroup.ItemText>
+          <SegmentGroup.ItemHiddenInput />
+        </SegmentGroup.Item>
       ))}
-    </Flex>
+    </SegmentGroup.Root>
   );
-};
+});
+
+SegmentedControl.displayName = 'SegmentedControl';

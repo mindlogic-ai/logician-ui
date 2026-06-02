@@ -1,19 +1,22 @@
 import { forwardRef } from 'react';
-import { Text, TextProps, useTheme } from '@chakra-ui/react';
+import { Text, TextProps } from '@chakra-ui/react';
 
-export const Subtitle = forwardRef<HTMLSpanElement, TextProps>((props, ref) => {
-  const theme = useTheme();
-  return (
-    <Text
-      ref={ref}
-      as="h6"
-      fontSize={theme.fontSizes.p}
-      fontWeight="medium"
-      color="gray.1000"
-      wordBreak="keep-all"
-      {...props}
-    />
-  );
-});
+export const Subtitle = forwardRef<HTMLParagraphElement, TextProps>(
+  (props, ref) => {
+    const { fontSize, ...rest } = props;
+
+    return (
+      <Text
+        ref={ref}
+        as="h6"
+        textStyle={fontSize ? undefined : 'subtitle'}
+        fontSize={fontSize}
+        color="gray.1000"
+        wordBreak="keep-all"
+        {...rest}
+      />
+    );
+  }
+);
 
 Subtitle.displayName = 'Subtitle';

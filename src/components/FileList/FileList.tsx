@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, List } from '@chakra-ui/react';
+import { Box, Button, List } from '@chakra-ui/react';
 
 import { FileItem } from '@/components/FileItem';
 import { FileGroupProps } from '@/components/FileList/FileList.types';
@@ -45,40 +45,51 @@ export const FileList = ({
   if (files?.length <= 0) return null;
 
   return (
-    <List
+    <Box
       w="100%"
       border="1px solid"
       borderColor="gray.200"
       borderRadius="md"
       overflow="hidden"
     >
-      {files?.slice(0, currentVisibleCount).map((file) => (
-        <FileItem
-          key={file.id}
-          fileName={file.name}
-          onFileDelete={onFileDelete ? () => handleFileDelete(file) : undefined}
-          onFileDownload={
-            onFileDownload && file.fileUrl
-              ? () => onFileDownload?.(file)
-              : undefined
-          }
-          border={0}
-          borderBottom="1px solid"
-          borderBottomColor="gray.50"
-          progress={file.progress}
-          error={file.error}
-          fileSize={file.size}
-          isDeleting={deletingFileIds.has(file.id)}
-        />
-      ))}
+      <List.Root>
+        {files?.slice(0, currentVisibleCount).map((file) => (
+          <List.Item key={file.id} listStyle="none">
+            <FileItem
+              fileName={file.name}
+              onFileDelete={
+                onFileDelete ? () => handleFileDelete(file) : undefined
+              }
+              onFileDownload={
+                onFileDownload && file.fileUrl
+                  ? () => onFileDownload?.(file)
+                  : undefined
+              }
+              border={0}
+              borderBottom="1px solid"
+              borderBottomColor="gray.50"
+              progress={file.progress}
+              error={file.error}
+              fileSize={file.size}
+              isDeleting={deletingFileIds.has(file.id)}
+            />
+          </List.Item>
+        ))}
+      </List.Root>
       {shouldShowLoadMoreButton && (
         <Button
           onClick={handleFileLoadMore}
           alignSelf="stretch"
           w="100%"
-          variant="unstyled"
+          variant="ghost"
           display="flex"
           gap={1}
+          css={{
+            all: 'unset',
+            display: 'flex',
+            gap: '0.25rem',
+            cursor: 'pointer',
+          }}
         >
           <Subtitle color="gray.600">
             {translate('see_more')} ({visibleCount}/{files.length})
@@ -86,7 +97,7 @@ export const FileList = ({
           <IoChevronDownOutline color="gray.600" />
         </Button>
       )}
-    </List>
+    </Box>
   );
 };
 

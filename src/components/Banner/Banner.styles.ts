@@ -7,26 +7,32 @@ import { BannerProps, BannerSize } from './Banner.types';
 
 type VariantType = NonNullable<BannerProps['variant']>;
 
+/**
+ * Banner variant styles using the Golden Ratio color system.
+ *
+ * Uses `lightest` backgrounds with `lighter` borders and `dark` text
+ * for optimal readability and WCAG AA compliance.
+ */
 export const bannerStyles: Record<VariantType, BoxProps> = {
   info: {
-    bg: 'primary.lighter',
-    borderColor: 'primary.light',
-    color: 'primary.dark',
+    bg: 'primary.extralight', // #E8EEFB
+    borderColor: 'primary.lighter', // #B9CBF3
+    color: 'primary.dark', // #0D317D
   },
   success: {
-    bg: 'success.lighter',
-    borderColor: 'success.light',
-    color: 'success.dark',
+    bg: 'success.extralight', // #E9FBE8
+    borderColor: 'success.lighter', // #BDF3B9
+    color: 'success.dark', // #147D0D
   },
   warning: {
-    bg: 'warning.lighter',
-    borderColor: 'warning.light',
-    color: 'warning.dark',
+    bg: 'warning.extralight', // #FBF6E8
+    borderColor: 'warning.lighter', // #F3E4B9
+    color: 'warning.dark', // #7D610D
   },
   danger: {
-    bg: 'danger.lighter',
-    borderColor: 'danger.light',
-    color: 'danger.dark',
+    bg: 'danger.extralight', // #FBE8E9
+    borderColor: 'danger.lighter', // #F3B9BD
+    color: 'danger.dark', // #7D0D14
   },
 };
 
@@ -90,7 +96,7 @@ export const sizeStyles: Record<
       boxSize: 'sm', // 20px
     },
     text: {
-      fontSize: 'subtext', // theme.fontSizes.subtext (~13-14px)
+      textStyle: 'subtext', // Use textStyle instead of fontSize
       lineHeight: '1.4',
     },
     accentWidth: '3px',
@@ -106,7 +112,7 @@ export const sizeStyles: Record<
       boxSize: 'md', // 24px
     },
     text: {
-      fontSize: 'p', // theme.fontSizes.p (~14px)
+      textStyle: 'p', // Use textStyle instead of fontSize
       lineHeight: '1.5',
     },
     accentWidth: '4px',
@@ -122,7 +128,7 @@ export const sizeStyles: Record<
       boxSize: 'lg', // 32px
     },
     text: {
-      fontSize: 'h5', // theme.fontSizes.h5 (~15-17px)
+      textStyle: 'h5', // Use textStyle instead of fontSize
       lineHeight: '1.6',
     },
     accentWidth: '5px',

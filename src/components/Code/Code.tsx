@@ -1,160 +1,181 @@
-import { lazy, Suspense, useState } from 'react';
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import { Box, Flex, Spinner } from '@chakra-ui/react';
+import { useEffect, useRef, useState } from 'react';
+import {
+  CodeBlock as ChakraCodeBlock,
+  CodeBlockRootProps,
+} from '@chakra-ui/react';
 
 import { useTranslate } from '@/hooks/useTranslate';
 
-import { Card } from '../Card';
-import { InlineCode } from '../InlineCode';
-import { SegmentedControl } from '../SegmentedControl';
-import { Subtext } from '../Typography';
-import { CopyButton } from './_components/CopyButton';
+import { FaCheck, FaRegCopy } from '../Icon';
+import { IconButton } from '../IconButton';
+import { Tooltip } from '../Tooltip';
 import { CodeProps } from './Code.types';
+import { shikiAdapter } from './shikiAdapter';
 
-// Use dynamic import to break circular dependency
-const Markdown = lazy(() =>
-  import('../Markdown').then((module) => ({ default: module.Markdown }))
-);
+type CodeBlockMeta = NonNullable<CodeBlockRootProps['meta']>;
 
 export const Code = ({
   children,
   language: languageProp,
   onCopy,
-  style = a11yDark,
-  customStyle,
   hideHeader = false,
+  showLineNumbers,
   containerProps,
   ...rest
 }: CodeProps) => {
   const language = languageProp === 'js' ? 'javascript' : languageProp;
 
+  const { meta: containerMeta, ...containerPropsRest } = containerProps ?? {};
+  const { meta: restMeta, ...restWithoutMeta } = rest;
+
+  const hasMeta =
+    Boolean(containerMeta) ||
+    Boolean(restMeta) ||
+    showLineNumbers !== undefined;
+  const mergedMeta: CodeBlockMeta | undefined = hasMeta
+    ? {
+        ...containerMeta,
+        ...restMeta,
+        ...(showLineNumbers !== undefined && { showLineNumbers }),
+      }
+    : undefined;
+
   const translate = useTranslate();
+  const [isCopied, setIsCopied] = useState(false);
+  const [isTooltipOpen, setIsTooltipOpen] = useState<boolean | undefined>(
+    undefined
+  );
+  const copyResetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const [isMarkdownPreviewMode, setIsMarkdownPreviewMode] =
-    useState<boolean>(false);
+  useEffect(
+    () => () => {
+      if (copyResetTimerRef.current) {
+        clearTimeout(copyResetTimerRef.current);
+      }
+    },
+    []
+  );
 
-  const handleCopyClick = () => {
+  const showHeader = !hideHeader && language;
+  const showOverlayCopy = !showHeader && Boolean(onCopy);
+
+  const handleCopy = () => {
     onCopy?.(children);
   };
 
-  const handleMarkdownModeChange = (selectedValue: string) => {
-    setIsMarkdownPreviewMode(selectedValue === 'preview');
-  };
-
-  // On click (not drag), select the code content
-  const handleSyntaxHighlighterClick = (
-    e: React.MouseEvent<HTMLPreElement>
-  ) => {
-    // Skip selection on double-click or if user is already selecting text
-    if (e.detail > 1 || window.getSelection()?.toString() !== '') {
-      return;
-    }
-
+  const handleOverlayCopy = async () => {
     try {
-      // Find the first child element that contains the code text
-      const codeElement = e.currentTarget.querySelector('code');
-
-      if (codeElement) {
-        const range = document.createRange();
-        range.selectNodeContents(codeElement);
-
-        const selection = window.getSelection();
-        if (selection) {
-          selection.removeAllRanges();
-          selection.addRange(range);
-        }
-      }
-    } catch (error) {
-      console.error('Error selecting code content:', error);
+      await navigator.clipboard.writeText(children);
+    } catch {
+      const textArea = document.createElement('textarea');
+      textArea.value = children;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
     }
+
+    onCopy?.(children);
+
+    setIsCopied(true);
+    setIsTooltipOpen(true);
+
+    if (copyResetTimerRef.current) {
+      clearTimeout(copyResetTimerRef.current);
+    }
+    copyResetTimerRef.current = setTimeout(() => {
+      setIsCopied(false);
+      setIsTooltipOpen(undefined);
+      copyResetTimerRef.current = null;
+    }, 1500);
   };
+
+  const headerCopyTrigger = onCopy ? (
+    <ChakraCodeBlock.CopyTrigger
+      aria-label="Copy code"
+      color="gray.600"
+      cursor="pointer"
+    >
+      <ChakraCodeBlock.CopyIndicator
+        copied={<FaCheck color="success.main" boxSize="xs" />}
+      />
+    </ChakraCodeBlock.CopyTrigger>
+  ) : null;
 
   return (
-    <Card
-      p={0}
-      borderRadius="none"
-      {...containerProps}
-      className={['ml-code', containerProps?.className].join(' ')}
-    >
-      {!hideHeader && language && (
-        <Flex
-          className="ml-code-header"
-          justify="space-between"
-          align="center"
-          px={4}
-          py={2}
-          bgColor="white"
-          borderBottom="1px solid"
-          borderColor="primary.light"
-          width="100%"
-          zIndex={2} // show above the code block, but below the TopNav
-        >
-          <Subtext fontWeight="bold" color="gray.1200">
-            <pre>{language}</pre>
-          </Subtext>
-          <Flex align="center" justify="flex-end" gap={2}>
-            {language === 'markdown' && (
-              <SegmentedControl
-                size="sm"
-                options={[
-                  {
-                    label: translate('code_markdown_raw') as string,
-                    value: 'raw',
-                  },
-                  {
-                    label: translate('code_markdown_preview') as string,
-                    value: 'preview',
-                  },
-                ]}
-                onSelect={handleMarkdownModeChange}
-              />
-            )}
-            {onCopy && <CopyButton onClick={handleCopyClick} />}
-          </Flex>
-        </Flex>
-      )}
-      <Box overflow="hidden">
-        <Box position="relative" overflowY="scroll" h="fit-content" p={0}>
-          {isMarkdownPreviewMode ? (
-            <Box p={2}>
-              <Suspense fallback={<Spinner />}>
-                <Markdown
-                  // Prevent infinite loop of markdown rendering
-                  components={{
-                    code: ({ className, ...rest }: any) => {
-                      // className denotes the language of the code block and only exists for block code
-                      if (!className) {
-                        return <InlineCode {...rest} />;
-                      }
-                    },
-                  }}
-                >
-                  {children}
-                </Markdown>
-              </Suspense>
-            </Box>
-          ) : (
-            // @ts-expect-error - SyntaxHighlighter type issues with React 18
-            <SyntaxHighlighter
-              language={language}
-              style={style}
-              wrapLines
-              wrapLongLines
-              {...rest}
-              customStyle={{
-                maxWidth: '100%',
-                margin: 0,
-                borderRadius: 0,
-                ...customStyle,
-              }}
-              onClick={handleSyntaxHighlighterClick}
+    <ChakraCodeBlock.AdapterProvider value={shikiAdapter}>
+      <ChakraCodeBlock.Root
+        code={children}
+        language={language}
+        textStyle="Body"
+        position="relative"
+        overflow="hidden"
+        borderColor="gray.300"
+        {...containerPropsRest}
+        {...restWithoutMeta}
+        meta={mergedMeta}
+        onCopy={handleCopy}
+        className={['ml-code', containerProps?.className]
+          .filter(Boolean)
+          .join(' ')}
+      >
+        {showHeader && (
+          <ChakraCodeBlock.Header
+            className="ml-code-header"
+            px={4}
+            py={2}
+            bgColor="white"
+            zIndex={2}
+          >
+            <ChakraCodeBlock.Title
+              fontFamily="mono"
+              fontWeight="bold"
+              color="gray.1200"
             >
-              {children}
-            </SyntaxHighlighter>
-          )}
-        </Box>
-      </Box>
-    </Card>
+              {language}
+            </ChakraCodeBlock.Title>
+            <ChakraCodeBlock.Control>
+              {headerCopyTrigger}
+            </ChakraCodeBlock.Control>
+          </ChakraCodeBlock.Header>
+        )}
+        {showOverlayCopy && (
+          <Tooltip
+            content={isCopied ? translate('copied') : translate('copy')}
+            placement="top"
+            open={isTooltipOpen}
+          >
+            <IconButton
+              className="ml-code-copy"
+              position="absolute"
+              top={2}
+              right={3}
+              zIndex={2}
+              aria-label={
+                isCopied
+                  ? String(translate('copied'))
+                  : String(translate('copy'))
+              }
+              size="sm"
+              colorPalette="neutral"
+              variant="ghost"
+              color="gray.800"
+              onClick={handleOverlayCopy}
+            >
+              {isCopied ? (
+                <FaCheck color="success.main" boxSize="xs" />
+              ) : (
+                <FaRegCopy boxSize="xs" />
+              )}
+            </IconButton>
+          </Tooltip>
+        )}
+        <ChakraCodeBlock.Content>
+          <ChakraCodeBlock.Code>
+            <ChakraCodeBlock.CodeText />
+          </ChakraCodeBlock.Code>
+        </ChakraCodeBlock.Content>
+      </ChakraCodeBlock.Root>
+    </ChakraCodeBlock.AdapterProvider>
   );
 };

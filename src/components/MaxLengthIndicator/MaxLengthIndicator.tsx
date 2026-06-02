@@ -18,7 +18,7 @@ export const MaxLengthIndicator = ({
   }, [value]);
 
   return (
-    <Subtitle fontSize="sm" color="gray.600" {...rest}>
+    <Subtitle textStyle="subtext" color="gray.600" {...rest}>
       {currentValue}/{maxLength}
     </Subtitle>
   );

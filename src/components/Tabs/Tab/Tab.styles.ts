@@ -1,20 +1,16 @@
-import * as CSS from 'csstype';
-
-import theme from '@/theme/index';
-
 // TODO: investigate why these TS issues are coming up
 export const verticalStyles = {
   borderInlineStart: 'none',
-  position: 'relative' as CSS.Property.Position,
+  position: 'relative',
   justifyContent: 'flex-start',
   alignItems: 'center',
-  textAlign: 'left' as CSS.Property.TextAlign,
+  textAlign: 'left',
   p: 4,
   width: '100%',
 };
 
 export const horizontalSelectedStyles = {
-  color: theme.semanticTokens.colors.primary.main,
+  color: 'primary.main',
   fontWeight: 'semibold',
   position: 'relative',
   _after: {
@@ -24,12 +20,23 @@ export const horizontalSelectedStyles = {
     left: 0,
     width: '100%',
     height: '2px',
-    background: theme.semanticTokens.colors.primary.main,
+    background: 'primary.main',
   },
 };
 
 export const verticalSelectedStyles = {
-  backgroundColor: 'primary.light',
-  color: 'primary.dark',
+  backgroundColor: 'primary.extralight', // #E8EEFB
+  color: 'primary.dark', // #0D317D
   fontWeight: 'bold',
+  _after: { content: 'none' },
+  _before: {
+    content: '""',
+    position: 'absolute',
+    insetInlineStart: 0,
+    // Prevents the "line" variant's _before from rendering a right-side indicator
+    insetInlineEnd: 'unset',
+    insetBlock: 0,
+    width: '2px',
+    background: 'primary.main',
+  },
 };

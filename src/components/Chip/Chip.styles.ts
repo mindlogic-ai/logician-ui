@@ -1,114 +1,144 @@
-import * as CSS from 'csstype';
+import { BadgeProps } from '@chakra-ui/react';
 
-import theme from '@/theme/index';
+import { ChipColorScheme, ChipVariant } from './Chip.types';
 
-import { ChipProps, ChipUseCase } from './Chip.types';
-
-export const baseStyles = {
-  borderRadius: '32px', // large border radius to round it
+export const baseStyles: BadgeProps = {
+  borderRadius: '32px',
   px: 3,
-  py: 2, // Use direct spacing value instead of theme.spacing[2]
-  textTransform: 'none' as CSS.Property.TextTransform,
+  py: 2,
+  textTransform: 'none',
 };
 
-export const useCaseStyles: Record<
-  ChipUseCase,
-  Record<string, Partial<ChipProps>>
+/**
+ * Chip styles using a two-dimensional variant system.
+ *
+ * Structure: colorSchemeStyles[colorScheme][variant]
+ *
+ * Uses semantic color tokens from the Golden Ratio color system.
+ */
+export const colorSchemeStyles: Record<
+  ChipColorScheme,
+  Record<ChipVariant, BadgeProps>
 > = {
   primary: {
     solid: {
-      bgColor: theme.semanticTokens.colors.primary.main,
+      bgColor: 'primary.main',
       color: 'white',
+    },
+    soft: {
+      bgColor: 'primary.extralight',
+      color: 'primary.dark',
     },
     outline: {
       border: '1px solid',
-      borderColor: theme.semanticTokens.colors.primary.main,
-      color: theme.semanticTokens.colors.primary.main,
-      bgColor: 'white',
-    },
-    subtle: {
-      bgColor: '#EBF0FB',
-      color: theme.semanticTokens.colors.primary.main,
+      borderColor: 'primary.main',
+      color: 'primary.main',
+      bgColor: 'transparent',
     },
   },
   secondary: {
     solid: {
-      bgColor: theme.colors.blue[700],
-      color: theme.colors.white,
-    },
-    outline: {
-      border: '1px solid',
-      borderColor: theme.colors.blue[700],
-      color: theme.colors.blue[700],
-      bgColor: 'white',
-    },
-    subtle: {
-      bgColor: theme.colors.blue[50],
-      color: theme.colors.blue[700],
-    },
-  },
-  success: {
-    solid: {
-      bgColor: theme.semanticTokens.colors.success.main,
+      bgColor: 'secondary.main',
       color: 'white',
     },
+    soft: {
+      bgColor: 'secondary.extralight',
+      color: 'secondary.dark',
+    },
     outline: {
       border: '1px solid',
-      borderColor: theme.semanticTokens.colors.success.main,
-      color: theme.semanticTokens.colors.success.main,
-      bgColor: 'white',
-    },
-    subtle: {
-      bgColor: theme.colors.green[50],
-      color: theme.semanticTokens.colors.success.main,
+      borderColor: 'secondary.main',
+      color: 'secondary.main',
+      bgColor: 'transparent',
     },
   },
   danger: {
     solid: {
-      bgColor: theme.semanticTokens.colors.danger.main,
+      bgColor: 'danger.main',
       color: 'white',
+    },
+    soft: {
+      bgColor: 'danger.extralight',
+      color: 'danger.dark',
     },
     outline: {
       border: '1px solid',
-      borderColor: theme.semanticTokens.colors.danger.main,
-      color: theme.semanticTokens.colors.danger.main,
-      bgColor: 'white',
-    },
-    subtle: {
-      bgColor: theme.semanticTokens.colors.danger.lighter,
-      color: theme.semanticTokens.colors.danger.main,
+      borderColor: 'danger.main',
+      color: 'danger.main',
+      bgColor: 'transparent',
     },
   },
-  dark: {
+  success: {
     solid: {
-      bgColor: theme.colors.gray[800],
+      bgColor: 'success.main',
       color: 'white',
+    },
+    soft: {
+      bgColor: 'success.extralight',
+      color: 'success.dark',
     },
     outline: {
       border: '1px solid',
-      backgroundColor: 'transparent',
-      borderColor: theme.colors.gray[700],
-      color: theme.colors.gray[700],
-    },
-    subtle: {
-      bgColor: theme.colors.gray[100],
-      color: theme.colors.gray[800],
+      borderColor: 'success.main',
+      color: 'success.main',
+      bgColor: 'transparent',
     },
   },
-  highlight: {
+  warning: {
     solid: {
-      bgColor: theme.colors.purple[600],
+      bgColor: 'warning.main',
       color: 'white',
+    },
+    soft: {
+      bgColor: 'warning.extralight',
+      color: 'warning.dark',
     },
     outline: {
       border: '1px solid',
-      backgroundColor: 'transparent',
-      borderColor: theme.colors.purple[600],
-      color: theme.colors.purple[600],
+      borderColor: 'warning.main',
+      color: 'warning.main',
+      bgColor: 'transparent',
     },
-    subtle: {
-      bgColor: theme.colors.purple[50],
-      color: theme.colors.purple[600],
+  },
+  neutral: {
+    solid: {
+      bgColor: 'gray.800',
+      borderColor: 'gray.800',
+      color: 'white',
+    },
+    soft: {
+      bgColor: 'gray.100',
+      borderColor: 'gray.300',
+      color: 'gray.800',
+    },
+    outline: {
+      border: '1px solid',
+      borderColor: 'gray.500',
+      color: 'gray.700',
+      bgColor: 'transparent',
     },
   },
 };
+
+/**
+ * Helper function to get chip styles for a given colorScheme and variant.
+ */
+export const getChipStyles = (
+  colorScheme: ChipColorScheme = 'primary',
+  variant: ChipVariant = 'soft'
+): BadgeProps => {
+  return colorSchemeStyles[colorScheme][variant];
+};
+
+/** All available color schemes */
+export const colorSchemes: ChipColorScheme[] = [
+  'primary',
+  'secondary',
+  'danger',
+  'success',
+  'warning',
+  'neutral',
+];
+
+/** All available variants */
+export const variants: ChipVariant[] = ['solid', 'soft', 'outline'];

@@ -1,13 +1,25 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, VStack, HStack, Text, Grid, GridItem } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
 import { Sparkles } from '../Icon';
-import { Button, variantStyles } from '.';
-import { ButtonVariant } from './Button.types';
+import { Button, buttonColorPalettes, buttonVariants } from '.';
+import { ButtonColorPalette, ButtonVariant } from './Button.types';
 
 const meta = {
   title: 'Components/Button',
   component: Button,
+  argTypes: {
+    colorPalette: {
+      control: 'select',
+      options: buttonColorPalettes,
+      description: 'Semantic color family (Chakra v3 colorPalette)',
+    },
+    variant: {
+      control: 'select',
+      options: buttonVariants,
+      description: 'Visual appearance (overrides Chakra variant)',
+    },
+  },
 } satisfies Meta<typeof Button>;
 
 export default meta;
@@ -16,45 +28,359 @@ type Story = StoryObj<typeof Button>;
 
 export const Basic: Story = {
   args: {
-    children: 'This is a button',
+    children: 'Button',
+    colorPalette: 'primary',
+    variant: 'solid',
   },
 };
 
-export const AllButtonVariants: Story = {
-  args: {
-    children: 'This is a button',
-  },
-  render: (args) => {
-    const variants = Object.keys(variantStyles) as Array<ButtonVariant>;
+/**
+ * All available button sizes.
+ *
+ * ## Sizes:
+ * - `2xs`: Extra extra small (h: 24px)
+ * - `xs`: Extra small (h: 32px) - fontSize bumped to 'sm' (14px) for readability
+ * - `sm`: Small (h: 36px)
+ * - `md`: Medium (h: 40px) - Default
+ * - `lg`: Large (h: 44px)
+ * - `xl`: Extra large (h: 48px)
+ * - `2xl`: Extra extra large (h: 64px)
+ *
+ * Note: xs size has a smaller height but uses the same fontSize as sm for better readability.
+ */
+export const Sizes: Story = {
+  render: () => {
+    const sizes = ['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'] as const;
+
     return (
-      <Flex gap={4}>
-        {variants.map((variant) => (
-          <Box key={variant}>
-            <p>{variant}</p>
-            <Button variant={variant} onClick={() => {}} {...args} />
-          </Box>
-        ))}
-      </Flex>
+      <VStack gap={8} align="stretch">
+        {/* Solid variant sizes */}
+        <Box>
+          <Text fontSize="lg" fontWeight="bold" mb={4} color="gray.700">
+            Solid Variant
+          </Text>
+          <Flex gap={4} wrap="wrap" align="center">
+            {sizes.map((size) => (
+              <VStack key={size} gap={2} align="center">
+                <Text fontSize="sm" color="gray.600" fontWeight="medium">
+                  {size}
+                </Text>
+                <Button colorPalette="primary" variant="solid" size={size}>
+                  Button
+                </Button>
+              </VStack>
+            ))}
+          </Flex>
+        </Box>
+
+        {/* Outline variant sizes */}
+        <Box>
+          <Text fontSize="lg" fontWeight="bold" mb={4} color="gray.700">
+            Outline Variant
+          </Text>
+          <Flex gap={4} wrap="wrap" align="center">
+            {sizes.map((size) => (
+              <VStack key={size} gap={2} align="center">
+                <Text fontSize="sm" color="gray.600" fontWeight="medium">
+                  {size}
+                </Text>
+                <Button colorPalette="primary" variant="outline" size={size}>
+                  Button
+                </Button>
+              </VStack>
+            ))}
+          </Flex>
+        </Box>
+
+        {/* With icons */}
+        <Box>
+          <Text fontSize="lg" fontWeight="bold" mb={4} color="gray.700">
+            With Icons
+          </Text>
+          <Flex gap={4} wrap="wrap" align="center">
+            {sizes.map((size) => (
+              <VStack key={size} gap={2} align="center">
+                <Text fontSize="sm" color="gray.600" fontWeight="medium">
+                  {size}
+                </Text>
+                <Button colorPalette="primary" variant="soft" size={size}>
+                  <Sparkles /> Button
+                </Button>
+              </VStack>
+            ))}
+          </Flex>
+        </Box>
+      </VStack>
     );
   },
 };
 
-export const ButtonsWithIcons: Story = {
-  args: {
-    children: 'This is a button',
-    leftIcon: <Sparkles />,
-  },
-  render: (args) => {
-    const variants = Object.keys(variantStyles) as Array<ButtonVariant>;
-    return (
-      <Flex gap={4}>
-        {variants.map((variant) => (
-          <Box key={variant}>
-            <p>{variant}</p>
-            <Button variant={variant} onClick={() => {}} {...args} />
+/**
+ * Complete button matrix showing all colorPalette × variant combinations.
+ *
+ * ## Color Palettes (rows):
+ * - `primary`: Blue - main brand actions
+ * - `secondary`: Violet - accent actions
+ * - `danger`: Rose - destructive actions
+ * - `success`: Green - positive actions
+ * - `warning`: Gold - caution actions
+ * - `neutral`: Gray - low-emphasis actions
+ *
+ * ## Variants (columns):
+ * - `solid`: Filled background (most prominent)
+ * - `soft`: Light tinted background (subtle)
+ * - `outline`: Border only (medium emphasis)
+ * - `ghost`: No background or border (lowest emphasis)
+ */
+export const AllCombinations: Story = {
+  render: () => (
+    <VStack gap={6} align="stretch">
+      {/* Header row */}
+      <HStack gap={4}>
+        <Box w="100px" />
+        {buttonVariants.map((variant) => (
+          <Box key={variant} w="120px" textAlign="center">
+            <Text fontWeight="bold" color="gray.600">
+              {variant}
+            </Text>
           </Box>
         ))}
-      </Flex>
-    );
-  },
+      </HStack>
+
+      {/* Color palette rows */}
+      {buttonColorPalettes.map((colorPalette) => (
+        <HStack key={colorPalette} gap={4}>
+          <Box w="100px">
+            <Text fontWeight="bold" color="gray.600">
+              {colorPalette}
+            </Text>
+          </Box>
+          {buttonVariants.map((variant) => (
+            <Box key={`${colorPalette}-${variant}`} w="120px">
+              <Button colorPalette={colorPalette} variant={variant}>
+                Button
+              </Button>
+            </Box>
+          ))}
+        </HStack>
+      ))}
+    </VStack>
+  ),
+};
+
+/**
+ * All buttons with icons showing the complete matrix.
+ */
+export const AllWithIcons: Story = {
+  render: () => (
+    <VStack gap={6} align="stretch">
+      <HStack gap={4}>
+        <Box w="100px" />
+        {buttonVariants.map((variant) => (
+          <Box key={variant} w="140px" textAlign="center">
+            <Text fontWeight="bold" color="gray.600">
+              {variant}
+            </Text>
+          </Box>
+        ))}
+      </HStack>
+
+      {buttonColorPalettes.map((colorPalette) => (
+        <HStack key={colorPalette} gap={4}>
+          <Box w="100px">
+            <Text fontWeight="bold" color="gray.600">
+              {colorPalette}
+            </Text>
+          </Box>
+          {buttonVariants.map((variant) => (
+            <Box key={`${colorPalette}-${variant}`} w="140px">
+              <Button colorPalette={colorPalette} variant={variant}>
+                <Sparkles /> Button
+              </Button>
+            </Box>
+          ))}
+        </HStack>
+      ))}
+    </VStack>
+  ),
+};
+
+/**
+ * Primary color scheme in all variants.
+ */
+export const Primary: Story = {
+  render: () => (
+    <Flex gap={4} wrap="wrap">
+      {buttonVariants.map((variant) => (
+        <VStack key={variant} gap={1}>
+          <Text color="gray.600">{variant}</Text>
+          <Button colorPalette="primary" variant={variant}>
+            Primary
+          </Button>
+        </VStack>
+      ))}
+    </Flex>
+  ),
+};
+
+/**
+ * Secondary color scheme in all variants.
+ */
+export const Secondary: Story = {
+  render: () => (
+    <Flex gap={4} wrap="wrap">
+      {buttonVariants.map((variant) => (
+        <VStack key={variant} gap={1}>
+          <Text color="gray.600">{variant}</Text>
+          <Button colorPalette="secondary" variant={variant}>
+            Secondary
+          </Button>
+        </VStack>
+      ))}
+    </Flex>
+  ),
+};
+
+/**
+ * Danger color scheme in all variants.
+ */
+export const Danger: Story = {
+  render: () => (
+    <Flex gap={4} wrap="wrap">
+      {buttonVariants.map((variant) => (
+        <VStack key={variant} gap={1}>
+          <Text color="gray.600">{variant}</Text>
+          <Button colorPalette="danger" variant={variant}>
+            Danger
+          </Button>
+        </VStack>
+      ))}
+    </Flex>
+  ),
+};
+
+/**
+ * Success color scheme in all variants.
+ */
+export const Success: Story = {
+  render: () => (
+    <Flex gap={4} wrap="wrap">
+      {buttonVariants.map((variant) => (
+        <VStack key={variant} gap={1}>
+          <Text color="gray.600">{variant}</Text>
+          <Button colorPalette="success" variant={variant}>
+            Success
+          </Button>
+        </VStack>
+      ))}
+    </Flex>
+  ),
+};
+
+/**
+ * Warning color scheme in all variants.
+ */
+export const Warning: Story = {
+  render: () => (
+    <Flex gap={4} wrap="wrap">
+      {buttonVariants.map((variant) => (
+        <VStack key={variant} gap={1}>
+          <Text color="gray.600">{variant}</Text>
+          <Button colorPalette="warning" variant={variant}>
+            Warning
+          </Button>
+        </VStack>
+      ))}
+    </Flex>
+  ),
+};
+
+/**
+ * Neutral color scheme in all variants.
+ */
+export const Neutral: Story = {
+  render: () => (
+    <Flex gap={4} wrap="wrap">
+      {buttonVariants.map((variant) => (
+        <VStack key={variant} gap={1}>
+          <Text color="gray.600">{variant}</Text>
+          <Button colorPalette="neutral" variant={variant}>
+            Neutral
+          </Button>
+        </VStack>
+      ))}
+    </Flex>
+  ),
+};
+
+/**
+ * Solid variant across all color schemes.
+ */
+export const SolidVariant: Story = {
+  render: () => (
+    <Flex gap={4} wrap="wrap">
+      {buttonColorPalettes.map((colorPalette) => (
+        <VStack key={colorPalette} gap={1}>
+          <Text color="gray.600">{colorPalette}</Text>
+          <Button colorPalette={colorPalette} variant="solid">
+            Solid
+          </Button>
+        </VStack>
+      ))}
+    </Flex>
+  ),
+};
+
+/**
+ * Soft variant across all color schemes.
+ */
+export const SoftVariant: Story = {
+  render: () => (
+    <Flex gap={4} wrap="wrap">
+      {buttonColorPalettes.map((colorPalette) => (
+        <VStack key={colorPalette} gap={1}>
+          <Text color="gray.600">{colorPalette}</Text>
+          <Button colorPalette={colorPalette} variant="soft">
+            Soft
+          </Button>
+        </VStack>
+      ))}
+    </Flex>
+  ),
+};
+
+/**
+ * Outline variant across all color schemes.
+ */
+export const OutlineVariant: Story = {
+  render: () => (
+    <Flex gap={4} wrap="wrap">
+      {buttonColorPalettes.map((colorPalette) => (
+        <VStack key={colorPalette} gap={1}>
+          <Text color="gray.600">{colorPalette}</Text>
+          <Button colorPalette={colorPalette} variant="outline">
+            Outline
+          </Button>
+        </VStack>
+      ))}
+    </Flex>
+  ),
+};
+
+/**
+ * Ghost variant across all color schemes.
+ */
+export const GhostVariant: Story = {
+  render: () => (
+    <Flex gap={4} wrap="wrap">
+      {buttonColorPalettes.map((colorPalette) => (
+        <VStack key={colorPalette} gap={1}>
+          <Text color="gray.600">{colorPalette}</Text>
+          <Button colorPalette={colorPalette} variant="ghost">
+            Ghost
+          </Button>
+        </VStack>
+      ))}
+    </Flex>
+  ),
 };

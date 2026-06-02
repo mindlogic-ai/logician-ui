@@ -1,26 +1,64 @@
 import { BoxProps } from '@chakra-ui/react';
 
-import type { MLToastOptions } from './Toast.types';
+import type { ToastStatus } from './Toast.types';
 
-export const toastStyles = {
+/**
+ * Toast variant styles using the Golden Ratio color system.
+ *
+ * Uses `lightest` backgrounds with `lighter` borders and `dark` text
+ * for optimal readability and WCAG AA compliance.
+ */
+export const toastStyles: Record<ToastStatus, BoxProps> = {
   info: {
-    bg: 'primary.light',
-    color: 'primary.dark',
-    borderColor: 'primary.lighter',
+    bg: 'primary.extralight', // #E8EEFB
+    color: 'primary.dark', // #0D317D
+    borderColor: 'primary.lighter', // #B9CBF3
   },
   warning: {
-    bg: 'warning.lighter',
-    color: 'warning.dark',
-    borderColor: 'warning.light',
+    bg: 'warning.extralight', // #FBF6E8
+    color: 'warning.dark', // #7D610D
+    borderColor: 'warning.lighter', // #F3E4B9
   },
   success: {
-    bg: 'success.lighter',
-    color: 'success.dark',
-    borderColor: 'success.light',
+    bg: 'success.extralight', // #E9FBE8
+    color: 'success.dark', // #147D0D
+    borderColor: 'success.lighter', // #BDF3B9
   },
   error: {
-    bg: 'danger.lighter',
-    color: 'danger.dark',
-    borderColor: 'danger.light',
+    bg: 'danger.extralight', // #FBE8E9
+    color: 'danger.dark', // #7D0D14
+    borderColor: 'danger.lighter', // #F3B9BD
   },
-} satisfies Record<MLToastOptions['status'], BoxProps>;
+};
+
+/**
+ * CloseButton styles for each toast status.
+ * Ensures visual consistency with the toast's color scheme.
+ * Uses BoxProps for flexibility with Toast.CloseTrigger
+ */
+export const closeButtonStyles: Record<ToastStatus, BoxProps> = {
+  info: {
+    color: 'primary.darker',
+    _hover: {
+      bg: 'primary.lighter',
+    },
+  },
+  warning: {
+    color: 'warning.darker',
+    _hover: {
+      bg: 'warning.lighter',
+    },
+  },
+  success: {
+    color: 'success.darker',
+    _hover: {
+      bg: 'success.lighter',
+    },
+  },
+  error: {
+    color: 'danger.darker',
+    _hover: {
+      bg: 'danger.lighter',
+    },
+  },
+};

@@ -70,32 +70,32 @@ User Agent: ${errorInfo.userAgent}`;
           bgColor="white"
           boxShadow="2xl"
         >
-          <VStack spacing={6} align="center" w="full" mx="auto">
+          <VStack gap={6} align="center" w="full" mx="auto">
             {/* Error Icon */}
             <Box
               position="relative"
               p={4}
-              bg="danger.lighter"
+              bg="danger.extralight"
               borderRadius="full"
             >
               <MdError boxSize="xl" color="danger.main" />
             </Box>
 
             {/* Error Title */}
-            <VStack spacing={3} align="center" w="full">
-              <H1 color="gray.1200" fontSize="3xl" fontWeight="bold">
+            <VStack gap={3} align="center" w="full">
+              <H1 color="gray.1200" textStyle="h2" fontWeight="bold">
                 {translate('error_boundary_title')}
               </H1>
-              <Subtitle color="gray.1000" fontSize="lg" maxW="md">
+              <Subtitle color="gray.1000" textStyle="h5" maxW="md">
                 {translate('error_boundary_subtitle')}
               </Subtitle>
             </VStack>
 
             {/* Error Message */}
             <Card
-              bg="danger.lighter"
+              bg="danger.extralight"
               border="1px solid"
-              borderColor="danger.light"
+              borderColor="danger.lighter"
               p={4}
               w="full"
             >
@@ -109,11 +109,16 @@ User Agent: ${errorInfo.userAgent}`;
             </Card>
 
             {/* Support Information */}
-            <Card bg="primary.light" borderColor="primary.light" p={6} w="full">
+            <Card
+              bg="primary.extralight"
+              borderColor="primary.lighter"
+              p={6}
+              w="full"
+            >
               <H4 color="primary.dark" mb={4} textAlign="center">
                 {translate('support_information')}
               </H4>
-              <VStack spacing={2} align="stretch" mb={4}>
+              <VStack gap={2} align="stretch" mb={4}>
                 <Flex justify="space-between">
                   <Text color="primary.main" fontWeight="semibold">
                     {translate('error_id')}:
@@ -165,21 +170,19 @@ User Agent: ${errorInfo.userAgent}`;
                   onClick={copyErrorInfo}
                   size="sm"
                   minW="fit-content"
-                  variant="tertiary"
-                  leftIcon={<FaRegCopy boxSize="xs" />}
+                  variant="ghost"
                 >
-                  {translate('copy_error_details')}
+                  <FaRegCopy boxSize="xs" /> {translate('copy_error_details')}
                 </Button>
               </Flex>
             </Card>
 
             {/* Action Buttons */}
-            <VStack spacing={3} w="full" align="center">
+            <VStack gap={3} w="full" align="center">
               <Button
                 onClick={onErrorReset}
                 size="lg"
-                variant="primary"
-                leftIcon={<HiRefresh />}
+                variant="solid"
                 _hover={{
                   transform: 'translateY(-1px)',
                   boxShadow: 'lg',
@@ -187,16 +190,15 @@ User Agent: ${errorInfo.userAgent}`;
                 w="full"
                 maxW="300px"
               >
-                {translate('try_again')}
+                <HiRefresh /> {translate('try_again')}
               </Button>
 
               <Button
                 onClick={() => window.location.reload()}
                 size="sm"
-                variant="tertiary"
-                leftIcon={<HiRefresh />}
+                variant="ghost"
               >
-                {translate('refresh_page')}
+                <HiRefresh /> {translate('refresh_page')}
               </Button>
             </VStack>
           </VStack>

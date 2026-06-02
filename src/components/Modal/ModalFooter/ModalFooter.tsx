@@ -1,14 +1,10 @@
-import React from 'react';
-import {
-  ModalFooter as ChakraModalFooter,
-  ModalFooterProps as ChakraModalFooterProps,
-} from '@chakra-ui/react';
+import { Dialog } from '@chakra-ui/react';
 
 import styles from './ModalFooter.module.css';
 
-export const ModalFooter = ({ className, ...rest }: ChakraModalFooterProps) => {
+export const ModalFooter = ({ className, ...rest }: Dialog.FooterProps) => {
   return (
-    <ChakraModalFooter
+    <Dialog.Footer
       className={[styles['ml-modal-footer'], className].join(' ')}
       gap={3}
       pt={4}

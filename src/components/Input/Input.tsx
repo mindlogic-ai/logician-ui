@@ -7,15 +7,10 @@ import {
   useRef,
   useState,
 } from 'react';
-import {
-  Input as ChakraInput,
-  InputGroup,
-  InputLeftElement,
-  InputRightElement,
-  useTheme,
-} from '@chakra-ui/react';
+import { Input as ChakraInput, InputGroup } from '@chakra-ui/react';
 
 import { formatNumber } from '@/utils/formatNumber';
+import { mergeCss } from '@/utils/mergeCss';
 
 import { InputProps } from './Input.types';
 
@@ -61,9 +56,7 @@ export const Input = forwardRef(
   (
     {
       leftIcon,
-      leftElementProps,
       rightIcon,
-      rightElementProps,
       onKeyDown,
       onCompositionEnd,
       onCompositionStart,
@@ -78,13 +71,16 @@ export const Input = forwardRef(
       _focus,
       trimWhiteSpace = false,
       noSpaces = false,
+      disabled,
+      invalid,
+      readOnly,
+      css,
       ...rest
     }: InputProps,
     ref?: ForwardedRef<HTMLInputElement>
   ) => {
     const rightElementRef = useRef<HTMLDivElement>(null);
     const [rightElementWidth, setRightElementWidth] = useState(0);
-    const theme = useTheme();
     const isComposing = useRef(false);
     const cursorPosition = useRef<number | null>(null);
     const [shouldRestoreCursor, setShouldRestoreCursor] = useState(false);
@@ -301,12 +297,16 @@ export const Input = forwardRef(
     const inputType = maskNumber && type === 'number' ? 'text' : type;
 
     return (
-      <InputGroup size={size} {...wrapperProps}>
-        {leftIcon && (
-          <InputLeftElement {...leftElementProps}>{leftIcon}</InputLeftElement>
-        )}
+      <InputGroup
+        startElement={leftIcon}
+        endElement={
+          rightIcon ? <div ref={rightElementRef}>{rightIcon}</div> : undefined
+        }
+        {...wrapperProps}
+      >
         <ChakraInput
           ref={ref}
+          size={size}
           maxLength={maxLength}
           value={currentValue}
           onChange={handleChange}
@@ -315,17 +315,28 @@ export const Input = forwardRef(
           onCompositionEnd={handleCompositionEnd}
           onKeyDown={handleKeyDown}
           type={inputType}
-          borderColor="gray.400"
-          bgColor="white"
+          disabled={disabled}
+          readOnly={readOnly}
+          data-invalid={invalid || undefined}
+          bg="white"
+          borderColor={invalid ? 'danger.main' : 'gray.400'}
           _hover={{
-            borderColor: 'gray.600',
+            borderColor: invalid ? 'danger.main' : 'primary.lighter',
             ..._hover,
           }}
           _focus={{
-            borderColor: 'primary.main',
+            borderColor: invalid ? 'danger.main' : 'primary.main',
             ..._focus,
           }}
-          focusBorderColor={theme.semanticTokens.colors.primary.main}
+          _invalid={{
+            borderColor: 'danger.main',
+            _hover: {
+              borderColor: 'danger.main',
+            },
+            _focus: {
+              borderColor: 'danger.main',
+            },
+          }}
           _readOnly={{
             opacity: 1,
             cursor: 'not-allowed',
@@ -340,17 +351,16 @@ export const Input = forwardRef(
             color: 'gray.1000',
             fontWeight: 'semibold',
           }}
-          sx={{
-            paddingInlineEnd: rightElementWidth,
-          }}
-          errorBorderColor={theme.semanticTokens.colors.danger.main}
           {...rest}
+          css={mergeCss(
+            {
+              paddingInlineEnd: rightElementWidth,
+              '--focus-color': 'var(--chakra-colors-primary-main)',
+              '--error-color': 'var(--chakra-colors-danger-main)',
+            },
+            css
+          )}
         />
-        {rightIcon && (
-          <InputRightElement ref={rightElementRef} {...rightElementProps}>
-            {rightIcon}
-          </InputRightElement>
-        )}
       </InputGroup>
     );
   }

@@ -1,40 +1,49 @@
-import {
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverContent,
-  PopoverProps,
-  PopoverTrigger,
-  Portal,
-} from '@chakra-ui/react';
+import { HoverCard, Portal } from '@chakra-ui/react';
 
 import { LuInfo } from '../Icon';
 import { IconButton } from '../IconButton';
-import { IconButtonProps } from '../IconButton/IconButton.types';
+import { ScaledContext } from '../ScaledContext';
+import { InfoSprinkleProps } from './InfoSprinkle.types';
 
 export const InfoSprinkle = ({
   children,
   iconButtonProps,
+  contentProps,
+  baseFontSize = '14px',
   ...rest
-}: {
-  children: React.ReactNode;
-  iconButtonProps?: Partial<IconButtonProps>;
-} & PopoverProps) => {
+}: InfoSprinkleProps) => {
   return (
-    <Popover trigger="hover" placement="top" isLazy {...rest}>
-      <PopoverTrigger>
+    <HoverCard.Root
+      positioning={{ placement: 'top' }}
+      openDelay={0}
+      closeDelay={0}
+      lazyMount
+      {...rest}
+    >
+      <HoverCard.Trigger asChild>
         <IconButton
           aria-label="Info"
-          icon={<LuInfo boxSize="sm" color="inherit" />}
+          opacity={0.5}
+          transition="opacity 0.2s"
+          _hover={{ opacity: 1, ...(iconButtonProps?._hover as any) }}
           {...iconButtonProps}
-        />
-      </PopoverTrigger>
+        >
+          <LuInfo
+            color={(iconButtonProps?.color as string) ?? 'gray.1000'}
+            boxSize={iconButtonProps?.size ?? 'xs'}
+          />
+        </IconButton>
+      </HoverCard.Trigger>
       <Portal>
-        <PopoverContent boxShadow="2xl" w="fit-content">
-          <PopoverArrow />
-          <PopoverBody>{children}</PopoverBody>
-        </PopoverContent>
+        <HoverCard.Positioner>
+          <HoverCard.Content p={2} {...contentProps}>
+            <HoverCard.Arrow>
+              <HoverCard.ArrowTip />
+            </HoverCard.Arrow>
+            <ScaledContext fontSize={baseFontSize}>{children}</ScaledContext>
+          </HoverCard.Content>
+        </HoverCard.Positioner>
       </Portal>
-    </Popover>
+    </HoverCard.Root>
   );
 };

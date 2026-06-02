@@ -70,19 +70,29 @@ export const baseMarkdownComponents = {
   // Make the pre tag a no-op that just renders children
   pre: ({ children }: any) => <Box>{children}</Box>,
   p: (props: any) => <Text color="inherit" {...props} />,
-  a: ({ style, ...rest }: any) => (
+  a: (props: any) => (
     //  `children` should be inside ...rest
-    <Link target="_blank" {...rest} />
+    <Link target="_blank" {...props} />
   ),
   ol: ({ style, ...rest }: any) => (
     <ol
-      style={{ paddingInlineStart: '22px', color: 'inherit', ...style }}
+      style={{
+        paddingInlineStart: '22px',
+        color: 'inherit',
+        fontSize: '0.875rem',
+        ...style,
+      }}
       {...rest}
     />
   ),
   ul: ({ style, ...rest }: any) => (
     <ul
-      style={{ paddingInlineStart: '22px', color: 'inherit', ...style }}
+      style={{
+        paddingInlineStart: '22px',
+        color: 'inherit',
+        fontSize: '0.875rem',
+        ...style,
+      }}
       {...rest}
     />
   ),

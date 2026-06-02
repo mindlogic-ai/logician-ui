@@ -1,19 +1,30 @@
-import { TabList as ChakraTabList, TabListProps } from '@chakra-ui/react';
+import type { TabsListProps as ChakraTabsListProps } from '@chakra-ui/react';
+import { Box, Tabs } from '@chakra-ui/react';
 
-import { useTabsContext } from '@/components/Tabs/TabsContext';
+import { mergeCss } from '@/utils/mergeCss';
 
 import { tabListStyles, verticalStyles } from './TabList.styles';
 
-export const TabList = (props: TabListProps) => {
-  const { orientation } = useTabsContext();
+export type TabListProps = ChakraTabsListProps;
+
+export const TabList = ({ children, css, ...props }: TabListProps) => {
   return (
-    <ChakraTabList
-      width="100%"
-      borderBottom="1px solid"
-      borderColor="gray.100"
-      {...tabListStyles}
-      {...(orientation === 'vertical' && verticalStyles)}
-      {...props}
-    />
+    <Tabs.List asChild>
+      <Box
+        width="100%"
+        borderBottom="1px solid"
+        borderColor="gray.100"
+        {...tabListStyles}
+        {...props}
+        css={mergeCss(
+          {
+            '&[data-orientation=vertical]': verticalStyles,
+          },
+          css
+        )}
+      >
+        {children}
+      </Box>
+    </Tabs.List>
   );
 };

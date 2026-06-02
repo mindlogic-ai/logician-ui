@@ -1,9 +1,20 @@
+import { Popover } from '@chakra-ui/react';
 import {
   RangeDatepicker as BaseRangeDatePicker,
   RangeDatepickerProps,
 } from 'chakra-dayzed-datepicker';
+import { format } from 'date-fns';
 
+import useLanguage from '@/hooks/useLanguage';
+
+import { Button, ButtonProps } from '../Button';
 import { MdOutlineCalendarToday } from '../Icon';
+import {
+  getDateFnsLocale,
+  getDayNames,
+  getDefaultFullDateFormat,
+  getMonthNames,
+} from '../MonthPicker/constants';
 
 export const RangeDatePicker = ({
   propsConfigs,
@@ -11,63 +22,43 @@ export const RangeDatePicker = ({
   usePortal = true,
   ...rest
 }: RangeDatepickerProps) => {
+  const { language } = useLanguage();
+  const dateFormat = configs?.dateFormat ?? getDefaultFullDateFormat(language);
+  const dateFnsLocale = getDateFnsLocale(language);
+
   return (
     <BaseRangeDatePicker
       usePortal={usePortal}
       {...rest}
       configs={{
+        monthNames: getMonthNames(language, 'LLLL'),
+        dayNames: getDayNames(language),
         ...configs,
-        dateFormat: configs?.dateFormat ?? 'MMM dd, yyyy',
+        dateFormat,
       }}
       propsConfigs={{
         triggerBtnProps: {
-          justifyContent: 'left',
-          pl: 2,
           fontWeight: 'regular',
           color: 'gray.1500',
           fontSize: 'md',
-          leftIcon: (
-            <MdOutlineCalendarToday
-              color="gray.600"
-              style={{ marginInlineEnd: 3 }}
-            />
-          ),
+          ...propsConfigs?.triggerBtnProps,
         },
         inputProps: {
           color: 'primary.dark',
           ...propsConfigs?.inputProps,
         },
         popoverCompProps: {
+          popoverBodyProps: {
+            border: 'none',
+            ...propsConfigs?.popoverCompProps?.popoverBodyProps,
+          },
           popoverContentProps: {
             p: 2,
             borderRadius: 16,
-            border: '1px solid',
-            borderColor: 'blue.300',
             boxShadow: 'lg',
-            bg: 'blue.100',
-            sx: {
-              '.chakra-button[aria-pressed="true"]': {
-                borderRadius: 'full',
-              },
-              // pressed="true" 직전의 pressed="false" 요소에 borderRight
-              '.chakra-button[aria-pressed="false"]:has(+ .chakra-button[aria-pressed="true"])':
-                {
-                  borderRightRadius: 'sm',
-                },
-              // pressed="true" 직후의 pressed="false" 요소에 borderLeft
-              '.chakra-button[aria-pressed="true"] + .chakra-button[aria-pressed="false"]':
-                {
-                  borderLeftRadius: 'sm',
-                },
-              // week row의 왼쪽 테두리
-              '.chakra-button[aria-pressed="false"]:nth-child(7n + 1)': {
-                borderLeftRadius: 'sm',
-              },
-              // week row 오른쪽 테두리
-              '.chakra-button[aria-pressed="false"]:nth-child(7n)': {
-                borderRightRadius: 'sm',
-              },
-            },
+            border: 'none',
+            borderWidth: 0,
+            bg: 'gray.0',
             ...propsConfigs?.popoverCompProps?.popoverContentProps,
           },
           ...propsConfigs?.popoverCompProps,
@@ -75,24 +66,25 @@ export const RangeDatePicker = ({
         calendarPanelProps: {
           wrapperProps: {
             gap: 4,
+            border: 'none',
             ...propsConfigs?.calendarPanelProps?.wrapperProps,
           },
           dividerProps: {
-            borderStyle: 'none',
+            display: 'none',
             ...propsConfigs?.calendarPanelProps?.dividerProps,
           },
           contentProps: {
             px: 6,
             py: 4,
-            border: '1px solid',
-            borderColor: 'blue.300',
+            borderWidth: '1px',
+            borderColor: 'primary.extralight',
             borderRadius: 16,
             bg: 'white',
             ...propsConfigs?.calendarPanelProps?.contentProps,
           },
           bodyProps: {
             gap: 0,
-            spacingY: 1,
+            rowGap: 1,
             ...propsConfigs?.calendarPanelProps?.bodyProps,
           },
           ...propsConfigs?.calendarPanelProps,
@@ -104,7 +96,7 @@ export const RangeDatePicker = ({
         weekdayLabelProps: {
           mb: 2,
           color: 'gray.1000',
-          fontSize: 'xs',
+          fontSize: 'sm',
           fontWeight: 'regular',
           ...propsConfigs?.weekdayLabelProps,
         },
@@ -115,49 +107,73 @@ export const RangeDatePicker = ({
             color: 'gray.1500',
             fontWeight: 'regular',
             _hover: {
-              background: 'primary.light',
+              background: 'primary.extralight',
               ...propsConfigs?.dayOfMonthBtnProps?.defaultBtnProps?._hover,
             },
             ...propsConfigs?.dayOfMonthBtnProps?.defaultBtnProps,
           },
-          // Today
           todayBtnProps: {
             fontWeight: 'semibold',
             ...propsConfigs?.dayOfMonthBtnProps?.todayBtnProps,
           },
           selectedBtnProps: {
             color: 'white',
-            background: 'primary.light',
+            background: 'primary.main',
             fontWeight: 'semibold',
             position: 'relative',
-            zIndex: 1,
-            borderRadius: 0,
-            _hover: {
-              background: 'primary.light',
-            },
-            _before: {
-              content: '""',
-              position: 'absolute',
-              top: 0,
-              bottom: 0,
-              left: 0,
-              right: 0,
-              background: 'primary.main',
-              borderRadius: 'full',
-              zIndex: -1,
-            },
+            border: 'none',
+            borderRadius: 'full',
             ...propsConfigs?.dayOfMonthBtnProps?.selectedBtnProps,
           },
           isInRangeBtnProps: {
-            color: 'primary.dark',
-            background: 'primary.light',
-            borderRadius: 0,
+            color: 'primary.main',
+            background: 'primary.extralight',
+            borderRadius: 'none',
+            css: {
+              // pressed="true" 직전의 pressed="false" 요소에 borderRight
+              '&[aria-pressed="false"]:has(+ &[aria-pressed="true"])': {
+                borderRightRadius: 'sm',
+              },
+              // pressed="true" 직후의 pressed="false" 요소에 borderLeft
+              '&[aria-pressed="true"] + &[aria-pressed="false"]': {
+                borderLeftRadius: 'sm',
+              },
+              // week row의 왼쪽 테두리
+              '&[aria-pressed="false"]:nth-child(7n + 1)': {
+                borderLeftRadius: 'sm',
+              },
+              // week row 오른쪽 테두리
+              '&[aria-pressed="false"]:nth-child(7n)': {
+                borderRightRadius: 'sm',
+              },
+            },
             ...propsConfigs?.dayOfMonthBtnProps?.isInRangeBtnProps,
           },
           ...propsConfigs?.dayOfMonthBtnProps,
         },
         ...propsConfigs,
       }}
-    />
+    >
+      {(selectedDates) => (
+        <Popover.Trigger asChild>
+          <Button
+            pl={2}
+            colorPalette="neutral"
+            variant="outline"
+            {...(propsConfigs?.triggerBtnProps as ButtonProps)}
+          >
+            <MdOutlineCalendarToday
+              color="gray.400"
+              style={{ marginInlineEnd: 3 }}
+            />
+            {selectedDates && selectedDates.length > 0
+              ? selectedDates.length === 1
+                ? `${format(selectedDates[0], dateFormat, { locale: dateFnsLocale })} - `
+                : `${format(selectedDates[0], dateFormat, { locale: dateFnsLocale })} - ${format(selectedDates[1], dateFormat, { locale: dateFnsLocale })}`
+              : ''}
+          </Button>
+        </Popover.Trigger>
+      )}
+    </BaseRangeDatePicker>
   );
 };

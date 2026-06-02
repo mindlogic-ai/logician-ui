@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, useTheme, useToken } from '@chakra-ui/react';
+import { Box, useToken } from '@chakra-ui/react';
 
 import { Text } from '../Typography';
 import {
@@ -18,19 +18,11 @@ const RadialProgress: React.FC<RadialProgressProps> = ({
   className,
   ...rest
 }) => {
-  const theme = useTheme();
-
-  // Helper function to resolve color tokens
-  const resolveColor = (color: string): string => {
-    try {
-      // Try to resolve as a token first
-      const resolvedColor = useToken('colors', color);
-      return resolvedColor || color;
-    } catch {
-      // If token resolution fails, return the original color
-      return color;
-    }
-  };
+  // useToken은 hook이므로 map 안이 아닌 최상위에서 호출
+  const colorTokens = segments.map((s) => s.color).concat('gray.200');
+  const resolvedColors = useToken('colors', colorTokens);
+  const resolveColor = (token: string) =>
+    resolvedColors[colorTokens.indexOf(token)] || token;
 
   // Early return if total is 0 or negative to prevent division by zero
   if (total <= 0) {
@@ -70,23 +62,27 @@ const RadialProgress: React.FC<RadialProgressProps> = ({
           ]
         : segments;
 
+  // Filter out zero-value segments for visible count
+  const visibleSegments = allSegments.filter((s) => s.value > 0);
+
   // Calculate total available degrees after accounting for gaps
-  const totalGaps = gapDegrees * 2 * allSegments.length; // Each segment has gaps on both sides
+  const totalGaps = gapDegrees * 2 * visibleSegments.length; // Each segment has gaps on both sides
   const availableDegrees = 360 - totalGaps;
 
-  // First pass: calculate raw degrees and identify segments needing minimum
-  const rawSegments: ProcessedSegment[] = allSegments.map((segment) => {
-    // Prevent division by zero when calculating raw degrees
-    const rawDegrees =
-      total > 0 ? (segment.value / total) * availableDegrees : 0;
-    const needsMinimum = segment.value === 0 || rawDegrees < minSegmentDegrees;
-    return {
-      ...segment,
-      rawDegrees,
-      needsMinimum,
-      actualDegrees: needsMinimum ? minSegmentDegrees : rawDegrees,
-    };
-  });
+  // First pass: calculate raw degrees, filtering out zero-value segments
+  const rawSegments: ProcessedSegment[] = allSegments
+    .filter((segment) => segment.value > 0)
+    .map((segment) => {
+      const rawDegrees =
+        total > 0 ? (segment.value / total) * availableDegrees : 0;
+      const needsMinimum = rawDegrees < minSegmentDegrees;
+      return {
+        ...segment,
+        rawDegrees,
+        needsMinimum,
+        actualDegrees: needsMinimum ? minSegmentDegrees : rawDegrees,
+      };
+    });
 
   // Calculate total degrees needed vs available
   const totalDegreesNeeded = rawSegments.reduce(

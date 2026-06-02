@@ -1,24 +1,18 @@
 // Core Components
 export * from './components/Accordion';
-export * from './components/Alert';
-export * from './components/AutowidthInput';
 export * from './components/Avatar';
 export * from './components/Badge';
 export * from './components/Banner';
 export * from './components/Breadcrumb';
 export * from './components/Button';
 export * from './components/Card';
-export * from './components/Carousel';
-export * from './components/CarouselModal';
 export * from './components/Checkbox';
 export * from './components/Chip';
-export * from './components/ChipButton';
 export * from './components/Code';
 export * from './components/CodeTabs';
+export * from './components/Collapsible';
 export * from './components/Container';
 export * from './components/CopyableCode';
-export * from './components/CrossPageToasts';
-export * from './components/DataField';
 export * from './components/DatePicker';
 export * from './components/ErrorFallback';
 export * from './components/ExpandableText';
@@ -31,7 +25,6 @@ export * from './components/FileList';
 // Form Components
 export * from './components/FormControl';
 export * from './components/FormLabel';
-export * from './components/GuideCue';
 
 // Icon Components (wrapper only, individual icons available via @mindlogic-ai/logician-ui/icons)
 export type { IconProps } from './components/Icon/_utils/createIcon';
@@ -63,6 +56,7 @@ export * from './components/MDXEditor';
 export * from './components/Menu';
 export * from './components/Modal';
 export * from './components/MonthPicker';
+export * from './components/Popover';
 
 // Navigation Components
 export * from './components/Pagination';
@@ -77,6 +71,7 @@ export * from './components/RadialProgress';
 
 // Interactive Components
 export * from './components/Radio';
+export * from './components/ScaledContext';
 export * from './components/SeeMoreButton';
 export * from './components/SegmentedControl';
 export * from './components/SegmentedProgressBar';
@@ -104,4 +99,10 @@ export {
   Subtitle,
   Text,
 } from './components/Typography';
-export * from './components/UrlInput';
+
+// Hooks
+export type { LanguageContextValue } from './hooks/useLanguage';
+export { LanguageContext, useLanguage } from './hooks/useLanguage';
+
+// Theme exports
+export { logicianConfig, system, theme } from './theme';

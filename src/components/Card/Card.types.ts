@@ -1,8 +1,8 @@
-import { CardProps as ChakraCardProps } from '@chakra-ui/react';
+import { CardRootProps as ChakraCardRootProps } from '@chakra-ui/react';
 
 export type CardVariant = 'default' | 'gradient';
 
-export type CardProps = ChakraCardProps & {
+export type CardProps = ChakraCardRootProps & {
   clickable?: boolean;
   variant?: CardVariant;
 };

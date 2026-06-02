@@ -40,7 +40,6 @@ const external = [
   'react-pin-input',
   'react-select',
   'react-spinners',
-  'react-textarea-autosize',
   /^rehype-/,
   /^remark-/,
 ];
@@ -84,7 +83,8 @@ export default {
     json(),
     postcss({
       modules: true,
-      extract: false, // Inject CSS into JS
+      inject: (cssVariableName) =>
+        `(function(){if(typeof document==='undefined')return;var s=document.createElement('style');s.textContent=${cssVariableName};document.head.appendChild(s);}());`,
       minimize: true,
     }),
     resolve({

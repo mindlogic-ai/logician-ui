@@ -1,52 +1,42 @@
-import { IconButtonProps } from '@chakra-ui/react';
+import { ButtonProps as ChakraButtonProps } from '@chakra-ui/react';
 
-import { IconButtonVariant } from './IconButton.types';
+import {
+  buttonColorPalettes,
+  buttonColorPaletteStyles,
+  buttonVariants,
+} from '../Button/Button.styles';
+import { ButtonColorPalette, ButtonVariant } from '../Button/Button.types';
 
-// TODO: UX를 위해 hover, active 스타일 구분 필요
-export const variantStyles: Record<
-  Exclude<IconButtonVariant, undefined>,
-  Partial<IconButtonProps>
+export {
+  buttonColorPalettes as iconButtonColorPalettes,
+  buttonColorPalettes as iconButtonColorSchemes, // Deprecated
+  buttonVariants as iconButtonVariants,
+};
+
+type StyleProps = Partial<ChakraButtonProps>;
+
+/**
+ * Override certain Button styles that don't apply to IconButton.
+ */
+export const iconButtonColorPaletteStyles: Record<
+  ButtonColorPalette,
+  Record<ButtonVariant, StyleProps>
 > = {
-  primary: {
-    borderColor: 'primary.main',
-    bgColor: 'primary.main',
-    color: 'white',
-    _hover: {
-      borderColor: 'blue.800',
-      bgColor: 'blue.800',
-    },
-  },
-  secondary: {
-    borderColor: 'primary.light',
-    bgColor: 'primary.light',
-    color: 'primary.main',
-    _hover: {
-      borderColor: 'blue.200',
-      bgColor: 'blue.200',
-    },
-  },
-  tertiary: {
-    borderColor: 'gray.400',
-    bgColor: 'white',
-    color: 'gray.1200',
-    _hover: {
-      bgColor: 'gray.50',
-    },
-  },
-  danger: {
-    borderColor: 'danger.main',
-    bgColor: 'danger.main',
-    color: 'white',
-    _hover: {
-      bgColor: 'red.600',
-    },
-  },
-  link: {
-    borderColor: 'transparent',
-    bgColor: 'transparent',
-    borderRadius: 'none',
-    _hover: {
-      bgColor: 'transparent',
+  ...buttonColorPaletteStyles,
+  neutral: {
+    ...buttonColorPaletteStyles.neutral,
+    ghost: {
+      ...buttonColorPaletteStyles.neutral.ghost,
+      color: 'gray.600',
     },
   },
 };
+
+export {
+  iconButtonColorPaletteStyles as iconButtonColorSchemeStyles, // Deprecated
+};
+
+export const getIconButtonStyles = (
+  colorPalette: ButtonColorPalette = 'neutral',
+  variant: ButtonVariant = 'ghost'
+): StyleProps => iconButtonColorPaletteStyles[colorPalette][variant];

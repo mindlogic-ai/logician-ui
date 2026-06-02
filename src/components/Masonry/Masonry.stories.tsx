@@ -70,7 +70,7 @@ export const Basic: Story = {
             shadow="sm"
           >
             <Text fontWeight="bold">{item.title}</Text>
-            <Text fontSize="sm">Height: {item.height}px</Text>
+            <Text textStyle="subtext">Height: {item.height}px</Text>
           </Box>
         ))}
       </Masonry>
@@ -118,7 +118,7 @@ export const WithRealContent: Story = {
             shadow="sm"
             mb={4}
           >
-            <Text fontWeight="bold" fontSize="lg" mb={2} color="blue.500">
+            <Text fontWeight="bold" textStyle="h5" mb={2} color="blue.500">
               {category.name}
             </Text>
             {category.items.map((item) => (
@@ -212,7 +212,7 @@ export const HorizontalArrangement: Story = {
 
     return (
       <Box>
-        <Text fontSize="xl" fontWeight="bold" mb={4}>
+        <Text textStyle="h4" fontWeight="bold" mb={4}>
           Horizontal Arrangement (row by row)
         </Text>
         <Masonry numCols={3} horizontalArrangement={true} gap={4}>
@@ -230,7 +230,7 @@ export const HorizontalArrangement: Story = {
           ))}
         </Masonry>
 
-        <Text fontSize="xl" fontWeight="bold" mt={8} mb={4}>
+        <Text textStyle="h4" fontWeight="bold" mt={8} mb={4}>
           Height-Balanced Arrangement (default)
         </Text>
         <Masonry numCols={3} horizontalArrangement={false} gap={4}>
@@ -259,7 +259,7 @@ export const ComparisonWithGrid: Story = {
 
     return (
       <Box>
-        <Text fontSize="xl" fontWeight="bold" mb={4}>
+        <Text textStyle="h4" fontWeight="bold" mb={4}>
           Masonry Layout
         </Text>
         <Masonry {...args}>
@@ -277,10 +277,10 @@ export const ComparisonWithGrid: Story = {
           ))}
         </Masonry>
 
-        <Text fontSize="xl" fontWeight="bold" mt={8} mb={4}>
+        <Text textStyle="h4" fontWeight="bold" mt={8} mb={4}>
           Regular Grid Layout
         </Text>
-        <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} spacing={4}>
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 3, xl: 4 }} gap={4}>
           {items.map((item) => (
             <Box
               key={item.id}

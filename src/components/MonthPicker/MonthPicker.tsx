@@ -8,19 +8,14 @@ import {
   HStack,
   Input,
   InputGroup,
-  InputLeftElement,
   Popover,
-  PopoverBody,
-  PopoverContent,
-  PopoverTrigger,
   Portal,
-  useDisclosure,
   VStack,
 } from '@chakra-ui/react';
 import { format, isAfter, isSameMonth } from 'date-fns';
 
 import { Text } from '@/components/Typography';
-import useLocale from '@/hooks/useLocale';
+import useLanguage from '@/hooks/useLanguage';
 import { useTranslate } from '@/hooks/useTranslate';
 
 import {
@@ -49,10 +44,13 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
   usePortal = true,
   popoverProps,
   name,
+  showClearButton = true,
   ...boxProps
 }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const { language: locale } = useLocale();
+  const [isOpen, setIsOpen] = useState(false);
+  const onOpen = () => setIsOpen(true);
+  const onClose = () => setIsOpen(false);
+  const { language: locale } = useLanguage();
   const translate = useTranslate();
 
   const [currentYear, setCurrentYear] = useState(() =>
@@ -206,94 +204,113 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
   }, [onChange]);
 
   const popoverContent = (
-    <PopoverContent width="320px">
-      <PopoverBody>
-        <VStack spacing={4} align="stretch">
-          {/* Year Navigation */}
-          <HStack justify="space-between" align="center">
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => handleYearChange('prev')}
-              disabled={!canNavigateToPrevYear}
-              opacity={!canNavigateToPrevYear ? 0.4 : 1}
-            >
-              <IoIosArrowBack />
-            </Button>
+    <Popover.Positioner>
+      <Popover.Content width="320px">
+        <Popover.Body>
+          <VStack gap={4} align="stretch">
+            {/* Year Navigation */}
+            <HStack justify="space-between" align="center">
+              <Button
+                size="sm"
+                colorPalette="neutral"
+                variant="ghost"
+                onClick={() => handleYearChange('prev')}
+                disabled={!canNavigateToPrevYear}
+                opacity={!canNavigateToPrevYear ? 0.4 : 1}
+              >
+                <IoIosArrowBack />
+              </Button>
 
-            <Text fontWeight="semibold" fontSize="lg">
-              {currentYear}
-            </Text>
+              <Text fontWeight="semibold" textStyle="h5">
+                {currentYear}
+              </Text>
 
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => handleYearChange('next')}
-              disabled={!canNavigateToNextYear}
-              opacity={!canNavigateToNextYear ? 0.4 : 1}
-            >
-              <IoChevronForward />
-            </Button>
-          </HStack>
+              <Button
+                size="sm"
+                colorPalette="neutral"
+                variant="ghost"
+                onClick={() => handleYearChange('next')}
+                disabled={!canNavigateToNextYear}
+                opacity={!canNavigateToNextYear ? 0.4 : 1}
+              >
+                <IoChevronForward />
+              </Button>
+            </HStack>
 
-          {/* Months Grid */}
-          <Grid templateColumns="repeat(3, 1fr)" gap={2}>
-            {monthNames.map((monthName, monthIndex) => (
-              <MonthButton
-                key={monthIndex}
-                month={monthIndex}
-                year={currentYear}
-                monthName={monthName}
-                selectedRange={selectedRange}
-                selectionStart={selectionStart}
-                hoveredMonth={hoveredMonth}
-                minMonth={minMonth}
-                maxMonth={maxMonth}
-                onClick={handleMonthClick}
-                onMouseEnter={handleMonthHover}
-                onMouseLeave={handleMonthHoverLeave}
-              />
-            ))}
-          </Grid>
+            {/* Months Grid */}
+            <Grid templateColumns="repeat(3, 1fr)" gap={2}>
+              {monthNames.map((monthName, monthIndex) => (
+                <MonthButton
+                  key={monthIndex}
+                  month={monthIndex}
+                  year={currentYear}
+                  monthName={monthName}
+                  selectedRange={selectedRange}
+                  selectionStart={selectionStart}
+                  hoveredMonth={hoveredMonth}
+                  minMonth={minMonth}
+                  maxMonth={maxMonth}
+                  onClick={handleMonthClick}
+                  onMouseEnter={handleMonthHover}
+                  onMouseLeave={handleMonthHoverLeave}
+                />
+              ))}
+            </Grid>
 
-          {/* Action Buttons */}
-          <HStack spacing={2} justify="flex-end">
-            <Button size="sm" variant="ghost" onClick={handleClear}>
-              {translate('clear')}
-            </Button>
-          </HStack>
-        </VStack>
-      </PopoverBody>
-    </PopoverContent>
+            {/* Action Buttons */}
+            {showClearButton && (
+              <HStack gap={2} justify="flex-end">
+                <Button
+                  size="sm"
+                  colorPalette="neutral"
+                  variant="ghost"
+                  onClick={handleClear}
+                >
+                  {translate('clear')}
+                </Button>
+              </HStack>
+            )}
+          </VStack>
+        </Popover.Body>
+      </Popover.Content>
+    </Popover.Positioner>
   );
 
   return (
     <Box {...boxProps}>
-      <Popover
-        isOpen={isOpen}
-        onOpen={onOpen}
-        onClose={onClose}
-        placement="bottom-start"
+      <Popover.Root
+        open={isOpen}
+        onOpenChange={(e) => {
+          if (e.open) {
+            onOpen();
+          } else {
+            onClose();
+          }
+        }}
+        positioning={{ placement: 'bottom-start' }}
         {...popoverProps}
       >
-        <PopoverTrigger>
-          <InputGroup>
-            <InputLeftElement>
-              <MdOutlineCalendarToday boxSize="xs" color="gray.800" />
-            </InputLeftElement>
-            <Input
-              name={name}
-              value={displayValue}
-              placeholder={effectivePlaceholder}
-              readOnly
-              disabled={disabled}
-              cursor={disabled ? 'not-allowed' : 'pointer'}
-              onClick={disabled ? undefined : onOpen}
-            />
-          </InputGroup>
-        </PopoverTrigger>
+        <Popover.Trigger {...({ asChild: true } as any)}>
+          <Box>
+            <InputGroup
+              startElement={
+                <MdOutlineCalendarToday boxSize="xs" color="gray.800" />
+              }
+            >
+              <Input
+                name={name}
+                value={displayValue}
+                placeholder={effectivePlaceholder}
+                readOnly
+                disabled={disabled}
+                cursor={disabled ? 'not-allowed' : 'pointer'}
+                onClick={disabled ? undefined : onOpen}
+              />
+            </InputGroup>
+          </Box>
+        </Popover.Trigger>
         {usePortal ? <Portal>{popoverContent}</Portal> : popoverContent}
-      </Popover>
+      </Popover.Root>
     </Box>
   );
 };

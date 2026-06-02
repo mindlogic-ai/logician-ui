@@ -1,0 +1,1 @@
+export { SliderThumbs } from './SliderThumbs';

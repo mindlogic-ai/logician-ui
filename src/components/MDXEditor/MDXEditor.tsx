@@ -1,7 +1,7 @@
 'use client';
 
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
-import { Box, useTheme } from '@chakra-ui/react';
+import { Box, useToken } from '@chakra-ui/react';
 import {
   BlockTypeSelect,
   BoldItalicUnderlineToggles,
@@ -36,8 +36,21 @@ export const MDXEditor = forwardRef<
   BaseEditorProps & MDXEditorMethods,
   MDXEditorProps
 >(({ containerProps, autoFocus = true, onError, ...rest }, ref) => {
-  const theme = useTheme();
   const [error, setError] = useState<string | null>(null);
+
+  // Resolve theme tokens to actual values
+  const [gray50, gray100, gray800, primaryLight, primaryLighter, primaryMain] =
+    useToken('colors', [
+      'gray.50',
+      'gray.100',
+      'gray.800',
+      'primary.light',
+      'primary.lighter',
+      'primary.main',
+    ]);
+
+  const [space1, space2, space4] = useToken('spacing', ['1', '2', '4']);
+  const [radiusSm] = useToken('radii', ['sm']);
 
   // 내부적으로 Editor 인스턴스를 참조하기 위한 로컬 ref
   const editorRef = useRef<BaseEditorProps & MDXEditorMethods>(null);
@@ -67,27 +80,40 @@ export const MDXEditor = forwardRef<
       onClick={handleContainerClick}
       cursor="text"
       {...containerProps}
-      sx={{
-        ...containerProps?.sx,
-        '.mdxeditor': {
+      css={{
+        /**
+         * Chakra v3 css prop styling notes:
+         *
+         * 1. All nested selectors require '&' prefix (e.g., '& .class', '& h1')
+         * 2. Use full CSS property names (background, padding) instead of Chakra
+         *    shorthand props (bg, p) in nested selectors
+         * 3. Color values must be resolved via useToken(), not token strings
+         * 4. Font sizes use responsive objects: { base: '2.4em', md: '3em' }
+         * 5. List styles must be explicitly defined (listStyleType, etc.)
+         *
+         * These requirements differ from v2's sx prop, which was more implicit.
+         * v3 prioritizes performance and explicitness over automatic handling.
+         */
+        ...containerProps?.css,
+        '& .mdxeditor': {
           width: '100%',
           minHeight: '300px',
           height: '100%',
-          bg: 'white',
+          background: 'white',
           display: 'flex',
           flexDirection: 'column',
         },
-        '.mdxeditor-toolbar': {
+        '& .mdxeditor-toolbar': {
           display: 'flex',
-          gap: theme.space[2],
-          p: theme.space[2],
+          gap: space2,
+          padding: space2,
           borderBottomWidth: '1px',
-          bg: 'gray.50',
+          background: gray50,
           flexShrink: 0,
           cursor: 'default',
         },
         // Target the root contenteditable wrapper
-        '[class*="_rootContentEditableWrapper_"]': {
+        '& [class*="_rootContentEditableWrapper_"]': {
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
@@ -96,89 +122,130 @@ export const MDXEditor = forwardRef<
           overflow: 'auto',
         },
         // Target the actual contenteditable element
-        '[contenteditable="true"]': {
+        '& [contenteditable="true"]': {
           flex: 1,
           minHeight: '100%',
           outline: 'none',
         },
         // Target any intermediate wrapper elements
-        '[class*="_contentEditable_"]': {
+        '& [class*="_contentEditable_"]': {
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
         },
-        '.content-editable': {
-          padding: theme.space[4],
+        '& .content-editable': {
+          padding: space4,
           color: 'black',
           display: 'flex',
           flexDirection: 'column',
-          gap: theme.space[1.5],
+          gap: radiusSm,
           flex: 1,
           height: '100%',
 
-          'h1, h2, h3, h4, h5': {
-            marginBottom: theme.space[0.5],
+          '& h1, & h2, & h3, & h4, & h5': {
+            marginBottom: '2px',
             fontWeight: 'bold',
           },
 
-          'h1:not(:first-child), h2:not(:first-child), h3:not(:first-child), h4:not(:first-child)':
+          '& h1:not(:first-child), & h2:not(:first-child), & h3:not(:first-child), & h4:not(:first-child)':
             {
-              marginTop: theme.space[1],
+              marginTop: space1,
             },
 
-          h1: {
-            fontSize: theme.fontSizes.h1,
+          /**
+           * Font sizes - Cannot be tokenized due to responsive objects
+           *
+           * Unlike spacing/radii/colors, fontSize values here are responsive objects
+           * { base: '2.4em', md: '3em' } which cannot be stored as regular tokens
+           * in Chakra v3. Only textStyles support responsive values, but we cannot
+           * extract just the fontSize from textStyles using useToken().
+           *
+           * These values match theme/index.ts textStyles exactly and must be
+           * manually synchronized when updating the theme:
+           * - h1: { base: '2.4em', md: '3em' }
+           * - h2: { base: '2em', md: '2.5em' }
+           * - h3: { base: '1.5em', md: '1.75em' }
+           * - h4: { base: '1.25em', md: '1.44em' }
+           * - h5: { base: '1.1em', md: '1.2em' }
+           */
+          '& h1': {
+            fontSize: { base: '2.4em', md: '3em' },
           },
-          h2: {
-            fontSize: theme.fontSizes.h2,
+          '& h2': {
+            fontSize: { base: '2em', md: '2.5em' },
           },
-          h3: {
-            fontSize: theme.fontSizes.h3,
+          '& h3': {
+            fontSize: { base: '1.5em', md: '1.75em' },
           },
-          h4: {
-            fontSize: theme.fontSizes.h4,
+          '& h4': {
+            fontSize: { base: '1.25em', md: '1.44em' },
           },
-          h5: {
-            fontSize: theme.fontSizes.h5,
+          '& h5': {
+            fontSize: { base: '1.1em', md: '1.2em' },
           },
 
-          'ol, ul': {
-            marginTop: theme.space[2],
-            paddingInlineStart: theme.space[4],
+          /**
+           * List styling - IMPORTANT: v3 requires explicit list-style properties
+           *
+           * In Chakra v2, the `sx` prop automatically preserved browser default list styles.
+           * In Chakra v3, the `css` prop is more explicit and performant, but requires
+           * manual specification of list styles to override MDXEditor's CSS resets.
+           *
+           * Required properties:
+           * - listStyleType: 'disc' (ul) or 'decimal' (ol) - Shows bullets/numbers
+           * - listStylePosition: 'outside' - Places markers outside content box
+           * - display: 'list-item' (on li) - Ensures proper list item rendering
+           *
+           * Why this changed: v3 optimized for speed by removing automatic style inference,
+           * requiring more explicit style declarations.
+           */
+          '& ul': {
+            marginTop: space2,
+            paddingInlineStart: space4,
+            listStyleType: 'disc',
+            listStylePosition: 'outside',
           },
 
-          li: {
+          '& ol': {
+            marginTop: space2,
+            paddingInlineStart: space4,
+            listStyleType: 'decimal',
+            listStylePosition: 'outside',
+          },
+
+          '& li': {
             lineHeight: '1.5',
-            marginBottom: theme.space[2],
+            marginBottom: space2,
+            display: 'list-item',
           },
 
-          blockquote: {
+          '& blockquote': {
             borderLeftWidth: '4px',
-            borderLeftColor: 'primary.light',
-            bg: 'primary.lighter',
-            pl: theme.space[4],
-            py: theme.space[2],
-            my: theme.space[4],
-            color: 'gray.800',
+            borderLeftColor: primaryLight,
+            background: primaryLighter,
+            paddingLeft: space4,
+            paddingBlock: space2,
+            marginBlock: space4,
+            color: gray800,
           },
 
-          a: {
-            color: 'primary.main',
+          '& a': {
+            color: primaryMain,
             textDecoration: 'underline',
           },
 
-          code: {
+          '& code': {
             fontFamily: 'mono',
-            bg: 'gray.100',
-            px: theme.space[1],
-            borderRadius: theme.radii.sm,
+            background: gray100,
+            paddingInline: space1,
+            borderRadius: radiusSm,
 
-            span: {
-              bg: 'transparent',
+            '& span': {
+              background: 'transparent',
             },
           },
         },
-        '.mdxeditor-diff-source-wrapper': {
+        '& .mdxeditor-diff-source-wrapper': {
           overflow: 'auto',
         },
       }}

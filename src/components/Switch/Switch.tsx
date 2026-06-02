@@ -1,8 +1,28 @@
-import React from 'react';
+import { forwardRef } from 'react';
 import { Switch as ChakraSwitch } from '@chakra-ui/react';
 
-export const Switch = ({ ...rest }) => {
-  return <ChakraSwitch {...rest} />;
-};
+import { SwitchProps } from './Switch.types';
+import { SwitchControl } from './SwitchControl';
+import { SwitchLabel } from './SwitchLabel';
 
-Switch.displayName = 'Switch';
+const SwitchBase = forwardRef<
+  React.ComponentRef<typeof ChakraSwitch.Root>,
+  SwitchProps
+>(({ id, children, ...props }, ref) => (
+  <ChakraSwitch.Root
+    ref={ref}
+    colorPalette="primary"
+    cursor="pointer"
+    _disabled={{ cursor: 'not-allowed' }}
+    {...props}
+  >
+    <ChakraSwitch.HiddenInput id={id} />
+    {children}
+  </ChakraSwitch.Root>
+));
+SwitchBase.displayName = 'Switch';
+
+export const Switch = Object.assign(SwitchBase, {
+  Control: SwitchControl,
+  Label: SwitchLabel,
+});
