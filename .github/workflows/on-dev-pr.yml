@@ -10,19 +10,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout PR head
         uses: actions/checkout@v4
         with:
+          # Check out the PR's head commit (not the default test-merge ref) so
+          # the conflict probe below compares head ↔ base directly.
+          ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
-      - name: Fetch main branch
-        run: git fetch origin main
-
-      - name: Check for merge conflicts with main
+      - name: Check for merge conflicts with base branch
+        env:
+          # The branch this PR targets (e.g. "dev") — not hardcoded "main".
+          BASE_REF: ${{ github.base_ref }}
         run: |
-          git merge --no-commit --no-ff origin/main || {
-            echo "❌ Merge conflicts detected with main branch"
+          # A git identity is required for `git merge --no-ff` to prepare its
+          # merge commit; without it the merge aborts with "empty ident name",
+          # which previously masqueraded as a merge conflict.
+          git config user.email "ci@mindlogic.ai"
+          git config user.name "CI Conflict Check"
+          git fetch origin "$BASE_REF"
+          git merge --no-commit --no-ff "origin/$BASE_REF" || {
+            echo "❌ Merge conflicts detected with $BASE_REF branch"
             exit 1
           }
           git merge --abort || true
-          echo "✅ No merge conflicts detected"
+          echo "✅ No merge conflicts detected with $BASE_REF"
