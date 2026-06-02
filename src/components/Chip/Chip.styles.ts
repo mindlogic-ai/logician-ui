@@ -22,7 +22,7 @@ export const colorSchemeStyles: Record<
 > = {
   primary: {
     solid: {
-      bgColor: 'primary.main',
+      bgColor: 'blue.500',
       color: 'white',
     },
     soft: {
@@ -38,7 +38,7 @@ export const colorSchemeStyles: Record<
   },
   secondary: {
     solid: {
-      bgColor: 'secondary.main',
+      bgColor: 'violet.500',
       color: 'white',
     },
     soft: {
@@ -54,7 +54,7 @@ export const colorSchemeStyles: Record<
   },
   danger: {
     solid: {
-      bgColor: 'danger.main',
+      bgColor: 'rose.500',
       color: 'white',
     },
     soft: {
@@ -70,7 +70,7 @@ export const colorSchemeStyles: Record<
   },
   success: {
     solid: {
-      bgColor: 'success.main',
+      bgColor: 'green.600',
       color: 'white',
     },
     soft: {
@@ -86,7 +86,7 @@ export const colorSchemeStyles: Record<
   },
   warning: {
     solid: {
-      bgColor: 'warning.main',
+      bgColor: 'gold.500',
       color: 'white',
     },
     soft: {

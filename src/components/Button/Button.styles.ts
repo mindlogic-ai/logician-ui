@@ -33,15 +33,15 @@ export const buttonColorPaletteStyles: Record<
    */
   primary: {
     solid: {
-      borderColor: 'primary.main',
-      bgColor: 'primary.main', // #1751D0
+      borderColor: 'blue.500',
+      bgColor: 'blue.500',
       color: 'white',
       _hover: {
         borderColor: 'blue.600',
-        bgColor: 'blue.600', // #1241A6
+        bgColor: 'blue.600',
       },
       _active: {
-        bgColor: 'primary.dark', // #0D317D
+        bgColor: 'blue.700',
         transform: 'scale(0.97)',
       },
     },
@@ -89,15 +89,15 @@ export const buttonColorPaletteStyles: Record<
    */
   secondary: {
     solid: {
-      borderColor: 'secondary.main',
-      bgColor: 'secondary.main', // #9117D0
+      borderColor: 'violet.500',
+      bgColor: 'violet.500',
       color: 'white',
       _hover: {
         borderColor: 'violet.600',
-        bgColor: 'violet.600', // #7412A6
+        bgColor: 'violet.600',
       },
       _active: {
-        bgColor: 'secondary.dark', // #570D7D
+        bgColor: 'violet.700',
         transform: 'scale(0.97)',
       },
     },
@@ -145,15 +145,15 @@ export const buttonColorPaletteStyles: Record<
    */
   danger: {
     solid: {
-      borderColor: 'danger.main',
-      bgColor: 'danger.main', // #D01721
+      borderColor: 'rose.500',
+      bgColor: 'rose.500',
       color: 'white',
       _hover: {
         borderColor: 'rose.600',
-        bgColor: 'rose.600', // #A6121A
+        bgColor: 'rose.600',
       },
       _active: {
-        bgColor: 'danger.dark', // #7D0D14
+        bgColor: 'rose.700',
         transform: 'scale(0.97)',
       },
     },
@@ -201,15 +201,15 @@ export const buttonColorPaletteStyles: Record<
    */
   success: {
     solid: {
-      borderColor: 'success.main',
-      bgColor: 'success.main', // #1AA612
+      borderColor: 'green.600',
+      bgColor: 'green.600',
       color: 'white',
       _hover: {
-        borderColor: 'success.dark',
-        bgColor: 'success.dark', // #147D0D
+        borderColor: 'green.700',
+        bgColor: 'green.700',
       },
       _active: {
-        bgColor: 'green.800', // #0D5309
+        bgColor: 'green.800',
         transform: 'scale(0.97)',
       },
     },
@@ -257,15 +257,15 @@ export const buttonColorPaletteStyles: Record<
    */
   warning: {
     solid: {
-      borderColor: 'warning.main',
-      bgColor: 'warning.main', // #D0A117
+      borderColor: 'gold.500',
+      bgColor: 'gold.500',
       color: 'white',
       _hover: {
         borderColor: 'gold.600',
-        bgColor: 'gold.600', // #A68112
+        bgColor: 'gold.600',
       },
       _active: {
-        bgColor: 'warning.dark', // #7D610D
+        bgColor: 'gold.700',
         transform: 'scale(0.97)',
       },
     },

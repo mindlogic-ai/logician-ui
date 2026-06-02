@@ -11,9 +11,10 @@ export const CheckboxControl = forwardRef<HTMLDivElement, CheckboxControlProps>(
     <ChakraCheckbox.Control
       ref={ref}
       borderRadius="xs"
-      // strong (not default): the unchecked box is border-only, so it needs a
-      // clearly visible outline in both modes (gray.500 / gray.900 _dark).
-      borderColor="border.strong"
+      // The unchecked box is border-only, so it needs a clearly visible outline.
+      // gray.500 in light; gray.800 in dark (border.strong's gray.900 was only
+      // 2.80:1 on canvas — gray.800 reaches the 3:1 non-text-contrast bar).
+      borderColor={{ base: 'gray.500', _dark: 'gray.800' }}
       borderWidth="1px"
       _checked={{ bgColor: 'primary.main', borderColor: 'primary.main' }}
       _indeterminate={{ bgColor: 'primary.main', borderColor: 'primary.main' }}

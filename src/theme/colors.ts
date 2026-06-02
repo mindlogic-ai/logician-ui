@@ -121,7 +121,11 @@ export const semanticTokens = {
         value: { base: '{colors.violet.200}', _dark: '{colors.violet.600}' },
       },
       main: {
-        value: { base: '{colors.violet.500}', _dark: '{colors.violet.300}' },
+        // _dark is violet.200 (not .300 like the other brands): violet.300 on
+        // the dark canvas is only 4.29:1, just under AA. Solid fills no longer
+        // use *.main (they pin to violet.500), so main now only drives
+        // text/icon/outline on dark, where the extra lift is pure benefit.
+        value: { base: '{colors.violet.500}', _dark: '{colors.violet.200}' },
       },
       dark: {
         value: { base: '{colors.violet.700}', _dark: '{colors.violet.200}' },
