@@ -27,17 +27,25 @@ import { colors, semanticTokens } from './colors';
  * E.g., '{colors.blue.500}' -> '#1751D0'
  */
 const resolveTokenReference = (reference: string): string => {
-  // Check if it's a reference string like '{colors.blue.500}'
-  const match = reference.match(/^\{colors\.(\w+)\.(\d+)\}$/);
-  if (!match) {
-    // Already a hex value or unknown format
+  // Scale reference, e.g. '{colors.blue.500}' or '{colors.gray.1500}'.
+  const scaleMatch = reference.match(/^\{colors\.(\w+)\.(\w+)\}$/);
+  if (scaleMatch) {
+    const [, colorName, shade] = scaleMatch;
+    const colorScale = (colors as any)[colorName];
+    if (colorScale && colorScale[shade]) {
+      return colorScale[shade].value;
+    }
     return reference;
   }
-  const [, colorName, shade] = match;
-  const colorScale = (colors as any)[colorName];
-  if (colorScale && colorScale[shade]) {
-    return colorScale[shade].value;
+  // Flat reference with no shade, e.g. '{colors.white}' / '{colors.black}'.
+  const flatMatch = reference.match(/^\{colors\.(\w+)\}$/);
+  if (flatMatch) {
+    const entry = (colors as any)[flatMatch[1]];
+    if (entry && typeof entry.value === 'string') {
+      return entry.value;
+    }
   }
+  // Already a hex value or unknown format.
   return reference;
 };
 

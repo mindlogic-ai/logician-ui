@@ -317,6 +317,10 @@ export const semanticTokens = {
  * This is the contract consumed by the factchat primitive→semantic codemod and
  * by reviewers. It is intentionally hand-maintained alongside `semanticTokens`
  * so a rename here is a visible, reviewable diff.
+ *
+ * Note: `bg.panel` is deliberately omitted — it is an internal realignment of a
+ * Chakra default (for overlay surfaces), not part of the public migration
+ * contract. App code should use `bg.surface`/`bg.canvas`.
  */
 export type SemanticColorToken =
   | `bg.${'canvas' | 'surface' | 'subtle' | 'muted' | 'inverse'}`

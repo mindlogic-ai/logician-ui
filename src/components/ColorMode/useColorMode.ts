@@ -33,15 +33,21 @@ export interface UseColorModeReturn {
 export function useColorMode(): UseColorModeReturn {
   const { theme, resolvedTheme, forcedTheme, setTheme } = useTheme();
 
+  // `colorMode` reflects what's actually rendered (a forced mode wins).
   const colorMode = (forcedTheme ?? resolvedTheme ?? 'light') as ColorMode;
 
+  // Toggle/preference operate on the *user* preference, not the forced
+  // override — so a staged `forcedColorMode` rollout doesn't invert the stored
+  // value, and the preference is preserved for when the force is removed.
+  const resolvedPreference = (resolvedTheme ?? 'light') as ColorMode;
+
   const toggleColorMode = useCallback(() => {
-    setTheme(colorMode === 'dark' ? 'light' : 'dark');
-  }, [colorMode, setTheme]);
+    setTheme(resolvedPreference === 'dark' ? 'light' : 'dark');
+  }, [resolvedPreference, setTheme]);
 
   return {
     colorMode,
-    colorModePreference: forcedTheme ?? theme,
+    colorModePreference: theme,
     setColorMode: setTheme,
     toggleColorMode,
   };
