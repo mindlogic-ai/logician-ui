@@ -34,13 +34,27 @@ jobs:
           NODE_ENV: production
           NODE_OPTIONS: '--max-old-space-size=4096'
 
-      # dev 브랜치: prerelease 모드 진입
+      # dev 브랜치: prerelease 모드 진입 (alpha 버전 계속 증가)
       - name: Enter prerelease mode
         if: github.ref_name == 'dev'
         run: yarn changeset pre enter alpha || true
 
+      # main 브랜치: prerelease 모드 종료 → 정식(코어) 버전으로 승격
+      # 이 단계가 없으면 dev 에서 넘어온 pre.json(mode: pre) 때문에
+      # main 에서도 alpha 버전만 계속 올라감
+      - name: Exit prerelease mode
+        if: github.ref_name == 'main'
+        run: yarn changeset pre exit || true
+
       - name: Apply changeset version
         run: yarn changeset version
+
+      # main 브랜치: pre.json 의 exit 상태를 main 에 커밋하지 않도록 복원.
+      # dev 는 항상 pre 모드를 유지해야 alpha 버전이 계속 증가하므로,
+      # main 에서 exit 상태(mode: exit)가 dev 로 역전파되면 안 됨.
+      - name: Restore pre.json on main
+        if: github.ref_name == 'main'
+        run: git checkout -- .changeset/pre.json || true
 
       - name: Get current version from package.json
         id: get_version
