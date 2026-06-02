@@ -16,7 +16,7 @@ export const PageLoader = ({
       justify="center"
       opacity={isLoading ? 0.5 : 0}
       transition="0.3s opacity ease"
-      bg="white"
+      bg="bg.canvas"
       zIndex={9999}
       {...rest}
     >

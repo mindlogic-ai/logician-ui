@@ -39,9 +39,8 @@ export const MDXEditor = forwardRef<
   const [error, setError] = useState<string | null>(null);
 
   // Resolve theme tokens to actual values
-  const [gray50, gray100, gray800, primaryLight, primaryLighter, primaryMain] =
+  const [gray100, gray800, primaryLight, primaryLighter, primaryMain] =
     useToken('colors', [
-      'gray.50',
       'gray.100',
       'gray.800',
       'primary.light',
@@ -99,7 +98,7 @@ export const MDXEditor = forwardRef<
           width: '100%',
           minHeight: '300px',
           height: '100%',
-          background: 'white',
+          background: 'var(--chakra-colors-bg-surface)',
           display: 'flex',
           flexDirection: 'column',
         },
@@ -108,7 +107,7 @@ export const MDXEditor = forwardRef<
           gap: space2,
           padding: space2,
           borderBottomWidth: '1px',
-          background: gray50,
+          background: 'var(--chakra-colors-bg-subtle)',
           flexShrink: 0,
           cursor: 'default',
         },
@@ -135,7 +134,7 @@ export const MDXEditor = forwardRef<
         },
         '& .content-editable': {
           padding: space4,
-          color: 'black',
+          color: 'var(--chakra-colors-fg-default)',
           display: 'flex',
           flexDirection: 'column',
           gap: radiusSm,

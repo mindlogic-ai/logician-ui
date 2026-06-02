@@ -79,7 +79,7 @@ export const RangeDatePicker = ({
             borderWidth: '1px',
             borderColor: 'primary.extralight',
             borderRadius: 16,
-            bg: 'white',
+            bg: 'bg.surface',
             ...propsConfigs?.calendarPanelProps?.contentProps,
           },
           bodyProps: {

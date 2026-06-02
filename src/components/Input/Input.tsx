@@ -318,8 +318,11 @@ export const Input = forwardRef(
           disabled={disabled}
           readOnly={readOnly}
           data-invalid={invalid || undefined}
-          bg="white"
-          borderColor={invalid ? 'danger.main' : 'gray.400'}
+          bg="bg.surface"
+          color="fg.default"
+          borderColor={
+            invalid ? 'danger.main' : { base: 'gray.400', _dark: 'gray.1100' }
+          }
           _hover={{
             borderColor: invalid ? 'danger.main' : 'primary.lighter',
             ..._hover,
@@ -340,15 +343,15 @@ export const Input = forwardRef(
           _readOnly={{
             opacity: 1,
             cursor: 'not-allowed',
-            bg: 'gray.50',
-            color: 'gray.600',
-            borderColor: 'gray.200',
+            bg: 'bg.subtle',
+            color: 'fg.muted',
+            borderColor: 'border.subtle',
           }}
           _disabled={{
             opacity: 1,
             cursor: 'not-allowed',
-            bg: 'gray.50',
-            color: 'gray.1000',
+            bg: 'bg.subtle',
+            color: { base: 'gray.1000', _dark: 'gray.400' },
             fontWeight: 'semibold',
           }}
           {...rest}

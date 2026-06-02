@@ -66,93 +66,270 @@ export const semanticTokens = {
      * Primary colors (Blue-based)
      * Use for: Primary buttons, links, focus rings, brand elements
      *
-     * Contrast ratios (on white):
+     * Light contrast ratios (on white):
      * - main (#1751D0): 5.9:1 ✓ AA
      * - dark (#0D317D): 9.4:1 ✓ AAA
+     *
+     * `_dark` lightens brand steps ~2 stops so interactive/text tokens keep
+     * AA contrast on dark surfaces (bg.canvas → gray.1500). Background tints
+     * (lightest/extralight/lighter/light) map to the deep end of the scale so
+     * brand-tinted fills read as subtle on dark, not as glare.
      */
     primary: {
-      lightest: { value: '{colors.blue.25}' }, // #F4F7FD - Lightest backgrounds
-      extralight: { value: '{colors.blue.50}' }, // #E8EEFB - Extra-light backgrounds
-      lighter: { value: '{colors.blue.100}' }, // #B9CBF3 - Light backgrounds
-      light: { value: '{colors.blue.200}' }, // #7DA0E8 - Hover states, subtle fills
-      main: { value: '{colors.blue.500}' }, // #1751D0 - Primary actions
-      dark: { value: '{colors.blue.700}' }, // #0D317D - Text on light backgrounds
-      darker: { value: '{colors.blue.900}' }, // #04102A - High-contrast text
+      lightest: {
+        value: { base: '{colors.blue.25}', _dark: '{colors.blue.900}' },
+      },
+      extralight: {
+        value: { base: '{colors.blue.50}', _dark: '{colors.blue.800}' },
+      },
+      lighter: {
+        value: { base: '{colors.blue.100}', _dark: '{colors.blue.700}' },
+      },
+      light: {
+        value: { base: '{colors.blue.200}', _dark: '{colors.blue.600}' },
+      },
+      main: {
+        value: { base: '{colors.blue.500}', _dark: '{colors.blue.300}' },
+      }, // primary actions
+      dark: {
+        value: { base: '{colors.blue.700}', _dark: '{colors.blue.200}' },
+      }, // emphasis text
+      darker: {
+        value: { base: '{colors.blue.900}', _dark: '{colors.blue.100}' },
+      }, // high-contrast text
     },
 
     /**
      * Secondary colors (Violet-based)
      * Use for: Accent elements, highlights, tags
      *
-     * Contrast ratios (on white):
+     * Light contrast ratios (on white):
      * - main (#9117D0): 5.1:1 ✓ AA
      * - dark (#570D7D): 9.2:1 ✓ AAA
      */
     secondary: {
-      lightest: { value: '{colors.violet.25}' }, // #FAF4FD - Lightest backgrounds
-      extralight: { value: '{colors.violet.50}' }, // #F4E8FB - Extra-light backgrounds
-      lighter: { value: '{colors.violet.100}' }, // #DEB9F3 - Light backgrounds
-      light: { value: '{colors.violet.200}' }, // #C17DE8 - Hover states
-      main: { value: '{colors.violet.500}' }, // #9117D0 - Accent actions
-      dark: { value: '{colors.violet.700}' }, // #570D7D - Text on light backgrounds
-      darker: { value: '{colors.violet.900}' }, // #1D042A - High-contrast text
+      lightest: {
+        value: { base: '{colors.violet.25}', _dark: '{colors.violet.900}' },
+      },
+      extralight: {
+        value: { base: '{colors.violet.50}', _dark: '{colors.violet.800}' },
+      },
+      lighter: {
+        value: { base: '{colors.violet.100}', _dark: '{colors.violet.700}' },
+      },
+      light: {
+        value: { base: '{colors.violet.200}', _dark: '{colors.violet.600}' },
+      },
+      main: {
+        value: { base: '{colors.violet.500}', _dark: '{colors.violet.300}' },
+      },
+      dark: {
+        value: { base: '{colors.violet.700}', _dark: '{colors.violet.200}' },
+      },
+      darker: {
+        value: { base: '{colors.violet.900}', _dark: '{colors.violet.100}' },
+      },
     },
 
     /**
      * Danger colors (Rose-based)
      * Use for: Error states, destructive actions, validation errors
      *
-     * Contrast ratios (on white):
+     * Light contrast ratios (on white):
      * - main (#D01721): 5.2:1 ✓ AA
      * - dark (#7D0D14): 9.6:1 ✓ AAA
      */
     danger: {
-      lightest: { value: '{colors.rose.25}' }, // #FDF5F5 - Lightest backgrounds
-      extralight: { value: '{colors.rose.50}' }, // #FBE8E9 - Extra-light backgrounds
-      lighter: { value: '{colors.rose.100}' }, // #F3B9BD - Light error fills
-      light: { value: '{colors.rose.200}' }, // #E87D84 - Error borders, icons
-      main: { value: '{colors.rose.500}' }, // #D01721 - Error text, buttons
-      dark: { value: '{colors.rose.700}' }, // #7D0D14 - Error text on light bg
-      darker: { value: '{colors.rose.900}' }, // #2A0407 - High-contrast error text
+      lightest: {
+        value: { base: '{colors.rose.25}', _dark: '{colors.rose.900}' },
+      },
+      extralight: {
+        value: { base: '{colors.rose.50}', _dark: '{colors.rose.800}' },
+      },
+      lighter: {
+        value: { base: '{colors.rose.100}', _dark: '{colors.rose.700}' },
+      },
+      light: {
+        value: { base: '{colors.rose.200}', _dark: '{colors.rose.600}' },
+      },
+      main: {
+        value: { base: '{colors.rose.500}', _dark: '{colors.rose.300}' },
+      },
+      dark: {
+        value: { base: '{colors.rose.700}', _dark: '{colors.rose.200}' },
+      },
+      darker: {
+        value: { base: '{colors.rose.900}', _dark: '{colors.rose.100}' },
+      },
     },
 
     /**
      * Success colors (Green-based)
      * Use for: Success messages, confirmations, positive feedback
      *
-     * Contrast ratios (on white):
+     * Light contrast ratios (on white):
      * - main (#1AA612): 4.5:1 ✓ AA (large text)
      * - dark (#147D0D): 6.1:1 ✓ AA
      */
     success: {
-      lightest: { value: '{colors.green.25}' }, // #F4FDF4 - Lightest backgrounds
-      extralight: { value: '{colors.green.50}' }, // #E9FBE8 - Extra-light backgrounds
-      lighter: { value: '{colors.green.100}' }, // #BDF3B9 - Light success fills
-      light: { value: '{colors.green.200}' }, // #84E87D - Success borders, icons
-      main: { value: '{colors.green.600}' }, // #1AA612 - Success text, buttons
-      dark: { value: '{colors.green.700}' }, // #147D0D - Success text on light bg
-      darker: { value: '{colors.green.900}' }, // #072A04 - High-contrast success text
+      lightest: {
+        value: { base: '{colors.green.25}', _dark: '{colors.green.900}' },
+      },
+      extralight: {
+        value: { base: '{colors.green.50}', _dark: '{colors.green.800}' },
+      },
+      lighter: {
+        value: { base: '{colors.green.100}', _dark: '{colors.green.700}' },
+      },
+      light: {
+        value: { base: '{colors.green.200}', _dark: '{colors.green.600}' },
+      },
+      main: {
+        value: { base: '{colors.green.600}', _dark: '{colors.green.300}' },
+      },
+      dark: {
+        value: { base: '{colors.green.700}', _dark: '{colors.green.200}' },
+      },
+      darker: {
+        value: { base: '{colors.green.900}', _dark: '{colors.green.100}' },
+      },
     },
 
     /**
      * Warning colors (Gold-based)
      * Use for: Warning messages, caution states, attention needed
      *
-     * Contrast ratios (on white):
+     * Light contrast ratios (on white):
      * - main (#D0A117): 3.0:1 (use dark on light backgrounds)
      * - dark (#7D610D): 5.8:1 ✓ AA
+     *
+     * NOTE: gold is the AA risk in both modes — verify per-pair contrast in the
+     * Storybook palette before relying on `warning.main` for text.
      */
     warning: {
-      lightest: { value: '{colors.gold.25}' }, // #FDFBF4 - Lightest backgrounds
-      extralight: { value: '{colors.gold.50}' }, // #FBF6E8 - Extra-light backgrounds
-      lighter: { value: '{colors.gold.100}' }, // #F3E4B9 - Light warning fills
-      light: { value: '{colors.gold.200}' }, // #E8CD7D - Warning borders, icons
-      main: { value: '{colors.gold.500}' }, // #D0A117 - Warning icons, accents
-      dark: { value: '{colors.gold.700}' }, // #7D610D - Warning text on light bg
-      darker: { value: '{colors.gold.900}' }, // #2A2004 - High-contrast warning text
+      lightest: {
+        value: { base: '{colors.gold.25}', _dark: '{colors.gold.900}' },
+      },
+      extralight: {
+        value: { base: '{colors.gold.50}', _dark: '{colors.gold.800}' },
+      },
+      lighter: {
+        value: { base: '{colors.gold.100}', _dark: '{colors.gold.700}' },
+      },
+      light: {
+        value: { base: '{colors.gold.200}', _dark: '{colors.gold.600}' },
+      },
+      main: {
+        value: { base: '{colors.gold.500}', _dark: '{colors.gold.300}' },
+      },
+      dark: {
+        value: { base: '{colors.gold.700}', _dark: '{colors.gold.200}' },
+      },
+      darker: {
+        value: { base: '{colors.gold.900}', _dark: '{colors.gold.100}' },
+      },
+    },
+
+    /**
+     * Neutral background tokens — map onto the gray.0–1500 scale.
+     * Use for: page/canvas, raised surfaces (cards, menus), subtle/muted fills,
+     * and inverse surfaces (tooltips, contrast banners).
+     *
+     * - canvas: app background
+     * - surface: raised surface (card, popover, menu)
+     * - subtle: subtle fill / secondary surface
+     * - muted: muted fill / tertiary surface, hover
+     * - inverse: high-contrast surface (flips to light in dark mode)
+     */
+    bg: {
+      canvas: {
+        value: { base: '{colors.gray.0}', _dark: '{colors.gray.1500}' },
+      },
+      surface: {
+        value: { base: '{colors.white}', _dark: '{colors.gray.1400}' },
+      },
+      subtle: {
+        value: { base: '{colors.gray.50}', _dark: '{colors.gray.1300}' },
+      },
+      muted: {
+        value: { base: '{colors.gray.100}', _dark: '{colors.gray.1200}' },
+      },
+      inverse: {
+        value: { base: '{colors.gray.1300}', _dark: '{colors.gray.50}' },
+      },
+      // Override Chakra's default `bg.panel` (whose `_dark` resolves to Chakra's
+      // own gray.950 = #111111, off our slate palette). Light value is white —
+      // identical to Chakra's default — so this only realigns dark overlay
+      // surfaces (Menu / Modal / Popover / Toast) onto our gray scale.
+      panel: {
+        value: { base: '{colors.white}', _dark: '{colors.gray.1400}' },
+      },
+    },
+
+    /**
+     * Neutral foreground (text/icon) tokens — map onto the gray.0–1500 scale.
+     *
+     * - default: primary text/icons
+     * - muted: secondary text
+     * - subtle: tertiary / placeholder text
+     * - inverse: text on inverse surfaces (flips with mode)
+     */
+    fg: {
+      default: {
+        value: { base: '{colors.gray.1300}', _dark: '{colors.gray.50}' },
+      },
+      muted: {
+        value: { base: '{colors.gray.900}', _dark: '{colors.gray.400}' },
+      },
+      subtle: {
+        value: { base: '{colors.gray.700}', _dark: '{colors.gray.600}' },
+      },
+      inverse: {
+        value: { base: '{colors.gray.0}', _dark: '{colors.gray.1400}' },
+      },
+    },
+
+    /**
+     * Neutral border tokens — map onto the gray.0–1500 scale.
+     *
+     * - default: standard borders, dividers
+     * - subtle: low-emphasis dividers
+     * - strong: high-emphasis borders, focus outlines on neutral
+     */
+    border: {
+      default: {
+        value: { base: '{colors.gray.300}', _dark: '{colors.gray.1100}' },
+      },
+      subtle: {
+        value: { base: '{colors.gray.200}', _dark: '{colors.gray.1300}' },
+      },
+      strong: {
+        value: { base: '{colors.gray.500}', _dark: '{colors.gray.900}' },
+      },
     },
   },
 } as const;
+
+/**
+ * Union of every semantic color token name exposed by the Logician theme,
+ * in Chakra dotted-path form (e.g. `fg.default`, `bg.surface`, `primary.main`).
+ *
+ * This is the contract consumed by the factchat primitive→semantic codemod and
+ * by reviewers. It is intentionally hand-maintained alongside `semanticTokens`
+ * so a rename here is a visible, reviewable diff.
+ */
+export type SemanticColorToken =
+  | `bg.${'canvas' | 'surface' | 'subtle' | 'muted' | 'inverse'}`
+  | `fg.${'default' | 'muted' | 'subtle' | 'inverse'}`
+  | `border.${'default' | 'subtle' | 'strong'}`
+  | `${'primary' | 'secondary' | 'danger' | 'success' | 'warning'}.${
+      | 'lightest'
+      | 'extralight'
+      | 'lighter'
+      | 'light'
+      | 'main'
+      | 'dark'
+      | 'darker'}`;
 
 /**
  * Primitive color palette following the Golden Ratio system.

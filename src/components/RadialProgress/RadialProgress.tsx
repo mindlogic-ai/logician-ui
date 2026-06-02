@@ -149,7 +149,7 @@ const RadialProgress: React.FC<RadialProgressProps> = ({
       justifyContent="center"
       height={`${size}px`}
       width="100%"
-      backgroundColor="white"
+      backgroundColor="bg.surface"
       className={['ml-radial-progress', className].join(' ')}
       {...rest}
     >
