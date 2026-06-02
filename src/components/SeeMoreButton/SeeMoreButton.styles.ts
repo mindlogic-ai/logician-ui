@@ -5,7 +5,7 @@ export const seeMoreButtonStyles = {
   display: 'flex',
   borderTop: '1px solid',
   borderRadius: 'none',
-  borderColor: 'gray.300',
+  borderColor: 'border.default',
   color: 'fg.subtle',
   fontSize: 'subtitle',
   cursor: 'pointer',

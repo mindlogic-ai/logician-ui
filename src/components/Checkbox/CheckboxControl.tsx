@@ -11,7 +11,9 @@ export const CheckboxControl = forwardRef<HTMLDivElement, CheckboxControlProps>(
     <ChakraCheckbox.Control
       ref={ref}
       borderRadius="xs"
-      borderColor="gray.400"
+      // strong (not default): the unchecked box is border-only, so it needs a
+      // clearly visible outline in both modes (gray.500 / gray.900 _dark).
+      borderColor="border.strong"
       borderWidth="1px"
       _checked={{ bgColor: 'primary.main', borderColor: 'primary.main' }}
       _indeterminate={{ bgColor: 'primary.main', borderColor: 'primary.main' }}
@@ -19,7 +21,7 @@ export const CheckboxControl = forwardRef<HTMLDivElement, CheckboxControlProps>(
       _disabled={{
         cursor: 'not-allowed',
         bgColor: 'gray.300',
-        borderColor: 'gray.200',
+        borderColor: 'border.subtle',
       }}
       {...focusRing}
       {...props}

@@ -9,7 +9,7 @@ export const ModalFooter = ({ className, ...rest }: Dialog.FooterProps) => {
       gap={3}
       pt={4}
       borderTop="1px solid"
-      borderColor="gray.50"
+      borderColor="border.subtle"
       {...rest}
     />
   );

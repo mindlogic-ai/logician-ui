@@ -48,7 +48,7 @@ export const FileList = ({
     <Box
       w="100%"
       border="1px solid"
-      borderColor="gray.200"
+      borderColor="border.subtle"
       borderRadius="md"
       overflow="hidden"
     >
@@ -67,7 +67,7 @@ export const FileList = ({
               }
               border={0}
               borderBottom="1px solid"
-              borderBottomColor="gray.50"
+              borderBottomColor="border.subtle"
               progress={file.progress}
               error={file.error}
               fileSize={file.size}

@@ -21,7 +21,7 @@ export const MenuList = forwardRef<HTMLDivElement, MenuListProps>(
         <Menu.Content
           ref={ref}
           border="1px solid"
-          borderColor="gray.200"
+          borderColor="border.subtle"
           borderRadius="md"
           boxShadow="0 5px 20px 1px {colors.gray.50}"
           p="1.5"
