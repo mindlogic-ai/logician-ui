@@ -66,7 +66,10 @@ export const SegmentedControl = forwardRef<
         }
       }}
       size={size}
-      bg="gray.50"
+      // Track + selected-indicator flip with the mode (light values preserved:
+      // bg.subtle → gray.50, bg.surface → white/gray.0). The indicator's md
+      // shadow carries the raised affordance in both modes.
+      bg="bg.subtle"
       p="1"
       borderRadius={borderRadius}
       boxShadow="none"
@@ -74,7 +77,7 @@ export const SegmentedControl = forwardRef<
       {...rest}
       css={mergeCss(
         {
-          '--segment-indicator-bg': `var(--chakra-colors-gray-0)`,
+          '--segment-indicator-bg': `var(--chakra-colors-bg-surface)`,
           '--segment-indicator-shadow': `var(--chakra-shadows-md)`,
         },
         css

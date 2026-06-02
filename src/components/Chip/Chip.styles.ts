@@ -107,13 +107,16 @@ export const colorSchemeStyles: Record<
       color: 'white',
     },
     soft: {
-      bgColor: 'gray.100',
-      borderColor: 'gray.300',
+      // Flip surface + border with the mode so the fg.muted text stays legible
+      // in dark. Light values preserved (bg.muted → gray.100, border.default →
+      // gray.300).
+      bgColor: 'bg.muted',
+      borderColor: 'border.default',
       color: 'fg.muted',
     },
     outline: {
       border: '1px solid',
-      borderColor: 'gray.500',
+      borderColor: 'border.strong', // gray.500 / gray.900 (_dark)
       color: 'fg.subtle',
       bgColor: 'transparent',
     },

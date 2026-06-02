@@ -67,7 +67,7 @@ User Agent: ${errorInfo.userAgent}`;
           p={12}
           textAlign="center"
           w="full"
-          bgColor="white"
+          bgColor="bg.surface"
           boxShadow="2xl"
         >
           <VStack gap={6} align="center" w="full" mx="auto">

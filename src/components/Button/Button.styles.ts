@@ -327,26 +327,29 @@ export const buttonColorPaletteStyles: Record<
     },
     soft: {
       borderColor: 'transparent',
-      bgColor: 'gray.100', // #F0F3F9
+      // Neutral fills flip with the mode (light values preserved: bg.subtle →
+      // gray.50, bg.muted → gray.100). Without this the surface stayed light in
+      // dark mode while the fg.default text flipped to light = invisible.
+      bgColor: 'bg.subtle', // gray.50 / gray.1300 (_dark)
       color: 'fg.default',
       _hover: {
         borderColor: 'transparent',
-        bgColor: 'gray.200', // #E2E6F0
+        bgColor: 'bg.muted', // gray.100 / gray.1200 (_dark)
       },
       _active: {
-        bgColor: 'gray.200', // #E2E6F0 — same as hover, scale provides pressed feedback
+        bgColor: 'bg.muted', // matches hover; scale provides pressed feedback
         transform: 'scale(0.97)',
       },
     },
     outline: {
-      borderColor: 'gray.300', // #CDD3E0
+      borderColor: 'border.default', // gray.300 / gray.1100 (_dark)
       bgColor: 'transparent',
       color: 'fg.default',
       _hover: {
-        bgColor: 'gray.50', // #F7F9FC
+        bgColor: 'bg.subtle', // gray.50 / gray.1300 (_dark)
       },
       _active: {
-        bgColor: 'gray.100', // #F0F3F9
+        bgColor: 'bg.muted', // gray.100 / gray.1200 (_dark)
         transform: 'scale(0.97)',
       },
     },
@@ -355,10 +358,10 @@ export const buttonColorPaletteStyles: Record<
       bgColor: 'transparent',
       color: 'fg.default',
       _hover: {
-        bgColor: 'gray.50', // #F7F9FC
+        bgColor: 'bg.subtle', // gray.50 / gray.1300 (_dark)
       },
       _active: {
-        bgColor: 'gray.100', // #F0F3F9
+        bgColor: 'bg.muted', // gray.100 / gray.1200 (_dark)
         transform: 'scale(0.97)',
       },
     },
