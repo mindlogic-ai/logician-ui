@@ -49,13 +49,6 @@ jobs:
       - name: Apply changeset version
         run: yarn changeset version
 
-      # main 브랜치: pre.json 의 exit 상태를 main 에 커밋하지 않도록 복원.
-      # dev 는 항상 pre 모드를 유지해야 alpha 버전이 계속 증가하므로,
-      # main 에서 exit 상태(mode: exit)가 dev 로 역전파되면 안 됨.
-      - name: Restore pre.json on main
-        if: github.ref_name == 'main'
-        run: git checkout -- .changeset/pre.json || true
-
       - name: Get current version from package.json
         id: get_version
         shell: bash
@@ -63,10 +56,19 @@ jobs:
           VERSION=$(node -p "require('./package.json').version")
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
+      # 정식 버전을 latest 태그로 배포하려면 publish 시점에 pre 모드가
+      # 종료(exit)된 상태여야 함. pre 모드면 alpha 태그로 배포됨.
       - name: Publish to NPM
         run: yarn changeset publish
         env:
           NPM_CONFIG_PROVENANCE: true
+
+      # main 브랜치: publish 까지 끝난 뒤 pre.json 을 복원해 exit 상태가
+      # main/dev 로 커밋·역전파되지 않도록 함. dev 는 항상 pre 모드를 유지해야
+      # alpha 버전이 계속 증가함.
+      - name: Restore pre.json on main
+        if: github.ref_name == 'main'
+        run: git checkout -- .changeset/pre.json || true
 
       - name: Commit version changes
         continue-on-error: true
