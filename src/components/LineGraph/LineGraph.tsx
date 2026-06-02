@@ -35,15 +35,18 @@ export const LineGraph = <T extends DatumBase>({
             // No dashes
             strokeDasharray=""
             vertical={false}
-            stroke="gray.400"
+            // recharts passes this straight to SVG and never resolves Chakra
+            // tokens, so use the CSS var directly — it flips with the .dark class.
+            stroke="var(--chakra-colors-border-default)"
           />
           <XAxis
             dataKey="name"
             // Color of line
             stroke="transparent"
-            // Props of text
+            // Props of text. CSS var (not a Chakra token) so the axis labels
+            // flip with the mode — recharts won't resolve 'gray.1200' itself.
             tick={{
-              fill: 'gray.1200',
+              fill: 'var(--chakra-colors-fg-muted)',
               fontSize: `${useToken('fontSizes', 'sm')}`,
             }}
             tickMargin={8}
@@ -51,9 +54,9 @@ export const LineGraph = <T extends DatumBase>({
           <YAxis
             // Color of line
             stroke="transparent"
-            // Props of text
+            // CSS var (see XAxis) so the labels flip with the mode.
             tick={{
-              fill: 'gray.1200',
+              fill: 'var(--chakra-colors-fg-muted)',
               fontSize: `${useToken('fontSizes', 'sm')}`,
             }}
             tickMargin={0}

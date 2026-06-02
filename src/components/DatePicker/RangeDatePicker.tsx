@@ -58,7 +58,10 @@ export const RangeDatePicker = ({
             boxShadow: 'lg',
             border: 'none',
             borderWidth: 0,
-            bg: 'gray.0',
+            // Flip the popover surface with the mode; gray.0 stayed white and
+            // framed the (already dark) calendars in dark mode. bg.surface keeps
+            // the same light value and resolves to gray.1400 under .dark.
+            bg: 'bg.surface',
             ...propsConfigs?.popoverCompProps?.popoverContentProps,
           },
           ...propsConfigs?.popoverCompProps,
