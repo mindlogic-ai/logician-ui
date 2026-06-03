@@ -9,6 +9,7 @@ on:
 permissions:
   id-token: write # Required for OIDC
   contents: write
+  pull-requests: write
 
 jobs:
   release:
@@ -17,6 +18,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history needed to re-baseline dev from main
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -34,38 +37,123 @@ jobs:
           NODE_ENV: production
           NODE_OPTIONS: '--max-old-space-size=4096'
 
-      # dev 브랜치: prerelease 모드 진입
-      - name: Enter prerelease mode
+      # ───────────────────────────── dev: alpha line ─────────────────────────────
+      # Invariant guard. dev's alpha campaign must sit on a STABLE base. If
+      # pre.json's base is itself a prerelease (e.g. `3.0.0-alpha.19`), the version
+      # line freezes — only the counter moves, never the base. That exact bug kept
+      # us pinned at 3.0.0-alpha.x for 36 releases. Fail LOUDLY instead of silently
+      # freezing again. (Recovery: re-baseline dev onto the last stable.)
+      - name: Guard prerelease base (dev)
         if: github.ref_name == 'dev'
-        run: yarn changeset pre enter alpha || true
+        run: |
+          if [ -f .changeset/pre.json ]; then
+            BASE=$(node -p "require('./.changeset/pre.json').initialVersions['@mindlogic-ai/logician-ui']")
+            case "$BASE" in
+              *-*)
+                echo "::error::pre.json base '$BASE' is a prerelease. dev must be re-baselined onto the last stable release before it can publish. Refusing to publish to avoid a frozen version line."
+                exit 1
+                ;;
+            esac
+            echo "pre.json base OK (stable): $BASE"
+          fi
+
+      - name: Enter prerelease mode (dev)
+        if: github.ref_name == 'dev'
+        run: |
+          if [ -f .changeset/pre.json ]; then
+            echo "Already in pre mode — continuing the existing alpha campaign."
+          else
+            yarn changeset pre enter alpha
+          fi
+
+      # ──────────────────────────── main: stable line ────────────────────────────
+      # Record the changesets about to be consumed into this stable release, so we
+      # can re-baseline dev precisely afterwards (drop exactly these, keep anything
+      # added to dev after the release PR was cut).
+      - name: Record released changesets (main)
+        if: github.ref_name == 'main'
+        id: released
+        run: |
+          FILES=$(cd .changeset && ls *.md 2>/dev/null | grep -v '^README.md$' || true)
+          {
+            echo "files<<EOF"
+            echo "$FILES"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      # Leave pre mode so the stable version graduates and publishes to `latest`.
+      # We do NOT restore pre.json afterwards — main stays clean (this is the fix
+      # for the stray pre.json that lingered on main).
+      - name: Exit prerelease mode (main)
+        if: github.ref_name == 'main'
+        run: yarn changeset pre exit || true
+
+      # ───────────────────────────── version + gates ─────────────────────────────
+      - name: Capture version before
+        id: preversion
+        run: echo "old=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
 
       - name: Apply changeset version
         run: yarn changeset version
 
-      - name: Get current version from package.json
+      - name: Get version
         id: get_version
-        shell: bash
         run: |
-          VERSION=$(node -p "require('./package.json').version")
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          NEW=$(node -p "require('./package.json').version")
+          echo "version=$NEW" >> "$GITHUB_OUTPUT"
+          if [ "$NEW" != "${{ steps.preversion.outputs.old }}" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No version change (no pending changesets) — skipping publish/release."
+          fi
+
+      # Guard: main must produce a STABLE version (pre exit must have worked).
+      - name: Guard stable version (main)
+        if: github.ref_name == 'main' && steps.get_version.outputs.changed == 'true'
+        run: |
+          V="${{ steps.get_version.outputs.version }}"
+          case "$V" in
+            *-*)
+              echo "::error::main produced prerelease '$V' — pre exit failed. Refusing to publish a prerelease to the latest tag."
+              exit 1
+              ;;
+          esac
+          echo "stable version OK: $V"
+
+      # Guard: dev must produce an alpha prerelease.
+      - name: Guard alpha version (dev)
+        if: github.ref_name == 'dev' && steps.get_version.outputs.changed == 'true'
+        run: |
+          V="${{ steps.get_version.outputs.version }}"
+          case "$V" in
+            *-alpha.*) echo "alpha version OK: $V" ;;
+            *)
+              echo "::error::dev produced non-alpha version '$V' (expected X.Y.Z-alpha.N). Aborting before publish."
+              exit 1
+              ;;
+          esac
 
       - name: Publish to NPM
+        if: steps.get_version.outputs.changed == 'true'
         run: yarn changeset publish
         env:
           NPM_CONFIG_PROVENANCE: true
 
       - name: Commit version changes
+        if: steps.get_version.outputs.changed == 'true'
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
+          git add -A
           git commit -m "Release ${{ github.ref_name == 'dev' && 'dev ' || '' }}version ${{ steps.get_version.outputs.version }}" || exit 0
           git push origin ${{ github.ref_name }}
 
       - name: Create GitHub Release
+        if: steps.get_version.outputs.changed == 'true'
         continue-on-error: true
         uses: actions/create-release@v1
         env:
@@ -76,14 +164,54 @@ jobs:
           draft: false
           prerelease: ${{ github.ref_name == 'dev' }}
 
-      # dev 브랜치: main으로 PR 생성
-      - name: Create Pull Request to Main
-        if: github.ref_name == 'dev'
+      # dev → open/refresh the promotion PR to main.
+      - name: Create promotion PR to main (dev)
+        if: github.ref_name == 'dev' && steps.get_version.outputs.changed == 'true'
         continue-on-error: true
-        run: |
-          gh pr create --base main --head dev --title "Release: v${{ steps.get_version.outputs.version }}" --body "Automated PR to merge dev changes into main for release." || echo "PR already exists"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create --base main --head dev \
+            --title "Release: v${{ steps.get_version.outputs.version }}" \
+            --body "Automated PR to promote dev to a stable release." \
+            || echo "PR already exists"
+
+      # main → re-baseline dev onto the freshly released stable, as a SAFE PR
+      # (never a force-push to dev). This is what prevents a recurrence: dev stops
+      # carrying already-released changesets and its alpha base advances to the new
+      # stable. Any changeset added to dev after the release PR is preserved.
+      - name: Re-baseline dev after stable release (main)
+        if: github.ref_name == 'main' && steps.get_version.outputs.changed == 'true'
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          STABLE: ${{ steps.get_version.outputs.version }}
+          RELEASED: ${{ steps.released.outputs.files }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin dev
+          BRANCH="chore/rebaseline-dev-v${STABLE}"
+          git checkout -B "$BRANCH" origin/dev
+          # 1) drop the changesets that were just released to stable
+          while IFS= read -r f; do
+            [ -n "$f" ] && rm -f ".changeset/$f"
+          done <<< "$RELEASED"
+          # 2) advance the base to the new stable and restart a clean alpha campaign
+          rm -f .changeset/pre.json
+          node -e "const fs=require('fs');const p='package.json';const j=JSON.parse(fs.readFileSync(p));j.version=process.env.STABLE;fs.writeFileSync(p,JSON.stringify(j,null,2)+'\n')"
+          yarn changeset pre enter alpha
+          git add -A
+          if git diff --cached --quiet; then
+            echo "dev already in sync — nothing to re-baseline."
+            exit 0
+          fi
+          git commit -m "chore: re-baseline dev onto v${STABLE} (restart alpha campaign)"
+          git push origin "$BRANCH" --force-with-lease
+          gh pr create --base dev --head "$BRANCH" \
+            --title "chore: re-baseline dev onto v${STABLE}" \
+            --body "Automated re-baseline after the v${STABLE} stable release. Drops the changesets already shipped in v${STABLE} and advances the alpha base to ${STABLE}, so dev's next alpha is computed from the correct base. Review & merge to keep dev's alpha line correct." \
+            || echo "rebaseline PR already exists"
 
       - name: Notify Success
         if: success()
