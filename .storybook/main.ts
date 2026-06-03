@@ -3,6 +3,8 @@ import path from 'path';
 
 const config: StorybookConfig = {
   stories: [
+    // Standalone MDX docs pages (e.g. theme guides).
+    '../src/**/*.mdx',
     '../src/theme/*.stories.@(js|jsx|ts|tsx|mdx)',
     '../src/components/**/*.stories.@(js|jsx|ts|tsx|mdx)',
     '../src/stories/**/*.stories.@(js|jsx|ts|tsx|mdx)',

@@ -1,0 +1,198 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Setup/Theme/Using Semantic Tokens" />
+
+# Using Semantic Tokens
+
+The design system ships a layer of **semantic color tokens** on top of the raw
+color palette. They are the colors you should reach for in app and component
+code. This guide explains what they are, when to use which, and how they make
+light/dark mode work automatically.
+
+> Looking for the live swatches and exact hex values? See
+> **Setup/Theme → Palette** — this page is the _how-to_.
+
+---
+
+## Why semantic tokens?
+
+A **primitive** like `gray.300` or `blue.500` is a fixed color. It means the
+same thing everywhere and never changes between light and dark.
+
+A **semantic token** like `fg.default` or `bg.surface` describes the _role_ a
+color plays ("primary text", "raised surface"), and resolves to a different
+primitive depending on the active color mode.
+
+```tsx
+// ❌ Primitive — frozen. Looks fine in light, unreadable in dark.
+<Text color="gray.1300" bg="white" />
+
+// ✅ Semantic — flips with the mode automatically.
+<Text color="fg.default" bg="bg.surface" />
+```
+
+Two payoffs:
+
+1. **Dark mode for free.** Add `color="fg.default"` and it's `gray.1300` in
+   light and `gray.50` in dark — no `useColorMode`, no conditionals.
+2. **Intent, not value.** `border.subtle` always reads as "a low-emphasis
+   divider," whatever the mode. The intent is encoded once, in the theme.
+
+**Rule of thumb:** in app/component code, prefer semantic tokens. Drop to a
+primitive (`gray.300`, `blue.500`, …) only for one-off visuals that genuinely
+have no semantic meaning.
+
+---
+
+## The neutral tokens
+
+These cover text, surfaces, and borders — the bulk of any UI. Each flips
+between a light and a dark value.
+
+### Foreground — `fg.*` (text & icons)
+
+| Token | Light | Dark | Use for |
+| --- | --- | --- | --- |
+| `fg.default` | `gray.1300` | `gray.50` | Primary text, headings, icons |
+| `fg.muted` | `gray.900` | `gray.400` | Secondary text, captions, supporting icons |
+| `fg.subtle` | `gray.700` | `gray.600` | Tertiary text, placeholders, disabled-ish labels |
+| `fg.inverse` | `gray.0` | `gray.1400` | Text on an **inverse** surface (e.g. tooltip) |
+
+### Background — `bg.*` (surfaces & fills)
+
+| Token | Light | Dark | Use for |
+| --- | --- | --- | --- |
+| `bg.canvas` | `gray.0` | `gray.1500` | App/page background |
+| `bg.surface` | `white` | `gray.1400` | Raised surface — cards, popovers, menus, modals |
+| `bg.subtle` | `gray.50` | `gray.1300` | Subtle fill, hover background, secondary surface |
+| `bg.muted` | `gray.100` | `gray.1200` | Muted fill, tertiary surface, neutral chips |
+| `bg.inverse` | `gray.1300` | `gray.50` | High-contrast/inverse surface (flips with mode) |
+
+### Border — `border.*` (borders & dividers)
+
+| Token | Light | Dark | Use for |
+| --- | --- | --- | --- |
+| `border.subtle` | `gray.200` | `gray.1300` | Low-emphasis dividers, faint outlines |
+| `border.default` | `gray.300` | `gray.1100` | Standard borders, container outlines |
+| `border.strong` | `gray.500` | `gray.900` | High-emphasis borders, form-control outlines |
+
+```tsx
+<Box bg="bg.surface" borderColor="border.default" borderWidth="1px">
+  <Heading color="fg.default">Title</Heading>
+  <Text color="fg.muted">Supporting copy</Text>
+</Box>
+```
+
+---
+
+## The brand tokens
+
+Five intent palettes — `primary` (blue), `secondary` (violet), `danger` (rose),
+`success` (green), `warning` (gold) — each expose a 7-step scale that also
+flips in dark mode:
+
+| Step | Typical use |
+| --- | --- |
+| `lightest` / `extralight` | Tinted backgrounds (badges, soft buttons, banners) |
+| `lighter` / `light` | Hover/pressed tints, subtle fills |
+| `main` | The action color — links, focus rings, ghost/outline text, icons |
+| `dark` | Emphasis text on a light/tinted background |
+| `darker` | High-contrast text |
+
+```tsx
+<Badge bg="danger.extralight" color="danger.dark">Error</Badge>
+<Link color="primary.main">Learn more</Link>
+```
+
+In dark mode these steps lighten so they keep contrast on dark surfaces — e.g.
+`primary.main` is `blue.500` in light and lifts to `blue.300` in dark.
+
+---
+
+## Migration cheat-sheet
+
+Replacing primitives in existing code? Map by role, not by exact value — pick
+the nearest semantic token:
+
+| Was (primitive) | Use (semantic) |
+| --- | --- |
+| `gray.1000`–`gray.1500` as text | `fg.default` |
+| `gray.800`–`gray.900` as text | `fg.muted` |
+| `gray.500`–`gray.700` as text/icon | `fg.subtle` |
+| `white` / `gray.0` surface | `bg.surface` / `bg.canvas` |
+| `gray.50` / `gray.100` fill | `bg.subtle` / `bg.muted` |
+| `gray.200` / `gray.300` border | `border.subtle` / `border.default` |
+| `gray.500` border | `border.strong` |
+| `blue.*` / `rose.*` … intent color | matching `primary.*` / `danger.*` … step |
+
+The full set of names is exported as the `SemanticColorToken` type
+(`fg.default`, `bg.surface`, `primary.main`, …) for codemods and review.
+
+---
+
+## How light/dark actually resolves
+
+- The mode is a **class on `<html>`**: `.dark` toggles every token's `_dark`
+  value (the Chakra v3 default `_dark` selector). No class = light.
+- `LogicianProvider` mounts the color-mode runtime by default (backed by
+  `next-themes`) and owns `color-scheme`. Consumers should add
+  `suppressHydrationWarning` to their `<html>`.
+
+```tsx
+<LogicianProvider defaultColorMode="system">
+  <App />
+</LogicianProvider>
+```
+
+`LogicianProvider` props: `defaultColorMode`, `forcedColorMode` (pin a mode for
+staged rollouts), `enableColorMode`.
+
+### Reading / toggling the mode
+
+```tsx
+import { useColorMode, useColorModeValue, ColorModeToggle } from '@mindlogic-ai/logician-ui';
+
+const { colorMode, setColorMode, toggleColorMode } = useColorMode();
+
+// Prefer tokens; use this only when a value can't be a token (e.g. an image).
+const src = useColorModeValue('/logo-light.svg', '/logo-dark.svg');
+
+// Drop-in switch:
+<ColorModeToggle />
+```
+
+---
+
+## Authoring mode-aware components
+
+**Prefer tokens.** If you must vary a raw value by mode, use a conditional
+object — light stays exact, dark overrides:
+
+```tsx
+<Box bgColor={{ base: 'gray.300', _dark: 'gray.1200' }} />
+```
+
+For **third-party libraries that don't understand Chakra tokens** (e.g.
+recharts), pass the token's CSS variable so it still flips via the `.dark`
+class:
+
+```tsx
+<XAxis tick={{ fill: 'var(--chakra-colors-fg-muted)' }} />
+```
+
+---
+
+## Contrast / accessibility
+
+The semantic pairings are tuned to meet **WCAG AA** in both modes. A couple of
+things to keep in mind:
+
+- **Solid color buttons keep white labels** on the saturated fill in both
+  modes — except **`warning` (gold)**, which uses a dark label because
+  white-on-gold fails AA. If you build a custom solid `warning` surface, use
+  dark text.
+- For **border-only** controls (e.g. an unchecked checkbox), reach for
+  `border.strong` so the outline clears the 3:1 non-text-contrast bar on dark.
+
+When in doubt, verify the specific pair in **Setup/Theme → Palette**, which
+shows the resolved light/dark values side by side.
