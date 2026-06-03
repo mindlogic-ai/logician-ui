@@ -33,15 +33,15 @@ export const buttonColorPaletteStyles: Record<
    */
   primary: {
     solid: {
-      borderColor: 'primary.main',
-      bgColor: 'primary.main', // #1751D0
+      borderColor: 'blue.500',
+      bgColor: 'blue.500',
       color: 'white',
       _hover: {
         borderColor: 'blue.600',
-        bgColor: 'blue.600', // #1241A6
+        bgColor: 'blue.600',
       },
       _active: {
-        bgColor: 'primary.dark', // #0D317D
+        bgColor: 'blue.700',
         transform: 'scale(0.97)',
       },
     },
@@ -89,15 +89,15 @@ export const buttonColorPaletteStyles: Record<
    */
   secondary: {
     solid: {
-      borderColor: 'secondary.main',
-      bgColor: 'secondary.main', // #9117D0
+      borderColor: 'violet.500',
+      bgColor: 'violet.500',
       color: 'white',
       _hover: {
         borderColor: 'violet.600',
-        bgColor: 'violet.600', // #7412A6
+        bgColor: 'violet.600',
       },
       _active: {
-        bgColor: 'secondary.dark', // #570D7D
+        bgColor: 'violet.700',
         transform: 'scale(0.97)',
       },
     },
@@ -145,15 +145,15 @@ export const buttonColorPaletteStyles: Record<
    */
   danger: {
     solid: {
-      borderColor: 'danger.main',
-      bgColor: 'danger.main', // #D01721
+      borderColor: 'rose.500',
+      bgColor: 'rose.500',
       color: 'white',
       _hover: {
         borderColor: 'rose.600',
-        bgColor: 'rose.600', // #A6121A
+        bgColor: 'rose.600',
       },
       _active: {
-        bgColor: 'danger.dark', // #7D0D14
+        bgColor: 'rose.700',
         transform: 'scale(0.97)',
       },
     },
@@ -201,15 +201,15 @@ export const buttonColorPaletteStyles: Record<
    */
   success: {
     solid: {
-      borderColor: 'success.main',
-      bgColor: 'success.main', // #1AA612
+      borderColor: 'green.600',
+      bgColor: 'green.600',
       color: 'white',
       _hover: {
-        borderColor: 'success.dark',
-        bgColor: 'success.dark', // #147D0D
+        borderColor: 'green.700',
+        bgColor: 'green.700',
       },
       _active: {
-        bgColor: 'green.800', // #0D5309
+        bgColor: 'green.800',
         transform: 'scale(0.97)',
       },
     },
@@ -257,15 +257,18 @@ export const buttonColorPaletteStyles: Record<
    */
   warning: {
     solid: {
-      borderColor: 'warning.main',
-      bgColor: 'warning.main', // #D0A117
-      color: 'white',
+      borderColor: 'gold.500',
+      bgColor: 'gold.500',
+      // Dark text on gold (white/gold was 2.39:1 in BOTH modes). gold.900 on
+      // gold.500 = 6.73:1; active stays gold.600 (4.42:1) rather than gold.700
+      // (2.75:1) so dark text keeps contrast on press.
+      color: 'gold.900',
       _hover: {
         borderColor: 'gold.600',
-        bgColor: 'gold.600', // #A68112
+        bgColor: 'gold.600',
       },
       _active: {
-        bgColor: 'warning.dark', // #7D610D
+        bgColor: 'gold.600',
         transform: 'scale(0.97)',
       },
     },
@@ -327,38 +330,41 @@ export const buttonColorPaletteStyles: Record<
     },
     soft: {
       borderColor: 'transparent',
-      bgColor: 'gray.100', // #F0F3F9
-      color: 'gray.1200', // #2A3142
+      // Neutral fills flip with the mode (light values preserved: bg.subtle →
+      // gray.50, bg.muted → gray.100). Without this the surface stayed light in
+      // dark mode while the fg.default text flipped to light = invisible.
+      bgColor: 'bg.subtle', // gray.50 / gray.1300 (_dark)
+      color: 'fg.default',
       _hover: {
         borderColor: 'transparent',
-        bgColor: 'gray.200', // #E2E6F0
+        bgColor: 'bg.muted', // gray.100 / gray.1200 (_dark)
       },
       _active: {
-        bgColor: 'gray.200', // #E2E6F0 — same as hover, scale provides pressed feedback
+        bgColor: 'bg.muted', // matches hover; scale provides pressed feedback
         transform: 'scale(0.97)',
       },
     },
     outline: {
-      borderColor: 'gray.300', // #CDD3E0
+      borderColor: 'border.default', // gray.300 / gray.1100 (_dark)
       bgColor: 'transparent',
-      color: 'gray.1200', // #2A3142
+      color: 'fg.default',
       _hover: {
-        bgColor: 'gray.50', // #F7F9FC
+        bgColor: 'bg.subtle', // gray.50 / gray.1300 (_dark)
       },
       _active: {
-        bgColor: 'gray.100', // #F0F3F9
+        bgColor: 'bg.muted', // gray.100 / gray.1200 (_dark)
         transform: 'scale(0.97)',
       },
     },
     ghost: {
       borderColor: 'transparent',
       bgColor: 'transparent',
-      color: 'gray.1200', // #2A3142
+      color: 'fg.default',
       _hover: {
-        bgColor: 'gray.50', // #F7F9FC
+        bgColor: 'bg.subtle', // gray.50 / gray.1300 (_dark)
       },
       _active: {
-        bgColor: 'gray.100', // #F0F3F9
+        bgColor: 'bg.muted', // gray.100 / gray.1200 (_dark)
         transform: 'scale(0.97)',
       },
     },

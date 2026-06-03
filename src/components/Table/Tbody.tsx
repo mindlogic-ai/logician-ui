@@ -8,7 +8,7 @@ export const Tbody = forwardRef<HTMLTableSectionElement, Table.BodyProps>(
     return (
       <Table.Body
         ref={ref}
-        color="gray.1500"
+        color="fg.default"
         fontWeight="medium"
         {...props}
         css={mergeCss(

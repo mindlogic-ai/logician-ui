@@ -14,11 +14,11 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       <ChakraCard.Root
         ref={ref}
         position="relative"
-        bg="white"
-        color="inherit"
+        bg="bg.surface"
+        color="fg.default"
         boxShadow="none"
         border="1px solid"
-        borderColor="gray.200"
+        borderColor="border.subtle"
         borderRadius="lg"
         transitionProperty="common"
         transitionDuration="normal"

@@ -16,7 +16,7 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
         <ChakraPopover.Content
           ref={ref}
           borderWidth="1px"
-          borderColor="gray.200"
+          borderColor="border.subtle"
           {...props}
         >
           <ScaledContext fontSize={baseFontSize}>{children}</ScaledContext>

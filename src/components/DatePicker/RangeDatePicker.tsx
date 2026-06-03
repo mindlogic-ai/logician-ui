@@ -39,7 +39,7 @@ export const RangeDatePicker = ({
       propsConfigs={{
         triggerBtnProps: {
           fontWeight: 'regular',
-          color: 'gray.1500',
+          color: 'fg.default',
           fontSize: 'md',
           ...propsConfigs?.triggerBtnProps,
         },
@@ -58,7 +58,10 @@ export const RangeDatePicker = ({
             boxShadow: 'lg',
             border: 'none',
             borderWidth: 0,
-            bg: 'gray.0',
+            // Flip the popover surface with the mode; gray.0 stayed white and
+            // framed the (already dark) calendars in dark mode. bg.surface keeps
+            // the same light value and resolves to gray.1400 under .dark.
+            bg: 'bg.surface',
             ...propsConfigs?.popoverCompProps?.popoverContentProps,
           },
           ...propsConfigs?.popoverCompProps,
@@ -79,7 +82,7 @@ export const RangeDatePicker = ({
             borderWidth: '1px',
             borderColor: 'primary.extralight',
             borderRadius: 16,
-            bg: 'white',
+            bg: 'bg.surface',
             ...propsConfigs?.calendarPanelProps?.contentProps,
           },
           bodyProps: {
@@ -95,7 +98,7 @@ export const RangeDatePicker = ({
         },
         weekdayLabelProps: {
           mb: 2,
-          color: 'gray.1000',
+          color: 'fg.muted',
           fontSize: 'sm',
           fontWeight: 'regular',
           ...propsConfigs?.weekdayLabelProps,
@@ -104,7 +107,7 @@ export const RangeDatePicker = ({
           defaultBtnProps: {
             width: 34,
             height: 34,
-            color: 'gray.1500',
+            color: 'fg.default',
             fontWeight: 'regular',
             _hover: {
               background: 'primary.extralight',

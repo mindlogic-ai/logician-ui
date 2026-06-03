@@ -67,7 +67,7 @@ User Agent: ${errorInfo.userAgent}`;
           p={12}
           textAlign="center"
           w="full"
-          bgColor="white"
+          bgColor="bg.surface"
           boxShadow="2xl"
         >
           <VStack gap={6} align="center" w="full" mx="auto">
@@ -83,10 +83,10 @@ User Agent: ${errorInfo.userAgent}`;
 
             {/* Error Title */}
             <VStack gap={3} align="center" w="full">
-              <H1 color="gray.1200" textStyle="h2" fontWeight="bold">
+              <H1 color="fg.default" textStyle="h2" fontWeight="bold">
                 {translate('error_boundary_title')}
               </H1>
-              <Subtitle color="gray.1000" textStyle="h5" maxW="md">
+              <Subtitle color="fg.muted" textStyle="h5" maxW="md">
                 {translate('error_boundary_subtitle')}
               </Subtitle>
             </VStack>

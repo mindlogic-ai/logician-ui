@@ -6,7 +6,7 @@ import {
 
 export const PopoverArrowTip = forwardRef<HTMLDivElement, PopoverArrowTipProps>(
   (props, ref) => (
-    <ChakraPopover.ArrowTip ref={ref} borderColor="gray.200" {...props} />
+    <ChakraPopover.ArrowTip ref={ref} borderColor="border.subtle" {...props} />
   )
 );
 PopoverArrowTip.displayName = 'Popover.ArrowTip';

@@ -39,16 +39,6 @@ export const MDXEditor = forwardRef<
   const [error, setError] = useState<string | null>(null);
 
   // Resolve theme tokens to actual values
-  const [gray50, gray100, gray800, primaryLight, primaryLighter, primaryMain] =
-    useToken('colors', [
-      'gray.50',
-      'gray.100',
-      'gray.800',
-      'primary.light',
-      'primary.lighter',
-      'primary.main',
-    ]);
-
   const [space1, space2, space4] = useToken('spacing', ['1', '2', '4']);
   const [radiusSm] = useToken('radii', ['sm']);
 
@@ -99,7 +89,7 @@ export const MDXEditor = forwardRef<
           width: '100%',
           minHeight: '300px',
           height: '100%',
-          background: 'white',
+          background: 'var(--chakra-colors-bg-surface)',
           display: 'flex',
           flexDirection: 'column',
         },
@@ -108,7 +98,7 @@ export const MDXEditor = forwardRef<
           gap: space2,
           padding: space2,
           borderBottomWidth: '1px',
-          background: gray50,
+          background: 'var(--chakra-colors-bg-subtle)',
           flexShrink: 0,
           cursor: 'default',
         },
@@ -135,7 +125,7 @@ export const MDXEditor = forwardRef<
         },
         '& .content-editable': {
           padding: space4,
-          color: 'black',
+          color: 'var(--chakra-colors-fg-default)',
           display: 'flex',
           flexDirection: 'column',
           gap: radiusSm,
@@ -221,22 +211,22 @@ export const MDXEditor = forwardRef<
 
           '& blockquote': {
             borderLeftWidth: '4px',
-            borderLeftColor: primaryLight,
-            background: primaryLighter,
+            borderLeftColor: 'var(--chakra-colors-primary-light)',
+            background: 'var(--chakra-colors-primary-lighter)',
             paddingLeft: space4,
             paddingBlock: space2,
             marginBlock: space4,
-            color: gray800,
+            color: 'var(--chakra-colors-fg-muted)',
           },
 
           '& a': {
-            color: primaryMain,
+            color: 'var(--chakra-colors-primary-main)',
             textDecoration: 'underline',
           },
 
           '& code': {
             fontFamily: 'mono',
-            background: gray100,
+            background: 'var(--chakra-colors-bg-muted)',
             paddingInline: space1,
             borderRadius: radiusSm,
 

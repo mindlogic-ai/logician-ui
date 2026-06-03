@@ -20,7 +20,7 @@ export const SliderThumb = forwardRef(
         borderStyle="solid"
         _disabled={{
           bg: 'gray.100',
-          borderColor: 'gray.400',
+          borderColor: 'border.default',
           cursor: 'not-allowed',
         }}
         {...focusRing}

@@ -22,7 +22,7 @@ export const colorSchemeStyles: Record<
 > = {
   primary: {
     solid: {
-      bgColor: 'primary.main',
+      bgColor: 'blue.500',
       color: 'white',
     },
     soft: {
@@ -38,7 +38,7 @@ export const colorSchemeStyles: Record<
   },
   secondary: {
     solid: {
-      bgColor: 'secondary.main',
+      bgColor: 'violet.500',
       color: 'white',
     },
     soft: {
@@ -54,7 +54,7 @@ export const colorSchemeStyles: Record<
   },
   danger: {
     solid: {
-      bgColor: 'danger.main',
+      bgColor: 'rose.500',
       color: 'white',
     },
     soft: {
@@ -70,7 +70,7 @@ export const colorSchemeStyles: Record<
   },
   success: {
     solid: {
-      bgColor: 'success.main',
+      bgColor: 'green.600',
       color: 'white',
     },
     soft: {
@@ -86,8 +86,8 @@ export const colorSchemeStyles: Record<
   },
   warning: {
     solid: {
-      bgColor: 'warning.main',
-      color: 'white',
+      bgColor: 'gold.500',
+      color: 'gold.900', // dark text: white/gold.500 was 2.39:1; gold.900 = 6.73:1
     },
     soft: {
       bgColor: 'warning.extralight',
@@ -107,14 +107,17 @@ export const colorSchemeStyles: Record<
       color: 'white',
     },
     soft: {
-      bgColor: 'gray.100',
-      borderColor: 'gray.300',
-      color: 'gray.800',
+      // Flip surface + border with the mode so the fg.muted text stays legible
+      // in dark. Light values preserved (bg.muted → gray.100, border.default →
+      // gray.300).
+      bgColor: 'bg.muted',
+      borderColor: 'border.default',
+      color: 'fg.muted',
     },
     outline: {
       border: '1px solid',
-      borderColor: 'gray.500',
-      color: 'gray.700',
+      borderColor: 'border.strong', // gray.500 / gray.900 (_dark)
+      color: 'fg.subtle',
       bgColor: 'transparent',
     },
   },

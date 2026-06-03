@@ -20,7 +20,7 @@ export const CollapsibleTrigger = forwardRef<
       cursor="pointer"
       fontWeight="bold"
       borderBottomWidth="1px"
-      borderBottomColor="gray.200"
+      borderBottomColor="border.subtle"
       _hover={{ bg: 'gray.50' }}
       {...rest}
     >

@@ -28,7 +28,7 @@ export const getStickyStyles = (
     overflow: 'visible',
     [stickyDirection]: `${stickyOffset}px`,
     zIndex: 2,
-    backgroundColor: 'white',
+    backgroundColor: 'bg.surface',
     ...(shouldShowShadow && {
       _after: {
         content: '""',
