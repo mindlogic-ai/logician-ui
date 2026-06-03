@@ -280,7 +280,11 @@ export const semanticTokens = {
      */
     fg: {
       default: {
-        value: { base: '{colors.gray.1300}', _dark: '{colors.gray.50}' },
+        // _dark is gray.200 (not gray.50): near-white text on the dark canvas
+        // ran ~18:1 — brighter than the light baseline (~15:1) and close to pure
+        // white, which causes glare/halation. gray.200 matches the light
+        // contrast (~15.4:1) while staying AAA.
+        value: { base: '{colors.gray.1300}', _dark: '{colors.gray.200}' },
       },
       muted: {
         value: { base: '{colors.gray.900}', _dark: '{colors.gray.400}' },

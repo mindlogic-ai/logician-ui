@@ -85,14 +85,14 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
               <Flex w="100%" flexDir="column" align="center" justify="center">
                 <Box
                   borderRadius="lg"
-                  bgColor={bgImage ? 'transparent' : 'gray.100'}
+                  bgColor={bgImage ? 'transparent' : 'bg.muted'}
                   p={3}
                   mb={2}
                   w="fit-content"
                 >
-                  <LuUpload color={bgImage ? 'gray.1200' : 'gray.600'} />
+                  <LuUpload color={bgImage ? 'fg.default' : 'fg.subtle'} />
                 </Box>
-                <Text color={bgImage ? 'gray.1200' : 'gray.600'}>
+                <Text color={bgImage ? 'fg.default' : 'fg.subtle'}>
                   {fileInputLabel || translate('upload_your_file')}
                 </Text>
               </Flex>

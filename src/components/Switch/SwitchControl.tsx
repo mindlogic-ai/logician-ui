@@ -7,7 +7,7 @@ export const SwitchControl = forwardRef<HTMLSpanElement, SwitchControlProps>(
   (props, ref) => (
     <ChakraSwitch.Control
       ref={ref}
-      bg="gray.200"
+      bg="bg.muted"
       _checked={{ bg: 'primary.main' }}
       {...focusRing}
       {...props}

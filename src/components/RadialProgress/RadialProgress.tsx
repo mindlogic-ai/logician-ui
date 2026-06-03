@@ -19,7 +19,7 @@ const RadialProgress: React.FC<RadialProgressProps> = ({
   ...rest
 }) => {
   // useToken은 hook이므로 map 안이 아닌 최상위에서 호출
-  const colorTokens = segments.map((s) => s.color).concat('gray.200');
+  const colorTokens = segments.map((s) => s.color).concat('bg.muted');
   const resolvedColors = useToken('colors', colorTokens);
   const resolveColor = (token: string) =>
     resolvedColors[colorTokens.indexOf(token)] || token;
@@ -54,11 +54,11 @@ const RadialProgress: React.FC<RadialProgressProps> = ({
   // Add gray segment for remaining space if needed
   const allSegments: Segment[] =
     segments.length === 0
-      ? [{ color: 'gray.200', value: total }] // Full gray circle if no segments
+      ? [{ color: 'bg.muted', value: total }] // Full gray circle if no segments
       : remainingValue > 0
         ? [
             ...segments,
-            { color: 'gray.200', value: remainingValue }, // Use token instead of theme.colors.gray[200]
+            { color: 'bg.muted', value: remainingValue }, // Use token instead of theme.colors.gray[200]
           ]
         : segments;
 
@@ -168,7 +168,7 @@ const RadialProgress: React.FC<RadialProgressProps> = ({
               cy={centerY}
               r={radius}
               fill="none"
-              stroke={resolveColor('gray.200')}
+              stroke={resolveColor('bg.muted')}
               strokeWidth={strokeWidth}
             />
           ) : (
@@ -215,7 +215,7 @@ const RadialProgress: React.FC<RadialProgressProps> = ({
           transform="translateX(-50%)"
           width={`${shadowWidth}px`}
           height={`${shadowHeight}px`}
-          background="gray.200"
+          background="bg.muted"
           borderRadius="50%"
           filter={`blur(${shadowBlur}px)`}
           opacity="0.3"

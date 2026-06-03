@@ -33,7 +33,9 @@ export const CopyableCode = ({
           top={0}
           bottom={0}
           w={24}
-          bg="linear-gradient(to right, transparent, #fff 15%)"
+          // Fade matches the Card surface (bg.surface) so it flips with the
+          // mode instead of fading to white on dark.
+          bg="linear-gradient(to right, transparent, var(--chakra-colors-bg-surface) 15%)"
           pointerEvents="none"
         />
       </Card>

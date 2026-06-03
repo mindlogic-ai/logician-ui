@@ -102,6 +102,12 @@ export const MDXEditor = forwardRef<
           flexShrink: 0,
           cursor: 'default',
         },
+        // Block-type select trigger in the toolbar — mdxeditor themes it with
+        // its own vars (left white), so flip it onto the semantic surface.
+        '& [class*="_selectTrigger_"]': {
+          background: 'var(--chakra-colors-bg-surface)',
+          color: 'var(--chakra-colors-fg-default)',
+        },
         // Target the root contenteditable wrapper
         '& [class*="_rootContentEditableWrapper_"]': {
           flex: 1,
