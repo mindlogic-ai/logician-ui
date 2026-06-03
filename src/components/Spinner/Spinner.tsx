@@ -13,7 +13,7 @@ export const Spinner = forwardRef(
         animationDuration="0.65s"
         ref={ref}
         {...rest}
-        css={mergeCss({ '--spinner-track-color': 'colors.gray.200' }, css)}
+        css={mergeCss({ '--spinner-track-color': 'colors.bg.muted' }, css)}
       />
     );
   }

@@ -29,7 +29,7 @@ export const InfoSprinkle = ({
           {...iconButtonProps}
         >
           <LuInfo
-            color={(iconButtonProps?.color as string) ?? 'gray.1000'}
+            color={(iconButtonProps?.color as string) ?? 'fg.muted'}
             boxSize={iconButtonProps?.size ?? 'xs'}
           />
         </IconButton>

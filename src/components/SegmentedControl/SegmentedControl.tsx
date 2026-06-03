@@ -114,7 +114,7 @@ export const SegmentedControl = forwardRef<
                 pointerEvents: 'none',
               },
               '[data-state="checked"] &': {
-                color: 'var(--chakra-colors-gray-1500)',
+                color: 'var(--chakra-colors-fg-default)',
                 fontWeight: '600',
               },
             }}

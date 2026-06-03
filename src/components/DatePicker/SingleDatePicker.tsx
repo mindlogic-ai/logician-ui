@@ -124,7 +124,7 @@ export const SingleDatePicker = ({
             {...(propsConfigs?.triggerBtnProps as ButtonProps)}
           >
             <MdOutlineCalendarToday
-              color="gray.400"
+              color="fg.subtle"
               style={{ marginInlineEnd: 3 }}
             />
             {selectedDate

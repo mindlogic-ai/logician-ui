@@ -106,7 +106,7 @@ export const Pagination = ({
               aria-label={translate('previous') as string}
               onClick={handleBack}
               disabled={currentPage <= 1}
-              color={currentPage === 1 ? 'gray.400' : 'gray.1000'}
+              color={currentPage === 1 ? 'fg.subtle' : 'fg.muted'}
             >
               <IoIosArrowBack boxSize="sm" />
             </IconButton>
@@ -116,7 +116,7 @@ export const Pagination = ({
               aria-label={translate('go_next_page_button') as string}
               onClick={handleNext}
               disabled={currentPage >= maxPage}
-              color={currentPage === maxPage ? 'gray.400' : 'gray.1000'}
+              color={currentPage === maxPage ? 'fg.subtle' : 'fg.muted'}
             >
               <IoChevronForward boxSize="sm" />
             </IconButton>

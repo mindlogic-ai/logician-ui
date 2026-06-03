@@ -21,7 +21,7 @@ export const CollapsibleTrigger = forwardRef<
       fontWeight="bold"
       borderBottomWidth="1px"
       borderBottomColor="border.subtle"
-      _hover={{ bg: 'gray.50' }}
+      _hover={{ bg: 'bg.subtle' }}
       {...rest}
     >
       <HStack width="100%" justify="space-between" align="center">

@@ -166,7 +166,7 @@ export const RangeDatePicker = ({
             {...(propsConfigs?.triggerBtnProps as ButtonProps)}
           >
             <MdOutlineCalendarToday
-              color="gray.400"
+              color="fg.subtle"
               style={{ marginInlineEnd: 3 }}
             />
             {selectedDates && selectedDates.length > 0
