@@ -2,7 +2,7 @@
 '@mindlogic-ai/logician-ui': minor
 ---
 
-feat: dark mode — semantic token layer + color-mode runtime
+feat: dark mode — semantic token layer, color-mode runtime, and full component adoption
 
 Adds first-class light/dark support to the design system.
 
@@ -14,7 +14,8 @@ Adds first-class light/dark support to the design system.
   `color="fg.default"`, `bg="bg.surface"`, `borderColor="border.default"`.
 - `_dark` variants added to the five brand semantics
   (`primary/secondary/danger/success/warning`); interactive/text steps lighten
-  ~2 stops for AA on dark surfaces.
+  ~2 stops for AA on dark surfaces (`secondary.main` lifts to `violet.200` so
+  secondary text/outline clears AA on the dark canvas).
 - Exported `SemanticColorToken` union (dotted-path names) for codemods/reviewers.
 
 **Color-mode runtime**
@@ -35,19 +36,50 @@ Adds first-class light/dark support to the design system.
 
 **Component dark-mode adoption**
 
-Card, Input, Textarea, Select/Combobox, Section/Page loaders, Markdown, MDXEditor,
-RangeDatePicker, Table (sticky cells) and RadialProgress now resolve their
-neutral surfaces/text/borders through the semantic tokens so they flip with the
-mode. Overlays (Menu/Modal/Popover/Toast) realign onto the slate scale via a
-`bg.panel` `_dark` override.
+Every component now flips through the semantic tokens — verified by rendering all
+64 component stories in both modes.
+
+- *Surfaces & overlays*: Card, Input, Textarea, Select/Combobox, Section/Page
+  loaders, Table, RadialProgress, ErrorFallback card, SegmentedControl track,
+  RangeDatePicker popover; overlays (Menu/Modal/Popover/Toast) realign onto the
+  slate scale via a `bg.panel` `_dark` override. The Menu uses a dark drop
+  shadow in dark mode (was a near-white glow).
+- *Text & icons*: foreground colors migrated to `fg.*` across Typography
+  (Text/Subtitle/Subtext/H3), Button/Chip/Tag/Badge neutral variants, FormLabel,
+  MaxLengthIndicator, Table head/body, IconButton, Tabs, SegmentedControl,
+  FileItem, FileList, MonthPicker, Code, CodeTabs, SeeMoreButton, ErrorFallback,
+  DatePickers, Markdown/MDXEditor content, and Menu items.
+- *Borders & dividers*: migrated to `border.*` across FileInput, Popover
+  (content + arrow), TabList, Avatar, MenuList, ModalFooter, FileList, FileItem,
+  Collapsible, TableContainer, SeeMoreButton, SliderThumb, Checkbox.
+- *Neutral soft fills* (Button/Chip/Tag) flip their surface + border instead of
+  leaving light-on-light text on dark.
+- *LineGraph* feeds recharts CSS-var strings (`var(--chakra-colors-*)`) for axis
+  labels and grid, since recharts does not resolve Chakra tokens.
+
+**Contrast / accessibility (also affects light mode)**
+
+A WCAG pass on the dark-mode pairs drove a few brand adjustments that, by
+design, also apply in light:
+
+- Solid `Button`/`IconButton`/`Chip`/`Tag` fills are pinned to their saturated
+  primitive steps so they are mode-invariant (they no longer lighten to the
+  bright `*.300` step in dark, which had dropped white-on-fill contrast to
+  ~1.8–4.5:1). White labels keep their light-mode contrast in both modes.
+- Solid **warning** uses a dark label (`gold.900`) in both light and dark —
+  white-on-gold was 2.39:1 (failing AA in *both* modes); it is now 6.7:1.
+- Checkbox unchecked-border and disabled-fill tuned to flip and clear the 3:1
+  non-text-contrast bar on dark.
 
 **Light-mode safety**
 
 - Additive only: no primitive (`gray.0–1500`, brand palettes) or existing
   semantic token was renamed or removed.
-- All new/overridden tokens keep their previous resolved **light** values
-  (`bg.panel`/`bg.subtle`/`bg.muted` light values match Chakra's defaults;
-  brand/neutral `base` values are unchanged), so light rendering is preserved.
+- Light rendering is preserved except for small, deliberate changes:
+  - solid **warning** buttons/chips/tags now use a dark label instead of white
+    (the AA fix above);
+  - a handful of text/border values shift by ~1 tonal step where no exact
+    semantic token matched the previous primitive.
 - `globalCss` gains a `.dark` body-variable block (no effect in light) and the
-  body text color now references `fg.default` (resolves to the same `gray.1300`
-  in light).
+  body text color references `fg.default` (resolves to the same `gray.1300` in
+  light).
