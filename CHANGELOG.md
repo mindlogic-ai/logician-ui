@@ -1,5 +1,48 @@
 # Changelog
 
+## 3.1.0-alpha.1
+
+### Patch Changes
+
+- 88b9e82: fix(dark-mode): flip remaining light-only cosmetic spots
+
+  A few non-flipping bits stayed light on the dark canvas; map them to semantic
+  tokens so they follow the mode:
+  - `InlineCode` chip background `gray.50` → `bg.subtle`.
+  - `CopyableCode`'s sticky copy-button fade gradient ended in `#fff` → now the
+    `bg.surface` CSS var, so it fades into the card instead of flashing white.
+  - `MDXEditor` block-type select: the toolbar trigger and its portaled dropdown
+    popup/items now resolve onto `bg.surface`/`fg.default` (with a `bg.muted`
+    highlight) instead of mdxeditor's default white.
+
+  Light mode is unchanged (all values resolve to their previous light colors).
+
+- 233077f: fix(dark-mode): migrate remaining non-flipping primitives to semantic tokens
+
+  A full-repo scan surfaced color values that stayed fixed across modes; map them
+  to semantic tokens so they flip. Two were dark-mode bugs:
+  - `SegmentedControl` selected-segment label was `gray.1500` (near-black) on the
+    dark indicator → now `fg.default`, legible in both modes.
+  - `Card` `gradient` variant was a hardcoded light gradient (`#F5F8FD→#FFF`) → now
+    `bg.subtle → bg.surface` with a `primary.light` border, so it flips.
+
+  Plus: CollapsibleTrigger hover, FileInput upload area, InfoSprinkle icon,
+  Pagination nav arrows, DatePicker calendar icons, PinInput border, and the
+  neutral progress/slider/switch/spinner/radial-progress **tracks** (`gray.200`
+  family → `bg.muted`). White slider knobs and brand/solid fills are intentionally
+  left as-is (they must stay visible / are mode-invariant by design). Light mode
+  is preserved aside from ~1-step token-mapping shifts.
+
+- 01fa8b4: fix(dark-mode): soften default text color (gray.50 → gray.200)
+
+  Primary text on the dark canvas resolved to `gray.50` (~18.3:1) — brighter than
+  the light-mode baseline (~15.3:1) and close to pure white, which reads as harsh
+  and causes glare/halation on longer text. `fg.default`'s `_dark` value now
+  resolves to `gray.200` (~15.4:1 on the canvas), matching the light-mode contrast
+  while staying AAA. The `.dark` body-text fallback in `globalCss` is aligned to
+  match. Light mode is unchanged, and `fg.muted`/`fg.subtle` are untouched so the
+  text hierarchy is preserved.
+
 ## 3.1.0-alpha.0
 
 ### Minor Changes

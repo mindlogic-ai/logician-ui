@@ -5,6 +5,9 @@
     "@mindlogic-ai/logician-ui": "3.0.0"
   },
   "changesets": [
-    "dark-mode-semantic-tokens"
+    "dark-mode-cosmetic-minors",
+    "dark-mode-semantic-tokens",
+    "dark-mode-token-scan-cleanup",
+    "soften-dark-default-text"
   ]
 }
