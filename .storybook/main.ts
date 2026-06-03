@@ -3,11 +3,10 @@ import path from 'path';
 
 const config: StorybookConfig = {
   stories: [
-    // Standalone MDX docs pages (e.g. theme guides).
+    // Standalone MDX docs pages (e.g. theme guides). In Storybook 8 docs MDX is
+    // a plain `*.mdx` — `*.stories.mdx` (MDX-in-CSF) was removed.
     '../src/**/*.mdx',
-    '../src/theme/*.stories.@(js|jsx|ts|tsx|mdx)',
-    '../src/components/**/*.stories.@(js|jsx|ts|tsx|mdx)',
-    '../src/stories/**/*.stories.@(js|jsx|ts|tsx|mdx)',
+    '../src/**/*.stories.@(js|jsx|ts|tsx)',
   ],
   addons: ['@storybook/addon-essentials', '@storybook/addon-docs'],
   staticDirs: ['../public'],
