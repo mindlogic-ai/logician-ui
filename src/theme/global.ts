@@ -20,7 +20,7 @@ export const globalCss = defineGlobalStyles({
   // Dark mode body fallbacks. Only activates under the `.dark` class set by the
   // color-mode provider, so light-mode rendering is byte-for-byte identical.
   '.dark': {
-    '--chakra-colors-chakra-body-text': '#F7F9FC', // gray.50 - Primary text (dark)
+    '--chakra-colors-chakra-body-text': '#E2E6F0', // gray.200 - Primary text (dark); softened from gray.50 to avoid near-white glare (matches fg.default)
     '--chakra-colors-chakra-body-bg': '#0B0E17', // gray.1500 - Background (dark)
   },
 
