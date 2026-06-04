@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.0.1
+
+### Patch Changes
+
+- b968351: fix(Input): allow callers to override the resting `borderColor`
+
+  `Input` hardcoded its resting border to `gray.400` (or `danger.main` when
+  invalid), so a `borderColor` prop passed by a caller could not reliably set the
+  default border. The prop is now destructured and used as `borderColor ?? (invalid
+? 'danger.main' : 'gray.400')`, so an explicit value wins while the invalid and
+  default fallbacks are preserved.
+
 ## 3.0.0
 
 ### Major Changes
