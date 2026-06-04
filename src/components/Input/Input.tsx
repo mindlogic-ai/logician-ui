@@ -74,6 +74,7 @@ export const Input = forwardRef(
       disabled,
       invalid,
       readOnly,
+      borderColor,
       css,
       ...rest
     }: InputProps,
@@ -321,7 +322,8 @@ export const Input = forwardRef(
           bg="bg.surface"
           color="fg.default"
           borderColor={
-            invalid ? 'danger.main' : { base: 'gray.400', _dark: 'gray.1100' }
+            borderColor ??
+            (invalid ? 'danger.main' : { base: 'gray.400', _dark: 'gray.1100' })
           }
           _hover={{
             borderColor: invalid ? 'danger.main' : 'primary.lighter',
