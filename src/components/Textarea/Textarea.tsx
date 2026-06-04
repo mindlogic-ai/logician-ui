@@ -17,6 +17,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       disabled,
       invalid,
       readOnly,
+      borderColor,
       css,
       ...props
     },
@@ -55,7 +56,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         // `colorPalette.focusRing` (gray.400) and ends up visibly
         // different from Input/Select. Mirror Input's chain explicitly.
         focusRingColor={invalid ? 'danger.main' : 'primary.main'}
-        borderColor={invalid ? 'danger.main' : 'gray.400'}
+        borderColor={borderColor ?? (invalid ? 'danger.main' : 'gray.400')}
         _hover={{
           borderColor: invalid ? 'danger.main' : 'primary.lighter',
           ..._hover,
