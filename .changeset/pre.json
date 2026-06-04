@@ -8,6 +8,7 @@
     "dark-mode-cosmetic-minors",
     "dark-mode-semantic-tokens",
     "dark-mode-token-scan-cleanup",
+    "input-bordercolor-override",
     "soften-dark-default-text"
   ]
 }
