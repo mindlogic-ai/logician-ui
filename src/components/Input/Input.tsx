@@ -74,6 +74,7 @@ export const Input = forwardRef(
       disabled,
       invalid,
       readOnly,
+      borderColor,
       css,
       ...rest
     }: InputProps,
@@ -319,7 +320,7 @@ export const Input = forwardRef(
           readOnly={readOnly}
           data-invalid={invalid || undefined}
           bg="white"
-          borderColor={invalid ? 'danger.main' : 'gray.400'}
+          borderColor={borderColor ?? (invalid ? 'danger.main' : 'gray.400')}
           _hover={{
             borderColor: invalid ? 'danger.main' : 'primary.lighter',
             ..._hover,
