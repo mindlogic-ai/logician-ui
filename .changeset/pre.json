@@ -2,14 +2,7 @@
   "mode": "pre",
   "tag": "alpha",
   "initialVersions": {
-    "@mindlogic-ai/logician-ui": "3.0.0"
+    "@mindlogic-ai/logician-ui": "3.0.2"
   },
-  "changesets": [
-    "dark-mode-cosmetic-minors",
-    "dark-mode-semantic-tokens",
-    "dark-mode-token-scan-cleanup",
-    "input-bordercolor-override",
-    "soften-dark-default-text",
-    "textarea-bordercolor-override"
-  ]
+  "changesets": []
 }
