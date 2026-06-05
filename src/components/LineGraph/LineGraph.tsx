@@ -62,9 +62,11 @@ export const LineGraph = <T extends DatumBase>({
             tickMargin={0}
           />
           <Tooltip
-            // invert label color since mode inside tooltip is different
+            // The tooltip surface stays light in both modes, so the label keeps
+            // a fixed near-black. Must be a CSS var, not 'gray.1500' — recharts
+            // won't resolve Chakra tokens (see XAxis/YAxis above).
             labelStyle={{
-              color: 'gray.1500',
+              color: 'var(--chakra-colors-gray-1500)',
             }}
           />
           {displayLegend && (
