@@ -208,7 +208,7 @@ semanticTokens: {
     // Foreground (text / icons)
     fg: {
       default: 'gray.1300', // primary text → gray.200
-      muted:   'gray.900',  // secondary    → gray.400
+      muted:   'gray.900',  // secondary    → gray.300
       subtle:  'gray.700',  // tertiary     → gray.600
       inverse: 'gray.0',    // text on inverse → gray.1400
     },

@@ -287,7 +287,12 @@ export const semanticTokens = {
         value: { base: '{colors.gray.1300}', _dark: '{colors.gray.200}' },
       },
       muted: {
-        value: { base: '{colors.gray.900}', _dark: '{colors.gray.400}' },
+        // _dark lifts gray.400 → gray.300: secondary text read as too dim on the
+        // dark canvas next to fg.default (gray.200). gray.300 sits one step under
+        // default — restoring the light-mode hierarchy gap — while staying well
+        // clear of AA (~12.8:1 on bg.canvas, ~11.7:1 on bg.surface). Light value
+        // (gray.900) is unchanged.
+        value: { base: '{colors.gray.900}', _dark: '{colors.gray.300}' },
       },
       subtle: {
         value: { base: '{colors.gray.700}', _dark: '{colors.gray.600}' },
