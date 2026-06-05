@@ -8,6 +8,7 @@
     "dark-mode-cosmetic-minors",
     "dark-mode-semantic-tokens",
     "dark-mode-token-scan-cleanup",
+    "fileinput-dark-panel",
     "input-bordercolor-override",
     "soften-dark-default-text",
     "textarea-bordercolor-override"
