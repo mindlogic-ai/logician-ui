@@ -54,8 +54,8 @@ Error and destructive action states.
 | `rose.100` | `#F3B9BD` | Light error fills |
 | `rose.200` | `#E87D84` | Error borders, icons |
 | `rose.300` | `#DC4A53` | Error accents |
-| `rose.500` | `#D01721` | **Danger main** - error states |
-| `rose.600` | `#A6121A` | Hover on main |
+| `rose.500` | `#C1232C` | **Danger main** - error states |
+| `rose.600` | `#9C1C23` | Hover on main |
 | `rose.700` | `#7D0D14` | Error text |
 | `rose.800` | `#53090D` | Dark emphasis |
 | `rose.900` | `#2A0407` | Darkest, high contrast |
@@ -161,7 +161,7 @@ semanticTokens: {
       extralight: 'rose.50',   // #FBE8E9 - Extra-light backgrounds
       lighter: 'rose.100',     // #F3B9BD - Light error fills
       light: 'rose.200',       // #E87D84 - Error borders
-      main: 'rose.500',        // #D01721 - Error states
+      main: 'rose.500',        // #C1232C - Error states
       dark: 'rose.700',        // #7D0D14 - Error text on light bg
       darker: 'rose.900',      // #2A0407 - High contrast error text
     },
@@ -249,7 +249,7 @@ All semantic color combinations meet WCAG 2.1 accessibility standards:
 | `primary.lightest` + `primary.dark` | 7.2:1 | AAA |
 | `primary.main` + white | 5.9:1 | AA |
 | `danger.lightest` + `danger.dark` | 7.4:1 | AAA |
-| `danger.main` + white | 5.2:1 | AA |
+| `danger.main` + white | 5.9:1 | AA |
 | `success.lightest` + `success.dark` | 6.1:1 | AA |
 | `warning.lightest` + `warning.dark` | 5.8:1 | AA |
 | `gray.0` + `gray.1300` | 11.2:1 | AAA |

@@ -140,7 +140,7 @@ export const semanticTokens = {
      * Use for: Error states, destructive actions, validation errors
      *
      * Light contrast ratios (on white):
-     * - main (#D01721): 5.2:1 ✓ AA
+     * - main (#C1232C): 5.9:1 ✓ AA
      * - dark (#7D0D14): 9.6:1 ✓ AAA
      */
     danger: {
@@ -409,8 +409,8 @@ export const colors = {
     100: { value: '#F3B9BD' }, // Lighter - subtle error fills
     200: { value: '#E87D84' }, // Light - error borders
     300: { value: '#DC4A53' }, // Medium - error accents
-    500: { value: '#D01721' }, // Base - danger.main
-    600: { value: '#A6121A' }, // Dark - hover on main
+    500: { value: '#C1232C' }, // Base - danger.main (desaturated ~1 notch from #D01721)
+    600: { value: '#9C1C23' }, // Dark - hover on main (desaturated to match .500)
     700: { value: '#7D0D14' }, // Darker - error text
     800: { value: '#53090D' }, // Very dark - emphasis
     900: { value: '#2A0407' }, // Darkest - high contrast
@@ -523,8 +523,8 @@ export const colors = {
     100: { value: '#F3B9BD' },
     200: { value: '#E87D84' },
     300: { value: '#DC4A53' },
-    500: { value: '#D01721' },
-    600: { value: '#A6121A' },
+    500: { value: '#C1232C' }, // kept in sync with rose.500 (deprecated alias)
+    600: { value: '#9C1C23' }, // kept in sync with rose.600 (deprecated alias)
     700: { value: '#7D0D14' },
     800: { value: '#53090D' },
     900: { value: '#2A0407' },

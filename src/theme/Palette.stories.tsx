@@ -475,7 +475,7 @@ export const ContrastReference: Story = {
         bg: 'danger.main',
         text: 'white',
         label: 'danger.main + white',
-        ratio: '5.2:1',
+        ratio: '5.9:1',
         badge: 'AA',
       },
       {
