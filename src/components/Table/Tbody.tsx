@@ -8,12 +8,13 @@ export const Tbody = forwardRef<HTMLTableSectionElement, Table.BodyProps>(
     return (
       <Table.Body
         ref={ref}
-        color="fg.default"
-        fontWeight="medium"
         {...props}
         css={mergeCss(
           {
             // Remove bottom border from last row to prevent overlap with container border
+            '& > tr:last-of-type': {
+              borderBottom: 'none',
+            },
             '& > tr:last-of-type > td': {
               borderBottom: 'none',
             },

@@ -7,7 +7,10 @@ export const getStickyStyles = (
   stickyDirection: StickyDirection = 'left',
   scrollState: TableScrollState,
   stickyOffset = 0,
-  isLastSticky = false
+  isLastSticky = false,
+  // Header cells use the recipe's header surface (bg.subtle); body cells the
+  // table surface — sticky cells need an opaque bg matching their row.
+  stickyBg: 'bg.surface' | 'bg.subtle' = 'bg.surface'
 ) => {
   if (!isSticky || !scrollState) return {};
   const { isScrollStart, isScrollEnd, isScrolling } = scrollState;
@@ -28,7 +31,7 @@ export const getStickyStyles = (
     overflow: 'visible',
     [stickyDirection]: `${stickyOffset}px`,
     zIndex: 2,
-    backgroundColor: 'bg.surface',
+    backgroundColor: stickyBg,
     ...(shouldShowShadow && {
       _after: {
         content: '""',

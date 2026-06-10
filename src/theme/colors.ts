@@ -268,6 +268,27 @@ export const semanticTokens = {
       panel: {
         value: { base: '{colors.white}', _dark: '{colors.gray.1400}' },
       },
+      /**
+       * Row/selection state tints. Use these for selected rows,
+       * validation-error rows, and transient highlights instead of
+       * hand-picking `primary.*`/`danger.*` tints at the call site.
+       *
+       * Values mirror `primary.lightest` / `danger.lightest` /
+       * `warning.lightest` (this Chakra version doesn't resolve
+       * semantic→semantic token references, so the primitive pairs are
+       * repeated here — keep them in sync with the brand ramps above).
+       */
+      selected: {
+        value: { base: '{colors.blue.25}', _dark: '{colors.blue.900}' },
+      },
+      invalid: {
+        subtle: {
+          value: { base: '{colors.rose.25}', _dark: '{colors.rose.900}' },
+        },
+      },
+      highlighted: {
+        value: { base: '{colors.gold.25}', _dark: '{colors.gold.900}' },
+      },
     },
 
     /**
@@ -336,7 +357,15 @@ export const semanticTokens = {
  * contract. App code should use `bg.surface`/`bg.canvas`.
  */
 export type SemanticColorToken =
-  | `bg.${'canvas' | 'surface' | 'subtle' | 'muted' | 'inverse'}`
+  | `bg.${
+      | 'canvas'
+      | 'surface'
+      | 'subtle'
+      | 'muted'
+      | 'inverse'
+      | 'selected'
+      | 'highlighted'}`
+  | 'bg.invalid.subtle'
   | `fg.${'default' | 'muted' | 'subtle' | 'inverse'}`
   | `border.${'default' | 'subtle' | 'strong'}`
   | `${'primary' | 'secondary' | 'danger' | 'success' | 'warning'}.${
