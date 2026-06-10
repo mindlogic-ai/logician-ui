@@ -122,6 +122,110 @@ export const Default: Story = {
   argTypes: {},
 };
 
+/**
+ * Rows that receive `onClick` (or `role="button"` / `tabIndex`) automatically
+ * get the interactive treatment from the table recipe: pointer cursor,
+ * `bg.muted` hover, and a focus-visible outline. Static rows never highlight.
+ */
+export const InteractiveRows: Story = {
+  render: (args) => (
+    <TableContainer>
+      <Table {...args}>
+        <Thead>
+          <Tr>
+            {columns.map((column) => (
+              <Th key={column.key}>{column.label}</Th>
+            ))}
+          </Tr>
+        </Thead>
+        <Tbody>
+          {data.map((item) => (
+            <Tr
+              key={item.unit}
+              tabIndex={0}
+              onClick={() => alert(`Clicked ${item.unit}`)}
+            >
+              {columns.map((column) => (
+                <Td key={column.key}>{item[column.key]}</Td>
+              ))}
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    </TableContainer>
+  ),
+  args: {},
+  argTypes: {},
+};
+
+/**
+ * Per-row state tints via `<Tr state="...">`, backed by the mode-aware
+ * semantic tokens `bg.selected`, `bg.invalid.subtle` and `bg.highlighted`.
+ */
+export const RowStates: Story = {
+  render: (args) => (
+    <TableContainer>
+      <Table {...args}>
+        <Thead>
+          <Tr>
+            <Th>state</Th>
+            {columns.map((column) => (
+              <Th key={column.key}>{column.label}</Th>
+            ))}
+          </Tr>
+        </Thead>
+        <Tbody>
+          {(['selected', 'invalid', 'highlighted', undefined] as const).map(
+            (state) => (
+              <Tr key={state ?? 'none'} state={state}>
+                <Td>{state ?? '—'}</Td>
+                {columns.map((column) => (
+                  <Td key={column.key}>{data[0][column.key]}</Td>
+                ))}
+              </Tr>
+            )
+          )}
+        </Tbody>
+      </Table>
+    </TableContainer>
+  ),
+  args: {},
+  argTypes: {},
+};
+
+/**
+ * `<Thead sticky>` pins the header to the top of the scroll container
+ * (position: sticky, opaque surface bg, hairline shadow).
+ */
+export const StickyHeader: Story = {
+  render: (args) => (
+    <TableContainer maxH="240px">
+      <Table {...args}>
+        <Thead sticky>
+          <Tr>
+            {columns.map((column) => (
+              <Th key={column.key}>{column.label}</Th>
+            ))}
+          </Tr>
+        </Thead>
+        <Tbody>
+          {Array.from({ length: 12 }, (_, i) => (
+            <Tr key={i}>
+              {columns.map((column) => (
+                <Td key={column.key}>
+                  {data[i % data.length][column.key]}
+                </Td>
+              ))}
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    </TableContainer>
+  ),
+  args: {},
+  argTypes: {},
+};
+
 export const ExpandedContent: Story = {
   render: (args) => (
     <TableContainer maxW="100%">

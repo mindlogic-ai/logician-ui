@@ -1,27 +1,9 @@
 import { forwardRef } from 'react';
 import { Table } from '@chakra-ui/react';
 
-import { mergeCss } from '@/utils/mergeCss';
-
 export const Tbody = forwardRef<HTMLTableSectionElement, Table.BodyProps>(
-  ({ css, ...props }, ref) => {
-    return (
-      <Table.Body
-        ref={ref}
-        color="fg.default"
-        fontWeight="medium"
-        {...props}
-        css={mergeCss(
-          {
-            // Remove bottom border from last row to prevent overlap with container border
-            '& > tr:last-of-type > td': {
-              borderBottom: 'none',
-            },
-          },
-          css
-        )}
-      />
-    );
+  (props, ref) => {
+    return <Table.Body ref={ref} {...props} />;
   }
 );
 
