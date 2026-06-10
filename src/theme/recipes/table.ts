@@ -32,6 +32,16 @@ export const tableSlotRecipe = defineSlotRecipe({
     },
     body: {
       fontWeight: 'medium',
+      // Remove the last row's bottom border so it doesn't double up with
+      // TableContainer's border. Both rules are needed under border-collapse:
+      // the row border comes from base.row, the cell border from Chakra's
+      // line variant.
+      '& > tr:last-of-type': {
+        borderBottom: 'none',
+      },
+      '& > tr:last-of-type > td': {
+        borderBottom: 'none',
+      },
     },
     row: {
       borderBottomWidth: '1px',
@@ -42,6 +52,9 @@ export const tableSlotRecipe = defineSlotRecipe({
       '&[data-interactive]': {
         cursor: 'pointer',
         _hover: { bg: 'bg.muted' },
+        // Inset outline instead of the shared focusRing util (boxShadow
+        // ring): rows are clipped by TableContainer's rounded overflow,
+        // which would crop an outer ring.
         _focusVisible: {
           outline: '2px solid',
           outlineColor: 'primary.main',
