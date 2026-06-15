@@ -102,6 +102,29 @@ export const MDXEditor = forwardRef<
           flexShrink: 0,
           cursor: 'default',
         },
+        // Toolbar icons. mdxeditor colors its toolbar svgs with its own
+        // `--baseTextContrast` (its internal slate scale), which doesn't follow
+        // our color mode — in dark mode they stay near-black (#1c2024) and all
+        // but vanish against the dark toolbar. Flip them onto the semantic
+        // foreground token so they track light/dark like the editor body text.
+        '& .mdxeditor-toolbar svg': {
+          color: 'var(--chakra-colors-fg-default)',
+        },
+        // Disabled toolbar buttons (e.g. undo/redo with nothing to undo) — keep
+        // them dimmed but still mode-aware, instead of mdxeditor's light-only
+        // border color.
+        '& .mdxeditor-toolbar [data-disabled] svg': {
+          color: 'var(--chakra-colors-fg-subtle)',
+        },
+        // Hover / pressed / toggled-on backgrounds. mdxeditor paints these with
+        // `--baseBgActive` (its slate scale), which also doesn't track the color
+        // mode — in dark mode it goes light-grey, so the now-light icons sit on a
+        // light fill and disappear on hover and when a format is active. Flip the
+        // fill onto the semantic hover token so it stays mode-aware.
+        '& .mdxeditor-toolbar button:hover, & .mdxeditor-toolbar button[data-state="on"], & .mdxeditor-toolbar button:active':
+          {
+            background: 'var(--chakra-colors-bg-muted)',
+          },
         // Block-type select trigger in the toolbar — mdxeditor themes it with
         // its own vars (left white), so flip it onto the semantic surface.
         '& [class*="_selectTrigger_"]': {
