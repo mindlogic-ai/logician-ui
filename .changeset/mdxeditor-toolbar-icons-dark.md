@@ -12,4 +12,7 @@ different (lighter) token.
 
 Flip the toolbar svgs onto the semantic `fg.default` token (and disabled
 buttons onto `fg.subtle`) so they resolve per color mode like the editor body
-text. Light mode is unchanged.
+text. The hover / pressed / toggled-on button backgrounds had the same problem
+(mdxeditor's `--baseBgActive` went light-grey in dark mode, hiding the icons on
+hover); those now use the semantic `bg.muted` hover token. Light mode is
+unchanged.

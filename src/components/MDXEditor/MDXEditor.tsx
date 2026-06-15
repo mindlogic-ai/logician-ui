@@ -116,6 +116,15 @@ export const MDXEditor = forwardRef<
         '& .mdxeditor-toolbar [data-disabled] svg': {
           color: 'var(--chakra-colors-fg-subtle)',
         },
+        // Hover / pressed / toggled-on backgrounds. mdxeditor paints these with
+        // `--baseBgActive` (its slate scale), which also doesn't track the color
+        // mode — in dark mode it goes light-grey, so the now-light icons sit on a
+        // light fill and disappear on hover and when a format is active. Flip the
+        // fill onto the semantic hover token so it stays mode-aware.
+        '& .mdxeditor-toolbar button:hover, & .mdxeditor-toolbar button[data-state="on"], & .mdxeditor-toolbar button:active':
+          {
+            background: 'var(--chakra-colors-bg-muted)',
+          },
         // Block-type select trigger in the toolbar — mdxeditor themes it with
         // its own vars (left white), so flip it onto the semantic surface.
         '& [class*="_selectTrigger_"]': {
