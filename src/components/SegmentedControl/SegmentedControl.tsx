@@ -66,10 +66,19 @@ export const SegmentedControl = forwardRef<
         }
       }}
       size={size}
-      // Track + selected-indicator flip with the mode (light values preserved:
-      // bg.subtle → gray.50, bg.surface → white/gray.0). The indicator's md
-      // shadow carries the raised affordance in both modes.
+      // Light mode: track is bg.subtle (gray.50) and the selected indicator is
+      // bg.surface (white) lifted by an md shadow — a classic raised thumb.
+      //
+      // Dark mode needs the opposite logic: elevation reads as *lighter*, not
+      // darker, and drop shadows are nearly invisible on a dark canvas. The
+      // default surface token (gray.1400) is actually darker than the gray.1300
+      // track, so the selected pill looked recessed and barely distinct from
+      // its neighbours. Deepen the track into a recessed trough, lift the
+      // indicator to a clearly lighter gray, and define its edge with a
+      // hairline border + soft ambient shadow (the approach iOS / macOS /
+      // Linear / Vercel use for dark segmented controls).
       bg="bg.subtle"
+      _dark={{ bg: 'gray.1400' }}
       p="1"
       borderRadius={borderRadius}
       boxShadow="none"
@@ -79,6 +88,11 @@ export const SegmentedControl = forwardRef<
         {
           '--segment-indicator-bg': `var(--chakra-colors-bg-surface)`,
           '--segment-indicator-shadow': `var(--chakra-shadows-md)`,
+          '.dark &': {
+            '--segment-indicator-bg': `var(--chakra-colors-gray-1100)`,
+            '--segment-indicator-shadow':
+              '0 1px 2px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08)',
+          },
         },
         css
       )}
