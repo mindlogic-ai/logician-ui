@@ -252,6 +252,18 @@ export const semanticTokens = {
       surface: {
         value: { base: '{colors.white}', _dark: '{colors.gray.1400}' },
       },
+      // Strongly-raised neutral surface — one level above `surface` (e.g. the
+      // selected thumb of a SegmentedControl). In dark this is the *lightest*
+      // neutral bg token so a raised element reads as lifted toward the light,
+      // not recessed. (The `bg.*` dark ramp is otherwise compressed such that
+      // `surface` sits below `subtle`/`muted`; `raised` deliberately tops the
+      // scale so "raised" has a token that behaves correctly in dark.)
+      // NB: named `raised`, not Chakra's `emphasized` — that default token name
+      // cannot be overridden via semanticTokens in this setup (it keeps
+      // resolving to Chakra's own gray.200), whereas a fresh name is honoured.
+      raised: {
+        value: { base: '{colors.white}', _dark: '{colors.gray.1100}' },
+      },
       subtle: {
         value: { base: '{colors.gray.50}', _dark: '{colors.gray.1300}' },
       },
@@ -360,6 +372,7 @@ export type SemanticColorToken =
   | `bg.${
       | 'canvas'
       | 'surface'
+      | 'raised'
       | 'subtle'
       | 'muted'
       | 'inverse'
