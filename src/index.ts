@@ -88,6 +88,7 @@ export * from './components/Tag';
 export * from './components/Textarea';
 export * from './components/Toast';
 export * from './components/Tooltip';
+export * from './components/Tree';
 // Typography Components (excluding Link to avoid conflict with Link component)
 export {
   H1,
