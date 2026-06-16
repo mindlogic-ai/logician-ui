@@ -92,6 +92,13 @@ export const SegmentedControl = forwardRef<
             '--segment-indicator-bg': `var(--chakra-colors-gray-1100)`,
             '--segment-indicator-shadow':
               '0 1px 2px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08)',
+            // The dark track only contrasts against the app canvas (gray.1500).
+            // On a same-or-lighter dark surface (e.g. a bg.surface card, also
+            // gray.1400) it would vanish and leave the control looking like
+            // floating text. A translucent-white hairline ring defines the
+            // track's bounds on *any* dark background, and rendering it as a
+            // box-shadow (not a real border) keeps the item-height math intact.
+            boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.12)',
           },
         },
         css
