@@ -102,6 +102,7 @@ export {
 } from './components/Typography';
 
 // Hooks
+export { useHasHover } from './hooks/useHasHover';
 export type { LanguageContextValue } from './hooks/useLanguage';
 export { LanguageContext, useLanguage } from './hooks/useLanguage';
 
