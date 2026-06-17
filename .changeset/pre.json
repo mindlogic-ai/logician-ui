@@ -2,23 +2,7 @@
   "mode": "pre",
   "tag": "alpha",
   "initialVersions": {
-    "@mindlogic-ai/logician-ui": "3.0.0"
+    "@mindlogic-ai/logician-ui": "3.1.0"
   },
-  "changesets": [
-    "baseline-dark-neutrals-and-fills",
-    "card-border-and-danger-saturation",
-    "dark-mode-cosmetic-minors",
-    "dark-mode-semantic-tokens",
-    "dark-mode-token-scan-cleanup",
-    "fg-muted-dark-contrast",
-    "fileinput-dark-panel",
-    "info-sprinkle-tap-support",
-    "input-bordercolor-override",
-    "mdxeditor-toolbar-icons-dark",
-    "segmented-control-dark-selection",
-    "slate-foundational-neutral-family",
-    "soften-dark-default-text",
-    "table-recipe-baseline",
-    "textarea-bordercolor-override"
-  ]
+  "changesets": []
 }
