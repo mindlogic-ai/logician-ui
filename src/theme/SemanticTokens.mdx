@@ -34,7 +34,7 @@ primitive depending on the active color mode.
 Two payoffs:
 
 1. **Dark mode for free.** Add `color="fg.default"` and it's `gray.1300` in
-   light and `gray.50` in dark — no `useColorMode`, no conditionals.
+   light and a light neutral in dark — no `useColorMode`, no conditionals.
 2. **Intent, not value.** `border.subtle` always reads as "a low-emphasis
    divider," whatever the mode. The intent is encoded once, in the theme.
 
@@ -49,14 +49,29 @@ have no semantic meaning.
 These cover text, surfaces, and borders — the bulk of any UI. Each flips
 between a light and a dark value.
 
+> **Dark neutrals are desaturated.** The `Dark` columns below name the `gray`
+> step each token mirrors, but in dark mode every neutral actually resolves to a
+> _halved-saturation_ counterpart of that step (the blue-tinted `gray` ramp is
+> right for light surfaces but muddy as a dark one). Light values are exactly the
+> named `gray` step. You never reference the desaturated values directly — use
+> the tokens.
+
 ### Foreground — `fg.*` (text & icons)
 
 | Token | Light | Dark | Use for |
 | --- | --- | --- | --- |
-| `fg.default` | `gray.1300` | `gray.200` | Primary text, headings, icons |
-| `fg.muted` | `gray.900` | `gray.300` | Secondary text, captions, supporting icons |
-| `fg.subtle` | `gray.700` | `gray.600` | Tertiary text, placeholders, disabled-ish labels |
+| `fg.emphasized` | `gray.1300` | `gray.200` | Headings, titles, key figures, strong emphasis |
+| `fg.default` | `gray.1000` | `gray.300` | Primary **body** text |
+| `fg.muted` | `gray.900` | `gray.400` | Secondary text, captions, supporting icons |
+| `fg.subtle` | `gray.700` | `gray.600`† | Tertiary text, placeholders, icons |
 | `fg.inverse` | `gray.0` | `gray.1400` | Text on an **inverse** surface (e.g. tooltip) |
+
+† `fg.subtle`'s dark value is bumped one step lighter than the straight mirror so
+helper/secondary text clears WCAG AA 4.5:1 on `bg.muted`.
+
+> `fg.default` is the body weight; `fg.emphasized` is the strongest step (the
+> near-black `gray.1300` `fg.default` used to be). Reach for `emphasized` only
+> when you want maximum contrast — headings, key numbers.
 
 ### Background — `bg.*` (surfaces & fills)
 
@@ -64,6 +79,8 @@ between a light and a dark value.
 | --- | --- | --- | --- |
 | `bg.canvas` | `gray.0` | `gray.1500` | App/page background |
 | `bg.surface` | `white` | `gray.1400` | Raised surface — cards, popovers, menus, modals |
+| `bg.raised` | `white` | `gray.1100` | Strongly-raised neutral — one level above `surface` (e.g. a selected segment); tops the dark ramp so it reads as lifted |
+| `bg.sunken` | `gray.50` | `gray.1500` | Sunken page wash for list/overview surfaces, so `bg.surface` cards read as raised above it |
 | `bg.subtle` | `gray.50` | `gray.1300` | Subtle fill, hover background, secondary surface |
 | `bg.muted` | `gray.100` | `gray.1200` | Muted fill, tertiary surface, neutral chips |
 | `bg.inverse` | `gray.1300` | `gray.50` | High-contrast/inverse surface (flips with mode) |
@@ -85,6 +102,32 @@ between a light and a dark value.
   <Text color="fg.muted">Supporting copy</Text>
 </Box>
 ```
+
+### `slate.*` — deprecated migration shim ⚠️
+
+`slate.0`–`slate.1500` is a **mode-aware** mirror of the `gray.*` primitives
+(`slate.N` is `gray.N` in light and the desaturated counterpart in dark). It
+exists **only as a migration shim** for code that historically styled neutrals
+with a raw ramp instead of the role tokens — it gives that code a lossless
+landing spot and a clean codemod target.
+
+> **Do not use `slate.*` in new code.** Use a role token. The ramp is slated for
+> removal once consumers have migrated.
+
+Codemod map (raw step → role token):
+
+| `slate.*` | Role token |
+| --- | --- |
+| `slate.1300` / `slate.1200` | `fg.emphasized` |
+| `slate.1000` / `slate.800` | `fg.default` (body) |
+| `slate.900` | `fg.muted` |
+| `slate.700` / `slate.600` | `fg.subtle` |
+| `slate.0` | `bg.canvas` |
+| `slate.50` | `bg.subtle` |
+| `slate.100` | `bg.muted` |
+| `slate.200` | `border.subtle` |
+| `slate.300` | `border.default` |
+| `slate.500` | `border.strong` |
 
 ---
 
@@ -110,6 +153,18 @@ flips in dark mode:
 In dark mode these steps lighten so they keep contrast on dark surfaces — e.g.
 `primary.main` is `blue.500` in light and lifts to `blue.300` in dark.
 
+### Solid brand fills — `primary.fill` / `primary.fillStrong`
+
+For a **solid blue surface with white text/icons on top** (modal headers, hero
+banners, brand badges), use `primary.fill` (or `primary.fillStrong` for a deeper
+shade) rather than `primary.main`. The `*.main`/`*.dark` steps lighten in dark —
+right for foreground, but too light to carry white text as a fill — so the
+`fill*` tokens stay deep blue in both modes.
+
+```tsx
+<ModalHeader bg="primary.fill" color="white">Upgrade</ModalHeader>
+```
+
 ---
 
 ## Migration cheat-sheet
@@ -119,9 +174,10 @@ the nearest semantic token:
 
 | Was (primitive) | Use (semantic) |
 | --- | --- |
-| `gray.1000`–`gray.1500` as text | `fg.default` |
-| `gray.800`–`gray.900` as text | `fg.muted` |
-| `gray.500`–`gray.700` as text/icon | `fg.subtle` |
+| `gray.1200`–`gray.1500` as heading/strong text | `fg.emphasized` |
+| `gray.1000`–`gray.1100` as body text | `fg.default` |
+| `gray.900` as secondary text | `fg.muted` |
+| `gray.500`–`gray.800` as tertiary text/icon | `fg.subtle` |
 | `white` / `gray.0` surface | `bg.surface` / `bg.canvas` |
 | `gray.50` / `gray.100` fill | `bg.subtle` / `bg.muted` |
 | `gray.200` / `gray.300` border | `border.subtle` / `border.default` |
