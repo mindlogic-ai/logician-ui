@@ -278,20 +278,25 @@ export const semanticTokens = {
     },
 
     /**
-     * Neutral tone ramp — a mode-aware companion to the raw `gray.*` primitives.
+     * `slate.*` — the foundational **mode-aware neutral family**.
      *
-     * Each `slate.N` resolves to `gray.N` in light and to the desaturated
-     * counterpart of the *mirrored* step in dark, so a single token carries the
-     * same visual role in both modes (e.g. `slate.300` is a light divider in
-     * light and the equivalent dark divider in dark — no `_dark={{…}}` needed at
-     * the call site).
+     * A first-class neutral palette alongside the raw `gray.*` primitives, but
+     * mode-aware: each `slate.N` resolves to `gray.N` in light and to the
+     * desaturated counterpart of the *mirrored* step in dark, so a single token
+     * carries the same tonal level in both modes (e.g. `slate.300` is a light
+     * divider in light and the equivalent dark divider in dark — no `_dark={{…}}`
+     * at the call site). It lives under `semanticTokens` only because Chakra
+     * requires that for the `_dark` flip; conceptually it is a *foundation*
+     * (a tonal scale), not a *role*.
      *
-     * @deprecated **Migration shim, not a blessed vocabulary.** `slate.*` exists
-     * to give code currently styling neutrals with a raw mode-aware ramp a
-     * lossless landing spot, and to be codemodded onto the `fg`/`bg`/`border`
-     * role tokens (e.g. `slate.200`→`border.subtle`, `slate.900`→`fg.muted`,
-     * `slate.800`→`fg.default`). **Do not reach for `slate.*` in new code** —
-     * use a role token. This ramp is slated for removal once consumers migrate.
+     * When to use which:
+     * - Prefer the **role tokens** (`fg`/`bg`/`border`) when one matches the
+     *   intent — they carry semantics and AA-tuned dark values.
+     * - Reach for **`slate.N`** when you need a specific neutral tonal step that
+     *   no role names (mirroring how you'd otherwise drop to a raw `gray.N`, but
+     *   keeping the dark flip). `slate` and the role tokens are *distinct* ramps
+     *   (slate is a mechanical mirror; roles are hand-tuned), so they are not
+     *   interchangeable in dark mode.
      *
      * `600`/`700` are lifted off the straight mirror (#8E939F/#7C818D) so the
      * secondary/muted text they most often carry clears WCAG AA 4.5:1 on the
@@ -531,9 +536,9 @@ export type SemanticColorToken =
   | 'bg.invalid.subtle'
   | `fg.${'emphasized' | 'default' | 'muted' | 'subtle' | 'inverse'}`
   | `border.${'default' | 'subtle' | 'strong'}`
-  // @deprecated `slate.*` is a migration shim for code moving off raw neutral
-  // ramps onto the `fg`/`bg`/`border` role tokens. Prefer a role token; do not
-  // reach for `slate.*` in new code. Slated for removal once consumers migrate.
+  // `slate.*` — foundational mode-aware neutral family (a tonal scale, not a
+  // role). Prefer a `fg`/`bg`/`border` role token when one fits; reach for
+  // `slate.N` when you need a specific neutral step no role names.
   | `slate.${
       | 0
       | 50
