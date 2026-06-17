@@ -29,6 +29,11 @@ const external = [
   /^react-syntax-highlighter/,
   /^react-icons/,
   /^recharts/,
+  // Workflow editor graph deps (kept external; pulled in via dependencies).
+  // Matching @xyflow/* also externalizes its side-effect CSS import so the
+  // consumer's bundler owns it rather than rollup-postcss.
+  /^@xyflow\//,
+  /^@dagrejs\//,
   'react-markdown',
   'katex',
   'lodash',
@@ -98,7 +103,7 @@ export default {
       declaration: true,
       declarationDir: 'dist',
       rootDir: 'src',
-      exclude: ['**/*.stories.tsx', '**/*.test.tsx'],
+      exclude: ['**/*.stories.tsx', '**/*.test.tsx', '**/*.test.ts'],
     }),
   ],
   onwarn(warning, warn) {
