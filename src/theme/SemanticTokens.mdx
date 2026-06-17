@@ -103,31 +103,29 @@ helper/secondary text clears WCAG AA 4.5:1 on `bg.muted`.
 </Box>
 ```
 
-### `slate.*` — deprecated migration shim ⚠️
+### `slate.*` — foundational mode-aware neutral family
 
-`slate.0`–`slate.1500` is a **mode-aware** mirror of the `gray.*` primitives
-(`slate.N` is `gray.N` in light and the desaturated counterpart in dark). It
-exists **only as a migration shim** for code that historically styled neutrals
-with a raw ramp instead of the role tokens — it gives that code a lossless
-landing spot and a clean codemod target.
+`slate.0`–`slate.1500` is a **first-class neutral palette**, sitting alongside
+the raw `gray.*` primitives but **mode-aware**: `slate.N` is `gray.N` in light
+and the desaturated counterpart in dark, so one token holds the same tonal level
+in both modes (`slate.300` is a light divider in light and the matching dark
+divider in dark — no `_dark={{…}}` at the call site). It lives under
+`semanticTokens` only because Chakra requires that for the `_dark` flip;
+conceptually it's a **foundation** (a tonal scale), not a **role**.
 
-> **Do not use `slate.*` in new code.** Use a role token. The ramp is slated for
-> removal once consumers have migrated.
+```tsx
+// Use a role token when one matches the intent (carries semantics + AA tuning):
+<Text color="fg.muted" />
 
-Codemod map (raw step → role token):
+// Reach for slate when you need a specific neutral step no role names — the
+// mode-aware equivalent of dropping to a raw gray.N:
+<Box borderColor="slate.300" bg="slate.50" />
+```
 
-| `slate.*` | Role token |
-| --- | --- |
-| `slate.1300` / `slate.1200` | `fg.emphasized` |
-| `slate.1000` / `slate.800` | `fg.default` (body) |
-| `slate.900` | `fg.muted` |
-| `slate.700` / `slate.600` | `fg.subtle` |
-| `slate.0` | `bg.canvas` |
-| `slate.50` | `bg.subtle` |
-| `slate.100` | `bg.muted` |
-| `slate.200` | `border.subtle` |
-| `slate.300` | `border.default` |
-| `slate.500` | `border.strong` |
+> `slate` and the role tokens (`fg`/`bg`/`border`) are **distinct ramps** —
+> `slate` is a mechanical light↔dark mirror, while the roles carry hand-tuned
+> dark values (AA bumps, hierarchy). They share light values but **diverge in
+> dark**, so they are not drop-in interchangeable. Pick by intent, not by value.
 
 ---
 
