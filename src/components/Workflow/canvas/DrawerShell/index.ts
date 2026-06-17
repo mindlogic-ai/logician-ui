@@ -1,1 +1,2 @@
-export { DrawerShell } from './DrawerShell';
+export type { NodeInspectorProps } from './DrawerShell';
+export { NodeInspector } from './DrawerShell';

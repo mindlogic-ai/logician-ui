@@ -4,7 +4,9 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
@@ -46,12 +48,10 @@ export function WorkflowProvider({
   issues,
   onArrange,
   readOnly = false,
-  showInspector = true,
-  onInspectTarget,
+  onSelectionChange,
   validating = false,
   categoryTokens,
   hostBridge,
-  renderEdgeDrawer,
   children,
 }: WorkflowProviderProps) {
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
@@ -78,17 +78,38 @@ export function WorkflowProvider({
 
   const resetRunStates = useCallback(() => setRunStates({}), []);
 
-  // Single entry point for "open this element's details": set the drawer target
-  // and, when a host has parked the inspector slot (test mode), ask it to
-  // restore the inspector. Every open-intent caller (canvas node/edge click,
-  // edge label, error-banner jump) routes through here so none get swallowed.
+  // Single entry point for "select this element": every open-intent caller
+  // (canvas node/edge click, edge label, error-banner jump) routes through here
+  // so selection lives in one place. The host is notified via the
+  // `onSelectionChange` effect below.
   const revealInspector = useCallback(
-    (target: DrawerTarget) => {
-      setDrawerTarget(target);
-      if (!showInspector) onInspectTarget?.();
-    },
-    [showInspector, onInspectTarget]
+    (target: DrawerTarget) => setDrawerTarget(target),
+    []
   );
+
+  // Notify the host whenever the selected element changes — so it can drive its
+  // own inspector / side panel anywhere in its layout. Keyed on the target
+  // identity (set fresh per click), so graph edits don't re-fire it; the
+  // node/edge snapshot is read at fire time via a ref to avoid stale closures.
+  const graphRef = useRef(graph);
+  graphRef.current = graph;
+  useEffect(() => {
+    if (!onSelectionChange) return;
+    if (!drawerTarget) {
+      onSelectionChange(null);
+      return;
+    }
+    const g = graphRef.current;
+    if (drawerTarget.type === 'node') {
+      const node = g.nodes.find((n) => n.id === drawerTarget.id);
+      onSelectionChange(node ? { type: 'node', id: node.id, node } : null);
+    } else {
+      const edge = g.edges.find((e) => e.id === drawerTarget.id);
+      onSelectionChange(edge ? { type: 'edge', id: edge.id, edge } : null);
+    }
+    // Depends on `drawerTarget` only — fire on selection-identity change, not on
+    // every graph edit (the node/edge snapshot is read via `graphRef`).
+  }, [drawerTarget]);
 
   const getNodeType = useCallback(
     (kind: string) => nodeTypes[kind],
@@ -150,11 +171,9 @@ export function WorkflowProvider({
       requestFieldFocus,
       consumeFieldFocusRequest,
       readOnly,
-      showInspector,
       validating,
       categoryTokens,
       hostBridge,
-      renderEdgeDrawer,
     }),
     [
       graph,
@@ -182,11 +201,9 @@ export function WorkflowProvider({
       requestFieldFocus,
       consumeFieldFocusRequest,
       readOnly,
-      showInspector,
       validating,
       categoryTokens,
       hostBridge,
-      renderEdgeDrawer,
     ]
   );
 

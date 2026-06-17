@@ -1,6 +1,6 @@
 'use client';
 
-import { type ReactNode, useEffect, useMemo } from 'react';
+import { type ComponentType, type ReactNode, useEffect, useMemo } from 'react';
 import { Box, chakra } from '@chakra-ui/react';
 
 import { Button } from '@/components/Button';
@@ -12,6 +12,7 @@ import { renamedOutputHandle } from '../../connectionRules';
 import { cloneNode } from '../../createNode';
 import type {
   DockSide,
+  EdgeDrawerRenderProps,
   GraphEdge,
   GraphNode,
   Issue,
@@ -22,20 +23,34 @@ import { FloatingCard } from '../FloatingCard';
 import { DrawerHeader } from './DrawerHeader';
 import { DrawerIssues } from './DrawerIssues';
 
-/**
- * Right-hand inspector drawer. A node and an edge share this surface: the
- * `editor.drawerTarget` discriminator selects which branch renders. Node
- * inspectors come from the host node-type registry (`def.renderDrawer`); edge
- * inspectors come from the optional host `renderEdgeDrawer`, falling back to a
- * built-in label + endpoints inspector. Returns null in read-only mode.
- */
-export function DrawerShell({
-  dock = 'right',
-}: {
-  /** Which side the drawer docks on — drives its top gutter (a left dock has no
-   * top-right action card to clear, so it sits higher). */
+export type NodeInspectorProps = {
+  /**
+   * Which side the inspector docks on. `'right'` (default) renders after the
+   * canvas; `'left'` orders it before the canvas (use when another surface owns
+   * the right rail). Also drives the top gutter — a left dock sits higher since
+   * it has no top-right action card to clear.
+   */
   dock?: DockSide;
-}) {
+  /**
+   * Optional host renderer for the edge inspector body. When omitted, edges get
+   * a built-in inspector (editable label + read-only endpoints + delete).
+   */
+  renderEdgeDrawer?: ComponentType<EdgeDrawerRenderProps>;
+};
+
+/**
+ * The built-in node/edge inspector. Mount it as a child of `<Workflow>` to get
+ * the default floating drawer; omit it to own inspection entirely (drive your
+ * own UI off `onSelectionChange`). A node and an edge share this surface: the
+ * editor's `drawerTarget` selects which branch renders. Node bodies come from
+ * the host node-type registry (`def.renderDrawer`); edge bodies come from the
+ * optional `renderEdgeDrawer`, falling back to a built-in label + endpoints
+ * inspector. Renders even in read-only mode (controls disable themselves).
+ */
+export function NodeInspector({
+  dock = 'right',
+  renderEdgeDrawer,
+}: NodeInspectorProps) {
   const {
     graph,
     dispatch,
@@ -45,9 +60,7 @@ export function DrawerShell({
     issuesByNode,
     issuesByEdge,
     readOnly,
-    showInspector,
     hostBridge,
-    renderEdgeDrawer,
   } = useWorkflow();
 
   const target = editor.drawerTarget;
@@ -68,9 +81,9 @@ export function DrawerShell({
 
   // Render even when read-only: node/edge inspectors disable their own controls
   // via the `readOnly` flag, so the drawer stays a legible read-only view (used
-  // by the version-history preview). Callers that want it fully gone pass
-  // `showInspector={false}`.
-  if (!showInspector || !target) return null;
+  // by the version-history preview). Callers that want it gone simply don't
+  // mount <NodeInspector>.
+  if (!target) return null;
   if (target.type === 'node') {
     if (!node) return null;
     return (
@@ -132,6 +145,10 @@ function DrawerFrame({
   const topInset = dock === 'left' ? 4 : 20;
   return (
     <FloatingCard
+      // A left dock renders before the canvas in the flex row; a right dock
+      // after. The host hides the palette when docking left, so order:-1 lands
+      // the inspector at the left edge.
+      order={dock === 'left' ? -1 : undefined}
       mt={topInset}
       mb={4}
       mx={4}
@@ -303,7 +320,7 @@ function EdgeDrawer({
   hostBridge: unknown;
   readOnly: boolean;
   dock: DockSide;
-  RenderEdge: ReturnType<typeof useWorkflow>['renderEdgeDrawer'];
+  RenderEdge?: ComponentType<EdgeDrawerRenderProps>;
 }) {
   const translate = useWorkflowTranslate();
   const { graph, dispatch, getNodeType, setDrawerTarget, setSelectedEdgeId } =

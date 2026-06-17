@@ -1,14 +1,14 @@
-import type { ComponentType, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import type { CategoryTokenMap } from '../canvas/IconTile';
 import type { GraphAction } from '../graphReducer';
 import type {
-  EdgeDrawerRenderProps,
   Graph,
   Issue,
   NodeTypeDef,
   NodeTypeRegistry,
   RunState,
+  WorkflowSelection,
   WorkflowTranslate,
 } from '../Workflow.types';
 
@@ -74,16 +74,12 @@ export type WorkflowContextValue = {
   requestFieldFocus: (nodeId: string, fieldKey: string) => void;
   consumeFieldFocusRequest: () => void;
   readOnly: boolean;
-  /** Whether the inspector drawer renders. See `WorkflowProps.showInspector`. */
-  showInspector: boolean;
   /**
-   * Select a node or edge AND ensure the inspector is showing it: sets the
-   * drawer target, and when a host has parked the inspector slot for another
-   * surface (`showInspector={false}`, e.g. the studio editor's test-chat card)
-   * asks it to restore the inspector via `WorkflowProps.onInspectTarget`. Every
-   * "open this element's details" entry point — canvas node/edge click, edge
-   * label, error-banner jump — routes through here so none of them get swallowed
-   * while the inspector is parked. No-op restore when the inspector is shown.
+   * Select a node or edge and make it the inspector's target. Every "open this
+   * element's details" entry point — canvas node/edge click, edge label,
+   * error-banner jump — routes through here so selection stays in one place
+   * (read it via `editor.drawerTarget`; the host is also notified through
+   * `WorkflowProps.onSelectionChange`).
    */
   revealInspector: (target: DrawerTarget) => void;
   /**
@@ -100,12 +96,6 @@ export type WorkflowContextValue = {
    * generic Workflow core depending on FactChat APIs. Inspectors narrow it.
    */
   hostBridge?: unknown;
-  /**
-   * Optional host renderer for the edge inspector drawer (see
-   * `WorkflowProps.renderEdgeDrawer`). When omitted the drawer falls back to a
-   * built-in label + endpoints inspector.
-   */
-  renderEdgeDrawer?: ComponentType<EdgeDrawerRenderProps>;
 };
 
 export type WorkflowProviderProps = {
@@ -122,15 +112,11 @@ export type WorkflowProviderProps = {
   /** See `WorkflowContextValue.onArrange`. */
   onArrange?: (graph: Graph) => void;
   readOnly?: boolean;
-  /** See `WorkflowProps.showInspector`. Defaults to `true`. */
-  showInspector?: boolean;
-  /** See `WorkflowProps.onInspectTarget`. */
-  onInspectTarget?: () => void;
+  /** See `WorkflowProps.onSelectionChange`. Fired by the provider on selection change. */
+  onSelectionChange?: (selection: WorkflowSelection | null) => void;
   /** See `WorkflowContextValue.validating`. */
   validating?: boolean;
   categoryTokens?: CategoryTokenMap;
   hostBridge?: unknown;
-  /** Optional host renderer for the edge inspector drawer. */
-  renderEdgeDrawer?: ComponentType<EdgeDrawerRenderProps>;
   children: ReactNode;
 };

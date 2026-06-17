@@ -1,6 +1,13 @@
 'use client';
 
-import { DragEvent, useCallback, useEffect, useRef, useState } from 'react';
+import {
+  DragEvent,
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Box } from '@chakra-ui/react';
 import type { OnConnectEnd, OnConnectStart, OnReconnect } from '@xyflow/react';
 import {
@@ -34,10 +41,14 @@ import {
   type NodeDimensions,
 } from '../../layout/autoLayout';
 import { useWorkflowKeyboard } from '../../useWorkflowKeyboard';
-import type { DockSide, Graph, Position } from '../../Workflow.types';
+import type {
+  Graph,
+  GraphEdge,
+  GraphNode,
+  Position,
+} from '../../Workflow.types';
 import { resolveDefaultConfig } from '../../Workflow.types';
 import { useWorkflow, useWorkflowTranslate } from '../../WorkflowContext';
-import { DrawerShell } from '../DrawerShell';
 import type { WorkflowReactFlowNode } from '../GenericNode';
 import { GenericNode } from '../GenericNode';
 import { GraphErrorBanner } from '../GraphErrorBanner';
@@ -98,10 +109,14 @@ function graphToReactFlow(
 
 function CanvasInner({
   showPalette,
-  inspectorDock,
+  onNodeClick: onNodeClickHost,
+  onEdgeClick: onEdgeClickHost,
+  children,
 }: {
   showPalette: boolean;
-  inspectorDock: DockSide;
+  onNodeClick?: (node: GraphNode) => void;
+  onEdgeClick?: (edge: GraphEdge) => void;
+  children?: ReactNode;
 }) {
   const {
     graph,
@@ -483,24 +498,39 @@ function CanvasInner({
     (_: unknown, node: WorkflowReactFlowNode) => {
       setSelectedNodeId(node.id);
       setSelectedEdgeId(null);
-      // revealInspector sets the drawer target and, in test mode (inspector
-      // parked by the test-chat card), asks the host to restore it on this node.
+      // revealInspector sets the drawer target (read by a mounted
+      // <NodeInspector>, and surfaced to the host via onSelectionChange).
       revealInspector({ type: 'node', id: node.id });
+      // Convenience click hook for hosts driving UI outside the canvas.
+      const graphNode = graph.nodes.find((n) => n.id === node.id);
+      if (graphNode) onNodeClickHost?.(graphNode);
     },
-    [setSelectedNodeId, setSelectedEdgeId, revealInspector]
+    [
+      setSelectedNodeId,
+      setSelectedEdgeId,
+      revealInspector,
+      graph,
+      onNodeClickHost,
+    ]
   );
 
-  // Single click selects the edge AND opens its inspector drawer — the same
-  // surface nodes use — replacing the old left-sidebar edge list. Like a node
-  // click, this routes through revealInspector so editing an edge mid-test isn't
-  // left blocked by the chat card.
+  // Single click selects the edge AND targets the inspector at it — the same
+  // surface nodes use — replacing the old left-sidebar edge list.
   const onEdgeClick = useCallback(
     (_: unknown, edge: Edge) => {
       setSelectedEdgeId(edge.id);
       setSelectedNodeId(null);
       revealInspector({ type: 'edge', id: edge.id });
+      const graphEdge = graph.edges.find((e) => e.id === edge.id);
+      if (graphEdge) onEdgeClickHost?.(graphEdge);
     },
-    [setSelectedEdgeId, setSelectedNodeId, revealInspector]
+    [
+      setSelectedEdgeId,
+      setSelectedNodeId,
+      revealInspector,
+      graph,
+      onEdgeClickHost,
+    ]
   );
 
   const onPaneClick = useCallback(() => {
@@ -633,10 +663,6 @@ function CanvasInner({
       {showPalette && isPaletteOpen ? (
         <NodePalette onClose={() => setIsPaletteOpen(false)} />
       ) : null}
-      {/* Left dock: the inspector takes the slot the palette vacated (host hides
-          the palette when it docks the inspector left), so it never collides
-          with a right-rail surface like the version-history panel. */}
-      {inspectorDock === 'left' ? <DrawerShell dock="left" /> : null}
       <Box
         flex="1"
         minWidth={0}
@@ -714,21 +740,34 @@ function CanvasInner({
           paletteToggleVisible={showPalette && !isPaletteOpen}
         />
       </Box>
-      {inspectorDock === 'right' ? <DrawerShell dock="right" /> : null}
+      {/* Canvas-anchored overlay slot (React-Flow-style children): the host
+          mounts <NodeInspector> here for the built-in drawer, or its own
+          surfaces. A left-docked inspector orders itself before the canvas. */}
+      {children}
     </Box>
   );
 }
 
 export function Canvas({
   showPalette = true,
-  inspectorDock = 'right',
+  onNodeClick,
+  onEdgeClick,
+  children,
 }: {
   showPalette?: boolean;
-  inspectorDock?: DockSide;
+  onNodeClick?: (node: GraphNode) => void;
+  onEdgeClick?: (edge: GraphEdge) => void;
+  children?: ReactNode;
 }) {
   return (
     <ReactFlowProvider>
-      <CanvasInner showPalette={showPalette} inspectorDock={inspectorDock} />
+      <CanvasInner
+        showPalette={showPalette}
+        onNodeClick={onNodeClick}
+        onEdgeClick={onEdgeClick}
+      >
+        {children}
+      </CanvasInner>
     </ReactFlowProvider>
   );
 }

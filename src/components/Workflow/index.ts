@@ -1,5 +1,7 @@
 export type { CollapsibleSectionProps } from './canvas/CollapsibleSection';
 export { CollapsibleSection } from './canvas/CollapsibleSection';
+export type { NodeInspectorProps } from './canvas/DrawerShell';
+export { NodeInspector } from './canvas/DrawerShell';
 export type {
   FieldTone,
   FieldToneState,
@@ -36,6 +38,7 @@ export { emptyGraph, graphReducer } from './graphReducer';
 export { Workflow } from './Workflow';
 export type {
   ConnectionCtx,
+  DockSide,
   DrawerRenderProps,
   EdgeDrawerRenderProps,
   Graph,
@@ -55,6 +58,7 @@ export type {
   Position,
   RunState,
   WorkflowProps,
+  WorkflowSelection,
   WorkflowTranslate,
 } from './Workflow.types';
 export { defineNodeType, resolveDefaultConfig } from './Workflow.types';

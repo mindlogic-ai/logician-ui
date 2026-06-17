@@ -339,6 +339,16 @@ export type NodeTypeDef<TConfig = unknown> = {
 export type NodeTypeRegistry = Record<string, NodeTypeDef>;
 
 /**
+ * A selected canvas element, surfaced to the host via `onSelectionChange`. The
+ * `node`/`edge` snapshot is included for convenience (e.g. to drive a custom
+ * inspector that lives elsewhere in the host's layout); `id`/`type` are the
+ * stable identity.
+ */
+export type WorkflowSelection =
+  | { type: 'node'; id: string; node: GraphNode }
+  | { type: 'edge'; id: string; edge: GraphEdge };
+
+/**
  * Public props for the `<Workflow>` component.
  */
 export type WorkflowProps = {
@@ -402,33 +412,36 @@ export type WorkflowProps = {
   showPalette?: boolean;
 
   /**
-   * Render the right-hand inspector drawer (node/edge details). Defaults to
-   * `true`. Hosts set this to `false` to free the floating-card slot for their
-   * own surface — e.g. the studio workflow editor swaps in a test-chat card
-   * when the author flips into test mode. Generic on purpose: the core only
-   * knows "show the inspector or don't".
+   * Fired when the user clicks a node, with the clicked node. A click also
+   * updates the editor's selection (readable via `useWorkflow`/`onSelectionChange`
+   * and rendered by `<NodeInspector>` if mounted), so this is a convenience for
+   * hosts that drive UI *outside* the canvas off a raw click — e.g. opening a
+   * detail panel elsewhere, or flipping back from a test surface into edit mode.
    */
-  showInspector?: boolean;
+  onNodeClick?: (node: GraphNode) => void;
+
+  /** Fired when the user clicks an edge, with the clicked edge. See `onNodeClick`. */
+  onEdgeClick?: (edge: GraphEdge) => void;
 
   /**
-   * Which side the inspector drawer docks on. Defaults to `'right'`. Hosts set
-   * `'left'` when another surface owns the right rail (e.g. the studio editor's
-   * version-history panel) so node inspection relocates into the slot the
-   * palette vacated instead of fighting for the right edge.
+   * Fired whenever the selected element changes — on node/edge click, on
+   * deselect (pane click), and when a selected element is deleted (`null`).
+   *
+   * This is the seam for "clicking a node controls a different part of the UI":
+   * the editor owns selection + canvas interaction, and the host renders its own
+   * inspector anywhere in its layout from this signal. The built-in
+   * `<NodeInspector>` is one such consumer — mount it as a child for the default
+   * floating drawer, omit it to own the inspector entirely.
    */
-  inspectorDock?: DockSide;
+  onSelectionChange?: (selection: WorkflowSelection | null) => void;
 
   /**
-   * Fired when the user clicks a node OR an edge while the inspector is
-   * suppressed (`showInspector={false}`). Lets a host that has parked the
-   * inspector slot for another surface (e.g. the studio editor's test-chat card)
-   * react to the click — typically by restoring the inspector — so a click in
-   * test mode jumps back to element details instead of being swallowed. The
-   * clicked element is already selected and set as the drawer target, so once
-   * the host flips `showInspector` back on the inspector opens on it. No-op when
-   * the inspector is already shown.
+   * Overlay children rendered inside the canvas frame (same pattern as React
+   * Flow's `<Controls>`/`<MiniMap>`/`<Panel>`). Mount `<NodeInspector>` here for
+   * the built-in node/edge drawer, or your own canvas-anchored surfaces.
+   * Children render inside the Workflow context, so they can call `useWorkflow`.
    */
-  onInspectTarget?: () => void;
+  children?: ReactNode;
 
   /**
    * Notified whenever the issues array identity changes. Mostly a Storybook
@@ -462,16 +475,6 @@ export type WorkflowProps = {
    * Kept as `unknown` so the framework itself stays domain-free.
    */
   hostBridge?: unknown;
-
-  /**
-   * Optional host renderer for the edge inspector drawer. Threaded through
-   * exactly like `nodeTypes`/`hostBridge` so the core never hardcodes
-   * edge-specific UI. When omitted, the editor renders a built-in inspector
-   * (editable label + read-only endpoints + delete) that is sufficient for
-   * label-only edges. Provide this to add richer edge editing later (e.g.
-   * edge conditions / CEL) without changing the framework core.
-   */
-  renderEdgeDrawer?: ComponentType<EdgeDrawerRenderProps>;
 };
 
 /**

@@ -32,14 +32,14 @@ export function Workflow({
   readOnly = false,
   validating = false,
   showPalette = true,
-  showInspector = true,
-  inspectorDock = 'right',
-  onInspectTarget,
+  onNodeClick,
+  onEdgeClick,
+  onSelectionChange,
   onIssuesChange,
   footer,
+  children,
   categoryTokens,
   hostBridge,
-  renderEdgeDrawer,
   translate: providedTranslate,
   minHeight = '500px',
 }: WorkflowProps) {
@@ -153,12 +153,10 @@ export function Workflow({
       issues={issues}
       onArrange={onArrange}
       readOnly={readOnly}
-      showInspector={showInspector}
-      onInspectTarget={onInspectTarget}
+      onSelectionChange={onSelectionChange}
       validating={validating}
       categoryTokens={categoryTokens}
       hostBridge={hostBridge}
-      renderEdgeDrawer={renderEdgeDrawer}
     >
       <Box
         display="flex"
@@ -169,8 +167,11 @@ export function Workflow({
       >
         <Canvas
           showPalette={showPalette && !readOnly}
-          inspectorDock={inspectorDock}
-        />
+          onNodeClick={onNodeClick}
+          onEdgeClick={onEdgeClick}
+        >
+          {children}
+        </Canvas>
         {footer ? (
           <Box
             borderTop="1px solid"
