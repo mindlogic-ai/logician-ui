@@ -4,5 +4,7 @@
   "initialVersions": {
     "@mindlogic-ai/logician-ui": "3.1.0"
   },
-  "changesets": []
+  "changesets": [
+    "workflow-editor-component"
+  ]
 }
