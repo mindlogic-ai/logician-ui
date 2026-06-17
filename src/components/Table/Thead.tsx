@@ -1,5 +1,7 @@
 import { Table } from '@chakra-ui/react';
 
-export const Thead = ({ ...rest }: Table.HeaderProps) => {
-  return <Table.Header color="gray.800" fontWeight="medium" {...rest} />;
+import { TableHeaderProps } from './Table.types';
+
+export const Thead = ({ sticky, ...rest }: TableHeaderProps) => {
+  return <Table.Header data-sticky={sticky ? '' : undefined} {...rest} />;
 };

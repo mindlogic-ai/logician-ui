@@ -93,7 +93,7 @@ export const Code = ({
   const headerCopyTrigger = onCopy ? (
     <ChakraCodeBlock.CopyTrigger
       aria-label="Copy code"
-      color="gray.600"
+      color="fg.muted"
       cursor="pointer"
     >
       <ChakraCodeBlock.CopyIndicator
@@ -110,7 +110,7 @@ export const Code = ({
         textStyle="Body"
         position="relative"
         overflow="hidden"
-        borderColor="gray.300"
+        borderColor="border.default"
         {...containerPropsRest}
         {...restWithoutMeta}
         meta={mergedMeta}
@@ -124,13 +124,13 @@ export const Code = ({
             className="ml-code-header"
             px={4}
             py={2}
-            bgColor="white"
+            bgColor="bg.surface"
             zIndex={2}
           >
             <ChakraCodeBlock.Title
               fontFamily="mono"
               fontWeight="bold"
-              color="gray.1200"
+              color="fg.default"
             >
               {language}
             </ChakraCodeBlock.Title>
@@ -159,7 +159,7 @@ export const Code = ({
               size="sm"
               colorPalette="neutral"
               variant="ghost"
-              color="gray.800"
+              color="fg.muted"
               onClick={handleOverlayCopy}
             >
               {isCopied ? (

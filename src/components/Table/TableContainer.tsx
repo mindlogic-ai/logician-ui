@@ -29,7 +29,7 @@ const TableContainerInner = forwardRef<HTMLDivElement, TableContainerProps>(
       <Table.ScrollArea
         border="1px solid"
         borderRadius="md"
-        borderColor="gray.200"
+        borderColor="border.subtle"
         ref={handleRef}
         {...rest}
       >

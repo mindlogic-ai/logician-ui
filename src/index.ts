@@ -11,6 +11,7 @@ export * from './components/Chip';
 export * from './components/Code';
 export * from './components/CodeTabs';
 export * from './components/Collapsible';
+export * from './components/ColorMode';
 export * from './components/Container';
 export * from './components/CopyableCode';
 export * from './components/DatePicker';
@@ -101,8 +102,10 @@ export {
 } from './components/Typography';
 
 // Hooks
+export { useHasHover } from './hooks/useHasHover';
 export type { LanguageContextValue } from './hooks/useLanguage';
 export { LanguageContext, useLanguage } from './hooks/useLanguage';
 
 // Theme exports
 export { logicianConfig, system, theme } from './theme';
+export type { SemanticColorToken } from './theme/colors';

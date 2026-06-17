@@ -65,7 +65,7 @@ export const Invalid: Story = {
           value={value}
           onChange={(e) => setValue(e.target.value)}
         />
-        <span style={{ color: '#D01721', fontSize: '14px' }}>
+        <span style={{ color: '#C1232C', fontSize: '14px' }}>
           This field contains an error. Please fix it.
         </span>
       </div>

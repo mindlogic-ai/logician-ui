@@ -3,6 +3,8 @@ import React, { useEffect, useMemo } from 'react';
 import type { SystemConfig } from '@chakra-ui/react';
 import { ChakraProvider, createSystem, defaultConfig } from '@chakra-ui/react';
 
+import type { ColorMode } from '@/components/ColorMode';
+import { ColorModeProvider } from '@/components/ColorMode';
 import type { SupportedLanguage } from '@/components/MonthPicker/constants';
 import { LanguageContext } from '@/hooks/useLanguage';
 
@@ -85,6 +87,28 @@ export interface LogicianProviderProps {
    * @default true
    */
   loadFonts?: boolean;
+
+  /**
+   * Initial color mode preference when none is stored.
+   * @default 'system'
+   */
+  defaultColorMode?: ColorMode | 'system';
+
+  /**
+   * Pin the app to a single color mode, ignoring stored/system preference.
+   * Use for a staged rollout (e.g. force light while a product migrates its
+   * components). Leave undefined for normal light/dark/system behavior.
+   */
+  forcedColorMode?: ColorMode;
+
+  /**
+   * Set to `false` to skip mounting the color-mode provider — e.g. if the host
+   * app already mounts its own. Disabling it means `useColorMode`,
+   * `useColorModeValue`, and `ColorModeToggle` won't work unless a
+   * `ColorModeProvider` is supplied elsewhere.
+   * @default true
+   */
+  enableColorMode?: boolean;
   children?: React.ReactNode;
 }
 
@@ -111,6 +135,9 @@ export const LogicianProvider: React.FC<LogicianProviderProps> = ({
   config,
   language = 'en',
   loadFonts = true,
+  defaultColorMode = 'system',
+  forcedColorMode,
+  enableColorMode = true,
   children,
 }) => {
   useEffect(() => {
@@ -129,10 +156,23 @@ export const LogicianProvider: React.FC<LogicianProviderProps> = ({
 
   const languageValue = useMemo(() => ({ language }), [language]);
 
-  return (
+  const tree = (
     <LanguageContext.Provider value={languageValue}>
       <ChakraProvider value={system}>{children}</ChakraProvider>
     </LanguageContext.Provider>
+  );
+
+  if (!enableColorMode) {
+    return tree;
+  }
+
+  return (
+    <ColorModeProvider
+      defaultTheme={defaultColorMode}
+      forcedTheme={forcedColorMode}
+    >
+      {tree}
+    </ColorModeProvider>
   );
 };
 

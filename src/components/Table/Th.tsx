@@ -125,7 +125,8 @@ export const Th = forwardRef<
       stickyDirection,
       scrollState,
       stickyOffset,
-      isLastSticky
+      isLastSticky,
+      'bg.subtle'
     );
 
     return (

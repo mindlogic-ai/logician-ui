@@ -14,7 +14,7 @@ export const ProgressBar = ({
   return (
     <ChakraProgress.Root value={value} {...rest}>
       <ChakraProgress.Track
-        bgColor="gray.200"
+        bgColor="bg.muted"
         height={styles.height}
         borderRadius={styles.borderRadius}
         overflow="hidden"

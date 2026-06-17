@@ -6,7 +6,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
-import { lighten, readableColor } from 'polished';
+import { readableColor } from 'polished';
 import { MouseEventHandler, useState } from 'react';
 
 import { Tooltip } from '../components/Tooltip';
@@ -27,18 +27,46 @@ import { colors, semanticTokens } from './colors';
  * E.g., '{colors.blue.500}' -> '#1751D0'
  */
 const resolveTokenReference = (reference: string): string => {
-  // Check if it's a reference string like '{colors.blue.500}'
-  const match = reference.match(/^\{colors\.(\w+)\.(\d+)\}$/);
-  if (!match) {
-    // Already a hex value or unknown format
+  // Scale reference, e.g. '{colors.blue.500}' or '{colors.gray.1500}'.
+  const scaleMatch = reference.match(/^\{colors\.(\w+)\.(\w+)\}$/);
+  if (scaleMatch) {
+    const [, colorName, shade] = scaleMatch;
+    const colorScale = (colors as any)[colorName];
+    if (colorScale && colorScale[shade]) {
+      return colorScale[shade].value;
+    }
     return reference;
   }
-  const [, colorName, shade] = match;
-  const colorScale = (colors as any)[colorName];
-  if (colorScale && colorScale[shade]) {
-    return colorScale[shade].value;
+  // Flat reference with no shade, e.g. '{colors.white}' / '{colors.black}'.
+  const flatMatch = reference.match(/^\{colors\.(\w+)\}$/);
+  if (flatMatch) {
+    const entry = (colors as any)[flatMatch[1]];
+    if (entry && typeof entry.value === 'string') {
+      return entry.value;
+    }
   }
+  // Already a hex value or unknown format.
   return reference;
+};
+
+/**
+ * A semantic token `value` is either a plain reference string (legacy) or a
+ * mode-conditional object `{ base, _dark }`. Resolve it to concrete light/dark
+ * hex codes so the palette can show both modes side by side.
+ */
+type TokenValue = string | { base: string; _dark?: string };
+
+const resolveTokenValue = (
+  value: TokenValue
+): { light: string; dark: string } => {
+  if (typeof value === 'string') {
+    const hex = resolveTokenReference(value);
+    return { light: hex, dark: hex };
+  }
+  return {
+    light: resolveTokenReference(value.base),
+    dark: resolveTokenReference(value._dark ?? value.base),
+  };
 };
 
 const meta = {
@@ -84,6 +112,59 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+// Safe readableColor that falls back to black
+const safeReadableColor = (color: string) => {
+  try {
+    return readableColor(color);
+  } catch {
+    return '#000000';
+  }
+};
+
+const SwatchHalf = ({
+  label,
+  hex,
+}: {
+  label: string;
+  hex: string;
+}) => {
+  const [wasCopied, setWasCopied] = useState<boolean>();
+  const handleClick: MouseEventHandler<HTMLButtonElement> = () => {
+    navigator.clipboard.writeText(hex);
+    setWasCopied(true);
+    setTimeout(() => setWasCopied(false), 2000);
+  };
+  return (
+    <Tooltip content="Copy hex code" placement="top">
+      <Flex
+        flex="1"
+        h="72px"
+        direction="column"
+        justify="space-between"
+        bg={hex}
+        p={2}
+        as="button"
+        transition="transform 0.1s ease-in-out"
+        // @ts-expect-error as prop
+        onClick={handleClick}
+        _hover={{ transform: 'scale(1.03)' }}
+      >
+        <Text color={safeReadableColor(hex)} fontSize="10px" textAlign="left">
+          {label}
+        </Text>
+        <Text
+          color={safeReadableColor(hex)}
+          fontSize="10px"
+          fontFamily="mono"
+          textAlign="left"
+        >
+          {wasCopied ? 'Copied!' : hex}
+        </Text>
+      </Flex>
+    </Tooltip>
+  );
+};
+
 const ColorCard = ({
   color,
   shade,
@@ -91,88 +172,33 @@ const ColorCard = ({
 }: {
   color: string;
   shade: string;
-  shadeValue: string;
+  shadeValue: TokenValue;
 }) => {
-  const [wasCopied, setWasCopied] = useState<boolean>();
-  // Resolve the token reference to actual hex value
-  const hexCode = resolveTokenReference(shadeValue);
-
-  const handleClick: MouseEventHandler<HTMLButtonElement> = () => {
-    navigator.clipboard.writeText(hexCode);
-    setWasCopied(true);
-    setTimeout(() => {
-      setWasCopied(false);
-    }, 2000);
-  };
-
-  // Safe lighten that falls back to the original color
-  const safeLighten = (amount: number, color: string) => {
-    try {
-      return lighten(amount, color);
-    } catch {
-      return color;
-    }
-  };
-
-  // Safe readableColor that falls back to black
-  const safeReadableColor = (color: string) => {
-    try {
-      return readableColor(color);
-    } catch {
-      return '#000000';
-    }
-  };
+  // Resolve to concrete light/dark hex so both modes are visible at once.
+  const { light, dark } = resolveTokenValue(shadeValue);
+  const hasDark = dark !== light;
 
   return (
-    <Flex flexDir="column" align="center" key={shade} p={3}>
-      <Tooltip content="Copy hex code" placement="top">
-        <Flex
-          w="100px"
-          h="100px"
-          align="flex-end"
-          bg={hexCode}
-          borderRadius="md"
-          boxShadow="md"
-          as="button"
-          transition="transform 0.1s ease-in-out"
-          // @ts-expect-error as prop
-          onClick={handleClick}
-          _hover={{
-            transform: 'scale(1.05)',
-          }}
-        >
-          {wasCopied ? (
-            <Flex
-              color={safeReadableColor(hexCode)}
-              w="100%"
-              h="100%"
-              justify="center"
-              align="center"
-            >
-              Copied!
-            </Flex>
-          ) : (
-            <Box
-              textAlign="center"
-              mt={4}
-              color={safeReadableColor(safeLighten(0.2, hexCode))}
-              bgColor={safeLighten(0.2, hexCode)}
-              m={2}
-              p={1}
-              w="100%"
-              borderRadius="md"
-            >
-              <Text color="inherit" textStyle="subtext">
-                {hexCode}
-              </Text>
-            </Box>
-          )}
-        </Flex>
-      </Tooltip>
-      <Text color="gray.1200" mt={2} textStyle="subtext" textAlign="center" wordBreak="break-word">
+    <Flex flexDir="column" align="stretch" key={shade} p={2}>
+      <Flex
+        borderRadius="md"
+        overflow="hidden"
+        boxShadow="md"
+        border="1px solid"
+        borderColor="border.subtle"
+      >
+        <SwatchHalf label={hasDark ? 'Light' : ''} hex={light} />
+        {hasDark && <SwatchHalf label="Dark" hex={dark} />}
+      </Flex>
+      <Text
+        color="fg.muted"
+        mt={2}
+        textStyle="subtext"
+        textAlign="center"
+        wordBreak="break-word"
+      >
         {color}.{shade}
       </Text>
-      <Subtext color="gray.700" textAlign="center" wordBreak="break-word">{shadeValue !== hexCode && shadeValue}</Subtext>
     </Flex>
   );
 };
@@ -275,7 +301,7 @@ export const SemanticTokens: Story = {
                     key={shade}
                     color={color}
                     shade={shade}
-                    shadeValue={(shadeValue as any).value as string}
+                    shadeValue={(shadeValue as any).value as TokenValue}
                   />
                 ))}
               </Grid>
@@ -449,7 +475,7 @@ export const ContrastReference: Story = {
         bg: 'danger.main',
         text: 'white',
         label: 'danger.main + white',
-        ratio: '5.2:1',
+        ratio: '5.9:1',
         badge: 'AA',
       },
       {
@@ -733,7 +759,7 @@ export const Default: Story = {
                     key={shade}
                     color={color}
                     shade={shade}
-                    shadeValue={(shadeValue as any).value as string}
+                    shadeValue={(shadeValue as any).value as TokenValue}
                   />
                 ))}
               </Grid>

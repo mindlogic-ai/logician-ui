@@ -15,8 +15,9 @@ const focusVars = {
 
 const fieldBase = {
   ...focusVars,
-  bg: 'white',
-  borderColor: 'gray.400',
+  bg: 'bg.surface',
+  color: 'fg.default',
+  borderColor: { base: 'gray.400', _dark: 'gray.1100' },
   _hover: { borderColor: 'primary.lighter' },
   _focus: { borderColor: 'primary.main' },
   _invalid: {
@@ -27,8 +28,8 @@ const fieldBase = {
   _disabled: {
     opacity: 1,
     cursor: 'not-allowed',
-    bg: 'gray.50',
-    color: 'gray.1000',
+    bg: 'bg.subtle',
+    color: { base: 'gray.1000', _dark: 'gray.400' },
     fontWeight: 'semibold',
   },
 };
@@ -47,8 +48,8 @@ export const inputStyles = {
 
 /** Dropdown panel for both Select and Combobox. */
 export const contentStyles = {
-  bg: 'white',
-  borderColor: 'gray.300',
+  bg: 'bg.surface',
+  borderColor: 'border.default',
   borderWidth: '1px',
   borderRadius: '8px',
   boxShadow: '0px 5px 20px 0px rgba(0, 0, 0, 0.10)',
@@ -59,17 +60,17 @@ export const contentStyles = {
 export const itemStyles = {
   borderRadius: '4px',
   cursor: 'pointer',
-  color: 'gray.1200',
-  _highlighted: { bg: 'gray.50' },
+  color: 'fg.default',
+  _highlighted: { bg: 'bg.subtle' },
   _checked: {
     bg: 'primary.extralight',
     color: 'primary.dark',
     fontWeight: 'bold',
   },
-  _disabled: { color: 'gray.500', cursor: 'not-allowed' },
+  _disabled: { color: 'fg.subtle', cursor: 'not-allowed' },
 };
 
 /** Dropdown chevron — softened so it doesn't outweigh adjacent icons. */
 export const indicatorStyles = {
-  color: 'gray.600',
+  color: 'fg.muted',
 };

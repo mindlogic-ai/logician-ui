@@ -20,8 +20,8 @@ export const tagColorPaletteStyles: Record<
       color: 'primary.dark',
     },
     solid: {
-      bgColor: 'primary.main',
-      borderColor: 'primary.main',
+      bgColor: 'blue.500',
+      borderColor: 'blue.500',
       color: 'white',
     },
     outline: {
@@ -37,8 +37,8 @@ export const tagColorPaletteStyles: Record<
       color: 'secondary.dark',
     },
     solid: {
-      bgColor: 'secondary.main',
-      borderColor: 'secondary.main',
+      bgColor: 'violet.500',
+      borderColor: 'violet.500',
       color: 'white',
     },
     outline: {
@@ -54,8 +54,8 @@ export const tagColorPaletteStyles: Record<
       color: 'danger.dark',
     },
     solid: {
-      bgColor: 'danger.main',
-      borderColor: 'danger.main',
+      bgColor: 'rose.500',
+      borderColor: 'rose.500',
       color: 'white',
     },
     outline: {
@@ -71,8 +71,8 @@ export const tagColorPaletteStyles: Record<
       color: 'success.dark',
     },
     solid: {
-      bgColor: 'success.main',
-      borderColor: 'success.main',
+      bgColor: 'green.600',
+      borderColor: 'green.600',
       color: 'white',
     },
     outline: {
@@ -88,9 +88,9 @@ export const tagColorPaletteStyles: Record<
       color: 'warning.dark',
     },
     solid: {
-      bgColor: 'warning.main',
-      borderColor: 'warning.main',
-      color: 'white',
+      bgColor: 'gold.500',
+      borderColor: 'gold.500',
+      color: 'gold.900', // dark text: white/gold.500 was 2.39:1; gold.900 = 6.73:1
     },
     outline: {
       bgColor: 'transparent',
@@ -100,9 +100,12 @@ export const tagColorPaletteStyles: Record<
   },
   neutral: {
     soft: {
-      bgColor: 'gray.100',
-      borderColor: 'gray.300',
-      color: 'gray.800',
+      // Flip surface + border with the mode so the fg.muted text stays legible
+      // in dark. Light values preserved (bg.muted → gray.100, border.default →
+      // gray.300).
+      bgColor: 'bg.muted',
+      borderColor: 'border.default',
+      color: 'fg.muted',
     },
     solid: {
       bgColor: 'gray.800',
@@ -111,8 +114,8 @@ export const tagColorPaletteStyles: Record<
     },
     outline: {
       bgColor: 'transparent',
-      borderColor: 'gray.500',
-      color: 'gray.700',
+      borderColor: 'border.strong', // gray.500 / gray.900 (_dark)
+      color: 'fg.subtle',
     },
   },
 };

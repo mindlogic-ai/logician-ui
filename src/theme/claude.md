@@ -20,7 +20,9 @@ src/theme/
 1. **Accessibility First**: All semantic color combinations meet WCAG 2.1 AA standards (4.5:1 minimum contrast)
 2. **Cool Gray Foundation**: Slate-based grays with blue undertone for a modern, professional feel
 3. **Consistent Scale**: Each color has 50/100/200/300/500/600/700/800/900 steps
-4. **Light Mode Optimized**: Designed for light mode with semantic token flexibility
+4. **Light & Dark Mode**: Neutral semantic tokens (`bg.*`/`fg.*`/`border.*`) carry a `_dark`
+   variant and flip automatically by color mode. Use them instead of raw `gray.*`/`white`
+   primitives so components work in both modes (see [Neutral Semantic Tokens](#neutral-semantic-tokens-dark-mode)).
 
 ### Primitive Color Palettes
 
@@ -52,8 +54,8 @@ Error and destructive action states.
 | `rose.100` | `#F3B9BD` | Light error fills |
 | `rose.200` | `#E87D84` | Error borders, icons |
 | `rose.300` | `#DC4A53` | Error accents |
-| `rose.500` | `#D01721` | **Danger main** - error states |
-| `rose.600` | `#A6121A` | Hover on main |
+| `rose.500` | `#C1232C` | **Danger main** - error states |
+| `rose.600` | `#9C1C23` | Hover on main |
 | `rose.700` | `#7D0D14` | Error text |
 | `rose.800` | `#53090D` | Dark emphasis |
 | `rose.900` | `#2A0407` | Darkest, high contrast |
@@ -159,7 +161,7 @@ semanticTokens: {
       extralight: 'rose.50',   // #FBE8E9 - Extra-light backgrounds
       lighter: 'rose.100',     // #F3B9BD - Light error fills
       light: 'rose.200',       // #E87D84 - Error borders
-      main: 'rose.500',        // #D01721 - Error states
+      main: 'rose.500',        // #C1232C - Error states
       dark: 'rose.700',        // #7D0D14 - Error text on light bg
       darker: 'rose.900',      // #2A0407 - High contrast error text
     },
@@ -185,6 +187,59 @@ semanticTokens: {
 }
 ```
 
+### Neutral Semantic Tokens (Dark Mode)
+
+The brand semantics above carry `_dark` variants, but the **neutral** tokens below are
+the ones to reach for on surfaces, text, and borders. Each maps onto the `gray.0–1500`
+scale and resolves to a different step under `.dark` (Chakra v3's class strategy), so a
+component built with them flips for free — **no `_dark` overrides needed**.
+
+```tsx
+semanticTokens: {
+  colors: {
+    // Backgrounds                base (light) → _dark
+    bg: {
+      canvas:  'gray.0',    // app background        → gray.1500
+      surface: 'white',     // cards, menus, popovers → gray.1400
+      subtle:  'gray.50',   // secondary surface      → gray.1300
+      muted:   'gray.100',  // tertiary fill, hover   → gray.1200
+      inverse: 'gray.1300', // high-contrast surface  → gray.50
+    },
+    // Foreground (text / icons)
+    fg: {
+      default: 'gray.1300', // primary text → gray.200
+      muted:   'gray.900',  // secondary    → gray.300
+      subtle:  'gray.700',  // tertiary     → gray.600
+      inverse: 'gray.0',    // text on inverse → gray.1400
+    },
+    // Borders / dividers
+    border: {
+      default: 'gray.300',  // standard borders → gray.1100
+      subtle:  'gray.200',  // low-emphasis     → gray.1300
+      strong:  'gray.500',  // high-emphasis    → gray.900
+    },
+  },
+}
+```
+
+```tsx
+// ✅ Flips with color mode
+<Box bg="bg.surface" color="fg.default" borderColor="border.default" />
+
+// ❌ Stuck in light mode — a white panel / dark text that never flips
+<Box bg="white" color="gray.1300" borderColor="gray.300" />
+```
+
+**Exceptions (intentionally do not flip):**
+- Solid brand fills and their white labels (`bg="primary.main" color="white"`) are
+  mode-invariant by design — keep them as primitives.
+- White slider knobs and always-dark surfaces (Tooltip, CodeTabs) stay fixed.
+- **Third-party renderers that don't resolve Chakra tokens** (e.g. recharts in
+  `LineGraph`): feed the resolved CSS var instead — `var(--chakra-colors-fg-muted)`.
+- **Translucency**: when you need a semi-transparent surface that still flips, mix the
+  CSS var instead of hardcoding rgba — e.g.
+  `color-mix(in srgb, var(--chakra-colors-bg-surface) 85%, transparent)` (see `FileInput`).
+
 ### WCAG Contrast Ratios
 
 All semantic color combinations meet WCAG 2.1 accessibility standards:
@@ -194,7 +249,7 @@ All semantic color combinations meet WCAG 2.1 accessibility standards:
 | `primary.lightest` + `primary.dark` | 7.2:1 | AAA |
 | `primary.main` + white | 5.9:1 | AA |
 | `danger.lightest` + `danger.dark` | 7.4:1 | AAA |
-| `danger.main` + white | 5.2:1 | AA |
+| `danger.main` + white | 5.9:1 | AA |
 | `success.lightest` + `success.dark` | 6.1:1 | AA |
 | `warning.lightest` + `warning.dark` | 5.8:1 | AA |
 | `gray.0` + `gray.1300` | 11.2:1 | AAA |
@@ -214,13 +269,24 @@ All semantic color combinations meet WCAG 2.1 accessibility standards:
 <Box bg="warning.lighter" color="warning.dark" />
 ```
 
+### Neutral Surfaces / Text / Borders: use `bg.*` / `fg.*` / `border.*`
+
+These flip with color mode — prefer them over raw `gray.*`/`white` for anything neutral:
+
+```tsx
+// ✅ Best - flips between light and dark
+<Box bgColor="bg.surface" borderColor="border.default" />
+<Text color="fg.default">Primary text</Text>
+<Text color="fg.subtle">Secondary text</Text>
+```
+
 ### Alternative: Primitive Colors
 
 ```tsx
-// ✅ Acceptable - when no semantic token applies
-<Box borderColor="gray.300" bgColor="gray.0" />
-<Text color="gray.1300">Primary text</Text>
-<Text color="gray.700">Secondary text</Text>
+// ⚠️ Only when the value must stay fixed across modes (rare for neutrals).
+// Raw gray.*/white do NOT flip, so a `white` surface or `gray.1300` text will be
+// stuck in light mode under .dark. Reach for bg.*/fg.*/border.* above instead.
+<Box bgColor="primary.main" color="white" /> // mode-invariant brand fill — OK
 ```
 
 ### Accessing Theme in Components
@@ -340,13 +406,17 @@ const color = theme.semanticTokens.colors.primary.main;
 const color = '#1751D0';
 ```
 
-### 3. Consistent Gray Usage
+### 3. Consistent Gray Usage — prefer flipping neutral tokens
 
 ```tsx
-// ✅ Good - semantic gray usage
-<Text color="gray.1300">Primary text</Text>
-<Text color="gray.700">Secondary text</Text>
-<Box borderColor="gray.300" />
+// ✅ Best - neutral semantic tokens flip with color mode
+<Text color="fg.default">Primary text</Text>
+<Text color="fg.subtle">Secondary text</Text>
+<Box bgColor="bg.surface" borderColor="border.default" />
+
+// ⚠️ Stuck in light mode - raw gray.*/white never flip under .dark
+<Text color="gray.1300" /> // use fg.default
+<Box bgColor="white" />    // use bg.surface
 
 // ❌ Bad - arbitrary values
 <Text color="#333" />
