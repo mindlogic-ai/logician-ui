@@ -1,5 +1,358 @@
 # Changelog
 
+## 3.1.0
+
+### Minor Changes
+
+- 1350bbc: feat(theme): desaturated dark neutrals, `slate.*` ramp, `bg.sunken`, and `primary.fill*`
+
+  Folds the generic dark-mode token work that factchat had been carrying as local
+  `semanticTokens` overrides back into the design system, so consumers get them as
+  defaults without re-declaring tokens.
+
+  **Desaturated dark neutrals (visual change in dark mode).** The blue-tinted
+  `gray` ramp reads correctly in light but turns muddy/over-chromatic as a dark
+  surface. Every dark-mode neutral now resolves to a halved-saturation mirror of
+  the `gray` step it referenced before (new `desaturatedGray` single-source map):
+  the `_dark` of `bg.{canvas,surface,raised,subtle,muted,inverse,panel}`,
+  `fg.{default,muted,inverse}`, and `border.{default,subtle,strong}`. **Light mode
+  is byte-for-byte unchanged** (every `base`/`_light` still references
+  `{colors.gray.*}` verbatim); only dark-mode rendering shifts, and only for
+  neutrals — chromatic state tints (`bg.selected/invalid/highlighted`) are
+  intentionally left alone.
+
+  **Re-pegged `fg.*` text scale (light-mode change for all consumers).** Body text
+  was anchored at `gray.1300` (~14:1 on white) — heavier than typical running copy
+  and heavier than real product usage. `fg.default` is re-pegged to `gray.1000`
+  (~9:1, a comfortable AAA body weight), and the old near-black step is preserved
+  as a new **`fg.emphasized`** token for headings/key figures. `fg.muted`'s dark
+  value drops one step to keep the `default`→`muted` hierarchy gap. `fg.subtle`
+  and `fg.inverse` are unchanged. Migrate any text that needs maximum contrast
+  from `fg.default` to `fg.emphasized`.
+
+  **New `slate.*` tone ramp (`slate.0`–`slate.1500`) — deprecated migration shim.**
+  A mode-aware companion to the raw `gray` primitives (each `slate.N` is `gray.N`
+  in light and the desaturated counterpart of the mirrored step in dark). It is
+  shipped **already `@deprecated`**: it exists only to give code that styles
+  neutrals with a raw ramp a lossless landing spot and a clean codemod target onto
+  the `fg`/`bg`/`border` role tokens (`slate.200`→`border.subtle`,
+  `slate.900`→`fg.muted`, `slate.800`/`slate.1000`→`fg.default`, etc.). Do not use
+  `slate.*` in new code; it will be removed once consumers migrate.
+
+  **New `bg.sunken`** — sunken page wash for list/overview surfaces (gray floor in
+  light so `bg.surface` cards read as raised; drops to the canvas floor in dark,
+  where the `bg.*` ramp is compressed and `subtle` would otherwise invert the
+  elevation).
+
+  **New `primary.fill` / `primary.fillStrong`** — solid brand-blue fills for
+  surfaces with white text/icons on top (modal headers, hero banners, brand
+  badges). Unlike `primary.main`/`primary.dark` (which lighten ~2 stops in dark,
+  correct for foreground but too light as a fill), these stay deep blue in dark.
+
+  **`fg.subtle` dark a11y bump** — lifted from the straight mirror (~4.06:1 on
+  `bg.muted`) to `#989DA9` (~4.6:1) so tertiary/helper text clears AA, while
+  staying below `fg.muted` so the hierarchy holds. Light value unchanged.
+
+  **Plain `bg`/`fg`/`border` DEFAULTs** — the bare Chakra globals (`html`
+  background/text and `--global-color-border`) now rejoin our desaturated neutrals
+  in dark instead of Chakra's off-palette black/gray. Light values repeat Chakra's
+  own, so light is untouched. Kept out of the public `SemanticColorToken` contract
+  (internal realignment, like `bg.panel`).
+
+  **Global scrollbar styling** — a thin, transparent-track, rounded thumb that's
+  mode-aware via the `slate` ramp, so scrollbars stop falling back to harsh raw
+  browser chrome in dark.
+
+  `SemanticColorToken` gains `fg.emphasized`, `slate.*`, `bg.sunken`, and
+  `primary.fill*`. The dark body-variable fallbacks in `globalCss` are repointed to
+  match `fg.default`/`bg.canvas`.
+
+  Note: Chakra's `bg.emphasized` (used by its default `Skeleton`) still can't be
+  overridden via `semanticTokens` here — `bg.raised` remains the canonical
+  "strongly-raised" elevation token. A `Skeleton` recipe is the follow-up if dark
+  skeletons need tuning.
+
+- 57c14b9: feat: dark mode — semantic token layer, color-mode runtime, and full component adoption
+
+  Adds first-class light/dark support to the design system.
+
+  **Semantic tokens (`semanticTokens.colors`)**
+  - New neutral tokens with `_dark`, mapped onto the existing `gray.0–1500` scale:
+    `bg.{canvas,surface,subtle,muted,inverse}`, `fg.{default,muted,subtle,inverse}`,
+    `border.{default,subtle,strong}`. Consume with zero app setup:
+    `color="fg.default"`, `bg="bg.surface"`, `borderColor="border.default"`.
+  - `_dark` variants added to the five brand semantics
+    (`primary/secondary/danger/success/warning`); interactive/text steps lighten
+    ~2 stops for AA on dark surfaces (`secondary.main` lifts to `violet.200` so
+    secondary text/outline clears AA on the dark canvas).
+  - Exported `SemanticColorToken` union (dotted-path names) for codemods/reviewers.
+
+  **Color-mode runtime**
+  - `LogicianProvider` now mounts a color-mode provider by default (backed by
+    `next-themes`, added as a dependency). New props: `defaultColorMode`,
+    `forcedColorMode` (for staged/force-light rollouts), `enableColorMode`.
+  - New exports: `ColorModeProvider`, `useColorMode`, `useColorModeValue`,
+    `ColorModeToggle`, and the `ColorMode` type.
+
+  **Switch contract**
+  - Strategy: class (`.dark` on `<html>`, the Chakra v3 default `_dark` selector).
+  - Storage key: `logician-color-mode`. `system` resolution enabled.
+    `disableTransitionOnChange` on. Logician owns `color-scheme` via
+    `enableColorScheme` — consumers should not also write it; add
+    `suppressHydrationWarning` to `<html>`.
+
+  **Component dark-mode adoption**
+
+  Every component now flips through the semantic tokens — verified by rendering all
+  64 component stories in both modes.
+  - _Surfaces & overlays_: Card, Input, Textarea, Select/Combobox, Section/Page
+    loaders, Table, RadialProgress, ErrorFallback card, SegmentedControl track,
+    RangeDatePicker popover; overlays (Menu/Modal/Popover/Toast) realign onto the
+    slate scale via a `bg.panel` `_dark` override. The Menu uses a dark drop
+    shadow in dark mode (was a near-white glow).
+  - _Text & icons_: foreground colors migrated to `fg.*` across Typography
+    (Text/Subtitle/Subtext/H3), Button/Chip/Tag/Badge neutral variants, FormLabel,
+    MaxLengthIndicator, Table head/body, IconButton, Tabs, SegmentedControl,
+    FileItem, FileList, MonthPicker, Code, CodeTabs, SeeMoreButton, ErrorFallback,
+    DatePickers, Markdown/MDXEditor content, and Menu items.
+  - _Borders & dividers_: migrated to `border.*` across FileInput, Popover
+    (content + arrow), TabList, Avatar, MenuList, ModalFooter, FileList, FileItem,
+    Collapsible, TableContainer, SeeMoreButton, SliderThumb, Checkbox.
+  - _Neutral soft fills_ (Button/Chip/Tag) flip their surface + border instead of
+    leaving light-on-light text on dark.
+  - _LineGraph_ feeds recharts CSS-var strings (`var(--chakra-colors-*)`) for axis
+    labels and grid, since recharts does not resolve Chakra tokens.
+
+  **Contrast / accessibility (also affects light mode)**
+
+  A WCAG pass on the dark-mode pairs drove a few brand adjustments that, by
+  design, also apply in light:
+  - Solid `Button`/`IconButton`/`Chip`/`Tag` fills are pinned to their saturated
+    primitive steps so they are mode-invariant (they no longer lighten to the
+    bright `*.300` step in dark, which had dropped white-on-fill contrast to
+    ~1.8–4.5:1). White labels keep their light-mode contrast in both modes.
+  - Solid **warning** uses a dark label (`gold.900`) in both light and dark —
+    white-on-gold was 2.39:1 (failing AA in _both_ modes); it is now 6.7:1.
+  - Checkbox unchecked-border and disabled-fill tuned to flip and clear the 3:1
+    non-text-contrast bar on dark.
+
+  **Light-mode safety**
+  - Additive only: no primitive (`gray.0–1500`, brand palettes) or existing
+    semantic token was renamed or removed.
+  - Light rendering is preserved except for small, deliberate changes:
+    - solid **warning** buttons/chips/tags now use a dark label instead of white
+      (the AA fix above);
+    - a handful of text/border values shift by ~1 tonal step where no exact
+      semantic token matched the previous primitive.
+  - `globalCss` gains a `.dark` body-variable block (no effect in light) and the
+    body text color references `fg.default` (resolves to the same `gray.1300` in
+    light).
+
+- b38a504: feat(theme): add `bg.raised` token; fix SegmentedControl dark-mode selection
+
+  **New semantic token `bg.raised`** — a strongly-raised neutral surface one level
+  above `bg.surface` (`white` in light, `gray.1100` in dark). It exists because
+  the `bg.*` dark ramp is compressed such that `bg.surface` (`gray.1400`) is
+  _darker_ than `bg.subtle` (`gray.1300`), so there was no token for a neutral
+  element that reads as lifted above a subtle fill in dark. Added to the exported
+  `SemanticColorToken` contract. (Named `raised` rather than Chakra's `emphasized`
+  because that default token name can't be overridden via `semanticTokens` in this
+  setup — it keeps resolving to Chakra's own `gray.200`.)
+
+  **SegmentedControl dark-mode selection.** Previously the selected indicator used
+  `bg.surface`, which in dark resolves _darker_ than the track, so the active
+  segment looked recessed and was barely distinguishable — and the `md` drop
+  shadow is invisible on a dark canvas. The indicator now rides on `bg.raised`, so
+  the selected thumb reads as lifted above the `bg.subtle` track in both modes.
+  Dark mode additionally gains a soft ambient shadow + translucent-white hairline
+  edge on the thumb (a drop shadow alone doesn't register on dark), and a
+  translucent-white hairline ring on the track so its bounds stay visible on any
+  dark surface — without it the track vanishes on a same-or-lighter dark surface
+  (e.g. a `bg.surface` card) and the control looks like floating text. Both rings
+  are box-shadows, not borders, so the matched item-height math is preserved.
+
+  Light mode is unchanged (verified pixel-identical; the dark-only treatment is
+  scoped to `.dark`, and `bg.raised` resolves to the same `white` the indicator
+  already used in light).
+
+- f4911e5: feat(table): move the table baseline into the theme's `table` slot recipe
+
+  A no-prop `<Table>` now renders the correct header/border/text/hover in both
+  light and dark mode — consumers should only override for genuine per-row
+  state or layout, instead of hand-rolling header bg, row borders, hover and
+  row tints at every call site.
+  - **Recipe base owns the defaults** (`theme.slotRecipes.table`, merged over
+    Chakra's default recipe): `columnHeader` → `fg.muted` + medium weight +
+    `bg.subtle` header surface + `border.subtle` bottom hairline; `row` →
+    `border.subtle` bottom border; body text inherits `fg.default`. Chakra's
+    `line` variant row bg (raw `bg` token — pure black in dark mode) is
+    overridden to transparent so the surface behind the table shows through.
+  - **Hover follows interactivity automatically**: `<Tr>` sets
+    `data-interactive` when it receives `onClick` / `role="button"` /
+    `tabIndex`, and the recipe keys cursor, `bg.muted` hover and a
+    focus-visible outline off `&[data-interactive]`. Static tables never
+    highlight.
+  - **Row-state prop**: `<Tr state="selected" | "invalid" | "highlighted">`
+    maps to new mode-aware semantic tokens `bg.selected` (← primary.lightest),
+    `bg.invalid.subtle` (← danger.lightest) and `bg.highlighted`
+    (← warning.lightest) — replaces hand-picked `primary.*`/`danger.*` tints.
+  - **Sticky header**: `<Thead sticky>` pins the header
+    (`position: sticky; top: 0`, opaque surface bg, hairline shadow so the
+    collapsed border doesn't vanish on scroll).
+  - **`Tr` forwards its ref**, so dnd-kit rows no longer need to drop to the
+    raw Chakra `Table.Row`.
+  - Sticky-column header cells now use the `bg.subtle` header surface instead
+    of `bg.surface`, matching the rest of the header row.
+
+  Audit note: the brand tint ramps (`*.lightest`/`*.extralight`/…) already
+  carry `_dark` values (e.g. `primary.lightest` → `blue.900`), so the new
+  state tokens inherit correct dark-mode tints.
+
+### Patch Changes
+
+- e0d64fe: fix(dark-mode): make Card edge visible + soften danger solid saturation
+  - **Card border** `border.subtle` → `border.default`. `border.subtle`'s `_dark`
+    step (`gray.1300` `#1E2433`) is nearly invisible on `bg.surface` in dark, so
+    cards blended into the canvas (the card has no shadow — the border is its only
+    boundary). `border.default` gives the card a discernible edge in both modes
+    (light `gray.200` → `gray.300`; dark `gray.1300` → `gray.1100`). The `gradient`
+    Card variant keeps its `primary.light` border.
+  - **Danger solid saturation** lowered one notch: `rose.500` `#D01721` → `#C1232C`
+    and `rose.600` `#A6121A` → `#9C1C23` (the solid destructive button's rest/hover
+    fills, and `danger.main`). Luminance-preserving desaturation, so contrast with
+    white labels is essentially unchanged (~5.5:1, AA). The deprecated `red.*`
+    alias is kept in sync. Text/active steps (`rose.700+`) and light tints are
+    untouched.
+
+- 88b9e82: fix(dark-mode): flip remaining light-only cosmetic spots
+
+  A few non-flipping bits stayed light on the dark canvas; map them to semantic
+  tokens so they follow the mode:
+  - `InlineCode` chip background `gray.50` → `bg.subtle`.
+  - `CopyableCode`'s sticky copy-button fade gradient ended in `#fff` → now the
+    `bg.surface` CSS var, so it fades into the card instead of flashing white.
+  - `MDXEditor` block-type select: the toolbar trigger and its portaled dropdown
+    popup/items now resolve onto `bg.surface`/`fg.default` (with a `bg.muted`
+    highlight) instead of mdxeditor's default white.
+
+  Light mode is unchanged (all values resolve to their previous light colors).
+
+- 233077f: fix(dark-mode): migrate remaining non-flipping primitives to semantic tokens
+
+  A full-repo scan surfaced color values that stayed fixed across modes; map them
+  to semantic tokens so they flip. Two were dark-mode bugs:
+  - `SegmentedControl` selected-segment label was `gray.1500` (near-black) on the
+    dark indicator → now `fg.default`, legible in both modes.
+  - `Card` `gradient` variant was a hardcoded light gradient (`#F5F8FD→#FFF`) → now
+    `bg.subtle → bg.surface` with a `primary.light` border, so it flips.
+
+  Plus: CollapsibleTrigger hover, FileInput upload area, InfoSprinkle icon,
+  Pagination nav arrows, DatePicker calendar icons, PinInput border, and the
+  neutral progress/slider/switch/spinner/radial-progress **tracks** (`gray.200`
+  family → `bg.muted`). White slider knobs and brand/solid fills are intentionally
+  left as-is (they must stay visible / are mode-invariant by design). Light mode
+  is preserved aside from ~1-step token-mapping shifts.
+
+- 9d7094e: fix(dark-mode): brighten `fg.muted` in dark from `gray.400` to `gray.300`
+
+  Secondary text (`fg.muted`) read as too dim on the dark canvas, sitting too far
+  below `fg.default` (`gray.200`). Lifting its `_dark` step to `gray.300` restores
+  the one-step hierarchy gap that light mode has (default → muted) while keeping
+  well clear of AA (~12.8:1 on `bg.canvas`, ~11.7:1 on `bg.surface`). Light value
+  (`gray.900`) is unchanged, so light mode is unaffected.
+
+- fbf170f: fix(dark-mode): flip FileInput upload panel + LineGraph tooltip label
+
+  Two non-flipping colors the earlier scan missed:
+  - `FileInput` inner upload panel was hardcoded `rgba(255, 255, 255, 0.85)` — a white
+    block on the image/video pages that never flipped in dark mode (consumers were
+    patching it with a scoped `_dark` CSS override on `containerStyle`). It now uses
+    `color-mix(in srgb, var(--chakra-colors-bg-surface) 85%, transparent)`, so it flips
+    with the mode while keeping the 85% translucency that lets `bgImage` peek through on
+    hover. Light mode is unchanged.
+  - `LineGraph` tooltip label was `color: 'gray.1500'`, an invalid CSS value recharts
+    can't resolve (it doesn't resolve Chakra tokens — the axes already use CSS vars for
+    this reason). Switched to `var(--chakra-colors-gray-1500)`.
+
+  Docs: `src/theme/claude.md` and `src/components/claude.md` now document the neutral
+  `bg.*`/`fg.*`/`border.*` semantic tokens and direct contributors to use them (instead
+  of raw `gray.*`/`white`) so new components flip in dark mode by default.
+
+- c1afdc6: fix(InfoSprinkle): open on tap on touch devices
+
+  `InfoSprinkle` is built on Chakra's `HoverCard`, whose underlying machine opens
+  on mouse hover and on focus but ignores touch pointers. Browsers that focus the
+  trigger on tap (e.g. Android Chrome) opened it anyway, but those that don't focus
+  buttons on tap (e.g. iOS Safari) never did. The trigger now opens the card on tap
+  on non-hover devices, while keeping the existing hover-to-open behaviour on
+  desktop; dismissal continues to use the HoverCard's own tap-outside / blur
+  handling. `open` / `defaultOpen` / `onOpenChange` continue to work for controlled
+  usage, and any `iconButtonProps.onClick` you pass is still called.
+
+  Also exports a new `useHasHover` hook used to detect hover-capable pointers.
+
+- 04db3be: fix(Input): allow callers to override the resting `borderColor`
+
+  `Input` hardcoded its resting border (`danger.main` when invalid, otherwise the
+  `{ base: 'gray.400', _dark: 'gray.1100' }` mode-aware default), so a `borderColor`
+  prop passed by a caller could not reliably set the default border. The prop is now
+  destructured and used as `borderColor ?? (invalid ? 'danger.main' : <default>)`,
+  so an explicit value wins while the invalid and light/dark fallbacks are
+  preserved.
+
+- 73b3713: fix(dark-mode): make MDXEditor toolbar icons follow the color mode
+
+  mdxeditor colors its toolbar icons with its own `--baseTextContrast` (its
+  internal slate scale), which doesn't track our color mode. In dark mode every
+  toolbar icon stayed near-black (`#1c2024`) and all but vanished against the dark
+  toolbar — only undo/redo read at all, because their disabled state used a
+  different (lighter) token.
+
+  Flip the toolbar svgs onto the semantic `fg.default` token (and disabled
+  buttons onto `fg.subtle`) so they resolve per color mode like the editor body
+  text. The hover / pressed / toggled-on button backgrounds had the same problem
+  (mdxeditor's `--baseBgActive` went light-grey in dark mode, hiding the icons on
+  hover); those now use the semantic `bg.muted` hover token. Light mode is
+  unchanged.
+
+- 5c8b582: docs(theme): reposition `slate.*` as a supported foundational neutral family (un-deprecate)
+
+  `slate.*` shipped in 3.1.0-alpha.11 marked `@deprecated` — framed as a temporary
+  migration shim to be codemodded onto the `fg`/`bg`/`border` role tokens. That was
+  premature: `slate` and the role tokens are **distinct ramps**, not redundant
+  copies. They agree on light values but diverge in dark — `slate` is a mechanical
+  halved-saturation mirror, while the role tokens carry hand-tuned dark values (AA
+  bumps, the `fg` re-peg, hierarchy spacing). So a blanket `slate→role` migration
+  is not value-neutral and isn't desirable.
+
+  `slate.*` is now a **first-class, supported foundational neutral family**: a
+  mode-aware tonal scale alongside the raw `gray.*` primitives. Guidance: prefer a
+  role token (`fg`/`bg`/`border`) when one matches the intent; reach for `slate.N`
+  when you need a specific neutral step no role names (the mode-aware equivalent of
+  dropping to a raw `gray.N`).
+
+  No value or rendering changes — only the `@deprecated` annotations on the token,
+  the `SemanticColorToken` type, and the docs are removed/repositioned.
+
+- 01fa8b4: fix(dark-mode): soften default text color (gray.50 → gray.200)
+
+  Primary text on the dark canvas resolved to `gray.50` (~18.3:1) — brighter than
+  the light-mode baseline (~15.3:1) and close to pure white, which reads as harsh
+  and causes glare/halation on longer text. `fg.default`'s `_dark` value now
+  resolves to `gray.200` (~15.4:1 on the canvas), matching the light-mode contrast
+  while staying AAA. The `.dark` body-text fallback in `globalCss` is aligned to
+  match. Light mode is unchanged, and `fg.muted`/`fg.subtle` are untouched so the
+  text hierarchy is preserved.
+
+- fdd7b3f: fix(Textarea): allow callers to override the resting `borderColor`
+
+  `Textarea` hardcoded its resting border (`danger.main` when invalid, otherwise the
+  `{ base: 'gray.400', _dark: 'gray.1100' }` mode-aware default), mirroring `Input`.
+  The `borderColor` prop is now destructured and used as
+  `borderColor ?? (invalid ? 'danger.main' : <default>)`, so an explicit value wins
+  while the invalid and light/dark fallbacks are preserved. This matches the
+  behavior added to `Input`.
+
 ## 3.1.0-alpha.12
 
 ### Patch Changes
