@@ -20,8 +20,8 @@ export const CollapsibleTrigger = forwardRef<
       cursor="pointer"
       fontWeight="bold"
       borderBottomWidth="1px"
-      borderBottomColor="gray.200"
-      _hover={{ bg: 'gray.50' }}
+      borderBottomColor="border.subtle"
+      _hover={{ bg: 'bg.subtle' }}
       {...rest}
     >
       <HStack width="100%" justify="space-between" align="center">

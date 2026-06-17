@@ -10,7 +10,7 @@ export const Subtext = forwardRef<HTMLParagraphElement, TextProps>(
         ref={ref}
         textStyle={fontSize ? undefined : 'subtext'}
         fontSize={fontSize}
-        color="gray.1500"
+        color="fg.default"
         wordBreak="keep-all"
         {...rest}
       />

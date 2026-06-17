@@ -9,7 +9,7 @@ export const SliderTrack = forwardRef(
     ref?: ForwardedRef<HTMLDivElement>
   ) => {
     return (
-      <Slider.Track bg="gray.200" {...rest} ref={ref}>
+      <Slider.Track bg="bg.muted" {...rest} ref={ref}>
         {children}
       </Slider.Track>
     );

@@ -27,7 +27,7 @@ export const iconButtonColorPaletteStyles: Record<
     ...buttonColorPaletteStyles.neutral,
     ghost: {
       ...buttonColorPaletteStyles.neutral.ghost,
-      color: 'gray.600',
+      color: 'fg.subtle',
     },
   },
 };

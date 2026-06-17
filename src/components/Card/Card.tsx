@@ -14,11 +14,15 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       <ChakraCard.Root
         ref={ref}
         position="relative"
-        bg="white"
-        color="inherit"
+        bg="bg.surface"
+        color="fg.default"
         boxShadow="none"
         border="1px solid"
-        borderColor="gray.200"
+        // border.default (gray.300 / gray.1100 _dark) instead of border.subtle:
+        // subtle's _dark (gray.1300 #1E2433) is ~invisible on bg.surface in dark,
+        // so cards blended into the canvas. default gives the card a discernible
+        // edge in both modes. The `gradient` variant keeps its primary.light border.
+        borderColor="border.default"
         borderRadius="lg"
         transitionProperty="common"
         transitionDuration="normal"

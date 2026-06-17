@@ -49,14 +49,18 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         readOnly={readOnly}
         data-invalid={invalid || undefined}
         resize="none"
-        bg="white"
+        bg="bg.surface"
+        color="fg.default"
         // Chakra v3 `Input` outline variant declares
         // `focusRingColor: var(--focus-color)`, but the matching
         // `Textarea` recipe does not — so the focus ring defaults to
         // `colorPalette.focusRing` (gray.400) and ends up visibly
         // different from Input/Select. Mirror Input's chain explicitly.
         focusRingColor={invalid ? 'danger.main' : 'primary.main'}
-        borderColor={borderColor ?? (invalid ? 'danger.main' : 'gray.400')}
+        borderColor={
+          borderColor ??
+          (invalid ? 'danger.main' : { base: 'gray.400', _dark: 'gray.1100' })
+        }
         _hover={{
           borderColor: invalid ? 'danger.main' : 'primary.lighter',
           ..._hover,
@@ -77,15 +81,15 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         _readOnly={{
           opacity: 1,
           cursor: 'not-allowed',
-          bg: 'gray.50',
-          color: 'gray.600',
-          borderColor: 'gray.200',
+          bg: 'bg.subtle',
+          color: 'fg.muted',
+          borderColor: 'border.subtle',
         }}
         _disabled={{
           opacity: 1,
           cursor: 'not-allowed',
-          bg: 'gray.50',
-          color: 'gray.1000',
+          bg: 'bg.subtle',
+          color: { base: 'gray.1000', _dark: 'gray.400' },
           fontWeight: 'semibold',
         }}
         {...props}

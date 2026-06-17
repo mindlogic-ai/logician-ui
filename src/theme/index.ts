@@ -7,6 +7,7 @@ import {
 
 import { colors, semanticTokens } from './colors';
 import { globalCss } from './global';
+import { tableSlotRecipe } from './recipes/table';
 
 /**
  * Shared textStyle value objects for DRY principle
@@ -243,6 +244,9 @@ const config = defineConfig({
       colors: semanticTokens.colors,
     },
     textStyles,
+    slotRecipes: {
+      table: tableSlotRecipe,
+    },
   },
 });
 

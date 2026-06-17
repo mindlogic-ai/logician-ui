@@ -36,7 +36,7 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
         align="center"
         justify="center"
         border="1px dashed"
-        borderColor="gray.300"
+        borderColor="border.default"
         position="relative"
         overflow="hidden"
         borderRadius="md"
@@ -74,7 +74,7 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
             flexDir="column"
             justify="center"
             align="center"
-            bgColor="rgba(255, 255, 255, 0.85)"
+            bgColor="color-mix(in srgb, var(--chakra-colors-bg-surface) 85%, transparent)"
             opacity={bgImage ? 0 : 1}
             transition="ease-in"
             _groupHover={{ opacity: 1 }} // Set opacity to 1 on parent hover
@@ -85,14 +85,14 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
               <Flex w="100%" flexDir="column" align="center" justify="center">
                 <Box
                   borderRadius="lg"
-                  bgColor={bgImage ? 'transparent' : 'gray.100'}
+                  bgColor={bgImage ? 'transparent' : 'bg.muted'}
                   p={3}
                   mb={2}
                   w="fit-content"
                 >
-                  <LuUpload color={bgImage ? 'gray.1200' : 'gray.600'} />
+                  <LuUpload color={bgImage ? 'fg.default' : 'fg.subtle'} />
                 </Box>
-                <Text color={bgImage ? 'gray.1200' : 'gray.600'}>
+                <Text color={bgImage ? 'fg.default' : 'fg.subtle'}>
                   {fileInputLabel || translate('upload_your_file')}
                 </Text>
               </Flex>

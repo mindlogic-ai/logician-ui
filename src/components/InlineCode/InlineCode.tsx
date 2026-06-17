@@ -6,7 +6,7 @@ import {
 export const InlineCode = ({ children, ...rest }: ChakraCodeProps) => {
   return (
     <ChakraCode
-      bg="gray.50"
+      bg="bg.subtle"
       color="primary.dark"
       borderRadius="sm"
       textStyle="p"
