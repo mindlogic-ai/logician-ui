@@ -399,6 +399,654 @@
     body text color references `fg.default` (resolves to the same `gray.1300` in
     light).
 
+## 3.0.2
+
+### Patch Changes
+
+- ae69640: fix(Textarea): allow callers to override the resting `borderColor`
+
+  `Textarea` hardcoded its resting border to `gray.400` (or `danger.main` when
+  invalid), mirroring `Input`. The `borderColor` prop is now destructured and used
+  as `borderColor ?? (invalid ? 'danger.main' : 'gray.400')`, so an explicit value
+  wins while the invalid and default fallbacks are preserved. This matches the
+  behavior added to `Input`.
+
+## 3.0.1
+
+### Patch Changes
+
+- b968351: fix(Input): allow callers to override the resting `borderColor`
+
+  `Input` hardcoded its resting border to `gray.400` (or `danger.main` when
+  invalid), so a `borderColor` prop passed by a caller could not reliably set the
+  default border. The prop is now destructured and used as `borderColor ?? (invalid
+? 'danger.main' : 'gray.400')`, so an explicit value wins while the invalid and
+  default fallbacks are preserved.
+
+## 3.0.0
+
+### Major Changes
+
+- a827f0f: feat!: Chakra UI v3 migration with Golden Ratio Color System
+
+  Complete migration to Chakra UI v3 with comprehensive design system overhaul and component architecture improvements.
+
+  ## Breaking Changes
+
+  ### Dependencies
+  - **Chakra UI**: v2.8 → v3.3 (major upgrade)
+  - **Removed peer dependencies**: `@emotion/styled`, `framer-motion` (no longer required in Chakra v3)
+  - **Next.js**: Now supports Next.js 16 (peer dependency range extended to `^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0`)
+    - All Next.js navigation APIs (`useRouter`, `usePathname`, `useSearchParams`) and `next/link` remain fully compatible
+    - No breaking changes to Next.js integration in logician-ui components
+  - **chakra-dayzed-datepicker**: upgraded to v3.0.0 for Chakra v3 compatibility
+
+  ### Removed Components
+
+  The following components have been removed:
+  - **Alert** - Use Chakra UI's native Alert component instead
+  - **AutowidthInput** - Functionality can be achieved with regular Input
+  - **Carousel** & **CarouselModal** - Use external carousel libraries
+  - **Chip** - Replaced by enhanced Tag component with variants
+  - **DataField** - Use Field component from Chakra v3
+  - **GuideCue** - Use Tooltip or Popover components
+  - **UrlInput** - Use regular Input component
+
+  ### Component API Changes
+
+  All components have been migrated to Chakra UI v3 APIs:
+  - **Button & IconButton**: `colorScheme` → `colorPalette`, new two-dimensional variant system (solid/outline/soft/ghost × primary/secondary/danger/success/warning)
+  - **Tag**: Enhanced with `colorPalette` prop and comprehensive variant support, replacing Chip functionality
+  - **Accordion**: New composition pattern with AccordionPanel component
+  - **Checkbox**: Updated to v3 composition API, `children` prop removed (use explicit label patterns instead)
+  - **Radio**: Updated to v3 composition API
+  - **Switch**: Updated to v3 composition API, `children` prop removed (use explicit label patterns instead)
+  - **Slider**: Updated to v3 composition API with SliderControl and SliderThumbs components
+  - **Tabs**: Updated to v3 composition API and context management
+  - **Toast**: New v3 API with backward compatibility wrapper
+  - **Tooltip**: Updated to v3 Popover-based implementation
+  - **Modal**: Migrated to Dialog component (v3)
+  - **Menu**: Updated to v3 composition pattern
+  - **Select**: Updated styling for v3 compatibility
+  - **PasswordInput**: Enhanced stories and v3 compatibility
+
+  ### Removed Deprecated v2 Props
+
+  All deprecated Chakra UI v2 props have been removed. TypeScript will now error for any usage of old prop names, forcing migration to v3 syntax:
+  - **Button**: Removed `colorScheme`, `isLoading`, `isDisabled`, `leftIcon`, `rightIcon`
+  - **IconButton**: Removed `colorScheme`, `isLoading`, `isDisabled`, `icon`
+  - **Input**: Removed `isDisabled`, `isInvalid`, `isReadOnly`
+  - **Checkbox**: Removed `isChecked`, `isDisabled`, `isInvalid`
+  - **Switch**: Removed `isChecked`, `isDisabled`
+  - **Textarea**: Removed `isDisabled`, `isInvalid`, `isReadOnly`
+  - **Tooltip**: Removed `label`, `hasArrow`, `isDisabled`, `isOpen`
+  - **Modal**: Removed `isOpen`, `onClose`
+  - **Toast**: Removed `position`, `isClosable`
+  - **Accordion**: Removed `allowToggle`, `allowMultiple`
+  - **Tag**: Removed `TagColorScheme` type alias
+  - **Slider**: Removed `onChange`, `focusThumbOnChange`; changed `value`/`defaultValue` types to `number[]` only
+
+  ## New Features
+
+  ### Chakra UI v3 Primitives
+
+  Added `primitives.ts` for advanced composition patterns:
+
+  ```tsx
+  import {
+    V3Checkbox,
+    V3RadioGroup,
+    V3Switch,
+    V3Slider,
+  } from '@mindlogic-ai/logician-ui';
+
+  // Use raw Chakra v3 components for maximum flexibility
+  <V3Checkbox.Root>
+    <V3Checkbox.HiddenInput />
+    <V3Checkbox.Control>
+      <V3Checkbox.Indicator />
+    </V3Checkbox.Control>
+    <V3Checkbox.Label>Label</V3Checkbox.Label>
+  </V3Checkbox.Root>;
+  ```
+
+  Available primitives: `V3Checkbox`, `V3RadioGroup`, `V3Switch`, `V3Slider`, `V3Field`, `V3PinInput`, `V3NumberInput`, `V3Dialog`, `V3Menu`, `V3Popover`, `V3Tooltip`, `V3Accordion`, `V3Collapsible`, `V3Tabs`, `V3Avatar`, `V3Badge`, `V3Card`, `V3Table`, `V3Tag`, `V3Progress`, `V3Breadcrumb`, `V3List`
+
+  ### Golden Ratio Color System
+
+  Complete redesign of the color palette using mathematically harmonious color relationships based on the golden ratio (φ ≈ 1.618).
+
+  #### New Color Primitives
+  - **Blue** (`blue.50` - `blue.900`): Primary brand color palette
+  - **Rose** (`rose.50` - `rose.900`): Danger/error states (replaces `red`)
+  - **Green** (`green.50` - `green.900`): Success states
+  - **Violet** (`violet.50` - `violet.900`): Secondary/accent color (replaces `purple`)
+  - **Gold** (`gold.50` - `gold.900`): Warning states (replaces `yellow`)
+  - **Gray** (`gray.0` - `gray.1500`): Extended 16-shade slate-based gray scale with cool blue undertone
+
+  #### Semantic Token Updates
+
+  All semantic tokens now reference the new primitive palettes:
+  - `primary.*` → Blue palette (#1751D0 main)
+  - `secondary.*` → Violet palette (#9117D0 main)
+  - `danger.*` → Rose palette (#D01721 main)
+  - `success.*` → Green palette (#1AA612 main)
+  - `warning.*` → Gold palette (#D0A117 main)
+
+  Each semantic category includes `lightest` and `darker` variants:
+
+  ```tsx
+  primary.lightest; // #E8EEFB
+  primary.darker; // #04102A
+  ```
+
+  #### Gray Scale Changes
+  - Added `gray.0` (#FDFDFF) for pure background
+  - All gray values updated with blue undertone
+  - Default body text changed from `gray.1500` to `gray.1300` (#1E2433)
+
+  #### WCAG Accessibility
+
+  All semantic color combinations meet WCAG 2.1 AA standards (4.5:1 minimum contrast).
+
+  #### Color Breaking Changes
+  - Gray palette values have changed significantly (now slate-based with blue undertone)
+  - `primary.light` now maps to `blue.200` (#7DA0E8) instead of `blue.300`
+  - `primary.main` now maps to `blue.500` (#1751D0) instead of `blue.900`
+  - Default body text color changed to `gray.1300` (#1E2433)
+  - Button hover states updated to use new palette shades
+
+  #### Legacy Aliases (Deprecated)
+
+  For backwards compatibility:
+  - `purple.*` → maps to `violet.*`
+  - `red.*` → maps to `rose.*`
+  - `yellow.*` → maps to `gold.*`
+
+  ### Component Enhancements
+  - **Button/IconButton**: New soft variant, two-dimensional variant system, updated hover states
+  - **Tag**: Full variant system replacing Chip component
+  - **Badge**: Enhanced with new color palette
+  - **Banner**: Updated styles for new color system
+  - **Typography**: All components updated with new color tokens
+  - **Breadcrumb**: v3 composition pattern support
+  - **PasswordInput**: New comprehensive stories
+
+  ## Migration Guide
+
+  ### Dependency Updates
+
+  ```bash
+  # Update package.json
+  npm install @chakra-ui/react@^3.3.0
+
+  # Remove old peer dependencies (no longer needed)
+  npm uninstall @emotion/styled framer-motion
+  ```
+
+  ### Replacing Removed Components
+
+  ```tsx
+  // Alert: Use Chakra's native Alert
+  import { Alert } from '@chakra-ui/react';
+
+  // Chip: Use Tag component
+  import { Tag } from '@mindlogic-ai/logician-ui';
+  <Tag colorPalette="primary" variant="solid">
+    Chip content
+  </Tag>;
+
+  // DataField: Use Field component
+  import { V3Field } from '@mindlogic-ai/logician-ui';
+
+  // GuideCue: Use Tooltip
+  import { Tooltip } from '@mindlogic-ai/logician-ui';
+  ```
+
+  ### Component API Updates
+
+  ```tsx
+  // Button/IconButton: colorScheme → colorPalette
+  <Button colorPalette="primary" variant="solid">Submit</Button>
+  <IconButton colorPalette="danger" variant="outline" aria-label="Delete" />
+
+  // Tag: New enhanced API
+  <Tag colorPalette="success" variant="soft">Active</Tag>
+
+  // Checkbox/Switch: children prop removed
+  // Before: <Checkbox>Accept terms</Checkbox>
+  // After: Use Chakra v3 primitives for labels
+  import { V3Checkbox } from '@mindlogic-ai/logician-ui';
+  <V3Checkbox.Root>
+    <V3Checkbox.HiddenInput />
+    <V3Checkbox.Control>
+      <V3Checkbox.Indicator />
+    </V3Checkbox.Control>
+    <V3Checkbox.Label>Accept terms</V3Checkbox.Label>
+  </V3Checkbox.Root>
+
+  // Slider: New composition pattern
+  <Slider defaultValue={[50]}>
+    <SliderControl>
+      <SliderTrack>
+        <SliderFilledTrack />
+      </SliderTrack>
+      <SliderThumbs />
+    </SliderControl>
+  </Slider>
+  ```
+
+  ### Color Token Updates
+
+  ```tsx
+  // Update semantic token references
+  color: 'primary.main'; // #1751D0 (was different in v2)
+  color: 'danger.main'; // #D01721 (rose-based)
+  color: 'gray.1300'; // #1E2433 (default text)
+  bg: 'gray.0'; // #FDFDFF (pure background)
+  ```
+
+  ## Documentation
+  - Component migration patterns: See updated Storybook stories
+  - Color system: `src/theme/Palette.stories.tsx`
+  - Theme documentation: `src/theme/claude.md`
+  - Chakra v3 primitives: `src/primitives.ts`
+
+- 11ea169: feat(Code)!: migrate Code component to Chakra UI v3's `CodeBlock` with its built-in Shiki formatter, replacing the `react-syntax-highlighter` implementation. The `Code` component keeps the `children`, `language`, `onCopy`, `hideHeader`, and `containerProps` props. Removes the `react-syntax-highlighter` and `@types/react-syntax-highlighter` dependencies and adds `shiki` (loaded on demand). The copy button is now rendered by `CodeBlock.CopyTrigger`; the user-supplied `onCopy` callback still fires with the copied text after the trigger copies to the clipboard.
+
+  BREAKING: the raw/preview Markdown toggle that `Code` showed when `language === 'markdown'` has been removed. `Code` now always renders a syntax-highlighted block. Along with it, the `code_markdown_raw` and `code_markdown_preview` translation keys are removed.
+
+- 61646cf: **Breaking: Checkbox, Switch, and Radio are now compound components**
+
+  `Checkbox`, `Switch`, and `Radio` no longer render their internal controls automatically. You must now compose them explicitly using sub-components.
+
+  **Checkbox**
+  - `Checkbox` is now the root element (replaces `Checkbox.Root`)
+  - `Checkbox.Control` renders the styled checkbox box
+  - `Checkbox.Label` renders the label text
+
+  **Switch**
+  - `Switch` is now the root element
+  - `Switch.Control` renders the styled toggle (includes thumb)
+  - `Switch.Label` renders the label text
+
+  **Radio**
+  - `Radio` is now the root element (replaces the internal `RadioGroup.Item` wrapper)
+  - `Radio.Indicator` renders the styled radio circle
+  - `Radio.Text` renders the label text
+  - `rootRef` and `inputProps` props removed
+
+- 3a2a951: **Breaking: Menu refactored to compound component pattern**
+
+  `Menu` is now the root element (wraps `ChakraMenu.Root`) with a `baseFontSize` prop (default `'14px'`). Menu content is automatically wrapped in `ScaledContext`. `MenuButton` is removed — use `Menu.Trigger asChild` instead.
+
+  **Migration**
+
+  ```tsx
+  // Before
+  <Menu.Root>
+    <MenuButton as={Button}>Open</MenuButton>
+    <MenuList><MenuItem value="x">Item</MenuItem></MenuList>
+  </Menu.Root>
+
+  // After
+  <Menu>
+    <Menu.Trigger asChild><Button>Open</Button></Menu.Trigger>
+    <Menu.List><Menu.Item value="x">Item</Menu.Item></Menu.List>
+  </Menu>
+  ```
+
+  Exposes: `Menu.Trigger`, `Menu.TriggerItem`, `Menu.ContextTrigger`, `Menu.List`, `Menu.Item`, `Menu.ItemGroup`, `Menu.ItemGroupLabel`, `Menu.ItemCommand`, `Menu.CheckboxItem`, `Menu.RadioItem`, `Menu.RadioItemGroup`, `Menu.Separator`, `Menu.Arrow`, `Menu.ArrowTip`
+
+### Minor Changes
+
+- 7e15535: Add `Collapsible` compound component (`Root`, `Trigger`, `Content`, `Indicator`) wrapping Chakra UI v3 Collapsible with Accordion-style defaults (bordered rounded container, bold trigger with chevron, padded content). Also fixes Avatar background, IconButton color precedence, Tooltip cloneElement removal, ModalFooter unused import, rollup CSS SSR injection, and removes unused `react-textarea-autosize` dependency.
+- b180dcb: feat(Avatar): add Chakra v3 namespace pattern subcomponent exports
+
+  Avatar now exposes subcomponents as namespace properties following the Chakra UI v3 pattern:
+  - `Avatar.Root`
+  - `Avatar.RootProvider`
+  - `Avatar.Fallback`
+  - `Avatar.Image`
+  - `Avatar.Icon`
+  - `Avatar.Group`
+  - `Avatar.Context`
+
+  fix(Popover): match arrow tip border color to content border color
+
+  `Popover.Content` now renders with an explicit `1px gray.200` border and sets a `--popover-border-color` CSS variable. `Popover.ArrowTip` reads that variable so the arrow border stays in sync with the content border.
+
+- c5eb2f7: Add `showLineNumbers` prop to `Code`. When enabled, the underlying Chakra `CodeBlock` renders a line-number gutter via its shiki adapter.
+- e47db64: Color palette expansion, responsive typography, and component improvements
+
+  ## Color Palette Expansion
+
+  **New Color Levels:**
+  - Added 25 shade to all primitive color palettes (blue, rose, green, violet, gold)
+  - New lightest backgrounds: #F4F7FD (blue), #FDF5F5 (rose), #F4FDF4 (green), #FAF4FD (violet), #FDFBF4 (gold)
+
+  **Semantic Token Changes (BREAKING):**
+  - **NEW**: `lightest` → 25 shade (lightest backgrounds, ghost states)
+  - **RENAMED**: Previous `lightest` → `extralight` (50 shade, extra-light backgrounds)
+  - `lighter`, `light`, `main`, `dark`, `darker` remain unchanged
+
+  **Migration Guide:**
+  Replace all instances of `.lightest` with `.extralight`:
+
+  ```tsx
+  // Before
+  <Badge bgColor="primary.lightest" />
+
+  // After
+  <Badge bgColor="primary.extralight" />
+  ```
+
+  Or use the new `lightest` for even lighter backgrounds:
+
+  ```tsx
+  <Badge bgColor="primary.lightest" /> // Now uses 25 shade
+  ```
+
+  **Component Updates:**
+  - Badge, Chip, Tag: Updated to use `extralight`
+  - Toast, Banner: Updated to use `extralight`
+  - Button soft variant: Updated to use `extralight`
+
+  ## Responsive Typography System
+
+  **Typography Updates:**
+  - Override Chakra v3 default textStyles (2xs-7xl) with responsive scaling
+  - Mobile: base size, Desktop (md+): one size up for better readability
+  - Update custom Logician textStyles (h1-h5, p, subtitle, subtext) with consistent scaling
+  - Update Palette storybook to reflect actual theme values
+
+  ## Modal Component API Changes (BREAKING)
+
+  **API Changes:**
+  - Remove auto-rendered `<ModalOverlay />` from Modal component
+  - Remove Portal wrapper from ModalContent for simpler composition
+  - Users must now explicitly add `<ModalOverlay />` when using Modal
+
+  **Migration:**
+
+  ```tsx
+  // Before
+  <Modal open={isOpen}>
+    <ModalContent>...</ModalContent>
+  </Modal>
+
+  // After
+  <Modal open={isOpen}>
+    <ModalOverlay />
+    <ModalContent>...</ModalContent>
+  </Modal>
+  ```
+
+  ## Component Improvements
+
+  **Bug Fixes:**
+  - Button: Remove fontSize override for xs size (now handled by theme)
+  - InfoSprinkle: Add optional chaining for iconButtonProps.size
+  - Markdown: Reduce gap from 1.2em to 1em for better spacing
+  - Pagination: Add whiteSpace="nowrap" to items per page label
+
+  ## Documentation Updates
+  - Updated theme/CLAUDE.md with new color tables and semantic token mappings
+  - Updated all inline comments in colors.ts
+  - Palette Storybook automatically displays new lightest shade
+
+  ## WCAG Compliance
+
+  All existing WCAG AA compliance maintained - no changes to `main`, `dark`, or `darker` mappings
+
+- 4b689ee: feat(Code): bundle the Stata grammar
+
+  Adds `stata` to `shikiAdapter`'s preloaded `langs`. Several consumers
+  (notably FactChat / academic users) pass `language="stata"` to `<Code>`
+  and were hitting `ShikiError: Language not found`. Surfaces in the
+  Storybook language dropdown automatically via `BUNDLED_LANGUAGES`.
+
+- a6a7811: feat(Code): bundle 11 additional Shiki language grammars
+
+  Expand `shikiAdapter`'s preloaded `langs` from 17 to 28 by adding `c`, `csharp`, `dart`, `dockerfile`, `kotlin`, `lua`, `matlab`, `mermaid`, `r`, `ruby`, `toml`. Selected based on consumer Sentry signals (FactChat hit `ShikiError: Language not found` for `r`, `c`, `cpp`, `stata` between 2026-04-30 and 2026-05-07) and prevalence in academic / programming-student use cases.
+
+  Bundle delta: ~376 KB raw / ~75 KB gzipped (+30% on the grammar bundle alone). Heavyweights deliberately excluded — `cpp` (464 KB), `swift` (104 KB), `php` (116 KB), `objective-c` (112 KB) — consumers can map these to syntactically-similar bundled grammars (e.g. `cpp → java`) for best-effort highlighting.
+
+- e144f01: feat(Code): extract `shikiAdapter` into its own module and refine default surface
+  - Move the inline `createShikiAdapter` call out of `Code.tsx` into `src/components/Code/shikiAdapter.ts`, so the adapter can be reused across code-rendering components (e.g. `CodeTabs`) and is easier to type and swap.
+  - Type the adapter against `HighlighterGeneric<BundledLanguage, BundledTheme>` imported from `shiki` instead of `any, any`.
+  - Simplify the default Code header: drop the `primary.light` bottom border, drop the `textStyle="xs"` title override, and drop the `borderRadius="none"` override on the root so the component respects the token default.
+  - Switch the root `textStyle` default from `"p"` to `"Body"` and set `borderColor="gray.300"` so the component matches surrounding surfaces.
+  - Show a `FaCheck` success indicator in the copy trigger when copying succeeds.
+
+- de10bd4: feat: add consistent keyboard focus ring across interactive components
+
+  Introduces a shared `focusRing` utility (`src/utils/focusRing.ts`) and applies the standard double-ring focus style (white inner + primary blue outer) to all keyboard-navigable components: Button, IconButton, Checkbox, Radio, Switch, SliderThumb, AccordionButton, MenuItem, BreadcrumbLink, and Chip.
+
+  Focus ring now only shows on keyboard navigation (`_focusVisible`) rather than on mouse click (`_focus`), following the CSS `:focus-visible` standard used by GitHub, Radix, and Material Design.
+
+- 63fa11b: Add FormIntegration component and improve Chakra UI v3 compatibility
+  - Add new FormIntegration component with comprehensive documentation
+  - Enhance LogicianProvider with Chakra UI v3 patterns and better theme integration
+  - Update form components (Select, Input, Textarea) for v3 compatibility
+  - Add comprehensive Storybook stories for Avatar, IconButton, and InfoSprinkle
+  - Refine theme configuration and global styles for better consistency
+  - Improve component exports in main index file
+
+- 541a14b: Add `baseFontSize` prop to `InfoSprinkle` (default `14px`), matching `Popover`'s scaling behavior via `ScaledContext`. Optimize `ScaledContext` so token-to-em conversion is computed once per Chakra system via a module-level `WeakMap` cache (shared across all instances) and memoize the merged inline style. Move `Popover`'s runtime context (`PopoverContext`, `usePopoverContext`) out of `Popover.types.ts` into a dedicated `Popover.context.ts`. Fix `Code` to merge `meta` from `containerProps` and root props instead of overwriting it, and restore `ModalHeader`'s `borderTopRadius="l3"` default.
+- a1d012f: feat: FormLabel RequiredIndicator, Select styles fix, Badge sizes, FileItem tooltips/download loading, Input bg, MonthPicker showClearButton rename
+  - FormLabel: show Field.RequiredIndicator when FormControl has required prop (via Chakra v3 Field context)
+  - Select: pass Logician-merged styles as base to consumer style callbacks (fixes Pagination border color)
+  - Select: fix option flicker on mouse leave by removing isFocused from background condition
+  - Badge: add size prop (sm/md/lg) with textStyle presets (subtext/subtitle)
+  - FileItem: add tooltips on download/delete icons, add isDownloading prop with spinner
+  - Input: set default background to white
+  - MonthPicker: rename showResetButton to showClearButton
+
+- 1656cbc: Add `Popover` compound component
+
+  Wraps Chakra's Popover with a `baseFontSize` prop (default `'14px'`) passed via context to `Popover.Content`, which wraps its children in `ScaledContext`. `Positioner` is hidden inside `Popover.Content`.
+
+  Exposes: `Popover.Anchor`, `Popover.Trigger`, `Popover.Content`, `Popover.Arrow`, `Popover.ArrowTip`, `Popover.CloseTrigger`, `Popover.Header`, `Popover.Body`, `Popover.Title`, `Popover.Description`, `Popover.Footer`.
+
+- e45787d: feat(Modal): add `fullScreenOnMobile` prop and scope base font to 14px
+  - Add `fullScreenOnMobile` prop to `Modal` (default: `true`). When true, the modal becomes fullscreen (100vw × 100dvh, no border-radius) on mobile viewports. When false, horizontal margin (`mx: 4`) is applied instead — suitable for confirm dialogs and small modals.
+  - Wrap `ModalContent` children in `ScaledContext fontSize="14px"` so all modal typography and spacing scales to a 14px base without affecting the global font size.
+  - Expose `useModalContext` hook for consuming `fullScreenOnMobile` in custom modal content components.
+
+- 73d2e60: feat(Select): replace react-select with Chakra-based Select and Combobox
+
+  The `Select` component is no longer a `react-select` wrapper. It is now a
+  compound-component namespace built on Chakra v3's Select primitives and
+  styled to match `Input` (border, hover, focus, invalid and disabled
+  states share the same tokens). A matching `Combobox` namespace is added
+  for searchable selects.
+
+  Two convenience components cover the common single-select case:
+  - `SelectField` — single-select dropdown (`options` / `value` / `onChange`)
+  - `ComboboxField` — searchable single-select with text filtering
+
+  ### Breaking change
+
+  The previous `react-select` API is removed. Consumers of `<Select />`
+  should migrate to `<SelectField />`:
+
+  ```tsx
+  // Before
+  <Select options={options} value={selectedOption} onChange={handleChange} />
+
+  // After
+  <SelectField options={options} value={value} onChange={handleChange} />
+  ```
+
+  `value` / `onChange` now work with the option's `value` (`T`) directly
+  rather than the whole option object. The `react-select`-specific props
+  (`styles`, `isMulti`, `isSearchable`, `menuPlacement`, …) no longer
+  exist — use the `Select` / `Combobox` namespaces for multi-select,
+  grouped options and custom layouts.
+
+  The `react-select` and `@tanstack/react-virtual` dependencies have been
+  dropped.
+
+- 9c8ef73: Add `ScaledContext` component
+
+  Wraps a `Box` with a given `fontSize` and re-maps spacing/sizes tokens from `rem` to `em`, so all spacing inside scales proportionally with the local font size. Useful for embedding UI at different densities without duplicating theme tokens.
+
+### Patch Changes
+
+- 04b32cf: chore(Card): remove unused `.card-image` CSS hook
+
+  The `.card-image` selector was a consumer-facing CSS hook intended to be
+  applied to image children of `<Card>` for hover-scale and smooth-transition
+  effects, but no consumers ended up adopting it. Removing the dead styles
+  (and the now-unused `mergeCss` indirection in `Card.tsx`).
+
+- 0641e41: feat(Checkbox): add inputRef prop to forward ref to the hidden input element
+- f52deaa: fix(Code): render copy button as floating overlay when `hideHeader` is true
+
+  Previously, setting `hideHeader` removed the entire header — including the copy
+  button — even when `onCopy` was provided. The copy trigger now renders as a
+  top-right overlay (`IconButton` ghost variant with a tooltip, matching the
+  `CodeTabs` copy button) whenever the header is hidden but `onCopy` is set.
+  Positioned at `top={2} right={3}` so the icon sits in the upper-right corner
+  without overlapping the first line of code. Exposes `.ml-code-copy` className
+  hook for consumer overrides.
+
+- 1595e85: fix: override Chakra spacing scale with em units
+
+  Numeric spacing tokens (p: 4, gap: 2, etc.) now resolve to em values
+  instead of rem, so spacing cascades from the nearest ancestor font-size
+  alongside text — enabling consistent contextual scaling.
+
+- 5edf7a7: fix: switch theme textStyles font sizes from rem to em for contextual scaling
+
+  em units inherit from the nearest ancestor font-size, enabling components inside
+  containers like Popover to scale from a local base (e.g. 14px) rather than
+  always deferring to the html root.
+
+- e7627c9: fix: replace compounding em lineHeight on 6xl textStyle with unitless ratio
+
+  `lineHeight: '5.75em'` resolved against the element's own font-size (60px),
+  producing 345px instead of the intended 92px. Replaced with unitless `1.533`
+  (92 ÷ 60) to preserve the original rendered output.
+
+- cc60a0d: fix: remove borders from soft button variants; improve Toast close button contrast and description styling; fix ghost button text color to use gray.1200
+- daebe15: fix(Card, Chip, Button, Checkbox): style consistency and runtime error fixes
+  - Card: move `transition` into `css` prop to prevent Chakra v3 runtime error when `clickable` is combined with `_hover`; deep-merge `_hover` so user-passed hover styles don't clobber clickable hover styles
+  - Chip: align neutral `solid`/`soft`/`outline` border colors with Tag (add missing `borderColor` on solid/soft, fix outline from `gray.700` → `gray.500`)
+  - Button: add `transform: scale(0.97)` to all `_active` states; fix primary/secondary soft active color (`*.light` → `*.lighter` to match hover)
+  - Checkbox: add `bgColor: gray.300` to `_disabled` state on root
+
+- 867370b: fix(Card): hoist `.card-image` transition and merge consumer `css`
+  - Move the `.card-image` transition onto the element itself so it animates on both enter and exit, not only while hovered
+  - Replace the hardcoded `transition: '0.3s all'` string (which the Chakra v3 style walker can't traverse as a value inside `_hover`) with token-backed `transitionProperty`/`transitionDuration`/`transitionTimingFunction` on the root and style-object form on `.card-image`
+  - Use `mergeCss` so consumer `css` composes with the library base styles instead of being overwritten by the trailing rest spread
+
+- c4fb34e: fix(Checkbox): move disabled fill styling to CheckboxControl for correct visual targeting
+- e144f01: fix(CodeTabs): stabilize panel width and split `CopyButton`
+  - Stack all language panels inside a single CSS grid cell so the container sizes to the widest panel. Non-selected panels use `visibility: hidden` + `aria-hidden` so they still contribute to intrinsic width without being interactive or announced to assistive tech. This eliminates the width jitter that occurred when switching between tabs whose code samples have different maximum line lengths.
+  - Extract `CopyButton` into its own module (`CodeTabs/CopyButton.tsx`) and drop the inner `TabPanels`/`TabPanel` wiring in favor of rendering `Code` panels directly.
+
+- fe346a9: fix: preserve library `css` prop against consumer overwrite across components
+
+  Several components defined a library `css` prop (typically CSS custom properties or nested selector blocks) but applied it BEFORE `{...rest}`, letting a consumer's `css` silently clobber it. Switched every site to destructure `css` from props and compose via `mergeCss(libraryCss, css)` applied AFTER `{...rest}`, so consumer styles merge with library styles instead of replacing them.
+
+  Also replaces the hardcoded `css={{ transition: 'all 0.25s ease-in-out' }}` on `Button` with `transitionProperty`/`transitionDuration`/`transitionTimingFunction` props to avoid the Chakra v3 style walker choking on the shorthand transition string when combined with state pseudos.
+
+  Components fixed:
+  - Button: swap hardcoded transition string for token-backed transition props
+  - Input, RadioGroup, SegmentedControl, Spinner, Tab, TabList, Tbody, Tooltip: merge consumer `css` with library `css` instead of letting `{...rest}` overwrite it
+
+- 7f3d81d: fix: load Pretendard Variable and Inter fonts from CDN in LogicianProvider
+
+  Previously no fonts were loaded by the library, causing browsers to fall back to system fonts (Arial/Helvetica) which rendered English text noticeably thicker than intended. LogicianProvider now automatically injects stylesheet links for Pretendard Variable (jsDelivr, dynamic subset) and Inter (Bunny Fonts) on mount. A `loadFonts` prop (default `true`) allows consumers to opt out if they manage fonts themselves. Also adds `-webkit-font-smoothing: antialiased` to global styles for consistent rendering across OS.
+
+- dda5b3d: fix(MenuItem): remove narrowed onClick override, inherit correct type from ChakraMenuItemProps
+- 272e59f: fix(ModalHeader): restore default textStyle="h4" on ModalHeader
+- 1630c8e: fix(ModalHeader): remove hardcoded textStyle from ModalHeader to allow consumers to control typography
+- 9a9c8e7: fix: PR #55 review feedback - Tabs v3 migration, createIcon optimization, SegmentedControl theme tokens, LogicianProvider Toaster removal
+- 7ca7b1d: Fix RadialProgress useToken hooks rule violation
+  - Resolve "Rendered fewer hooks" error by calling useToken at component top level instead of inside map callbacks
+
+- e144f01: fix(RadialProgress): hide segments with zero value
+
+  Previously, zero-value segments were still rendered at the minimum arc size (and still consumed gap budget), producing visible slivers for categories that should not appear at all. Zero-value segments are now filtered out before layout, so only segments with `value > 0` contribute to the visible count, the gap calculation, and the arc layout.
+
+- a4ce2dc: Fix release workflow alternating alpha bump failure
+
+  Remove `changeset pre exit` step from release workflow — it was committing `pre.json` with `mode: "exit"` back to dev, causing the next run's `pre enter alpha` to no-op and `changeset version` to exit pre-release instead of bumping alpha. Also resets `pre.json` to `mode: "pre"`.
+
+- 69c85f5: Fix TagCloseButton missing cursor pointer on hover
+
+  Fix Tag size prop type error by using TagRootProps instead of BoxProps
+
+- 2eec3f8: Fix vertical Tab indicator: use Chakra-native left-side indicator; suppress horizontal \_after
+
+  Vertical selected tab now shows a left-side 2px indicator using Chakra's built-in `--indicator-offset-x`, `--indicator-offset-y`, and `--indicator-thickness` CSS variables. Adds `_after: { content: 'none' }` to `verticalSelectedStyles` so the horizontal bottom-bar pseudo-element (from `_selected`) does not bleed through on vertical tabs.
+
+- 070588f: Fix Icon color to use currentColor, add default color/colorPalette to IconButton, update global fontWeight to 500
+- 5361a87: Set default icon color to `gray.600`
+- 515d7ea: fix: improve locale type safety and fix date format issues
+  - Add `SupportedLocale` union type derived from LOCALE_MAP keys, applied to LogicianProvider, useLocale, and all date helper functions
+  - Export `useLocale`, `LocaleContext`, and `LocaleContextValue` from package entry point
+  - Fix 2-digit year format (yy → yyyy) in getDefaultFullDateFormat
+  - Fix RangeDatePicker showing raw format string as end-date placeholder
+
+- d971f4c: feat(Modal): bake in Dialog.Backdrop overlay by default
+
+  Modal now renders the backdrop overlay internally, matching the Chakra v2 behavior where the overlay was included automatically. Users no longer need to render `<ModalOverlay />` manually inside `<Modal>`.
+
+- aa5e009: Various component fixes
+  - SegmentedControl: fix sizing, layout shift on selection, and font size scaling with size prop
+  - FileInput: use Text instead of Subtext for upload label
+  - MenuItem: apply danger.lightest hover background for danger variant
+  - ModalCloseButton: simplify using IconButton
+
+- 14528d9: style(Select, Textarea): align default look with Input
+
+  The `Select` and `Textarea` components now mirror `Input` so the three
+  form controls feel like one set. Concretely:
+
+  ### Select
+  - `borderColor` `gray.400` (was `gray.300`)
+  - `_hover` border `primary.lighter` (was `gray.400`)
+  - `_focus` border `primary.main` + 1px `outline` of the same color
+    (matches Chakra v3 `Input` recipe's `focusVisibleRing: "inside"`,
+    so the focused control reads as roughly 2px thick — was just 1px
+    border with no outline)
+  - `_invalid` border `danger.main` — unchanged
+  - font size `1em` (was hardcoded `14px`) so it inherits the same
+    responsive size as Chakra v3's `Input` `md` recipe
+  - font weight `500` (was `600`)
+  - selected value color `gray.1300` (was `gray.1200`) — matches the body
+    text color used by `Input`
+  - left padding `12px` (was `4px`) — matches Chakra v3 `Input` `md`
+  - disabled state: `bg gray.50`, `color gray.1000`, `fontWeight 600`,
+    `cursor not-allowed` — matches `Input`'s `_disabled`
+
+  ### Textarea
+  - `_hover` border `primary.lighter` (was `gray.600`)
+  - `bg white` so the field doesn't pick up surrounding colors
+  - focus ring color forced to `primary.main` (was `gray.400`). Chakra v3
+    `Input` outline recipe sets `focusRingColor: var(--focus-color)`, but
+    the matching `Textarea` recipe omits it — so the focus outline
+    defaulted to `colorPalette.focusRing` (gray.400). The component now
+    declares `focusRingColor` and the `--focus-color`/`--error-color`
+    css variables exactly the way `Input.tsx` does.
+  - `_readOnly`: `bg gray.50`, `color gray.600`, `borderColor gray.200`,
+    `cursor not-allowed` — matches `Input`'s `_readOnly`
+  - `_disabled`: `bg gray.50`, `color gray.1000`, `fontWeight semibold`,
+    `cursor not-allowed` — matches `Input`'s `_disabled`
+
+  `Input` itself is unchanged. No public API breaks; the `Select`
+  `styles` callback contract is preserved and consumer overrides keep
+  working as before. Size variants (`sm` / `lg` / `xl`) are out of scope
+  for this change — Select still renders at the Chakra `Input` `md`
+  geometry; a dedicated size-progression pass will follow in a separate
+  PR.
+
+- 676b42e: fix: DatePicker 스타일 수정
+
 ## 3.0.0-alpha.36
 
 ### Minor Changes
