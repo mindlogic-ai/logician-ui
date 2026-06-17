@@ -5,6 +5,7 @@
     "@mindlogic-ai/logician-ui": "3.0.0"
   },
   "changesets": [
+    "baseline-dark-neutrals-and-fills",
     "card-border-and-danger-saturation",
     "dark-mode-cosmetic-minors",
     "dark-mode-semantic-tokens",
