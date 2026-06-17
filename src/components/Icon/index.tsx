@@ -1,5 +1,7 @@
 import { Icons } from './_constants/iconList';
 
+export type { CreatedIcon } from './_utils/createIcon';
+
 // 각 아이콘을 개별적으로 export (Icons. 없이 직접 사용 가능)
 export const {
   // BI Icons
@@ -117,13 +119,31 @@ export const {
   // SL Icons
   SlSettings,
   // TB Icons
+  TbAlertCircle,
   TbAppWindowFilled,
+  TbArrowBackUp,
+  TbArrowForwardUp,
+  TbCheck,
+  TbChevronDown,
+  TbChevronUp,
   TbInfinity,
   TbLayoutNavbar,
+  TbLock,
   TbLockCog,
+  TbLockOpen,
+  TbMaximize,
   TbMessageChatbotFilled,
+  TbSitemap,
   TbSum,
   TbWorldSearch,
+  TbX,
+  // Lucide icons surfaced under friendly names (Workflow chrome)
+  AlertTriangle,
+  AlertOctagon,
+  GripVertical,
+  StickyNote,
+  Minus,
+  Plus,
   // Custom SVG Icons
   Analytics,
   Bulb,

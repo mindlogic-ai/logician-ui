@@ -79,10 +79,16 @@ import {
   LuDownload,
   LuExternalLink,
   LuGraduationCap,
+  LuGripVertical,
   LuInfo,
   LuMenu,
+  LuMinus,
+  LuOctagonAlert,
+  LuPlus,
   LuReceipt,
   LuSendHorizontal,
+  LuStickyNote,
+  LuTriangleAlert,
   LuUpload,
 } from 'react-icons/lu';
 import {
@@ -102,13 +108,24 @@ import { PiChatSlashBold, PiExam, PiGlobe, PiGlobeX } from 'react-icons/pi';
 import { RxDotsHorizontal } from 'react-icons/rx';
 import { SlSettings } from 'react-icons/sl';
 import {
+  TbAlertCircle,
   TbAppWindowFilled,
+  TbArrowBackUp,
+  TbArrowForwardUp,
+  TbCheck,
+  TbChevronDown,
+  TbChevronUp,
   TbInfinity,
   TbLayoutNavbar,
+  TbLock,
   TbLockCog,
+  TbLockOpen,
+  TbMaximize,
   TbMessageChatbotFilled,
+  TbSitemap,
   TbSum,
   TbWorldSearch,
+  TbX,
 } from 'react-icons/tb';
 
 import createIcon from '@/components/Icon/_utils/createIcon';
@@ -251,6 +268,13 @@ const iconList = {
   LuReceipt,
   LuSendHorizontal,
   LuUpload,
+  // Lucide icons surfaced under friendly names (used by Workflow chrome)
+  AlertTriangle: LuTriangleAlert,
+  AlertOctagon: LuOctagonAlert,
+  GripVertical: LuGripVertical,
+  StickyNote: LuStickyNote,
+  Minus: LuMinus,
+  Plus: LuPlus,
 
   // MD Icons
   MdAnnouncement,
@@ -278,13 +302,24 @@ const iconList = {
   SlSettings,
 
   // TB Icons
+  TbAlertCircle,
   TbAppWindowFilled,
+  TbArrowBackUp,
+  TbArrowForwardUp,
+  TbCheck,
+  TbChevronDown,
+  TbChevronUp,
   TbInfinity,
   TbLayoutNavbar,
+  TbLock,
   TbLockCog,
+  TbLockOpen,
+  TbMaximize,
   TbMessageChatbotFilled,
+  TbSitemap,
   TbSum,
   TbWorldSearch,
+  TbX,
 
   // Custom SVG Icons
   Analytics,
