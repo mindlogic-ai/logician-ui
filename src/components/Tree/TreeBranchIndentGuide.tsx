@@ -14,11 +14,7 @@ export const TreeBranchIndentGuide = forwardRef<
   // or `borderInlineStartWidth` (stacks a second 1px stroke on top of
   // the slot's own bg-painted 1px). Only override `bg` to lighten.
   return (
-    <ChakraTreeView.BranchIndentGuide
-      ref={ref}
-      bg="border.subtle"
-      {...props}
-    />
+    <ChakraTreeView.BranchIndentGuide ref={ref} bg="border.subtle" {...props} />
   );
 });
 TreeBranchIndentGuide.displayName = 'TreeBranchIndentGuide';
