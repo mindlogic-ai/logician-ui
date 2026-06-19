@@ -60,6 +60,37 @@
  * <Badge bgColor="success.lightest" color="success.dark" />
  * ```
  */
+/**
+ * Halved-saturation counterpart of each primitive `gray.N` — same hue and
+ * lightness, HSL saturation cut by ~50% (e.g. `gray.1300` #1E2433 @ 26% →
+ * #23262E @ 13%). The blue-tinted `gray` ramp reads as the right neutral in
+ * light mode but turns muddy/over-chromatic as a dark surface, so every
+ * dark-mode neutral below (`slate.*`, and the `_dark` of `bg`/`fg`/`border`)
+ * resolves to this desaturated mirror instead of the raw `gray` step. Light
+ * mode is untouched — it keeps referencing `{colors.gray.*}` verbatim.
+ *
+ * Single source of truth: change a dark neutral here, not at each token.
+ */
+const desaturatedGray = {
+  0: '#FEFEFF',
+  50: '#F8F9FB',
+  100: '#F2F4F7',
+  200: '#E5E8EC',
+  300: '#D2D5DB',
+  400: '#B6BAC3',
+  500: '#A2A6B1',
+  600: '#8E939F',
+  700: '#7C818D',
+  800: '#6A6F7C',
+  900: '#595E6B',
+  1000: '#4A4E5A',
+  1100: '#3C404B',
+  1200: '#30343C',
+  1300: '#23262E',
+  1400: '#181A20',
+  1500: '#0E1014',
+} as const;
+
 export const semanticTokens = {
   colors: {
     /**
@@ -97,6 +128,18 @@ export const semanticTokens = {
       darker: {
         value: { base: '{colors.blue.900}', _dark: '{colors.blue.100}' },
       }, // high-contrast text
+      // Solid brand-blue *fills* for surfaces with white text/icons on top
+      // (modal headers, hero/banner gradients, brand badges). `primary.main`/
+      // `primary.dark` lighten ~2 stops in dark — right for foreground, too
+      // light as a fill — so these stay a deep blue in dark instead. `base`
+      // repeats the old main/dark values, so light is unchanged. Bare accents
+      // (dots, progress bars) keep `primary.main`.
+      fill: {
+        value: { base: '{colors.blue.500}', _dark: '{colors.blue.700}' },
+      },
+      fillStrong: {
+        value: { base: '{colors.blue.700}', _dark: '{colors.blue.800}' },
+      },
     },
 
     /**
@@ -235,6 +278,77 @@ export const semanticTokens = {
     },
 
     /**
+     * `slate.*` — the foundational **mode-aware neutral family**.
+     *
+     * A first-class neutral palette alongside the raw `gray.*` primitives, but
+     * mode-aware: each `slate.N` resolves to `gray.N` in light and to the
+     * desaturated counterpart of the *mirrored* step in dark, so a single token
+     * carries the same tonal level in both modes (e.g. `slate.300` is a light
+     * divider in light and the equivalent dark divider in dark — no `_dark={{…}}`
+     * at the call site). It lives under `semanticTokens` only because Chakra
+     * requires that for the `_dark` flip; conceptually it is a *foundation*
+     * (a tonal scale), not a *role*.
+     *
+     * When to use which:
+     * - Prefer the **role tokens** (`fg`/`bg`/`border`) when one matches the
+     *   intent — they carry semantics and AA-tuned dark values.
+     * - Reach for **`slate.N`** when you need a specific neutral tonal step that
+     *   no role names (mirroring how you'd otherwise drop to a raw `gray.N`, but
+     *   keeping the dark flip). `slate` and the role tokens are *distinct* ramps
+     *   (slate is a mechanical mirror; roles are hand-tuned), so they are not
+     *   interchangeable in dark mode.
+     *
+     * `600`/`700` are lifted off the straight mirror (#8E939F/#7C818D) so the
+     * secondary/muted text they most often carry clears WCAG AA 4.5:1 on the
+     * dark canvas/surface — the straight mirrors measured ~3.0–3.9 there.
+     */
+    slate: {
+      0: { value: { base: '{colors.gray.0}', _dark: desaturatedGray[1500] } },
+      50: { value: { base: '{colors.gray.50}', _dark: desaturatedGray[1400] } },
+      100: {
+        value: { base: '{colors.gray.100}', _dark: desaturatedGray[1300] },
+      },
+      200: {
+        value: { base: '{colors.gray.200}', _dark: desaturatedGray[1200] },
+      },
+      300: {
+        value: { base: '{colors.gray.300}', _dark: desaturatedGray[1100] },
+      },
+      400: {
+        value: { base: '{colors.gray.400}', _dark: desaturatedGray[1000] },
+      },
+      500: {
+        value: { base: '{colors.gray.500}', _dark: desaturatedGray[900] },
+      },
+      600: { value: { base: '{colors.gray.600}', _dark: '#898E99' } },
+      700: { value: { base: '{colors.gray.700}', _dark: '#8D919D' } },
+      800: {
+        value: { base: '{colors.gray.800}', _dark: desaturatedGray[600] },
+      },
+      900: {
+        value: { base: '{colors.gray.900}', _dark: desaturatedGray[500] },
+      },
+      1000: {
+        value: { base: '{colors.gray.1000}', _dark: desaturatedGray[400] },
+      },
+      1100: {
+        value: { base: '{colors.gray.1100}', _dark: desaturatedGray[300] },
+      },
+      1200: {
+        value: { base: '{colors.gray.1200}', _dark: desaturatedGray[200] },
+      },
+      1300: {
+        value: { base: '{colors.gray.1300}', _dark: desaturatedGray[100] },
+      },
+      1400: {
+        value: { base: '{colors.gray.1400}', _dark: desaturatedGray[50] },
+      },
+      1500: {
+        value: { base: '{colors.gray.1500}', _dark: desaturatedGray[0] },
+      },
+    },
+
+    /**
      * Neutral background tokens — map onto the gray.0–1500 scale.
      * Use for: page/canvas, raised surfaces (cards, menus), subtle/muted fills,
      * and inverse surfaces (tooltips, contrast banners).
@@ -246,27 +360,55 @@ export const semanticTokens = {
      * - inverse: high-contrast surface (flips to light in dark mode)
      */
     bg: {
+      // Chakra's own global css paints `html { background: bg }` — the *plain*
+      // `bg` token, not `bg.canvas` — so this is the actual page background
+      // wherever no component paints over it. `_light` is pure white (Chakra's
+      // value, so light is untouched); `_dark` rejoins our neutral floor instead
+      // of Chakra's off-palette black.
+      DEFAULT: {
+        value: { _light: '{colors.white}', _dark: desaturatedGray[1500] },
+      },
       canvas: {
-        value: { base: '{colors.gray.0}', _dark: '{colors.gray.1500}' },
+        value: { base: '{colors.gray.0}', _dark: desaturatedGray[1500] },
       },
       surface: {
-        value: { base: '{colors.white}', _dark: '{colors.gray.1400}' },
+        value: { base: '{colors.white}', _dark: desaturatedGray[1400] },
+      },
+      // Strongly-raised neutral surface — one level above `surface` (e.g. the
+      // selected thumb of a SegmentedControl). In dark this is the *lightest*
+      // neutral bg token so a raised element reads as lifted toward the light,
+      // not recessed. (The `bg.*` dark ramp is otherwise compressed such that
+      // `surface` sits below `subtle`/`muted`; `raised` deliberately tops the
+      // scale so "raised" has a token that behaves correctly in dark.)
+      // NB: named `raised`, not Chakra's `emphasized` — that default token name
+      // cannot be overridden via semanticTokens in this setup (it keeps
+      // resolving to Chakra's own gray.200), whereas a fresh name is honoured.
+      raised: {
+        value: { base: '{colors.white}', _dark: desaturatedGray[1100] },
       },
       subtle: {
-        value: { base: '{colors.gray.50}', _dark: '{colors.gray.1300}' },
+        value: { base: '{colors.gray.50}', _dark: desaturatedGray[1300] },
       },
       muted: {
-        value: { base: '{colors.gray.100}', _dark: '{colors.gray.1200}' },
+        value: { base: '{colors.gray.100}', _dark: desaturatedGray[1200] },
       },
       inverse: {
-        value: { base: '{colors.gray.1300}', _dark: '{colors.gray.50}' },
+        value: { base: '{colors.gray.1300}', _dark: desaturatedGray[50] },
+      },
+      // Sunken page wash for list/overview surfaces: a gray floor in light so
+      // `bg.surface` cards read as raised above it. In dark the `bg.*` ramp is
+      // compressed (`subtle` sits *lighter* than `surface`), which would invert
+      // that elevation — so the dark value drops to the canvas floor instead.
+      // Component-level fills (hover, chips, inner blocks) keep using `bg.subtle`.
+      sunken: {
+        value: { base: '{colors.gray.50}', _dark: desaturatedGray[1500] },
       },
       // Override Chakra's default `bg.panel` (whose `_dark` resolves to Chakra's
       // own gray.950 = #111111, off our slate palette). Light value is white —
       // identical to Chakra's default — so this only realigns dark overlay
       // surfaces (Menu / Modal / Popover / Toast) onto our gray scale.
       panel: {
-        value: { base: '{colors.white}', _dark: '{colors.gray.1400}' },
+        value: { base: '{colors.white}', _dark: desaturatedGray[1400] },
       },
       /**
        * Row/selection state tints. Use these for selected rows,
@@ -300,26 +442,42 @@ export const semanticTokens = {
      * - inverse: text on inverse surfaces (flips with mode)
      */
     fg: {
+      // Plain `fg` is Chakra's html-level text color (`html { color: fg }`).
+      // `_light` repeats Chakra's value (black); `_dark` rejoins our desaturated
+      // neutral so legacy html-level text tracks `fg.default`.
+      DEFAULT: {
+        value: { _light: '{colors.black}', _dark: desaturatedGray[50] },
+      },
+      // Strongest text — headings, titles, key figures, emphasis. This is the
+      // near-black step that `fg.default` used to be; `default` is now re-pegged
+      // to a lighter body weight (see below), so reach for `emphasized` when you
+      // specifically want maximum contrast.
+      emphasized: {
+        value: { base: '{colors.gray.1300}', _dark: desaturatedGray[200] },
+      },
       default: {
-        // _dark is gray.200 (not gray.50): near-white text on the dark canvas
-        // ran ~18:1 — brighter than the light baseline (~15:1) and close to pure
-        // white, which causes glare/halation. gray.200 matches the light
-        // contrast (~15.4:1) while staying AAA.
-        value: { base: '{colors.gray.1300}', _dark: '{colors.gray.200}' },
+        // Primary *body* text. Re-pegged from gray.1300 → gray.1000: near-black
+        // (gray.1300, ~14:1 on white) is unusually heavy for running copy, and
+        // real product usage clustered well below it. gray.1000 (~9:1) is a
+        // comfortable AAA body weight; the old near-black step lives on as
+        // `fg.emphasized`. _dark drops one step from emphasized for hierarchy.
+        value: { base: '{colors.gray.1000}', _dark: desaturatedGray[300] },
       },
       muted: {
-        // _dark lifts gray.400 → gray.300: secondary text read as too dim on the
-        // dark canvas next to fg.default (gray.200). gray.300 sits one step under
-        // default — restoring the light-mode hierarchy gap — while staying well
-        // clear of AA (~12.8:1 on bg.canvas, ~11.7:1 on bg.surface). Light value
-        // (gray.900) is unchanged.
-        value: { base: '{colors.gray.900}', _dark: '{colors.gray.300}' },
+        // Secondary text. _dark sits one step below `default` (~9.5:1 on the dark
+        // canvas) to keep the default→muted hierarchy gap. Light value (gray.900)
+        // is unchanged.
+        value: { base: '{colors.gray.900}', _dark: desaturatedGray[400] },
       },
       subtle: {
-        value: { base: '{colors.gray.700}', _dark: '{colors.gray.600}' },
+        // Tertiary / placeholder / icon text. _dark a11y-bumped from the straight
+        // mirror (desaturatedGray[600] #8E939F, ~4.06:1 on bg.muted) to #989DA9
+        // (~4.6:1) so it clears AA while staying below fg.muted. Light value
+        // (gray.700) is unchanged.
+        value: { base: '{colors.gray.700}', _dark: '#989DA9' },
       },
       inverse: {
-        value: { base: '{colors.gray.0}', _dark: '{colors.gray.1400}' },
+        value: { base: '{colors.gray.0}', _dark: desaturatedGray[1400] },
       },
     },
 
@@ -331,14 +489,21 @@ export const semanticTokens = {
      * - strong: high-emphasis borders, focus outlines on neutral
      */
     border: {
+      // Plain `border` feeds Chakra's `--global-color-border` (the implicit
+      // default border color). Not a text color, so its `_dark` takes the
+      // straight halved-saturation mirror (no a11y bump). `_light` repeats
+      // Chakra's value so light is untouched.
+      DEFAULT: {
+        value: { _light: '{colors.gray.200}', _dark: desaturatedGray[800] },
+      },
       default: {
-        value: { base: '{colors.gray.300}', _dark: '{colors.gray.1100}' },
+        value: { base: '{colors.gray.300}', _dark: desaturatedGray[1100] },
       },
       subtle: {
-        value: { base: '{colors.gray.200}', _dark: '{colors.gray.1300}' },
+        value: { base: '{colors.gray.200}', _dark: desaturatedGray[1300] },
       },
       strong: {
-        value: { base: '{colors.gray.500}', _dark: '{colors.gray.900}' },
+        value: { base: '{colors.gray.500}', _dark: desaturatedGray[900] },
       },
     },
   },
@@ -352,22 +517,47 @@ export const semanticTokens = {
  * by reviewers. It is intentionally hand-maintained alongside `semanticTokens`
  * so a rename here is a visible, reviewable diff.
  *
- * Note: `bg.panel` is deliberately omitted — it is an internal realignment of a
- * Chakra default (for overlay surfaces), not part of the public migration
- * contract. App code should use `bg.surface`/`bg.canvas`.
+ * Note: `bg.panel` and the bare `bg`/`fg`/`border` DEFAULT tokens are
+ * deliberately omitted — they are internal realignments of Chakra defaults
+ * (overlay surfaces and html-level globals), not part of the public migration
+ * contract. App code should use `bg.surface`/`bg.canvas`, `fg.default`, etc.
  */
 export type SemanticColorToken =
   | `bg.${
       | 'canvas'
       | 'surface'
+      | 'raised'
       | 'subtle'
       | 'muted'
+      | 'sunken'
       | 'inverse'
       | 'selected'
       | 'highlighted'}`
   | 'bg.invalid.subtle'
-  | `fg.${'default' | 'muted' | 'subtle' | 'inverse'}`
+  | `fg.${'emphasized' | 'default' | 'muted' | 'subtle' | 'inverse'}`
   | `border.${'default' | 'subtle' | 'strong'}`
+  // `slate.*` — foundational mode-aware neutral family (a tonal scale, not a
+  // role). Prefer a `fg`/`bg`/`border` role token when one fits; reach for
+  // `slate.N` when you need a specific neutral step no role names.
+  | `slate.${
+      | 0
+      | 50
+      | 100
+      | 200
+      | 300
+      | 400
+      | 500
+      | 600
+      | 700
+      | 800
+      | 900
+      | 1000
+      | 1100
+      | 1200
+      | 1300
+      | 1400
+      | 1500}`
+  | `primary.${'fill' | 'fillStrong'}`
   | `${'primary' | 'secondary' | 'danger' | 'success' | 'warning'}.${
       | 'lightest'
       | 'extralight'

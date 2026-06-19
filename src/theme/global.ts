@@ -20,8 +20,8 @@ export const globalCss = defineGlobalStyles({
   // Dark mode body fallbacks. Only activates under the `.dark` class set by the
   // color-mode provider, so light-mode rendering is byte-for-byte identical.
   '.dark': {
-    '--chakra-colors-chakra-body-text': '#E2E6F0', // gray.200 - Primary text (dark); softened from gray.50 to avoid near-white glare (matches fg.default)
-    '--chakra-colors-chakra-body-bg': '#0B0E17', // gray.1500 - Background (dark)
+    '--chakra-colors-chakra-body-text': '#E5E8EC', // desaturated gray.200 - Primary text (dark); matches fg.default's _dark
+    '--chakra-colors-chakra-body-bg': '#0E1014', // desaturated gray.1500 - Background (dark); matches bg.canvas's _dark
   },
 
   html: {
@@ -48,6 +48,35 @@ export const globalCss = defineGlobalStyles({
   },
   "body[data-lang='es']": {
     fontFamily: inter.style.fontFamily,
+  },
+
+  // Global scrollbar styling. Without this, scrollbars fall back to the raw
+  // browser chrome — a bright, square, high-contrast track that stands out
+  // badly in dark mode. A thin, transparent-track, rounded thumb (mode-aware
+  // via the `slate` ramp) is unobtrusive in both modes. Components that opt out
+  // (e.g. hidden scrollbars) still override locally.
+  '*': {
+    scrollbarWidth: 'thin',
+    scrollbarColor: 'var(--chakra-colors-slate-300) transparent',
+  },
+  '::-webkit-scrollbar': {
+    width: '10px',
+    height: '10px',
+  },
+  '::-webkit-scrollbar-track': {
+    background: 'transparent',
+  },
+  '::-webkit-scrollbar-thumb': {
+    backgroundColor: 'var(--chakra-colors-slate-300)',
+    borderRadius: '9999px',
+    border: '2px solid transparent',
+    backgroundClip: 'content-box',
+  },
+  '::-webkit-scrollbar-thumb:hover': {
+    backgroundColor: 'var(--chakra-colors-slate-400)',
+  },
+  '::-webkit-scrollbar-corner': {
+    background: 'transparent',
   },
 });
 

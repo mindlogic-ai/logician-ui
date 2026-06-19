@@ -89,6 +89,7 @@ export * from './components/Textarea';
 export * from './components/Toast';
 export * from './components/Tooltip';
 export * from './components/Tree';
+export * from './components/Workflow';
 // Typography Components (excluding Link to avoid conflict with Link component)
 export {
   H1,
@@ -103,6 +104,7 @@ export {
 } from './components/Typography';
 
 // Hooks
+export { useHasHover } from './hooks/useHasHover';
 export type { LanguageContextValue } from './hooks/useLanguage';
 export { LanguageContext, useLanguage } from './hooks/useLanguage';
 
