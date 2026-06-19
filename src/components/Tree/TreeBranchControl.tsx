@@ -9,16 +9,12 @@ export const TreeBranchControl = forwardRef<
   HTMLDivElement,
   TreeBranchControlProps
 >((props, ref) => {
+  // See TreeItem — same reason: the recipe's depth-based padding-inline-
+  // start (`var(--tree-offset)`) gets overridden if we re-declare `px`
+  // here. Only the color/state overrides remain.
   return (
     <ChakraTreeView.BranchControl
       ref={ref}
-      display="flex"
-      alignItems="center"
-      gap={2}
-      px={3}
-      py={2}
-      rounded="md"
-      cursor="pointer"
       color="fg.default"
       _hover={{ bg: 'bg.subtle' }}
       _selected={{ bg: 'primary.lightest', color: 'primary.dark' }}
