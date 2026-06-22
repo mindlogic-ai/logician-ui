@@ -34,9 +34,10 @@ export type TreeBranchIndentGuideProps = TreeViewBranchIndentGuideProps & {
   elbow?: boolean;
   /**
    * Length of the elbow foot — the horizontal cross-stroke that joins
-   * the rail to the row content. Any Chakra width value. Only applies
-   * when `elbow` is set.
-   * @default '0.625rem'
+   * the rail to the row content. Drawn from the parent rail column
+   * toward the text, so the default reaches exactly to the row content.
+   * Any Chakra width value. Only applies when `elbow` is set.
+   * @default 'var(--tree-indentation)'
    */
   footLength?: string | number;
 };
