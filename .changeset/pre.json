@@ -5,6 +5,7 @@
     "@mindlogic-ai/logician-ui": "3.1.0"
   },
   "changesets": [
+    "add-overline-typography",
     "add-tree-component",
     "workflow-editor-component"
   ]
