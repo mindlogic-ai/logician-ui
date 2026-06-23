@@ -98,6 +98,7 @@ export {
   H4,
   H5,
   Link,
+  Overline,
   Subtext,
   Subtitle,
   Text,
