@@ -322,8 +322,7 @@ export const Input = forwardRef(
           bg="bg.surface"
           color="fg.default"
           borderColor={
-            borderColor ??
-            (invalid ? 'danger.main' : { base: 'gray.400', _dark: 'gray.1100' })
+            borderColor ?? (invalid ? 'danger.main' : 'border.default')
           }
           _hover={{
             borderColor: invalid ? 'danger.main' : 'primary.lighter',
