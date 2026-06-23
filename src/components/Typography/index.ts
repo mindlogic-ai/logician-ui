@@ -5,6 +5,7 @@ export { H3 } from './H3';
 export { H4 } from './H4';
 export { H5 } from './H5';
 export { Link } from './Link';
+export { Overline } from './Overline';
 export { Subtext } from './Subtext';
 export { Subtitle } from './Subtitle';
 export { Text } from './Text';
@@ -12,6 +13,7 @@ export { Text } from './Text';
 // Type exports
 export type { LinkCustomProps as LinkProps } from './Link';
 export type {
+  TypographyProps as OverlineProps,
   TypographyProps as SubtextProps,
   TypographyProps as SubtitleProps,
   TypographyProps as TextProps,

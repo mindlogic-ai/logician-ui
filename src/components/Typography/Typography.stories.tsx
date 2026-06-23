@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { H1, H2, H3, H4, H5, Link, Subtext, Subtitle, Text } from '.';
+import { H1, H2, H3, H4, H5, Link, Overline, Subtext, Subtitle, Text } from '.';
 
 const meta = {
   title: 'Components/Typography',
@@ -13,6 +13,7 @@ type Story = StoryObj<typeof Text>;
 export const AllTextStyles: Story = {
   render: (props) => (
     <>
+      <Overline {...props}>Overline - section eyebrow</Overline>
       <H1 {...props}>
         H1 - Lorem ipsum dolor sit amet,{' '}
         <Link variant="error" href="https://example.com">

@@ -60,6 +60,14 @@ const SHARED_TEXT_STYLE_VALUES = {
     fontWeight: '500',
     lineHeight: '1.5',
   },
+  overline: {
+    fontFamily: 'body',
+    fontSize: { base: '0.805em', md: '0.875em' }, // 12.88px → 14px (matches subtext)
+    fontWeight: '500',
+    lineHeight: '1.5',
+    letterSpacing: '0.05em', // Chakra 'wider' tracking
+    textTransform: 'uppercase',
+  },
 } as const;
 
 /**
@@ -171,6 +179,11 @@ export const textStyles = defineTextStyles({
   subtext: {
     description: 'Small caption text - responsive 12.88-14px',
     value: SHARED_TEXT_STYLE_VALUES.subtext,
+  },
+  overline: {
+    description:
+      'Eyebrow / section label - uppercase, wider tracking (12.88-14px)',
+    value: SHARED_TEXT_STYLE_VALUES.overline,
   },
 });
 
