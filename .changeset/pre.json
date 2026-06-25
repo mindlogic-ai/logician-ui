@@ -7,6 +7,7 @@
   "changesets": [
     "add-overline-typography",
     "add-tree-component",
+    "export-color-tokens",
     "form-control-border-default",
     "workflow-editor-component"
   ]
