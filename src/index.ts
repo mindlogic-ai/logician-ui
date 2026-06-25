@@ -111,4 +111,8 @@ export { LanguageContext, useLanguage } from './hooks/useLanguage';
 
 // Theme exports
 export { logicianConfig, system, theme } from './theme';
-export type { SemanticColorToken } from './theme/colors';
+export {
+  colors,
+  type SemanticColorToken,
+  semanticTokens,
+} from './theme/colors';
