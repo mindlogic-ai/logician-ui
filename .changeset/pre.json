@@ -9,6 +9,7 @@
     "add-tree-component",
     "export-color-tokens",
     "form-control-border-default",
+    "segmented-control-sunken-ring",
     "workflow-editor-component"
   ]
 }
