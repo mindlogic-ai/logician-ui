@@ -66,31 +66,33 @@ export const SegmentedControl = forwardRef<
         }
       }}
       size={size}
-      // Light mode: track is bg.subtle (gray.50) and the selected indicator is
-      // bg.surface (white) lifted by an md shadow — a classic raised thumb.
+      // Track is bg.subtle (gray.50 light) and the selected indicator rides on
+      // `bg.raised` — a raised neutral surface that resolves white in light and
+      // the lightest neutral (gray.1100) in dark, so the thumb reads as lifted
+      // above the track in both modes (`bg.surface` could not: its dark value is
+      // darker than the track). The indicator also gains a shadow: an md drop
+      // shadow in light, and in dark — where a drop shadow is invisible on a
+      // dark canvas — a soft ambient shadow + a translucent-white hairline edge.
       //
-      // Selected indicator rides on `bg.raised` — a raised neutral surface that
-      // resolves white in light and the lightest neutral (gray.1100) in dark,
-      // so the thumb reads as lifted above the `bg.subtle` track in both modes
-      // (`bg.surface` could not: its dark value is darker than the track). Dark
-      // mode also needs two things light mode doesn't, and neither
-      // maps to a token: a drop shadow is invisible on a dark canvas, so the
-      // indicator gains a soft ambient shadow + a translucent-white hairline
-      // edge; and the track only contrasts against the app canvas — on a
-      // same-or-lighter dark surface (e.g. a bg.surface card) it would vanish
-      // and leave the control looking like floating text, so a translucent
-      // hairline ring defines its bounds on any dark background. Both rings are
-      // box-shadows (not borders) so the matched item-height math is preserved.
+      // The track itself only contrasts where the page wash is darker (light) or
+      // lighter (dark) than the fill. It vanishes when the page matches the
+      // track: a `bg.sunken` list/overview page is gray.50 in light — identical
+      // to the bg.subtle track — and a `bg.surface` card is lighter than the
+      // track in dark. In either case the control would read as floating text,
+      // so a hairline ring defines its bounds on *any* background: a neutral
+      // `border.subtle` ring in light, a translucent-white ring in dark. Both
+      // rings are box-shadows (not borders) so the matched item-height math is
+      // preserved.
       bg="bg.subtle"
       p="1"
       borderRadius={borderRadius}
-      boxShadow="none"
       w="fit-content"
       {...rest}
       css={mergeCss(
         {
           '--segment-indicator-bg': `var(--chakra-colors-bg-raised)`,
           '--segment-indicator-shadow': `var(--chakra-shadows-md)`,
+          boxShadow: '0 0 0 1px var(--chakra-colors-border-subtle)',
           '.dark &': {
             '--segment-indicator-shadow':
               '0 1px 2px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08)',
