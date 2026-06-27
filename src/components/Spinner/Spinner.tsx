@@ -13,7 +13,15 @@ export const Spinner = forwardRef(
         animationDuration="0.65s"
         ref={ref}
         {...rest}
-        css={mergeCss({ '--spinner-track-color': 'colors.bg.muted' }, css)}
+        // The track ring is the only non-animated affordance; bg.muted
+        // (gray.100) is ~1.03:1 against the bg.sunken page wash (gray.50) and
+        // vanishes there. border.subtle (the hairline-gray role, gray.200) reads
+        // on any background and stays mode-aware. (Can't ring an SVG-style
+        // track, so the track color itself carries the contrast here.)
+        css={mergeCss(
+          { '--spinner-track-color': 'colors.border.subtle' },
+          css
+        )}
       />
     );
   }

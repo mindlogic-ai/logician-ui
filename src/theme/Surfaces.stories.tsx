@@ -157,9 +157,9 @@ const SurfaceShowcase = () => {
 /**
  * Side-by-side reference: all at-risk components on `bg.surface`, `bg.sunken`,
  * and `bg.canvas` at once. In light mode, watch the middle (`bg.sunken`) column
- * — `SegmentedControl` should still show its ring, while `InlineCode` /
- * `Switch` / `Slider` / `SegmentedProgressBar` / `Spinner` are the fills that
- * currently lose contrast there.
+ * — every control should still read as a bounded control there. Each one now
+ * carries a hairline `border.subtle` ring (or, for `Spinner`, a `border.subtle`
+ * track) so its bg.subtle / bg.muted fill no longer melts into the page wash.
  */
 export const ContrastOnPageBackgrounds: Story = {
   render: () => <SurfaceShowcase />,
