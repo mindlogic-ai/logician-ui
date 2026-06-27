@@ -92,7 +92,7 @@ const SurfaceShowcase = () => {
           </Box>
 
           <VStack align="stretch" gap={2}>
-            <Subtext>SegmentedControl (outline: border.strong)</Subtext>
+            <Subtext>SegmentedControl (outline: border.default)</Subtext>
             <SegmentedControl
               options={SEGMENT_OPTIONS}
               value={segment}
@@ -158,8 +158,8 @@ const SurfaceShowcase = () => {
  * Side-by-side reference: all at-risk components on `bg.surface`, `bg.sunken`,
  * and `bg.canvas` at once. In light mode, watch the middle (`bg.sunken`) column
  * — every control should still read as a bounded control there. Structured
- * controls (`SegmentedControl`, `InlineCode`) are outlined (`border.strong` /
- * `border.default`); meter surfaces (`Switch`, `Slider`, `SegmentedProgressBar`,
+ * controls (`SegmentedControl`, `InlineCode`) are outlined (`border.default`);
+ * meter surfaces (`Switch`, `Slider`, `SegmentedProgressBar`,
  * `Spinner`) use the `bg.track` fill so the track reads on the page wash.
  */
 export const ContrastOnPageBackgrounds: Story = {

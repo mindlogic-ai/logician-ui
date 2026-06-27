@@ -15,10 +15,11 @@ The fix follows the element's own contrast story:
   (a raised, shadowed thumb and bold selected text), so they only need their
   outer bounds drawn — and darkening their track would break the light-track /
   raised-thumb relationship.
-  - `SegmentedControl` — `border.strong` ring in light (mirrors the existing
-    dark-mode ring).
+  - `SegmentedControl` — `border.default` ring in light (mirrors the existing
+    dark-mode ring; `border.strong` read as a heavy box for a control that
+    normally has no outline).
   - `InlineCode` — `border.default` ring (a chip is too small for a fill to
-    register; kept lighter than `border.strong` so it isn't a heavy box inline).
+    register).
 - **Meter surfaces get a darker fill.** Their unfilled track *is* the information
   and a thin rail can't be read from an edge alone, so the fill must contrast.
   Introduces a new semantic token **`bg.track`** (`gray.300` light /

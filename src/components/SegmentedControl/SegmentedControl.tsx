@@ -80,12 +80,14 @@ export const SegmentedControl = forwardRef<
       // to the bg.subtle track — and a `bg.surface` card is lighter than the
       // track in dark. In either case the control would read as floating text,
       // so a hairline ring defines its bounds on *any* background: a neutral
-      // `border.strong` ring in light, a translucent-white ring in dark. (The
+      // `border.default` ring in light, a translucent-white ring in dark. (The
       // ring — not the track fill — does the work here: the selected thumb is a
       // raised white surface lifted by its shadow, a relationship that depends
       // on the track staying light, so we outline the group rather than darken
-      // it.) Both rings are box-shadows (not borders) so the matched
-      // item-height math is preserved.
+      // it. `border.default` keeps the edge present but light — `border.strong`
+      // reads as a heavy box for a control that normally has no outline.) Both
+      // rings are box-shadows (not borders) so the matched item-height math is
+      // preserved.
       bg="bg.subtle"
       p="1"
       borderRadius={borderRadius}
@@ -95,7 +97,7 @@ export const SegmentedControl = forwardRef<
         {
           '--segment-indicator-bg': `var(--chakra-colors-bg-raised)`,
           '--segment-indicator-shadow': `var(--chakra-shadows-md)`,
-          boxShadow: '0 0 0 1px var(--chakra-colors-border-strong)',
+          boxShadow: '0 0 0 1px var(--chakra-colors-border-default)',
           '.dark &': {
             '--segment-indicator-shadow':
               '0 1px 2px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08)',
