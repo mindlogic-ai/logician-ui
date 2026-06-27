@@ -403,6 +403,18 @@ export const semanticTokens = {
       sunken: {
         value: { base: '{colors.gray.50}', _dark: desaturatedGray[1500] },
       },
+      // Recessed control-track surface for "meter"-style components whose
+      // unfilled track carries meaning (Switch off-state, Slider rail,
+      // SegmentedProgressBar remainder, Spinner track). Unlike `bg.subtle` /
+      // `bg.muted` (gray.50 / gray.100), which collapse into the `bg.sunken`
+      // page wash in light mode, this sits at gray.300 so the track reads as a
+      // filled surface on any background. Dark keeps the `bg.muted` value
+      // (desaturatedGray[1200]) — already lighter than the dark canvas/surface,
+      // so it reads there without change. Use this only for control tracks, not
+      // as a general fill (that stays `bg.subtle` / `bg.muted`).
+      track: {
+        value: { base: '{colors.gray.300}', _dark: desaturatedGray[1200] },
+      },
       // Override Chakra's default `bg.panel` (whose `_dark` resolves to Chakra's
       // own gray.950 = #111111, off our slate palette). Light value is white —
       // identical to Chakra's default — so this only realigns dark overlay
@@ -530,6 +542,7 @@ export type SemanticColorToken =
       | 'subtle'
       | 'muted'
       | 'sunken'
+      | 'track'
       | 'inverse'
       | 'selected'
       | 'highlighted'}`

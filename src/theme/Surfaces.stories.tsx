@@ -92,7 +92,7 @@ const SurfaceShowcase = () => {
           </Box>
 
           <VStack align="stretch" gap={2}>
-            <Subtext>SegmentedControl (track: bg.subtle)</Subtext>
+            <Subtext>SegmentedControl (outline: border.strong)</Subtext>
             <SegmentedControl
               options={SEGMENT_OPTIONS}
               value={segment}
@@ -102,14 +102,14 @@ const SurfaceShowcase = () => {
           </VStack>
 
           <VStack align="stretch" gap={2}>
-            <Subtext>InlineCode (bg: bg.subtle)</Subtext>
+            <Subtext>InlineCode (outline: border.default)</Subtext>
             <Text>
               Run <InlineCode>yarn build</InlineCode> to compile.
             </Text>
           </VStack>
 
           <VStack align="stretch" gap={2}>
-            <Subtext>Switch — off-state control (track: bg.muted)</Subtext>
+            <Subtext>Switch — off-state track (fill: bg.track)</Subtext>
             <HStack gap={4}>
               <Switch size="md">
                 <Switch.Control />
@@ -121,7 +121,7 @@ const SurfaceShowcase = () => {
           </VStack>
 
           <VStack align="stretch" gap={2}>
-            <Subtext>Slider — empty track (bg.muted)</Subtext>
+            <Subtext>Slider — empty rail (fill: bg.track)</Subtext>
             <Slider
               value={sliderValue}
               min={0}
@@ -138,14 +138,14 @@ const SurfaceShowcase = () => {
           </VStack>
 
           <VStack align="stretch" gap={2}>
-            <Subtext>SegmentedProgressBar — empty portion (bg.muted)</Subtext>
+            <Subtext>SegmentedProgressBar — empty portion (fill: bg.track)</Subtext>
             <SegmentedProgressBar max={100}>
               <ProgressSegment value={45} filledTrackColor="primary.main" />
             </SegmentedProgressBar>
           </VStack>
 
           <VStack align="start" gap={2}>
-            <Subtext>Spinner — track (bg.muted)</Subtext>
+            <Subtext>Spinner — track (bg.track)</Subtext>
             <Spinner />
           </VStack>
         </VStack>
@@ -157,9 +157,10 @@ const SurfaceShowcase = () => {
 /**
  * Side-by-side reference: all at-risk components on `bg.surface`, `bg.sunken`,
  * and `bg.canvas` at once. In light mode, watch the middle (`bg.sunken`) column
- * — every control should still read as a bounded control there. Each one now
- * carries a hairline `border.subtle` ring (or, for `Spinner`, a `border.subtle`
- * track) so its bg.subtle / bg.muted fill no longer melts into the page wash.
+ * — every control should still read as a bounded control there. Structured
+ * controls (`SegmentedControl`, `InlineCode`) are outlined (`border.strong` /
+ * `border.default`); meter surfaces (`Switch`, `Slider`, `SegmentedProgressBar`,
+ * `Spinner`) use the `bg.track` fill so the track reads on the page wash.
  */
 export const ContrastOnPageBackgrounds: Story = {
   render: () => <SurfaceShowcase />,

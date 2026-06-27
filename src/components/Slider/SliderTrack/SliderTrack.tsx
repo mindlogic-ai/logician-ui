@@ -10,12 +10,12 @@ export const SliderTrack = forwardRef(
   ) => {
     return (
       <Slider.Track
-        bg="bg.muted"
-        // bg.muted (gray.100) is ~1.03:1 against the bg.sunken page wash
-        // (gray.50), so the empty rail nearly disappears on a sunken page. A
-        // hairline border.subtle ring keeps the rail visible on any background
-        // (mode-aware token; box-shadow so the rail height/fill math is intact).
-        boxShadow="0 0 0 1px var(--chakra-colors-border-subtle)"
+        // The empty rail is a meter surface — too thin for an outline to read as
+        // anything but a hollow edge — so the fill itself must contrast. bg.muted
+        // (gray.100) is ~1.03:1 against the bg.sunken page wash (gray.50) and
+        // disappears there; bg.track (gray.300) reads as a filled rail on any
+        // background. The filled portion stays primary (SliderFilledTrack).
+        bg="bg.track"
         {...rest}
         ref={ref}
       >

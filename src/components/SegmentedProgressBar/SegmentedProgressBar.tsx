@@ -13,12 +13,11 @@ export const SegmentedProgressBar = ({
         position="relative"
         flex={1}
         display="flex"
-        bgColor="bg.muted"
-        // The empty track (bg.muted, gray.100) is ~1.03:1 against the bg.sunken
-        // page wash (gray.50), so it nearly vanishes on a sunken page. A hairline
-        // border.subtle ring defines the bar's bounds on any background. An
-        // outset box-shadow is not clipped by overflow:hidden and adds no layout.
-        boxShadow="0 0 0 1px var(--chakra-colors-border-subtle)"
+        // The remainder behind the segments is a meter surface, so it needs a
+        // visible fill. bg.muted (gray.100) is ~1.03:1 against the bg.sunken page
+        // wash (gray.50) and vanishes there; bg.track (gray.300) reads as a
+        // filled track on any background. Filled segments paint over it.
+        bgColor="bg.track"
         borderRadius="full"
         w="100%"
         h="16px"
