@@ -25,7 +25,6 @@ const external = [
   // Color-mode runtime (app singleton; must not be bundled)
   'next-themes',
   // Heavy dependencies
-  '@mdxeditor/editor',
   /^react-syntax-highlighter/,
   /^react-icons/,
   /^recharts/,

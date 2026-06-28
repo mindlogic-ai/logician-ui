@@ -53,7 +53,6 @@ export * from './components/LogicianProvider';
 export * from './components/Markdown';
 export * from './components/Masonry';
 export * from './components/MaxLengthIndicator';
-export * from './components/MDXEditor';
 export * from './components/Menu';
 export * from './components/Modal';
 export * from './components/MonthPicker';
