@@ -23,7 +23,24 @@ export type TreeBranchTriggerProps = TreeViewBranchTriggerProps;
 export type TreeBranchIndicatorProps = TreeViewBranchIndicatorProps;
 export type TreeBranchTextProps = TreeViewBranchTextProps;
 export type TreeBranchContentProps = TreeViewBranchContentProps;
-export type TreeBranchIndentGuideProps = TreeViewBranchIndentGuideProps;
+export type TreeBranchIndentGuideProps = TreeViewBranchIndentGuideProps & {
+  /**
+   * Draw an `L`-shaped (`├` / `└`) horizontal foot off the innermost
+   * vertical rail so each row reads as a connected tree branch rather
+   * than a free-floating column line. Off by default to preserve the
+   * existing plain-vertical-rail look. See `TreeBranchIndentGuide`.
+   * @default false
+   */
+  elbow?: boolean;
+  /**
+   * Length of the elbow foot — the horizontal cross-stroke that joins
+   * the rail to the row content. Drawn from the parent rail column
+   * toward the text, so the default reaches exactly to the row content.
+   * Any Chakra width value. Only applies when `elbow` is set.
+   * @default 'var(--tree-indentation)'
+   */
+  footLength?: string | number;
+};
 export type TreeItemProps = TreeViewItemProps;
 export type TreeItemTextProps = TreeViewItemTextProps;
 export type TreeItemIndicatorProps = TreeViewItemIndicatorProps;
