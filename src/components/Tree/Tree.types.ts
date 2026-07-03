@@ -25,10 +25,11 @@ export type TreeBranchTextProps = TreeViewBranchTextProps;
 export type TreeBranchContentProps = TreeViewBranchContentProps;
 export type TreeBranchIndentGuideProps = TreeViewBranchIndentGuideProps & {
   /**
-   * Draw an `L`-shaped (`├` / `└`) horizontal foot off the innermost
-   * vertical rail so each row reads as a connected tree branch rather
-   * than a free-floating column line. Off by default to preserve the
-   * existing plain-vertical-rail look. See `TreeBranchIndentGuide`.
+   * Draw `├` / `└` guide lines instead of a plain vertical rail: every
+   * row gets a horizontal foot joining it to its parent rail, middle
+   * rows keep the vertical (`├`), and the last row of each group stops
+   * at its centre (`└`). Off by default to preserve the existing
+   * plain-vertical-rail look. See `TreeBranchIndentGuide`.
    * @default false
    */
   elbow?: boolean;
@@ -40,6 +41,14 @@ export type TreeBranchIndentGuideProps = TreeViewBranchIndentGuideProps & {
    * @default 'var(--tree-indentation)'
    */
   footLength?: string | number;
+  /**
+   * Color of the guide lines (rail, elbow foot and vertical segments).
+   * Any Chakra color token. The default is a mode-flipping semantic
+   * token, so it darkens in light mode and lightens in dark mode
+   * automatically.
+   * @default 'border.default'
+   */
+  guideColor?: string;
 };
 export type TreeItemProps = TreeViewItemProps;
 export type TreeItemTextProps = TreeViewItemTextProps;

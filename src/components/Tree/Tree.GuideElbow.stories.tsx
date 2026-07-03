@@ -7,10 +7,11 @@ import { createTreeCollection } from './index';
 /**
  * Stories for the `elbow` option on `Tree.BranchIndentGuide`.
  *
- * `elbow` adds an `L`-shaped horizontal foot to the innermost vertical
- * rail, so every row reads as a connected `├` / `└` branch — the
- * "guide line" tree feel — instead of a set of free-floating column
- * lines. Pass it through the `indentGuide` element:
+ * `elbow` turns the plain vertical rails into `├` / `└` guide lines:
+ * every row gets a horizontal foot joining it to its parent rail, and
+ * the last row of each group stops at its centre (`└`). `guideColor`
+ * customizes the line color (default `border.default`, which flips
+ * with color mode). Pass both through the `indentGuide` element:
  *
  *   <Tree.Node indentGuide={<Tree.BranchIndentGuide elbow />} ... />
  */
@@ -134,6 +135,46 @@ export const WithElbowGuides: Story = {
         </Tree.Tree>
       </Tree.Root>
     </Box>
+  ),
+};
+
+/**
+ * `guideColor` — customize the guide line color with any Chakra color
+ * token. The default `border.default` flips with color mode; pick a
+ * stronger token (or any palette color) for more contrast.
+ */
+export const GuideColor: Story = {
+  args: {
+    collection: orgCollection,
+    'aria-label': '조직',
+    defaultExpandedValue: allBranchIds,
+  },
+  render: (args) => (
+    <HStack align="flex-start" gap={8}>
+      {(
+        [
+          ['border.default (기본)', undefined],
+          ['border.strong', 'border.strong'],
+          ['primary.light', 'primary.light'],
+        ] as const
+      ).map(([label, guideColor]) => (
+        <Stack key={label} gap={2} width="280px">
+          <Text fontSize="sm" fontWeight="semibold" color="fg.muted">
+            {label}
+          </Text>
+          <Tree.Root {...args}>
+            <Tree.Tree>
+              <Tree.Node
+                indentGuide={
+                  <Tree.BranchIndentGuide elbow guideColor={guideColor} />
+                }
+                render={renderNode}
+              />
+            </Tree.Tree>
+          </Tree.Root>
+        </Stack>
+      ))}
+    </HStack>
   ),
 };
 

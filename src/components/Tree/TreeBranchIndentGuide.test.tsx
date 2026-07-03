@@ -40,7 +40,7 @@ const renderNode = ({
     </Tree.Item>
   );
 
-function renderGuide(elbow: boolean) {
+function renderGuide(elbow: boolean, extraProps: { guideColor?: string } = {}) {
   const { container } = render(
     <ChakraProvider value={system}>
       <Tree.Root
@@ -52,9 +52,9 @@ function renderGuide(elbow: boolean) {
           <Tree.Node
             indentGuide={
               elbow ? (
-                <Tree.BranchIndentGuide elbow />
+                <Tree.BranchIndentGuide elbow {...extraProps} />
               ) : (
-                <Tree.BranchIndentGuide />
+                <Tree.BranchIndentGuide {...extraProps} />
               )
             }
             render={renderNode}
@@ -134,5 +134,66 @@ describe('Tree.BranchIndentGuide elbow', () => {
     const anchor = styleAnchor(cls);
     // This specific guide's class must not anchor any ::before foot rule.
     expect(sheetText()).not.toMatch(new RegExp(`${anchor}\\s*~[^{]*::before`));
+  });
+
+  it('stops the vertical segment at the centre of the last row (└)', () => {
+    const cls = renderGuide(true);
+    const anchor = styleAnchor(cls);
+    const css = sheetText();
+
+    // Middle rows: full-height vertical (├) on the row itself.
+    const middleRule =
+      css.match(
+        new RegExp(
+          `${anchor}\\s*~\\s*\\[data-part="item"\\]:not\\(:last-child\\)::after\\s*\\{[^}]*\\}`
+        )
+      )?.[0] ?? '';
+    expect(middleRule).toContain('inset-block-start:0');
+    expect(middleRule).toContain('inset-block-end:0');
+    expect(middleRule).toContain('width:1px');
+
+    // Last leaf row: segment ends at 50% so the foot forms a └.
+    const lastItemRule =
+      css.match(
+        new RegExp(
+          `${anchor}\\s*~\\s*\\[data-part="item"\\]:last-child::after\\s*\\{[^}]*\\}`
+        )
+      )?.[0] ?? '';
+    expect(lastItemRule).toContain('inset-block-start:0');
+    expect(lastItemRule).toContain('height:50%');
+
+    // Last branch row: half-height segment on its control only, so an
+    // expanded last branch has no rail running past its elbow.
+    const lastBranchRule =
+      css.match(
+        new RegExp(
+          `${anchor}\\s*~\\s*\\[data-part="branch"\\]:last-child\\s*>\\s*\\[data-part="branch-control"\\]::after\\s*\\{[^}]*\\}`
+        )
+      )?.[0] ?? '';
+    expect(lastBranchRule).toContain('height:50%');
+
+    // Non-last branch: pass-through rail spans the whole expanded subtree,
+    // painted above row hover backgrounds like the original slot rail.
+    const passThroughRule =
+      css.match(
+        new RegExp(
+          `${anchor}\\s*~\\s*\\[data-part="branch"\\]:not\\(:last-child\\)::before\\s*\\{[^}]*\\}`
+        )
+      )?.[0] ?? '';
+    expect(passThroughRule).toContain('inset-block-end:0');
+    expect(passThroughRule).toContain('z-index:1');
+  });
+
+  it('paints the guide with the custom guideColor token', () => {
+    const cls = renderGuide(true, { guideColor: 'red.500' });
+    const anchor = styleAnchor(cls);
+    const css = sheetText();
+    const footRule =
+      css.match(
+        new RegExp(
+          `${anchor}\\s*~\\s*\\[data-part="item"\\]::before\\s*\\{[^}]*\\}`
+        )
+      )?.[0] ?? '';
+    expect(footRule).toMatch(/--chakra-colors-red-500|red\.500/);
   });
 });
