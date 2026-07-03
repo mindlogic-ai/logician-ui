@@ -35,10 +35,11 @@ export type TreeBranchIndentGuideProps = TreeViewBranchIndentGuideProps & {
   elbow?: boolean;
   /**
    * Length of the elbow foot — the horizontal cross-stroke that joins
-   * the rail to the row content. Drawn from the parent rail column
-   * toward the text; the default stops 4px short of the row content so
-   * the foot doesn't touch the text. Any Chakra width value. Only
-   * applies when `elbow` is set.
+   * the rail to the row content, drawn from the parent rail column
+   * toward the text. In elbow mode each level indents 4px further than
+   * the plain-rail default, and since the default foot length doesn't
+   * grow with it, the foot ends 8px short of the row text. Any Chakra
+   * width value. Only applies when `elbow` is set.
    * @default 'calc(var(--tree-indentation) - 4px)'
    */
   footLength?: string | number;

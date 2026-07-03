@@ -3,11 +3,37 @@ import { TreeView as ChakraTreeView } from '@chakra-ui/react';
 
 import { TreeBranchIndentGuideProps } from './Tree.types';
 
+// Extra per-level indentation in elbow mode. Guide-line trees read better
+// with a little more horizontal air between the elbow and the row text,
+// so each level indents this much further than the recipe default. The
+// foot length does NOT grow with it (its default is derived from the
+// original `--tree-indentation`), so the foot-to-text gap widens by the
+// same amount.
+const ELBOW_EXTRA_INDENT = '4px';
+
+// The widened per-level indentation, defined on the guide's sibling rows
+// so both the recipe's offset math and our pseudo-element math can share
+// it. Root rows (depth 1) have no guide sibling, but their offset
+// multiplies indentation by zero, so every level stays consistent.
+const ELBOW_INDENT_VARS = {
+  '--tree-elbow-indentation': `calc(var(--tree-indentation) + ${ELBOW_EXTRA_INDENT})`,
+} as const;
+
+// Re-derive the recipe's `--tree-indentation-offset` (which feeds
+// `--tree-offset`, the row's padding-start) from the widened indentation.
+// Must be set on the same elements the recipe defines it on
+// (item / branch-control) — inheritance can't override those.
+const ELBOW_OFFSET_VARS = {
+  '--tree-indentation-offset':
+    'calc(var(--tree-elbow-indentation) * var(--tree-depth))',
+} as const;
+
 // The parent rail column, measured from a child row (item / branch-control).
 // A row's content starts at its own `--tree-offset`, and the parent rail
-// sits exactly one `--tree-indentation` to its left (verified against the
+// sits exactly one (widened) indentation to its left (verified against the
 // recipe's offset math for both the guide and the row slots).
-const ROW_RAIL_COLUMN = 'calc(var(--tree-offset) - var(--tree-indentation))';
+const ROW_RAIL_COLUMN =
+  'calc(var(--tree-offset) - var(--tree-elbow-indentation))';
 
 // The same column, computed from the `branch` element itself. A branch
 // only carries Ark's inline `--depth` (the recipe's `--tree-offset` is
@@ -15,7 +41,7 @@ const ROW_RAIL_COLUMN = 'calc(var(--tree-offset) - var(--tree-indentation))';
 // rail(x) = padding + indentation * (depth - 2) + icon * 0.5 * (depth - 1)
 // — algebraically identical to ROW_RAIL_COLUMN for a row at `--depth`.
 const BRANCH_RAIL_COLUMN =
-  'calc(var(--tree-padding-inline) + var(--tree-indentation) * (var(--depth) - 2) + var(--tree-icon-size) * 0.5 * (var(--depth) - 1))';
+  'calc(var(--tree-padding-inline) + var(--tree-elbow-indentation) * (var(--depth) - 2) + var(--tree-icon-size) * 0.5 * (var(--depth) - 1))';
 
 export const TreeBranchIndentGuide = forwardRef<
   HTMLDivElement,
@@ -73,6 +99,15 @@ export const TreeBranchIndentGuide = forwardRef<
     } as const;
     const elbowCss = elbow
       ? {
+          '& ~ [data-part="item"]': {
+            ...ELBOW_INDENT_VARS,
+            ...ELBOW_OFFSET_VARS,
+          },
+          // branch-control reads --tree-elbow-indentation by inheritance,
+          // but the offset override must sit on the control itself.
+          '& ~ [data-part="branch"]': ELBOW_INDENT_VARS,
+          '& ~ [data-part="branch"] > [data-part="branch-control"]':
+            ELBOW_OFFSET_VARS,
           '& ~ [data-part="item"]::before': foot,
           '& ~ [data-part="branch"] > [data-part="branch-control"]::before':
             foot,

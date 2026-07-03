@@ -125,7 +125,21 @@ describe('Tree.BranchIndentGuide elbow', () => {
     expect(footRule).toContain('inset-block-start:50%');
     expect(footRule).toContain('height:1px');
     expect(footRule).toMatch(
-      /inset-inline-start:calc\(var\(--tree-offset\) - var\(--tree-indentation\)\)/
+      /inset-inline-start:calc\(var\(--tree-offset\) - var\(--tree-elbow-indentation\)\)/
+    );
+
+    // Elbow mode widens per-level indentation: the sibling rows redefine
+    // the recipe's indentation-offset from the widened value, pushing the
+    // row text right, away from the elbow foot.
+    const rowVarsRule =
+      css.match(
+        new RegExp(`${anchor}\\s*~\\s*\\[data-part="item"\\]\\s*\\{[^}]*\\}`)
+      )?.[0] ?? '';
+    expect(rowVarsRule).toContain(
+      '--tree-elbow-indentation:calc(var(--tree-indentation) + 4px)'
+    );
+    expect(rowVarsRule).toContain(
+      '--tree-indentation-offset:calc(var(--tree-elbow-indentation) * var(--tree-depth))'
     );
   });
 
