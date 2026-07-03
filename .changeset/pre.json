@@ -11,6 +11,8 @@
     "form-control-border-default",
     "remove-mdxeditor",
     "segmented-control-sunken-ring",
+    "tree-elbow-last-row-and-guide-color",
+    "tree-indent-guide-elbow",
     "workflow-editor-component"
   ]
 }

@@ -1,5 +1,42 @@
 # Changelog
 
+## 4.0.0-alpha.7
+
+### Minor Changes
+
+- e670b90: `Tree.BranchIndentGuide`: fix the `elbow` guide's last-row shape and make the guide color customizable.
+
+  **Fix — `└` on the last row of each group**
+
+  Chakra's indent-guide slot paints one continuous full-height vertical rail per branch content, so with `elbow` the rail always ran past the last row's foot and every row rendered as `├`. In `elbow` mode the slot rail is now hidden and the guide lines are drawn per row instead: middle rows get a full-height vertical segment (`├`), the last row's segment stops at its centre where the foot meets it (`└`), and a non-last expanded branch draws a pass-through rail over its whole subtree so the parent column stays continuous. An expanded last branch correctly hangs below its elbow with no rail running past it.
+
+  **New — `guideColor` prop**
+
+  Colors the rail, elbow foot and vertical segments with any Chakra color token. The default moves from `border.subtle` (gray.200 — barely visible against the background) to the darker `border.default` (gray.300). Both are mode-flipping semantic tokens, so the guide automatically lightens in dark mode.
+
+  ```tsx
+  <Tree.Node
+    indentGuide={<Tree.BranchIndentGuide elbow guideColor="border.strong" />}
+    render={...}
+  />
+  ```
+
+- e670b90: Add an `elbow` option to `Tree.BranchIndentGuide` for `├` / `└` guide-line trees.
+
+  The default indent guide draws plain vertical rails (one per depth). `elbow` adds a horizontal foot to the innermost rail so every row connects to its parent column like a classic file-tree / sidebar:
+
+  ```tsx
+  <Tree.Node
+    indentGuide={<Tree.BranchIndentGuide elbow />}
+    render={renderNode}
+  />
+  ```
+
+  - `elbow?: boolean` (default `false`) — opt-in, so existing trees are unchanged.
+  - `footLength?: string | number` (default `'var(--tree-indentation)'`) — tunes the length of the horizontal cross-stroke; the default reaches exactly from the rail to the row content.
+
+  Chakra renders one indent guide per branch (its first child, a single `height: 100%` rail), followed by that branch's rows as siblings — so the foot is drawn as a `::before` cross-stroke on the guide's sibling rows (`[data-part="item"]` and `[data-part="branch"] > [data-part="branch-control"]`), scoped to the elbow guide's own class. No extra DOM, no change to depth math; the foot is pinned to each row's vertical centre (`inset-block-start: 50%`) and starts at the parent rail column (`calc(var(--tree-offset) - var(--tree-indentation))`), so it stays aligned across all `size` variants. The foot uses `border.subtle` to match the rail colour. This replaces the need for the `∟`-glyph workaround shown in the `LeafIndicatorComparison` story.
+
 ## 4.0.0-alpha.6
 
 ### Major Changes
