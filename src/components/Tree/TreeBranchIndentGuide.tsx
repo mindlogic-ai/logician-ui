@@ -24,7 +24,7 @@ export const TreeBranchIndentGuide = forwardRef<
   (
     {
       elbow = false,
-      footLength = 'var(--tree-indentation)',
+      footLength = 'calc(var(--tree-indentation) - 4px)',
       guideColor = 'border.default',
       ...props
     },
