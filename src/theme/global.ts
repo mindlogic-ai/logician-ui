@@ -26,7 +26,10 @@ export const globalCss = defineGlobalStyles({
 
   html: {
     height: 'var(--chakra-vh)',
-    fontSize: 16,
+    // Global base font size. The whole type/spacing scale is em-relative, so
+    // this single value drives the app-wide baseline; surfaces that need a
+    // different base (e.g. FactChat chat at 16px) opt in via <ScaledContext>.
+    fontSize: 14,
     fontFamily: [
       pretendard.style.fontFamily,
       inter.style.fontFamily,
