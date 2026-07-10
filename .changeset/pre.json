@@ -7,6 +7,7 @@
   "changesets": [
     "add-overline-typography",
     "add-tree-component",
+    "base-font-size-14px",
     "export-color-tokens",
     "form-control-border-default",
     "remove-mdxeditor",
