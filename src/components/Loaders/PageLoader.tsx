@@ -1,5 +1,6 @@
-import BounceLoader from 'react-spinners/BounceLoader';
 import { Box, Flex, FlexProps } from '@chakra-ui/react';
+
+import { Spinner } from '@/components/Spinner';
 
 export const PageLoader = ({
   isLoading,
@@ -21,10 +22,7 @@ export const PageLoader = ({
       {...rest}
     >
       <Box position="relative">
-        <BounceLoader
-          color="var(--chakra-colors-primary-main)"
-          style={{ zIndex: 999 }}
-        />
+        <Spinner boxSize="60px" borderWidth="6px" css={{ zIndex: 999 }} />
       </Box>
     </Flex>
   );
