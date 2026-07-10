@@ -88,9 +88,13 @@ export const tagColorPaletteStyles: Record<
       color: 'warning.darker',
     },
     solid: {
-      bgColor: 'gold.500',
-      borderColor: 'gold.500',
-      color: 'gold.900', // dark text: white/gold.500 was 2.39:1; gold.900 = 6.73:1
+      // Deepened from gold.500 so white text clears AA and the chip matches the
+      // other solids (white on a saturated fill). White/gold.500 was only
+      // 2.39:1; white/gold.700 = 5.86:1 ✓ AA. Bright gold + near-black text read
+      // harsh on the dark canvas.
+      bgColor: 'gold.700',
+      borderColor: 'gold.700',
+      color: 'white',
     },
     outline: {
       bgColor: 'transparent',
