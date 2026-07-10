@@ -74,7 +74,7 @@ const SHARED_TEXT_STYLE_VALUES = {
  * Text styles for consistent typography across the application
  * Names match fontSize tokens for easy migration: fontStyle="h1" → textStyle="h1"
  *
- * Base font size: 16px (set in global.ts)
+ * Base font size: 14px (set in global.ts)
  * Responsive scaling using em units (relative to nearest ancestor font-size):
  * - Mobile (base): Slightly smaller for better readability on small screens
  * - Desktop (md+): Original design sizes
