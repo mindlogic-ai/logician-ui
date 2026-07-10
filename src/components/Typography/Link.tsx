@@ -23,7 +23,11 @@ export const Link = forwardRef<HTMLAnchorElement, LinkCustomProps>(
     return (
       <ChakraLink
         ref={ref}
-        fontWeight="semibold"
+        // Inherit the surrounding text weight so an inline link reads as part of
+        // its sentence (extrabold inside an H1, body weight inside a paragraph)
+        // rather than a fixed-semibold patch. Color + underline carry the link
+        // affordance. Override with an explicit `fontWeight` when needed.
+        fontWeight="inherit"
         wordBreak="keep-all"
         color={linkColor}
         _hover={{

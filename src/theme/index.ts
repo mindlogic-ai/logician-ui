@@ -18,21 +18,25 @@ const SHARED_TEXT_STYLE_VALUES = {
   h1: {
     fontFamily: 'heading',
     fontSize: { base: '2.4em', md: '3em' }, // 38.4px → 48px
-    fontWeight: 'bold',
+    // Display sizes carry the heaviest weight; the tight negative tracking
+    // above keeps extrabold from reading loose at 48px.
+    fontWeight: 'extrabold',
     lineHeight: '1.33',
     letterSpacing: '-0.02em',
   },
   h2: {
     fontFamily: 'heading',
     fontSize: { base: '2em', md: '2.5em' }, // 32px → 40px
-    fontWeight: 'semibold',
+    fontWeight: 'extrabold',
     lineHeight: '1.33',
     letterSpacing: '-0.01em',
   },
   h3: {
     fontFamily: 'heading',
     fontSize: { base: '1.5em', md: '1.75em' }, // 24px → 28px
-    fontWeight: 'semibold',
+    // Steps down to bold — the weight ramp tapers as size shrinks so heavy
+    // display weights don't muddy the smaller headings (h4/h5 stay lighter).
+    fontWeight: 'bold',
     lineHeight: '1.33',
     letterSpacing: '-0.01em',
   },
