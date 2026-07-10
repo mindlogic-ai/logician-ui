@@ -7,6 +7,7 @@
   "changesets": [
     "add-overline-typography",
     "add-tree-component",
+    "banner-icon-size-per-size",
     "base-font-size-14px",
     "bolder-headings-darker-tags",
     "export-color-tokens",
