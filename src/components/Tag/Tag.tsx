@@ -36,6 +36,7 @@ export const Tag = forwardRef(
         borderRadius="md"
         boxShadow="none"
         fontSize="sm"
+        fontWeight="semibold"
         {...styles}
         {...rest}
         ref={ref}
