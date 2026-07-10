@@ -8,6 +8,7 @@
     "add-overline-typography",
     "add-tree-component",
     "base-font-size-14px",
+    "bolder-headings-darker-tags",
     "export-color-tokens",
     "form-control-border-default",
     "remove-mdxeditor",
