@@ -17,6 +17,16 @@ Tag text is darker and a touch bolder across the board:
   `fg.subtle` → `fg.muted`). This also lifts the `warning` outline off the
   palette's AA-risk step (gold.500 3.0:1 → gold.700 5.8:1).
 - All variants gain `fontWeight="semibold"`.
+- The `warning` `solid` fill deepens to `gold.700` with white text (was
+  `gold.500` with near-black text) so it clears AA (5.86:1) and matches the
+  other solid chips.
 
-Consumers using `H1`–`H3` or `Tag` will see the heavier weights and darker
-tag labels automatically.
+`Link` now inherits the surrounding font weight instead of pinning
+`semibold`, so an inline link reads at its text's weight — `extrabold`
+inside an `H1`, body weight inside a paragraph — with color + underline
+carrying the affordance. Standalone links in body copy therefore render one
+step lighter than before (medium instead of semibold); pass an explicit
+`fontWeight` to opt out.
+
+Consumers using `H1`–`H3`, `Tag`, or `Link` will see these changes
+automatically.
