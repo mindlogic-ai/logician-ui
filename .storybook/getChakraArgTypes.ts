@@ -37,7 +37,7 @@ export const getChakraArgTypes = (
   if (!exclude.includes("boxSize")) {
     argTypes["boxSize"] = {
       control: "select",
-      options: ["xs", "sm", "md", "lg", "xl"],
+      options: ["2xs", "xs", "sm", "md", "lg", "xl"],
       description:
         "The size of the component, optimized for smaller scales. Used for components like Icon.",
       table: {
