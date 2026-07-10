@@ -11,6 +11,7 @@
     "export-color-tokens",
     "form-control-border-default",
     "remove-mdxeditor",
+    "remove-react-spinners-loaders",
     "segmented-control-sunken-ring",
     "tree-elbow-last-row-and-guide-color",
     "tree-indent-guide-elbow",
