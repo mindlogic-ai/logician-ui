@@ -4,7 +4,7 @@ import { DragEvent } from 'react';
 import { Box, HStack, Stack } from '@chakra-ui/react';
 
 import { Card } from '@/components/Card';
-import { GripVertical, TbX } from '@/components/Icon';
+import { CloseIcon, GripVerticalIcon } from '@/components/Icon';
 import { IconButton } from '@/components/IconButton';
 import { Subtext, Subtitle } from '@/components/Typography';
 
@@ -80,7 +80,7 @@ function PaletteItem({ def }: { def: NodeTypeDef }) {
           ) : null}
         </Stack>
         <Box color="slate.700" display="flex" alignItems="center">
-          <GripVertical boxSize="xs" />
+          <GripVerticalIcon boxSize="xs" />
         </Box>
       </HStack>
     </Card>
@@ -150,7 +150,7 @@ export function NodePalette({ onClose }: { onClose: () => void }) {
           colorPalette="neutral"
           onClick={onClose}
         >
-          <TbX boxSize="xs" aria-hidden />
+          <CloseIcon boxSize="xs" aria-hidden />
         </IconButton>
       </HStack>
       <Box flex="1" minHeight={0} overflowY="auto" p={3}>

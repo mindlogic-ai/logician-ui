@@ -4,7 +4,7 @@ import { type ComponentType, type ReactNode, useEffect, useMemo } from 'react';
 import { Box, chakra } from '@chakra-ui/react';
 
 import { Button } from '@/components/Button';
-import { TbX } from '@/components/Icon';
+import { CloseIcon } from '@/components/Icon';
 import { Menu } from '@/components/Menu';
 import { Text } from '@/components/Typography';
 
@@ -398,7 +398,7 @@ function EdgeDrawer({
             width="100%"
             onClick={onDelete}
           >
-            <TbX boxSize="xs" />
+            <CloseIcon boxSize="xs" />
             {translate('workflow_edge_delete') as string}
           </Button>
         </Box>

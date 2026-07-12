@@ -3,7 +3,7 @@ import { Box, Button, List } from '@chakra-ui/react';
 
 import { FileItem } from '@/components/FileItem';
 import { FileGroupProps } from '@/components/FileList/FileList.types';
-import { IoChevronDownOutline } from '@/components/Icon';
+import { ChevronDownIcon } from '@/components/Icon';
 import { Subtitle } from '@/components/Typography';
 import { useTranslate } from '@/hooks/useTranslate';
 
@@ -94,7 +94,7 @@ export const FileList = ({
           <Subtitle color="fg.subtle">
             {translate('see_more')} ({visibleCount}/{files.length})
           </Subtitle>
-          <IoChevronDownOutline color="fg.subtle" />
+          <ChevronDownIcon color="fg.subtle" />
         </Button>
       )}
     </Box>

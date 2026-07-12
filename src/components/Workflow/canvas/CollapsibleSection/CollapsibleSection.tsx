@@ -3,7 +3,11 @@
 import { ReactNode, useId, useState } from 'react';
 import { Box, HStack, Stack, type StackProps } from '@chakra-ui/react';
 
-import { TbAlertCircle, TbChevronDown, TbChevronUp } from '@/components/Icon';
+import {
+  AlertCircleIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from '@/components/Icon';
 import { Subtext } from '@/components/Typography';
 
 export type CollapsibleSectionProps = StackProps & {
@@ -77,11 +81,11 @@ export function CollapsibleSection({
           {headerAction}
           <Box color="slate.900" display="flex" alignItems="center">
             {showErrorGlyph ? (
-              <TbAlertCircle boxSize="xs" color="danger.main" />
+              <AlertCircleIcon boxSize="xs" color="danger.main" />
             ) : expanded ? (
-              <TbChevronUp boxSize="xs" />
+              <ChevronUpIcon boxSize="xs" />
             ) : (
-              <TbChevronDown boxSize="xs" />
+              <ChevronDownIcon boxSize="xs" />
             )}
           </Box>
         </HStack>

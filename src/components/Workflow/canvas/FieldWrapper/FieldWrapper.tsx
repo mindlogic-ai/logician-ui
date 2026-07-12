@@ -3,7 +3,7 @@
 import { ReactNode, useMemo, useRef } from 'react';
 import { HStack, Stack } from '@chakra-ui/react';
 
-import { AlertTriangle, TbAlertCircle } from '@/components/Icon';
+import { AlertCircleIcon, AlertTriangleIcon } from '@/components/Icon';
 import { Subtext } from '@/components/Typography';
 
 import { useWorkflowIssueMessage } from '../../useWorkflowIssueMessage';
@@ -103,9 +103,9 @@ export function FieldWrapper({
         <HStack gap={1} align="center">
           <Subtext color={toneColor} display="flex" alignItems="center">
             {tone === 'danger' ? (
-              <TbAlertCircle boxSize="xs" />
+              <AlertCircleIcon boxSize="xs" />
             ) : (
-              <AlertTriangle boxSize="xs" />
+              <AlertTriangleIcon boxSize="xs" />
             )}
           </Subtext>
           <Subtext color={toneColor}>{resolveIssueMessage(issue)}</Subtext>

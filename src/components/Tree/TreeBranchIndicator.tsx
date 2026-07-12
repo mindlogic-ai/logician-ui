@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import { TreeView as ChakraTreeView } from '@chakra-ui/react';
 
-import { IoChevronForward } from '@/components/Icon';
+import { ChevronRightIcon } from '@/components/Icon';
 
 import { TreeBranchIndicatorProps } from './Tree.types';
 
@@ -20,7 +20,7 @@ export const TreeBranchIndicator = forwardRef<
       _motionReduce={{ transition: 'none' }}
       {...rest}
     >
-      {children ?? <IoChevronForward boxSize="xs" />}
+      {children ?? <ChevronRightIcon boxSize="xs" />}
     </ChakraTreeView.BranchIndicator>
   );
 });

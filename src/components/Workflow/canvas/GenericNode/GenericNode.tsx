@@ -3,7 +3,7 @@
 import { memo, useMemo } from 'react';
 import type { NodeProps } from '@xyflow/react';
 
-import { AlertOctagon } from '@/components/Icon';
+import { AlertOctagonIcon } from '@/components/Icon';
 
 import type { GraphNode } from '../../Workflow.types';
 import { useWorkflow } from '../../WorkflowContext';
@@ -56,7 +56,7 @@ export const GenericNode = memo(function GenericNode(
         // safety category surfaces the broken-ness in the icon tile, not
         // only in the error ring chrome.
         category="safety"
-        icon={AlertOctagon}
+        icon={AlertOctagonIcon}
         selected={!!selected}
         runState="error"
         issues={[

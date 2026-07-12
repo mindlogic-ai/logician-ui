@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { Box, Flex, VStack } from '@chakra-ui/react';
 import { useReactFlow } from '@xyflow/react';
 
-import { TbChevronDown } from '@/components/Icon';
+import { ChevronDownIcon } from '@/components/Icon';
 import { Spinner } from '@/components/Spinner';
 import { Subtext, Text } from '@/components/Typography';
 
@@ -207,7 +207,7 @@ export function GraphErrorBanner({
         <Text fontSize="sm" fontWeight="semibold" color="slate.1300">
           {summarize(errorCount, warningCount)}
         </Text>
-        <TbChevronDown
+        <ChevronDownIcon
           boxSize="xs"
           color="slate.900"
           transform={open ? 'rotate(180deg)' : 'none'}

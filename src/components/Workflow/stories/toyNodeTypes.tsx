@@ -4,7 +4,7 @@ import { VStack } from '@chakra-ui/react';
 
 import { FormControl } from '@/components/FormControl';
 import { FormLabel } from '@/components/FormLabel';
-import { Bulb, Plus, Sparkles } from '@/components/Icon';
+import { BulbIcon, PlusIcon, SparklesIcon } from '@/components/Icon';
 import { Input } from '@/components/Input';
 
 import { defineNodeType, type NodeTypeDef } from '../Workflow.types';
@@ -24,7 +24,7 @@ const inputNode = defineNodeType<InputCfg>({
   label: 'Number',
   description: 'Constant input',
   category: 'trigger',
-  icon: Sparkles,
+  icon: SparklesIcon,
   defaultConfig: () => ({ value: 1 }),
   placement: { role: 'start' },
   handles: () => ({ inputs: [], outputs: [{ id: 'out' }] }),
@@ -55,7 +55,7 @@ const addNode = defineNodeType<AddCfg>({
   label: 'Add',
   description: 'a + b',
   category: 'logic',
-  icon: Plus,
+  icon: PlusIcon,
   defaultConfig: () => ({ label: 'sum' }),
   handles: () => ({
     inputs: [
@@ -91,7 +91,7 @@ const outputNode = defineNodeType<OutputCfg>({
   label: 'Print',
   description: 'Terminal output',
   category: 'output',
-  icon: Bulb,
+  icon: BulbIcon,
   defaultConfig: () => ({ label: 'result' }),
   placement: { minCount: 1, role: 'end' },
   handles: () => ({ inputs: [{ id: 'in' }], outputs: [] }),
