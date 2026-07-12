@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Flex } from '@chakra-ui/react';
 
-import { IoChevronForward, IoIosArrowBack } from '@/components/Icon';
+import { ChevronLeftIcon, ChevronRightIcon } from '@/components/Icon';
 import { IconButton } from '@/components/IconButton';
 import { Subtext, Subtitle } from '@/components/Typography';
 import { useTranslate } from '@/hooks/useTranslate';
@@ -108,7 +108,7 @@ export const Pagination = ({
               disabled={currentPage <= 1}
               color={currentPage === 1 ? 'fg.subtle' : 'fg.muted'}
             >
-              <IoIosArrowBack boxSize="sm" />
+              <ChevronLeftIcon boxSize="sm" />
             </IconButton>
             <IconButton
               colorPalette="neutral"
@@ -118,7 +118,7 @@ export const Pagination = ({
               disabled={currentPage >= maxPage}
               color={currentPage === maxPage ? 'fg.subtle' : 'fg.muted'}
             >
-              <IoChevronForward boxSize="sm" />
+              <ChevronRightIcon boxSize="sm" />
             </IconButton>
           </Flex>
         )}

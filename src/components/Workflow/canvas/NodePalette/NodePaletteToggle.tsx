@@ -2,7 +2,7 @@
 
 import { Box } from '@chakra-ui/react';
 
-import { IoAddOutline } from '@/components/Icon';
+import { PlusIcon } from '@/components/Icon';
 import { IconButton } from '@/components/IconButton';
 import { Tooltip } from '@/components/Tooltip';
 
@@ -31,7 +31,7 @@ export function NodePaletteToggle({ onOpen }: { onOpen: () => void }) {
           boxShadow="md"
           onClick={onOpen}
         >
-          <IoAddOutline boxSize="md" />
+          <PlusIcon boxSize="md" />
         </IconButton>
       </Tooltip>
     </Box>

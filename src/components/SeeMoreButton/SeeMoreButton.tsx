@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@chakra-ui/react';
 
-import { IoChevronDownOutline } from '@/components/Icon';
+import { ChevronDownIcon } from '@/components/Icon';
 import { useTranslate } from '@/hooks/useTranslate';
 
 import { seeMoreButtonStyles } from './SeeMoreButton.styles';
@@ -25,7 +25,7 @@ export const SeeMoreButton = ({
   return (
     <Button {...seeMoreButtonStyles} {...rest}>
       {translate('see_more')} ({currentCount}/{maxCount}){' '}
-      <IoChevronDownOutline color="inherit" />
+      <ChevronDownIcon color="inherit" />
     </Button>
   );
 };

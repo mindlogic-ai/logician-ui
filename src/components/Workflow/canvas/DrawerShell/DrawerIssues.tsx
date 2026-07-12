@@ -3,7 +3,7 @@
 import { type ReactNode, useMemo } from 'react';
 import { Box, HStack, VStack } from '@chakra-ui/react';
 
-import { AlertTriangle, TbAlertCircle } from '@/components/Icon';
+import { AlertCircleIcon, AlertTriangleIcon } from '@/components/Icon';
 import { Subtext } from '@/components/Typography';
 
 import { useWorkflowIssueMessage } from '../../useWorkflowIssueMessage';
@@ -43,7 +43,7 @@ function IssueCallout({
   resolveMessage: (issue: Issue) => string;
 }) {
   const { bg, color, borderColor } = severityCalloutStyle(severity);
-  const Icon = severity === 'error' ? TbAlertCircle : AlertTriangle;
+  const Icon = severity === 'error' ? AlertCircleIcon : AlertTriangleIcon;
   return (
     <Box
       border="1px solid"

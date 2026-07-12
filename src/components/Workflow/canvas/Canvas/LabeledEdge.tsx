@@ -16,7 +16,7 @@ import {
   getSmoothStepPath,
 } from '@xyflow/react';
 
-import { TbX } from '@/components/Icon';
+import { CloseIcon } from '@/components/Icon';
 import { IconButton } from '@/components/IconButton';
 
 import { useWorkflow, useWorkflowTranslate } from '../../WorkflowContext';
@@ -186,7 +186,7 @@ export function LabeledEdge({
                   bg="bg.surface"
                   borderRadius="full"
                 >
-                  <TbX boxSize="xs" />
+                  <CloseIcon boxSize="xs" />
                 </IconButton>
               </Box>
             ) : null}

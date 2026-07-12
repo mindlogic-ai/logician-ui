@@ -1,11 +1,12 @@
 import { ForwardedRef, forwardRef } from 'react';
-import { LuEye, LuEyeOff } from 'react-icons/lu';
 import {
   IconButton,
   InputGroup,
   mergeRefs,
   useControllableState,
 } from '@chakra-ui/react';
+
+import { EyeIcon, EyeOffIcon } from '@/components/Icon';
 
 import { Input } from '../Input';
 import { PasswordInputProps } from './PasswordInput.types';
@@ -17,7 +18,7 @@ export const PasswordInput = forwardRef(
       defaultVisible = false,
       visible: visibleProp,
       onVisibleChange,
-      visibilityIcon = { on: <LuEye />, off: <LuEyeOff /> },
+      visibilityIcon = { on: <EyeIcon />, off: <EyeOffIcon /> },
       disabled,
       ...rest
     }: PasswordInputProps,

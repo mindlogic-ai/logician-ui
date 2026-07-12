@@ -2,7 +2,7 @@ import { Stack, Box, Text } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
-import { IoCall, IoSearch, IoIosMail } from '@/components/Icon';
+import { PhoneFilledIcon, SearchIcon, MailIcon } from '@/components/Icon';
 import { MaxLengthIndicator } from '../MaxLengthIndicator';
 
 import { Input } from './Input';
@@ -148,7 +148,7 @@ export const LeftIcon: Story = {
     placeholder: 'Phone number',
     size: 'md',
     disabled: false,
-    leftIcon: <IoCall color="gray.300" />,
+    leftIcon: <PhoneFilledIcon color="gray.300" />,
   },
 };
 
@@ -157,15 +157,15 @@ export const RightIcon: Story = {
     placeholder: 'Search...',
     size: 'md',
     disabled: false,
-    rightIcon: <IoSearch color="gray.300" />,
+    rightIcon: <SearchIcon color="gray.300" />,
   },
 };
 
 export const BothIcons: Story = {
   args: {
     placeholder: 'Email address',
-    leftIcon: <IoIosMail color="gray.300" />,
-    rightIcon: <IoSearch color="gray.300" />,
+    leftIcon: <MailIcon color="gray.300" />,
+    rightIcon: <SearchIcon color="gray.300" />,
   },
 };
 

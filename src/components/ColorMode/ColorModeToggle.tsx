@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { LuMoon, LuSun } from 'react-icons/lu';
 
+import { MoonIcon, SunIcon } from '@/components/Icon';
 import { IconButton } from '@/components/IconButton';
 import type { IconButtonProps } from '@/components/IconButton/IconButton.types';
 
@@ -37,7 +37,7 @@ export const ColorModeToggle: React.FC<ColorModeToggleProps> = ({
 
   return (
     <IconButton aria-label={ariaLabel} onClick={toggleColorMode} {...rest}>
-      {mounted && colorMode === 'dark' ? <LuSun /> : <LuMoon />}
+      {mounted && colorMode === 'dark' ? <SunIcon /> : <MoonIcon />}
     </IconButton>
   );
 };

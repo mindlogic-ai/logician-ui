@@ -6,7 +6,7 @@ import { Handle, Position } from '@xyflow/react';
 
 import { Card } from '@/components/Card';
 import { Chip } from '@/components/Chip';
-import { AlertTriangle, StickyNote } from '@/components/Icon';
+import { AlertTriangleIcon, StickyNoteIcon } from '@/components/Icon';
 import { Subtext } from '@/components/Typography';
 
 import type {
@@ -124,14 +124,14 @@ function getHeaderBadge(
   if (hasError) {
     return (
       <Box color="danger.main" display="flex" alignItems="center">
-        <AlertTriangle boxSize="xs" />
+        <AlertTriangleIcon boxSize="xs" />
       </Box>
     );
   }
   if (hasWarning) {
     return (
       <Box color="warning.dark" display="flex" alignItems="center">
-        <AlertTriangle boxSize="xs" />
+        <AlertTriangleIcon boxSize="xs" />
       </Box>
     );
   }
@@ -222,7 +222,7 @@ export function NodeShell({
             letterSpacing="wider"
             textTransform="uppercase"
           >
-            <StickyNote boxSize="xs" />
+            <StickyNoteIcon boxSize="xs" />
             <Subtext color="warning.dark" fontWeight="bold">
               Note
             </Subtext>

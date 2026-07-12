@@ -43,6 +43,18 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/no-var-requires': 'warn', // Allow require() in library code
     'unused-imports/no-unused-imports': 'error',
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: ['react-icons', 'react-icons/*'],
+            message:
+              'Import icons from the family-agnostic registry (@/components/Icon) instead of react-icons directly. Only iconList.ts may import react-icons.',
+          },
+        ],
+      },
+    ],
     '@typescript-eslint/no-empty-object-type': 'off',
     '@next/next/no-img-element': 'off', // Allow img elements in UI library
     'unused-imports/no-unused-vars': [
@@ -56,6 +68,15 @@ module.exports = {
     ],
   },
   overrides: [
+    {
+      // Only these files may import react-icons directly.
+      files: [
+        'src/components/Icon/_constants/iconList.ts',
+        'src/components/Icon/_utils/*.{ts,tsx}',
+        '**/*.stories.{ts,tsx}',
+      ],
+      rules: { 'no-restricted-imports': 'off' },
+    },
     {
       files: ['*.js', '*.jsx', '*.ts', '*.tsx'],
       rules: {

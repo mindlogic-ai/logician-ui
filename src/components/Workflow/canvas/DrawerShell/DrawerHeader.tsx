@@ -3,7 +3,7 @@
 import { type ReactNode } from 'react';
 import { HStack } from '@chakra-ui/react';
 
-import { RxDotsHorizontal, TbX } from '@/components/Icon';
+import { CloseIcon, DotsHorizontalIcon } from '@/components/Icon';
 import { IconButton } from '@/components/IconButton';
 import { Menu } from '@/components/Menu';
 import { Subtext, Text } from '@/components/Typography';
@@ -83,7 +83,7 @@ export function DrawerHeader({
                 variant="ghost"
                 colorPalette="neutral"
               >
-                <RxDotsHorizontal boxSize="xs" />
+                <DotsHorizontalIcon boxSize="xs" />
               </IconButton>
             </Menu.Trigger>
             <Menu.List zIndex="popover">{menuItems}</Menu.List>
@@ -96,7 +96,7 @@ export function DrawerHeader({
           colorPalette="neutral"
           onClick={onClose}
         >
-          <TbX boxSize="xs" aria-hidden />
+          <CloseIcon boxSize="xs" aria-hidden />
         </IconButton>
       </HStack>
     </HStack>

@@ -10,14 +10,14 @@ import {
 } from '@xyflow/react';
 
 import {
-  Minus,
-  Plus,
-  TbArrowBackUp,
-  TbArrowForwardUp,
-  TbLock,
-  TbLockOpen,
-  TbMaximize,
-  TbSitemap,
+  ArrowBackUpIcon,
+  ArrowForwardUpIcon,
+  LockIcon,
+  LockOpenIcon,
+  MaximizeIcon,
+  MinusIcon,
+  PlusIcon,
+  SitemapIcon,
 } from '@/components/Icon';
 import { Tooltip } from '@/components/Tooltip';
 
@@ -115,12 +115,12 @@ export function CanvasControls({
     >
       <Tooltip content={zoomInLabel} placement="right">
         <ControlButton onClick={() => zoomIn()} aria-label={zoomInLabel}>
-          <Plus />
+          <PlusIcon />
         </ControlButton>
       </Tooltip>
       <Tooltip content={zoomOutLabel} placement="right">
         <ControlButton onClick={() => zoomOut()} aria-label={zoomOutLabel}>
-          <Minus />
+          <MinusIcon />
         </ControlButton>
       </Tooltip>
       <Tooltip content={fitViewLabel} placement="right">
@@ -128,7 +128,7 @@ export function CanvasControls({
           onClick={() => fitView(fitViewOptions)}
           aria-label={fitViewLabel}
         >
-          <TbMaximize />
+          <MaximizeIcon />
         </ControlButton>
       </Tooltip>
       {/* Undo/redo, the interactivity lock and auto-arrange are authoring
@@ -141,7 +141,7 @@ export function CanvasControls({
             disabled={!canUndo}
             aria-label={undoLabel}
           >
-            <TbArrowBackUp />
+            <ArrowBackUpIcon />
           </ControlButton>
         </Tooltip>
       )}
@@ -152,7 +152,7 @@ export function CanvasControls({
             disabled={!canRedo}
             aria-label={redoLabel}
           >
-            <TbArrowForwardUp />
+            <ArrowForwardUpIcon />
           </ControlButton>
         </Tooltip>
       )}
@@ -162,14 +162,14 @@ export function CanvasControls({
             onClick={onToggleInteractivity}
             aria-label={interactivityLabel}
           >
-            {isInteractive ? <TbLockOpen /> : <TbLock />}
+            {isInteractive ? <LockOpenIcon /> : <LockIcon />}
           </ControlButton>
         </Tooltip>
       )}
       {readOnly ? null : (
         <Tooltip content={autoArrangeLabel} placement="right">
           <ControlButton onClick={onAutoArrange} aria-label={autoArrangeLabel}>
-            <TbSitemap />
+            <SitemapIcon />
           </ControlButton>
         </Tooltip>
       )}

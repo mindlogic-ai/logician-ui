@@ -3,7 +3,7 @@
 import type { MouseEvent, ReactNode } from 'react';
 
 import { Badge } from '@/components/Badge';
-import { TbCheck, TbX } from '@/components/Icon';
+import { CheckIcon, CloseIcon } from '@/components/Icon';
 
 import type { EdgeLabelVariant } from './edgeLabelVariant';
 
@@ -61,8 +61,8 @@ export function BranchLabelBadge({
       cursor={onClick ? 'pointer' : 'default'}
       onClick={onClick}
     >
-      {variant === 'pass' ? <TbCheck boxSize="xs" aria-hidden /> : null}
-      {variant === 'fail' ? <TbX boxSize="xs" aria-hidden /> : null}
+      {variant === 'pass' ? <CheckIcon boxSize="xs" aria-hidden /> : null}
+      {variant === 'fail' ? <CloseIcon boxSize="xs" aria-hidden /> : null}
       {children}
     </Badge>
   );
