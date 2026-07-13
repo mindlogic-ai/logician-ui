@@ -24,6 +24,7 @@ export * from './components/FileItem';
 export * from './components/FileList';
 
 // Form Components
+export * from './components/Form';
 export * from './components/FormControl';
 export * from './components/FormLabel';
 
