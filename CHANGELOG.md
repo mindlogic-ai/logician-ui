@@ -1,5 +1,42 @@
 # Changelog
 
+## 4.0.0-alpha.14
+
+### Minor Changes
+
+- b79705a: Add an `elevated` variant to `Card`.
+
+  The base `Card` is intentionally flat (`boxShadow: 'none'`, `border.default`).
+  `elevated` promotes the soft "raised object" resting treatment — `boxShadow:
+'sm'` plus the lighter `border.subtle` — into the design system, so standalone
+  content cards can share one baseline instead of re-deriving it inline. The
+  gentle shadow does the separating, which is why the border can soften; pair it
+  with `clickable` (or a consumer hover) to add a lift on interaction.
+
+- 681ff06: Ship the shared form-primitive family: `FieldRow`, `FieldLabel`, `FieldError`, `FieldHelp`, `FormSection`, `FormSectionHeader`, `FormScrollArea`, `FormFooter` and `FormModalFooter`.
+
+  These were hoisted out of FactChat's `@/components/form` so every product composes fields from one design-system family instead of hand-rolling label / error / section / footer chrome.
+
+  **Highlights**
+  - `FieldRow` — the composition keystone: wraps a control in `FormControl` and owns all label↔control / `aria-invalid` / `aria-describedby` wiring. Form-library agnostic (`error` is a plain prop, so it works with RHF and `useState` forms).
+  - `FormSection` — a titled group of fields; flat by default, `collapsible` delegates to `CollapsibleSection`.
+  - `FormFooter` / `FormScrollArea` — the sticky-footer + scroll-column shell for sidebar/left-panel forms.
+  - `FormModalFooter` — the action footer for form-in-a-modal surfaces (optional far-left delete + Cancel + primary submit with its own loading/disabled state). It is **copy-agnostic**: it owns no strings, so `cancelLabel` is **required** and `deleteLabel` is rendered verbatim — the consuming app supplies its own (translated) labels.
+
+  Each primitive ships with a Storybook story and a test.
+
+- b79705a: Give the `soft` button variant a visible hairline border.
+
+  Previously `soft` set `borderColor: 'transparent'`, so a soft button read as an
+  untethered tinted fill with no edge against a white surface — the `1px` border
+  box was already reserved on every variant, only its color was hidden. Each
+  color palette now colors that border: the tinted palettes
+  (`primary`/`secondary`/`danger`/`success`/`warning`) use their own `.light`
+  token for a same-hue hairline that stays a clear step below `outline`'s `.main`
+  border, and `neutral` uses `border.default` so the edge survives dark mode
+  (where `border.subtle` would collapse into the fill). No layout shift — the
+  border width was already there. `solid`, `outline`, and `ghost` are unchanged.
+
 ## 4.0.0-alpha.13
 
 ### Minor Changes
