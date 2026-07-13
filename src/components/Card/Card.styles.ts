@@ -16,4 +16,12 @@ export const variantStyles = {
     border: '1px solid',
     borderColor: 'primary.light',
   },
+  // Soft resting elevation — a gentle shadow does the separating, so the border
+  // can soften to `border.subtle` (which alone would be too faint, especially in
+  // dark mode). Use for standalone content cards that should read as raised
+  // objects rather than flat framed boxes.
+  elevated: {
+    boxShadow: 'sm',
+    borderColor: 'border.subtle',
+  },
 };

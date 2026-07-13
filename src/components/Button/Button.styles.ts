@@ -46,11 +46,14 @@ export const buttonColorPaletteStyles: Record<
       },
     },
     soft: {
-      borderColor: 'transparent',
+      // Same-hue hairline so soft reads as a defined control on white, not a
+      // floating fill. `light` sits well below `outline`'s `.main` border, so
+      // soft stays the quieter of the two bordered variants.
+      borderColor: 'primary.light',
       bgColor: 'primary.extralight', // #E8EEFB
       color: 'primary.dark', // #0D317D
       _hover: {
-        borderColor: 'transparent',
+        borderColor: 'primary.light',
         bgColor: 'primary.lighter', // #B9CBF3
       },
       _active: {
@@ -102,11 +105,11 @@ export const buttonColorPaletteStyles: Record<
       },
     },
     soft: {
-      borderColor: 'transparent',
+      borderColor: 'secondary.light',
       bgColor: 'secondary.extralight', // #F4E8FB
       color: 'secondary.dark', // #570D7D
       _hover: {
-        borderColor: 'transparent',
+        borderColor: 'secondary.light',
         bgColor: 'secondary.lighter', // #DEB9F3
       },
       _active: {
@@ -158,11 +161,11 @@ export const buttonColorPaletteStyles: Record<
       },
     },
     soft: {
-      borderColor: 'transparent',
+      borderColor: 'danger.light',
       bgColor: 'danger.extralight', // #FBE8E9
       color: 'danger.dark', // #7D0D14
       _hover: {
-        borderColor: 'transparent',
+        borderColor: 'danger.light',
         bgColor: 'danger.lighter', // #F3B9BD
       },
       _active: {
@@ -214,11 +217,11 @@ export const buttonColorPaletteStyles: Record<
       },
     },
     soft: {
-      borderColor: 'transparent',
+      borderColor: 'success.light',
       bgColor: 'success.extralight', // #E9FBE8
       color: 'success.dark', // #147D0D
       _hover: {
-        borderColor: 'transparent',
+        borderColor: 'success.light',
         bgColor: 'success.lighter', // #BDF3B9
       },
       _active: {
@@ -273,11 +276,11 @@ export const buttonColorPaletteStyles: Record<
       },
     },
     soft: {
-      borderColor: 'transparent',
+      borderColor: 'warning.light',
       bgColor: 'warning.extralight', // #FBF6E8
       color: 'warning.dark', // #7D610D
       _hover: {
-        borderColor: 'transparent',
+        borderColor: 'warning.light',
         bgColor: 'warning.lighter', // #F3E4B9
       },
       _active: {
@@ -329,14 +332,16 @@ export const buttonColorPaletteStyles: Record<
       },
     },
     soft: {
-      borderColor: 'transparent',
+      // `border.default` (not a gray tint) so the neutral hairline stays visible
+      // in dark mode, where `border.subtle` collapses into the fill.
+      borderColor: 'border.default', // gray.300 / gray.1100 (_dark)
       // Neutral fills flip with the mode (light values preserved: bg.subtle →
       // gray.50, bg.muted → gray.100). Without this the surface stayed light in
       // dark mode while the fg.default text flipped to light = invisible.
       bgColor: 'bg.subtle', // gray.50 / gray.1300 (_dark)
       color: 'fg.default',
       _hover: {
-        borderColor: 'transparent',
+        borderColor: 'border.default',
         bgColor: 'bg.muted', // gray.100 / gray.1200 (_dark)
       },
       _active: {
