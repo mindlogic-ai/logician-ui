@@ -25,13 +25,13 @@ describe('FormSectionHeader', () => {
       <FormSectionHeader
         title="Collaboration"
         description="Grant access to work on this assistant."
-      />,
+      />
     );
     expect(
-      screen.getByRole('heading', { name: 'Collaboration' }),
+      screen.getByRole('heading', { name: 'Collaboration' })
     ).toBeInTheDocument();
     expect(screen.getByTestId('description')).toHaveTextContent(
-      'Grant access to work on this assistant.',
+      'Grant access to work on this assistant.'
     );
   });
 
@@ -40,7 +40,7 @@ describe('FormSectionHeader', () => {
       <FormSectionHeader
         title="Files"
         titleAdornment={<span data-testid="sprinkle">i</span>}
-      />,
+      />
     );
     expect(screen.getByRole('heading', { name: 'Files' })).toBeInTheDocument();
     expect(screen.getByTestId('sprinkle')).toBeInTheDocument();
@@ -51,7 +51,7 @@ describe('FormSectionHeader', () => {
       <FormSectionHeader
         title="Connectors"
         action={<button type="button">Add</button>}
-      />,
+      />
     );
     expect(screen.getByRole('button', { name: 'Add' })).toBeInTheDocument();
   });
@@ -60,14 +60,14 @@ describe('FormSectionHeader', () => {
     render(<FormSectionHeader description="Standalone description." />);
     expect(screen.queryByRole('heading')).toBeNull();
     expect(screen.getByTestId('description')).toHaveTextContent(
-      'Standalone description.',
+      'Standalone description.'
     );
   });
 
   it('renders a bare heading with no description when none is given', () => {
     render(<FormSectionHeader title="Visibility" />);
     expect(
-      screen.getByRole('heading', { name: 'Visibility' }),
+      screen.getByRole('heading', { name: 'Visibility' })
     ).toBeInTheDocument();
     expect(screen.queryByTestId('description')).toBeNull();
   });

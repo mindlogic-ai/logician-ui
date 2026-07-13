@@ -52,7 +52,7 @@ describe('FormModalFooter', () => {
         onSubmit={noop}
         cancelLabel="Cancel"
         submitLabel="Save"
-      />,
+      />
     );
     expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
@@ -69,7 +69,7 @@ describe('FormModalFooter', () => {
         onSubmit={onSubmit}
         cancelLabel="Cancel"
         submitLabel="Save"
-      />,
+      />
     );
     fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
     fireEvent.click(screen.getByRole('button', { name: 'Save' }));
@@ -79,11 +79,15 @@ describe('FormModalFooter', () => {
 
   it('is a type="submit" button inside a form (no onSubmit), type="button" with onSubmit', () => {
     const { rerender } = render(
-      <FormModalFooter onCancel={noop} cancelLabel="Cancel" submitLabel="Save" />,
+      <FormModalFooter
+        onCancel={noop}
+        cancelLabel="Cancel"
+        submitLabel="Save"
+      />
     );
     expect(screen.getByRole('button', { name: 'Save' })).toHaveAttribute(
       'type',
-      'submit',
+      'submit'
     );
     rerender(
       <FormModalFooter
@@ -91,11 +95,11 @@ describe('FormModalFooter', () => {
         onSubmit={noop}
         cancelLabel="Cancel"
         submitLabel="Save"
-      />,
+      />
     );
     expect(screen.getByRole('button', { name: 'Save' })).toHaveAttribute(
       'type',
-      'button',
+      'button'
     );
   });
 
@@ -109,7 +113,7 @@ describe('FormModalFooter', () => {
         submitLabel="Save"
         onDelete={onDelete}
         deleteLabel="Delete"
-      />,
+      />
     );
     expect(screen.getByTestId('trash')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /Delete/ }));
@@ -126,7 +130,7 @@ describe('FormModalFooter', () => {
         onDelete={noop}
         deleteLabel="Delete"
         isSubmitting
-      />,
+      />
     );
     expect(screen.getByRole('button', { name: 'Cancel' })).toBeDisabled();
     expect(screen.getByRole('button', { name: /Delete/ })).toBeDisabled();
@@ -143,7 +147,7 @@ describe('FormModalFooter', () => {
         cancelLabel="Cancel"
         submitLabel="Save"
         submitDisabled
-      />,
+      />
     );
     expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Cancel' })).not.toBeDisabled();

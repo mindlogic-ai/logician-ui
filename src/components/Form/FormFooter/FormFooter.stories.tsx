@@ -10,7 +10,7 @@ const meta: Meta<typeof FormFooter> = {
   title: 'Components/Form/FormFooter',
   component: FormFooter,
   decorators: [
-    Story => (
+    (Story) => (
       <Box w="420px" bg="bg.canvas">
         <Story />
       </Box>

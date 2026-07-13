@@ -42,10 +42,10 @@ describe('FormSection', () => {
     render(
       <FormSection title="Profile" description="How it introduces itself.">
         <div>field</div>
-      </FormSection>,
+      </FormSection>
     );
     expect(
-      screen.getByRole('heading', { name: 'Profile' }),
+      screen.getByRole('heading', { name: 'Profile' })
     ).toBeInTheDocument();
     expect(screen.getByText('How it introduces itself.')).toBeInTheDocument();
     expect(screen.getByText('field')).toBeInTheDocument();
@@ -56,7 +56,7 @@ describe('FormSection', () => {
     render(
       <FormSection title="Behavior" collapsible hasError>
         <div>field</div>
-      </FormSection>,
+      </FormSection>
     );
     const collapsible = screen.getByTestId('collapsible');
     expect(collapsible).toHaveAttribute('data-label', 'Behavior');
@@ -68,7 +68,7 @@ describe('FormSection', () => {
     render(
       <FormSection collapsible>
         <div>field</div>
-      </FormSection>,
+      </FormSection>
     );
     expect(screen.queryByTestId('collapsible')).toBeNull();
     expect(screen.getByText('field')).toBeInTheDocument();
@@ -81,7 +81,7 @@ describe('FormSection', () => {
         titleAdornment={<span data-testid="sprinkle">i</span>}
       >
         <div>field</div>
-      </FormSection>,
+      </FormSection>
     );
     expect(screen.getByRole('heading', { name: 'Files' })).toBeInTheDocument();
     expect(screen.getByTestId('sprinkle')).toBeInTheDocument();

@@ -10,7 +10,7 @@ const meta: Meta<typeof FormSectionHeader> = {
   title: 'Components/Form/FormSectionHeader',
   component: FormSectionHeader,
   decorators: [
-    Story => (
+    (Story) => (
       <Box maxW="480px">
         <Story />
       </Box>

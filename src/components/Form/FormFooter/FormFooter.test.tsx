@@ -31,7 +31,7 @@ describe('FormFooter', () => {
         start={<button>Delete</button>}
         meta={<span>Updated now</span>}
         action={<button>Save</button>}
-      />,
+      />
     );
     expect(screen.getByText('Delete')).toBeInTheDocument();
     expect(screen.getByText('Updated now')).toBeInTheDocument();
@@ -43,21 +43,21 @@ describe('FormFooter', () => {
       <FormFooter
         start={<button>Delete</button>}
         action={<button>Save</button>}
-      />,
+      />
     );
     expect(outer(container)).toHaveAttribute('data-justify', 'space-between');
   });
 
   it('justifies flex-end when there is no start slot (media full-width action)', () => {
     const { container } = render(
-      <FormFooter action={<button>Generate</button>} />,
+      <FormFooter action={<button>Generate</button>} />
     );
     expect(outer(container)).toHaveAttribute('data-justify', 'flex-end');
   });
 
   it('is sticky by default and drops sticky when disabled', () => {
     const { container, rerender } = render(
-      <FormFooter action={<button>Save</button>} />,
+      <FormFooter action={<button>Save</button>} />
     );
     expect(outer(container)).toHaveAttribute('data-position', 'sticky');
 

@@ -13,7 +13,7 @@ const meta: Meta<typeof FormModalFooter> = {
     submitLabel: 'Save',
   },
   decorators: [
-    Story => (
+    (Story) => (
       <Box w="480px" bg="bg.canvas">
         <Story />
       </Box>
@@ -41,7 +41,11 @@ export const Default: Story = {};
 
 /** Edit modal shape: a far-left destructive Delete beside Cancel + submit. */
 export const WithDelete: Story = {
-  args: { onDelete: () => {}, deleteLabel: 'Delete', submitLabel: 'Save changes' },
+  args: {
+    onDelete: () => {},
+    deleteLabel: 'Delete',
+    submitLabel: 'Save changes',
+  },
 };
 
 /** Mid-request: spinner on submit, every button disabled. */

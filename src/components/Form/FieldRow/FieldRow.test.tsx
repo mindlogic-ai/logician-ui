@@ -49,7 +49,7 @@ describe('FieldRow', () => {
     render(
       <FieldRow label="Display name" helperText="Up to 40 chars" error="Nope">
         {control}
-      </FieldRow>,
+      </FieldRow>
     );
     expect(screen.getByText('Display name')).toBeInTheDocument();
     expect(screen.getByLabelText('name')).toBeInTheDocument();
@@ -61,7 +61,7 @@ describe('FieldRow', () => {
     const { container } = render(
       <FieldRow label="Name" error="Required">
         {control}
-      </FieldRow>,
+      </FieldRow>
     );
     expect(container.querySelector('[data-invalid="true"]')).not.toBeNull();
   });
@@ -76,7 +76,7 @@ describe('FieldRow', () => {
     const { container } = render(
       <FieldRow label="Name" error="Required" invalid={false}>
         {control}
-      </FieldRow>,
+      </FieldRow>
     );
     expect(container.querySelector('[data-invalid="false"]')).not.toBeNull();
   });

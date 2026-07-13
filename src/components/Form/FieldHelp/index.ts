@@ -1,2 +1,2 @@
-export { FieldHelp } from './FieldHelp';
 export type { FieldHelpProps } from './FieldHelp';
+export { FieldHelp } from './FieldHelp';
