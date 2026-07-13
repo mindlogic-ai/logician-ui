@@ -22,3 +22,10 @@ export const Gradient: Story = {
     children: 'Gradient Card',
   },
 };
+
+export const Elevated: Story = {
+  args: {
+    variant: 'elevated',
+    children: 'Elevated Card',
+  },
+};
