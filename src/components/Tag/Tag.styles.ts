@@ -16,7 +16,7 @@ export const tagColorPaletteStyles: Record<
   primary: {
     soft: {
       bgColor: 'primary.extralight',
-      borderColor: 'primary.light',
+      borderColor: 'primary.lighter',
       color: 'primary.darker',
     },
     solid: {
@@ -33,7 +33,7 @@ export const tagColorPaletteStyles: Record<
   secondary: {
     soft: {
       bgColor: 'secondary.extralight',
-      borderColor: 'secondary.light',
+      borderColor: 'secondary.lighter',
       color: 'secondary.darker',
     },
     solid: {
@@ -50,7 +50,7 @@ export const tagColorPaletteStyles: Record<
   danger: {
     soft: {
       bgColor: 'danger.extralight',
-      borderColor: 'danger.light',
+      borderColor: 'danger.lighter',
       color: 'danger.darker',
     },
     solid: {
@@ -67,7 +67,7 @@ export const tagColorPaletteStyles: Record<
   success: {
     soft: {
       bgColor: 'success.extralight',
-      borderColor: 'success.light',
+      borderColor: 'success.lighter',
       color: 'success.darker',
     },
     solid: {
@@ -84,7 +84,7 @@ export const tagColorPaletteStyles: Record<
   warning: {
     soft: {
       bgColor: 'warning.extralight',
-      borderColor: 'warning.light',
+      borderColor: 'warning.lighter',
       color: 'warning.darker',
     },
     solid: {
