@@ -47,13 +47,14 @@ export const buttonColorPaletteStyles: Record<
     },
     soft: {
       // Same-hue hairline so soft reads as a defined control on white, not a
-      // floating fill. `light` sits well below `outline`'s `.main` border, so
-      // soft stays the quieter of the two bordered variants.
-      borderColor: 'primary.light',
+      // floating fill. `lighter` sits well below `outline`'s `.main` border, so
+      // soft stays the quieter of the two bordered variants; it also equals the
+      // hover/active fill, so the border melts into the fill on interaction.
+      borderColor: 'primary.lighter',
       bgColor: 'primary.extralight', // #E8EEFB
       color: 'primary.dark', // #0D317D
       _hover: {
-        borderColor: 'primary.light',
+        borderColor: 'primary.lighter',
         bgColor: 'primary.lighter', // #B9CBF3
       },
       _active: {
@@ -105,11 +106,11 @@ export const buttonColorPaletteStyles: Record<
       },
     },
     soft: {
-      borderColor: 'secondary.light',
+      borderColor: 'secondary.lighter',
       bgColor: 'secondary.extralight', // #F4E8FB
       color: 'secondary.dark', // #570D7D
       _hover: {
-        borderColor: 'secondary.light',
+        borderColor: 'secondary.lighter',
         bgColor: 'secondary.lighter', // #DEB9F3
       },
       _active: {
@@ -161,11 +162,11 @@ export const buttonColorPaletteStyles: Record<
       },
     },
     soft: {
-      borderColor: 'danger.light',
+      borderColor: 'danger.lighter',
       bgColor: 'danger.extralight', // #FBE8E9
       color: 'danger.dark', // #7D0D14
       _hover: {
-        borderColor: 'danger.light',
+        borderColor: 'danger.lighter',
         bgColor: 'danger.lighter', // #F3B9BD
       },
       _active: {
@@ -217,11 +218,11 @@ export const buttonColorPaletteStyles: Record<
       },
     },
     soft: {
-      borderColor: 'success.light',
+      borderColor: 'success.lighter',
       bgColor: 'success.extralight', // #E9FBE8
       color: 'success.dark', // #147D0D
       _hover: {
-        borderColor: 'success.light',
+        borderColor: 'success.lighter',
         bgColor: 'success.lighter', // #BDF3B9
       },
       _active: {
@@ -276,11 +277,11 @@ export const buttonColorPaletteStyles: Record<
       },
     },
     soft: {
-      borderColor: 'warning.light',
+      borderColor: 'warning.lighter',
       bgColor: 'warning.extralight', // #FBF6E8
       color: 'warning.dark', // #7D610D
       _hover: {
-        borderColor: 'warning.light',
+        borderColor: 'warning.lighter',
         bgColor: 'warning.lighter', // #F3E4B9
       },
       _active: {
