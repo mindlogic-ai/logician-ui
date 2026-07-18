@@ -92,6 +92,7 @@ export * from './components/Tree';
 export * from './components/Workflow';
 // Typography Components (excluding Link to avoid conflict with Link component)
 export {
+  Caption,
   H1,
   H2,
   H3,
