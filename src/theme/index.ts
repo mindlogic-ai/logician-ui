@@ -64,6 +64,14 @@ const SHARED_TEXT_STYLE_VALUES = {
     fontWeight: '500',
     lineHeight: '1.5',
   },
+  caption: {
+    fontFamily: 'body',
+    fontSize: { base: '0.688em', md: '0.75em' }, // 11px → 12px
+    fontWeight: '500',
+    // Tighter leading than the body scale (1.5): captions are compact,
+    // typically single-line metadata (timestamps, counts, helper microcopy).
+    lineHeight: '1.4',
+  },
   overline: {
     fontFamily: 'body',
     fontSize: { base: '0.805em', md: '0.875em' }, // 12.88px → 14px (matches subtext)
@@ -181,8 +189,13 @@ export const textStyles = defineTextStyles({
     value: SHARED_TEXT_STYLE_VALUES.subtitleAndP,
   },
   subtext: {
-    description: 'Small caption text - responsive 12.88-14px',
+    description: 'Supporting / secondary text - responsive 12.88-14px',
     value: SHARED_TEXT_STYLE_VALUES.subtext,
+  },
+  caption: {
+    description:
+      'Smallest metadata tier — timestamps, counts, helper microcopy (11-12px)',
+    value: SHARED_TEXT_STYLE_VALUES.caption,
   },
   overline: {
     description:

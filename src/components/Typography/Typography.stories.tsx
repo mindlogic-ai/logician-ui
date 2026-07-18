@@ -1,6 +1,18 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { H1, H2, H3, H4, H5, Link, Overline, Subtext, Subtitle, Text } from '.';
+import {
+  Caption,
+  H1,
+  H2,
+  H3,
+  H4,
+  H5,
+  Link,
+  Overline,
+  Subtext,
+  Subtitle,
+  Text,
+} from '.';
 
 const meta = {
   title: 'Components/Typography',
@@ -48,6 +60,10 @@ export const AllTextStyles: Story = {
         Subtext - Lorem ipsum dolor sit amet,{' '}
         <Link href="https://example.com">consectetur adipiscing elit</Link>
       </Subtext>
+      <Caption {...props}>
+        Caption - Lorem ipsum dolor sit amet,{' '}
+        <Link href="https://example.com">consectetur adipiscing elit</Link>
+      </Caption>
     </>
   ),
 };

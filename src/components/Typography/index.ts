@@ -1,4 +1,5 @@
 // Component exports
+export { Caption } from './Caption';
 export { H1 } from './H1';
 export { H2 } from './H2';
 export { H3 } from './H3';
@@ -13,6 +14,7 @@ export { Text } from './Text';
 // Type exports
 export type { LinkCustomProps as LinkProps } from './Link';
 export type {
+  TypographyProps as CaptionProps,
   TypographyProps as OverlineProps,
   TypographyProps as SubtextProps,
   TypographyProps as SubtitleProps,
