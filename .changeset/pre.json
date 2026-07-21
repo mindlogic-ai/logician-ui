@@ -16,6 +16,7 @@
     "form-control-border-default",
     "hoist-form-primitives",
     "icon-2xs-boxsize",
+    "inline-code-step-down",
     "remove-mdxeditor",
     "remove-react-spinners-loaders",
     "segmented-control-sunken-ring",
