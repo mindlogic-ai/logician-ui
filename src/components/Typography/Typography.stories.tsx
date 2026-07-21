@@ -1,5 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 
+import { InlineCode } from '../InlineCode';
+
 import {
   Caption,
   H1,
@@ -66,4 +68,28 @@ export const AllTextStyles: Story = {
       </Caption>
     </>
   ),
+};
+
+// InlineCode nested in each type tier. InlineCode's size is em-relative
+// (textStyle="subtext"), so it tracks whatever it sits in: a readable step below
+// body in a paragraph, and proportionally smaller inside a heading. Use this to
+// eyeball the step-down per context and to confirm a caller's `fontFamily="mono"`
+// still wins (InlineCode has no mono default). Pair with `AllTextStyles` above.
+export const InlineCodeInTextStyles: Story = {
+  render: () => {
+    const code = <InlineCode fontFamily="mono">inline_code()</InlineCode>;
+    return (
+      <>
+        <H1>H1 heading with {code} inside</H1>
+        <H2>H2 heading with {code} inside</H2>
+        <H3>H3 heading with {code} inside</H3>
+        <H4>H4 heading with {code} inside</H4>
+        <H5>H5 heading with {code} inside</H5>
+        <Text>Paragraph body text with {code} mid-sentence.</Text>
+        <Subtitle>Subtitle with {code} inside</Subtitle>
+        <Subtext>Subtext with {code} inside</Subtext>
+        <Caption>Caption with {code} inside</Caption>
+      </>
+    );
+  },
 };
