@@ -9,7 +9,12 @@ export const InlineCode = ({ children, ...rest }: ChakraCodeProps) => {
       bg="bg.subtle"
       color="primary.dark"
       borderRadius="sm"
-      textStyle="p"
+      // `subtext` rather than `p`: inline code reads a step below body text so
+      // its chip (padding + ring) and the mono face's larger x-height don't make
+      // it bulge in running prose. `subtext` is the same tier as `p` — same
+      // family/weight/line-height — only one size down, so this changes size
+      // only (a mono override passed by callers still wins, as with `p`).
+      textStyle="subtext"
       // bg.subtle (gray.50) matches the bg.sunken page wash, so on a sunken
       // page the chip fill vanishes. The chip is too small for a fill bump to
       // register, so (like SegmentedControl) it gets an outline instead — a
