@@ -8,7 +8,9 @@ export const InlineCode = ({ children, ...rest }: ChakraCodeProps) => {
     <ChakraCode
       bg="bg.subtle"
       color="primary.dark"
-      borderRadius="sm"
+      // `xs` (4px) rather than `sm` (6px): on the small, now-shorter chip a 6px
+      // radius reads a little bubbly; the tighter corner is crisper inline.
+      borderRadius="xs"
       // `subtext` rather than `p`: inline code reads a step below body text so
       // its chip (padding + ring) and the mono face's larger x-height don't make
       // it bulge in running prose. `subtext` is the same tier as `p` — same
