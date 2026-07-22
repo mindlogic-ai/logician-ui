@@ -386,11 +386,17 @@ export const semanticTokens = {
       raised: {
         value: { base: '{colors.white}', _dark: desaturatedGray[1100] },
       },
+      // `_light` (not `base`): Chakra's defaults for `bg.subtle`/`bg.muted` are
+      // `{ _light: gray.50 }` / `{ _light: gray.100 }`, which outrank `base` in
+      // light mode. Our light values happen to match Chakra's today, so `base`
+      // rendered correctly by coincidence — pin `_light` so these stay ours if
+      // either value ever diverges (as `border.subtle`/`fg.muted`/`fg.subtle`
+      // already did). No visible change.
       subtle: {
-        value: { base: '{colors.gray.50}', _dark: desaturatedGray[1300] },
+        value: { _light: '{colors.gray.50}', _dark: desaturatedGray[1300] },
       },
       muted: {
-        value: { base: '{colors.gray.100}', _dark: desaturatedGray[1200] },
+        value: { _light: '{colors.gray.100}', _dark: desaturatedGray[1200] },
       },
       inverse: {
         value: { base: '{colors.gray.1300}', _dark: desaturatedGray[50] },
@@ -418,9 +424,11 @@ export const semanticTokens = {
       // Override Chakra's default `bg.panel` (whose `_dark` resolves to Chakra's
       // own gray.950 = #111111, off our slate palette). Light value is white —
       // identical to Chakra's default — so this only realigns dark overlay
-      // surfaces (Menu / Modal / Popover / Toast) onto our gray scale.
+      // surfaces (Menu / Modal / Popover / Toast) onto our gray scale. `_light`
+      // (not `base`) for the same reason as `bg.subtle`/`bg.muted`: Chakra's
+      // default `bg.panel` is `{ _light: white }`, which would outrank `base`.
       panel: {
-        value: { base: '{colors.white}', _dark: desaturatedGray[1400] },
+        value: { _light: '{colors.white}', _dark: desaturatedGray[1400] },
       },
       /**
        * Row/selection state tints. Use these for selected rows,
@@ -476,17 +484,21 @@ export const semanticTokens = {
         value: { base: '{colors.gray.1000}', _dark: desaturatedGray[300] },
       },
       muted: {
-        // Secondary text. _dark sits one step below `default` (~9.5:1 on the dark
-        // canvas) to keep the default→muted hierarchy gap. Light value (gray.900)
-        // is unchanged.
-        value: { base: '{colors.gray.900}', _dark: desaturatedGray[400] },
+        // Secondary text. `_light` (not `base`): Chakra's default `fg.muted` is
+        // `{ _light: gray.600 }`, which outranks `base` in light mode — so `base`
+        // was shadowed and secondary text rendered gray.600, lighter than our
+        // intended gray.900. _dark sits one step below `default` (~9.5:1 on the
+        // dark canvas) to keep the default→muted hierarchy gap.
+        value: { _light: '{colors.gray.900}', _dark: desaturatedGray[400] },
       },
       subtle: {
-        // Tertiary / placeholder / icon text. _dark a11y-bumped from the straight
+        // Tertiary / placeholder / icon text. `_light` (not `base`): Chakra's
+        // default `fg.subtle` is `{ _light: gray.400 }`, which outranks `base` in
+        // light mode — so `base` was shadowed and this rendered gray.400, much
+        // lighter than our intended gray.700. _dark a11y-bumped from the straight
         // mirror (desaturatedGray[600] #8E939F, ~4.06:1 on bg.muted) to #989DA9
-        // (~4.6:1) so it clears AA while staying below fg.muted. Light value
-        // (gray.700) is unchanged.
-        value: { base: '{colors.gray.700}', _dark: '#989DA9' },
+        // (~4.6:1) so it clears AA while staying below fg.muted.
+        value: { _light: '{colors.gray.700}', _dark: '#989DA9' },
       },
       inverse: {
         value: { base: '{colors.gray.0}', _dark: desaturatedGray[1400] },
@@ -512,7 +524,13 @@ export const semanticTokens = {
         value: { base: '{colors.gray.300}', _dark: desaturatedGray[1100] },
       },
       subtle: {
-        value: { base: '{colors.gray.200}', _dark: desaturatedGray[1300] },
+        // `_light` (not `base`): Chakra's default `border.subtle` is
+        // `{ _light: gray.50 }`, and a `_light` condition outranks `base` in
+        // light mode — so a `base` override here is silently shadowed by
+        // Chakra's near-white gray.50 (dividers/frames vanish). Pin `_light` so
+        // our gray.200 wins. (`border.default`/`strong` are safe: Chakra has no
+        // default for those names, so `base` is honoured.)
+        value: { _light: '{colors.gray.200}', _dark: desaturatedGray[1300] },
       },
       strong: {
         value: { base: '{colors.gray.500}', _dark: desaturatedGray[900] },
