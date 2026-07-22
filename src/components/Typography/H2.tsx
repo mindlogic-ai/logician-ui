@@ -8,6 +8,7 @@ export const H2 = forwardRef<HTMLHeadingElement, HeadingProps>((props, ref) => {
     <Heading
       ref={ref}
       as="h2"
+      color="fg.emphasized"
       textStyle={fontSize ? undefined : 'h2'}
       fontSize={fontSize}
       wordBreak="keep-all"
