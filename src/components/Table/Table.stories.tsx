@@ -613,7 +613,7 @@ export const ChatbotAdminScenario: Story = {
             Next page →
           </Button>
         </HStack>
-        <TableContainer>
+        <TableContainer maxW="640px">
           <Table {...args}>
             <Thead>
               <Tr>
@@ -745,7 +745,7 @@ export const StickyHeaderAndColumns: Story = {
             Next page →
           </Button>
         </HStack>
-        <TableContainer maxH="360px">
+        <TableContainer maxW="640px" maxH="360px">
           <Table {...args}>
             <Thead sticky>
               <Tr>
