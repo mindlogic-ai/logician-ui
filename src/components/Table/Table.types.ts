@@ -1,15 +1,21 @@
 import { Table } from '@chakra-ui/react';
 
-import { StickyDirection } from './Table.styles';
+export type StickyDirection = 'left' | 'right';
 
 export interface TableContainerProps extends Table.ScrollAreaProps {
   children: React.ReactNode;
 }
 
 export interface TableCellProps extends Table.CellProps {
+  /**
+   * Mark this cell as a sticky column. You must also pass a fixed width
+   * (`w`) and the pinned position (`left` for sticky-left, `right` for
+   * sticky-right). Use `stickyOffsets()` for cumulative-offset math when
+   * multiple columns are sticky on the same side.
+   */
   isSticky?: boolean;
+  /** Which edge the cell sticks to. Defaults to `left`. */
   stickyDirection?: StickyDirection;
-  stickyIndex?: number;
 }
 
 export type TableRowState = 'selected' | 'invalid' | 'highlighted';

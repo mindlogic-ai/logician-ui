@@ -14,6 +14,49 @@ export const tableSlotRecipe = defineSlotRecipe({
   base: {
     root: {
       color: 'fg.default',
+      // Opt-in sticky column affordance: <Th|Td isSticky stickyDirection="left|right">
+      // sets `data-sticky="left"` or `data-sticky="right"`. The consumer still
+      // owns the pin position (`left`/`right` prop) and column width (`w`) —
+      // use the `stickyOffsets` helper for cumulative-offset math with
+      // multiple sticky columns on the same side.
+      //
+      // Distinct values ("left"/"right") rather than a bare `data-sticky`
+      // attribute so this selector never collides with <Thead sticky>'s
+      // `data-sticky=""` on the `<thead>`.
+      '& [data-sticky="left"], & [data-sticky="right"]': {
+        position: 'sticky',
+        // Below sticky <Thead> (docked = 10) so a scrolled header still
+        // paints over pinned columns.
+        zIndex: 1,
+        _after: {
+          content: '""',
+          position: 'absolute',
+          pointerEvents: 'none',
+          top: 0,
+          bottom: '-1px',
+          width: '32px',
+        },
+      },
+      '& [data-sticky="left"]': {
+        _after: {
+          insetInlineEnd: 0,
+          translate: '100% 0',
+          shadow: 'inset 8px 0px 8px -8px rgba(0, 0, 0, 0.16)',
+        },
+      },
+      '& [data-sticky="right"]': {
+        _after: {
+          insetInlineStart: 0,
+          translate: '-100% 0',
+          shadow: 'inset -8px 0px 8px -8px rgba(0, 0, 0, 0.16)',
+        },
+      },
+      // Opaque backdrop so scrolled content doesn't show through the pinned
+      // column. Th already gets `bg.subtle` from the columnHeader slot; Td
+      // is transparent by default so we set an explicit body-cell surface.
+      '& tbody [data-sticky="left"], & tbody [data-sticky="right"]': {
+        bg: 'bg.surface',
+      },
     },
     header: {
       color: 'fg.muted',
@@ -22,7 +65,7 @@ export const tableSlotRecipe = defineSlotRecipe({
       '&[data-sticky]': {
         position: 'sticky',
         top: 0,
-        // Above sticky-column cells (zIndex 2 in Table.styles.ts)
+        // Above sticky-column cells (zIndex 1 above)
         zIndex: 'docked',
         bg: 'bg.surface',
         // border-collapse leaves cell borders behind when the header sticks;

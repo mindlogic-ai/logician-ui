@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import {
   ExpandingTr,
+  stickyOffsets,
   Table,
   TableContainer,
   Tbody,
@@ -273,6 +274,11 @@ export const ExpandedContent: Story = {
   argTypes: {},
 };
 
+/**
+ * Single left-sticky column. `isSticky` opts the cell into the sticky
+ * treatment; `w` locks the column width and `left="0"` pins it. With one
+ * sticky column, `left="0"` is the whole story — no cumulative math.
+ */
 export const WithLeftStickyColumn: Story = {
   render: (args) => (
     <TableContainer>
@@ -284,6 +290,7 @@ export const WithLeftStickyColumn: Story = {
                 key={column.key}
                 isSticky={index === 0}
                 stickyDirection="left"
+                {...(index === 0 && { w: '8em', left: '0' })}
               >
                 {column.label}
               </Th>
@@ -298,6 +305,7 @@ export const WithLeftStickyColumn: Story = {
                   key={column.key}
                   isSticky={index === 0}
                   stickyDirection="left"
+                  {...(index === 0 && { w: '8em', left: '0' })}
                 >
                   {item[column.key]}
                 </Td>
@@ -312,35 +320,47 @@ export const WithLeftStickyColumn: Story = {
   argTypes: {},
 };
 
+/**
+ * Mirror of {@link WithLeftStickyColumn} on the right edge. `right="0"`
+ * pins the last column against the right side of the scroll container.
+ */
 export const WithRightStickyColumn: Story = {
   render: (args) => (
     <TableContainer>
       <Table {...args}>
         <Thead>
           <Tr>
-            {wideColumns.map((column, index) => (
-              <Th
-                key={column.key}
-                isSticky={index === wideColumns.length - 1}
-                stickyDirection="right"
-              >
-                {column.label}
-              </Th>
-            ))}
+            {wideColumns.map((column, index) => {
+              const isLast = index === wideColumns.length - 1;
+              return (
+                <Th
+                  key={column.key}
+                  isSticky={isLast}
+                  stickyDirection="right"
+                  {...(isLast && { w: '10em', right: '0' })}
+                >
+                  {column.label}
+                </Th>
+              );
+            })}
           </Tr>
         </Thead>
         <Tbody>
           {wideData.map((item) => (
             <Tr key={item.id}>
-              {wideColumns.map((column, index) => (
-                <Td
-                  key={column.key}
-                  isSticky={index === wideColumns.length - 1}
-                  stickyDirection="right"
-                >
-                  {item[column.key]}
-                </Td>
-              ))}
+              {wideColumns.map((column, index) => {
+                const isLast = index === wideColumns.length - 1;
+                return (
+                  <Td
+                    key={column.key}
+                    isSticky={isLast}
+                    stickyDirection="right"
+                    {...(isLast && { w: '10em', right: '0' })}
+                  >
+                    {item[column.key]}
+                  </Td>
+                );
+              })}
             </Tr>
           ))}
         </Tbody>
@@ -351,35 +371,50 @@ export const WithRightStickyColumn: Story = {
   argTypes: {},
 };
 
+/**
+ * One column pinned on each side.
+ */
 export const WithBothStickyColumns: Story = {
   render: (args) => (
     <TableContainer>
       <Table {...args}>
         <Thead>
           <Tr>
-            {wideColumns.map((column, index) => (
-              <Th
-                key={column.key}
-                isSticky={index === 0 || index === wideColumns.length - 1}
-                stickyDirection={index === 0 ? 'left' : 'right'}
-              >
-                {column.label}
-              </Th>
-            ))}
+            {wideColumns.map((column, index) => {
+              const isFirst = index === 0;
+              const isLast = index === wideColumns.length - 1;
+              return (
+                <Th
+                  key={column.key}
+                  isSticky={isFirst || isLast}
+                  stickyDirection={isFirst ? 'left' : 'right'}
+                  {...(isFirst && { w: '8em', left: '0' })}
+                  {...(isLast && { w: '10em', right: '0' })}
+                >
+                  {column.label}
+                </Th>
+              );
+            })}
           </Tr>
         </Thead>
         <Tbody>
           {wideData.map((item) => (
             <Tr key={item.id}>
-              {wideColumns.map((column, index) => (
-                <Td
-                  key={column.key}
-                  isSticky={index === 0 || index === wideColumns.length - 1}
-                  stickyDirection={index === 0 ? 'left' : 'right'}
-                >
-                  {item[column.key]}
-                </Td>
-              ))}
+              {wideColumns.map((column, index) => {
+                const isFirst = index === 0;
+                const isLast = index === wideColumns.length - 1;
+                return (
+                  <Td
+                    key={column.key}
+                    isSticky={isFirst || isLast}
+                    stickyDirection={isFirst ? 'left' : 'right'}
+                    {...(isFirst && { w: '8em', left: '0' })}
+                    {...(isLast && { w: '10em', right: '0' })}
+                  >
+                    {item[column.key]}
+                  </Td>
+                );
+              })}
             </Tr>
           ))}
         </Tbody>
@@ -390,43 +425,54 @@ export const WithBothStickyColumns: Story = {
   argTypes: {},
 };
 
-export const WithTwoLeftStickyColumns: Story = {
-  render: (args) => (
-    <TableContainer>
-      <Table {...args}>
-        <Thead>
-          <Tr>
-            {wideColumns.map((column, index) => (
-              <Th
-                key={column.key}
-                isSticky={index === 0 || index === 1}
-                stickyDirection="left"
-                stickyIndex={index === 0 || index === 1 ? index : undefined}
-              >
-                {column.label}
-              </Th>
-            ))}
-          </Tr>
-        </Thead>
-        <Tbody>
-          {wideData.map((item) => (
-            <Tr key={item.id}>
+/**
+ * Multiple sticky columns on the same side. `stickyOffsets` returns
+ * `{ w, left }` for each column so header and body row stay in sync from
+ * a single width declaration. Inputs are in `em` — e.g. `6` = 6em.
+ */
+export const WithMultipleLeftStickyColumns: Story = {
+  render: (args) => {
+    // Widths in em, chosen to hold typical content. Sticky columns are
+    // fixed-width by contract — long content truncates with the default
+    // `text-overflow: ellipsis` on Th/Td.
+    const STICKY = stickyOffsets([6, 11, 15]); // ID, name, email
+    return (
+      <TableContainer>
+        <Table {...args}>
+          <Thead>
+            <Tr>
               {wideColumns.map((column, index) => (
-                <Td
+                <Th
                   key={column.key}
-                  isSticky={index === 0 || index === 1}
+                  isSticky={index < STICKY.length}
                   stickyDirection="left"
-                  stickyIndex={index === 0 || index === 1 ? index : undefined}
+                  {...(index < STICKY.length ? STICKY[index] : {})}
                 >
-                  {item[column.key]}
-                </Td>
+                  {column.label}
+                </Th>
               ))}
             </Tr>
-          ))}
-        </Tbody>
-      </Table>
-    </TableContainer>
-  ),
+          </Thead>
+          <Tbody>
+            {wideData.map((item) => (
+              <Tr key={item.id}>
+                {wideColumns.map((column, index) => (
+                  <Td
+                    key={column.key}
+                    isSticky={index < STICKY.length}
+                    stickyDirection="left"
+                    {...(index < STICKY.length ? STICKY[index] : {})}
+                  >
+                    {item[column.key]}
+                  </Td>
+                ))}
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </TableContainer>
+    );
+  },
   args: { width: '180%' },
   argTypes: {},
 };
