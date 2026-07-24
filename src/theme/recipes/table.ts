@@ -32,26 +32,20 @@ export const tableSlotRecipe = defineSlotRecipe({
       // content truncates via the existing `text-overflow: ellipsis` and the
       // pin offsets always line up.
       //
-      // `width: max-content` is critical: Chakra's default is `width: full`
-      // (100%), which under fixed layout distributes the container's extra
-      // space back into the columns — silently growing sticky cells past
-      // their declared `w` and breaking the cumulative pin offsets.
-      // `max-content` sizes the table to the sum of its declared column
-      // widths, so sticky cells stay exactly the size they asked for and
-      // `<TableContainer>`'s `overflow-x: auto` triggers the horizontal
-      // scroll consumers expect. Deliberately NOT combined with a
-      // `min-width` — pinning table width to the container in narrow
-      // viewports would re-trigger the same width-distribution bug.
-      // Consumers who want the table to also fill wider containers should
-      // pad non-sticky columns with explicit `w`s so total known-width
-      // exceeds the container.
+      // Kept minimal: we deliberately DO NOT override `width`/`min-width`
+      // here. Chakra's default `width: full` (100%) with fixed layout gives
+      // each declared column its `w` and lets undeclared columns share the
+      // remainder — so factchat's tables still fill their container while
+      // sticky offsets stay correct. Consumers running with an explicit
+      // oversized `width` prop (Storybook's `width: '200%'` etc.) will
+      // reintroduce the width-distribution bug and need to drop that prop
+      // or declare widths on every column.
       //
       // Falls back gracefully in browsers without `:has()` (Chrome/Edge
       // <105, Safari <15.4) — the sticky bug still shows there but nothing
       // else regresses.
       '&:has([data-sticky="left"]), &:has([data-sticky="right"])': {
         tableLayout: 'fixed',
-        width: 'max-content',
       },
       '& [data-sticky="left"], & [data-sticky="right"]': {
         position: 'sticky',
