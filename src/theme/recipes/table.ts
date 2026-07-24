@@ -32,20 +32,23 @@ export const tableSlotRecipe = defineSlotRecipe({
       // content truncates via the existing `text-overflow: ellipsis` and the
       // pin offsets always line up.
       //
-      // Kept minimal: we deliberately DO NOT override `width`/`min-width`
-      // here. Chakra's default `width: full` (100%) with fixed layout gives
-      // each declared column its `w` and lets undeclared columns share the
-      // remainder — so factchat's tables still fill their container while
-      // sticky offsets stay correct. Consumers running with an explicit
-      // oversized `width` prop (Storybook's `width: '200%'` etc.) will
-      // reintroduce the width-distribution bug and need to drop that prop
-      // or declare widths on every column.
+      // `min-width: max-content` is the piece that makes narrow containers
+      // scroll instead of proportionally shrinking every column. Chakra's
+      // default `width: 100%` alone would fill the container — but in fixed
+      // layout, if the container is narrower than the sum of declared
+      // column widths, the browser shrinks columns to fit and the sticky
+      // offsets misalign. `min-width: max-content` pins the table to at
+      // least the sum of its declared widths (so sticky cells stay their
+      // declared size, `<TableContainer>`'s `overflow-x: auto` triggers a
+      // scroll), while `width: 100%` still fills wider containers by
+      // handing the extra to undeclared columns.
       //
       // Falls back gracefully in browsers without `:has()` (Chrome/Edge
       // <105, Safari <15.4) — the sticky bug still shows there but nothing
       // else regresses.
       '&:has([data-sticky="left"]), &:has([data-sticky="right"])': {
         tableLayout: 'fixed',
+        minWidth: 'max-content',
       },
       '& [data-sticky="left"], & [data-sticky="right"]': {
         position: 'sticky',
