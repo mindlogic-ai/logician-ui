@@ -13,6 +13,7 @@
     "bolder-headings-darker-tags",
     "card-elevated-variant",
     "export-color-tokens",
+    "fix-sticky-column-offset-staleness",
     "form-control-border-default",
     "headings-use-fg-emphasized",
     "hoist-form-primitives",
