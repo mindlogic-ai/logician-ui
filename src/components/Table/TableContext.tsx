@@ -14,9 +14,11 @@ export interface TableScrollState {
   isScrolling: boolean;
 }
 
+type ColumnWidths = Record<number, number>; // Maps index to width
+
 interface StickyColumnInfo {
-  leftColumnWidths: Map<number, number>; // Maps index to width
-  rightColumnWidths: Map<number, number>; // Maps index to width
+  left: ColumnWidths;
+  right: ColumnWidths;
 }
 
 interface TableContextValue extends TableScrollState {
@@ -52,9 +54,15 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children }) => {
     isScrolling: false,
   });
 
-  const stickyColumnsRef = useRef<StickyColumnInfo>({
-    leftColumnWidths: new Map(),
-    rightColumnWidths: new Map(),
+  // Column widths live in state (not a ref) so that a width change — a font
+  // swap, a window/sidebar resize, or the columns re-flowing when the table
+  // goes from fitting to overflowing — triggers a re-render and the sticky
+  // offsets are recomputed. Storing them in a ref (the previous approach) meant
+  // the offsets were computed once at mount and then went stale, detaching the
+  // sticky columns from their real positions.
+  const [stickyColumns, setStickyColumns] = useState<StickyColumnInfo>({
+    left: {},
+    right: {},
   });
 
   // 스크롤 상태 업데이트
@@ -95,14 +103,17 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children }) => {
     [updateScrollState]
   );
 
-  // Register a sticky column with its width
+  // Register a sticky column with its (measured) width. Rounds to whole pixels
+  // and bails when unchanged so the ResizeObserver-driven callers can't
+  // ping-pong on sub-pixel differences and spin the render loop.
   const registerStickyColumn = useCallback(
     (direction: 'left' | 'right', index: number, width: number) => {
-      if (direction === 'left') {
-        stickyColumnsRef.current.leftColumnWidths.set(index, width);
-      } else {
-        stickyColumnsRef.current.rightColumnWidths.set(index, width);
-      }
+      const rounded = Math.round(width);
+      setStickyColumns((prev) => {
+        const side = prev[direction];
+        if (side[index] === rounded) return prev;
+        return { ...prev, [direction]: { ...side, [index]: rounded } };
+      });
     },
     []
   );
@@ -112,38 +123,33 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children }) => {
     (direction: 'left' | 'right', index: number) => {
       if (index === 0) return 0;
 
-      const widthsMap =
-        direction === 'left'
-          ? stickyColumnsRef.current.leftColumnWidths
-          : stickyColumnsRef.current.rightColumnWidths;
+      const widths = stickyColumns[direction];
 
       let offset = 0;
       for (let i = 0; i < index; i++) {
-        offset += widthsMap.get(i) || 0;
+        offset += widths[i] || 0;
       }
 
       return offset;
     },
-    []
+    [stickyColumns]
   );
 
   // Check if a column is the last sticky column on its side
   const isLastStickyColumn = useCallback(
     (direction: 'left' | 'right', index: number) => {
-      const widthsMap =
-        direction === 'left'
-          ? stickyColumnsRef.current.leftColumnWidths
-          : stickyColumnsRef.current.rightColumnWidths;
+      const widths = stickyColumns[direction];
 
-      // Find the highest index in the map
+      // Find the highest registered index on this side
       let maxIndex = -1;
-      for (const idx of widthsMap.keys()) {
+      for (const key of Object.keys(widths)) {
+        const idx = Number(key);
         if (idx > maxIndex) maxIndex = idx;
       }
 
       return index === maxIndex;
     },
-    []
+    [stickyColumns]
   );
 
   // 단일 useEffect에서 모든 이벤트 리스너 관리

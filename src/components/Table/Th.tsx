@@ -1,9 +1,10 @@
-import { forwardRef, useCallback, useEffect, useRef } from 'react';
+import { forwardRef, useCallback, useRef } from 'react';
 import { Table, useToken } from '@chakra-ui/react';
 
 import { getStickyStyles } from './Table.styles';
 import { TableCellProps } from './Table.types';
 import { useTableContext } from './TableContext';
+import { useRegisterStickyWidth } from './useRegisterStickyWidth';
 
 export const Th = forwardRef<
   HTMLTableCellElement,
@@ -86,13 +87,14 @@ export const Th = forwardRef<
       ...scrollState
     } = tableContext;
 
-    // Update width when element is mounted and dimensions change
-    useEffect(() => {
-      if (isSticky && measureNodeRef.current) {
-        const width = measureNodeRef.current.getBoundingClientRect().width;
-        registerStickyColumn(stickyDirection, stickyIndex, width);
-      }
-    }, [isSticky, registerStickyColumn, stickyDirection, stickyIndex]);
+    // Keep this column's width registered so the cumulative sticky offsets stay
+    // correct across layout changes (font swap, resize, fit -> overflow).
+    useRegisterStickyWidth(measureNodeRef, {
+      isSticky,
+      direction: stickyDirection,
+      index: stickyIndex,
+      register: registerStickyColumn,
+    });
 
     // Combine refs (forwarded ref and internal ref)
     const setRefs = useCallback(
