@@ -677,3 +677,130 @@ export const ChatbotAdminScenario: Story = {
   args: { width: '200%' },
   argTypes: {},
 };
+
+/**
+ * Combined sticky header + sticky columns + pagination. This is the
+ * full-cross-axis case: `<Thead sticky>` pins the header row to the top
+ * when the body scrolls vertically, and four left-sticky columns + one
+ * right-sticky column pin during horizontal scroll. The `<Tbody>` holds
+ * enough rows per page (16+) to make vertical scroll meaningful inside
+ * the constrained `maxH="360px"` container. Pagination swaps the entire
+ * body across three profiles (short / verbose / mixed content widths).
+ *
+ * Reviewers can:
+ * - Scroll vertically → header stays pinned on top of pinned columns
+ * - Scroll horizontally → four left-sticky + one right-sticky columns
+ *   remain aligned to their declared offsets
+ * - Paginate → sticky offsets re-flow to the new page's widths
+ */
+const buildStickyComboPage = (
+  base: ChatbotRow[],
+  pageId: string,
+  rowCount = 16
+): ChatbotRow[] =>
+  Array.from({ length: rowCount }, (_, i) => ({
+    ...base[i % base.length],
+    id: `${pageId}-${i}`,
+  }));
+
+const STICKY_COMBO_PAGES: ChatbotRow[][] = CHATBOT_PAGES.map((page, pi) =>
+  buildStickyComboPage(page, `combo-p${pi + 1}`)
+);
+
+export const StickyHeaderAndColumns: Story = {
+  render: (args) => {
+    const [page, setPage] = useState(0);
+    const rows = STICKY_COMBO_PAGES[page];
+    const LEFT_STICKY = stickyOffsets([3, 15, 12, 9]);
+    const RIGHT_STICKY = { w: '4em', right: '0' } as const;
+
+    return (
+      <Flex direction="column" gap={3}>
+        <HStack>
+          <Button
+            colorPalette="neutral"
+            variant="outline"
+            size="sm"
+            disabled={page === 0}
+            onClick={() => setPage((p) => Math.max(0, p - 1))}
+          >
+            ← Prev page
+          </Button>
+          <Text fontSize="14px" color="gray.700">
+            Page {page + 1} / {STICKY_COMBO_PAGES.length}
+          </Text>
+          <Button
+            colorPalette="neutral"
+            variant="outline"
+            size="sm"
+            disabled={page === STICKY_COMBO_PAGES.length - 1}
+            onClick={() =>
+              setPage((p) => Math.min(STICKY_COMBO_PAGES.length - 1, p + 1))
+            }
+          >
+            Next page →
+          </Button>
+        </HStack>
+        <TableContainer maxH="360px">
+          <Table {...args}>
+            <Thead sticky>
+              <Tr>
+                <Th isSticky stickyDirection="left" {...LEFT_STICKY[0]}>
+                  #
+                </Th>
+                <Th isSticky stickyDirection="left" {...LEFT_STICKY[1]}>
+                  Name
+                </Th>
+                <Th isSticky stickyDirection="left" {...LEFT_STICKY[2]}>
+                  Groups
+                </Th>
+                <Th isSticky stickyDirection="left" {...LEFT_STICKY[3]}>
+                  Status
+                </Th>
+                <Th>Email</Th>
+                <Th>Phone</Th>
+                <Th>Hobby</Th>
+                <Th isSticky stickyDirection="right" {...RIGHT_STICKY} />
+              </Tr>
+            </Thead>
+            <Tbody>
+              {rows.map((row, i) => (
+                <Tr key={row.id}>
+                  <Td isSticky stickyDirection="left" {...LEFT_STICKY[0]}>
+                    {i + 1}
+                  </Td>
+                  <Td isSticky stickyDirection="left" {...LEFT_STICKY[1]}>
+                    {row.name}
+                  </Td>
+                  <Td isSticky stickyDirection="left" {...LEFT_STICKY[2]}>
+                    {row.groups}
+                  </Td>
+                  <Td isSticky stickyDirection="left" {...LEFT_STICKY[3]}>
+                    {row.status}
+                  </Td>
+                  <Td>{row.email}</Td>
+                  <Td>{row.phone}</Td>
+                  <Td>{row.hobby}</Td>
+                  <Td isSticky stickyDirection="right" {...RIGHT_STICKY}>
+                    <IconButton aria-label="Details">
+                      <IoChevronDownOutline />
+                    </IconButton>
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </TableContainer>
+        <Text fontSize="12px" color="gray.600">
+          Scroll vertically → the header row stays pinned on top of the
+          left-sticky columns. Scroll horizontally → the pinned columns
+          stay aligned. Paginate to swap between short, verbose, and
+          mixed content-width profiles; sticky offsets re-flow on each
+          page without any measurement dance.
+        </Text>
+      </Flex>
+    );
+  },
+  args: { width: '200%' },
+  argTypes: {},
+};
