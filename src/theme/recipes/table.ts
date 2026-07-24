@@ -23,6 +23,36 @@ export const tableSlotRecipe = defineSlotRecipe({
       // Distinct values ("left"/"right") rather than a bare `data-sticky`
       // attribute so this selector never collides with <Thead sticky>'s
       // `data-sticky=""` on the `<thead>`.
+      //
+      // Force `table-layout: fixed` when ANY sticky column is present. In
+      // auto layout `width` is a hint and columns grow to fit content, which
+      // breaks the cumulative-offset math (declared `left="15em"` on column N
+      // is wrong once column N-1 actually renders wider than its declared
+      // width). Fixed layout hard-caps each column at its declared `w` so
+      // content truncates via the existing `text-overflow: ellipsis` and the
+      // pin offsets always line up.
+      //
+      // `width: max-content` is critical: Chakra's default is `width: full`
+      // (100%), which under fixed layout distributes the container's extra
+      // space back into the columns — silently growing sticky cells past
+      // their declared `w` and breaking the cumulative pin offsets.
+      // `max-content` sizes the table to the sum of its declared column
+      // widths, so sticky cells stay exactly the size they asked for and
+      // `<TableContainer>`'s `overflow-x: auto` triggers the horizontal
+      // scroll consumers expect. Deliberately NOT combined with a
+      // `min-width` — pinning table width to the container in narrow
+      // viewports would re-trigger the same width-distribution bug.
+      // Consumers who want the table to also fill wider containers should
+      // pad non-sticky columns with explicit `w`s so total known-width
+      // exceeds the container.
+      //
+      // Falls back gracefully in browsers without `:has()` (Chrome/Edge
+      // <105, Safari <15.4) — the sticky bug still shows there but nothing
+      // else regresses.
+      '&:has([data-sticky="left"]), &:has([data-sticky="right"])': {
+        tableLayout: 'fixed',
+        width: 'max-content',
+      },
       '& [data-sticky="left"], & [data-sticky="right"]': {
         position: 'sticky',
         // Below sticky <Thead> (docked = 10) so a scrolled header still
