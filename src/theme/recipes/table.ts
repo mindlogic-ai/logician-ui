@@ -32,24 +32,13 @@ export const tableSlotRecipe = defineSlotRecipe({
       // content truncates via the existing `text-overflow: ellipsis` and the
       // pin offsets always line up.
       //
-      // `min-width: max-content` is the piece that makes narrow containers
-      // scroll instead of proportionally shrinking every column. Chakra's
-      // default `width: 100%` alone would fill the container — but in fixed
-      // layout, if the container is narrower than the sum of declared
-      // column widths, the browser shrinks columns to fit and the sticky
-      // offsets misalign. `min-width: max-content` pins the table to at
-      // least the sum of its declared widths (so sticky cells stay their
-      // declared size, `<TableContainer>`'s `overflow-x: auto` triggers a
-      // scroll), while `width: 100%` still fills wider containers by
-      // handing the extra to undeclared columns.
-      //
-      // Falls back gracefully in browsers without `:has()` (Chrome/Edge
-      // <105, Safari <15.4) — the sticky bug still shows there but nothing
-      // else regresses.
-      '&:has([data-sticky="left"]), &:has([data-sticky="right"])': {
-        tableLayout: 'fixed',
-        minWidth: 'max-content',
-      },
+      // `table-layout: fixed` + `min-width: max-content` are applied at
+      // the component level via `<Table stickyColumns>` (not here via a
+      // `:has()` selector) — Chakra v3's Panda pipeline compiled the
+      // `:has()` rule but the runtime selector never matched our
+      // `data-sticky` cells, leaving fixed layout off and pinned columns
+      // shrinking to content width. Component-side prop is the reliable
+      // path.
       '& [data-sticky="left"], & [data-sticky="right"]': {
         position: 'sticky',
         // Below sticky <Thead> (docked = 10) so a scrolled header still

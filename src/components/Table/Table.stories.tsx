@@ -283,7 +283,7 @@ export const ExpandedContent: Story = {
 export const WithLeftStickyColumn: Story = {
   render: (args) => (
     <TableContainer>
-      <Table {...args}>
+      <Table stickyColumns {...args}>
         <Thead>
           <Tr>
             {wideColumns.map((column, index) => (
@@ -328,7 +328,7 @@ export const WithLeftStickyColumn: Story = {
 export const WithRightStickyColumn: Story = {
   render: (args) => (
     <TableContainer>
-      <Table {...args}>
+      <Table stickyColumns {...args}>
         <Thead>
           <Tr>
             {wideColumns.map((column, index) => {
@@ -378,7 +378,7 @@ export const WithRightStickyColumn: Story = {
 export const WithBothStickyColumns: Story = {
   render: (args) => (
     <TableContainer>
-      <Table {...args}>
+      <Table stickyColumns {...args}>
         <Thead>
           <Tr>
             {wideColumns.map((column, index) => {
@@ -439,7 +439,7 @@ export const WithMultipleLeftStickyColumns: Story = {
     const STICKY = stickyOffsets([6, 11, 15]); // ID, name, email
     return (
       <TableContainer>
-        <Table {...args}>
+        <Table stickyColumns {...args}>
           <Thead>
             <Tr>
               {wideColumns.map((column, index) => (
@@ -614,7 +614,7 @@ export const ChatbotAdminScenario: Story = {
           </Button>
         </HStack>
         <TableContainer maxW="640px">
-          <Table {...args}>
+          <Table stickyColumns {...args}>
             <Thead>
               <Tr>
                 <Th isSticky stickyDirection="left" {...LEFT_STICKY[0]}>
@@ -746,7 +746,7 @@ export const StickyHeaderAndColumns: Story = {
           </Button>
         </HStack>
         <TableContainer maxW="640px" maxH="360px">
-          <Table {...args}>
+          <Table stickyColumns {...args}>
             <Thead sticky>
               <Tr>
                 <Th isSticky stickyDirection="left" {...LEFT_STICKY[0]}>
