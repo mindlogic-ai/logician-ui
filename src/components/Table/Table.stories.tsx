@@ -674,7 +674,11 @@ export const ChatbotAdminScenario: Story = {
       </Flex>
     );
   },
-  args: { width: '200%' },
+  // No `width` override: the sticky recipe pins the table to
+  // `width: max-content` so total column widths determine table width.
+  // A `width: 200%` here would let Chakra style props override the recipe
+  // and redistribute space back into sticky cells (the original bug).
+  args: {},
   argTypes: {},
 };
 
@@ -801,6 +805,7 @@ export const StickyHeaderAndColumns: Story = {
       </Flex>
     );
   },
-  args: { width: '200%' },
+  // See ChatbotAdminScenario for why we drop the `width` arg — same reason.
+  args: {},
   argTypes: {},
 };
