@@ -1,4 +1,4 @@
-import { Flex } from '@chakra-ui/react';
+import { Flex, HStack, Text } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
@@ -13,6 +13,7 @@ import {
   Thead,
   Tr,
 } from '.';
+import { Button } from '../Button';
 import { IoChevronDownOutline } from '../Icon';
 import { IconButton } from '../IconButton';
 
