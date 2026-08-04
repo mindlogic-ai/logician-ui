@@ -34,6 +34,15 @@ export const bannerStyles: Record<VariantType, BoxProps> = {
     borderColor: 'danger.lighter', // #F3B9BD
     color: 'danger.dark', // #7D0D14
   },
+  // Semantic surface tokens rather than a status palette: there is no neutral
+  // ramp with the extralight/lighter/dark steps the others use, and `bg.subtle`
+  // + `border.default` + `fg.default` already carry their own `_dark` values, so
+  // this recedes correctly in both modes without a second set of colours.
+  neutral: {
+    bg: 'bg.subtle',
+    borderColor: 'border.default',
+    color: 'fg.default',
+  },
 };
 
 export const accentStyles: Record<VariantType, BoxProps['_before']> = {
@@ -49,6 +58,11 @@ export const accentStyles: Record<VariantType, BoxProps['_before']> = {
   danger: {
     bg: 'danger.dark',
   },
+  // Quiet accent — present so the shape still reads as a Banner, but without the
+  // saturated rail that makes the status variants demand attention.
+  neutral: {
+    bg: 'border.default',
+  },
 };
 
 export const iconConfig: Record<
@@ -59,6 +73,7 @@ export const iconConfig: Record<
   success: { Icon: IoIosCheckmarkCircle, color: 'success.main' },
   warning: { Icon: IoWarning, color: 'warning.main' },
   danger: { Icon: MdError, color: 'danger.main' },
+  neutral: { Icon: LuInfo, color: 'fg.muted' },
 };
 
 export const textStyles: Record<VariantType, TypographyProps> = {
@@ -73,6 +88,9 @@ export const textStyles: Record<VariantType, TypographyProps> = {
   },
   danger: {
     color: 'danger.dark',
+  },
+  neutral: {
+    color: 'fg.default',
   },
 };
 

@@ -43,6 +43,14 @@ export const Danger: Story = {
   },
 };
 
+export const Neutral: Story = {
+  args: {
+    variant: 'neutral',
+    children:
+      'This model is unavailable and there is nothing to switch to — an admin has to change the setting.',
+  },
+};
+
 export const AllSizes: Story = {
   render: () => (
     <VStack gap={4} align="stretch">
@@ -59,7 +67,7 @@ export const AllSizes: Story = {
   ),
 };
 
-const variants = ['info', 'success', 'warning', 'danger'] as const;
+const variants = ['info', 'success', 'warning', 'danger', 'neutral'] as const;
 
 export const AllVariants: Story = {
   render: () => (
