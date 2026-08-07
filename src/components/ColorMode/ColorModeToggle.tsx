@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import { Box } from '@chakra-ui/react';
 
 import { MoonIcon, SunIcon } from '@/components/Icon';
 import { IconButton } from '@/components/IconButton';
@@ -35,9 +36,43 @@ export const ColorModeToggle: React.FC<ColorModeToggleProps> = ({
     setMounted(true);
   }, []);
 
+  const isDark = mounted && colorMode === 'dark';
+
   return (
     <IconButton aria-label={ariaLabel} onClick={toggleColorMode} {...rest}>
-      {mounted && colorMode === 'dark' ? <SunIcon /> : <MoonIcon />}
+      {/* Both icons share one grid cell and cross by rotating out and in, so the
+          toggle reads as one object turning rather than two icons swapping. The
+          page-wide colour flip stays instant on purpose — `ColorModeProvider`
+          sets `disableTransitionOnChange` so the whole UI doesn't wash through
+          an intermediate state — this animates the control only. */}
+      <Box display="grid" boxSize="1em">
+        <Box
+          gridArea="1 / 1"
+          display="grid"
+          placeItems="center"
+          opacity={isDark ? 1 : 0}
+          transform={isDark ? undefined : 'rotate(-90deg) scale(0.5)'}
+          transitionProperty="opacity, transform"
+          transitionDuration="motion.slow"
+          transitionTimingFunction="overshoot"
+          _motionReduce={{ transitionDuration: 'motion.instant' }}
+        >
+          <SunIcon />
+        </Box>
+        <Box
+          gridArea="1 / 1"
+          display="grid"
+          placeItems="center"
+          opacity={isDark ? 0 : 1}
+          transform={isDark ? 'rotate(90deg) scale(0.5)' : undefined}
+          transitionProperty="opacity, transform"
+          transitionDuration="motion.slow"
+          transitionTimingFunction="overshoot"
+          _motionReduce={{ transitionDuration: 'motion.instant' }}
+        >
+          <MoonIcon />
+        </Box>
+      </Box>
     </IconButton>
   );
 };

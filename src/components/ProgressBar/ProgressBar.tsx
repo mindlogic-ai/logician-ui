@@ -22,7 +22,15 @@ export const ProgressBar = ({
         <ChakraProgress.Range
           bgColor={filledTrackColor}
           borderRadius={styles.borderRadius}
-          transition="width 0.3s ease-in-out"
+          // `ease-in-out` made the bar start slowly on every update, as if it
+          // were accelerating from rest — but progress only moves one way and
+          // arrives in discrete jumps, so easing IN is a fiction. `emphasized`
+          // covers most of the distance immediately and settles, which reads as
+          // the bar catching up to a value that already changed.
+          transitionProperty="width"
+          transitionDuration="motion.base"
+          transitionTimingFunction="emphasized"
+          _motionReduce={{ transitionDuration: 'motion.instant' }}
         />
       </ChakraProgress.Track>
     </ChakraProgress.Root>
