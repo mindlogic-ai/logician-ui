@@ -7,7 +7,7 @@ import {
 
 import { colors, semanticTokens } from './colors';
 import { globalCss } from './global';
-import { durations, easings } from './motion';
+import { durations, easings, keyframes } from './motion';
 import { tableSlotRecipe } from './recipes/table';
 
 /**
@@ -213,6 +213,7 @@ export const textStyles = defineTextStyles({
 const config = defineConfig({
   globalCss,
   theme: {
+    keyframes,
     tokens: {
       colors,
       // Merged with Chakra's own scales, not replacing them — see ./motion for

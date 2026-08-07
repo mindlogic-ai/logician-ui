@@ -104,6 +104,28 @@ export const easings = {
 };
 
 /**
+ * Keyframes owned by the motion layer.
+ *
+ * `checkmark-draw` strokes Chakra's default checkmark on instead of flashing it
+ * in. The icon is already stroke-based (`fill: none`, `stroke: currentColor`,
+ * `polyline points="20 6 9 17 4 12"`), so a dash offset is all it takes; the
+ * polyline measures ~22.6 user units, and 24 clears it with room to spare.
+ */
+export const keyframes = {
+  'checkmark-draw': {
+    from: { strokeDashoffset: '24' },
+    to: { strokeDashoffset: '0' },
+  },
+};
+
+/**
+ * Dash length for {@link keyframes}' `checkmark-draw`, exported so the consuming
+ * component sets `stroke-dasharray` from the same number the keyframe animates
+ * to — two places, one value.
+ */
+export const CHECKMARK_DASH = 24;
+
+/**
  * The duration scale in milliseconds, for animation tech that cannot read a CSS
  * variable — framer-motion, `Element.animate`, `setTimeout`-driven sequences.
  *

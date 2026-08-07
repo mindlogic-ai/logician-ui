@@ -107,7 +107,18 @@ export const SegmentedControl = forwardRef<
         css
       )}
     >
-      <SegmentGroup.Indicator borderRadius={indicatorRadius} />
+      <SegmentGroup.Indicator
+        borderRadius={indicatorRadius}
+        // Chakra's `segment-group` recipe positions the indicator through
+        // `--left`/`--width` but declares no transition, so it teleports between
+        // segments. Transitioning those two properties is what turns it into the
+        // slide the control is supposed to have. `emphasized` because the thumb
+        // should arrive under the finger and settle, not coast.
+        transitionProperty="left, width, top, height"
+        transitionDuration="motion.base"
+        transitionTimingFunction="emphasized"
+        _motionReduce={{ transitionDuration: 'motion.instant' }}
+      />
       {items.map((item) => (
         <SegmentGroup.Item
           key={item.value}

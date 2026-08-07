@@ -3,7 +3,7 @@ import { Button as ChakraButton } from '@chakra-ui/react';
 
 import { focusRing } from '@/utils/focusRing';
 
-import { getButtonStyles } from './Button.styles';
+import { buttonTransition, getButtonStyles } from './Button.styles';
 import { ButtonProps } from './Button.types';
 
 /**
@@ -46,9 +46,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {...styles}
         {...focusRing}
         cursor="pointer"
-        transitionProperty="all"
-        transitionDuration="0.25s"
-        transitionTimingFunction="ease-in-out"
+        transition={buttonTransition}
+        _motionReduce={{ transition: 'none' }}
         ref={ref}
         {...rest}
       >

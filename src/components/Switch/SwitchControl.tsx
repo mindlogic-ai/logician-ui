@@ -14,10 +14,23 @@ export const SwitchControl = forwardRef<HTMLSpanElement, SwitchControlProps>(
       // The checked state is the self-defining primary.main fill.
       bg="bg.track"
       _checked={{ bg: 'primary.main' }}
+      transitionProperty="background-color"
+      transitionDuration="fast"
+      _motionReduce={{ transitionDuration: 'motion.instant' }}
       {...focusRing}
       {...props}
     >
-      <ChakraSwitch.Thumb />
+      <ChakraSwitch.Thumb
+        // A toggle is the metaphor of a physical switch, so the thumb settles
+        // slightly past its stop rather than easing to a halt. Chakra's default
+        // is `translate` over `fast` on a plain curve; `overshoot` is the one
+        // curve that stays legible over the thumb's ~16px of travel, because it
+        // reverses direction — `standard` vs `emphasized` would not.
+        transitionProperty="translate"
+        transitionDuration="motion.base"
+        transitionTimingFunction="overshoot"
+        _motionReduce={{ transitionDuration: 'motion.instant' }}
+      />
     </ChakraSwitch.Control>
   )
 );

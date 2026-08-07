@@ -5,6 +5,27 @@ import { ButtonColorPalette, ButtonVariant } from './Button.types';
 type StyleProps = Partial<ChakraButtonProps>;
 
 /**
+ * The press is timed apart from everything else.
+ *
+ * This used to be `transitionProperty="all"` at a flat `0.25s`, which put the
+ * `scale(0.97)` press on the same 250ms clock as a colour change. A press has to
+ * read as *contact* — the finger is already gone by 250ms and the button is
+ * still sinking — so it takes `motion.press` (120ms) while colour, border and
+ * shadow keep the slower step, since those are feedback rather than touch.
+ *
+ * Naming the properties also stops `all` from animating things nobody asked it
+ * to (width, padding) when a consumer changes them on hover.
+ */
+export const buttonTransition = [
+  'transform var(--chakra-durations-motion-press) var(--chakra-easings-standard)',
+  'background-color var(--chakra-durations-fast) ease-in-out',
+  'border-color var(--chakra-durations-fast) ease-in-out',
+  'color var(--chakra-durations-fast) ease-in-out',
+  'box-shadow var(--chakra-durations-fast) ease-in-out',
+  'opacity var(--chakra-durations-fast) ease-in-out',
+].join(', ');
+
+/**
  * Two-dimensional Button styles using the Golden Ratio color system.
  *
  * Combines `colorPalette` (semantic color) with `variant` (visual appearance)
