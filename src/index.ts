@@ -117,3 +117,11 @@ export {
   type SemanticColorToken,
   semanticTokens,
 } from './theme/colors';
+export {
+  MOTION_DURATION_MS,
+  MOTION_DURATION_S,
+  MOTION_EASE,
+  MOTION_EASE_CSS,
+  type MotionDurationToken,
+  type MotionEaseToken,
+} from './theme/motion';

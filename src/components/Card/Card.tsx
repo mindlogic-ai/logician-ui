@@ -25,8 +25,12 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         borderColor="border.default"
         borderRadius="lg"
         transitionProperty="common"
-        transitionDuration="normal"
+        // `normal` is a Chakra v2 duration that no longer exists in v3 — it fell
+        // through as a literal, and `transition-duration: normal` is invalid CSS,
+        // so the whole declaration was dropped and the hover never transitioned.
+        transitionDuration="motion.base"
         transitionTimingFunction="ease"
+        _motionReduce={{ transitionDuration: 'motion.instant' }}
         p={8}
         {...(clickable ? { cursor: clickableStyles.cursor } : {})}
         {...variantStyles[variant]}

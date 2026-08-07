@@ -76,7 +76,12 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
             align="center"
             bgColor="color-mix(in srgb, var(--chakra-colors-bg-surface) 85%, transparent)"
             opacity={bgImage ? 0 : 1}
-            transition="ease-in"
+            // Shorthand needs a duration — with only a timing function it
+            // resolves to 0s and the hover fade snaps in one frame.
+            transitionProperty="opacity"
+            transitionDuration="moderate"
+            transitionTimingFunction="ease-in"
+            _motionReduce={{ transitionDuration: 'motion.instant' }}
             _groupHover={{ opacity: 1 }} // Set opacity to 1 on parent hover
           >
             {isLoading ? (
