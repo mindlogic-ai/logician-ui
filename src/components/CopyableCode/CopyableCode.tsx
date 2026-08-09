@@ -77,7 +77,7 @@ export const CopyableCode = ({
       >
         {/* Both icons occupy the same cell so the button keeps its width while
             they cross, and the check lands with a slight overshoot. */}
-        <Box display="grid" boxSize="1em" flexShrink={0}>
+        <Box display="grid" placeItems="center" flexShrink={0}>
           <Box
             gridArea="1 / 1"
             display="grid"

@@ -45,7 +45,7 @@ export const ColorModeToggle: React.FC<ColorModeToggleProps> = ({
           page-wide colour flip stays instant on purpose — `ColorModeProvider`
           sets `disableTransitionOnChange` so the whole UI doesn't wash through
           an intermediate state — this animates the control only. */}
-      <Box display="grid" boxSize="1em">
+      <Box display="grid" placeItems="center">
         <Box
           gridArea="1 / 1"
           display="grid"

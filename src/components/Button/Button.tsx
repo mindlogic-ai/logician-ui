@@ -46,6 +46,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {...styles}
         {...focusRing}
         cursor="pointer"
+        // Explicit identity so the press transitions from a definite value
+        // rather than relying on `scale: none` being read as 1.
+        scale="1"
         transition={buttonTransition}
         _motionReduce={{ transition: 'none' }}
         ref={ref}

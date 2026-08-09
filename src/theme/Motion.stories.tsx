@@ -115,7 +115,7 @@ const IconMorphDemo = () => {
   return (
     <HStack gap={3}>
       <IconButton aria-label="Toggle demo" onClick={() => setDark(d => !d)}>
-        <Box display="grid" boxSize="1em">
+        <Box display="grid" placeItems="center">
           <Box {...face(dark, '-90deg')}>
             <SunIcon />
           </Box>
@@ -162,9 +162,9 @@ export const Changed: Story = {
         <Row
           id="A01"
           name="Button"
-          why='transitionProperty="all"이 scale(0.97) 프레스를 색 변화와 같은 250ms 시계에 묶어놔서, 손을 뗀 뒤에도 계속 눌리고 있었습니다.'
+          why='프레스가 색 변화와 같은 250ms에 묶여 있었고, transform: scale()이라 호출부의 transform(예: 가운데 정렬)을 덮어써 버튼이 눌릴 때 움직였습니다.'
           before="all · 0.25s · ease-in-out"
-          after="transform 120ms (motion.press) · 색·그림자 150ms"
+          after="scale 120ms (motion.press) · 색·그림자 150ms"
         >
           <HStack gap={3}>
             <Button colorPalette="primary" variant="solid">
