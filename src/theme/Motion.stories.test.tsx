@@ -9,7 +9,8 @@ import { ProgressBar } from '../components/ProgressBar';
 import { SegmentedControl } from '../components/SegmentedControl';
 import { Switch } from '../components/Switch';
 import { system } from '.';
-import { BEFORE, Changed } from './Motion.stories';
+import meta, { BEFORE, Changed } from './Motion.stories';
+import * as motionStories from './Motion.stories';
 
 /**
  * The `Changed` story's left column renders the **real** components with their
@@ -230,5 +231,22 @@ describe('the Changed story rebuilds "before" on the real components', () => {
     expect(
       container.querySelectorAll('.chakra-card__root').length
     ).toBeGreaterThanOrEqual(6);
+  });
+
+  it('exports nothing CSF would index as an unrenderable story', () => {
+    // Every named export in a `.stories` file becomes a story. `BEFORE` is
+    // exported for the tests above, and without `excludeStories` Storybook
+    // indexes it as `theme-motion--before` and fails to render it.
+    const excluded = new Set<string>(meta.excludeStories);
+
+    for (const [name, value] of Object.entries(motionStories)) {
+      if (name === 'default') continue;
+      const isStory =
+        typeof value === 'object' && value !== null && 'render' in value;
+      expect(
+        isStory || excluded.has(name),
+        `${name} is neither a story nor listed in meta.excludeStories`
+      ).toBe(true);
+    }
   });
 });

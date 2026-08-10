@@ -28,6 +28,10 @@ import { MOTION_EASE_CSS } from './motion';
 const meta = {
   title: 'Theme/Motion',
   parameters: { layout: 'fullscreen' },
+  // CSF treats *every* named export in a `.stories` file as a story, so the
+  // `BEFORE` overrides below — exported for the accompanying test — would
+  // otherwise be indexed as a story with nothing to render.
+  excludeStories: ['BEFORE'],
 } satisfies Meta;
 
 export default meta;
