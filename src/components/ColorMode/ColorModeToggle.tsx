@@ -5,6 +5,7 @@ import { Box } from '@chakra-ui/react';
 import { MoonIcon, SunIcon } from '@/components/Icon';
 import { IconButton } from '@/components/IconButton';
 import type { IconButtonProps } from '@/components/IconButton/IconButton.types';
+import { transitions } from '@/theme/motion';
 
 import { useColorMode } from './useColorMode';
 
@@ -52,10 +53,7 @@ export const ColorModeToggle: React.FC<ColorModeToggleProps> = ({
           placeItems="center"
           opacity={isDark ? 1 : 0}
           transform={isDark ? undefined : 'rotate(-90deg) scale(0.5)'}
-          transitionProperty="opacity, transform"
-          transitionDuration="motion.slow"
-          transitionTimingFunction="overshoot"
-          _motionReduce={{ transitionDuration: 'motion.instant' }}
+          {...transitions.spring('opacity, transform')}
         >
           <SunIcon />
         </Box>
@@ -65,10 +63,7 @@ export const ColorModeToggle: React.FC<ColorModeToggleProps> = ({
           placeItems="center"
           opacity={isDark ? 0 : 1}
           transform={isDark ? 'rotate(90deg) scale(0.5)' : undefined}
-          transitionProperty="opacity, transform"
-          transitionDuration="motion.slow"
-          transitionTimingFunction="overshoot"
-          _motionReduce={{ transitionDuration: 'motion.instant' }}
+          {...transitions.spring('opacity, transform')}
         >
           <MoonIcon />
         </Box>

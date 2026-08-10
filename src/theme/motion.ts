@@ -104,6 +104,132 @@ export const easings = {
 };
 
 /**
+ * Turning motion off for someone who asked for less of it.
+ *
+ * `prefers-reduced-motion` is an OS accessibility setting, not a preference in
+ * our app. For people with a vestibular disorder, on-screen movement causes
+ * dizziness and nausea — it is not a matter of taste. Zeroing the duration keeps
+ * the *result* (the switch still flips, the colour still changes) and removes
+ * only the travel between states.
+ *
+ * Spread into every preset below rather than written per component, because
+ * "anything that animates must honour this" is a policy, not a decision a
+ * component gets to make. Written 13 separate times, the 14th component forgets.
+ */
+const REDUCED = { _motionReduce: { transitionDuration: 'motion.instant' } };
+
+/**
+ * The transition presets — pick by intent, and the timing comes with it.
+ *
+ * Each takes the property (or properties) to animate, because that part *is*
+ * per-element: the Switch moves its thumb, the ProgressBar its width. Naming it
+ * is also not optional — CSS defaults `transition-property` to `all`, so a
+ * duration on its own quietly animates every property on the element, which is
+ * how `Button` ended up transitioning the width and padding a consumer set on
+ * hover.
+ *
+ * These four are what eight components actually converged on. Before the
+ * presets the same "a colour changes on hover" was written with four different
+ * easings (`ease-out`, `ease-in`, `ease`, and none at all) across four files.
+ *
+ * @example
+ * ```tsx
+ * <SegmentGroup.Indicator {...transitions.travel('left, width')} />
+ * <ChakraSwitch.Thumb {...transitions.spring('translate')} />
+ * ```
+ */
+export const transitions = {
+  /**
+   * The physical response to a pointer going down. Shorter than everything else
+   * because it has to feel like contact rather than like an animation — at
+   * 250ms the finger is gone and the control is still sinking.
+   */
+  press: (property = 'scale') => ({
+    transitionProperty: property,
+    transitionDuration: 'motion.press',
+    transitionTimingFunction: 'standard',
+    ...REDUCED,
+  }),
+
+  /**
+   * Hover and state feedback: a fill, a border, a shadow, an overlay. Quick,
+   * because it answers something the member just did and then gets out of the
+   * way.
+   */
+  feedback: (property: string) => ({
+    transitionProperty: property,
+    transitionDuration: 'fast',
+    transitionTimingFunction: 'standard',
+    ...REDUCED,
+  }),
+
+  /**
+   * Something moves or grows to a new position — an indicator sliding between
+   * segments, a bar filling. `emphasized` covers most of the distance
+   * immediately and settles, which reads as arriving at a value that already
+   * changed rather than accelerating from rest.
+   */
+  travel: (property: string) => ({
+    transitionProperty: property,
+    transitionDuration: 'motion.base',
+    transitionTimingFunction: 'emphasized',
+    ...REDUCED,
+  }),
+
+  /**
+   * A physical state flip, or two things crossing over each other — a switch
+   * thumb, an icon morphing into another. `overshoot` passes the target and
+   * comes back, and because it reverses direction it stays legible even over a
+   * few pixels, which `standard` ↔ `emphasized` does not.
+   */
+  /**
+   * For the rare element that needs two clocks at once, so a single
+   * duration cannot express it — `Button` presses on `motion.press` while its
+   * colour and shadow run on `fast`. Pass the composed shorthand; the
+   * reduced-motion guard comes with it, which is the whole reason this lives
+   * here rather than being hand-written beside the string.
+   */
+  composite: (transition: string) => ({
+    transition,
+    _motionReduce: { transition: 'none' },
+  }),
+
+  spring: (property: string) => ({
+    transitionProperty: property,
+    transitionDuration: 'motion.base',
+    transitionTimingFunction: 'overshoot',
+    ...REDUCED,
+  }),
+};
+
+/**
+ * Dash length for {@link keyframes}' `checkmark-draw`, exported so the consuming
+ * component sets `stroke-dasharray` from the same number the keyframe animates
+ * to — two places, one value.
+ */
+export const CHECKMARK_DASH = 24;
+
+/**
+ * Drawing Chakra's checkmark on, as a style object rather than four lines
+ * copied per call site.
+ *
+ * This is an `animation`, not a transition, and it does **not** turn off the
+ * same way. Killing the animation alone would leave `stroke-dashoffset` parked
+ * at its start value and the tick invisible, so the reduced-motion branch has to
+ * undo `stroke-dasharray` as well — exactly the kind of per-case detail that
+ * goes wrong when it is re-derived by hand.
+ */
+export const checkmarkDraw = {
+  '& polyline, & path': {
+    strokeDasharray: CHECKMARK_DASH,
+    animation: `checkmark-draw var(--chakra-durations-motion-base) var(--chakra-easings-emphasized) 60ms both`,
+  },
+  '@media (prefers-reduced-motion: reduce)': {
+    '& polyline, & path': { animation: 'none', strokeDasharray: 'none' },
+  },
+};
+
+/**
  * Keyframes owned by the motion layer.
  *
  * `checkmark-draw` strokes Chakra's default checkmark on instead of flashing it
@@ -117,13 +243,6 @@ export const keyframes = {
     to: { strokeDashoffset: '0' },
   },
 };
-
-/**
- * Dash length for {@link keyframes}' `checkmark-draw`, exported so the consuming
- * component sets `stroke-dasharray` from the same number the keyframe animates
- * to — two places, one value.
- */
-export const CHECKMARK_DASH = 24;
 
 /**
  * The duration scale in milliseconds, for animation tech that cannot read a CSS

@@ -1,6 +1,7 @@
 import { forwardRef } from 'react';
 import { SegmentGroup } from '@chakra-ui/react';
 
+import { transitions } from '@/theme/motion';
 import { mergeCss } from '@/utils/mergeCss';
 
 import {
@@ -114,10 +115,7 @@ export const SegmentedControl = forwardRef<
         // segments. Transitioning those two properties is what turns it into the
         // slide the control is supposed to have. `emphasized` because the thumb
         // should arrive under the finger and settle, not coast.
-        transitionProperty="left, width, top, height"
-        transitionDuration="motion.base"
-        transitionTimingFunction="emphasized"
-        _motionReduce={{ transitionDuration: 'motion.instant' }}
+        {...transitions.travel('left, width, top, height')}
       />
       {items.map((item) => (
         <SegmentGroup.Item

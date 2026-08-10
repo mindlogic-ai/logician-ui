@@ -1,6 +1,7 @@
 import { forwardRef } from 'react';
 import { Button as ChakraButton } from '@chakra-ui/react';
 
+import { transitions } from '@/theme/motion';
 import { focusRing } from '@/utils/focusRing';
 
 import { buttonTransition, getButtonStyles } from './Button.styles';
@@ -49,8 +50,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         // Explicit identity so the press transitions from a definite value
         // rather than relying on `scale: none` being read as 1.
         scale="1"
-        transition={buttonTransition}
-        _motionReduce={{ transition: 'none' }}
+        {...transitions.composite(buttonTransition)}
         ref={ref}
         {...rest}
       >

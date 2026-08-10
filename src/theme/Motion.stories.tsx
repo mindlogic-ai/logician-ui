@@ -283,6 +283,15 @@ export const Changed: Story = {
 
 /* ------------------------------------------------------------------- Tokens */
 
+
+const PRESETS = [
+  { name: 'press', t: 'motion.press · standard', use: '포인터 다운 — 접촉감', who: 'Button' },
+  { name: 'feedback', t: 'fast · standard', use: 'hover·상태 색/불투명도 변화', who: 'Card · Checkbox · Switch 트랙 · FileInput · Tree · CopyableCode(나가는 아이콘)' },
+  { name: 'travel', t: 'motion.base · emphasized', use: '위치·크기가 새 값으로 이동', who: 'SegmentedControl · ProgressBar' },
+  { name: 'spring', t: 'motion.base · overshoot', use: '물리적 전환, 두 요소의 교차', who: 'Switch 썸 · ColorModeToggle · CopyableCode(들어오는 아이콘)' },
+  { name: 'composite', t: '(직접 구성)', use: '한 요소에 두 시계가 필요할 때', who: 'Button — 프레스 120ms + 색 150ms' },
+];
+
 const OURS = [
   { name: 'motion.instant', ms: 0, use: '전환 없음 — 토큰 슬롯의 "끄기" 값' },
   { name: 'motion.press', ms: 120, use: '포인터 다운 — 접촉감' },
@@ -353,6 +362,38 @@ export const Tokens: Story = {
             재생
           </Button>
         </HStack>
+
+        <H4 mb={1}>프리셋 — 컴포넌트가 실제로 쓰는 것</H4>
+        <Subtext color="fg.muted" mb={4}>
+          의도로 고르면 타이밍이 따라옵니다. duration·easing을 직접 적을 일은
+          거의 없습니다 — 아래 스케일은 프리셋을 만들 때 보는 재료입니다.
+        </Subtext>
+        <Stack gap={3} mb={9}>
+          {PRESETS.map(p => (
+            <Grid
+              key={p.name}
+              templateColumns={{ base: '1fr', md: '150px 210px 1fr' }}
+              gap={4}
+              alignItems="baseline"
+              borderTop="1px solid"
+              borderColor="border.subtle"
+              pt={3}
+            >
+              <Text fontFamily="mono" fontSize="sm" fontWeight="600" mb={0}>
+                {p.name}
+              </Text>
+              <Text fontFamily="mono" fontSize="xs" color="fg.muted" mb={0}>
+                {p.t}
+              </Text>
+              <Box>
+                <Subtext mb={0}>{p.use}</Subtext>
+                <Subtext color="fg.muted" mb={0} fontSize="2xs">
+                  {p.who}
+                </Subtext>
+              </Box>
+            </Grid>
+          ))}
+        </Stack>
 
         <H4 mb={3}>Duration — 우리 것</H4>
         <Stack gap={2} mb={7}>
@@ -482,7 +523,8 @@ export const Tokens: Story = {
         <H4 mb={3}>쓰는 법</H4>
         <Stack gap={2}>
           {[
-            '<Box transitionDuration="motion.base" transitionTimingFunction="emphasized" />',
+            "<SegmentGroup.Indicator {...transitions.travel('left, width')} />",
+            "<Switch.Thumb {...transitions.spring('translate')} />",
             'css={{ animation: `x var(--chakra-durations-motion-slow) var(--chakra-easings-emphasized)` }}',
             '<motion.div transition={{ duration: MOTION_DURATION_S.base, ease: MOTION_EASE.emphasized }} />',
           ].map(s => (

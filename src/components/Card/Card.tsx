@@ -1,6 +1,8 @@
 import { forwardRef } from 'react';
 import { Card as ChakraCard } from '@chakra-ui/react';
 
+import { transitions } from '@/theme/motion';
+
 import { clickableStyles, variantStyles } from './Card.styles';
 import { CardProps } from './Card.types';
 
@@ -24,13 +26,10 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         // edge in both modes. The `gradient` variant keeps its primary.light border.
         borderColor="border.default"
         borderRadius="lg"
-        transitionProperty="common"
-        // `normal` is a Chakra v2 duration that no longer exists in v3 — it fell
-        // through as a literal, and `transition-duration: normal` is invalid CSS,
-        // so the whole declaration was dropped and the hover never transitioned.
-        transitionDuration="motion.base"
-        transitionTimingFunction="ease"
-        _motionReduce={{ transitionDuration: 'motion.instant' }}
+        // Was `transitionDuration="normal"` — a Chakra v2 token absent from v3.
+        // It fell through as a literal, `transition-duration: normal` is invalid
+        // CSS, and the whole declaration was dropped, so hover never transitioned.
+        {...transitions.feedback('common')}
         p={8}
         {...(clickable ? { cursor: clickableStyles.cursor } : {})}
         {...variantStyles[variant]}

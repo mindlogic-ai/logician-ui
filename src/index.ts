@@ -117,6 +117,7 @@ export {
   type SemanticColorToken,
   semanticTokens,
 } from './theme/colors';
+export { checkmarkDraw, transitions } from './theme/motion';
 export {
   MOTION_DURATION_MS,
   MOTION_DURATION_S,

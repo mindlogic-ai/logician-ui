@@ -2,6 +2,7 @@ import { forwardRef } from 'react';
 import { TreeView as ChakraTreeView } from '@chakra-ui/react';
 
 import { ChevronRightIcon } from '@/components/Icon';
+import { transitions } from '@/theme/motion';
 
 import { TreeBranchIndicatorProps } from './Tree.types';
 
@@ -15,9 +16,8 @@ export const TreeBranchIndicator = forwardRef<
       display="inline-flex"
       alignItems="center"
       justifyContent="center"
-      transition="transform 0.15s ease-out"
+      {...transitions.feedback('transform')}
       _open={{ transform: 'rotate(90deg)' }}
-      _motionReduce={{ transition: 'none' }}
       {...rest}
     >
       {children ?? <ChevronRightIcon boxSize="xs" />}

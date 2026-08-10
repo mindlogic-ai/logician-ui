@@ -49,3 +49,33 @@ same suggestions don't come back around.
 but animating that needs a measured height (which is why Chakra's own
 `expand-height` interpolates to a `--height` Ark sets), so it should be rebuilt
 on the `Collapsible` primitive as its own change.
+
+## How to reach for it
+
+Components pick a **transition preset** by intent rather than assembling a
+duration and a curve by hand:
+
+```tsx
+<SegmentGroup.Indicator {...transitions.travel('left, width')} />
+<Switch.Thumb {...transitions.spring('translate')} />
+```
+
+`press` (contact) · `feedback` (hover and state) · `travel` (moving to a new
+position) · `spring` (a physical flip, or two things crossing) · `composite`
+(the rare element needing two clocks, like Button). Each takes the property to
+animate, because CSS defaults `transition-property` to `all` and a duration on
+its own quietly animates everything on the element.
+
+Reduced motion lives **inside** the presets. "Anything that animates must honour
+`prefers-reduced-motion`" is a policy, not a per-component decision — written out
+by hand it was already spread across 13 places, and the 14th component is the one
+that forgets. `checkmarkDraw` is exported the same way, because an animation does
+not turn off like a transition: killing it alone would park `stroke-dashoffset`
+at its start value and leave the tick invisible, so the dash pattern has to be
+undone as well.
+
+Folding onto the presets also normalised a few timings that had drifted: the same
+"a colour changes on hover" was written with four different easings across four
+files. `Card` hover now runs at 150ms rather than 300ms, `ColorModeToggle` at
+300ms rather than 500ms, and `FileInput` at 150ms rather than 200ms — all three
+were arbitrary rather than reasoned, and hover feedback reads better fast.
