@@ -110,12 +110,12 @@ export const SegmentedControl = forwardRef<
     >
       <SegmentGroup.Indicator
         borderRadius={indicatorRadius}
-        // Chakra's `segment-group` recipe positions the indicator through
-        // `--left`/`--width` but declares no transition, so it teleports between
-        // segments. Transitioning those two properties is what turns it into the
-        // slide the control is supposed to have. `emphasized` because the thumb
-        // should arrive under the finger and settle, not coast.
-        {...transitions.travel('left, width, top, height')}
+        // Ark inlines this part's `transition-*`, and inline beats a class — so
+        // the usual preset props never reach it. Retiming has to go through the
+        // custom properties those inline `var()`s read. Ark's own default is
+        // 150ms on an unset curve; `emphasized` at 300ms lets the thumb arrive
+        // under the finger and settle rather than skate.
+        css={transitions.arkTiming()}
       />
       {items.map((item) => (
         <SegmentGroup.Item

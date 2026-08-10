@@ -194,6 +194,37 @@ export const transitions = {
     _motionReduce: { transition: 'none' },
   }),
 
+  /**
+   * For Ark parts that write their own `transition-*` declarations **inline**,
+   * where the presets above are silently ignored — an inline declaration beats
+   * any class rule, so `transitionDuration` as a prop never reaches the element.
+   *
+   * `SegmentGroup.Indicator` is the one in this library: Ark inlines
+   * `transition-property: var(--transition-property)` and
+   * `transition-duration: var(--transition-duration, 150ms)`. What it leaves
+   * open are the custom properties those `var()`s read, so retiming means
+   * setting those instead. Returns a `css` object, not props, because a custom
+   * property is not a style prop.
+   *
+   * The property list stays Ark's (`left, top, width, height`) — it is already
+   * right, and it is the one part written inline that cannot be changed.
+   *
+   * @example
+   * ```tsx
+   * <SegmentGroup.Indicator css={transitions.arkTiming()} />
+   * ```
+   */
+  arkTiming: (
+    duration = '--chakra-durations-motion-base',
+    easing = '--chakra-easings-emphasized'
+  ) => ({
+    '--transition-duration': `var(${duration})`,
+    '--transition-timing-function': `var(${easing})`,
+    '@media (prefers-reduced-motion: reduce)': {
+      '--transition-duration': 'var(--chakra-durations-motion-instant)',
+    },
+  }),
+
   spring: (property: string) => ({
     transitionProperty: property,
     transitionDuration: 'motion.base',

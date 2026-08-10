@@ -152,9 +152,9 @@ export const Changed: Story = {
         <Row
           id="A05"
           name="SegmentedControl"
-          why="가장 큰 변화. Chakra 레시피가 --left/--width로 위치만 잡고 transition을 선언하지 않아, 인디케이터가 미끄러지지 않고 순간이동했습니다."
-          before="transition 없음 — 썸이 튐"
-          after="left/width · motion.base · emphasized"
+          why="Ark가 이 파트의 transition을 인라인으로 씁니다. 인라인은 클래스를 이기므로 보통의 prop은 닿지 않고, Ark가 남겨둔 커스텀 속성으로만 조정됩니다."
+          before="Ark 기본값 150ms · 곡선 미지정"
+          after="300ms · emphasized (--transition-duration 경유)"
         >
           <SegmentedControl options={SEGMENTS} />
         </Row>

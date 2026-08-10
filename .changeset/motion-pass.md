@@ -8,10 +8,14 @@ Nothing here changes an API — every change is to how a component moves, so the
 thing to check after upgrading is feel, not types. `Theme/Motion pass` in
 Storybook puts all eight side by side with what each did before.
 
-**SegmentedControl was the one actually broken.** Chakra's `segment-group`
-recipe positions the indicator through `--left`/`--width` but declares no
-transition, so the thumb teleported between segments — the slide the control is
-supposed to have never existed. It now transitions over `motion.base`.
+**SegmentedControl** now runs on the house timing rather than Ark's default.
+Its indicator was already sliding — Ark writes the `transition-*` declarations
+**inline**, at 150ms on an unset curve — which is also why the obvious fix does
+nothing: an inline declaration beats any class rule, so `transitionDuration` as
+a prop never reaches the element. Retiming goes through the custom properties
+those inline `var()`s read, and `transitions.arkTiming()` is the preset for it.
+It is 300ms on `emphasized` now, so the thumb arrives under the finger and
+settles instead of skating.
 
 **Button** splits the press out of its blanket transition. `transitionProperty="all"`
 at a flat `0.25s` put `scale(0.97)` on the same clock as a colour change, so the
