@@ -5,8 +5,10 @@
 Motion pass: eight components now move on the shared timing scale.
 
 Nothing here changes an API — every change is to how a component moves, so the
-thing to check after upgrading is feel, not types. `Theme/Motion pass` in
-Storybook puts all eight side by side with what each did before.
+thing to check after upgrading is feel, not types. `Theme/Motion → Changed` in
+Storybook puts each one next to what it did before — the left column is the real
+component with the old values restored, not a mock, so the two run side by side
+off one click.
 
 **SegmentedControl** now runs on the house timing rather than Ark's default.
 Its indicator was already sliding — Ark writes the `transition-*` declarations
