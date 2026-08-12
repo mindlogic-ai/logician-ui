@@ -74,3 +74,42 @@ describe('Swap', () => {
     ).toContain('@media (prefers-reduced-motion: reduce)');
   });
 });
+
+/**
+ * Direction is the part that makes a three-step sequence read as progress. Both
+ * the case that just left and the case still to come are invisible, so nothing
+ * on screen distinguishes them — only the sign of the offset does, and getting
+ * it wrong looks like two labels bouncing past each other rather than a queue
+ * advancing.
+ */
+describe('Swap direction', () => {
+  const threeStates = (value: string) =>
+    render(
+      <ChakraProvider value={system}>
+        <Swap value={value}>
+          <Swap.Case value="idle">저장</Swap.Case>
+          <Swap.Case value="saving">저장 중</Swap.Case>
+          <Swap.Case value="saved">완료</Swap.Case>
+        </Swap>
+      </ChakraProvider>
+    );
+
+  it('sends past cases up and keeps future cases below', () => {
+    const { getByText } = threeStates('saving');
+
+    // Declared before the active one — already happened, so it left upward.
+    expect(cssFor(getByText('저장'))).toContain('translate:0 -8px');
+    expect(cssFor(getByText('저장 중'))).toContain('translate:0 0');
+    // Declared after — has not happened yet, so it waits below.
+    expect(cssFor(getByText('완료'))).toContain('translate:0 8px');
+  });
+
+  it('moves a case from below to above as the sequence passes it', () => {
+    const first = threeStates('idle');
+    expect(cssFor(first.getByText('저장 중'))).toContain('translate:0 8px');
+    first.unmount();
+
+    const last = threeStates('saved');
+    expect(cssFor(last.getByText('저장 중'))).toContain('translate:0 -8px');
+  });
+});

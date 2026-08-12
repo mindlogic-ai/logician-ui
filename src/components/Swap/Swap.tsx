@@ -1,10 +1,28 @@
 'use client';
-import React, { createContext, useContext } from 'react';
+import React, {
+  Children,
+  createContext,
+  isValidElement,
+  useContext,
+} from 'react';
 import { Box } from '@chakra-ui/react';
 
 import { SwapCaseProps, SwapProps } from './Swap.types';
 
-const SwapContext = createContext<string | number | null>(null);
+interface SwapContextValue {
+  /** Position of the showing case in declaration order; -1 if it matched none. */
+  activeIndex: number;
+  /** Declaration order, keyed by each case's `value`. */
+  order: Map<SwapCaseProps['value'], number>;
+}
+
+const SwapContext = createContext<SwapContextValue>({
+  activeIndex: -1,
+  order: new Map(),
+});
+
+/** How far a case sits from the window when it is not the one showing. */
+const OFFSET = '8px';
 
 /**
  * The two clocks a state swap needs: the outgoing label has to clear fast so the
@@ -28,6 +46,25 @@ const SWAP_TRANSITION = [
  * Sizing this way rather than with a hand-tuned `minW` means the lock survives
  * translation, where the longest string is not the one you measured.
  *
+ * ## Which way a case moves
+ *
+ * **Declaration order is the running order.** A case listed before the one
+ * showing has already happened, so it leaves upward; a case listed after has not
+ * happened yet, so it waits below and rises into place. Everything travels the
+ * same direction, which is what makes a three-step sequence read as progress
+ * rather than as two labels bouncing past each other:
+ *
+ * ```
+ *   저장          ↑ 지나감        ↑ 지나감
+ *   저장 중  →      저장 중   →   ↑ 지나감
+ *   완료          ↓ 아직         완료
+ * ```
+ *
+ * Order the cases the way the states actually occur. Going backwards is fine —
+ * the labels simply run the other way.
+ *
+ * Cases must be direct children of `Swap`; that is how their order is read.
+ *
  * @example
  * ```tsx
  * <Button onClick={copy}>
@@ -38,17 +75,40 @@ const SWAP_TRANSITION = [
  * </Button>
  * ```
  */
-const SwapRoot = ({ value, children, ...rest }: SwapProps) => (
-  <SwapContext.Provider value={value}>
-    <Box display="inline-grid" placeItems="center" {...rest}>
-      {children}
-    </Box>
-  </SwapContext.Provider>
-);
+const SwapRoot = ({ value, children, ...rest }: SwapProps) => {
+  const order = new Map<SwapCaseProps['value'], number>();
+
+  Children.toArray(children).forEach((child, index) => {
+    if (!isValidElement<SwapCaseProps>(child)) return;
+    if (!order.has(child.props.value)) order.set(child.props.value, index);
+  });
+
+  const activeIndex = order.get(value) ?? -1;
+
+  return (
+    <SwapContext.Provider value={{ activeIndex, order }}>
+      <Box
+        display="inline-grid"
+        placeItems="center"
+        // The window the labels slide through: without it the outgoing label
+        // would be visible above the button while it fades.
+        overflow="hidden"
+        {...rest}
+      >
+        {children}
+      </Box>
+    </SwapContext.Provider>
+  );
+};
 SwapRoot.displayName = 'Swap';
 
 const SwapCase = ({ value, children, ...rest }: SwapCaseProps) => {
-  const active = useContext(SwapContext) === value;
+  const { activeIndex, order } = useContext(SwapContext);
+  const index = order.get(value) ?? -1;
+  const active = index === activeIndex && index !== -1;
+  // Past cases have left upward; future ones wait below. An unmatched case (the
+  // parent's `value` names nothing) is treated as still to come.
+  const resting = index < activeIndex ? `0 -${OFFSET}` : `0 ${OFFSET}`;
 
   return (
     <Box
@@ -60,7 +120,7 @@ const SwapCase = ({ value, children, ...rest }: SwapCaseProps) => {
       gap="1.5"
       whiteSpace="nowrap"
       opacity={active ? 1 : 0}
-      translate={active ? '0 0' : '0 8px'}
+      translate={active ? '0 0' : resting}
       pointerEvents={active ? undefined : 'none'}
       aria-hidden={!active || undefined}
       transition={SWAP_TRANSITION}
