@@ -12,11 +12,9 @@ import { MOTION_EASE_CSS } from './motion';
 /**
  * # Motion
  *
- * The timing layer, laid out like the type layer: a primitive scale plus a
- * named composition on top of it, both registered in the theme.
- *
- * - **Presets** — the vocabulary you write. Start here.
- * - **Scales** — the durations and curves the presets are built from.
+ * - **Presets** — what to type. Start here.
+ * - **Scales** — the raw durations and curves, for the three cases a preset
+ *   cannot cover.
  */
 const meta = {
   title: 'Theme/Motion',
@@ -29,76 +27,126 @@ type Story = StoryObj;
 
 /* ------------------------------------------------------------------ shared */
 
-const Code = ({ children }: { children: string }) => (
-  <Box
-    fontFamily="mono"
-    fontSize="xs"
-    bg="bg.subtle"
-    color="fg.default"
-    px={3}
-    py={2}
-    borderRadius="sm"
-    overflowX="auto"
-    whiteSpace="pre"
-  >
-    {children}
-  </Box>
-);
+/** Click-to-copy code, the same affordance the palette swatches have. */
+const Code = ({ children }: { children: string }) => {
+  const [copied, setCopied] = useState(false);
 
-const Label = ({ children }: { children: string }) => (
-  <Text
-    fontFamily="mono"
-    fontSize="2xs"
-    color="fg.muted"
-    letterSpacing="0.08em"
-    mb={0}
-  >
-    {children}
-  </Text>
-);
+  return (
+    <Box
+      as="button"
+      onClick={() => {
+        navigator.clipboard?.writeText(children);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1200);
+      }}
+      position="relative"
+      display="block"
+      w="100%"
+      textAlign="left"
+      fontFamily="mono"
+      fontSize="xs"
+      lineHeight="1.7"
+      bg="bg.subtle"
+      color="fg.default"
+      border="1px solid"
+      borderColor="border.subtle"
+      px={3}
+      py={2}
+      borderRadius="sm"
+      overflowX="auto"
+      whiteSpace="pre"
+      cursor="pointer"
+      animationStyle="feedback"
+      transitionProperty="background-color, border-color"
+      _hover={{ borderColor: 'border.default' }}
+    >
+      {children}
+      <Box
+        position="absolute"
+        top={1}
+        right={2}
+        fontSize="2xs"
+        color="fg.subtle"
+        opacity={copied ? 1 : 0}
+        animationStyle="feedback"
+        transitionProperty="opacity"
+      >
+        복사됨
+      </Box>
+    </Box>
+  );
+};
 
 /* ----------------------------------------------------------------- Presets */
+
+/** 상황 → 그대로 붙여 넣을 줄. */
+const RECIPES = [
+  {
+    task: 'hover하면 배경·테두리 색이 바뀐다',
+    line: 'animationStyle="feedback" transitionProperty="background-color, border-color"',
+  },
+  {
+    task: 'hover하면 무언가 흐려지거나 나타난다',
+    line: 'animationStyle="feedback" transitionProperty="opacity"',
+  },
+  {
+    task: '누르면 눌리는 느낌이 난다',
+    line: 'animationStyle="press"',
+  },
+  {
+    task: '인디케이터가 선택된 항목으로 미끄러진다',
+    line: 'animationStyle="travel" transitionProperty="left, width"',
+  },
+  {
+    task: '막대가 새 값까지 찬다',
+    line: 'animationStyle="travel" transitionProperty="width"',
+  },
+  {
+    task: '토글 썸이 반대쪽으로 넘어간다',
+    line: 'animationStyle="spring" transitionProperty="translate"',
+  },
+  {
+    task: '아이콘 두 개가 자리를 바꾼다',
+    line: 'animationStyle="spring" transitionProperty="opacity, transform"',
+  },
+];
 
 interface PresetProps {
   name: string;
   timing: string;
-  when: string;
-  usedBy: string;
+  pick: string;
+  code: string;
   demo: React.ReactNode;
 }
 
-const Preset = ({ name, timing, when, usedBy, demo }: PresetProps) => (
-  <Grid
-    templateColumns={{ base: '1fr', lg: '170px 1fr 260px' }}
-    gap={{ base: 4, lg: 7 }}
-    alignItems="start"
-    borderTop="1px solid"
-    borderColor="border.subtle"
-    py={6}
-  >
-    <Box>
-      <Text fontFamily="mono" fontWeight="700" mb={1}>
+const Preset = ({ name, timing, pick, code, demo }: PresetProps) => (
+  <Box borderTop="1px solid" borderColor="border.subtle" py={6}>
+    <HStack gap={3} align="baseline" mb={3}>
+      <Text fontFamily="mono" fontWeight="700" mb={0}>
         {name}
       </Text>
       <Subtext fontFamily="mono" fontSize="2xs" color="fg.muted" mb={0}>
         {timing}
       </Subtext>
-    </Box>
+    </HStack>
 
-    <Box minH="44px" display="flex" alignItems="center">
-      {demo}
-    </Box>
-
-    <Box>
-      <Subtext mb={1}>{when}</Subtext>
-      <Subtext color="fg.muted" fontSize="2xs" mb={0}>
-        {usedBy}
-      </Subtext>
-    </Box>
-  </Grid>
+    <Grid
+      templateColumns={{ base: '1fr', lg: '260px 1fr' }}
+      gap={{ base: 4, lg: 8 }}
+      alignItems="start"
+    >
+      <Box minH="44px" display="flex" alignItems="center">
+        {demo}
+      </Box>
+      <Stack gap={2}>
+        <Subtext mb={0}>{pick}</Subtext>
+        <Code>{code}</Code>
+      </Stack>
+    </Grid>
+  </Box>
 );
 
-/** A track with a dot that runs end to end, so a curve is visible as travel. */
+/** A track with a dot that runs end to end, so a curve reads as travel. */
 const Runner = ({ style, at }: { style: string; at: boolean }) => (
   <Box
     position="relative"
@@ -129,11 +177,11 @@ const SEGMENTS = [
 ];
 
 /**
- * The motion vocabulary.
+ * What to type.
  *
- * Four intents cover everything in the library; the two below them exist for
- * cases a single preset cannot express. Pick by intent and the timing comes
- * with it — the same trade `textStyle="h3"` makes for typography.
+ * Two props, always: the preset names the timing, and `transitionProperty`
+ * names what moves. Find the row that matches what you are building and copy
+ * the line.
  */
 export const Presets: Story = {
   name: 'Presets',
@@ -143,29 +191,91 @@ export const Presets: Story = {
     const [on, setOn] = useState(false);
 
     return (
-      <Box p={10} maxW="1080px">
+      <Box p={10} maxW="1000px">
         <H2 mb={2}>Motion</H2>
-        <Text color="fg.muted" mb={6}>
-          의도를 고르면 타이밍이 따라옵니다. 프리셋은{' '}
-          <code>theme.animationStyles</code>에 등록되어 있어{' '}
-          <code>textStyle</code>과 같은 방식으로 쓰고, 소비 앱이 자기 config에서
-          다시 정의할 수 있습니다.
+        <Text color="fg.muted" mb={8}>
+          움직임은 <b>항상 prop 두 개</b>로 씁니다. 프리셋이 타이밍을, {}
+          <code>transitionProperty</code>가 무엇이 움직이는지를 정합니다. 직접
+          숫자를 적을 일은 없습니다.
         </Text>
 
-        <Stack gap={2} mb={9}>
-          <Code>{`<Switch.Thumb  animationStyle="spring"  transitionProperty="translate" />
-<Progress.Range animationStyle="travel"  transitionProperty="width" />`}</Code>
-          <Subtext color="fg.muted" mb={0}>
-            무엇이 움직이는지는 요소마다 다르므로{' '}
-            <code>transitionProperty</code>는 항상 직접 적습니다. 프리셋의
-            기본값은 <code>none</code>이라, 빠뜨리면 아무것도 움직이지 않습니다
-            — CSS 기본값 <code>all</code>로 떨어져 전부 움직이는 것보다 눈에
-            띕니다.
-          </Subtext>
+        <Code>{`<Box animationStyle="feedback" transitionProperty="opacity" />`}</Code>
+        <Stack gap={1} mt={3}>
+          {[
+            ['animationStyle', '얼마나 빠르게, 어떤 곡선으로'],
+            ['transitionProperty', '무엇이 움직이는지'],
+          ].map(([prop, means]) => (
+            <HStack key={prop} gap={3} align="baseline">
+              <Text
+                fontFamily="mono"
+                fontSize="xs"
+                minW="150px"
+                color="fg.default"
+                mb={0}
+              >
+                {prop}
+              </Text>
+              <Subtext color="fg.muted" mb={0}>
+                {means}
+              </Subtext>
+            </HStack>
+          ))}
         </Stack>
 
-        <HStack justify="space-between" align="baseline" mb={1}>
-          <H3 mb={0}>의도 넷</H3>
+        <H3 mt={10} mb={1}>
+          만들려는 것부터 찾으세요
+        </H3>
+        <Subtext color="fg.muted" mb={4}>
+          줄을 눌러 복사한 뒤 그대로 붙여 넣으면 됩니다.
+        </Subtext>
+
+        <Stack gap={2} mb={10}>
+          {RECIPES.map((r) => (
+            <Grid
+              key={r.task}
+              templateColumns={{ base: '1fr', md: '260px 1fr' }}
+              gap={{ base: 1, md: 5 }}
+              alignItems="center"
+            >
+              <Subtext color="fg.muted" mb={0}>
+                {r.task}
+              </Subtext>
+              <Code>{r.line}</Code>
+            </Grid>
+          ))}
+        </Stack>
+
+        <H3 mb={2}>어떤 프리셋인지 헷갈리면</H3>
+        <Stack gap={1} mb={2}>
+          {[
+            ['색 · 불투명도 · 그림자가 바뀐다', 'feedback'],
+            ['위치 · 크기가 새 값으로 간다', 'travel'],
+            ['물리적으로 넘어가거나, 두 개가 교차한다', 'spring'],
+            ['손가락이 닿는다', 'press'],
+          ].map(([cond, name]) => (
+            <HStack key={name} gap={3} align="baseline">
+              <Text
+                fontFamily="mono"
+                fontSize="sm"
+                fontWeight="600"
+                minW="80px"
+                mb={0}
+              >
+                {name}
+              </Text>
+              <Subtext color="fg.muted" mb={0}>
+                {cond}
+              </Subtext>
+            </HStack>
+          ))}
+        </Stack>
+        <Subtext color="fg.muted" mb={10}>
+          더 고민되면 <code>feedback</code>을 쓰세요. 넷 중 가장 눈에 띄지 않고,
+          틀려도 손해가 가장 작습니다.
+        </Subtext>
+
+        <HStack justify="space-between" align="baseline" mb={2}>
+          <H3 mb={0}>넷을 직접 비교</H3>
           <Button size="xs" variant="outline" onClick={() => setAt((v) => !v)}>
             이동 재생
           </Button>
@@ -173,9 +283,13 @@ export const Presets: Story = {
 
         <Preset
           name="press"
-          timing="motion.press · standard"
-          when="포인터가 눌리는 순간의 접촉감."
-          usedBy="유일하게 property 기본값이 있습니다 — 프레스는 언제나 scale."
+          timing="120ms · standard"
+          pick="포인터가 눌리는 순간의 접촉감. 넷 중 유일하게 property를 안 적어도 됩니다 — 프레스는 언제나 scale이라 기본값이 들어 있습니다."
+          code={`<Box
+  scale="1"
+  animationStyle="press"
+  _active={{ scale: '0.94' }}
+/>`}
           demo={
             <Box
               as="button"
@@ -198,9 +312,13 @@ export const Presets: Story = {
 
         <Preset
           name="feedback"
-          timing="fast · standard"
-          when="hover와 상태 변화 — 채움, 테두리, 그림자, 불투명도."
-          usedBy="Card · Checkbox · Switch 트랙 · FileInput · Tree · CopyableCode"
+          timing="150ms · standard"
+          pick="hover와 상태 변화. 방금 한 행동에 답하고 바로 비켜야 하므로 가장 짧습니다."
+          code={`<Box
+  animationStyle="feedback"
+  transitionProperty="background-color, border-color"
+  _hover={{ bg: 'primary.lightest', borderColor: 'primary.main' }}
+/>`}
           demo={
             <Box
               px={5}
@@ -221,17 +339,17 @@ export const Presets: Story = {
 
         <Preset
           name="travel"
-          timing="motion.base · emphasized"
-          when="새 위치나 크기로 이동. 거리 대부분을 먼저 덮고 자리를 잡습니다."
-          usedBy="SegmentedControl · ProgressBar"
+          timing="300ms · emphasized"
+          pick="새 위치나 크기로 이동. 거리 대부분을 먼저 덮고 마지막에 자리를 잡아서, 이미 바뀐 값을 따라잡는 것처럼 읽힙니다."
+          code={`<Progress.Range animationStyle="travel" transitionProperty="width" />`}
           demo={<Runner style="travel" at={at} />}
         />
 
         <Preset
           name="spring"
-          timing="motion.base · overshoot"
-          when="물리적인 상태 전환, 또는 두 요소의 교차. 목표를 지나쳤다가 돌아옵니다."
-          usedBy="Switch 썸 · ColorModeToggle · CopyableCode 확인 아이콘"
+          timing="300ms · overshoot"
+          pick="물리적인 전환, 또는 두 요소의 교차. 목표를 지나쳤다 돌아오므로 몇 px만 움직여도 눈에 보입니다 — 위 travel과 나란히 재생해 보세요."
+          code={`<Switch.Thumb animationStyle="spring" transitionProperty="translate" />`}
           demo={
             <Stack gap={3} w="100%">
               <Runner style="spring" at={at} />
@@ -243,19 +361,53 @@ export const Presets: Story = {
           }
         />
 
-        <H3 mt={10} mb={1}>
-          단일 프리셋으로 안 되는 둘
+        <H3 mt={10} mb={2}>
+          이렇게 쓰지 마세요
         </H3>
-        <Subtext color="fg.muted" mb={0}>
-          어휘를 우회하지 않고 예외를 담기 위한 것입니다. 새 컴포넌트라면 위
-          넷에서 고르세요.
+        <Stack gap={3} mb={10}>
+          <Box>
+            <Subtext color="danger.main" mb={1}>
+              ❌ 숫자와 곡선을 직접 적기 — 파일마다 값이 갈라집니다
+            </Subtext>
+            <Code>{`<Box transitionDuration="300ms" transitionTimingFunction="ease-out" />`}</Code>
+          </Box>
+          <Box>
+            <Subtext color="danger.main" mb={1}>
+              ❌ property를 빠뜨리기 — 아무것도 움직이지 않습니다
+            </Subtext>
+            <Code>{`<Box animationStyle="feedback" />`}</Code>
+          </Box>
+          <Box>
+            <Subtext color="success.main" mb={1}>
+              ✅ 프리셋 + 무엇이 움직이는지
+            </Subtext>
+            <Code>{`<Box animationStyle="feedback" transitionProperty="opacity" />`}</Code>
+          </Box>
+        </Stack>
+
+        <H3 mb={2}>따로 챙기지 않아도 되는 것</H3>
+        <Text color="fg.muted" mb={3}>
+          <b>동작 줄이기</b>는 프리셋 안에 들어 있습니다. OS에서{' '}
+          <code>prefers-reduced-motion</code>을 켠 사람에게는 duration이
+          자동으로 <code>0ms</code>가 됩니다 — 스위치는 여전히 켜지고 색도
+          여전히 바뀌며, 이동만 사라집니다. 컴포넌트마다 적을 필요가 없습니다.
+        </Text>
+
+        <H3 mt={8} mb={2}>
+          넷으로 안 되는 경우
+        </H3>
+        <Subtext color="fg.muted" mb={5}>
+          만드는 컴포넌트가 아래에 해당하지 않으면 볼 필요 없습니다.
         </Subtext>
 
         <Preset
           name="composite"
-          timing="(직접 구성) + 동작 줄이기 가드"
-          when="한 요소에 시계가 둘 필요할 때. transition 단축 속성을 직접 쓰고 가드만 받습니다."
-          usedBy="Button — 프레스는 motion.press, 색·그림자는 fast"
+          timing="직접 구성 + 동작 줄이기 가드"
+          pick="한 요소에 서로 다른 속도가 둘 필요할 때. Button은 프레스가 120ms인데 색은 150ms입니다. transition 단축 속성을 직접 쓰고 가드만 프리셋에서 받습니다."
+          code={`<ChakraButton
+  transition={buttonTransition}
+  animationStyle="composite"
+/>`}
           demo={
             <HStack gap={3}>
               <Button colorPalette="primary" variant="solid">
@@ -270,17 +422,17 @@ export const Presets: Story = {
 
         <Preset
           name="arkTravel"
-          timing="travel과 동일 · 커스텀 속성으로 전달"
-          when="Ark가 transition을 인라인으로 쓰는 파트용. 인라인은 클래스를 이기므로 일반 프리셋이 닿지 않습니다."
-          usedBy="SegmentedControl 인디케이터"
+          timing="travel과 같은 타이밍"
+          pick="Ark가 transition을 인라인 style로 쓰는 파트용. 인라인은 클래스를 이기므로 일반 프리셋이 아예 닿지 않습니다. 라이브러리에서 해당하는 건 SegmentedControl 인디케이터 하나뿐입니다."
+          code={`<SegmentGroup.Indicator animationStyle="arkTravel" />`}
           demo={<SegmentedControl options={SEGMENTS} />}
         />
 
         <Preset
           name="checkmarkDraw"
-          timing="motion.base · emphasized · 60ms 지연"
-          when="체크마크를 그려서 표시. transition이 아니라 animation입니다."
-          usedBy="Checkbox 인디케이터"
+          timing="300ms · emphasized · 60ms 지연"
+          pick="체크마크를 그려서 표시. transition이 아니라 keyframe animation이라 별도로 있습니다."
+          code={`<Checkbox.Indicator animationStyle="checkmarkDraw" />`}
           demo={
             <HStack gap={4}>
               <Checkbox
@@ -300,22 +452,6 @@ export const Presets: Story = {
             </HStack>
           }
         />
-
-        <H3 mt={10} mb={2}>
-          동작 줄이기
-        </H3>
-        <Text color="fg.muted" mb={3}>
-          <code>prefers-reduced-motion</code>은 취향이 아니라 OS 접근성
-          설정입니다 — 전정기관 질환이 있는 사람에게 화면의 움직임은 어지럼증을
-          유발합니다. 모든 프리셋이 이 조건에서 duration을 <code>0ms</code>로
-          내립니다. 결과(스위치는 여전히 켜지고 색은 여전히 바뀜)는 남고 이동만
-          사라집니다.
-        </Text>
-        <Subtext color="fg.muted" mb={0}>
-          프리셋 안에 들어 있는 이유: &ldquo;움직이는 것은 모두 이 설정을
-          지킨다&rdquo;는 정책이지 컴포넌트가 매번 내릴 결정이 아니기
-          때문입니다. 컴포넌트마다 적으면 열네 번째 컴포넌트가 빠뜨립니다.
-        </Subtext>
       </Box>
     );
   },
@@ -324,18 +460,22 @@ export const Presets: Story = {
 /* ------------------------------------------------------------------ Scales */
 
 const OURS = [
-  { name: 'motion.instant', ms: 0, use: '전환 없음 — 동작 줄이기가 넣는 값' },
-  { name: 'motion.press', ms: 120, use: '포인터 접촉' },
-  { name: 'motion.base', ms: 300, use: '기본 — 등장·퇴장·리빌' },
-  { name: 'motion.slow', ms: 500, use: '시선을 끌고 가는 이동' },
-  { name: 'motion.slower', ms: 700, use: '공들여 오르는 카운트업' },
+  {
+    name: 'motion.instant',
+    ms: 0,
+    use: '동작 줄이기가 넣는 값. 직접 쓸 일은 없습니다',
+  },
+  { name: 'motion.press', ms: 120, use: 'press 프리셋이 씁니다' },
+  { name: 'motion.base', ms: 300, use: 'travel · spring 프리셋이 씁니다' },
+  { name: 'motion.slow', ms: 500, use: '화면을 가로지르는 이동 (프리셋 없음)' },
+  { name: 'motion.slower', ms: 700, use: '카운트업 (프리셋 없음)' },
 ];
 
 const CHAKRAS = [
-  { name: 'fast', ms: 150, note: '150ms는 이걸 쓰세요' },
-  { name: 'moderate', ms: 200, note: '200ms는 이걸 쓰세요' },
-  { name: 'slow', ms: 300, note: '우리 motion.slow(500)와 다름' },
-  { name: 'slower', ms: 400, note: '우리 motion.slower(700)와 다름' },
+  { name: 'fast', ms: 150, use: 'feedback 프리셋이 씁니다' },
+  { name: 'moderate', ms: 200, use: '200ms가 필요하면 이걸 쓰세요' },
+  { name: 'slow', ms: 300, use: '⚠️ 우리 motion.slow(500ms)와 다른 값' },
+  { name: 'slower', ms: 400, use: '⚠️ 우리 motion.slower(700ms)와 다른 값' },
 ];
 
 const CURVES = [
@@ -343,19 +483,19 @@ const CURVES = [
     name: 'standard',
     d: 'M0,100 C40,100 20,0 100,0',
     half: '50%',
-    use: '평범한 전환',
+    use: 'press · feedback',
   },
   {
     name: 'emphasized',
     d: 'M0,100 C22,0 36,0 100,0',
     half: '96%',
-    use: '값에 도착하는 하우스 곡선',
+    use: 'travel',
   },
   {
     name: 'overshoot',
     d: 'M0,100 C34,-56 64,0 100,0',
     half: '109%',
-    use: '물리적 토글, 두 요소의 교차',
+    use: 'spring',
   },
 ];
 
@@ -396,18 +536,18 @@ const Track = ({
 const ScaleRow = ({
   name,
   ms,
-  note,
+  use,
   at,
   muted,
 }: {
   name: string;
   ms: number;
-  note: string;
+  use: string;
   at: boolean;
   muted?: boolean;
 }) => (
   <Grid
-    templateColumns={{ base: '140px 56px 1fr', md: '140px 56px 1fr 240px' }}
+    templateColumns={{ base: '140px 56px 1fr', md: '140px 56px 1fr 280px' }}
     gap={4}
     alignItems="center"
   >
@@ -430,16 +570,16 @@ const ScaleRow = ({
     </Text>
     <Track ms={ms} at={at} />
     <Subtext color="fg.muted" mb={0} display={{ base: 'none', md: 'block' }}>
-      {note}
+      {use}
     </Subtext>
   </Grid>
 );
 
 /**
- * The raw material: the duration scale and the three curves.
+ * The raw scale, for the three cases a preset cannot cover.
  *
- * Reach for a preset first — these are what you look at when *defining* one, or
- * when driving an animation from JS where a preset cannot apply.
+ * If none of those three is what you are doing, this page is not the one you
+ * need — go back to Presets.
  */
 export const Scales: Story = {
   name: 'Scales',
@@ -453,30 +593,64 @@ export const Scales: Story = {
 
     return (
       <Box p={10} maxW="920px">
-        <HStack justify="space-between" align="baseline" mb={6}>
-          <H2 mb={0}>스케일</H2>
+        <H2 mb={2}>스케일</H2>
+        <Text color="fg.muted" mb={6}>
+          아래 세 경우가 아니면 이 페이지는 볼 필요가 없습니다 — <b>Presets</b>
+          로 가세요.
+        </Text>
+
+        <Stack gap={5} mb={10}>
+          <Box>
+            <Subtext mb={1}>
+              <b>1.</b> framer-motion — CSS 변수를 못 읽으므로 숫자로 넣습니다
+            </Subtext>
+            <Code>{`import { MOTION_DURATION_S, MOTION_EASE } from '@mindlogic-ai/logician-ui';
+
+<motion.div transition={{ duration: MOTION_DURATION_S.base, ease: MOTION_EASE.emphasized }} />`}</Code>
+          </Box>
+          <Box>
+            <Subtext mb={1}>
+              <b>2.</b> keyframe animation — Chakra prop이 아니라 CSS
+              문자열입니다
+            </Subtext>
+            <Code>{`css={{ animation: 'pop var(--chakra-durations-motion-slow) var(--chakra-easings-emphasized)' }}`}</Code>
+          </Box>
+          <Box>
+            <Subtext mb={1}>
+              <b>3.</b> 새 프리셋을 정의할 때 — <code>src/theme/motion.ts</code>
+            </Subtext>
+            <Code>{`reveal: {
+  value: {
+    transitionProperty: 'none',
+    transitionDuration: 'motion.slow',
+    transitionTimingFunction: 'emphasized',
+    _motionReduce: { transitionDuration: 'motion.instant' },
+  },
+},`}</Code>
+          </Box>
+        </Stack>
+
+        <HStack justify="space-between" align="baseline" mb={4}>
+          <H3 mb={0}>Duration</H3>
           <Button size="sm" onClick={play}>
             재생
           </Button>
         </HStack>
 
-        <H3 mb={1}>Duration — 우리 것</H3>
-        <Subtext color="fg.muted" mb={4}>
-          <code>motion.</code> 접두어가 붙는 이유: Chakra가 <code>slow</code>·
-          <code>slower</code>를 다른 값으로 이미 쓰고 있고, 그 토큰을 Chakra의{' '}
-          <code>dialog</code>·<code>drawer</code>·<code>progress</code> 레시피가
-          읽습니다. 덮어쓰면 우리가 만들지 않은 컴포넌트의 타이밍이 바뀝니다.
+        <Subtext color="fg.muted" mb={3}>
+          우리 스케일. <code>motion.</code> 접두어가 붙는 이유는 아래 Chakra
+          스케일과 이름이 겹치기 때문입니다.
         </Subtext>
-        <Stack gap={2} mb={8}>
+        <Stack gap={2} mb={7}>
           {OURS.map((d) => (
-            <ScaleRow key={d.name} {...d} note={d.use} at={at} />
+            <ScaleRow key={d.name} {...d} at={at} />
           ))}
         </Stack>
 
-        <H3 mb={1}>Duration — Chakra 것 (그대로 둠)</H3>
-        <Subtext color="fg.muted" mb={4}>
-          150ms와 200ms는 우리 스케일에 없습니다. 이미 정확히 이 값이라 이름만
-          둘이 되는 셈입니다.
+        <Subtext color="fg.muted" mb={3}>
+          Chakra 스케일. 그대로 두고 함께 씁니다 — 150ms·200ms는 여기 있으므로
+          우리 쪽에 만들지 않았습니다. <code>slow</code>·<code>slower</code>는
+          이름이 같고 값이 다르니 주의하세요.
         </Subtext>
         <Stack gap={2} mb={10}>
           {CHAKRAS.map((d) => (
@@ -546,13 +720,13 @@ export const Scales: Story = {
                 절반 지점에 <b>{c.half}</b> 이동
               </Subtext>
               <Subtext color="fg.muted" mb={0}>
-                {c.use}
+                {c.use} 프리셋이 씁니다
               </Subtext>
             </Box>
           ))}
         </Grid>
 
-        <Stack gap={3} mb={4}>
+        <Stack gap={3} mb={3}>
           {CURVES.map((c) => (
             <Grid
               key={c.name}
@@ -571,23 +745,12 @@ export const Scales: Story = {
             </Grid>
           ))}
         </Stack>
-        <Subtext color="fg.muted" mb={10}>
+        <Subtext color="fg.muted" mb={0}>
           <code>standard</code>와 <code>emphasized</code>는 그래프로는 크게
-          다르지만 짧은 거리에서는 눈으로 구분되지 않습니다 — 2000ms로 보고
-          300ms로 내려보세요.
-          <code>overshoot</code>는 방향이 바뀌므로 어떤 거리에서도 보입니다.
+          다르지만 짧은 거리에서는 눈으로 구분되지 않습니다 — 2000ms로 본 뒤
+          300ms로 내려보세요. <code>overshoot</code>만 거리와 무관하게 보입니다.
+          새 프리셋에서 곡선을 고를 때 이게 기준입니다.
         </Subtext>
-
-        <H3 mb={2}>JS에서</H3>
-        <Subtext color="fg.muted" mb={3}>
-          framer-motion은 CSS 변수를 읽지 못하므로 같은 값을 숫자로도
-          내보냅니다.
-        </Subtext>
-        <Stack gap={2}>
-          <Label>RAW VALUES</Label>
-          <Code>{`<motion.div transition={{ duration: MOTION_DURATION_S.base, ease: MOTION_EASE.emphasized }} />`}</Code>
-          <Code>{`MOTION_DURATION_MS  MOTION_DURATION_S  MOTION_EASE  MOTION_EASE_CSS`}</Code>
-        </Stack>
       </Box>
     );
   },
