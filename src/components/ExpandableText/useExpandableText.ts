@@ -1,114 +1,101 @@
-import { isValidElement, useCallback, useMemo, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 
-// Utility function to extract text content from ReactNode
-const getTextContent = (node: React.ReactNode): string => {
-  if (typeof node === 'string' || typeof node === 'number') {
-    return String(node);
-  }
+import { MOTION_DURATION_MS } from '@/theme/motion';
 
-  if (Array.isArray(node)) {
-    return node.map(getTextContent).join('');
-  }
+/**
+ * Whether the OS is asking for less movement, read when it matters rather than
+ * subscribed to — this only decides how long to wait before tidying up, and a
+ * member who flips the setting mid-click is not a case worth a listener for.
+ */
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
-  if (isValidElement(node)) {
-    return getTextContent(node.props.children);
-  }
+/** Two frames, so React has committed the first value before the second lands. */
+const afterPaint = (fn: () => void) =>
+  requestAnimationFrame(() => requestAnimationFrame(fn));
 
-  return '';
-};
+/**
+ * Collapsed/expanded state for text clipped to a number of lines.
+ *
+ * Both states render the same children and the clipping is a `max-height`, which
+ * is what makes the change animatable at all — the previous character-count
+ * version swapped one node tree for another, so there was never anything on the
+ * page for a transition to reveal.
+ *
+ * ## Why not `-webkit-line-clamp`
+ *
+ * The clamp would give the cut line an ellipsis, but it takes the height with
+ * it: under a clamp `scrollHeight` collapses to the clipped height, so there is
+ * no way left to ask whether anything is hidden, and the link that opens the
+ * text can never appear. A `max-height` of whole `lh` units cuts on the same
+ * line boundary, keeps `scrollHeight` honest, and is the thing being animated
+ * anyway.
+ *
+ * ## Why two commits per direction
+ *
+ * `max-height` only animates between two lengths, and each direction begins on a
+ * value that is not one. Opening ends at `none` so a later reflow — a resize, a
+ * font swap — is not trapped under a stale pixel count; closing therefore has to
+ * pin the height it is leaving for one frame before releasing it.
+ */
+export const useExpandableText = (lineClamp: number) => {
+  const contentRef = useRef<HTMLDivElement>(null);
+  const settleTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
-// Utility function to truncate ReactNode content while preserving structure
-const truncateReactNode = (
-  node: React.ReactNode,
-  charLimit: number,
-  currentLength = 0
-): { truncated: React.ReactNode; length: number } => {
-  if (currentLength >= charLimit) {
-    return { truncated: null, length: currentLength };
-  }
+  const [isExpanded, setIsExpanded] = useState(false);
+  /** `undefined` means "rest at the line multiple" — see the component. */
+  const [maxHeight, setMaxHeight] = useState<string>();
+  /** Until we know something is hidden, no link is offered. */
+  const [isOverflowing, setIsOverflowing] = useState(false);
 
-  if (typeof node === 'string' || typeof node === 'number') {
-    const text = String(node);
-    const remainingChars = charLimit - currentLength;
+  useLayoutEffect(() => {
+    const el = contentRef.current;
+    if (!el) return;
 
-    if (text.length <= remainingChars) {
-      return { truncated: node, length: currentLength + text.length };
-    }
-
-    return {
-      truncated: text.slice(0, remainingChars) + '…',
-      length: charLimit,
+    // Only meaningful while collapsed; open, the two heights are equal.
+    const check = () => {
+      if (!isExpanded) setIsOverflowing(el.scrollHeight > el.clientHeight + 1);
     };
-  }
+    check();
 
-  if (Array.isArray(node)) {
-    const truncatedChildren: React.ReactNode[] = [];
-    let totalLength = currentLength;
+    // How many lines the text takes depends on width, so a resize can create or
+    // remove the overflow entirely.
+    const observer = new ResizeObserver(check);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [lineClamp, isExpanded]);
 
-    for (const child of node) {
-      if (totalLength >= charLimit) break;
-
-      const { truncated, length } = truncateReactNode(
-        child,
-        charLimit,
-        totalLength
-      );
-      if (truncated !== null) {
-        truncatedChildren.push(truncated);
-      }
-      totalLength = length;
-    }
-
-    return { truncated: truncatedChildren, length: totalLength };
-  }
-
-  if (isValidElement(node)) {
-    const { truncated: truncatedChildren, length } = truncateReactNode(
-      node.props.children,
-      charLimit,
-      currentLength
-    );
-
-    if (truncatedChildren === null) {
-      return { truncated: null, length };
-    }
-
-    return {
-      truncated: {
-        ...node,
-        props: {
-          ...node.props,
-          children: truncatedChildren,
-        },
-      },
-      length,
-    };
-  }
-
-  return { truncated: node, length: currentLength };
-};
-
-export const useExpandableText = (
-  children: React.ReactNode,
-  charLimit = 100
-) => {
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
-
-  const textContent = useMemo(() => getTextContent(children), [children]);
-  const isLong = textContent.length > charLimit;
-
-  const displayText = useMemo(() => {
-    if (isExpanded || !isLong) return children;
-
-    const { truncated } = truncateReactNode(children, charLimit);
-    return truncated;
-  }, [isExpanded, isLong, children, charLimit]);
+  useEffect(() => () => clearTimeout(settleTimer.current), []);
 
   const handleToggle = useCallback((event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
-    setIsExpanded((prev) => !prev);
+
+    const el = contentRef.current;
+    if (!el) return;
+    clearTimeout(settleTimer.current);
+
+    const settle = prefersReducedMotion() ? 0 : MOTION_DURATION_MS.base;
+
+    setIsExpanded((wasExpanded) => {
+      if (wasExpanded) {
+        setMaxHeight(`${el.scrollHeight}px`); // pin the height being left
+        afterPaint(() => setMaxHeight(undefined)); // → line multiple; animates
+        return false;
+      }
+
+      setMaxHeight(`${el.scrollHeight}px`); // full height; animates open
+      settleTimer.current = setTimeout(() => setMaxHeight('none'), settle);
+      return true;
+    });
   }, []);
 
-  return { isExpanded, isLong, displayText, handleToggle };
+  return { contentRef, isExpanded, isOverflowing, maxHeight, handleToggle };
 };
