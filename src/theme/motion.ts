@@ -221,6 +221,41 @@ export const animationStyles = {
   },
 
   /**
+   * The radio's mark: the ring fills, then the dot springs in 60ms later — the
+   * same two beats as the checkbox, "pressed" then "confirmed".
+   *
+   * An animation rather than a transition, for the same reason the checkmark is
+   * one: Chakra only mounts `.dot` once the item is checked, so there is no
+   * previous value for a transition to interpolate from. Scale is the only thing
+   * a dot can do, and `overshoot` is what makes 8px of growth legible — it
+   * reverses direction, which the other curves do not.
+   *
+   * Unlike `checkmarkDraw`, the reduced-motion branch only has to switch the
+   * animation off: the recipe already declares the dot's resting `scale: 0.4`,
+   * so removing the animation lands it exactly where it belongs. The checkmark
+   * has to undo its dash pattern as well, because that one is only correct
+   * *while* the animation runs.
+   *
+   * The fill transition lives here too rather than in `feedback`, because this
+   * element is both the ring that fills and the dot's parent, and it can only
+   * carry one `animationStyle`.
+   */
+  dotPop: {
+    value: {
+      transitionProperty: 'background-color, border-color',
+      transitionDuration: 'fast',
+      transitionTimingFunction: 'standard',
+      '& .dot': {
+        animation: `dot-pop var(--chakra-durations-motion-base) var(--chakra-easings-overshoot) 60ms both`,
+      },
+      _motionReduce: {
+        transitionDuration: 'motion.instant',
+        '& .dot': { animation: 'none' },
+      },
+    },
+  },
+
+  /**
    * Strokes a checkmark on instead of flashing it in, 60ms after the box fills.
    *
    * **Not general.** Unlike the four intents, this one is sized to one icon: the
@@ -270,6 +305,13 @@ export const keyframes = {
   'modal-out': {
     from: { opacity: '1', scale: '1' },
     to: { opacity: '0', scale: '0.97' },
+  },
+  // The dot only mounts on check, so it grows from nothing. `0.4` is where
+  // Chakra's radiomark recipe rests it; ending anywhere else would make the dot
+  // jump the moment the animation hands back.
+  'dot-pop': {
+    from: { scale: '0' },
+    to: { scale: '0.4' },
   },
   'checkmark-draw': {
     // Negative, not positive. Chakra's polyline runs `20 6 → 9 17 → 4 12`, so

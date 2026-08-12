@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { system } from './index';
-import { animationStyles } from './motion';
+import { animationStyles, keyframes } from './motion';
 
 /** The presets that carry a `transition-*` clock, as opposed to the two hatches. */
 const CLOCKED = ['press', 'feedback', 'travel', 'spring'] as const;
@@ -97,5 +97,38 @@ describe('motion vocabulary', () => {
     expect(applied('checkmarkDraw')[REDUCED_QUERY]).toEqual({
       '& polyline, & path': { animation: 'none', strokeDasharray: 'none' },
     });
+  });
+});
+
+/**
+ * Two presets drive a `keyframes` animation rather than a transition, because
+ * the element they animate only mounts once its control is checked — there is
+ * no previous value to interpolate from. They turn off differently from each
+ * other, which is the part that is easy to get wrong.
+ */
+describe('the two mount-time animations', () => {
+  it('lands the radio dot exactly where its recipe rests it', () => {
+    // Chakra's radiomark declares `.dot { scale: 0.4 }`. Ending the keyframe
+    // anywhere else would make the dot jump the frame the animation hands back.
+    expect(keyframes['dot-pop'].to).toEqual({ scale: '0.4' });
+    expect(keyframes['dot-pop'].from).toEqual({ scale: '0' });
+  });
+
+  it('needs no cleanup under reduced motion, unlike the checkmark', () => {
+    // Switching the animation off leaves the dot at the recipe's resting scale,
+    // so nothing else has to be undone...
+    expect(applied('dotPop')[REDUCED_QUERY]).toMatchObject({
+      '& .dot': { animation: 'none' },
+    });
+    // ...whereas the checkmark's dash pattern is only correct *while* it runs.
+    expect(applied('checkmarkDraw')[REDUCED_QUERY]).toEqual({
+      '& polyline, & path': { animation: 'none', strokeDasharray: 'none' },
+    });
+  });
+
+  it('still eases the ring fill, since dotPop owns that element too', () => {
+    expect(applied('dotPop').transitionDuration).toBe(
+      'var(--chakra-durations-fast)'
+    );
   });
 });
