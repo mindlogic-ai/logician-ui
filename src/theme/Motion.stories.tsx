@@ -615,6 +615,58 @@ const ScaleRow = ({
 );
 
 /**
+ * One of the three situations that land you on this page: when you are in it,
+ * why the presets do not apply, and the line to write.
+ */
+const WhenCase = ({
+  n,
+  title,
+  when,
+  why,
+  code,
+}: {
+  n: string;
+  title: string;
+  when: string;
+  why: string;
+  code: string;
+}) => (
+  <Box borderTop="1px solid" borderColor="border.subtle" pt={5}>
+    <HStack gap={2} align="baseline" mb={2}>
+      <Text fontFamily="mono" fontSize="sm" color="fg.muted" mb={0}>
+        {n}
+      </Text>
+      <Text fontWeight="700" mb={0}>
+        {title}
+      </Text>
+    </HStack>
+    <Grid
+      templateColumns={{ base: '1fr', lg: '86px 1fr' }}
+      gap={{ base: 1, lg: 4 }}
+      mb={2}
+    >
+      <Subtext color="fg.muted" fontSize="2xs" mb={0}>
+        이런 상황
+      </Subtext>
+      <Subtext mb={0}>{when}</Subtext>
+    </Grid>
+    <Grid
+      templateColumns={{ base: '1fr', lg: '86px 1fr' }}
+      gap={{ base: 1, lg: 4 }}
+      mb={3}
+    >
+      <Subtext color="fg.muted" fontSize="2xs" mb={0}>
+        여기를 보는 이유
+      </Subtext>
+      <Subtext color="fg.muted" mb={0}>
+        {why}
+      </Subtext>
+    </Grid>
+    <Code>{code}</Code>
+  </Box>
+);
+
+/**
  * The raw scale, for the three cases a preset cannot cover.
  *
  * If none of those three is what you are doing, this page is not the one you
@@ -633,40 +685,42 @@ export const Scales: Story = {
     return (
       <Box p={10} maxW="920px">
         <H2 mb={2}>스케일</H2>
-        <Text color="fg.muted" mb={6}>
-          아래 세 경우가 아니면 이 페이지는 볼 필요가 없습니다 — <b>Presets</b>
-          로 가세요.
+        <Text color="fg.muted" mb={7}>
+          여기는 <b>재료</b> 페이지입니다. 컴포넌트에 움직임을 넣는 중이라면{' '}
+          <b>Presets (쓸 때)</b>로 가세요. 아래 세 상황에서만 필요합니다.
         </Text>
 
-        <Stack gap={5} mb={10}>
-          <Box>
-            <Subtext mb={1}>
-              <b>1.</b> framer-motion — CSS 변수를 못 읽으므로 숫자로 넣습니다
-            </Subtext>
-            <Code>{`import { MOTION_DURATION_S, MOTION_EASE } from '@mindlogic-ai/logician-ui';
+        <Stack gap={7} mb={12}>
+          <WhenCase
+            n="1"
+            title="framer-motion을 쓸 때"
+            when="요소가 마운트·언마운트되며 등장하거나 사라질 때, 레이아웃 변화를 따라갈 때, 드래그·제스처, 리스트 순차 등장 — CSS transition으로는 표현이 안 되는 것들입니다. (transition은 사라지는 요소를 잡지 못합니다.)"
+            why="framer-motion은 CSS 변수를 읽지 못하므로 숫자가 필요합니다. 프리셋을 못 쓸 뿐 타이밍 스케일은 그대로 씁니다 — 아래 표의 값을 그대로 가져가세요."
+            code={`import { MOTION_DURATION_S, MOTION_EASE } from '@mindlogic-ai/logician-ui';
 
-<motion.div transition={{ duration: MOTION_DURATION_S.base, ease: MOTION_EASE.emphasized }} />`}</Code>
-          </Box>
-          <Box>
-            <Subtext mb={1}>
-              <b>2.</b> keyframe animation — Chakra prop이 아니라 CSS
-              문자열입니다
-            </Subtext>
-            <Code>{`css={{ animation: 'pop var(--chakra-durations-motion-slow) var(--chakra-easings-emphasized)' }}`}</Code>
-          </Box>
-          <Box>
-            <Subtext mb={1}>
-              <b>3.</b> 새 프리셋을 정의할 때 — <code>src/theme/motion.ts</code>
-            </Subtext>
-            <Code>{`reveal: {
+<motion.div transition={{ duration: MOTION_DURATION_S.base, ease: MOTION_EASE.emphasized }} />`}
+          />
+          <WhenCase
+            n="2"
+            title="keyframe animation을 쓸 때"
+            when="상태가 A에서 B로 바뀌는 게 아니라 스스로 도는 것 — 무한 반복(스켈레톤 시머, 점멸), 중간 경유점이 필요한 동작(셰이크: 좌→우→좌→우), 마운트하자마자 한 번 재생(체크마크 그리기가 이 경우입니다)."
+            why="프리셋의 대안이 아닙니다. 프리셋은 transition-*만, keyframe은 animation-*만 건드리므로 한 요소에 둘 다 붙어도 충돌하지 않습니다 — 예를 들어 hover 색은 feedback, 배경은 펄스. 여기서 가져가는 건 duration과 곡선 값뿐입니다."
+            code={`css={{ animation: 'pop var(--chakra-durations-motion-slow) var(--chakra-easings-emphasized)' }}`}
+          />
+          <WhenCase
+            n="3"
+            title="새 프리셋을 정의할 때"
+            when="넷 중 어디에도 맞지 않는 의도가 여러 컴포넌트에서 반복될 때. 한 번뿐이면 만들지 말고 가장 가까운 프리셋을 쓰세요 — 프리셋이 늘어날수록 고르기가 어려워집니다."
+            why="src/theme/motion.ts에 추가합니다. 아래 스케일에서 duration과 곡선을 골라 조립하면 됩니다. 동작 줄이기 가드를 빠뜨리면 테스트가 잡습니다."
+            code={`reveal: {
   value: {
     transitionProperty: 'none',
     transitionDuration: 'motion.slow',
     transitionTimingFunction: 'emphasized',
     _motionReduce: { transitionDuration: 'motion.instant' },
   },
-},`}</Code>
-          </Box>
+},`}
+          />
         </Stack>
 
         <HStack justify="space-between" align="baseline" mb={4}>
