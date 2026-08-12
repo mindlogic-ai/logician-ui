@@ -191,6 +191,14 @@ export const animationStyles = {
   /**
    * Strokes a checkmark on instead of flashing it in, 60ms after the box fills.
    *
+   * **Not general.** Unlike the four intents, this one is sized to one icon: the
+   * dash is {@link CHECKMARK_DASH} user units, which covers Chakra's ~22.6-unit
+   * checkmark in a 24 viewBox and nothing longer. Applied to a longer path the
+   * far end would never be revealed; applied to a filled (non-stroke) icon
+   * nothing happens at all, because there is no stroke to dash. Another icon
+   * that wants to be drawn on needs its own preset with its own dash length —
+   * measure the path, do not reuse this number.
+   *
    * This is an `animation`, not a transition, and it does not turn off the same
    * way: killing the animation alone would park `stroke-dashoffset` at its start
    * value and leave the tick invisible, so the reduced-motion branch has to undo
@@ -221,7 +229,13 @@ export type MotionStyleToken = keyof typeof animationStyles;
  */
 export const keyframes = {
   'checkmark-draw': {
-    from: { strokeDashoffset: String(CHECKMARK_DASH) },
+    // Negative, not positive. Chakra's polyline runs `20 6 → 9 17 → 4 12`, so
+    // its *start* is the long stroke's top-right tip. A positive offset reveals
+    // from the path start, which draws the tick backwards — right tip down to
+    // the left one. A negative offset reveals from the path *end* instead, so
+    // the stroke grows out of the short left tip and up to the right, the way a
+    // tick is written.
+    from: { strokeDashoffset: String(-CHECKMARK_DASH) },
     to: { strokeDashoffset: '0' },
   },
 };

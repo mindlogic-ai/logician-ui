@@ -12,9 +12,11 @@ import { MOTION_EASE_CSS } from './motion';
 /**
  * # Motion
  *
- * - **Presets** — what to type. Start here.
- * - **Scales** — the raw durations and curves, for the three cases a preset
- *   cannot cover.
+ * - **Presets (쓸 때)** — building a component. What to type. Nearly always this
+ *   page.
+ * - **Scales (만들 때)** — the raw durations and curves. Only for the three
+ *   cases a preset cannot cover: framer-motion, a keyframe string, or defining
+ *   a new preset.
  */
 const meta = {
   title: 'Theme/Motion',
@@ -146,28 +148,47 @@ const Preset = ({ name, timing, pick, code, demo }: PresetProps) => (
   </Box>
 );
 
-/** A track with a dot that runs end to end, so a curve reads as travel. */
-const Runner = ({ style, at }: { style: string; at: boolean }) => (
-  <Box
-    position="relative"
-    h="14px"
-    w="100%"
-    maxW="240px"
-    bg="bg.subtle"
-    borderRadius="full"
-  >
+/**
+ * A track with a dot that runs end to end, so a curve reads as travel.
+ *
+ * The button sits next to the track it moves, and both runners share one piece
+ * of state — pressing either sends both dots at once, which is the only way to
+ * see that `emphasized` and `overshoot` differ over this distance.
+ */
+const Runner = ({
+  style,
+  at,
+  onPlay,
+}: {
+  style: string;
+  at: boolean;
+  onPlay: () => void;
+}) => (
+  <HStack gap={3} w="100%">
     <Box
-      position="absolute"
-      top="1px"
-      left={at ? 'calc(100% - 13px)' : '1px'}
-      w="12px"
-      h="12px"
+      position="relative"
+      h="14px"
+      flex="1"
+      maxW="190px"
+      bg="bg.subtle"
       borderRadius="full"
-      bg="primary.main"
-      animationStyle={style}
-      transitionProperty="left"
-    />
-  </Box>
+    >
+      <Box
+        position="absolute"
+        top="1px"
+        left={at ? 'calc(100% - 13px)' : '1px'}
+        w="12px"
+        h="12px"
+        borderRadius="full"
+        bg="primary.main"
+        animationStyle={style}
+        transitionProperty="left"
+      />
+    </Box>
+    <Button size="xs" variant="outline" onClick={onPlay} flexShrink={0}>
+      재생
+    </Button>
+  </HStack>
 );
 
 const SEGMENTS = [
@@ -184,19 +205,27 @@ const SEGMENTS = [
  * the line.
  */
 export const Presets: Story = {
-  name: 'Presets',
+  name: 'Presets (쓸 때)',
   render: () => {
     const [at, setAt] = useState(false);
     const [checked, setChecked] = useState(false);
     const [on, setOn] = useState(false);
 
+    // Send it back to the start, then off again on the next frame, so "재생"
+    // always runs the same direction however many times it is pressed.
+    const play = () => {
+      setAt(false);
+      requestAnimationFrame(() => requestAnimationFrame(() => setAt(true)));
+    };
+
     return (
       <Box p={10} maxW="1000px">
         <H2 mb={2}>Motion</H2>
         <Text color="fg.muted" mb={8}>
-          움직임은 <b>항상 prop 두 개</b>로 씁니다. 프리셋이 타이밍을, {}
+          움직임은 <b>prop 두 개</b>로 씁니다. 프리셋이 타이밍을, {}
           <code>transitionProperty</code>가 무엇이 움직이는지를 정합니다. 직접
-          숫자를 적을 일은 없습니다.
+          숫자를 적을 일은 없습니다. (<code>press</code>와 아래 예외 셋은 prop이
+          하나입니다.)
         </Text>
 
         <Code>{`<Box animationStyle="feedback" transitionProperty="opacity" />`}</Code>
@@ -274,12 +303,7 @@ export const Presets: Story = {
           틀려도 손해가 가장 작습니다.
         </Subtext>
 
-        <HStack justify="space-between" align="baseline" mb={2}>
-          <H3 mb={0}>넷을 직접 비교</H3>
-          <Button size="xs" variant="outline" onClick={() => setAt((v) => !v)}>
-            이동 재생
-          </Button>
-        </HStack>
+        <H3 mb={2}>넷을 직접 비교</H3>
 
         <Preset
           name="press"
@@ -342,7 +366,7 @@ export const Presets: Story = {
           timing="300ms · emphasized"
           pick="새 위치나 크기로 이동. 거리 대부분을 먼저 덮고 마지막에 자리를 잡아서, 이미 바뀐 값을 따라잡는 것처럼 읽힙니다."
           code={`<Progress.Range animationStyle="travel" transitionProperty="width" />`}
-          demo={<Runner style="travel" at={at} />}
+          demo={<Runner style="travel" at={at} onPlay={play} />}
         />
 
         <Preset
@@ -352,7 +376,7 @@ export const Presets: Story = {
           code={`<Switch.Thumb animationStyle="spring" transitionProperty="translate" />`}
           demo={
             <Stack gap={3} w="100%">
-              <Runner style="spring" at={at} />
+              <Runner style="spring" at={at} onPlay={play} />
               <Switch checked={on} onCheckedChange={(e) => setOn(!!e.checked)}>
                 <Switch.Control />
                 <Switch.Label>알림 받기</Switch.Label>
@@ -403,11 +427,17 @@ export const Presets: Story = {
         <Preset
           name="composite"
           timing="직접 구성 + 동작 줄이기 가드"
-          pick="한 요소에 서로 다른 속도가 둘 필요할 때. Button은 프레스가 120ms인데 색은 150ms입니다. transition 단축 속성을 직접 쓰고 가드만 프리셋에서 받습니다."
-          code={`<ChakraButton
-  transition={buttonTransition}
-  animationStyle="composite"
-/>`}
+          pick="한 요소 안에서 속성마다 다른 속도가 필요할 때. Button은 프레스가 120ms인데 색은 150ms라 duration 하나로 표현이 안 됩니다. 이때만 transition 단축 속성을 직접 조립하고, composite가 주는 것은 동작 줄이기 가드(transition: none) 하나뿐입니다. 값은 반드시 토큰 var()로 적으세요 — 숫자를 적는 순간 스케일 밖으로 나갑니다."
+          code={`// Button.styles.ts — 속성별로 다른 duration이 필요할 때만
+export const buttonTransition = [
+  'scale            var(--chakra-durations-motion-press) var(--chakra-easings-standard)',
+  'background-color var(--chakra-durations-fast)         var(--chakra-easings-standard)',
+  'border-color     var(--chakra-durations-fast)         var(--chakra-easings-standard)',
+  'box-shadow       var(--chakra-durations-fast)         var(--chakra-easings-standard)',
+].join(', ');
+
+// Button.tsx
+<ChakraButton transition={buttonTransition} animationStyle="composite" />`}
           demo={
             <HStack gap={3}>
               <Button colorPalette="primary" variant="solid">
@@ -422,17 +452,26 @@ export const Presets: Story = {
 
         <Preset
           name="arkTravel"
-          timing="travel과 같은 타이밍"
-          pick="Ark가 transition을 인라인 style로 쓰는 파트용. 인라인은 클래스를 이기므로 일반 프리셋이 아예 닿지 않습니다. 라이브러리에서 해당하는 건 SegmentedControl 인디케이터 하나뿐입니다."
-          code={`<SegmentGroup.Indicator animationStyle="arkTravel" />`}
+          timing="travel과 같은 타이밍 · prop 하나"
+          pick="Ark가 이 파트의 transition-*을 인라인 style로 씁니다. 인라인은 클래스를 이기므로 여기서는 transitionProperty를 넘겨도 무시됩니다 — 무엇이 움직이는지(left, top, width, height)까지 Ark가 인라인으로 정해두기 때문입니다. Ark가 var()로 열어둔 건 duration과 곡선 둘뿐이고, arkTravel이 그 두 커스텀 속성을 채웁니다. 라이브러리에서 해당하는 건 SegmentedControl 인디케이터 하나뿐입니다."
+          code={`// property는 넘기지 않습니다 — 넘겨도 인라인에 밀립니다
+<SegmentGroup.Indicator animationStyle="arkTravel" />
+
+// Ark가 이 요소에 직접 써두는 것
+//   --transition-property: left, top, width, height;   ← 인라인, 못 바꿈
+//   transition-property: var(--transition-property);   ← 인라인, 못 바꿈
+//   transition-duration: var(--transition-duration, 150ms);   ← 이 var를 채움
+//   transition-timing-function: var(--transition-timing-function);`}
           demo={<SegmentedControl options={SEGMENTS} />}
         />
 
         <Preset
           name="checkmarkDraw"
-          timing="300ms · emphasized · 60ms 지연"
-          pick="체크마크를 그려서 표시. transition이 아니라 keyframe animation이라 별도로 있습니다."
-          code={`<Checkbox.Indicator animationStyle="checkmarkDraw" />`}
+          timing="300ms · emphasized · 60ms 지연 · prop 하나"
+          pick="체크마크를 왼쪽 짧은 획에서 오른쪽으로 그립니다. transition이 아니라 keyframe animation이라 별도로 있습니다. 다른 셋과 달리 범용이 아닙니다 — dash 길이 24가 Chakra 체크마크(약 22.6 단위) 하나에 맞춰져 있어서, 더 긴 path는 끝까지 그려지지 않고 fill 기반 아이콘은 그릴 stroke 자체가 없어 아무 일도 일어나지 않습니다. 다른 아이콘을 그리려면 그 path 길이를 재서 프리셋을 따로 만드세요."
+          code={`<Checkbox.Indicator animationStyle="checkmarkDraw" />
+
+// 쓸 수 있는 조건: stroke 기반 아이콘(fill: none) + path 길이 ≤ 24`}
           demo={
             <HStack gap={4}>
               <Checkbox
@@ -582,7 +621,7 @@ const ScaleRow = ({
  * need — go back to Presets.
  */
 export const Scales: Story = {
-  name: 'Scales',
+  name: 'Scales (만들 때)',
   render: () => {
     const [at, setAt] = useState(false);
     const [ms, setMs] = useState(500);
