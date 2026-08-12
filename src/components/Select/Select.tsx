@@ -27,6 +27,9 @@ const Content = forwardRef<HTMLDivElement, ChakraSelect.ContentProps>(
     return (
       <ChakraSelect.Content
         ref={ref}
+        // Chakra closes this one over `fastest` (50ms), which is fast enough to
+        // read as the list being cut off rather than dismissed.
+        animationStyle="presence"
         {...props}
         css={mergeCss(contentStyles, css)}
       />

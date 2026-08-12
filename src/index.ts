@@ -77,6 +77,7 @@ export * from './components/SeeMoreButton';
 export * from './components/SegmentedControl';
 export * from './components/SegmentedProgressBar';
 export * from './components/Select';
+export * from './components/Skeleton';
 export * from './components/Slider';
 export * from './components/Spinner';
 export * from './components/Swap';
@@ -126,7 +127,13 @@ export {
   MOTION_DURATION_S,
   MOTION_EASE,
   MOTION_EASE_CSS,
+  MOTION_STAGGER_MAX,
   type MotionDurationToken,
   type MotionEaseToken,
   type MotionStyleToken,
 } from './theme/motion';
+export {
+  staggerDelayMs,
+  type StaggerProps,
+  staggerProps,
+} from './utils/staggerProps';

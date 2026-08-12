@@ -539,6 +539,30 @@ export const buttonTransition = [
             </HStack>
           }
         />
+        <H3 mt={10} mb={2}>
+          여기 없는 것
+        </H3>
+        <Text color="fg.muted" mb={3}>
+          열림·닫힘(<code>presence</code>), 계속 도는 것(<code>spin</code> ·{' '}
+          <code>pulse</code> · <code>shimmer</code> · <code>indeterminate</code>
+          ), 목록이 차례로 도착하는 것(<code>stagger</code>)은{' '}
+          <b>Theme/Motion Orchestration</b>에 있습니다. 한 요소가 한 번
+          움직이는 게 아니라 상태·반복·순서를 다루기 때문입니다.
+        </Text>
+
+        <H3 mt={8} mb={2}>
+          새 프리셋을 추가하기 전에
+        </H3>
+        <Text color="fg.muted" mb={10}>
+          <b>
+            새 프리셋에는 기존 어휘로 표현할 수 없는 실제 호출부가 둘
+            필요합니다.
+          </b>{' '}
+          하나뿐이면 그건 어휘가 아니라 그 컴포넌트의 사정이고,{' '}
+          <code>composite</code>가 그 자리를 위해 있습니다. 프리셋이 스무 개가
+          되면 프리셋이 없는 것과 같습니다 — 고르는 비용이 직접 적는 비용을
+          넘어서는 순간부터 아무도 고르지 않기 때문입니다.
+        </Text>
       </Box>
     );
   },
@@ -552,10 +576,27 @@ const OURS = [
     ms: 0,
     use: '동작 줄이기가 넣는 값. 직접 쓸 일은 없습니다',
   },
+  {
+    name: 'motion.beat',
+    ms: 60,
+    use: '한 동작을 두 박자로 나누는 간격 (checkmarkDraw · dotPop)',
+  },
   { name: 'motion.press', ms: 120, use: 'press 프리셋이 씁니다' },
   { name: 'motion.base', ms: 300, use: 'travel · spring 프리셋이 씁니다' },
   { name: 'motion.slow', ms: 500, use: '화면을 가로지르는 이동 (프리셋 없음)' },
   { name: 'motion.slower', ms: 700, use: '카운트업 (프리셋 없음)' },
+  {
+    name: 'motion.stagger.step',
+    ms: 35,
+    use: '목록 항목 사이 간격 (stagger 프리셋)',
+  },
+  { name: 'motion.loop.turn', ms: 650, use: '스피너 한 바퀴 (spin)' },
+  { name: 'motion.loop.ambient', ms: 1200, use: '제자리 호흡 (pulse)' },
+  {
+    name: 'motion.loop.sweep',
+    ms: 1800,
+    use: '컨테이너를 가로지르는 한 번 (shimmer · indeterminate)',
+  },
 ];
 
 const CHAKRAS = [

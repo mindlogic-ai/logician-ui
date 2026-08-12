@@ -49,6 +49,11 @@ export const Tooltip = forwardRef(
               py={1}
               borderRadius="md"
               maxW="320px"
+              // The one part whose recipe timing was symmetric — 150ms both
+              // ways — which is why a tooltip used to feel like it was being
+              // peeled off the trigger. It has the shortest dwell of anything
+              // here, so the exit being half the enter matters most.
+              animationStyle="presence"
               {...contentProps}
               css={mergeCss(
                 { '--tooltip-bg': 'var(--chakra-colors-gray-1200)' },
