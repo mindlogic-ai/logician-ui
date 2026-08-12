@@ -52,7 +52,7 @@ inline `var()`s read, which is what `arkTravel` sets.
 **Button** splits the press out of its blanket transition. `transitionProperty="all"`
 at a flat `0.25s` put the press on the same clock as a colour change. The press
 is also now the individual `scale` property rather than `transform: scale()`,
-which used to *replace* a transform the call site had set for positioning.
+which used to _replace_ a transform the call site had set for positioning.
 
 **Switch** gives the thumb the `overshoot` curve — the only one that survives
 ~16px of travel, because it reverses direction.
@@ -79,3 +79,31 @@ files. `Card` hover now runs at 150ms rather than 300ms, `ColorModeToggle` at
 that needs a measured height (which is why Chakra's own `expand-height`
 interpolates to a `--height` Ark sets), so it should be rebuilt on the
 `Collapsible` primitive as its own change.
+
+## Proposals checked and not taken
+
+Recorded with the evidence so the same four do not come back around. The common
+thread: a component file being silent about motion does not mean it has none —
+these behaviours live in Chakra's recipes and in Ark's runtime, neither of which
+a grep over `src/components` ever sees.
+
+- **Modal, "exit in half the enter time"** — already true before this change:
+  `motionPreset: "scale"` is the default and gives content 200ms in / 100ms out.
+  What was missing was the travel and the curve, which this release adds.
+- **Accordion, "grid-template-rows 0fr→1fr to drop the JS measurement"** — the
+  height already animates (`expand-height` at `moderate`). The grid technique is
+  not reachable without replacing Chakra's content slot: Ark's presence sets
+  `hidden` on the collapsed panel, and a `display: none` element cannot
+  transition its rows. Nothing a reader would see changes either way, so this is
+  a robustness refactor rather than a motion change.
+- **Menu, "300ms hover-intent on open"** — hover-intent already exists, at
+  100ms: Zag opens a submenu on `TRIGGER_POINTERMOVE` through an `opening` state
+  whose `waitForOpenDelay` is a 100ms timer that `TRIGGER_POINTERLEAVE` cancels.
+  Root menus open on click, so the scenario the proposal described — a row of
+  triggers that flicker as the cursor crosses them — does not exist here at all.
+  The delay is hardcoded in the machine with no prop, so 300ms is not reachable
+  without owning the open state.
+- **Button `loading`** — the prop exists and is inherited from Chakra, and
+  `Loader` preserves the button's width when used without `loadingText`. But the
+  proposal's actual point was a label _swap_ changing the width, which Chakra
+  does not address; that is what `Swap` now does.

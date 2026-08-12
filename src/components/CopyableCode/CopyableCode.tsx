@@ -6,6 +6,7 @@ import { useTranslate } from '@/hooks/useTranslate';
 import { Button } from '../Button';
 import { Card } from '../Card';
 import { FaCheck, FaRegCopy } from '../Icon';
+import { Swap } from '../Swap';
 import { CopyableCodeProps } from './CopyableCode.types';
 
 /** How long the button stays in its confirmed state before reverting, in ms. */
@@ -75,33 +76,21 @@ export const CopyableCode = ({
         transform="translateY(-50%)"
         zIndex={1}
       >
-        {/* Both icons occupy the same cell so the button keeps its width while
-            they cross, and the check lands with a slight overshoot. */}
-        <Box display="grid" placeItems="center" flexShrink={0}>
-          <Box
-            gridArea="1 / 1"
-            display="grid"
-            placeItems="center"
-            opacity={copied ? 0 : 1}
-            transform={copied ? 'scale(0.5)' : undefined}
-            animationStyle="feedback"
-            transitionProperty="opacity, transform"
-          >
+        {/* Icon *and* label swap together, in one cell. The label is the part
+            that mattered: "복사" → "복사 완료" is two characters wider, and this
+            button is absolutely positioned against the right edge, so growing
+            it walked the button leftwards over the code the moment it was
+            clicked. Swap sizes to the widest state, so it no longer moves. */}
+        <Swap value={copied ? 'done' : 'idle'}>
+          <Swap.Case value="idle">
             <FaRegCopy boxSize="xs" />
-          </Box>
-          <Box
-            gridArea="1 / 1"
-            display="grid"
-            placeItems="center"
-            opacity={copied ? 1 : 0}
-            transform={copied ? undefined : 'scale(0.5)'}
-            animationStyle="spring"
-            transitionProperty="opacity, transform"
-          >
+            {translate('copy')}
+          </Swap.Case>
+          <Swap.Case value="done">
             <FaCheck boxSize="xs" />
-          </Box>
-        </Box>
-        {translate(copied ? 'copied' : 'copy')}
+            {translate('copied')}
+          </Swap.Case>
+        </Swap>
       </Button>
     </Flex>
   );

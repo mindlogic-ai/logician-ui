@@ -4,7 +4,14 @@ import { useState } from 'react';
 
 import { Button } from '../components/Button';
 import { Checkbox } from '../components/Checkbox';
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+} from '../components/Modal';
 import { SegmentedControl } from '../components/SegmentedControl';
+import { Swap } from '../components/Swap';
 import { Switch } from '../components/Switch';
 import { H2, H3, Subtext, Text } from '../components/Typography';
 import { MOTION_EASE_CSS } from './motion';
@@ -111,6 +118,10 @@ const RECIPES = [
     task: '아이콘 두 개가 자리를 바꾼다',
     line: 'animationStyle="spring" transitionProperty="opacity, transform"',
   },
+  {
+    task: '버튼 라벨이 상태에 따라 바뀐다 (폭이 변하면 안 됨)',
+    line: '<Swap value={done ? "done" : "idle"}> … </Swap>',
+  },
 ];
 
 interface PresetProps {
@@ -197,6 +208,32 @@ const SEGMENTS = [
   { label: '완료', value: 'done' },
 ];
 
+/** The real Modal, so the enter/exit timing is the shipped one. */
+const ModalDemo = () => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button size="xs" variant="outline" onClick={() => setOpen(true)}>
+        모달 열기
+      </Button>
+      <Modal open={open} onOpenChange={(e) => setOpen(e.open)}>
+        <ModalContent maxW="320px">
+          <ModalHeader>진입과 퇴장</ModalHeader>
+          <ModalBody>
+            <Text mb={4}>
+              바깥을 클릭해 닫아 보세요. 퇴장이 진입의 절반입니다.
+            </Text>
+            <Button size="xs" onClick={() => setOpen(false)}>
+              닫기
+            </Button>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+};
+
 /**
  * What to type.
  *
@@ -224,7 +261,7 @@ export const Presets: Story = {
         <Text color="fg.muted" mb={8}>
           움직임은 <b>prop 두 개</b>로 씁니다. 프리셋이 타이밍을, {}
           <code>transitionProperty</code>가 무엇이 움직이는지를 정합니다. 직접
-          숫자를 적을 일은 없습니다. (<code>press</code>와 아래 예외 셋은 prop이
+          숫자를 적을 일은 없습니다. (<code>press</code>와 아래 예외들은 prop이
           하나입니다.)
         </Text>
 
@@ -423,6 +460,17 @@ export const Presets: Story = {
         <Subtext color="fg.muted" mb={5}>
           만드는 컴포넌트가 아래에 해당하지 않으면 볼 필요 없습니다.
         </Subtext>
+
+        <Preset
+          name="modal"
+          timing="진입 300ms · emphasized / 퇴장 150ms · standard"
+          pick="한 요소가 _open과 _closed 두 상태를 모두 가질 때. 진입은 아래에서 작게 올라오고, 퇴장은 이동 없이 줄어들며 절반의 시간에 끝납니다 — 나가는 것에 시선을 끌 이유가 없기 때문입니다. Modal이 이미 쓰고 있어 직접 적을 일은 없습니다."
+          code={`<Dialog.Content animationStyle="modal" />
+
+// 동작 줄이기에서는 duration을 0으로 만들지 않고 이동만 뺍니다 —
+// 아무 전환 없이 나타나는 모달은 페이지가 바뀐 것처럼 읽힙니다.`}
+          demo={<ModalDemo />}
+        />
 
         <Preset
           name="composite"

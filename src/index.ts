@@ -79,6 +79,7 @@ export * from './components/SegmentedProgressBar';
 export * from './components/Select';
 export * from './components/Slider';
 export * from './components/Spinner';
+export * from './components/Swap';
 export * from './components/Switch';
 
 // Layout Components

@@ -189,6 +189,38 @@ export const animationStyles = {
   },
 
   /**
+   * The Modal's own enter and exit, on one element via `_open` / `_closed`.
+   *
+   * Chakra's `motionPreset: "scale"` already gets the ratio right — 200ms in,
+   * 100ms out — but scales from a flat 0.95 with no vertical travel and no
+   * named curve. This enters from slightly lower and smaller so the dialog
+   * reads as coming toward the reader, and leaves by shrinking a little without
+   * the travel, because an exit only has to get out of the way.
+   *
+   * Reduced motion keeps a plain fade rather than zeroing the duration: a modal
+   * appearing with no transition at all reads as a page swap. The movement is
+   * what has to go, not the fact that something changed.
+   */
+  modal: {
+    value: {
+      _open: {
+        animationName: 'modal-in',
+        animationDuration: 'motion.base',
+        animationTimingFunction: 'emphasized',
+      },
+      _closed: {
+        animationName: 'modal-out',
+        animationDuration: 'fast',
+        animationTimingFunction: 'standard',
+      },
+      _motionReduce: {
+        _open: { animationName: 'fade-in' },
+        _closed: { animationName: 'fade-out' },
+      },
+    },
+  },
+
+  /**
    * Strokes a checkmark on instead of flashing it in, 60ms after the box fills.
    *
    * **Not general.** Unlike the four intents, this one is sized to one icon: the
@@ -228,6 +260,17 @@ export type MotionStyleToken = keyof typeof animationStyles;
  * draws it without swapping in a custom icon.
  */
 export const keyframes = {
+  // Enter from slightly below and smaller; leave by shrinking in place. The
+  // exit deliberately drops the translate — travelling away draws the eye to
+  // something that is leaving.
+  'modal-in': {
+    from: { opacity: '0', scale: '0.94', translate: '0 10px' },
+    to: { opacity: '1', scale: '1', translate: '0 0' },
+  },
+  'modal-out': {
+    from: { opacity: '1', scale: '1' },
+    to: { opacity: '0', scale: '0.97' },
+  },
   'checkmark-draw': {
     // Negative, not positive. Chakra's polyline runs `20 6 → 9 17 → 4 12`, so
     // its *start* is the long stroke's top-right tip. A positive offset reveals
