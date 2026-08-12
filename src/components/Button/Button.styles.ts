@@ -34,9 +34,17 @@ const STANDARD = 'var(--chakra-easings-standard)';
 
 export const buttonTransition = [
   `scale ${PRESS} ${STANDARD}`,
-  ...['background-color', 'border-color', 'color', 'box-shadow', 'opacity'].map(
-    (property) => `${property} ${FEEDBACK} ${STANDARD}`
-  ),
+  ...[
+    'background-color',
+    'border-color',
+    'color',
+    'box-shadow',
+    'opacity',
+    // Both moved by `lift`, listed unconditionally because a property nobody
+    // changes costs nothing, and leaving them out would make the opt-in jump.
+    'translate',
+    'filter',
+  ].map((property) => `${property} ${FEEDBACK} ${STANDARD}`),
 ].join(', ');
 
 /**

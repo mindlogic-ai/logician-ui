@@ -18,13 +18,39 @@ import { ButtonProps } from './Button.types';
  * <Button colorPalette="danger" variant="solid">Delete</Button>
  * <Button colorPalette="secondary" variant="outline">Cancel</Button>
  * <Button colorPalette="neutral" variant="ghost">Close</Button>
+ * <Button colorPalette="primary" variant="solid" lift>Get started</Button>
  * ```
  */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ colorPalette, variant = 'soft', size, children, ...rest }, ref) => {
+  ({ colorPalette, variant = 'soft', size, lift, children, ...rest }, ref) => {
     const palette = colorPalette ?? 'primary';
 
-    const styles = getButtonStyles(palette, variant);
+    const base = getButtonStyles(palette, variant);
+
+    // Merged rather than spread after: each variant already owns `_hover` and
+    // `_active` for its colours, and replacing either would drop them.
+    const styles = lift
+      ? {
+          ...base,
+          _hover: {
+            ...base._hover,
+            translate: '0 -1px',
+            // `drop-shadow`, not `box-shadow`. The keyboard focus ring is a
+            // box-shadow, and Chakra emits `:hover` after `:focus-visible`, so
+            // a focused button being hovered would lose its ring to this. A
+            // different property cannot collide with it at all — and unlike a
+            // box-shadow it follows the border radius for free.
+            filter: 'drop-shadow(0 3px 6px rgba(0, 0, 0, 0.18))',
+            // A black shadow does nothing on a dark canvas; deepen it there.
+            _dark: { filter: 'drop-shadow(0 3px 8px rgba(0, 0, 0, 0.55))' },
+          },
+          // Pressing puts it back on the surface, under the `scale`.
+          _active: { ...base._active, translate: '0 0', filter: 'none' },
+          // `:hover` still matches a disabled button, so the lift has to be
+          // switched off here rather than left to pointer-events.
+          _disabled: { translate: '0 0', filter: 'none' },
+        }
+      : base;
 
     /**
      * Chakra Button automatically maps size prop to textStyle:
