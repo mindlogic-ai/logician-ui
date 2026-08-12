@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 
 import { useTranslate } from '@/hooks/useTranslate';
-import { transitions } from '@/theme/motion';
 
 import { Button } from '../Button';
 import { Card } from '../Card';
@@ -85,7 +84,8 @@ export const CopyableCode = ({
             placeItems="center"
             opacity={copied ? 0 : 1}
             transform={copied ? 'scale(0.5)' : undefined}
-            {...transitions.feedback('opacity, transform')}
+            animationStyle="feedback"
+            transitionProperty="opacity, transform"
           >
             <FaRegCopy boxSize="xs" />
           </Box>
@@ -95,7 +95,8 @@ export const CopyableCode = ({
             placeItems="center"
             opacity={copied ? 1 : 0}
             transform={copied ? undefined : 'scale(0.5)'}
-            {...transitions.spring('opacity, transform')}
+            animationStyle="spring"
+            transitionProperty="opacity, transform"
           >
             <FaCheck boxSize="xs" />
           </Box>

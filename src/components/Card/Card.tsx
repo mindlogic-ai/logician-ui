@@ -1,8 +1,6 @@
 import { forwardRef } from 'react';
 import { Card as ChakraCard } from '@chakra-ui/react';
 
-import { transitions } from '@/theme/motion';
-
 import { clickableStyles, variantStyles } from './Card.styles';
 import { CardProps } from './Card.types';
 
@@ -29,7 +27,8 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         // Was `transitionDuration="normal"` — a Chakra v2 token absent from v3.
         // It fell through as a literal, `transition-duration: normal` is invalid
         // CSS, and the whole declaration was dropped, so hover never transitioned.
-        {...transitions.feedback('common')}
+        animationStyle="feedback"
+        transitionProperty="common"
         p={8}
         {...(clickable ? { cursor: clickableStyles.cursor } : {})}
         {...variantStyles[variant]}

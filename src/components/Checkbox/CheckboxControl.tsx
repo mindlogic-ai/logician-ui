@@ -4,7 +4,6 @@ import {
   CheckboxControlProps,
 } from '@chakra-ui/react';
 
-import { checkmarkDraw, transitions } from '@/theme/motion';
 import { focusRing } from '@/utils/focusRing';
 
 export const CheckboxControl = forwardRef<HTMLDivElement, CheckboxControlProps>(
@@ -30,17 +29,14 @@ export const CheckboxControl = forwardRef<HTMLDivElement, CheckboxControlProps>(
       // The box fills first, then the tick is stroked on 60ms later. Firing them
       // together reads as one indistinct flash; the gap makes it two beats —
       // "pressed", then "confirmed".
-      {...transitions.feedback('background-color, border-color')}
+      animationStyle="feedback"
+      transitionProperty="background-color, border-color"
       {...focusRing}
       {...props}
     >
-      <ChakraCheckbox.Indicator
-        // Chakra's checkmark is already stroke-based (`fill: none`,
-        // `stroke: currentColor`, `polyline points="20 6 9 17 4 12"`), so a dash
-        // offset draws it without swapping in a custom icon. The polyline only
-        // mounts once checked, so this runs on mount — exactly when we want it.
-        css={checkmarkDraw}
-      />
+      {/* The polyline only mounts once checked, so the draw runs on mount —
+          exactly when we want it. */}
+      <ChakraCheckbox.Indicator animationStyle="checkmarkDraw" />
     </ChakraCheckbox.Control>
   )
 );

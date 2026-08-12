@@ -1,7 +1,6 @@
 import { forwardRef } from 'react';
 import { Switch as ChakraSwitch, SwitchControlProps } from '@chakra-ui/react';
 
-import { transitions } from '@/theme/motion';
 import { focusRing } from '@/utils/focusRing';
 
 export const SwitchControl = forwardRef<HTMLSpanElement, SwitchControlProps>(
@@ -15,7 +14,8 @@ export const SwitchControl = forwardRef<HTMLSpanElement, SwitchControlProps>(
       // The checked state is the self-defining primary.main fill.
       bg="bg.track"
       _checked={{ bg: 'primary.main' }}
-      {...transitions.feedback('background-color')}
+      animationStyle="feedback"
+      transitionProperty="background-color"
       {...focusRing}
       {...props}
     >
@@ -25,7 +25,8 @@ export const SwitchControl = forwardRef<HTMLSpanElement, SwitchControlProps>(
         // is `translate` over `fast` on a plain curve; `overshoot` is the one
         // curve that stays legible over the thumb's ~16px of travel, because it
         // reverses direction — `standard` vs `emphasized` would not.
-        {...transitions.spring('translate')}
+        animationStyle="spring"
+        transitionProperty="translate"
       />
     </ChakraSwitch.Control>
   )

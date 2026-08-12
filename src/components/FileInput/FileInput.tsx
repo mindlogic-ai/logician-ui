@@ -5,7 +5,6 @@ import { UploadIcon } from '@/components/Icon';
 import { Spinner } from '@/components/Spinner';
 import { Text } from '@/components/Typography';
 import { useTranslate } from '@/hooks/useTranslate';
-import { transitions } from '@/theme/motion';
 
 import { FileInputProps } from './FileInput.types';
 
@@ -79,7 +78,8 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
             opacity={bgImage ? 0 : 1}
             // Was `transition="ease-in"` — a shorthand with only a timing
             // function resolves to 0s, so the hover fade snapped in one frame.
-            {...transitions.feedback('opacity')}
+            animationStyle="feedback"
+            transitionProperty="opacity"
             _groupHover={{ opacity: 1 }} // Set opacity to 1 on parent hover
           >
             {isLoading ? (

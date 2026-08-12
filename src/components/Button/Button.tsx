@@ -1,7 +1,6 @@
 import { forwardRef } from 'react';
 import { Button as ChakraButton } from '@chakra-ui/react';
 
-import { transitions } from '@/theme/motion';
 import { focusRing } from '@/utils/focusRing';
 
 import { buttonTransition, getButtonStyles } from './Button.styles';
@@ -50,7 +49,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         // Explicit identity so the press transitions from a definite value
         // rather than relying on `scale: none` being read as 1.
         scale="1"
-        {...transitions.composite(buttonTransition)}
+        // Two clocks on one element — the press is faster than the colour
+        // change — so the shorthand is written out and only the reduced-motion
+        // guard comes from the vocabulary.
+        transition={buttonTransition}
+        animationStyle="composite"
         ref={ref}
         {...rest}
       >

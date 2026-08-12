@@ -28,13 +28,15 @@ type StyleProps = Partial<ChakraButtonProps>;
  * Naming the properties also stops `all` from animating things nobody asked it
  * to (width, padding) when a consumer changes them on hover.
  */
+const PRESS = 'var(--chakra-durations-motion-press)';
+const FEEDBACK = 'var(--chakra-durations-fast)';
+const STANDARD = 'var(--chakra-easings-standard)';
+
 export const buttonTransition = [
-  'scale var(--chakra-durations-motion-press) var(--chakra-easings-standard)',
-  'background-color var(--chakra-durations-fast) ease-in-out',
-  'border-color var(--chakra-durations-fast) ease-in-out',
-  'color var(--chakra-durations-fast) ease-in-out',
-  'box-shadow var(--chakra-durations-fast) ease-in-out',
-  'opacity var(--chakra-durations-fast) ease-in-out',
+  `scale ${PRESS} ${STANDARD}`,
+  ...['background-color', 'border-color', 'color', 'box-shadow', 'opacity'].map(
+    (property) => `${property} ${FEEDBACK} ${STANDARD}`
+  ),
 ].join(', ');
 
 /**

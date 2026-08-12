@@ -1,75 +1,47 @@
+import type { SystemStyleObject } from '@chakra-ui/react';
+
+/**
+ * The shape of one entry in a Chakra composition slot.
+ *
+ * Not `defineAnimationStyles`: that helper narrows values to the `animation*`
+ * properties, and these presets are mostly `transition*`. Chakra offers three
+ * composition slots — `textStyle`, `layerStyle`, `animationStyle` — and none is
+ * typed for transitions, while the theme slot itself accepts any style object.
+ * Typing it here keeps the values fully checked (conditions and nested selectors
+ * included) without a cast.
+ */
+type MotionStyle = { value: SystemStyleObject };
+
 /**
  * Motion tokens — the timing layer of the design system.
  *
- * Durations and easing curves live here (not inline per animation) so every
- * animated surface shares one vocabulary and one feel — the same reason colors
- * and radii are tokens. Consume these instead of hardcoding a `0.25s` or a
- * `cubic-bezier(...)`.
+ * Laid out like the type layer: a primitive scale ({@link durations},
+ * {@link easings}) plus a named composition on top of it ({@link animationStyles}),
+ * both registered in the theme. Component code names the intent and the timing
+ * comes with it, the same way `textStyle="h3"` carries a family, size, weight,
+ * leading and tracking.
+ *
+ * ```tsx
+ * <Switch.Thumb animationStyle="spring" transitionProperty="translate" />
+ * ```
  *
  * ## Why the durations carry a `motion.` prefix
  *
- * Chakra already ships a duration scale, and three of the names we want are
- * already taken with *different* values:
+ * Chakra already ships a duration scale, and two of the names we want are taken
+ * with *different* values — `slow` is 300ms there and 500ms here, `slower` is
+ * 400ms there and 700ms here. Its `dialog`, `drawer` and `progress` recipes read
+ * those, so redefining them would retime components we do not own. The easings
+ * need no prefix: Chakra's are `ease-in` / `ease-out` / `ease-in-out` /
+ * `ease-in-smooth`, so ours collide with nothing.
  *
- * | name     | Chakra | ours  |
- * | -------- | ------ | ----- |
- * | `fast`   | 150ms  | 150ms |
- * | `slow`   | 300ms  | 500ms |
- * | `slower` | 400ms  | 700ms |
- *
- * Redefining `slow`/`slower` would silently retime every Chakra component that
- * references them — `dialog`, `drawer` and `progress` all do — so a Modal's
- * backdrop would start fading over 500ms because we wanted a *reward flight* to
- * take that long. Prefixing keeps our scale and Chakra's side by side, and the
- * one thing a shared library must not do is change the meaning of a token it
- * did not define.
- *
- * The easings need no prefix: Chakra's are `ease-in` / `ease-out` /
- * `ease-in-out` / `ease-in-smooth`, so `standard` / `emphasized` / `overshoot`
- * collide with nothing.
- *
- * ## The two gaps we do NOT fill
- *
- * 150ms and 200ms are deliberately absent from {@link durations} — Chakra's
- * `fast` (150ms) and `moderate` (200ms) already cover them exactly. Adding
- * `motion.fast` next to `fast` would be two names for one number.
- *
- * ## Reduced motion
- *
- * Not handled here — it's a runtime concern. CSS transitions should pair with
- * `_motionReduce`, and animations built on other tech gate on their own
- * `prefers-reduced-motion` read.
- *
- * @example Chakra props
- * ```tsx
- * <Box transitionDuration="motion.base" transitionTimingFunction="emphasized" />
- * ```
- *
- * @example emotion / raw CSS
- * ```ts
- * css={{ animation: `pop var(--chakra-durations-motion-slow) var(--chakra-easings-emphasized)` }}
- * ```
- *
- * @example framer-motion — needs raw numbers, not CSS variables
- * ```tsx
- * <motion.div transition={{ duration: MOTION_DURATION_S.base, ease: MOTION_EASE.emphasized }} />
- * ```
+ * 150ms and 200ms are deliberately absent — Chakra's `fast` and `moderate`
+ * already are those numbers, and two names for one value is worse than a
+ * prefix.
  */
 
 /**
- * Duration tokens, prefixed to sit alongside Chakra's own scale rather than
- * overwrite it. Pick by intent, not by number:
- *
- * - `motion.instant` — no transition; the "off" value for a token slot
- * - `motion.press`   — the physical response to a pointer going down: a sink, a
- *                      colour flip under the finger. Shorter than Chakra's
- *                      `fast` because it has to feel like *contact* rather than
- *                      like an animation
- * - `motion.base`    — the default for most transitions (enter/leave, reveals)
- * - `motion.slow`    — deliberate moves that carry the eye across the UI
- * - `motion.slower`  — count-ups that should feel earned, not instant
- *
- * For 150ms use Chakra's `fast`; for 200ms use Chakra's `moderate`.
+ * The duration scale. Pick a preset from {@link animationStyles} rather than one
+ * of these directly; these are the raw material the presets are built from.
  */
 export const durations = {
   // Nested rather than flat `'motion.base'` keys: both spellings give the same
@@ -77,25 +49,27 @@ export const durations = {
   // variable name (`--chakra-durations-motion\.base`), which is unusable in
   // hand-written CSS. Nesting flattens to a clean `--chakra-durations-motion-base`.
   motion: {
+    /** No transition — the "off" value a reduced-motion guard swaps in. */
     instant: { value: '0ms' },
+    /** Contact: a pointer going down. Shorter than `fast` so it reads as touch. */
     press: { value: '120ms' },
+    /** The default for enters, leaves and reveals. */
     base: { value: '300ms' },
+    /** Deliberate moves that carry the eye across the UI. */
     slow: { value: '500ms' },
+    /** Count-ups that should feel earned. */
     slower: { value: '700ms' },
   },
 };
 
 /**
- * Named easing curves.
+ * The easing curves.
  *
- * - `standard`   — symmetric, unremarkable; for utilitarian transitions
- * - `emphasized` — decisive ease-out; the house curve for enters and reveals.
- *                  Covers ~96% of the distance in the first half of its
- *                  duration, so it reads as *arriving then settling*
- * - `overshoot`  — springs slightly past then settles; reserved for celebratory
- *                  pops and for toggles that should feel physical. Because it
- *                  reverses direction it stays legible even over a few pixels,
- *                  which `standard` ↔ `emphasized` does not
+ * - `standard` — symmetric and unremarkable; utilitarian transitions
+ * - `emphasized` — decisive ease-out, the house curve for arriving at a value.
+ *   Covers ~96% of the distance in the first half of its duration
+ * - `overshoot` — passes the target and settles back. Because it reverses
+ *   direction it stays legible over a few pixels, which the other two do not
  */
 export const easings = {
   standard: { value: 'cubic-bezier(0.4, 0, 0.2, 1)' },
@@ -104,173 +78,150 @@ export const easings = {
 };
 
 /**
- * Turning motion off for someone who asked for less of it.
+ * Reduced motion, applied once per preset rather than per component.
  *
- * `prefers-reduced-motion` is an OS accessibility setting, not a preference in
- * our app. For people with a vestibular disorder, on-screen movement causes
- * dizziness and nausea — it is not a matter of taste. Zeroing the duration keeps
- * the *result* (the switch still flips, the colour still changes) and removes
- * only the travel between states.
+ * `prefers-reduced-motion` is an OS accessibility setting, not a taste — for
+ * someone with a vestibular disorder on-screen movement causes nausea. Zeroing
+ * the duration keeps the *result* (the switch still flips, the colour still
+ * changes) and removes only the travel between states.
  *
- * Spread into every preset below rather than written per component, because
- * "anything that animates must honour this" is a policy, not a decision a
- * component gets to make. Written 13 separate times, the 14th component forgets.
+ * It lives inside the presets because "anything that animates must honour this"
+ * is a policy, not a per-component decision.
  */
 const REDUCED = { _motionReduce: { transitionDuration: 'motion.instant' } };
 
 /**
- * The transition presets — pick by intent, and the timing comes with it.
+ * Dash length for the `checkmark-draw` keyframe. Declared once so the pattern
+ * the tick is hidden behind and the offset the keyframe animates away are the
+ * same number. Chakra's polyline measures ~22.6 user units; 24 clears it.
+ */
+const CHECKMARK_DASH = 24;
+
+/**
+ * The motion vocabulary — four intents, plus two escape hatches.
  *
- * Each takes the property (or properties) to animate, because that part *is*
- * per-element: the Switch moves its thumb, the ProgressBar its width. Naming it
- * is also not optional — CSS defaults `transition-property` to `all`, so a
- * duration on its own quietly animates every property on the element, which is
- * how `Button` ended up transitioning the width and padding a consumer set on
- * hover.
+ * Applied as `animationStyle="<name>"`, the same shape as `textStyle="h3"`, so
+ * a consuming app can remap one in its own config without forking anything.
  *
- * These four are what eight components actually converged on. Before the
- * presets the same "a colour changes on hover" was written with four different
- * easings (`ease-out`, `ease-in`, `ease`, and none at all) across four files.
+ * Each transition preset leaves `transition-property` at `none` and expects the
+ * call site to name what moves, because that part genuinely varies per element —
+ * the Switch moves its thumb, the ProgressBar its width. `none` rather than an
+ * omission is deliberate: CSS defaults `transition-property` to `all`, so a
+ * preset with no property would quietly animate every property on the element
+ * (this is how Button once animated a consumer's width and padding on hover).
+ * Forgetting the prop now means *nothing* moves, which is visible, instead of
+ * *everything* moving, which is not.
  *
- * @example
  * ```tsx
- * <SegmentGroup.Indicator {...transitions.travel('left, width')} />
- * <ChakraSwitch.Thumb {...transitions.spring('translate')} />
+ * <SegmentGroup.Indicator animationStyle="travel" transitionProperty="left, width" />
  * ```
  */
-export const transitions = {
-  /**
-   * The physical response to a pointer going down. Shorter than everything else
-   * because it has to feel like contact rather than like an animation — at
-   * 250ms the finger is gone and the control is still sinking.
-   */
-  press: (property = 'scale') => ({
-    transitionProperty: property,
-    transitionDuration: 'motion.press',
-    transitionTimingFunction: 'standard',
-    ...REDUCED,
-  }),
-
-  /**
-   * Hover and state feedback: a fill, a border, a shadow, an overlay. Quick,
-   * because it answers something the member just did and then gets out of the
-   * way.
-   */
-  feedback: (property: string) => ({
-    transitionProperty: property,
-    transitionDuration: 'fast',
-    transitionTimingFunction: 'standard',
-    ...REDUCED,
-  }),
-
-  /**
-   * Something moves or grows to a new position — an indicator sliding between
-   * segments, a bar filling. `emphasized` covers most of the distance
-   * immediately and settles, which reads as arriving at a value that already
-   * changed rather than accelerating from rest.
-   */
-  travel: (property: string) => ({
-    transitionProperty: property,
-    transitionDuration: 'motion.base',
-    transitionTimingFunction: 'emphasized',
-    ...REDUCED,
-  }),
-
-  /**
-   * A physical state flip, or two things crossing over each other — a switch
-   * thumb, an icon morphing into another. `overshoot` passes the target and
-   * comes back, and because it reverses direction it stays legible even over a
-   * few pixels, which `standard` ↔ `emphasized` does not.
-   */
-  /**
-   * For the rare element that needs two clocks at once, so a single
-   * duration cannot express it — `Button` presses on `motion.press` while its
-   * colour and shadow run on `fast`. Pass the composed shorthand; the
-   * reduced-motion guard comes with it, which is the whole reason this lives
-   * here rather than being hand-written beside the string.
-   */
-  composite: (transition: string) => ({
-    transition,
-    _motionReduce: { transition: 'none' },
-  }),
-
-  /**
-   * For Ark parts that write their own `transition-*` declarations **inline**,
-   * where the presets above are silently ignored — an inline declaration beats
-   * any class rule, so `transitionDuration` as a prop never reaches the element.
-   *
-   * `SegmentGroup.Indicator` is the one in this library: Ark inlines
-   * `transition-property: var(--transition-property)` and
-   * `transition-duration: var(--transition-duration, 150ms)`. What it leaves
-   * open are the custom properties those `var()`s read, so retiming means
-   * setting those instead. Returns a `css` object, not props, because a custom
-   * property is not a style prop.
-   *
-   * The property list stays Ark's (`left, top, width, height`) — it is already
-   * right, and it is the one part written inline that cannot be changed.
-   *
-   * @example
-   * ```tsx
-   * <SegmentGroup.Indicator css={transitions.arkTiming()} />
-   * ```
-   */
-  arkTiming: (
-    duration = '--chakra-durations-motion-base',
-    easing = '--chakra-easings-emphasized'
-  ) => ({
-    '--transition-duration': `var(${duration})`,
-    '--transition-timing-function': `var(${easing})`,
-    '@media (prefers-reduced-motion: reduce)': {
-      '--transition-duration': 'var(--chakra-durations-motion-instant)',
+export const animationStyles = {
+  press: {
+    value: {
+      // The one preset with a real default: a press is a scale, always.
+      transitionProperty: 'scale',
+      transitionDuration: 'motion.press',
+      transitionTimingFunction: 'standard',
+      ...REDUCED,
     },
-  }),
-
-  spring: (property: string) => ({
-    transitionProperty: property,
-    transitionDuration: 'motion.base',
-    transitionTimingFunction: 'overshoot',
-    ...REDUCED,
-  }),
-};
-
-/**
- * Dash length for {@link keyframes}' `checkmark-draw`, exported so the consuming
- * component sets `stroke-dasharray` from the same number the keyframe animates
- * to — two places, one value.
- */
-export const CHECKMARK_DASH = 24;
-
-/**
- * Drawing Chakra's checkmark on, as a style object rather than four lines
- * copied per call site.
- *
- * This is an `animation`, not a transition, and it does **not** turn off the
- * same way. Killing the animation alone would leave `stroke-dashoffset` parked
- * at its start value and the tick invisible, so the reduced-motion branch has to
- * undo `stroke-dasharray` as well — exactly the kind of per-case detail that
- * goes wrong when it is re-derived by hand.
- */
-export const checkmarkDraw = {
-  '& polyline, & path': {
-    strokeDasharray: CHECKMARK_DASH,
-    animation: `checkmark-draw var(--chakra-durations-motion-base) var(--chakra-easings-emphasized) 60ms both`,
   },
-  '@media (prefers-reduced-motion: reduce)': {
-    '& polyline, & path': { animation: 'none', strokeDasharray: 'none' },
+
+  feedback: {
+    value: {
+      transitionProperty: 'none',
+      transitionDuration: 'fast',
+      transitionTimingFunction: 'standard',
+      ...REDUCED,
+    },
   },
-};
+
+  travel: {
+    value: {
+      transitionProperty: 'none',
+      transitionDuration: 'motion.base',
+      transitionTimingFunction: 'emphasized',
+      ...REDUCED,
+    },
+  },
+
+  spring: {
+    value: {
+      transitionProperty: 'none',
+      transitionDuration: 'motion.base',
+      transitionTimingFunction: 'overshoot',
+      ...REDUCED,
+    },
+  },
+
+  /**
+   * For an element that needs two clocks at once, which a single duration cannot
+   * express — `Button` presses on `motion.press` while its colour and shadow run
+   * on `fast`. Write the composed `transition` shorthand yourself and take the
+   * reduced-motion guard from here.
+   */
+  composite: {
+    value: { _motionReduce: { transition: 'none' } },
+  },
+
+  /**
+   * `travel`, delivered through custom properties instead of style props.
+   *
+   * Ark writes some parts' `transition-*` declarations **inline**, and an inline
+   * declaration beats any class rule, so the presets above never reach them.
+   * What Ark leaves open are the custom properties its inline `var()`s read:
+   * `transition-duration: var(--transition-duration, 150ms)` and
+   * `transition-timing-function: var(--transition-timing-function)`. Setting
+   * those is the only way in.
+   *
+   * `SegmentGroup.Indicator` is the one such part in this library. Its property
+   * list stays Ark's (`left, top, width, height`) — already right, and the one
+   * thing written inline that cannot be changed.
+   */
+  arkTravel: {
+    value: {
+      '--transition-duration': 'var(--chakra-durations-motion-base)',
+      '--transition-timing-function': 'var(--chakra-easings-emphasized)',
+      _motionReduce: {
+        '--transition-duration': 'var(--chakra-durations-motion-instant)',
+      },
+    },
+  },
+
+  /**
+   * Strokes a checkmark on instead of flashing it in, 60ms after the box fills.
+   *
+   * This is an `animation`, not a transition, and it does not turn off the same
+   * way: killing the animation alone would park `stroke-dashoffset` at its start
+   * value and leave the tick invisible, so the reduced-motion branch has to undo
+   * the dash pattern as well.
+   */
+  checkmarkDraw: {
+    value: {
+      '& polyline, & path': {
+        strokeDasharray: CHECKMARK_DASH,
+        animation: `checkmark-draw var(--chakra-durations-motion-base) var(--chakra-easings-emphasized) 60ms both`,
+      },
+      _motionReduce: {
+        '& polyline, & path': { animation: 'none', strokeDasharray: 'none' },
+      },
+    },
+  },
+} satisfies Record<string, MotionStyle>;
+
+/** Every name `animationStyle` accepts from this theme. */
+export type MotionStyleToken = keyof typeof animationStyles;
 
 /**
  * Keyframes owned by the motion layer.
  *
- * `checkmark-draw` strokes Chakra's default checkmark on instead of flashing it
- * in. The icon is already stroke-based (`fill: none`, `stroke: currentColor`,
- * `polyline points="20 6 9 17 4 12"`), so a dash offset is all it takes; the
- * polyline measures ~22.6 user units, and 24 clears it with room to spare.
+ * Chakra's checkmark is already stroke-based (`fill: none`,
+ * `stroke: currentColor`, `polyline points="20 6 9 17 4 12"`), so a dash offset
+ * draws it without swapping in a custom icon.
  */
 export const keyframes = {
   'checkmark-draw': {
-    from: { strokeDashoffset: '24' },
+    from: { strokeDashoffset: String(CHECKMARK_DASH) },
     to: { strokeDashoffset: '0' },
   },
 };
@@ -280,8 +231,7 @@ export const keyframes = {
  * variable — framer-motion, `Element.animate`, `setTimeout`-driven sequences.
  *
  * Includes `fast` (150) and `moderate` (200), which have no `motion.*` token
- * because Chakra already provides them: a JS consumer still needs the numbers,
- * and reading them from two places would be worse than listing them once here.
+ * because Chakra already provides them: a JS consumer still needs the numbers.
  */
 export const MOTION_DURATION_MS = {
   instant: 0,
@@ -319,11 +269,9 @@ export const MOTION_EASE = {
 export type MotionEaseToken = keyof typeof MOTION_EASE;
 
 /**
- * The same curves as CSS `transition-timing-function` / `animation` strings,
- * for the rare case where the `easings` token cannot be reached (a keyframes
- * string assembled outside a Chakra style context).
- *
- * Prefer `var(--chakra-easings-emphasized)` where a CSS variable will resolve.
+ * The same curves as CSS strings, for the rare case where the `easings` token
+ * cannot be reached (a keyframes string assembled outside a Chakra style
+ * context). Prefer `var(--chakra-easings-emphasized)` where a variable resolves.
  */
 export const MOTION_EASE_CSS: Record<MotionEaseToken, string> = {
   standard: 'cubic-bezier(0.4, 0, 0.2, 1)',

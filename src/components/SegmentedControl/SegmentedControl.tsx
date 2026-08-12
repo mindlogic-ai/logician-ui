@@ -1,7 +1,6 @@
 import { forwardRef } from 'react';
 import { SegmentGroup } from '@chakra-ui/react';
 
-import { transitions } from '@/theme/motion';
 import { mergeCss } from '@/utils/mergeCss';
 
 import {
@@ -110,12 +109,10 @@ export const SegmentedControl = forwardRef<
     >
       <SegmentGroup.Indicator
         borderRadius={indicatorRadius}
-        // Ark inlines this part's `transition-*`, and inline beats a class — so
-        // the usual preset props never reach it. Retiming has to go through the
-        // custom properties those inline `var()`s read. Ark's own default is
-        // 150ms on an unset curve; `emphasized` at 300ms lets the thumb arrive
-        // under the finger and settle rather than skate.
-        css={transitions.arkTiming()}
+        // `travel`, but delivered through custom properties: Ark inlines this
+        // part's `transition-*` and an inline declaration beats a class, so the
+        // ordinary preset would never reach it.
+        animationStyle="arkTravel"
       />
       {items.map((item) => (
         <SegmentGroup.Item

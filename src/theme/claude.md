@@ -6,12 +6,39 @@ The Logician UI theme system extends Chakra UI's theming capabilities with the *
 
 ```
 src/theme/
-├── index.ts          # Main theme export
+├── index.ts          # Main theme export (also defines textStyles)
 ├── colors.ts         # Color palette & semantic tokens
+├── motion.ts         # Duration/easing scales & the animationStyle presets
 ├── font.ts           # Font family definitions
 ├── global.ts         # Global CSS styles
-└── Palette.stories.tsx  # Visual color palette reference
+├── Palette.stories.tsx  # Visual color palette reference
+└── Motion.stories.tsx   # Motion preset & scale reference
 ```
+
+## Motion
+
+Same two tiers as type: a primitive scale (`durations`, `easings`) and a named
+composition on top of it (`animationStyles`), both registered in the theme.
+
+Component code names the intent and takes the timing that comes with it, the way
+`textStyle="h3"` carries a family, size, weight, leading and tracking:
+
+```tsx
+<Switch.Thumb animationStyle="spring" transitionProperty="translate" />
+```
+
+`press` · `feedback` · `travel` · `spring`, plus `composite` / `arkTravel` /
+`checkmarkDraw` for the cases a single preset cannot express. Every preset
+carries its own `prefers-reduced-motion` branch, so honouring that setting is
+structural rather than remembered.
+
+`transitionProperty` stays at the call site — what moves varies per element —
+and defaults to `none` in each preset, because CSS would otherwise default it to
+`all` and animate everything on the element.
+
+Durations carry a `motion.` prefix so they sit alongside Chakra's scale instead
+of redefining `slow`/`slower`, which its `dialog`, `drawer` and `progress`
+recipes read. See `Theme/Motion` in Storybook.
 
 ## Golden Ratio Color System
 

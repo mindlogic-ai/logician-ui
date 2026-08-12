@@ -117,12 +117,15 @@ export {
   type SemanticColorToken,
   semanticTokens,
 } from './theme/colors';
-export { checkmarkDraw, transitions } from './theme/motion';
 export {
+  animationStyles,
+  durations,
+  easings,
   MOTION_DURATION_MS,
   MOTION_DURATION_S,
   MOTION_EASE,
   MOTION_EASE_CSS,
   type MotionDurationToken,
   type MotionEaseToken,
+  type MotionStyleToken,
 } from './theme/motion';

@@ -7,7 +7,7 @@ import {
 
 import { colors, semanticTokens } from './colors';
 import { globalCss } from './global';
-import { durations, easings, keyframes } from './motion';
+import { animationStyles, durations, easings, keyframes } from './motion';
 import { tableSlotRecipe } from './recipes/table';
 
 /**
@@ -213,6 +213,10 @@ export const textStyles = defineTextStyles({
 const config = defineConfig({
   globalCss,
   theme: {
+    // The motion vocabulary, consumed as `animationStyle="feedback"` — the same
+    // composition slot `textStyles` uses, so a consuming app can remap a preset
+    // from its own config.
+    animationStyles,
     keyframes,
     tokens: {
       colors,
