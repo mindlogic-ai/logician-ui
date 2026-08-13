@@ -4,12 +4,16 @@
   /* ==========================================================================
      Logician UI — token layer
      Values mirror src/theme/colors.ts (Golden Ratio system) and src/theme/index.ts
-     (radii, spacing, textStyles). Light values are the `base`/`_light` branch of
-     each semantic token; dark values are the `_dark` branch, i.e. the
-     `desaturatedGray` ramp plus the brand-step lift documented in colors.ts.
+     (radii, spacing, textStyles), taking the `base`/`_light` branch of each
+     semantic token. This page is light-only by choice, so the `_dark` branches
+     are not carried and every colour below is painted explicitly — the page
+     holds its own appearance on a dark host rather than inheriting one.
      ========================================================================== */
   :root {
-    color-scheme: light dark;
+    /* Deliberately light-only. `light` (not `light dark`) so native chrome —
+       the date picker, select popup, scrollbars — stays light even when the
+       viewer's OS or the host page is in dark mode. */
+    color-scheme: light;
 
     /* bg.* */
     --lg-canvas: #fdfdff;      /* gray.0  */
@@ -74,91 +78,6 @@
       Roboto, sans-serif;
   }
 
-  /* System-dark, with no explicit stamp. Guarded so an explicit light choice wins. */
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --lg-canvas: #0e1014;
-      --lg-surface: #181a20;
-      --lg-subtle: #23262e;
-      --lg-muted: #30343c;
-
-      --lg-fg-emphasized: #e5e8ec;
-      --lg-fg-default: #d2d5db;
-      --lg-fg-muted: #b6bac3;
-      --lg-fg-subtle: #989da9;
-      --lg-fg-inverse: #181a20;
-
-      --lg-line: #3c404b;
-      --lg-line-subtle: #23262e;
-      --lg-line-strong: #595e6b;
-
-      --lg-primary: #4a79dc;         /* blue.300 — brand lifted ~2 stops */
-      --lg-primary-dark: #7da0e8;    /* blue.200 */
-      --lg-primary-lightest: #04102a;/* blue.900 */
-      --lg-primary-xlight: #092053;  /* blue.800 */
-      --lg-primary-lighter: #0d317d; /* blue.700 */
-      --lg-primary-fill: #0d317d;    /* primary.fill._dark */
-      --lg-primary-fill-hover: #1241a6;
-      --lg-primary-fill-active: #092053;
-      --lg-on-primary: #ffffff;
-
-      --lg-success: #53dc4a;
-      --lg-success-xlight: #0d5309;
-      --lg-success-lighter: #147d0d;
-      --lg-success-dark: #bdf3b9;
-
-      --lg-danger: #e87d84;
-      --lg-danger-xlight: #53090d;
-      --lg-danger-dark: #f3b9bd;
-
-      --lg-ring-gap: #181a20;
-
-      --lg-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.4);
-      --lg-shadow-md: 0 5px 20px rgba(0, 0, 0, 0.55);
-    }
-  }
-
-  /* Explicit dark stamp — beats a light OS. */
-  :root[data-theme="dark"] {
-    --lg-canvas: #0e1014;
-    --lg-surface: #181a20;
-    --lg-subtle: #23262e;
-    --lg-muted: #30343c;
-
-    --lg-fg-emphasized: #e5e8ec;
-    --lg-fg-default: #d2d5db;
-    --lg-fg-muted: #b6bac3;
-    --lg-fg-subtle: #989da9;
-    --lg-fg-inverse: #181a20;
-
-    --lg-line: #3c404b;
-    --lg-line-subtle: #23262e;
-    --lg-line-strong: #595e6b;
-
-    --lg-primary: #4a79dc;
-    --lg-primary-dark: #7da0e8;
-    --lg-primary-lightest: #04102a;
-    --lg-primary-xlight: #092053;
-    --lg-primary-lighter: #0d317d;
-    --lg-primary-fill: #0d317d;
-    --lg-primary-fill-hover: #1241a6;
-    --lg-primary-fill-active: #092053;
-    --lg-on-primary: #ffffff;
-
-    --lg-success: #53dc4a;
-    --lg-success-xlight: #0d5309;
-    --lg-success-lighter: #147d0d;
-    --lg-success-dark: #bdf3b9;
-
-    --lg-danger: #e87d84;
-    --lg-danger-xlight: #53090d;
-    --lg-danger-dark: #f3b9bd;
-
-    --lg-ring-gap: #181a20;
-
-    --lg-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.4);
-    --lg-shadow-md: 0 5px 20px rgba(0, 0, 0, 0.55);
-  }
 
   /* ==========================================================================
      Base
@@ -347,9 +266,9 @@
     gap: 0.5rem;
     padding: 0.375rem 0.875rem;
     border-radius: var(--lg-radius-full);
-    /* Mixed against the live surface rather than pinned to success.extralight:
-       the flat token reads as a loud green block on the dark canvas, and the
-       save state should stay quieter than the blue accent in both themes. */
+    /* Mixed against the surface rather than pinned to success.extralight, so
+       the save state stays a touch quieter than the blue accent — the accent
+       should be the only colour competing for attention. */
     background: color-mix(in srgb, var(--lg-success) 12%, var(--lg-surface));
     color: var(--lg-success-dark);
     font-size: 0.875rem;
