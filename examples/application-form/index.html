@@ -65,9 +65,13 @@
     --lg-radius-lg: 12px;
     --lg-radius-full: 9999px;
 
-    --lg-font: "Pretendard Variable", Pretendard, "Inter", "Noto Sans",
-      "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
-      "Malgun Gothic", "Segoe UI", Roboto, sans-serif;
+    /* theme/font.ts ships a `noto` face as a placeholder for the consuming app
+       to supply; this page supplies Noto Sans KR. The face is embedded as a
+       woff2 data URI rather than linked, because the artifact CSP blocks font
+       CDNs and a <link> would silently fall back to a system face. */
+    --lg-font: "Noto Sans KR", "Noto Sans", "Inter", -apple-system,
+      BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "Segoe UI",
+      Roboto, sans-serif;
   }
 
   /* System-dark, with no explicit stamp. Guarded so an explicit light choice wins. */
@@ -173,6 +177,10 @@
     color: var(--lg-fg-default);
     font-family: var(--lg-font);
     font-size: 1rem;
+    /* Only 500/600/700 are embedded (the weights the textStyle scale uses), so
+       inherited text must land on 500 rather than the UA default of 400 —
+       otherwise the browser synthesises a weight the subset does not carry. */
+    font-weight: 500;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     /* Korean wraps at any character by default, which splits 어절 mid-word
