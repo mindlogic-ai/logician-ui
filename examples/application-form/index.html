@@ -1,0 +1,1861 @@
+<title>한빛대학교 온라인 지원서</title>
+
+<style>
+  /* ==========================================================================
+     Logician UI — token layer
+     Values mirror src/theme/colors.ts (Golden Ratio system) and src/theme/index.ts
+     (radii, spacing, textStyles). Light values are the `base`/`_light` branch of
+     each semantic token; dark values are the `_dark` branch, i.e. the
+     `desaturatedGray` ramp plus the brand-step lift documented in colors.ts.
+     ========================================================================== */
+  :root {
+    color-scheme: light dark;
+
+    /* bg.* */
+    --lg-canvas: #fdfdff;      /* gray.0  */
+    --lg-surface: #ffffff;     /* white   */
+    --lg-subtle: #f7f9fc;      /* gray.50 */
+    --lg-muted: #f0f3f9;       /* gray.100 */
+
+    /* fg.* */
+    --lg-fg-emphasized: #1e2433; /* gray.1300 */
+    --lg-fg-default: #414a63;    /* gray.1000 */
+    --lg-fg-muted: #505a74;      /* gray.900  */
+    --lg-fg-subtle: #737d96;     /* gray.700  */
+    --lg-fg-inverse: #fdfdff;    /* gray.0    */
+
+    /* border.* */
+    --lg-line: #cdd3e0;         /* gray.300 */
+    --lg-line-subtle: #e2e6f0;  /* gray.200 */
+    --lg-line-strong: #9aa3b8;  /* gray.500 */
+
+    /* primary.* (blue) */
+    --lg-primary: #1751d0;         /* blue.500 */
+    --lg-primary-dark: #0d317d;    /* blue.700 */
+    --lg-primary-lightest: #f4f7fd;/* blue.25  */
+    --lg-primary-xlight: #e8eefb;  /* blue.50  */
+    --lg-primary-lighter: #b9cbf3; /* blue.100 */
+    --lg-primary-fill: #1751d0;
+    --lg-primary-fill-hover: #1241a6;   /* blue.600 */
+    --lg-primary-fill-active: #0d317d;  /* blue.700 */
+    --lg-on-primary: #ffffff;
+
+    /* success.* (green) */
+    --lg-success: #1aa612;        /* green.600 */
+    --lg-success-xlight: #e9fbe8; /* green.50  */
+    --lg-success-lighter: #bdf3b9;/* green.100 */
+    --lg-success-dark: #147d0d;   /* green.700 */
+
+    /* danger.* (rose) */
+    --lg-danger: #c1232c;         /* rose.500 */
+    --lg-danger-xlight: #fbe8e9;  /* rose.50  */
+    --lg-danger-dark: #7d0d14;    /* rose.700 */
+
+    /* focusRing gap colour — utils/focusRing.ts paints white behind the ring */
+    --lg-ring-gap: #ffffff;
+
+    /* elevation — Card `elevated` / Select contentStyles */
+    --lg-shadow-sm: 0 1px 2px rgba(30, 36, 51, 0.06), 0 1px 3px rgba(30, 36, 51, 0.05);
+    --lg-shadow-md: 0 5px 20px rgba(0, 0, 0, 0.1);
+
+    /* radii */
+    --lg-radius-xs: 4px;
+    --lg-radius-sm: 6px;
+    --lg-radius-md: 8px;
+    --lg-radius-lg: 12px;
+    --lg-radius-full: 9999px;
+
+    --lg-font: "Pretendard Variable", Pretendard, "Inter", "Noto Sans",
+      "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+      "Malgun Gothic", "Segoe UI", Roboto, sans-serif;
+  }
+
+  /* System-dark, with no explicit stamp. Guarded so an explicit light choice wins. */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --lg-canvas: #0e1014;
+      --lg-surface: #181a20;
+      --lg-subtle: #23262e;
+      --lg-muted: #30343c;
+
+      --lg-fg-emphasized: #e5e8ec;
+      --lg-fg-default: #d2d5db;
+      --lg-fg-muted: #b6bac3;
+      --lg-fg-subtle: #989da9;
+      --lg-fg-inverse: #181a20;
+
+      --lg-line: #3c404b;
+      --lg-line-subtle: #23262e;
+      --lg-line-strong: #595e6b;
+
+      --lg-primary: #4a79dc;         /* blue.300 — brand lifted ~2 stops */
+      --lg-primary-dark: #7da0e8;    /* blue.200 */
+      --lg-primary-lightest: #04102a;/* blue.900 */
+      --lg-primary-xlight: #092053;  /* blue.800 */
+      --lg-primary-lighter: #0d317d; /* blue.700 */
+      --lg-primary-fill: #0d317d;    /* primary.fill._dark */
+      --lg-primary-fill-hover: #1241a6;
+      --lg-primary-fill-active: #092053;
+      --lg-on-primary: #ffffff;
+
+      --lg-success: #53dc4a;
+      --lg-success-xlight: #0d5309;
+      --lg-success-lighter: #147d0d;
+      --lg-success-dark: #bdf3b9;
+
+      --lg-danger: #e87d84;
+      --lg-danger-xlight: #53090d;
+      --lg-danger-dark: #f3b9bd;
+
+      --lg-ring-gap: #181a20;
+
+      --lg-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.4);
+      --lg-shadow-md: 0 5px 20px rgba(0, 0, 0, 0.55);
+    }
+  }
+
+  /* Explicit dark stamp — beats a light OS. */
+  :root[data-theme="dark"] {
+    --lg-canvas: #0e1014;
+    --lg-surface: #181a20;
+    --lg-subtle: #23262e;
+    --lg-muted: #30343c;
+
+    --lg-fg-emphasized: #e5e8ec;
+    --lg-fg-default: #d2d5db;
+    --lg-fg-muted: #b6bac3;
+    --lg-fg-subtle: #989da9;
+    --lg-fg-inverse: #181a20;
+
+    --lg-line: #3c404b;
+    --lg-line-subtle: #23262e;
+    --lg-line-strong: #595e6b;
+
+    --lg-primary: #4a79dc;
+    --lg-primary-dark: #7da0e8;
+    --lg-primary-lightest: #04102a;
+    --lg-primary-xlight: #092053;
+    --lg-primary-lighter: #0d317d;
+    --lg-primary-fill: #0d317d;
+    --lg-primary-fill-hover: #1241a6;
+    --lg-primary-fill-active: #092053;
+    --lg-on-primary: #ffffff;
+
+    --lg-success: #53dc4a;
+    --lg-success-xlight: #0d5309;
+    --lg-success-lighter: #147d0d;
+    --lg-success-dark: #bdf3b9;
+
+    --lg-danger: #e87d84;
+    --lg-danger-xlight: #53090d;
+    --lg-danger-dark: #f3b9bd;
+
+    --lg-ring-gap: #181a20;
+
+    --lg-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.4);
+    --lg-shadow-md: 0 5px 20px rgba(0, 0, 0, 0.55);
+  }
+
+  /* ==========================================================================
+     Base
+     global.ts pins html to 14px; this surface opts into a 16px base the way
+     ScaledContext does for reading-dense views, so the em-relative textStyle
+     scale resolves to the sizes its own comments quote (p 16, h3 28, subtext 14).
+     ========================================================================== */
+  html {
+    font-size: 16px;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--lg-canvas);
+    color: var(--lg-fg-default);
+    font-family: var(--lg-font);
+    font-size: 1rem;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    /* Korean wraps at any character by default, which splits 어절 mid-word
+       ("수정할 수 있습 / 니다"). keep-all breaks on spaces instead. */
+    word-break: keep-all;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  /* textStyles ------------------------------------------------------------ */
+  .ts-h3 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.33;
+    letter-spacing: -0.01em;
+    color: var(--lg-fg-emphasized);
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  .ts-h4 {
+    font-size: 1.44rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--lg-fg-emphasized);
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  .ts-h5 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--lg-fg-emphasized);
+    margin: 0;
+  }
+
+  .ts-p {
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .ts-subtext {
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .ts-caption {
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  .ts-overline {
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .fg-subtle {
+    color: var(--lg-fg-subtle);
+  }
+
+  .fg-muted {
+    color: var(--lg-fg-muted);
+  }
+
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    /* clip-path as well as the legacy clip: without it the element keeps its
+       static position and, inside a horizontal scroller, pushes the page wider
+       than the viewport. */
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* focusRing — utils/focusRing.ts: 2px gap ring + 4px primary ring --------- */
+  :focus {
+    outline: none;
+  }
+
+  :focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--lg-ring-gap),
+      0 0 0 4px var(--lg-primary);
+    transition: box-shadow 0.15s ease-out;
+  }
+
+  /* ==========================================================================
+     Shell
+     ========================================================================== */
+  .app {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  .masthead {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--lg-line-subtle);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+  }
+
+  .brand__mark {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    flex: none;
+    border-radius: var(--lg-radius-lg);
+    background: var(--lg-primary-fill);
+    color: var(--lg-on-primary);
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .brand__name {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--lg-fg-emphasized);
+  }
+
+  /* Save pill — Badge success variant (Badge.styles.ts) */
+  .savepill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.875rem;
+    border-radius: var(--lg-radius-full);
+    /* Mixed against the live surface rather than pinned to success.extralight:
+       the flat token reads as a loud green block on the dark canvas, and the
+       save state should stay quieter than the blue accent in both themes. */
+    background: color-mix(in srgb, var(--lg-success) 12%, var(--lg-surface));
+    color: var(--lg-success-dark);
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .savepill__dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    flex: none;
+    border-radius: var(--lg-radius-full);
+    background: var(--lg-success);
+  }
+
+  .savepill[data-state="saving"] {
+    background: var(--lg-muted);
+    color: var(--lg-fg-muted);
+  }
+
+  .savepill[data-state="saving"] .savepill__dot {
+    background: var(--lg-fg-subtle);
+    animation: pulse 1s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    50% {
+      opacity: 0.3;
+    }
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 1fr);
+    gap: 2rem;
+    align-items: start;
+    margin-top: 2rem;
+  }
+
+  /* Grid items default to min-width:auto, which lets wide content push the
+     track past the viewport instead of scrolling inside its own container. */
+  .layout > * {
+    min-width: 0;
+  }
+
+  /* ==========================================================================
+     Step rail
+     ========================================================================== */
+  .rail {
+    position: sticky;
+    top: 1.5rem;
+  }
+
+  .rail__title {
+    color: var(--lg-fg-subtle);
+    padding: 0 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .rail__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid transparent;
+    border-radius: var(--lg-radius-lg);
+    background: transparent;
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition:
+      background-color 0.25s ease-in-out,
+      border-color 0.25s ease-in-out,
+      box-shadow 0.25s ease-in-out;
+  }
+
+  .step:hover {
+    background: var(--lg-subtle);
+  }
+
+  .step[aria-current="step"] {
+    background: var(--lg-surface);
+    border-color: var(--lg-line);
+    box-shadow: var(--lg-shadow-sm);
+  }
+
+  .step__num {
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    flex: none;
+    border-radius: var(--lg-radius-full);
+    background: var(--lg-primary-xlight);
+    color: var(--lg-primary-dark);
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .step[aria-current="step"] .step__num {
+    background: var(--lg-primary-fill);
+    color: var(--lg-on-primary);
+  }
+
+  .step[data-done="true"] .step__num {
+    background: color-mix(in srgb, var(--lg-success) 14%, var(--lg-surface));
+    color: var(--lg-success-dark);
+  }
+
+  .step[data-done="true"][aria-current="step"] .step__num {
+    background: var(--lg-primary-fill);
+    color: var(--lg-on-primary);
+  }
+
+  .step__label {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--lg-fg-emphasized);
+  }
+
+  .step__hint {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--lg-fg-subtle);
+  }
+
+  /* ==========================================================================
+     Card — Card.tsx: bg.surface, 1px border.default, radius lg, p={8}
+     ========================================================================== */
+  .card {
+    background: var(--lg-surface);
+    border: 1px solid var(--lg-line);
+    border-radius: var(--lg-radius-lg);
+    padding: 2rem;
+  }
+
+  .panel__eyebrow {
+    color: var(--lg-primary);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+  }
+
+  .panel__lede {
+    max-width: 62ch;
+    margin-top: 0.5rem;
+    color: var(--lg-fg-muted);
+  }
+
+  .panel__body {
+    margin-top: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  /* ==========================================================================
+     Form controls — Input.tsx / Textarea.tsx / Select.styles.ts
+     ========================================================================== */
+  .grid2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem 1.25rem;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4375rem;
+    min-width: 0;
+  }
+
+  .field--full {
+    grid-column: 1 / -1;
+  }
+
+  .field__label {
+    display: flex;
+    align-items: baseline;
+    gap: 0.375rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--lg-fg-emphasized);
+  }
+
+  .field__req {
+    color: var(--lg-danger);
+    font-weight: 700;
+  }
+
+  .field__opt {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--lg-fg-subtle);
+  }
+
+  .control {
+    width: 100%;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--lg-fg-default);
+    background: var(--lg-surface);
+    border: 1px solid var(--lg-line);
+    border-radius: var(--lg-radius-md);
+    padding: 0 0.75rem;
+    height: 2.5rem;
+    transition:
+      border-color 0.25s ease-in-out,
+      box-shadow 0.15s ease-out;
+  }
+
+  .control::placeholder {
+    color: var(--lg-fg-subtle);
+  }
+
+  .control:hover {
+    border-color: var(--lg-primary-lighter);
+  }
+
+  .control:focus {
+    border-color: var(--lg-primary);
+  }
+
+  .control[aria-invalid="true"],
+  .control[aria-invalid="true"]:hover,
+  .control[aria-invalid="true"]:focus {
+    border-color: var(--lg-danger);
+  }
+
+  /* Jumping to an invalid field focuses it; a blue ring there would contradict
+     the red border and the error text below it. */
+  .control[aria-invalid="true"]:focus-visible {
+    box-shadow:
+      0 0 0 2px var(--lg-ring-gap),
+      0 0 0 4px var(--lg-danger);
+  }
+
+  textarea.control {
+    height: auto;
+    min-height: 8.75rem;
+    padding: 0.625rem 0.75rem;
+    line-height: 1.6;
+    resize: vertical;
+  }
+
+  /* Select trigger — triggerStyles + indicatorStyles */
+  .select-wrap {
+    position: relative;
+    display: flex;
+  }
+
+  select.control {
+    cursor: pointer;
+    appearance: none;
+    padding-right: 2.25rem;
+  }
+
+  .select-wrap__chevron {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--lg-fg-muted);
+  }
+
+  .field__error {
+    display: none;
+    color: var(--lg-danger);
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .field[data-invalid="true"] .field__error {
+    display: block;
+  }
+
+  .counter {
+    align-self: flex-end;
+    color: var(--lg-fg-subtle);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .counter[data-near="true"] {
+    color: var(--lg-danger);
+  }
+
+  /* ==========================================================================
+     Buttons — Button.tsx: 1px border, radius md, semibold, lh 1.2,
+     transition all .25s ease-in-out, _active scale(0.97)
+     ========================================================================== */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.5rem;
+    padding: 0 1.125rem;
+    border: 1px solid transparent;
+    border-radius: var(--lg-radius-md);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.2;
+    cursor: pointer;
+    transition: all 0.25s ease-in-out;
+  }
+
+  .btn:active {
+    transform: scale(0.97);
+  }
+
+  .btn--solid {
+    background: var(--lg-primary-fill);
+    border-color: var(--lg-primary-fill);
+    color: var(--lg-on-primary);
+  }
+
+  .btn--solid:hover {
+    background: var(--lg-primary-fill-hover);
+    border-color: var(--lg-primary-fill-hover);
+  }
+
+  .btn--solid:active {
+    background: var(--lg-primary-fill-active);
+  }
+
+  .btn--outline {
+    background: transparent;
+    border-color: var(--lg-line);
+    color: var(--lg-fg-default);
+  }
+
+  .btn--outline:hover {
+    background: var(--lg-subtle);
+  }
+
+  .btn--outline:active {
+    background: var(--lg-muted);
+  }
+
+  .btn--ghost {
+    background: transparent;
+    color: var(--lg-primary);
+  }
+
+  .btn--ghost:hover {
+    background: var(--lg-primary-xlight);
+  }
+
+  /* Dashed "add" affordance */
+  .btn--add {
+    width: 100%;
+    background: transparent;
+    border: 1px dashed var(--lg-line);
+    color: var(--lg-primary);
+  }
+
+  .btn--add:hover {
+    background: var(--lg-primary-lightest);
+    border-color: var(--lg-primary-lighter);
+  }
+
+  .iconbtn {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    flex: none;
+    border: 1px solid var(--lg-line);
+    border-radius: var(--lg-radius-sm);
+    background: var(--lg-surface);
+    color: var(--lg-fg-muted);
+    cursor: pointer;
+    transition: all 0.25s ease-in-out;
+  }
+
+  .iconbtn:hover:not(:disabled) {
+    background: var(--lg-subtle);
+    color: var(--lg-fg-emphasized);
+  }
+
+  .iconbtn:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+
+  .iconbtn:disabled {
+    opacity: 1;
+    color: var(--lg-line);
+    cursor: not-allowed;
+  }
+
+  .iconbtn--danger:hover:not(:disabled) {
+    background: var(--lg-danger-xlight);
+    border-color: var(--lg-danger);
+    color: var(--lg-danger);
+  }
+
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--lg-line-subtle);
+  }
+
+  /* ==========================================================================
+     Repeatable activity entries
+     ========================================================================== */
+  .entries {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .entry {
+    background: var(--lg-subtle);
+    border: 1px solid var(--lg-line-subtle);
+    border-radius: var(--lg-radius-lg);
+    padding: 1.25rem;
+  }
+
+  .entry__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .entry__index {
+    color: var(--lg-fg-subtle);
+  }
+
+  .entry__tools {
+    display: flex;
+    gap: 0.375rem;
+  }
+
+  .entry .control {
+    background: var(--lg-surface);
+  }
+
+  .empty {
+    padding: 2rem 1.25rem;
+    border: 1px dashed var(--lg-line);
+    border-radius: var(--lg-radius-lg);
+    text-align: center;
+    color: var(--lg-fg-subtle);
+  }
+
+  /* ==========================================================================
+     Review step
+     ========================================================================== */
+  .review {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .review__key,
+  .review__val {
+    padding: 0.875rem 0;
+    border-bottom: 1px solid var(--lg-line-subtle);
+    margin: 0;
+  }
+
+  .review__key {
+    color: var(--lg-fg-subtle);
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .review__val {
+    color: var(--lg-fg-emphasized);
+    font-size: 1rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+  }
+
+  /* The navbar draws its own top rule, so the last row's divider would double up. */
+  .review > :nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+
+  .review__val--empty {
+    color: var(--lg-fg-subtle);
+    font-weight: 500;
+    font-style: italic;
+  }
+
+  .review__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .review__list li::before {
+    content: "· ";
+    color: var(--lg-fg-subtle);
+  }
+
+  .review__note {
+    display: block;
+    margin-top: 0.125rem;
+    font-weight: 500;
+    color: var(--lg-fg-muted);
+  }
+
+  /* Validation summary — Banner-style soft danger surface */
+  .alert {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--lg-danger);
+    border-radius: var(--lg-radius-md);
+    background: var(--lg-danger-xlight);
+    color: var(--lg-danger-dark);
+    margin-bottom: 1.25rem;
+  }
+
+  .alert__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .alert__title {
+    font-weight: 700;
+  }
+
+  .alert ul {
+    margin: 0;
+    padding-left: 1.125rem;
+  }
+
+  .alert a {
+    color: inherit;
+  }
+
+  /* Submitted confirmation */
+  /* Flex column rather than text-align on inline-level children: an
+     inline-grid receipt and an inline-flex button otherwise share a line. */
+  .done {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 0 1rem;
+  }
+
+  .done__mark {
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    flex: none;
+    margin-bottom: 1.25rem;
+    border-radius: var(--lg-radius-full);
+    background: color-mix(in srgb, var(--lg-success) 14%, var(--lg-surface));
+    color: var(--lg-success-dark);
+  }
+
+  .done__meta {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 0.5rem 1.5rem;
+    margin: 1.75rem 0 2rem;
+    padding: 1rem 1.5rem;
+    border: 1px solid var(--lg-line-subtle);
+    border-radius: var(--lg-radius-md);
+    background: var(--lg-subtle);
+    text-align: left;
+  }
+
+  .done__meta dt {
+    color: var(--lg-fg-subtle);
+    font-size: 0.875rem;
+  }
+
+  .done__meta dd {
+    margin: 0;
+    font-weight: 600;
+    color: var(--lg-fg-emphasized);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ==========================================================================
+     Responsive
+     ========================================================================== */
+  @media (max-width: 880px) {
+    .layout {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.25rem;
+    }
+
+    .rail {
+      position: static;
+    }
+
+    .rail__list {
+      position: relative;
+      flex-direction: row;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.25rem;
+    }
+
+    .rail__list li {
+      flex: none;
+    }
+
+    .step__hint {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .app {
+      padding: 1.5rem 1rem 3rem;
+    }
+
+    .card {
+      padding: 1.25rem;
+    }
+
+    .grid2 {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .review {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+    }
+
+    .review__key {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .navbar {
+      flex-direction: column-reverse;
+    }
+
+    .navbar .btn {
+      width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+
+    .btn:active,
+    .iconbtn:active {
+      transform: none;
+    }
+  }
+</style>
+
+<div class="app">
+  <header class="masthead">
+    <div class="brand">
+      <div class="brand__mark" aria-hidden="true">한</div>
+      <div>
+        <span class="brand__name">한빛대학교 · 온라인 지원서</span>
+        <span class="ts-subtext fg-subtle">2027학년도 수시모집</span>
+      </div>
+    </div>
+    <p class="savepill" id="savepill" data-state="saved" role="status">
+      <span class="savepill__dot" aria-hidden="true"></span>
+      <span id="savetext">자동 저장됨 · 방금 전</span>
+    </p>
+  </header>
+
+  <div class="layout">
+    <nav class="rail" aria-label="작성 단계">
+      <p class="ts-overline rail__title">작성 단계</p>
+      <ul class="rail__list" id="rail"></ul>
+    </nav>
+
+    <main class="card" id="panel" tabindex="-1"></main>
+  </div>
+</div>
+
+<script>
+  (function () {
+    "use strict";
+
+    /* ---------------------------------------------------------------------
+     * Icons — 1.5px stroke, currentColor, sized to the 16px base.
+     * ------------------------------------------------------------------- */
+    var icon = {
+      chevron:
+        '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      up: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 13V3m0 0L4 7m4-4l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      down: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3v10m0 0l4-4m-4 4l-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      close:
+        '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+      arrowLeft:
+        '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13 8H3m0 0l4-4M3 8l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      arrowRight:
+        '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10m0 0l-4-4m4 4l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      check:
+        '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      checkLarge:
+        '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      alert:
+        '<svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true" style="flex:none;margin-top:2px"><circle cx="10" cy="10" r="7.25" stroke="currentColor" stroke-width="1.5"/><path d="M10 6.25v4.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="13.5" r="0.9" fill="currentColor"/></svg>',
+    };
+
+    var MAX_ESSAY = 1000;
+
+    var MAJORS = [
+      "컴퓨터공학과",
+      "전자공학과",
+      "기계공학과",
+      "경영학과",
+      "국어국문학과",
+      "생명과학과",
+      "디자인학과",
+    ];
+
+    var TRACKS = ["학생부종합", "학생부교과", "논술", "실기·실적"];
+
+    /* ---------------------------------------------------------------------
+     * State
+     * ------------------------------------------------------------------- */
+    var state = {
+      step: 0,
+      // A step only earns a completion tick once it has actually been opened —
+      // a green check on a screen the applicant has never seen would be a lie,
+      // even when the prefilled values happen to validate.
+      visited: [true, false, false, false],
+      showErrors: false,
+      submitted: false,
+      receipt: null,
+      basic: {
+        name: "홍길동",
+        birth: "2008-03-14",
+        email: "gildong@example.com",
+        phone: "010-1234-5678",
+        major: "컴퓨터공학과",
+        track: "학생부종합",
+      },
+      essay: {
+        intro: "저는 어릴 때부터 무언가를 분해하고 다시 조립하는 것을 좋아했습니다.",
+        motive: "",
+      },
+      activities: [
+        {
+          id: 1,
+          title: "교내 코딩 동아리 회장",
+          period: "2025.03 – 2026.02",
+          detail: "주 1회 스터디를 운영하고 교내 해커톤을 기획했습니다.",
+        },
+        {
+          id: 2,
+          title: "전국 청소년 SW 대회 장려상",
+          period: "2025.08",
+          detail: "재난 알림 앱을 만들어 출품했습니다.",
+        },
+      ],
+      nextId: 3,
+      savedAt: Date.now(),
+    };
+
+    var STEPS = [
+      { label: "기본 정보", hint: "이름·연락처·지원" },
+      { label: "에세이", hint: "자기소개·지원동기" },
+      { label: "활동·수상 이력", hint: "여러 개 추가" },
+      { label: "검토·제출", hint: "최종 확인" },
+    ];
+
+    /* ---------------------------------------------------------------------
+     * Validation — errors are keyed by field id so the summary can link to them
+     * ------------------------------------------------------------------- */
+    function isEmail(v) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+    }
+
+    function isPhone(v) {
+      return /^0\d{1,2}-?\d{3,4}-?\d{4}$/.test(v.replace(/\s/g, ""));
+    }
+
+    function errorsForStep(index) {
+      var out = [];
+      var b = state.basic;
+
+      if (index === 0) {
+        if (!b.name.trim()) out.push({ id: "f-name", msg: "이름을 입력해 주세요." });
+        if (!b.birth) out.push({ id: "f-birth", msg: "생년월일을 선택해 주세요." });
+        if (!b.email.trim()) {
+          out.push({ id: "f-email", msg: "이메일을 입력해 주세요." });
+        } else if (!isEmail(b.email.trim())) {
+          out.push({ id: "f-email", msg: "이메일 형식이 올바르지 않습니다. 예: gildong@example.com" });
+        }
+        if (!b.phone.trim()) {
+          out.push({ id: "f-phone", msg: "전화번호를 입력해 주세요." });
+        } else if (!isPhone(b.phone.trim())) {
+          out.push({ id: "f-phone", msg: "전화번호는 010-1234-5678 형식으로 입력해 주세요." });
+        }
+        if (!b.major) out.push({ id: "f-major", msg: "지원 학과를 선택해 주세요." });
+      }
+
+      if (index === 1) {
+        if (!state.essay.intro.trim()) {
+          out.push({ id: "f-intro", msg: "자기소개를 입력해 주세요." });
+        }
+      }
+
+      if (index === 2) {
+        state.activities.forEach(function (a, i) {
+          var filled = a.period.trim() || a.detail.trim();
+          if (filled && !a.title.trim()) {
+            out.push({
+              id: "f-act-title-" + a.id,
+              msg: "활동 " + (i + 1) + "의 활동/수상명을 입력해 주세요.",
+            });
+          }
+        });
+      }
+
+      return out;
+    }
+
+    function stepIsComplete(index) {
+      return errorsForStep(index).length === 0;
+    }
+
+    function errorMap(index) {
+      var map = {};
+      errorsForStep(index).forEach(function (e) {
+        if (!map[e.id]) map[e.id] = e.msg;
+      });
+      return map;
+    }
+
+    /* ---------------------------------------------------------------------
+     * Autosave indicator
+     * ------------------------------------------------------------------- */
+    var pill = document.getElementById("savepill");
+    var savetext = document.getElementById("savetext");
+    var saveTimer = null;
+
+    function relativeSaved() {
+      var mins = Math.floor((Date.now() - state.savedAt) / 60000);
+      if (mins < 1) return "방금 전";
+      if (mins < 60) return mins + "분 전";
+      return Math.floor(mins / 60) + "시간 전";
+    }
+
+    function paintSave() {
+      if (pill.getAttribute("data-state") === "saving") return;
+      savetext.textContent = "자동 저장됨 · " + relativeSaved();
+    }
+
+    function markDirty() {
+      pill.setAttribute("data-state", "saving");
+      savetext.textContent = "저장 중…";
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(function () {
+        state.savedAt = Date.now();
+        pill.setAttribute("data-state", "saved");
+        paintSave();
+      }, 600);
+    }
+
+    setInterval(paintSave, 20000);
+
+    /* ---------------------------------------------------------------------
+     * Small render helpers
+     * ------------------------------------------------------------------- */
+    function esc(s) {
+      return String(s).replace(/[&<>"']/g, function (c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+      });
+    }
+
+    function field(opts) {
+      var invalid = opts.error ? ' data-invalid="true"' : "";
+      var cls = "field" + (opts.full ? " field--full" : "");
+      var marker = opts.optional
+        ? '<span class="field__opt">선택</span>'
+        : '<span class="field__req" aria-hidden="true">*</span>';
+
+      return (
+        '<div class="' + cls + '"' + invalid + ' data-field="' + opts.id + '">' +
+        '<label class="field__label" for="' + opts.id + '">' +
+        esc(opts.label) + marker +
+        (opts.optional ? "" : '<span class="visually-hidden">필수</span>') +
+        "</label>" +
+        opts.control +
+        '<p class="field__error" id="' + opts.id + '-err">' + esc(opts.error || "") + "</p>" +
+        "</div>"
+      );
+    }
+
+    function inputControl(id, key, value, type, placeholder, invalid) {
+      return (
+        '<input class="control" id="' + id + '" type="' + type + '"' +
+        ' value="' + esc(value) + '"' +
+        (placeholder ? ' placeholder="' + esc(placeholder) + '"' : "") +
+        ' data-bind="' + key + '"' +
+        (invalid ? ' aria-invalid="true" aria-describedby="' + id + '-err"' : "") +
+        " />"
+      );
+    }
+
+    function selectControl(id, key, value, options, placeholder, invalid) {
+      var opts = '<option value=""' + (value ? "" : " selected") + ">" + esc(placeholder) + "</option>";
+      options.forEach(function (o) {
+        opts += '<option value="' + esc(o) + '"' + (o === value ? " selected" : "") + ">" + esc(o) + "</option>";
+      });
+      return (
+        '<div class="select-wrap">' +
+        '<select class="control" id="' + id + '" data-bind="' + key + '"' +
+        (invalid ? ' aria-invalid="true" aria-describedby="' + id + '-err"' : "") +
+        ">" + opts + "</select>" +
+        '<span class="select-wrap__chevron">' + icon.chevron + "</span>" +
+        "</div>"
+      );
+    }
+
+    function textareaControl(id, key, value, placeholder, invalid) {
+      return (
+        '<textarea class="control" id="' + id + '" data-bind="' + key + '"' +
+        ' maxlength="' + MAX_ESSAY + '"' +
+        ' placeholder="' + esc(placeholder) + '"' +
+        (invalid ? ' aria-invalid="true" aria-describedby="' + id + '-err"' : "") +
+        ">" + esc(value) + "</textarea>" +
+        '<p class="ts-subtext counter" id="' + id + '-count" data-counter-for="' + id + '">' +
+        formatCount(value.length) + "</p>"
+      );
+    }
+
+    function formatCount(n) {
+      return n.toLocaleString("ko-KR") + " / " + MAX_ESSAY.toLocaleString("ko-KR") + "자";
+    }
+
+    function alertBox(errors) {
+      var items = errors
+        .map(function (e) {
+          return '<li><a href="#' + e.id + '" data-jump="' + e.id + '">' + esc(e.msg) + "</a></li>";
+        })
+        .join("");
+      return (
+        '<div class="alert" role="alert">' + icon.alert +
+        '<div class="alert__body">' +
+        '<span class="alert__title">확인이 필요한 항목이 ' + errors.length + "개 있습니다</span>" +
+        "<ul>" + items + "</ul>" +
+        "</div></div>"
+      );
+    }
+
+    /* ---------------------------------------------------------------------
+     * Step rail
+     * ------------------------------------------------------------------- */
+    function renderRail() {
+      var rail = document.getElementById("rail");
+      rail.innerHTML = STEPS.map(function (s, i) {
+        var current = i === state.step && !state.submitted;
+        // The review step carries no fields of its own, so it can only be
+        // "완료" once the application has actually been submitted.
+        var done = state.submitted
+          ? stepIsComplete(i)
+          : !current && state.visited[i] && stepIsComplete(i) && i < STEPS.length - 1;
+        var badge = done ? icon.check : String(i + 1);
+        var status = current ? "현재 단계" : done ? "작성 완료" : "미작성";
+
+        return (
+          "<li>" +
+          '<button type="button" class="step" data-goto="' + i + '"' +
+          (current ? ' aria-current="step"' : "") +
+          ' data-done="' + done + '">' +
+          '<span class="step__num" aria-hidden="true">' + badge + "</span>" +
+          "<span>" +
+          '<span class="step__label">' + esc(s.label) + "</span>" +
+          '<span class="step__hint">' + esc(s.hint) + "</span>" +
+          "</span>" +
+          '<span class="visually-hidden">' + status + "</span>" +
+          "</button></li>"
+        );
+      }).join("");
+    }
+
+    /* ---------------------------------------------------------------------
+     * Panels
+     * ------------------------------------------------------------------- */
+    function panelHeader(title, lede) {
+      return (
+        '<p class="ts-overline panel__eyebrow">단계 ' + (state.step + 1) + " / " + STEPS.length + "</p>" +
+        '<h1 class="ts-h3">' + esc(title) + "</h1>" +
+        '<p class="ts-p panel__lede">' + esc(lede) + "</p>"
+      );
+    }
+
+    function renderStep0(err) {
+      var b = state.basic;
+      return (
+        panelHeader("기본 정보", "지원자 본인의 기본 정보를 입력합니다. * 표시된 항목은 필수입니다.") +
+        '<div class="panel__body">' +
+        (state.showErrors && Object.keys(err).length ? alertBox(errorsForStep(0)) : "") +
+        '<div class="grid2">' +
+        field({
+          id: "f-name",
+          label: "이름",
+          error: err["f-name"],
+          control: inputControl("f-name", "basic.name", b.name, "text", "홍길동", !!err["f-name"]),
+        }) +
+        field({
+          id: "f-birth",
+          label: "생년월일",
+          error: err["f-birth"],
+          control: inputControl("f-birth", "basic.birth", b.birth, "date", "", !!err["f-birth"]),
+        }) +
+        field({
+          id: "f-email",
+          label: "이메일",
+          error: err["f-email"],
+          control: inputControl("f-email", "basic.email", b.email, "email", "gildong@example.com", !!err["f-email"]),
+        }) +
+        field({
+          id: "f-phone",
+          label: "전화번호",
+          error: err["f-phone"],
+          control: inputControl("f-phone", "basic.phone", b.phone, "tel", "010-1234-5678", !!err["f-phone"]),
+        }) +
+        field({
+          id: "f-major",
+          label: "지원 학과",
+          error: err["f-major"],
+          control: selectControl("f-major", "basic.major", b.major, MAJORS, "학과를 선택하세요", !!err["f-major"]),
+        }) +
+        field({
+          id: "f-track",
+          label: "전형",
+          optional: true,
+          control: selectControl("f-track", "basic.track", b.track, TRACKS, "전형을 선택하세요", false),
+        }) +
+        "</div></div>"
+      );
+    }
+
+    function renderStep1(err) {
+      var e = state.essay;
+      return (
+        panelHeader("에세이", "아래 두 문항을 자유롭게 작성합니다. 작성 중 내용은 자동으로 저장됩니다.") +
+        '<div class="panel__body">' +
+        (state.showErrors && Object.keys(err).length ? alertBox(errorsForStep(1)) : "") +
+        field({
+          id: "f-intro",
+          label: "자기소개",
+          error: err["f-intro"],
+          control: textareaControl(
+            "f-intro",
+            "essay.intro",
+            e.intro,
+            "지금까지의 경험 중 자신을 가장 잘 보여 주는 이야기를 적어 주세요.",
+            !!err["f-intro"]
+          ),
+        }) +
+        field({
+          id: "f-motive",
+          label: "지원 동기",
+          optional: true,
+          control: textareaControl(
+            "f-motive",
+            "essay.motive",
+            e.motive,
+            "이 학과에 지원하게 된 이유를 적어 주세요.",
+            false
+          ),
+        }) +
+        "</div>"
+      );
+    }
+
+    function renderStep2(err) {
+      var body;
+
+      if (!state.activities.length) {
+        body = '<p class="empty ts-p">아직 추가한 활동이 없습니다. 아래에서 첫 항목을 추가해 보세요.</p>';
+      } else {
+        body =
+          '<div class="entries">' +
+          state.activities
+            .map(function (a, i) {
+              var titleErr = err["f-act-title-" + a.id];
+              return (
+                '<section class="entry" aria-label="활동 ' + (i + 1) + '">' +
+                '<div class="entry__head">' +
+                '<p class="ts-subtext entry__index">활동 ' + (i + 1) + "</p>" +
+                '<div class="entry__tools">' +
+                '<button type="button" class="iconbtn" data-move="up" data-id="' + a.id + '"' +
+                (i === 0 ? " disabled" : "") + ' aria-label="활동 ' + (i + 1) + ' 위로 이동">' + icon.up + "</button>" +
+                '<button type="button" class="iconbtn" data-move="down" data-id="' + a.id + '"' +
+                (i === state.activities.length - 1 ? " disabled" : "") +
+                ' aria-label="활동 ' + (i + 1) + ' 아래로 이동">' + icon.down + "</button>" +
+                '<button type="button" class="iconbtn iconbtn--danger" data-remove="' + a.id + '"' +
+                ' aria-label="활동 ' + (i + 1) + ' 삭제">' + icon.close + "</button>" +
+                "</div></div>" +
+                '<div class="grid2">' +
+                field({
+                  id: "f-act-title-" + a.id,
+                  label: "활동/수상명",
+                  error: titleErr,
+                  control: inputControl(
+                    "f-act-title-" + a.id,
+                    "act." + a.id + ".title",
+                    a.title,
+                    "text",
+                    "교내 코딩 동아리 회장",
+                    !!titleErr
+                  ),
+                }) +
+                field({
+                  id: "f-act-period-" + a.id,
+                  label: "기간",
+                  optional: true,
+                  control: inputControl(
+                    "f-act-period-" + a.id,
+                    "act." + a.id + ".period",
+                    a.period,
+                    "text",
+                    "2025.03 – 2026.02",
+                    false
+                  ),
+                }) +
+                field({
+                  id: "f-act-detail-" + a.id,
+                  label: "설명",
+                  optional: true,
+                  full: true,
+                  control:
+                    '<textarea class="control" id="f-act-detail-' + a.id + '"' +
+                    ' data-bind="act.' + a.id + '.detail" style="min-height:5.5rem"' +
+                    ' placeholder="무엇을 맡아 어떤 결과를 냈는지 적어 주세요.">' +
+                    esc(a.detail) + "</textarea>",
+                }) +
+                "</div></section>"
+              );
+            })
+            .join("") +
+          "</div>";
+      }
+
+      return (
+        panelHeader(
+          "활동·수상 이력",
+          "활동이나 수상 내역을 항목별로 추가합니다. 순서를 바꾸거나 삭제할 수 있고, 아무것도 입력하지 않은 항목은 제출되지 않습니다."
+        ) +
+        '<div class="panel__body">' +
+        (state.showErrors && Object.keys(err).length ? alertBox(errorsForStep(2)) : "") +
+        body +
+        '<button type="button" class="btn btn--add" id="add-activity">+ 활동 추가</button>' +
+        "</div>"
+      );
+    }
+
+    function reviewRow(key, value) {
+      var empty = !String(value || "").trim();
+      return (
+        '<dt class="review__key">' + esc(key) + "</dt>" +
+        '<dd class="review__val' + (empty ? " review__val--empty" : "") + '">' +
+        (empty ? "미입력" : esc(value)) +
+        "</dd>"
+      );
+    }
+
+    function renderStep3() {
+      var b = state.basic;
+      var e = state.essay;
+      var filled = state.activities.filter(function (a) {
+        return a.title.trim();
+      });
+
+      var acts = filled.length
+        ? '<ul class="review__list">' +
+          filled
+            .map(function (a) {
+              return (
+                "<li>" + esc(a.title) +
+                (a.period.trim() ? " (" + esc(a.period) + ")" : "") +
+                (a.detail.trim()
+                  ? '<span class="ts-subtext review__note">' + esc(a.detail) + "</span>"
+                  : "") +
+                "</li>"
+              );
+            })
+            .join("") +
+          "</ul>"
+        : '<span class="review__val--empty">미입력</span>';
+
+      return (
+        panelHeader("검토·제출", "입력한 내용을 확인한 뒤 제출합니다. 제출 후에도 마감 전까지 수정할 수 있습니다.") +
+        '<div class="panel__body">' +
+        (state.showErrors ? renderSubmitBlockers() : "") +
+        '<dl class="review">' +
+        reviewRow("이름", b.name) +
+        reviewRow("생년월일", b.birth) +
+        reviewRow("이메일", b.email) +
+        reviewRow("전화번호", b.phone) +
+        reviewRow("지원 학과", b.major) +
+        reviewRow("전형", b.track) +
+        reviewRow("자기소개", e.intro) +
+        reviewRow("지원 동기", e.motive) +
+        '<dt class="review__key">활동·수상 이력</dt>' +
+        '<dd class="review__val' + (filled.length ? "" : " review__val--empty") + '">' + acts + "</dd>" +
+        "</dl></div>"
+      );
+    }
+
+    function allBlockers() {
+      var out = [];
+      for (var i = 0; i < 3; i++) {
+        errorsForStep(i).forEach(function (e) {
+          out.push({ id: e.id, msg: STEPS[i].label + " · " + e.msg, step: i });
+        });
+      }
+      return out;
+    }
+
+    function renderSubmitBlockers() {
+      var blockers = allBlockers();
+      if (!blockers.length) return "";
+      var items = blockers
+        .map(function (b) {
+          return '<li><a href="#" data-jump-step="' + b.step + '" data-jump="' + b.id + '">' + esc(b.msg) + "</a></li>";
+        })
+        .join("");
+      return (
+        '<div class="alert" role="alert">' + icon.alert +
+        '<div class="alert__body">' +
+        '<span class="alert__title">제출하려면 ' + blockers.length + "개 항목을 채워야 합니다</span>" +
+        "<ul>" + items + "</ul>" +
+        "</div></div>"
+      );
+    }
+
+    function renderSubmitted() {
+      return (
+        '<div class="done">' +
+        '<div class="done__mark">' + icon.checkLarge + "</div>" +
+        '<h1 class="ts-h3">지원서가 제출되었습니다</h1>' +
+        '<p class="ts-p panel__lede" style="margin-left:auto;margin-right:auto">' +
+        "접수 확인 메일을 " + esc(state.basic.email) + " 으로 보냈습니다. 마감일 전까지는 언제든 수정할 수 있습니다." +
+        "</p>" +
+        '<dl class="done__meta">' +
+        "<dt>접수번호</dt><dd>" + esc(state.receipt.no) + "</dd>" +
+        "<dt>제출 일시</dt><dd>" + esc(state.receipt.at) + "</dd>" +
+        "<dt>지원 학과</dt><dd>" + esc(state.basic.major) + "</dd>" +
+        "</dl>" +
+        '<button type="button" class="btn btn--outline" id="reopen">지원서 수정하기</button>' +
+        "</div>"
+      );
+    }
+
+    function renderNav() {
+      var last = state.step === STEPS.length - 1;
+      var prev = state.step > 0
+        ? '<button type="button" class="btn btn--outline" data-nav="prev">' + icon.arrowLeft + "이전</button>"
+        : "<span></span>";
+      var next = last
+        ? '<button type="button" class="btn btn--solid" data-nav="submit">제출하기</button>'
+        : '<button type="button" class="btn btn--solid" data-nav="next">다음' + icon.arrowRight + "</button>";
+      return '<div class="navbar">' + prev + next + "</div>";
+    }
+
+    /* ---------------------------------------------------------------------
+     * Render + focus management
+     * ------------------------------------------------------------------- */
+    var panel = document.getElementById("panel");
+
+    function render(focusPanel) {
+      renderRail();
+
+      if (state.submitted) {
+        panel.innerHTML = renderSubmitted();
+        if (focusPanel) panel.focus();
+        return;
+      }
+
+      var err = errorMap(state.step);
+      var html =
+        state.step === 0 ? renderStep0(err)
+        : state.step === 1 ? renderStep1(err)
+        : state.step === 2 ? renderStep2(err)
+        : renderStep3();
+
+      panel.innerHTML = html + renderNav();
+      if (focusPanel) panel.focus();
+    }
+
+    /* ---------------------------------------------------------------------
+     * Binding — inputs mutate state in place so typing never re-renders
+     * (a re-render on every keystroke would drop focus and break IME composition).
+     * ------------------------------------------------------------------- */
+    function writeBinding(path, value) {
+      var parts = path.split(".");
+      if (parts[0] === "act") {
+        var id = Number(parts[1]);
+        var entry = state.activities.filter(function (a) {
+          return a.id === id;
+        })[0];
+        if (entry) entry[parts[2]] = value;
+        return;
+      }
+      state[parts[0]][parts[1]] = value;
+    }
+
+    panel.addEventListener("input", function (event) {
+      var el = event.target;
+      var path = el.getAttribute("data-bind");
+      if (!path) return;
+
+      writeBinding(path, el.value);
+      markDirty();
+
+      var counter = panel.querySelector('[data-counter-for="' + el.id + '"]');
+      if (counter) {
+        counter.textContent = formatCount(el.value.length);
+        counter.setAttribute("data-near", String(el.value.length >= MAX_ESSAY * 0.95));
+      }
+
+      // Clear an error the moment the field becomes valid again.
+      var wrapper = el.closest(".field");
+      if (wrapper && wrapper.getAttribute("data-invalid") === "true") {
+        if (!errorMap(state.step)[wrapper.getAttribute("data-field")]) {
+          wrapper.setAttribute("data-invalid", "false");
+          el.removeAttribute("aria-invalid");
+        }
+      }
+
+      renderRail();
+    });
+
+    panel.addEventListener("change", function (event) {
+      if (event.target.tagName === "SELECT") renderRail();
+    });
+
+    /* ---------------------------------------------------------------------
+     * Actions
+     * ------------------------------------------------------------------- */
+    function goTo(index, focusPanel) {
+      state.step = Math.max(0, Math.min(STEPS.length - 1, index));
+      state.visited[state.step] = true;
+      state.showErrors = false;
+      render(focusPanel !== false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function focusField(id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.focus();
+      el.scrollIntoView({ block: "center", behavior: "smooth" });
+    }
+
+    document.addEventListener("click", function (event) {
+      var target = event.target;
+
+      var jump = target.closest("[data-jump]");
+      if (jump) {
+        event.preventDefault();
+        var stepAttr = jump.getAttribute("data-jump-step");
+        var fieldId = jump.getAttribute("data-jump");
+        if (stepAttr !== null) {
+          state.step = Number(stepAttr);
+          state.showErrors = true;
+          render(false);
+        }
+        focusField(fieldId);
+        return;
+      }
+
+      var railBtn = target.closest("[data-goto]");
+      if (railBtn) {
+        state.submitted = false;
+        goTo(Number(railBtn.getAttribute("data-goto")));
+        return;
+      }
+
+      var nav = target.closest("[data-nav]");
+      if (nav) {
+        var action = nav.getAttribute("data-nav");
+
+        if (action === "prev") {
+          goTo(state.step - 1);
+          return;
+        }
+
+        if (action === "next") {
+          if (errorsForStep(state.step).length) {
+            state.showErrors = true;
+            render(false);
+            focusField(errorsForStep(state.step)[0].id);
+            return;
+          }
+          goTo(state.step + 1);
+          return;
+        }
+
+        if (action === "submit") {
+          var blockers = allBlockers();
+          if (blockers.length) {
+            state.showErrors = true;
+            state.step = blockers[0].step;
+            render(false);
+            focusField(blockers[0].id);
+            return;
+          }
+          state.submitted = true;
+          state.receipt = {
+            no: "2027-S-" + String(10000 + Math.floor(Math.random() * 89999)),
+            at: new Date().toLocaleString("ko-KR", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+          };
+          render(true);
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          return;
+        }
+      }
+
+      if (target.closest("#reopen")) {
+        state.submitted = false;
+        goTo(0);
+        return;
+      }
+
+      if (target.closest("#add-activity")) {
+        state.activities.push({
+          id: state.nextId++,
+          title: "",
+          period: "",
+          detail: "",
+        });
+        markDirty();
+        render(false);
+        focusField("f-act-title-" + (state.nextId - 1));
+        return;
+      }
+
+      var remove = target.closest("[data-remove]");
+      if (remove) {
+        var removeId = Number(remove.getAttribute("data-remove"));
+        state.activities = state.activities.filter(function (a) {
+          return a.id !== removeId;
+        });
+        markDirty();
+        render(false);
+        return;
+      }
+
+      var move = target.closest("[data-move]");
+      if (move) {
+        var moveId = Number(move.getAttribute("data-id"));
+        var dir = move.getAttribute("data-move") === "up" ? -1 : 1;
+        var from = -1;
+        state.activities.forEach(function (a, i) {
+          if (a.id === moveId) from = i;
+        });
+        var to = from + dir;
+        if (from < 0 || to < 0 || to >= state.activities.length) return;
+
+        var moved = state.activities.splice(from, 1)[0];
+        state.activities.splice(to, 0, moved);
+        markDirty();
+        render(false);
+
+        // Keep the keyboard on the button that just moved.
+        var again = panel.querySelector(
+          '[data-move="' + (dir === -1 ? "up" : "down") + '"][data-id="' + moveId + '"]'
+        );
+        if (again && !again.disabled) again.focus();
+        else focusField("f-act-title-" + moveId);
+      }
+    });
+
+    // Korean content — declared for screen readers and locale-aware controls.
+    document.documentElement.lang = "ko";
+
+    paintSave();
+    render(false);
+  })();
+</script>
