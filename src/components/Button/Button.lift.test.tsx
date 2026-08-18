@@ -124,7 +124,11 @@ describe('a call site that presses too', () => {
 
   it('does the same for hover', () => {
     const { getByRole } = setup(
-      <Button colorPalette="primary" variant="solid" _hover={{ outline: '1px' }}>
+      <Button
+        colorPalette="primary"
+        variant="solid"
+        _hover={{ outline: '1px' }}
+      >
         A
       </Button>
     );
