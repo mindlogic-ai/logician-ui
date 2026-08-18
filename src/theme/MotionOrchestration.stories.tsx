@@ -76,7 +76,12 @@ const RatioDemo = () => {
         { label: '대칭 300 / 300', enter: 300, exit: 300 },
         { label: '비대칭 300 / 150 (presence)', enter: 300, exit: 150 },
       ].map((row) => (
-        <Grid key={row.label} templateColumns="180px 1fr" gap={4} alignItems="center">
+        <Grid
+          key={row.label}
+          templateColumns="180px 1fr"
+          gap={4}
+          alignItems="center"
+        >
           <Subtext color="fg.muted" mb={0}>
             {row.label}
           </Subtext>
@@ -225,8 +230,16 @@ export const Presence: Story = {
 const LOOP_POLICY = [
   ['spin', '느려지되 계속 돈다', '작업이 살아 있다는 유일한 신호라서'],
   ['pulse', '멈춘다', '자리표시자라는 사실은 모양이 말한다'],
-  ['shimmer', '멈추고 그라디언트도 걷는다', '멈춘 하이라이트는 얼룩으로 보인다'],
-  ['indeterminate', '막대가 선다', '가로로 계속 지나가는 것이 가장 위험한 움직임'],
+  [
+    'shimmer',
+    '멈추고 그라디언트도 걷는다',
+    '멈춘 하이라이트는 얼룩으로 보인다',
+  ],
+  [
+    'indeterminate',
+    '막대가 선다',
+    '가로로 계속 지나가는 것이 가장 위험한 움직임',
+  ],
 ];
 
 export const Loops: Story = {
@@ -241,10 +254,10 @@ export const Loops: Story = {
         <H2 mb={2}>loop</H2>
         <Text color="fg.muted" mb={6}>
           끝나는 시점을 모르는 동안 계속 도는 움직임입니다.{' '}
-          <code>animationIterationCount: infinite</code>가 붙고, <b>동작
-          줄이기가 duration 0이 아닌</b> 유일한 부류입니다 — 루프를 0으로 만들면
-          요소가 주기 한가운데서 얼어붙거나(멈춘 스피너 = 죽은 요청) 신호 자체가
-          사라집니다.
+          <code>animationIterationCount: infinite</code>가 붙고,{' '}
+          <b>동작 줄이기가 duration 0이 아닌</b> 유일한 부류입니다 — 루프를
+          0으로 만들면 요소가 주기 한가운데서 얼어붙거나(멈춘 스피너 = 죽은
+          요청) 신호 자체가 사라집니다.
         </Text>
 
         <Section
@@ -270,8 +283,8 @@ export const Loops: Story = {
             ))}
           </Stack>
           <Subtext color="fg.muted" mt={4} mb={0}>
-            WCAG 2.2.2(일시정지 · 정지 · 숨기기)는 자동으로 시작해 5초 넘게
-            돌고 다른 내용과 함께 놓이는 움직임을 다룹니다 — 느린 요청 동안의
+            WCAG 2.2.2(일시정지 · 정지 · 숨기기)는 자동으로 시작해 5초 넘게 돌고
+            다른 내용과 함께 놓이는 움직임을 다룹니다 — 느린 요청 동안의
             스켈레톤이 정확히 그것이고, 자리표시자에는 정지 버튼을 달 수 없으니
             <code>prefers-reduced-motion</code>에서 실제로 멈추는 것이 그 자리를
             지키는 방법입니다.
@@ -310,8 +323,8 @@ export const Loops: Story = {
             <ProgressBar value={62} />
             <Subtext color="fg.muted" mb={0}>
               위가 indeterminate, 아래가 값이 있는 막대입니다. 위쪽은{' '}
-              <code>translate</code>로 움직여 레이아웃을 다시 계산하지 않습니다 —
-              느린 요청 내내 도는 루프라 그 차이가 쌓입니다.
+              <code>translate</code>로 움직여 레이아웃을 다시 계산하지 않습니다
+              — 느린 요청 내내 도는 루프라 그 차이가 쌓입니다.
             </Subtext>
           </Stack>
         </Section>
@@ -349,7 +362,11 @@ const StaggerLab = () => {
             {n}개
           </Button>
         ))}
-        <Button size="xs" variant="outline" onClick={() => setRun((r) => r + 1)}>
+        <Button
+          size="xs"
+          variant="outline"
+          onClick={() => setRun((r) => r + 1)}
+        >
           다시 재생
         </Button>
       </HStack>
@@ -436,9 +453,9 @@ export const Stagger: Story = {
           </Subtext>
           <Subtext color="fg.muted" mb={0}>
             <code>Masonry</code>와 <code>Table</code>에는 붙이지 않습니다. 길고,
-            가상 스크롤 후보이며(그러면 인덱스가 &quot;스크롤 창 안의 위치&quot;가
-            되어 스크롤할 때마다 다시 도착합니다), 정렬을 바꾸면 헤더를 누를
-            때마다 전체를 다시 깝니다.
+            가상 스크롤 후보이며(그러면 인덱스가 &quot;스크롤 창 안의
+            위치&quot;가 되어 스크롤할 때마다 다시 도착합니다), 정렬을 바꾸면
+            헤더를 누를 때마다 전체를 다시 깝니다.
           </Subtext>
         </Stack>
       </Section>
@@ -485,9 +502,9 @@ export const Stagger: Story = {
             <code>ComboboxField</code>는 뺐습니다. 같은 목록이지만 필터 뒤에
             있어서 한 글자 칠 때마다 항목이 다시 마운트되고, 읽는 중인 결과를
             매번 다시 깔게 됩니다. Toast도 뺐습니다 — 하나씩 도착하는 것이라
-            인덱스가 의미를 갖지 않고, 스택 오프셋을 Ark가 인라인으로 관리합니다.
-            Tree는 자식 구성이 호출부의 것이라 라이브러리가 인덱스를 알 수
-            없습니다.
+            인덱스가 의미를 갖지 않고, 스택 오프셋을 Ark가 인라인으로
+            관리합니다. Tree는 자식 구성이 호출부의 것이라 라이브러리가 인덱스를
+            알 수 없습니다.
           </Subtext>
         </Stack>
       </Section>
@@ -518,7 +535,7 @@ export const Governance: Story = {
         {[
           [
             '호출부가 둘 이상인가',
-            'Skeleton 하나만 쓰는 움직임이면 Skeleton 안에 두세요. shimmer가 프리셋이 된 건 Skeleton과 ProgressBar가 같은 정책(줄일 때 멈춘다)을 나눠 갖기 때문입니다.',
+            'Spinner 하나만 쓰는 회전이면 Spinner 안에 두세요 — spin이 실제로 그렇게 내려갔습니다. presence가 프리셋인 건 메뉴·팝오버·툴팁·셀렉트·콜랩시블 다섯이 같은 시계를 나눠 갖기 때문입니다.',
           ],
           [
             '기존 어휘로 정말 안 되는가',
@@ -530,7 +547,11 @@ export const Governance: Story = {
           ],
           [
             '테스트가 그 정책을 강제하는가',
-            '_open이 있으면 _closed도 있어야 하고, 루프면 _motionReduce가 있어야 합니다. 둘 다 이미 CI가 봅니다.',
+            '_open이 있으면 _closed도 있어야 하고, 그 _closed가 더 짧아야 합니다. 컴포넌트로 내려간 모션도 동작 줄이기 분기를 갖고 있어야 합니다. 셋 다 이미 CI가 봅니다.',
+          ],
+          [
+            '이름을 하나만 쓰고 있는가',
+            'animationStyle은 한 번에 이름 하나입니다. 배열이나 객체를 주면 두 모션이 겹치는 게 아니라 반응형 브레이크포인트로 읽힙니다 — 모바일은 이것, 데스크톱은 저것. 타입이 못 잡아서(Chakra가 AnyString으로 열어둠) lint가 잡습니다.',
           ],
         ].map(([q, a]) => (
           <Box key={q}>
@@ -543,6 +564,40 @@ export const Governance: Story = {
           </Box>
         ))}
       </Stack>
+
+      <H2 mb={2} mt={4}>
+        둘을 같이 써야 한다면
+      </H2>
+      <Text color="fg.muted" mb={4}>
+        <code>animationStyle</code> 슬롯은 하나뿐이라 이름은 한 번에 하나입니다.
+        그렇다고 요소가 한 가지만 할 수 있는 건 아닙니다 —{' '}
+        <b>transition과 animation은 서로 다른 CSS 속성</b>이라 겹치지 않고 같이
+        돕니다. 프리셋으로 하나를 고르고, 나머지는 그냥 적으세요.
+      </Text>
+
+      <Box
+        as="pre"
+        bg="bg.muted"
+        p={4}
+        borderRadius="md"
+        fontSize="xs"
+        overflowX="auto"
+        mb={4}
+      >
+        {`<Box
+  animationStyle="presence"          // 열림·닫힘 시계 (animation-*)
+  transitionProperty="opacity"       // 그와 별개로 도는 전환 (transition-*)
+  transitionDuration="fast"
+/>`}
+      </Box>
+
+      <Subtext color="fg.muted" mb={6}>
+        Chakra 자신이 이렇게 씁니다: 메뉴 레시피가 <code>animationStyle</code>로
+        움직임 <b>이름</b>을 고르고 <code>animationDuration</code>으로{' '}
+        <b>시계</b>를 따로 붙입니다. 우리 <code>presence</code>는 그 반대로
+        시계만 주기 때문에, 레시피가 정한 이름을 덮지 않고 여섯 부품에 동시에
+        앉을 수 있습니다.
+      </Subtext>
 
       <Subtext color="fg.muted" mb={0}>
         빼는 것도 같은 규칙입니다. 호출부가 하나로 줄어든 프리셋은 그 컴포넌트로

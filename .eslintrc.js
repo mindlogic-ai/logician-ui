@@ -55,6 +55,31 @@ module.exports = {
         ],
       },
     ],
+    // ── motion vocabulary guards ────────────────────────────────────────
+    // `animationStyle` cannot be narrowed by types: Chakra declares it as
+    // `ConditionalValue<... | AnyString>`, so a typo and a responsive array
+    // both type-check and then silently do the wrong thing. These two are the
+    // only place that can catch either.
+    'no-restricted-syntax': [
+      'error',
+      {
+        // `animationStyle={['travel', 'spring']}` reads as *breakpoints*, not as
+        // two motions combined: travel on mobile, spring from `sm` up. It is the
+        // one mistake here that produces no error and no visible symptom on the
+        // machine that wrote it.
+        selector:
+          "JSXAttribute[name.name='animationStyle'] > JSXExpressionContainer > :matches(ArrayExpression, ObjectExpression)",
+        message:
+          'animationStyle takes one name. An array or object is read as responsive breakpoints, not as two motions at once — to combine, put the second one in its own CSS properties (see Theme/Motion Orchestration).',
+      },
+      {
+        // Chakra ignores a name it does not know, so a typo is silence.
+        selector:
+          "JSXAttribute[name.name='animationStyle'] > Literal[value!=/^(press|feedback|travel|spring|presence|stagger|composite|slide-fade-in|slide-fade-out|scale-fade-in|scale-fade-out)$/]",
+        message:
+          "Unknown animationStyle. The vocabulary is press, feedback, travel, spring, presence, stagger, composite (plus Chakra's slide-fade-*/scale-fade-*). A motion only one component uses belongs in that component's .styles.ts.",
+      },
+    ],
     '@typescript-eslint/no-empty-object-type': 'off',
     '@next/next/no-img-element': 'off', // Allow img elements in UI library
     'unused-imports/no-unused-vars': [
