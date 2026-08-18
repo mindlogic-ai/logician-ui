@@ -6,6 +6,8 @@ import {
 
 import { focusRing } from '@/utils/focusRing';
 
+import { checkmarkDraw } from './Checkbox.styles';
+
 export const CheckboxControl = forwardRef<HTMLDivElement, CheckboxControlProps>(
   (props, ref) => (
     <ChakraCheckbox.Control
@@ -36,7 +38,7 @@ export const CheckboxControl = forwardRef<HTMLDivElement, CheckboxControlProps>(
     >
       {/* The polyline only mounts once checked, so the draw runs on mount —
           exactly when we want it. */}
-      <ChakraCheckbox.Indicator animationStyle="checkmarkDraw" />
+      <ChakraCheckbox.Indicator css={checkmarkDraw} />
     </ChakraCheckbox.Control>
   )
 );

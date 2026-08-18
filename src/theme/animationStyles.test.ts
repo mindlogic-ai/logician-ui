@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { system } from './index';
-import { animationStyles, durations, keyframes } from './motion';
+import { animationStyles, durations } from './motion';
 
 /** The presets that carry a `transition-*` clock, as opposed to the two hatches. */
 const CLOCKED = ['press', 'feedback', 'travel', 'spring'] as const;
@@ -111,63 +111,6 @@ describe('motion vocabulary', () => {
     expect(timing('travel')).toEqual([d('motion-base'), e('emphasized')]);
     expect(timing('spring')).toEqual([d('motion-base'), e('overshoot')]);
   });
-
-  it('arkTravel sets the custom properties Ark reads, not style props', () => {
-    // Ark inlines this part's `transition-*`, and inline beats a class, so the
-    // ordinary presets cannot reach it — only the vars its inline `var()`s read.
-    const css = applied('arkTravel');
-    expect(css['--transition-duration']).toBe(
-      'var(--chakra-durations-motion-base)'
-    );
-    expect(css['--transition-timing-function']).toBe(
-      'var(--chakra-easings-emphasized)'
-    );
-    expect(css[REDUCED_QUERY]).toEqual({
-      '--transition-duration': 'var(--chakra-durations-motion-instant)',
-    });
-  });
-
-  it('checkmarkDraw also restores what its animation presupposes', () => {
-    // An animation does not turn off like a transition: killing it alone would
-    // park stroke-dashoffset at its start and leave the tick invisible, so the
-    // dash pattern has to be undone as well.
-    expect(applied('checkmarkDraw')[REDUCED_QUERY]).toEqual({
-      '& polyline, & path': { animation: 'none', strokeDasharray: 'none' },
-    });
-  });
-});
-
-/**
- * Two presets drive a `keyframes` animation rather than a transition, because
- * the element they animate only mounts once its control is checked — there is
- * no previous value to interpolate from. They turn off differently from each
- * other, which is the part that is easy to get wrong.
- */
-describe('the two mount-time animations', () => {
-  it('lands the radio dot exactly where its recipe rests it', () => {
-    // Chakra's radiomark declares `.dot { scale: 0.4 }`. Ending the keyframe
-    // anywhere else would make the dot jump the frame the animation hands back.
-    expect(keyframes['dot-pop'].to).toEqual({ scale: '0.4' });
-    expect(keyframes['dot-pop'].from).toEqual({ scale: '0' });
-  });
-
-  it('needs no cleanup under reduced motion, unlike the checkmark', () => {
-    // Switching the animation off leaves the dot at the recipe's resting scale,
-    // so nothing else has to be undone...
-    expect(applied('dotPop')[REDUCED_QUERY]).toMatchObject({
-      '& .dot': { animation: 'none' },
-    });
-    // ...whereas the checkmark's dash pattern is only correct *while* it runs.
-    expect(applied('checkmarkDraw')[REDUCED_QUERY]).toEqual({
-      '& polyline, & path': { animation: 'none', strokeDasharray: 'none' },
-    });
-  });
-
-  it('still eases the ring fill, since dotPop owns that element too', () => {
-    expect(applied('dotPop').transitionDuration).toBe(
-      'var(--chakra-durations-fast)'
-    );
-  });
 });
 
 /**
@@ -190,7 +133,11 @@ describe('the enter/exit policy', () => {
     // A guard on the guard: if the condition Chakra emits for `_open` ever
     // changes spelling, `withOpen` silently empties and every assertion below
     // passes over nothing.
-    expect(withOpen).toEqual(expect.arrayContaining(['presence', 'modal']));
+    // `presence` is the only global preset with an open state — the Modal now
+    // carries its own two keyframe names and borrows this clock. The walk stays
+    // a walk rather than an assertion about `presence` alone, so the next
+    // preset with an `_open` branch is covered the day it is written.
+    expect(withOpen).toEqual(['presence']);
   });
 
   it('never declares an enter without the matching exit', () => {
@@ -211,19 +158,6 @@ describe('the enter/exit policy', () => {
     });
   });
 
-  it('hands the same clock to the Modal, which only owns its keyframes', () => {
-    const presence = applied('presence') as Css;
-    const modal = applied('modal') as Css;
-
-    (['animationDuration', 'animationTimingFunction'] as const).forEach((p) => {
-      expect(modal[OPEN][p]).toBe(presence[OPEN][p]);
-      expect(modal[CLOSED][p]).toBe(presence[CLOSED][p]);
-    });
-    // ...and the bespoke part is still bespoke.
-    expect(modal[OPEN].animationName).toBe('modal-in');
-    expect(modal[CLOSED].animationName).toBe('modal-out');
-  });
-
   it('declares no animation-name of its own, so each recipe keeps its own', () => {
     // The reason one preset can sit on a menu that slides, a popover that
     // scales and a collapsible that interpolates a measured height. A name here
@@ -231,77 +165,5 @@ describe('the enter/exit policy', () => {
     const presence = applied('presence') as Css;
     expect(presence[OPEN].animationName).toBeUndefined();
     expect(presence[CLOSED].animationName).toBeUndefined();
-  });
-});
-
-/**
- * Loops turn off differently from everything else in this file, and wrongly in
- * four different ways if the author reaches for the reflex `duration: 0`: a
- * frozen spinner reads as a hung request, a frozen shimmer is a bright smear
- * parked across a placeholder.
- *
- * WCAG 2.2.2 is what makes this more than taste — it covers motion that starts
- * on its own, runs past five seconds and shares the screen with other content,
- * which is exactly a skeleton during a slow request.
- */
-describe('the looping presets', () => {
-  const LOOPS = ['spin', 'pulse', 'shimmer', 'indeterminate'] as const;
-
-  it('run forever, which is what makes them loops', () => {
-    LOOPS.forEach((name) => {
-      expect((applied(name) as Css).animationIterationCount, name).toBe(
-        'infinite'
-      );
-    });
-  });
-
-  it('every one of them decides what reduced motion means for it', () => {
-    LOOPS.forEach((name) => {
-      const reduced = (applied(name) as Css)[REDUCED_QUERY];
-      expect(reduced, name).toBeDefined();
-      // Never `duration: 0`. On a finite transition that keeps the end state;
-      // on a loop it parks the element at an arbitrary frame of its cycle.
-      expect(reduced.animationDuration, name).not.toBe(
-        'var(--chakra-durations-motion-instant)'
-      );
-    });
-  });
-
-  it('keeps the spinner turning, slower, because it is the signal', () => {
-    const css = applied('spin') as Css;
-    const running = DURATION_MS[css.animationDuration];
-    const reduced = DURATION_MS[css[REDUCED_QUERY].animationDuration];
-    expect(reduced).toBeGreaterThan(running);
-    // Still an animation, still infinite — only the rate changed.
-    expect(css[REDUCED_QUERY].animationName).toBeUndefined();
-  });
-
-  it('stops the three that only decorate a placeholder', () => {
-    (['pulse', 'shimmer', 'indeterminate'] as const).forEach((name) => {
-      expect((applied(name) as Css)[REDUCED_QUERY].animationName, name).toBe(
-        'none'
-      );
-    });
-  });
-
-  it('turns the two seamless loops at a constant rate', () => {
-    // A rotation and a track crossing both return to their own start. Easing
-    // decelerates into the last frame and accelerates out of the first, which
-    // are the same position — so the eye catches a stutter once per cycle.
-    ['spin', 'indeterminate'].forEach((name) => {
-      expect((applied(name) as Css).animationTimingFunction, name).toBe(
-        'linear'
-      );
-    });
-  });
-
-  it('names Chakra keyframes for spin and pulse instead of redefining them', () => {
-    // Redefining a keyframe we did not author replaces it for every Chakra
-    // component that reads it by name — the trap the `motion.` duration prefix
-    // exists to avoid, one layer down.
-    expect(keyframes).not.toHaveProperty('spin');
-    expect(keyframes).not.toHaveProperty('pulse');
-    expect((applied('spin') as Css).animationName).toBe('spin');
-    expect((applied('pulse') as Css).animationName).toBe('pulse');
   });
 });

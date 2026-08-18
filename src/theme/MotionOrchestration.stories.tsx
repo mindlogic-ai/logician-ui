@@ -9,11 +9,6 @@ import { Menu } from '../components/Menu';
 import { Popover } from '../components/Popover';
 import { ProgressBar } from '../components/ProgressBar';
 import { SelectField } from '../components/Select';
-import {
-  Skeleton,
-  SkeletonCircle,
-  SkeletonText,
-} from '../components/Skeleton';
 import { Spinner } from '../components/Spinner';
 import { Tooltip } from '../components/Tooltip';
 import { H2, H3, Subtext, Text } from '../components/Typography';
@@ -294,28 +289,16 @@ export const Loops: Story = {
         </Section>
 
         <Section
-          title="shimmer · pulse — Skeleton"
-          lead="루프 어휘가 자리값을 하는 이유. Skeleton은 움직임 말고는 아무것도 아닌 유일한 표면입니다."
+          title="루프는 전역 어휘가 아닙니다"
+          lead="쓰는 컴포넌트가 하나뿐인 모션은 그 컴포넌트 옆에 삽니다 — 고를 일이 없는 것을 고르는 목록에 두면 목록이 무거워지기만 합니다."
         >
-          <HStack gap={2} mb={4}>
-            {(['shimmer', 'pulse', 'none'] as const).map((a) => (
-              <Button
-                key={a}
-                size="xs"
-                variant={animation === a ? 'solid' : 'outline'}
-                onClick={() => setAnimation(a)}
-              >
-                {a}
-              </Button>
-            ))}
-          </HStack>
-          <HStack gap={4} align="flex-start" maxW="520px">
-            <SkeletonCircle size="12" animation={animation} />
-            <Stack gap={2} flex="1">
-              <Skeleton height="5" animation={animation} />
-              <SkeletonText noOfLines={2} gap="2" animation={animation} />
-            </Stack>
-          </HStack>
+          <Subtext color="fg.muted" mb={0}>
+            <code>spin</code>은 <code>Spinner.styles.ts</code>,{' '}
+            <code>indeterminate</code>는 <code>ProgressBar.styles.ts</code>에
+            있습니다. 읽는 토큰(<code>motion.loop.*</code>)은 여전히 전역
+            스케일이고, 지역인 것은 <b>조합</b>입니다. 두 번째 호출부가 생기는
+            날이 전역으로 올릴 때입니다.
+          </Subtext>
         </Section>
 
         <Section

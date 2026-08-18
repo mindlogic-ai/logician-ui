@@ -77,10 +77,8 @@ export * from './components/SeeMoreButton';
 export * from './components/SegmentedControl';
 export * from './components/SegmentedProgressBar';
 export * from './components/Select';
-export * from './components/Skeleton';
 export * from './components/Slider';
 export * from './components/Spinner';
-export * from './components/Swap';
 export * from './components/Switch';
 
 // Layout Components

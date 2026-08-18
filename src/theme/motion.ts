@@ -81,8 +81,6 @@ export const durations = {
     loop: {
       /** One full rotation of a spinner. Preserves the 0.65s it was born with. */
       turn: { value: '650ms' },
-      /** One breath of a placeholder pulsing in place. */
-      ambient: { value: '1200ms' },
       /** One pass of something crossing its whole container. */
       sweep: { value: '1800ms' },
     },
@@ -186,34 +184,11 @@ const PRESENCE_TIMING = {
 } as const;
 
 /**
- * Reduced motion for a **loop** is not `duration: 0`.
- *
- * A finite transition can be zeroed because its job is to connect two states
- * and the end state survives. A loop has no end state: zeroing it either
- * freezes the element mid-cycle — a spinner stuck at some arbitrary angle,
- * which reads as a hung request rather than a working one — or removes the only
- * thing on screen saying work is happening. So each loop preset decides for
- * itself what "still meaningful, but not moving at you" is, and the four
- * answers are genuinely different: the spinner slows down and keeps turning
- * because it *is* the signal; the shimmer, the pulse and the indeterminate bar
- * stop, because what they signal ("this is a placeholder") is carried by the
- * shape, not the movement.
- *
- * This is also where WCAG 2.2.2 (Pause, Stop, Hide) lands. It applies to motion
- * that starts automatically, runs more than five seconds and is presented
- * alongside other content — which is exactly a skeleton screen during a slow
- * request, the one case these presets exist for. There is no pause control on a
- * placeholder, so honouring `prefers-reduced-motion` by actually *stopping* is
- * how the loops stay on the right side of it.
- */
-const LOOP = { animationIterationCount: 'infinite' } as const;
-
-/**
  * Dash length for the `checkmark-draw` keyframe. Declared once so the pattern
  * the tick is hidden behind and the offset the keyframe animates away are the
  * same number. Chakra's polyline measures ~22.6 user units; 24 clears it.
  */
-const CHECKMARK_DASH = 24;
+export const CHECKMARK_DASH = 24;
 
 /**
  * The motion vocabulary — four intents, plus two escape hatches.
@@ -283,30 +258,6 @@ export const animationStyles = {
   },
 
   /**
-   * `travel`, delivered through custom properties instead of style props.
-   *
-   * Ark writes some parts' `transition-*` declarations **inline**, and an inline
-   * declaration beats any class rule, so the presets above never reach them.
-   * What Ark leaves open are the custom properties its inline `var()`s read:
-   * `transition-duration: var(--transition-duration, 150ms)` and
-   * `transition-timing-function: var(--transition-timing-function)`. Setting
-   * those is the only way in.
-   *
-   * `SegmentGroup.Indicator` is the one such part in this library. Its property
-   * list stays Ark's (`left, top, width, height`) — already right, and the one
-   * thing written inline that cannot be changed.
-   */
-  arkTravel: {
-    value: {
-      '--transition-duration': 'var(--chakra-durations-motion-base)',
-      '--transition-timing-function': 'var(--chakra-easings-emphasized)',
-      _motionReduce: {
-        '--transition-duration': 'var(--chakra-durations-motion-instant)',
-      },
-    },
-  },
-
-  /**
    * The enter/exit clock, for any part that has an open and a closed state.
    *
    * Applied as `animationStyle="presence"` to a Chakra or Ark presence part —
@@ -323,116 +274,6 @@ export const animationStyles = {
    */
   presence: {
     value: { ...PRESENCE_TIMING },
-  },
-
-  /**
-   * The Modal's own enter and exit, on one element via `_open` / `_closed`.
-   *
-   * Chakra's `motionPreset: "scale"` already gets the ratio right — 200ms in,
-   * 100ms out — but scales from a flat 0.95 with no vertical travel and no
-   * named curve. This enters from slightly lower and smaller so the dialog
-   * reads as coming toward the reader, and leaves by shrinking a little without
-   * the travel, because an exit only has to get out of the way.
-   *
-   * The two keyframes stay bespoke — no other surface enters by rising toward
-   * the reader — but the clock is now `presence`'s, spread in rather than
-   * restated. The numbers were already identical; the point is that they can no
-   * longer drift apart, and that the asymmetry test below reaches this preset
-   * as well.
-   */
-  modal: {
-    value: {
-      _open: { animationName: 'modal-in', ...PRESENCE_TIMING._open },
-      _closed: { animationName: 'modal-out', ...PRESENCE_TIMING._closed },
-      _motionReduce: PRESENCE_TIMING._motionReduce,
-    },
-  },
-
-  /**
-   * The spinner's turn.
-   *
-   * `linear`, and this is the one preset where the curve is not a preference:
-   * an eased rotation decelerates into 360° and accelerates out of 0°, but
-   * those are the same position, so the eye sees a stutter once per turn. A
-   * loop that returns to its own start has no seam only if the rate is
-   * constant.
-   *
-   * Under reduced motion it keeps turning, at roughly half speed. A spinner is
-   * the only thing on screen asserting that the request is still alive; freezing
-   * it says the opposite. Slower movement is the concession — see {@link LOOP}.
-   */
-  spin: {
-    value: {
-      // Chakra's `spin` keyframe (0deg → 360deg) rather than one of ours: it is
-      // already exactly right, and redefining a keyframe we did not author would
-      // silently retime every Chakra component that reaches for it — the same
-      // trap the `motion.` duration prefix exists to avoid.
-      animationName: 'spin',
-      animationDuration: 'motion.loop.turn',
-      animationTimingFunction: 'linear',
-      ...LOOP,
-      _motionReduce: { animationDuration: 'motion.loop.sweep' },
-    },
-  },
-
-  /**
-   * A placeholder breathing in place — opacity only, no travel.
-   *
-   * Stops flat under reduced motion. What a pulse communicates is "this box is
-   * not content yet", and the box goes on saying that while perfectly still.
-   */
-  pulse: {
-    value: {
-      // Chakra's `pulse` keyframe (50% { opacity: 0.5 }), for the same reason
-      // `spin` reuses its rotation.
-      animationName: 'pulse',
-      animationDuration: 'motion.loop.ambient',
-      animationTimingFunction: 'standard',
-      ...LOOP,
-      _motionReduce: { animationName: 'none' },
-    },
-  },
-
-  /**
-   * A highlight sweeping across a placeholder. The call site owns the gradient;
-   * this preset only slides it, because the background is the part that varies
-   * (a skeleton's wash is not a progress bar's).
-   *
-   * Static under reduced motion — a horizontal wipe is the loop most likely to
-   * provoke the vestibular response the media query is asking us to avoid.
-   */
-  shimmer: {
-    value: {
-      animationName: 'shimmer',
-      animationDuration: 'motion.loop.sweep',
-      animationTimingFunction: 'standard',
-      ...LOOP,
-      _motionReduce: { animationName: 'none' },
-    },
-  },
-
-  /**
-   * A bar sliding across its track for work of unknown length — the
-   * determinate bar's counterpart, where there is no percentage to show.
-   *
-   * `linear`, like `spin`: this one also restarts from its own start, and an
-   * eased sweep pauses at the edge of the track every cycle, which reads as the
-   * request having stalled there.
-   *
-   * Under reduced motion the bar stops travelling and simply sits in the track.
-   * That loses the "still working" signal, which is the cost — but a bar
-   * repeatedly crossing the viewport is the highest-risk motion of the four,
-   * and the surrounding UI (a disabled control, a status line) is where that
-   * signal belongs anyway.
-   */
-  indeterminate: {
-    value: {
-      animationName: 'indeterminate',
-      animationDuration: 'motion.loop.sweep',
-      animationTimingFunction: 'linear',
-      ...LOOP,
-      _motionReduce: { animationName: 'none' },
-    },
   },
 
   /**
@@ -474,69 +315,6 @@ export const animationStyles = {
       // the item still has to end up visible, which `both` + a live name would
       // otherwise decide. Killing the name does that in one.
       _motionReduce: { animationName: 'none', animationDelay: '0ms' },
-    },
-  },
-
-  /**
-   * The radio's mark: the ring fills, then the dot springs in one `motion.beat` later — the
-   * same two beats as the checkbox, "pressed" then "confirmed".
-   *
-   * An animation rather than a transition, for the same reason the checkmark is
-   * one: Chakra only mounts `.dot` once the item is checked, so there is no
-   * previous value for a transition to interpolate from. Scale is the only thing
-   * a dot can do, and `overshoot` is what makes 8px of growth legible — it
-   * reverses direction, which the other curves do not.
-   *
-   * Unlike `checkmarkDraw`, the reduced-motion branch only has to switch the
-   * animation off: the recipe already declares the dot's resting `scale: 0.4`,
-   * so removing the animation lands it exactly where it belongs. The checkmark
-   * has to undo its dash pattern as well, because that one is only correct
-   * *while* the animation runs.
-   *
-   * The fill transition lives here too rather than in `feedback`, because this
-   * element is both the ring that fills and the dot's parent, and it can only
-   * carry one `animationStyle`.
-   */
-  dotPop: {
-    value: {
-      transitionProperty: 'background-color, border-color',
-      transitionDuration: 'fast',
-      transitionTimingFunction: 'standard',
-      '& .dot': {
-        animation: `dot-pop var(--chakra-durations-motion-base) var(--chakra-easings-overshoot) var(--chakra-durations-motion-beat) both`,
-      },
-      _motionReduce: {
-        transitionDuration: 'motion.instant',
-        '& .dot': { animation: 'none' },
-      },
-    },
-  },
-
-  /**
-   * Strokes a checkmark on instead of flashing it in, one `motion.beat` after the box fills.
-   *
-   * **Not general.** Unlike the four intents, this one is sized to one icon: the
-   * dash is {@link CHECKMARK_DASH} user units, which covers Chakra's ~22.6-unit
-   * checkmark in a 24 viewBox and nothing longer. Applied to a longer path the
-   * far end would never be revealed; applied to a filled (non-stroke) icon
-   * nothing happens at all, because there is no stroke to dash. Another icon
-   * that wants to be drawn on needs its own preset with its own dash length —
-   * measure the path, do not reuse this number.
-   *
-   * This is an `animation`, not a transition, and it does not turn off the same
-   * way: killing the animation alone would park `stroke-dashoffset` at its start
-   * value and leave the tick invisible, so the reduced-motion branch has to undo
-   * the dash pattern as well.
-   */
-  checkmarkDraw: {
-    value: {
-      '& polyline, & path': {
-        strokeDasharray: CHECKMARK_DASH,
-        animation: `checkmark-draw var(--chakra-durations-motion-base) var(--chakra-easings-emphasized) var(--chakra-durations-motion-beat) both`,
-      },
-      _motionReduce: {
-        '& polyline, & path': { animation: 'none', strokeDasharray: 'none' },
-      },
     },
   },
 } satisfies Record<string, MotionStyle>;
@@ -594,10 +372,7 @@ export const keyframes = {
   // needs no extra node inside every skeleton block. Right-to-left over a
   // 400%-wide gradient — the direction a sweep is read in, and wide enough that
   // the bright band is off-screen at both ends instead of parked at the edge.
-  shimmer: {
-    from: { backgroundPosition: '200% 0' },
-    to: { backgroundPosition: '-200% 0' },
-  },
+
   // A bar of unknown length crossing its track. Starts fully off the left edge
   // and ends fully off the right, so neither end of the cycle shows the bar
   // sitting still at a boundary — the frame that makes an indeterminate bar
@@ -632,7 +407,6 @@ export const MOTION_DURATION_MS = {
   slow: 500,
   slower: 700,
   loopTurn: 650,
-  loopAmbient: 1200,
   loopSweep: 1800,
   staggerStep: 35,
 } as const;
@@ -650,7 +424,6 @@ export const MOTION_DURATION_S = {
   slow: 0.5,
   slower: 0.7,
   loopTurn: 0.65,
-  loopAmbient: 1.2,
   loopSweep: 1.8,
   staggerStep: 0.035,
 } as const;

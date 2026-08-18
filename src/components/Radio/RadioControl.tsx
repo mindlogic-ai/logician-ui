@@ -3,6 +3,8 @@ import { RadioGroup, RadioGroupItemControlProps } from '@chakra-ui/react';
 
 import { focusRing } from '@/utils/focusRing';
 
+import { dotPop } from './Radio.styles';
+
 export const RadioControl = forwardRef<
   HTMLDivElement,
   RadioGroupItemControlProps
@@ -18,7 +20,7 @@ export const RadioControl = forwardRef<
   >
     {/* `ItemIndicator` is the mark that actually holds `.dot`; it renders its
         own `ItemControl` internally, which is why this is nested. */}
-    <RadioGroup.ItemIndicator animationStyle="dotPop" />
+    <RadioGroup.ItemIndicator css={dotPop} />
   </RadioGroup.ItemControl>
 ));
 RadioControl.displayName = 'Radio.Control';

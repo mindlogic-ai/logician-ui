@@ -3,6 +3,7 @@ import { SegmentGroup } from '@chakra-ui/react';
 
 import { mergeCss } from '@/utils/mergeCss';
 
+import { indicatorTravel } from './SegmentedControl.styles';
 import {
   SegmentedControlOption,
   SegmentedControlProps,
@@ -109,10 +110,9 @@ export const SegmentedControl = forwardRef<
     >
       <SegmentGroup.Indicator
         borderRadius={indicatorRadius}
-        // `travel`, but delivered through custom properties: Ark inlines this
-        // part's `transition-*` and an inline declaration beats a class, so the
-        // ordinary preset would never reach it.
-        animationStyle="arkTravel"
+        // `travel`, delivered through custom properties — see the comment on
+        // `indicatorTravel` for why the ordinary preset cannot reach this part.
+        css={indicatorTravel}
       />
       {items.map((item) => (
         <SegmentGroup.Item

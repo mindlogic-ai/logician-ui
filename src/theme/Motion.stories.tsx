@@ -11,7 +11,6 @@ import {
   ModalHeader,
 } from '../components/Modal';
 import { SegmentedControl } from '../components/SegmentedControl';
-import { Swap } from '../components/Swap';
 import { Switch } from '../components/Switch';
 import { H2, H3, Subtext, Text } from '../components/Typography';
 import { MOTION_EASE_CSS } from './motion';
@@ -117,10 +116,6 @@ const RECIPES = [
   {
     task: '아이콘 두 개가 자리를 바꾼다',
     line: 'animationStyle="spring" transitionProperty="opacity, transform"',
-  },
-  {
-    task: '버튼 라벨이 상태에 따라 바뀐다 (폭이 변하면 안 됨)',
-    line: '<Swap value={done ? "done" : "idle"}> … </Swap>',
   },
 ];
 

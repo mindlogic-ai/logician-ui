@@ -1,6 +1,6 @@
 import { Progress as ChakraProgress } from '@chakra-ui/react';
 
-import { sizeStyles } from './ProgressBar.styles';
+import { indeterminateSweep, sizeStyles } from './ProgressBar.styles';
 import { ProgressBarProps } from './ProgressBar.types';
 
 export const ProgressBar = ({
@@ -36,7 +36,7 @@ export const ProgressBar = ({
             width="40%"
             minWidth="unset"
             backgroundImage="none"
-            animationStyle="indeterminate"
+            css={indeterminateSweep}
           />
         ) : (
           <ChakraProgress.Range
