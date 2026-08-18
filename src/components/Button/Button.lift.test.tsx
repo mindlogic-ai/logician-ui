@@ -96,3 +96,51 @@ describe('Button lift', () => {
     expect(base).toContain('filter var(--chakra-durations-fast)');
   });
 });
+
+/**
+ * A call site that adds one line to `_active` used to replace the whole object,
+ * so the variant's pressed colour and the press `scale` both vanished and the
+ * button stopped reading as pressed. FactChat's quiz footer does exactly this
+ * (a 2px press ledge on the submit button), which is how it was found.
+ */
+describe('a call site that presses too', () => {
+  const pressed = (el: Element) => rulesMatching(el, ':active');
+
+  it('keeps the variant press when the call site adds its own', () => {
+    const { getByRole } = setup(
+      <Button
+        colorPalette="primary"
+        variant="solid"
+        _active={{ transform: 'translateY(2px)' }}
+      >
+        제출
+      </Button>
+    );
+    const rule = pressed(getByRole('button'));
+    expect(rule).toContain('transform:translateY(2px)'); // theirs
+    expect(rule).toContain('scale:0.97'); // ours, previously erased
+    expect(rule).toContain('background-color'); // and the pressed colour
+  });
+
+  it('does the same for hover', () => {
+    const { getByRole } = setup(
+      <Button colorPalette="primary" variant="solid" _hover={{ outline: '1px' }}>
+        A
+      </Button>
+    );
+    const rule = rulesMatching(getByRole('button'), ':hover');
+    expect(rule).toContain('outline');
+    expect(rule).toContain('background');
+  });
+
+  it('transitions a transform the call site sets, which `all` used to cover', () => {
+    // Nothing in this component sets `transform` — the press uses `scale` so it
+    // cannot clobber a call site — but naming the properties dropped the call
+    // site's own transform out of the transition and left it snapping.
+    const { getByRole } = setup(<Button>A</Button>);
+    const base = rulesFor(getByRole('button'))
+      .map((r) => r.declarations)
+      .join(' ');
+    expect(base).toContain('transform var(--chakra-durations-fast)');
+  });
+});

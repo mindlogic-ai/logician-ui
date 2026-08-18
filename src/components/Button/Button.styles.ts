@@ -43,6 +43,13 @@ export const buttonTransition = [
     // Both moved by `lift`, listed unconditionally because a property nobody
     // changes costs nothing, and leaving them out would make the opt-in jump.
     'translate',
+    // Nothing here sets `transform` — the press deliberately uses `scale` so it
+    // cannot clobber a call site. But call sites do set it (a 2px press ledge,
+    // an icon nudge), and under the old `transitionProperty: all` those moved
+    // smoothly. Naming the properties took that away and left them snapping,
+    // which is a regression the call site cannot see in this file. Listing it
+    // costs nothing while we set it nowhere.
+    'transform',
     'filter',
   ].map((property) => `${property} ${FEEDBACK} ${STANDARD}`),
 ].join(', ');

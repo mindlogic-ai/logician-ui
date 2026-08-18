@@ -22,7 +22,19 @@ import { ButtonProps } from './Button.types';
  * ```
  */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ colorPalette, variant = 'soft', size, lift, children, ...rest }, ref) => {
+  (
+    {
+      colorPalette,
+      variant = 'soft',
+      size,
+      lift,
+      children,
+      _hover: hoverProp,
+      _active: activeProp,
+      ...rest
+    },
+    ref
+  ) => {
     const palette = colorPalette ?? 'primary';
 
     const base = getButtonStyles(palette, variant);
@@ -70,6 +82,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         size={size}
         borderRadius="md"
         {...styles}
+        // Merged, not left to `{...rest}`. A prop spread later replaces the
+        // whole object, so a call site adding one line — the 2px press ledge
+        // FactChat puts on its quiz buttons — used to silently drop the
+        // variant's pressed colour *and* the scale with it, and the button
+        // stopped reading as pressed at all. Its own keys still win; it just
+        // no longer erases the ones it did not mention.
+        _hover={{ ...styles._hover, ...hoverProp }}
+        _active={{ ...styles._active, ...activeProp }}
         {...focusRing}
         cursor="pointer"
         // Explicit identity so the press transitions from a definite value
