@@ -455,8 +455,14 @@ export const Choose: Story = {
           전부이고, 그 이름이 시간과 곡선과 동작 줄이기를 함께 가져옵니다.
         </Text>
 
-        {/* The two-line concept, kept as one visual unit so it can be recalled
-            as one. Everything else on this page is an instance of it. */}
+        {/* The three roles, kept as one visual unit so they can be recalled as
+            one. Everything else on this page is an instance of this.
+
+            Three rather than two because the two-prop version keeps producing
+            the same misreading — that the preset is "applied to hover". It is
+            not: a transition never sees the hover. It sees a property changing
+            and decides how long that takes. Naming the cause as its own row is
+            what separates those. */}
         <Box
           border="1px solid"
           borderColor="border.default"
@@ -464,34 +470,78 @@ export const Choose: Story = {
           p={5}
           mb={10}
         >
-          <Stack gap={3} mb={4}>
+          <Stack gap={4} mb={5}>
             {[
-              ['animationStyle', '언제 · 어떤 곡선으로', 'primary.main'],
-              ['transitionProperty', '무엇이 움직이는지', 'fg.default'],
-            ].map(([prop, means, color]) => (
-              <HStack key={prop} gap={4} align="baseline">
+              {
+                role: '무엇이',
+                prop: 'transitionProperty="background-color"',
+                means: 'background-color가',
+                accent: false,
+              },
+              {
+                role: '어떻게',
+                prop: 'animationStyle="feedback"',
+                means: '150ms · standard 곡선으로 부드럽게',
+                accent: true,
+              },
+              {
+                role: '언제',
+                prop: "_hover={{ bg: 'primary.lightest' }}",
+                means: 'hover하면 값이 바뀐다',
+                accent: false,
+              },
+            ].map(({ role, prop, means, accent }) => (
+              <Grid
+                key={role}
+                templateColumns={{ base: '1fr', md: '58px 1fr' }}
+                gap={{ base: 1, md: 4 }}
+                alignItems="baseline"
+              >
                 <Text
-                  fontFamily="mono"
                   fontSize="sm"
                   fontWeight="700"
-                  color={color}
-                  minW="170px"
+                  color="fg.muted"
                   mb={0}
+                  flexShrink={0}
                 >
-                  {prop}
+                  {role}
                 </Text>
-                <Text fontSize="sm" mb={0}>
-                  {means}
-                </Text>
-              </HStack>
+                <Box>
+                  <Text
+                    fontFamily="mono"
+                    fontSize="xs"
+                    fontWeight="600"
+                    color={accent ? 'primary.main' : 'fg.default'}
+                    mb={0}
+                  >
+                    {prop}
+                  </Text>
+                  <Subtext color="fg.muted" mb={0}>
+                    {means}
+                  </Subtext>
+                </Box>
+              </Grid>
             ))}
           </Stack>
-          <Code>{`<Box animationStyle="feedback" transitionProperty="opacity" />`}</Code>
-          <Subtext color="fg.muted" mt={3} mb={0}>
-            둘째 줄이 없으면 <b>아무것도 움직이지 않습니다.</b> 프리셋은 시간만
-            정하고, 무엇이 움직이는지는 요소마다 다르기 때문입니다. (
-            <code>press</code>와 <code>presence</code>는 예외 — 각각 언제나
-            scale, 언제나 열림·닫힘이라 기본값이 들어 있습니다.)
+
+          <Code>{`<Box
+  transitionProperty="background-color"
+  animationStyle="feedback"
+  _hover={{ bg: 'primary.lightest' }}
+/>`}</Code>
+
+          <Subtext color="fg.muted" mt={4} mb={2}>
+            <b>프리셋은 hover에 붙는 게 아니라 background-color에 붙습니다.</b>{' '}
+            transition은 hover를 모릅니다 — &quot;background-color가 바뀌면
+            150ms에 걸쳐 바꿔라&quot;가 전부고, 값을 바꾼 게 hover든{' '}
+            <code>_focus</code>든 prop이든 상관하지 않습니다.{' '}
+            <code>_hover</code>를 <code>_focus</code>로 바꿔도 똑같이 돕니다.
+          </Subtext>
+          <Subtext color="fg.muted" mb={0}>
+            <b>&quot;무엇이&quot;를 빠뜨리면 아무것도 움직이지 않습니다</b> —
+            프리셋은 시간만 정하고, 무엇이 움직이는지는 요소마다 다르기
+            때문입니다. (<code>press</code>와 <code>presence</code>는 예외 —
+            각각 언제나 scale, 언제나 열림·닫힘이라 기본값이 들어 있습니다.)
           </Subtext>
         </Box>
 
