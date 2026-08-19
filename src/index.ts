@@ -12,11 +12,14 @@ export * from './components/Code';
 export * from './components/CodeTabs';
 export * from './components/Collapsible';
 export * from './components/ColorMode';
+export * from './components/Confetti';
 export * from './components/Container';
 export * from './components/CopyableCode';
+export * from './components/CountUp';
 export * from './components/DatePicker';
 export * from './components/ErrorFallback';
 export * from './components/ExpandableText';
+export * from './components/FlyTo';
 
 // File Components
 export * from './components/FileInput';
@@ -71,6 +74,7 @@ export * from './components/ProgressBar';
 export * from './components/RadialProgress';
 
 // Interactive Components
+export * from './components/Pulse';
 export * from './components/Radio';
 export * from './components/ScaledContext';
 export * from './components/SeeMoreButton';
@@ -130,6 +134,7 @@ export {
   type MotionEaseToken,
   type MotionStyleToken,
 } from './theme/motion';
+export { cubicBezier } from './utils/cubicBezier';
 export {
   staggerDelayMs,
   type StaggerProps,

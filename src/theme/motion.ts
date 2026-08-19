@@ -68,6 +68,24 @@ export const durations = {
     /** Count-ups that should feel earned. */
     slower: { value: '700ms' },
     /**
+     * Celebration — the only band above `slower` that is not a loop.
+     *
+     * The rest of the scale answers "how long before the interface has
+     * responded", and its ceiling is `slower` because past ~700ms a response
+     * stops reading as an answer and starts reading as a wait. A celebration
+     * inverts that: the point *is* to be watched, and a confetti burst that is
+     * over before the eye finds it has not celebrated anything.
+     *
+     * One value rather than a band. The temptation with celebration is to
+     * randomise the duration per piece, which is what the FactChat purchase
+     * confetti does (2–3s, `Math.random()` per piece). Randomness belongs to
+     * *placement* — where a piece starts, how it tumbles, what colour it is —
+     * because that is what makes fifty pieces read as fifty things. Randomising
+     * the clock instead means the same burst is a different length every time,
+     * and nothing downstream can be sequenced against it.
+     */
+    celebrate: { value: '900ms' },
+    /**
      * Continuous motion. Three values rather than one, because a loop's period
      * is set by how far it travels: the spinner covers 360° in a 16px circle,
      * the shimmer crosses the full width of whatever it is laid on. One number
@@ -388,6 +406,59 @@ export const keyframes = {
     from: { opacity: '0', translate: '0 6px' },
     to: { opacity: '1', translate: '0 0' },
   },
+
+  // ── celebration ─────────────────────────────────────────────────────────
+  // Three keyframes that exist because CSS cannot express a there-and-back, an
+  // arc, or a tumble as a transition: all three need a midpoint. They are
+  // global because `@keyframes` always is — the *compositions* that read them
+  // live next to `Pulse`, `FlyTo` and `Confetti`.
+
+  // Overshoot and settle. `scale` rather than `transform: scale()` so a call
+  // site that is already translating the element keeps its translate.
+  'pulse-pop': {
+    '0%': { scale: '1' },
+    '50%': { scale: 'var(--pulse-peak, 1.12)' },
+    '100%': { scale: '1' },
+  },
+
+  // A ghost travelling between two rects the caller measured. The midpoint
+  // lifts above the straight line, which is what separates "this was sent
+  // there" from "this slid there" — a straight interpolation between two points
+  // on a page reads as a layout change rather than as an object in flight.
+  //
+  // Every value is a custom property because the distance is only known at
+  // runtime, and because a keyframe cannot take arguments.
+  'fly-arc': {
+    '0%': { translate: '0 0', scale: '1', opacity: '1' },
+    '50%': {
+      translate:
+        'calc(var(--fly-dx) * 0.5) calc(var(--fly-dy) * 0.5 - var(--fly-lift))',
+      scale: '0.92',
+      opacity: '1',
+    },
+    '100%': {
+      translate: 'var(--fly-dx) var(--fly-dy)',
+      scale: '0.4',
+      opacity: '0',
+    },
+  },
+
+  // One piece falling past the bottom of its container while tumbling. The
+  // horizontal drift and the spin are custom properties so fifty pieces share
+  // one keyframe and one class; only the numbers differ per piece.
+  //
+  // Ends past 100% rather than at it, so the piece leaves the frame instead of
+  // stopping at the edge — a piece that fades in place reads as a rendering
+  // bug, and one that stops at the bottom reads as litter.
+  'confetti-fall': {
+    '0%': { translate: '0 -10%', rotate: '0deg', opacity: '1' },
+    '80%': { opacity: '1' },
+    '100%': {
+      translate: 'var(--confetti-drift) 120%',
+      rotate: 'var(--confetti-spin)',
+      opacity: '0',
+    },
+  },
 };
 
 /**
@@ -406,6 +477,7 @@ export const MOTION_DURATION_MS = {
   base: 300,
   slow: 500,
   slower: 700,
+  celebrate: 900,
   loopTurn: 650,
   loopSweep: 1800,
   staggerStep: 35,
@@ -423,6 +495,7 @@ export const MOTION_DURATION_S = {
   base: 0.3,
   slow: 0.5,
   slower: 0.7,
+  celebrate: 0.9,
   loopTurn: 0.65,
   loopSweep: 1.8,
   staggerStep: 0.035,
