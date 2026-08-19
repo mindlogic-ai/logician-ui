@@ -1,7 +1,7 @@
 import { ForwardedRef, forwardRef, useMemo } from 'react';
 import { Box } from '@chakra-ui/react';
 
-import { MOTION_DURATION_MS, MOTION_STAGGER_MAX } from '../../theme/motion';
+import { MOTION_DURATION_MS } from '../../theme/motion';
 import { confettiPiece } from './Confetti.styles';
 import { ConfettiProps } from './Confetti.types';
 
@@ -37,14 +37,20 @@ const scatter = (seed: number) => {
  * differ only in the three custom properties it reads, so the burst costs one
  * style rule rather than fifty.
  *
- * **Randomness is in placement, never in time.** Where a piece starts, how far
- * it drifts, how it tumbles and what colour it is are all random, because that
- * is what makes fifty pieces read as fifty things. The *clock* is
- * `motion.celebrate` for every piece, and the only spread is a stagger of
- * `motion.stagger.step` per piece up to the usual cap. FactChat's purchase
- * confetti randomises the duration instead (2–3s each), which means the burst
- * is a different length every time it plays and nothing can be sequenced after
- * it — including the count-up it is supposed to be celebrating.
+ * **The token sets the pace; each piece scales it.** Where a piece starts, how
+ * far it drifts, which way it tumbles, what colour it is and *how fast it
+ * falls* are all per-piece — equal fall speed is the one thing debris never
+ * has, and fifty pieces at an identical rate read as one sheet. But the rate is
+ * a bounded multiple of `motion.celebrate.fall` rather than an open interval,
+ * so the burst still has a computable end. FactChat's version uses
+ * `2 + Math.random()` seconds with no ceiling, which is the part that makes a
+ * burst impossible to schedule anything after.
+ *
+ * The delay is random too, not indexed. An earlier pass here reused the
+ * `stagger` step, which was a mistake worth naming: a list has an order the eye
+ * follows, and a delay that grows with the index is a *rhythm*. Confetti has no
+ * order, so the same delay reads as a wave sweeping across the container —
+ * fifty pieces queueing rather than bursting.
  *
  * Under reduced motion the pieces mount and stay invisible rather than being
  * branched away in JS — a burst carries no information, so removing it removes
@@ -73,13 +79,21 @@ export const Confetti = forwardRef(
         color: colors[Math.floor(next() * colors.length)],
         // ± half a container width of lateral travel.
         drift: `${Math.round(next() * 100 - 50)}px`,
-        spin: `${Math.round(next() * 720 - 360)}deg`,
+        // Two full turns, and only the direction is random. A magnitude that
+        // varies down to near zero gives some pieces no tumble at all, which is
+        // the difference between debris and a falling rectangle.
+        spin: next() < 0.5 ? '-720deg' : '720deg',
         width: `${6 + Math.round(next() * 4)}px`,
         height: `${8 + Math.round(next() * 6)}px`,
-        // Capped the same way a staggered list is, and for the same reason: past
-        // the cap a delay stops reading as scatter and starts reading as
-        // stragglers.
-        delay: `${Math.min(i, MOTION_STAGGER_MAX * 3) * MOTION_DURATION_MS.staggerStep}ms`,
+        // 0.85–1.3× the token. Anchored to the scale, and with a ceiling: the
+        // whole burst is over by `fall × 1.3 + base`, which is knowable without
+        // running it.
+        rate: (0.85 + next() * 0.45).toFixed(2),
+        // Random within `motion.base`, not stepped by index — see the note
+        // above about why a stagger is wrong here. 300ms is wide enough that no
+        // two pieces launch together and narrow enough that the burst still
+        // reads as one event.
+        delay: `${Math.round(next() * MOTION_DURATION_MS.base)}ms`,
       }));
     }, [pieceCount, colors, seed]);
 
@@ -91,6 +105,10 @@ export const Confetti = forwardRef(
         overflow="hidden"
         pointerEvents="none"
         aria-hidden
+        // Establishes the containing block the keyframe's `cqh` resolves
+        // against. Without it `110cqh` falls back to the small viewport and
+        // every piece leaves the screen in the first few frames.
+        containerType="size"
         {...rest}
       >
         {pieces.map((p) => (
@@ -105,6 +123,7 @@ export const Confetti = forwardRef(
               {
                 '--confetti-drift': p.drift,
                 '--confetti-spin': p.spin,
+                '--confetti-rate': p.rate,
                 animationDelay: p.delay,
               } as React.CSSProperties
             }

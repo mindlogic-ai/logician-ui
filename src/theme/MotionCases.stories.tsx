@@ -300,7 +300,7 @@ export const Cases: Story = {
             ],
             [
               '축하 대역이 비어 있었습니다',
-              '스케일의 천장이 slower(700ms)였고, 그 위는 루프뿐이었습니다. 컨페티가 갈 자리가 없어서 motion.celebrate(900ms)를 이번에 추가했습니다.',
+              '스케일의 천장이 slower(700ms)였고 그 위는 루프뿐이었습니다. motion.celebrate를 추가했는데, loop처럼 두 값이 필요했습니다 — burst(900ms)는 제자리에서 튀는 것, fall(1800ms)은 컨테이너를 가로질러 떨어지는 것. 거리가 주기를 정하기 때문입니다.',
             ],
           ].map(([t, d]) => (
             <Box key={t}>
@@ -417,11 +417,14 @@ const CONFETTI_EASE =
 animation: \`course-confetti 900ms
   \${CONFETTI_EASE} \${piece.delay}ms forwards\``}
         after={`// theme/motion.ts — 새 토큰
-celebrate: { value: '900ms' },
+celebrate: {
+  burst: { value: '900ms'  },   // 제자리 팝
+  fall:  { value: '1800ms' },   // 컨테이너 횡단
+},
 
 // Confetti.styles.ts
 animationName: 'confetti-fall',
-animationDuration: 'motion.celebrate',
+animationDuration: 'calc(var(--…-celebrate-fall) * var(--confetti-rate))',
 animationTimingFunction: 'linear',`}
         verdict="900ms는 그대로 두되 이름을 줬습니다 — 스케일의 천장이 slower(700)였고 그 위는 루프뿐이라, 축하가 갈 자리가 없었습니다. 곡선은 linear로 바꿨습니다: 낙하는 중력이라 감속하면 「떨어진다」가 아니라 「내려놓는다」로 읽힙니다. 팩트챗 주석도 자기 곡선이 어디에도 안 맞는다고 말하고 있었습니다."
         demo={
@@ -488,13 +491,16 @@ animationTimingFunction: 'linear',`}
 
 // 시간이 조각마다 랜덤 →
 // 같은 연출이 재생할 때마다 길이가 다름`}
-        after={`// 랜덤은 배치에만, 시간에는 안 씁니다
-left:  \`\${next() * 100}%\`      // 랜덤
-drift: \`\${…}px\`                // 랜덤
-spin:  \`\${…}deg\`               // 랜덤
+        after={`// 배치도 랜덤, 속도도 랜덤 — 다만 토큰에 묶어서
+left:  \`\${next() * 100}%\`
+drift: \`\${…}px\`
+spin:  '±720deg'                 // 방향만 랜덤, 크기는 고정
+rate:  0.85 ~ 1.30               // ← 토큰의 배수
+delay: 0 ~ motion.base(300ms)    // ← 랜덤, index 아님
 
-animationDuration: 'motion.celebrate'  // 전부 900ms
-animationDelay: i * 35ms (상한 있음)   // stagger.step`}
+animationDuration:
+  calc(motion.celebrate.fall * var(--confetti-rate))
+// 1530~2340ms. 상한이 계산 가능합니다.`}
         verdict="가장 크게 바뀐 곳입니다. 2~3초 랜덤 → 900ms 고정 + 스태거. 조각마다 시간이 다르면 버스트 전체 길이가 재생마다 달라서, 뒤에 무엇도 이어 붙일 수 없습니다 — 정작 축하하려던 카운트업조차요. 랜덤은 「50개가 50개로 보이게」 하는 데 필요한 것이고, 그건 위치·회전·색이 이미 해줍니다."
         demo={
           <Subtext color="fg.muted" mb={0}>
@@ -535,8 +541,8 @@ animationDelay: i * 35ms (상한 있음)   // stagger.step`}
       <Stack gap={3} mb={8}>
         {[
           [
-            '토큰 1개 추가',
-            'motion.celebrate = 900ms. 축하는 응답이 아니라 보여지는 것이라 응답 스케일의 천장(slower 700) 위에 있습니다. 랜덤 대신 고정값인 이유는 뒤에 무언가를 이어 붙일 수 있어야 하기 때문입니다.',
+            '토큰 2개 추가',
+            'motion.celebrate.burst(900ms) · fall(1800ms). 축하는 응답이 아니라 보여지는 것이라 응답 스케일의 천장(slower 700) 위에 있고, loop처럼 두 값인 이유는 거리가 주기를 정하기 때문입니다.',
           ],
           [
             'keyframe 3개 추가',

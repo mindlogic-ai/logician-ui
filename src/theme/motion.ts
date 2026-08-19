@@ -73,18 +73,24 @@ export const durations = {
      * The rest of the scale answers "how long before the interface has
      * responded", and its ceiling is `slower` because past ~700ms a response
      * stops reading as an answer and starts reading as a wait. A celebration
-     * inverts that: the point *is* to be watched, and a confetti burst that is
-     * over before the eye finds it has not celebrated anything.
+     * inverts that: the point *is* to be watched, and a burst that is over
+     * before the eye finds it has not celebrated anything.
      *
-     * One value rather than a band. The temptation with celebration is to
-     * randomise the duration per piece, which is what the FactChat purchase
-     * confetti does (2–3s, `Math.random()` per piece). Randomness belongs to
-     * *placement* — where a piece starts, how it tumbles, what colour it is —
-     * because that is what makes fifty pieces read as fifty things. Randomising
-     * the clock instead means the same burst is a different length every time,
-     * and nothing downstream can be sequenced against it.
+     * Two values for the same reason `loop` has three — the period is set by
+     * how far the thing travels, and one number for both leaves the burst
+     * sluggish or the fall frantic.
      */
-    celebrate: { value: '900ms' },
+    celebrate: {
+      /** A pop that stays near where it started: a badge, a node, a chip. */
+      burst: { value: '900ms' },
+      /**
+       * A piece crossing the whole container it was thrown into. Slower than
+       * anything else in the scale on purpose: this is the one motion that is
+       * modelling gravity rather than an interface responding, and a piece that
+       * clears a dialog in under a second reads as flicked rather than dropped.
+       */
+      fall: { value: '1800ms' },
+    },
     /**
      * Continuous motion. Three values rather than one, because a loop's period
      * is set by how far it travels: the spinner covers 360° in a 16px circle,
@@ -444,17 +450,30 @@ export const keyframes = {
   },
 
   // One piece falling past the bottom of its container while tumbling. The
-  // horizontal drift and the spin are custom properties so fifty pieces share
+  // drift, the spin and the rate are custom properties so fifty pieces share
   // one keyframe and one class; only the numbers differ per piece.
   //
-  // Ends past 100% rather than at it, so the piece leaves the frame instead of
-  // stopping at the edge — a piece that fades in place reads as a rendering
-  // bug, and one that stops at the bottom reads as litter.
+  // The fall is measured in `cqh` — container query height — and that detail is
+  // load-bearing. A percentage inside `translate` resolves against the
+  // *element's own* box, so `110%` on a 10px piece is eleven pixels: the first
+  // version of this keyframe used one and the confetti trembled in place
+  // instead of falling. `top: 110%` would resolve correctly, since `top`
+  // percentages are relative to the containing block, but animating `top` is a
+  // layout property and this runs on fifty elements at once. `cqh` gives the
+  // containing block's height to a compositor-only property.
+  //
+  // Fades out at 65% rather than at the end. A piece that is still opaque when
+  // it reaches the bottom edge reads as landing — as litter the container is
+  // now holding — and fifty of those read as a mess to be cleaned up. Gone
+  // before the floor is what makes it dissolve instead.
+  //
+  // A full 720°: two turns, not a fraction of one. A piece that rotates less
+  // than once has not tumbled, it has tilted.
   'confetti-fall': {
-    '0%': { translate: '0 -10%', rotate: '0deg', opacity: '1' },
-    '80%': { opacity: '1' },
+    '0%': { translate: '0 -12px', rotate: '0deg', opacity: '1' },
+    '65%': { opacity: '0' },
     '100%': {
-      translate: 'var(--confetti-drift) 120%',
+      translate: 'var(--confetti-drift) 110cqh',
       rotate: 'var(--confetti-spin)',
       opacity: '0',
     },
@@ -477,7 +496,8 @@ export const MOTION_DURATION_MS = {
   base: 300,
   slow: 500,
   slower: 700,
-  celebrate: 900,
+  celebrateBurst: 900,
+  celebrateFall: 1800,
   loopTurn: 650,
   loopSweep: 1800,
   staggerStep: 35,
@@ -495,7 +515,8 @@ export const MOTION_DURATION_S = {
   base: 0.3,
   slow: 0.5,
   slower: 0.7,
-  celebrate: 0.9,
+  celebrateBurst: 0.9,
+  celebrateFall: 1.8,
   loopTurn: 0.65,
   loopSweep: 1.8,
   staggerStep: 0.035,
