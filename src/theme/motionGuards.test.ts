@@ -22,12 +22,21 @@ import { beforeAll, describe, expect, it } from 'vitest';
  * these tests run in cannot provide.
  */
 const CASES = {
-  vocabulary: `<div animationStyle="feedback" />`,
+  vocabulary: `<div animationStyle="feedback" transitionProperty="opacity" />`,
   chakraOwn: `<div animationStyle="scale-fade-in" />`,
-  typo: `<div animationStyle="sprng" />`,
+  typo: `<div animationStyle="sprng" transitionProperty="opacity" />`,
   moved: `<div animationStyle="spin" />`,
   array: `<div animationStyle={['travel', 'spring']} />`,
   breakpoints: `<div animationStyle={{ base: 'travel', md: 'spring' }} />`,
+  // The scope guard: these three set the clock and leave the property at
+  // `none`, so the call site has to name what moves.
+  noScope: `<div animationStyle="travel" />`,
+  scopeViaShorthand: `<div animationStyle="travel" transition="width 1s" />`,
+  scopeViaCss: `<div animationStyle="spring" css={{ transitionProperty: 'translate' }} />`,
+  scopeViaSpread: `<div animationStyle="feedback" {...rest} />`,
+  // The two presets that carry their own scope and must not be asked for one.
+  pressNeedsNoScope: `<div animationStyle="press" />`,
+  presenceNeedsNoScope: `<div animationStyle="presence" />`,
 };
 
 type Case = keyof typeof CASES;
@@ -93,5 +102,34 @@ describe('the animationStyle guards', () => {
 
   it('catches the breakpoint object for the same reason', () => {
     expect(reported.get('breakpoints')?.join()).toContain('one name');
+  });
+});
+
+describe('the scope guard', () => {
+  it('catches a transition preset with nothing to move', () => {
+    // `transition-property: none` is the preset's own default, so this
+    // compiles, renders, and does nothing — the failure a diff cannot show.
+    expect(reported.get('noScope')?.join()).toContain('say what moves');
+  });
+
+  it.each([
+    ['the transition shorthand', 'scopeViaShorthand'],
+    ['a css object', 'scopeViaCss'],
+    ['a spread that may carry it', 'scopeViaSpread'],
+  ] as const)('accepts scope named through %s', (_label, key) => {
+    // Three real ways to say what moves. The spread is the loose one on
+    // purpose: what a caller passes is unknowable here, and a guard that
+    // cried wolf on every `{...rest}` would be turned off within the week.
+    expect(reported.get(key)).toEqual([]);
+  });
+
+  it.each([
+    ['press', 'pressNeedsNoScope'],
+    ['presence', 'presenceNeedsNoScope'],
+  ] as const)('leaves %s alone, since it carries its own scope', (_n, key) => {
+    // press defaults to `scale`; presence is an `animation-*` preset and its
+    // keyframe already names what moves. Asking either for a property would
+    // teach the opposite of what the vocabulary means.
+    expect(reported.get(key)).toEqual([]);
   });
 });

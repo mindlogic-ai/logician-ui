@@ -885,14 +885,16 @@ export const buttonTransition = [
           </Box>
           <Box>
             <Subtext color="danger.main" mb={1}>
-              ❌ property를 빠뜨리기 — 아무것도 움직이지 않습니다
+              ❌ property를 빠뜨리기 — 아무것도 움직이지 않습니다{' '}
+              <b>(lint가 잡습니다)</b>
             </Subtext>
             <Code>{`<Box animationStyle="feedback" />`}</Code>
           </Box>
           <Box>
             <Subtext color="danger.main" mb={1}>
               ❌ 이름을 두 개 주기 — 겹치는 게 아니라 반응형 브레이크포인트로
-              읽힙니다 (모바일은 travel, 데스크톱은 spring)
+              읽힙니다 (모바일은 travel, 데스크톱은 spring){' '}
+              <b>(lint가 잡습니다)</b>
             </Subtext>
             <Code>{`<Box animationStyle={['travel', 'spring']} />`}</Code>
           </Box>
@@ -903,6 +905,17 @@ export const buttonTransition = [
             <Code>{`<Box animationStyle="feedback" transitionProperty="opacity" />`}</Code>
           </Box>
         </Stack>
+
+        <Subtext color="fg.muted" mb={10}>
+          <b>타입은 이 셋 중 아무것도 못 잡습니다.</b> Chakra가{' '}
+          <code>animationStyle</code>을 <code>AnyString</code>으로 열어 두었고,{' '}
+          <code>transitionProperty</code>는 별개의 optional prop이라 하나가 다른
+          하나를 요구하게 만들려면 Chakra 컴포넌트 타입을 전부 포크해야 합니다.
+          그래서 lint 규칙 셋(오타 · 이름 두 개 · property 누락)이 있고,{' '}
+          <code>motionGuards.test.ts</code>가 그 규칙들이 아직 살아 있는지
+          확인합니다. 다만 lint는 <b>JSX만</b> 봅니다 — <code>.styles.ts</code>{' '}
+          안의 스타일 객체는 사각지대입니다.
+        </Subtext>
 
         <H3 mb={2}>따로 챙기지 않아도 되는 것</H3>
         <Text color="fg.muted" mb={10}>
@@ -1319,8 +1332,8 @@ const CHECKLIST = [
     '_open이 있으면 _closed도 있어야 하고, 그 _closed가 더 짧아야 합니다. 컴포넌트로 내려간 모션도 동작 줄이기 분기를 갖고 있어야 합니다. 셋 다 이미 CI가 봅니다.',
   ],
   [
-    'lint 정규식에 이름을 추가했는가',
-    '.eslintrc.js의 animationStyle 목록에 없으면 새 이름이 오타로 잡힙니다. 타입이 못 잡는 자리라 수동입니다.',
+    'lint 정규식 두 곳을 고쳤는가',
+    '.eslintrc.js의 animationStyle 목록에 없으면 새 이름이 오타로 잡힙니다. 그리고 transition 계열 프리셋이면 scope 가드의 (feedback|travel|spring) 목록에도 넣어야, 호출부가 transitionProperty를 빠뜨렸을 때 잡힙니다. 타입이 못 가는 자리라 둘 다 수동입니다.',
   ],
 ];
 
