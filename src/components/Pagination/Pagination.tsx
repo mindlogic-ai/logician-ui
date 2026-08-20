@@ -81,6 +81,11 @@ export const Pagination = ({
             <SelectField<number>
               size="sm"
               width="5.5rem"
+              // The visible label for this control is the "개씩 보기" text beside
+              // it, which the select itself cannot claim — so it carries the
+              // same words as its own hidden label rather than shipping
+              // nameless (KWCAG 5.3.4.1 레이블 제공).
+              ariaLabel={translate('pagination_items_per_page') as string}
               options={itemsPerPageOptions.map((option) => ({
                 label: option.toString(),
                 value: option,

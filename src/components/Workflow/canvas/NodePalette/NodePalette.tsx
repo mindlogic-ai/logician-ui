@@ -1,6 +1,6 @@
 'use client';
 
-import { DragEvent } from 'react';
+import { DragEvent, useId } from 'react';
 import { Box, HStack, Stack } from '@chakra-ui/react';
 
 import { Card } from '@/components/Card';
@@ -95,6 +95,8 @@ function PaletteItem({ def }: { def: NodeTypeDef }) {
 export function NodePalette({ onClose }: { onClose: () => void }) {
   const { nodeTypes, readOnly } = useWorkflow();
   const translate = useWorkflowTranslate();
+  // Names the region below with the same words the header shows.
+  const titleId = useId();
   if (readOnly) return null;
 
   // Group by category, preserving registration order within each group.
@@ -115,6 +117,14 @@ export function NodePalette({ onClose }: { onClose: () => void }) {
 
   return (
     <FloatingCard
+      // A named region, so the palette is something a screen-reader user can
+      // navigate TO. Its title used to be a `Subtitle`, which rendered `<h6>`
+      // and put a level-6 heading under the host page's `<h1>` (axe
+      // `heading-order`); `Subtitle` is a paragraph now, and a labelled region
+      // is what this panel actually is — a landmark, not an outline entry
+      // (KWCAG 2.1 5.2.4.1 반복 영역 건너뛰기 / 5.2.4.2 제목 제공).
+      role="region"
+      aria-labelledby={titleId}
       width={PALETTE_WIDTH}
       mt={4}
       mb={4}
@@ -140,7 +150,7 @@ export function NodePalette({ onClose }: { onClose: () => void }) {
         borderBottom="1px solid"
         borderColor="slate.200"
       >
-        <Subtitle color="slate.1300">
+        <Subtitle id={titleId} color="slate.1300">
           {translate('workflow_palette_title')}
         </Subtitle>
         <IconButton

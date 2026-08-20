@@ -19,6 +19,7 @@ export function SelectField<T = string>({
   onChange,
   placeholder,
   label,
+  ariaLabel,
   size = 'md',
   invalid,
   disabled,
@@ -61,7 +62,19 @@ export function SelectField<T = string>({
       }}
     >
       <Select.HiddenSelect />
-      {label != null && <Select.Label>{label}</Select.Label>}
+      {/* The label part is what the trigger's `aria-labelledby` points at, and
+          Chakra emits that reference whether or not the part is rendered. Leave
+          it out and the reference dangles, so the trigger resolves to no name —
+          a "button" to a screen reader, whatever the selected option says
+          (KWCAG 5.3.4.1 레이블 제공). So it is always rendered: visibly when the
+          field has a label, hidden when the name lives elsewhere on screen. */}
+      {label != null ? (
+        <Select.Label>{label}</Select.Label>
+      ) : (
+        (ariaLabel ?? placeholder) && (
+          <Select.Label srOnly>{ariaLabel ?? placeholder}</Select.Label>
+        )
+      )}
       <Select.Control>
         <Select.Trigger>
           <Select.ValueText placeholder={placeholder} />
