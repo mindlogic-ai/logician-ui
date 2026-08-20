@@ -3,6 +3,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 
 import { FileInput } from '@/components/FileInput';
 import { LogicianProvider } from '@/components/LogicianProvider';
+import { baseMarkdownComponents } from '@/components/Markdown/Markdown';
 import { Radio, RadioGroup } from '@/components/Radio';
 import { SelectField } from '@/components/Select';
 import {
@@ -27,6 +28,18 @@ import { Subtitle } from '@/components/Typography';
  */
 
 beforeAll(() => {
+  // Zag's slider observes its thumb to size the track. jsdom ships no
+  // `ResizeObserver`, so without this the observe call throws ASYNCHRONOUSLY,
+  // after the test that triggered it has already passed — which vitest reports
+  // as an unhandled error and exits non-zero on. A green test list and a red
+  // run is the worst way to find that out, so it is stubbed here rather than
+  // left to whoever next reads the CI log.
+  window.ResizeObserver = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  } as unknown as typeof window.ResizeObserver;
+
   // Chakra's color-mode and responsive machinery calls it on mount; jsdom has no
   // implementation.
   window.matchMedia = ((query: string) => ({
@@ -125,6 +138,18 @@ describe('KWCAG 5.2.4.2 제목 제공', () => {
     const { container } = withProvider(<Subtitle as="h2">절 제목</Subtitle>);
 
     expect(container.querySelector('h2')?.textContent).toBe('절 제목');
+  });
+
+  it('마크다운의 ###### 은 여전히 제목이다', () => {
+    // `Subtitle` 의 기본 태그를 문단으로 바꾸면서 같이 끌려간 자리. 마크다운
+    // 매퍼의 `h6` 는 **글쓴이가 실제로 쓴 제목**이므로, 여기까지 문단이 되면
+    // 고치려던 결함이 방향만 바꿔 다시 생긴다 — 제목 목록에서 사라지는 쪽으로.
+    const H6 = baseMarkdownComponents.h6 as React.ComponentType<{
+      children: React.ReactNode;
+    }>;
+    const { container } = withProvider(<H6>여섯 번째 제목</H6>);
+
+    expect(container.querySelector('h6')?.textContent).toBe('여섯 번째 제목');
   });
 });
 
