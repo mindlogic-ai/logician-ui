@@ -8,6 +8,7 @@ import { CountUp } from '../components/CountUp';
 import { FlyTo } from '../components/FlyTo';
 import { Pulse } from '../components/Pulse';
 import { H2, H3, Subtext, Text } from '../components/Typography';
+import { MOTION_DURATION_MS } from './motion';
 
 /**
  * # Motion Cases — 팩트챗 보상·크레딧 연출
@@ -257,9 +258,104 @@ const PurchaseCelebration = () => {
           결제가 완료되었습니다
         </Text>
         <Text fontSize="2xl" fontWeight="700" color="primary.main" mb={0}>
-          <CountUp key={run} from={1250} to={1250 + 500 * run} /> 크레딧
+          <CountUp
+            key={run}
+            from={1250}
+            to={1250 + 500 * run}
+            // The celebration band, not the response band — see the A/B/C
+            // comparison below. A balance rising under a confetti burst is
+            // being watched, not being answered.
+            durationMs={MOTION_DURATION_MS.celebrateFall}
+            delayMs={MOTION_DURATION_MS.celebrateBurst}
+          />{' '}
+          크레딧
         </Text>
       </Box>
+    </Stack>
+  );
+};
+
+/**
+ * The one judgement call this port leaves open, made comparable.
+ *
+ * 1500ms is not on the scale; 700 and 1800 are. So the question is not "how
+ * long should it count" but "which band is a balance rising under a confetti
+ * burst" — a response the interface owes, or a celebration it is staging.
+ */
+const COUNT_OPTIONS = [
+  {
+    key: 'A',
+    label: '팩트챗 그대로',
+    duration: 1500,
+    delay: 1000,
+    note: '1500 + 1000ms — 둘 다 스케일 밖',
+    onScale: false,
+  },
+  {
+    key: 'B',
+    label: '축하 대역',
+    duration: MOTION_DURATION_MS.celebrateFall,
+    delay: MOTION_DURATION_MS.celebrateBurst,
+    note: 'celebrate.fall + celebrate.burst — 둘 다 토큰',
+    onScale: true,
+  },
+  {
+    key: 'C',
+    label: '응답 대역',
+    duration: MOTION_DURATION_MS.slower,
+    delay: 0,
+    note: 'slower, 지연 없음 — 토큰이지만 대역이 다름',
+    onScale: true,
+  },
+];
+
+const CountUpLab = () => {
+  const [run, setRun] = useState(0);
+
+  return (
+    <Stack gap={4}>
+      <Button size="xs" variant="outline" onClick={() => setRun((r) => r + 1)}>
+        셋 동시 재생
+      </Button>
+
+      <Stack gap={3}>
+        {COUNT_OPTIONS.map((o) => (
+          <Grid
+            key={o.key}
+            templateColumns={{ base: '1fr', md: '26px 110px 170px 1fr' }}
+            gap={{ base: 1, md: 4 }}
+            alignItems="baseline"
+          >
+            <Text
+              fontFamily="mono"
+              fontSize="sm"
+              fontWeight="700"
+              color={o.onScale ? 'primary.main' : 'fg.muted'}
+              mb={0}
+            >
+              {o.key}
+            </Text>
+            <Text fontSize="sm" mb={0}>
+              {o.label}
+            </Text>
+            <Text fontSize="xl" fontWeight="700" mb={0}>
+              <CountUp
+                key={`${o.key}-${run}`}
+                from={1250}
+                to={1750}
+                durationMs={o.duration}
+                delayMs={o.delay}
+              />{' '}
+              <Box as="span" fontSize="sm" fontWeight="400" color="fg.muted">
+                크레딧
+              </Box>
+            </Text>
+            <Subtext color="fg.muted" fontSize="2xs" mb={0}>
+              {o.note}
+            </Subtext>
+          </Grid>
+        ))}
+      </Stack>
     </Stack>
   );
 };
@@ -523,17 +619,17 @@ animationDuration:
 
 // react-countup 의존성
 // 1500 + 1000 = 2.5초`}
-        after={`<CountUp from={previousBalance} to={balance} />
+        after={`<CountUp
+  from={previousBalance}
+  to={balance}
+  durationMs={MOTION_DURATION_MS.celebrateFall}   // 1800
+  delayMs={MOTION_DURATION_MS.celebrateBurst}     // 900
+/>
 
-// 기본값 motion.slower (700ms), delay 0
-// rAF + cubicBezier('emphasized')
-// — CSS가 썼을 곡선을 그대로 평가합니다`}
-        verdict="2.5초 → 0.7초. 이건 실제로 보이는 변화이고, 판단이 필요한 유일한 항목입니다. 모달 헤딩이 이미 「결제가 완료되었습니다」라고 말한 뒤라 숫자는 이미 알려진 정보고, 700ms를 넘기면 「벌었다」가 아니라 「기다린다」로 읽힙니다. 위 데모에서 직접 보고 판단하세요."
-        demo={
-          <Subtext color="fg.muted" mb={0}>
-            위 ② 데모의 크레딧 숫자
-          </Subtext>
-        }
+// 의존성 없음 — rAF + cubicBezier('emphasized')
+// 기본값은 slower(700)이고, 축하 자리에서만 호출부가 올립니다.`}
+        verdict="처음엔 700ms로 줄였는데, 그건 스케일이 강제한 게 아니라 제가 낸 의견이었습니다 — durationMs는 prop이라 1500도 그냥 됩니다. 진짜 질문은 「얼마나 오래」가 아니라 「어느 대역인가」였습니다. 1500은 스케일 위에 없고, 가까운 값은 slower(700)와 celebrate.fall(1800)입니다. 컨페티가 터지는 동안 올라가는 잔액은 인터페이스가 갚는 응답이 아니라 무대에 올린 축하이므로 축하 대역이 맞습니다 — 결과적으로 2.5초 → 2.7초로, 팩트챗 의도를 거의 그대로 두면서 두 값 다 토큰이 됐습니다. 컴포넌트 기본값은 slower(700)로 남깁니다: 관리자 KPI처럼 축하가 아닌 카운트업이 더 많습니다. 오른쪽에서 셋을 나란히 재생해 보세요."
+        demo={<CountUpLab />}
       />
 
       <H3 mt={12} mb={2}>
