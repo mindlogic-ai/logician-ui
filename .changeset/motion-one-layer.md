@@ -19,13 +19,12 @@ clock instead of restating it. Rendered output is unchanged: every one was
 measured in a browser before and after.
 
 The duration tokens they read (`motion.loop.*`) stay global — that is the scale,
-and only the *composition* was local. Keyframes stay global too, because CSS
+and only the _composition_ was local. Keyframes stay global too, because CSS
 gives `@keyframes` no other home.
 
-Two new components from that work are gone for now, so this release changes only
-components that already existed: `Skeleton` is removed outright, and `Swap` is
-folded into the one place that used it, `CopyableCode`, which keeps the fixed
-button width.
+One component from that work did not survive the cull: `Skeleton` wrapped
+Chakra's for a shimmer nobody else asked for, so it never shipped. `Swap` folded
+into `CopyableCode`, its only call site, which keeps the fixed button width.
 
 The guarantees followed the code rather than being dropped with it: a new
 `componentMotion.test.ts` asserts that every relocated motion still answers

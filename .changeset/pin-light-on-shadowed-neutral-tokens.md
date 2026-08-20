@@ -18,7 +18,7 @@ mode, so after the theme merge Chakra's values won and ours never rendered:
   text shipped much lighter than intended.
 
 (The source comments for `fg.muted`/`fg.subtle` said "Light value … is unchanged",
-which was true of the *intent* but not of what actually rendered.) Dark mode was
+which was true of the _intent_ but not of what actually rendered.) Dark mode was
 always correct because those tokens set `_dark` explicitly, which does override
 Chakra's `_dark`.
 

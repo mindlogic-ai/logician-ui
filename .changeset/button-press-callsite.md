@@ -6,7 +6,7 @@ A call site that presses too no longer erases the Button's own press.
 
 `_hover` and `_active` arrived through the prop spread, and a spread replaces
 the whole object — so a button that added one line (FactChat's quiz footer adds
-a 2px press ledge) silently lost the variant's pressed colour *and* the press
+a 2px press ledge) silently lost the variant's pressed colour _and_ the press
 `scale` along with it, and stopped reading as pressed at all. Both are now
 merged the way `lift` already merged them: the call site's own keys still win,
 they just no longer erase the ones they did not mention.
