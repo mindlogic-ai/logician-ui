@@ -470,7 +470,12 @@ export const keyframes = {
   // A full 720°: two turns, not a fraction of one. A piece that rotates less
   // than once has not tumbled, it has tilted.
   'confetti-fall': {
-    '0%': { translate: '0 -12px', rotate: '0deg', opacity: '1' },
+    // `-150%` of the piece's own height, not a pixel literal: pieces vary in
+    // size, and a fixed offset that clears a 9px piece leaves a 13px one
+    // peeking over the rim before it moves. Percentages in `translate` resolve
+    // against the element, which is exactly what is wanted on this axis and
+    // exactly what was wrong on the other one (see `110cqh` below).
+    '0%': { translate: '0 -150%', rotate: '0deg', opacity: '1' },
     '65%': { opacity: '0' },
     '100%': {
       translate: 'var(--confetti-drift) 110cqh',

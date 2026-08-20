@@ -41,7 +41,14 @@ export const confettiPiece: SystemStyleObject = {
   animationDuration:
     'calc(var(--chakra-durations-motion-celebrate-fall) * var(--confetti-rate, 1))',
   animationTimingFunction: 'linear',
-  animationFillMode: 'forwards',
+  // `both`, not `forwards`. Each piece waits out a delay of up to
+  // `motion.base`, and with `forwards` alone the element renders in its *own*
+  // CSS state during that wait — parked at `top: 0`, which is the top edge of
+  // the container and fully visible. Forty pieces then sit in a row along the
+  // rim and drop when their delay expires: hanging, not falling. The backwards
+  // half of `both` applies the 0% frame during the delay instead, which is
+  // above the edge and clipped away.
+  animationFillMode: 'both',
   // Nothing to soften: a burst carries no information, so under reduced motion
   // the pieces stay where they are and invisible. Done in CSS rather than by
   // branching in JS so the decision sits on the same media query as every
