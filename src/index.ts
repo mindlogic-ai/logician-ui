@@ -1,5 +1,6 @@
 // Core Components
 export * from './components/Accordion';
+export * from './components/Appear';
 export * from './components/Avatar';
 export * from './components/Badge';
 export * from './components/Banner';
@@ -76,13 +77,16 @@ export * from './components/RadialProgress';
 // Interactive Components
 export * from './components/Pulse';
 export * from './components/Radio';
+export * from './components/Reveal';
 export * from './components/ScaledContext';
 export * from './components/SeeMoreButton';
 export * from './components/SegmentedControl';
 export * from './components/SegmentedProgressBar';
 export * from './components/Select';
+export * from './components/Shake';
 export * from './components/Slider';
 export * from './components/Spinner';
+export * from './components/SwapTransition';
 export * from './components/Switch';
 
 // Layout Components

@@ -413,6 +413,67 @@ export const keyframes = {
     to: { opacity: '1', translate: '0 0' },
   },
 
+  // ── entrances and gestures ──────────────────────────────────────────────
+  // Four more that need a midpoint or a mount, which is what puts them in
+  // keyframes rather than in a transition preset.
+
+  // A mount entrance: fade, plus an optional scale (a *stamp* landing on
+  // something) or vertical travel (content *arriving*). Both are custom
+  // properties defaulting to the identity, so one keyframe covers a plain fade,
+  // a stamp, an arrival, or all three at once.
+  //
+  // `scale` and `translate` rather than a `transform` shorthand: the individual
+  // properties compose, so a call site that is already transforming the element
+  // keeps its transform.
+  'appear-in': {
+    from: {
+      opacity: '0',
+      scale: 'var(--appear-scale, 1)',
+      translate: '0 var(--appear-rise, 0px)',
+    },
+    to: { opacity: '1', scale: '1', translate: '0 0' },
+  },
+
+  // A decaying horizontal swing that settles back to centre — refusal, not
+  // emphasis. Decaying rather than symmetric because a constant-amplitude
+  // wobble reads as broken, and settling *back* rather than overshooting
+  // because an overshoot at the end reads as bounce, which is celebratory.
+  'shake-x': {
+    '0%, 100%': { translate: '0 0' },
+    '20%': { translate: 'calc(var(--shake-distance, 6px) * -1) 0' },
+    '40%': { translate: 'var(--shake-distance, 6px) 0' },
+    '60%': { translate: 'calc(var(--shake-distance, 6px) * -0.6) 0' },
+    '80%': { translate: 'calc(var(--shake-distance, 6px) * 0.6) 0' },
+  },
+
+  // Opening a block out of nothing, through the grid track rather than through
+  // `height`. `height: auto` is not interpolable, which is why the framer-motion
+  // version has to measure; `grid-template-rows: 0fr → 1fr` interpolates and
+  // gets `auto` for free. Same trick the Accordion and ExpandableText already
+  // use, so this is the library's existing answer rather than a new one.
+  //
+  // Still a layout property, and that is inherent to opening to content-height:
+  // keep it on small blocks.
+  'reveal-open': {
+    from: { gridTemplateRows: '0fr', opacity: '0' },
+    to: { gridTemplateRows: '1fr', opacity: '1' },
+  },
+
+  // The two halves of a directional swap. The outgoing content leaves *against*
+  // the travel direction so the pair reads as one movement rather than as two
+  // things passing each other.
+  'swap-in': {
+    from: { opacity: '0', translate: 'var(--swap-distance, 24px) 0' },
+    to: { opacity: '1', translate: '0 0' },
+  },
+  'swap-out': {
+    from: { opacity: '1', translate: '0 0' },
+    to: {
+      opacity: '0',
+      translate: 'calc(var(--swap-distance, 24px) * -1) 0',
+    },
+  },
+
   // ── celebration ─────────────────────────────────────────────────────────
   // Three keyframes that exist because CSS cannot express a there-and-back, an
   // arc, or a tumble as a transition: all three need a midpoint. They are
