@@ -5,13 +5,37 @@ import { MOTION_DURATION_MS } from '../../theme/motion';
 import { confettiPiece } from './Confetti.styles';
 import { ConfettiProps } from './Confetti.types';
 
-/** Palette-token names, so a burst re-themes with everything else. */
+/**
+ * Literal hex, and the one place in this library that is deliberately off the
+ * palette.
+ *
+ * The first version reached for `primary.main` / `success.main` /
+ * `warning.main` / `danger.main`, which was wrong twice over. **Semantically**,
+ * those colours mean things: raining the error red and the warning amber over
+ * "payment complete" says something the screen does not. Confetti is the one
+ * element on a page with nothing to communicate, so a colour that communicates
+ * is the wrong kind of colour.
+ *
+ * **And optically**, the palette is built for interface legibility — text and
+ * controls on a light surface — so it sits dark and desaturated: average
+ * lightness 47%, nothing above 80% saturation, and three of the five in the
+ * blue range. Fifty pieces of that read as a chart legend falling. These six
+ * average 56% lightness, four of them are fully saturated, and they span the
+ * whole wheel (9°–330°), which is what makes a burst read as a burst.
+ *
+ * The cost, stated rather than hidden: these do not follow a re-theme, and they
+ * do not adapt to dark mode — a bright hex on a dark surface is brighter still.
+ * That is acceptable for a burst that lasts two seconds and carries no
+ * information, and it is why `colors` is a prop: an app that needs its own
+ * festival palette passes one.
+ */
 const DEFAULT_COLORS = [
-  'primary.main',
-  'success.main',
-  'warning.main',
-  'danger.main',
-  'primary.light',
+  '#FFD700', // gold
+  '#FF69B4', // hot pink
+  '#00CED1', // turquoise
+  '#FF6347', // tomato
+  '#9370DB', // medium purple
+  '#32CD32', // lime
 ];
 
 /**
@@ -83,8 +107,14 @@ export const Confetti = forwardRef(
         // varies down to near zero gives some pieces no tumble at all, which is
         // the difference between debris and a falling rectangle.
         spin: next() < 0.5 ? '-720deg' : '720deg',
-        width: `${6 + Math.round(next() * 4)}px`,
-        height: `${8 + Math.round(next() * 6)}px`,
+        // Square, near enough. The first version varied width 6–10 and height
+        // 8–14 independently, which produced pieces 2.3× taller than wide —
+        // and with `radii.xs` on top of that (4px, because this theme
+        // overrides Chakra's 2px for buttons and cards) a 6px-wide piece is
+        // two-thirds round. A rounded oblong tumbling end over end is not a
+        // fragment of paper; the team's word for it was 애벌레, caterpillar.
+        width: `${8 + Math.round(next() * 4)}px`,
+        height: `${8 + Math.round(next() * 5)}px`,
         // 0.85–1.3× the token. Anchored to the scale, and with a ceiling: the
         // whole burst is over by `fall × 1.3 + base`, which is knowable without
         // running it.

@@ -32,7 +32,11 @@ import type { SystemStyleObject } from '@chakra-ui/react';
 export const confettiPiece: SystemStyleObject = {
   position: 'absolute',
   top: '0',
-  borderRadius: 'xs',
+  // No radius, and not a token. `radii.xs` is 4px in this theme — a value
+  // chosen for buttons and cards, which is most of the width of a 10px piece.
+  // The radius scale exists for things a finger touches; a fragment is not one,
+  // and a corner is what makes it read as torn paper rather than a pill.
+  borderRadius: '0',
   animationName: 'confetti-fall',
   animationDuration:
     'calc(var(--chakra-durations-motion-celebrate-fall) * var(--confetti-rate, 1))',
