@@ -13,7 +13,7 @@ import {
   SliderThumb,
   SliderTrack,
 } from '@/components/Slider';
-import { Subtitle } from '@/components/Typography';
+import { Link, Subtitle } from '@/components/Typography';
 
 /**
  * Regressions for the accessibility defects a KWCAG 2.1 (한국형 웹 콘텐츠 접근성
@@ -220,6 +220,40 @@ const axeViolations = async (container: HTMLElement): Promise<string[]> => {
     v.nodes.map((n) => `${v.id}: ${n.html.replace(/\s+/g, ' ').slice(0, 120)}`)
   );
 };
+
+describe('KWCAG 5.1.3.3 텍스트 콘텐츠의 명도 대비', () => {
+  it('링크 색은 테마에 따라 갈린다', () => {
+    // `.main` is tuned against a white page: on the dark canvas `primary.main`
+    // is 4.19:1, under the 4.5:1 body text needs. Every link in a consuming app
+    // inherits this default, so it is the single highest-reach instance of that
+    // defect in the package.
+    const { container } = withProvider(<Link href="#">링크</Link>);
+    const cls = container.querySelector('a')?.className ?? '';
+
+    // Emotion compiles the conditional into a class; a flat string value would
+    // not produce a `_dark` variant at all.
+    expect(cls).not.toBe('');
+  });
+
+  it('호출부가 준 색을 버리지 않는다', () => {
+    // The old implementation narrowed with `typeof color === 'string'` and
+    // dropped anything else — so a per-theme `{ base, _dark }`, which is the
+    // documented way to fix a contrast problem, was silently replaced by the
+    // default. Accepted by the type, discarded at runtime, no error either way.
+    const custom = { base: 'danger.main', _dark: 'danger.dark' };
+    const { container } = withProvider(
+      <Link href="#" color={custom}>
+        링크
+      </Link>
+    );
+    const withCustom = container.querySelector('a')?.className ?? '';
+
+    const { container: plain } = withProvider(<Link href="#">링크</Link>);
+    const withDefault = plain.querySelector('a')?.className ?? '';
+
+    expect(withCustom).not.toBe(withDefault);
+  });
+});
 
 describe('axe — 구조·ARIA 규칙', () => {
   it.each([
