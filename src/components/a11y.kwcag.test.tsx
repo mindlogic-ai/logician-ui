@@ -1,4 +1,5 @@
 import { render } from '@testing-library/react';
+import axe from 'axe-core';
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import { FileInput } from '@/components/FileInput';
@@ -170,5 +171,91 @@ describe('KWCAG 5.4.2.1 웹 애플리케이션 접근성 준수', () => {
     // `_groupHover` compiles to `.group:hover &`, so the CLASS is what makes it
     // fire — the old `role="group"` did nothing for hover or for assistive tech.
     expect(container.querySelector('label')?.className).toContain('group');
+  });
+});
+
+/**
+ * An axe pass over the components above, so the NEXT defect of this shape does
+ * not need an audit downstream to find it.
+ *
+ * Everything in this file until now is a regression test: each one names a
+ * defect that already shipped. This runs the same engine the certification
+ * audit runs, in the design system, on the compositions most likely to be
+ * wrong — so a component that acquires a nameless control, a role that is not
+ * allowed on its element, or an interactive element inside another fails here
+ * rather than in an app that consumes it.
+ *
+ * **jsdom has no layout**, so this is deliberately not the whole rule set:
+ * `color-contrast` needs painted pixels and reports nothing here, and rules
+ * about visibility or size have the same problem. What jsdom does carry
+ * perfectly is structure and ARIA — which is precisely where all nine defects
+ * in this branch lived. The contrast half belongs to a browser, and FactChat's
+ * `storybook-a11y.yml` runs it there in both colour modes.
+ */
+const STRUCTURAL_AXE_RULES = [
+  'aria-allowed-attr',
+  'aria-allowed-role',
+  'aria-required-attr',
+  'aria-required-children',
+  'aria-required-parent',
+  'aria-valid-attr-value',
+  'button-name',
+  'duplicate-id',
+  'label',
+  'link-name',
+  'nested-interactive',
+  'aria-input-field-name',
+  'aria-toggle-field-name',
+];
+
+/** Runs axe over a container and returns one line per violating node. */
+const axeViolations = async (container: HTMLElement): Promise<string[]> => {
+  const results = await axe.run(container, {
+    runOnly: { type: 'rule', values: STRUCTURAL_AXE_RULES },
+    // The default reporter walks the whole document for a summary this does
+    // not use, and jsdom makes that slow for no gain.
+    resultTypes: ['violations'],
+  });
+  return results.violations.flatMap((v) =>
+    v.nodes.map((n) => `${v.id}: ${n.html.replace(/\s+/g, ' ').slice(0, 120)}`)
+  );
+};
+
+describe('axe — 구조·ARIA 규칙', () => {
+  it.each([
+    [
+      '이름이 있는 셀렉트',
+      <SelectField
+        key="select"
+        options={[{ label: 'One', value: '1' }]}
+        ariaLabel="분류 선택"
+      />,
+    ],
+    [
+      '이름이 있는 슬라이더',
+      <Slider key="slider" ariaLabel="탐색" value={[10]} min={0} max={100}>
+        <SliderTrack>
+          <SliderFilledTrack />
+        </SliderTrack>
+        <SliderThumb />
+      </Slider>,
+    ],
+    [
+      '라디오 그룹',
+      <RadioGroup key="radio" defaultValue="a">
+        <Radio value="a">
+          <Radio.Control />
+          <Radio.Text>A</Radio.Text>
+        </Radio>
+        <Radio value="b">
+          <Radio.Control />
+          <Radio.Text>B</Radio.Text>
+        </Radio>
+      </RadioGroup>,
+    ],
+    ['파일 입력', <FileInput key="file" onChange={() => {}} />],
+  ])('%s', async (_name, ui) => {
+    const { container } = withProvider(ui);
+    expect(await axeViolations(container)).toEqual([]);
   });
 });

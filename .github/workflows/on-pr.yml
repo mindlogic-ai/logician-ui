@@ -29,6 +29,16 @@ jobs:
       - name: Run type checking
         run: yarn type-check
 
+      # The suite was never run here. `package.json` has had `"test": "vitest
+      # run"` the whole time and no workflow called it, so every test in this
+      # repo was decorative — including `src/components/a11y.kwcag.test.tsx`,
+      # which holds nine accessibility defects that already shipped once and
+      # that FactChat's KWCAG 2.1 certification depends on staying fixed.
+      # Putting `Subtitle` back to `as="h6"` passed every check before this
+      # line existed. It takes ~13s.
+      - name: Run tests
+        run: yarn test
+
       - name: Build package
         run: yarn build
         env:
