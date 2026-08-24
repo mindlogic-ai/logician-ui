@@ -82,6 +82,7 @@ export const Th = forwardRef<
 
     const {
       registerStickyColumn,
+      hasStickyWidth,
       getStickyOffset,
       isLastStickyColumn,
       ...scrollState
@@ -94,6 +95,8 @@ export const Th = forwardRef<
       direction: stickyDirection,
       index: stickyIndex,
       register: registerStickyColumn,
+      hasWidth: hasStickyWidth,
+      role: 'header',
     });
 
     // Combine refs (forwarded ref and internal ref)
