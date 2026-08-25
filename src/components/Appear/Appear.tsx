@@ -34,6 +34,15 @@ import { AppearProps } from './Appear.types';
  * `AnimatePresence` ancestor — standalone it is a no-op there as well, so
  * nothing that actually ran is lost in the port.
  *
+ * ## What it puts in the DOM
+ *
+ * **One `div` around `children`**, and layout props land on that wrapper rather
+ * than on the child. Usually the same result — but the child is no longer a
+ * *direct* child of what surrounds it, so animate the inner element instead of
+ * wrapping when the parent needs its children directly: a `<tr>` needs `<td>`s,
+ * and Ark parts (`Menu.List`, `Tree`) walk their own children for focus and
+ * typeahead.
+ *
  * ```tsx
  * <Appear scaleFrom={0.5}>✓</Appear>
  * <Appear rise={6} delayMs={120}>정답입니다</Appear>

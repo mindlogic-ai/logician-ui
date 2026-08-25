@@ -22,6 +22,13 @@ import { ShakeProps } from './Shake.types';
  * motion, so for some readers nothing happens at all; pair it with colour, an
  * icon, or copy that says the same thing.
  *
+ * **Adds one `div` around `children`**, and layout props land on that wrapper
+ * rather than on the child. Usually the same result — but the child is no longer
+ * a *direct* child of what surrounds it, so animate the inner element instead of
+ * wrapping when the parent needs its children directly: a `<tr>` needs `<td>`s,
+ * and Ark parts (`Menu.List`, `Tree`) walk their own children for focus and
+ * typeahead.
+ *
  * ```tsx
  * <Shake trigger={attempts}>
  *   <Input aria-invalid={invalid} />

@@ -23,6 +23,11 @@ import { FlyToProps } from './FlyTo.types';
  * Under reduced motion nothing flies and `onDone` fires on the next tick, so
  * whatever the flight was sequencing still completes.
  *
+ * **Adds nothing where you write it.** Unlike the wrapping primitives here, the
+ * ghost renders into a portal and is positioned against the viewport, so mounting
+ * it never moves the layout it was written into — and it is free to fly across
+ * ancestors that clip or scroll.
+ *
  * ```tsx
  * {flight && (
  *   <FlyTo from={flight.from} to={flight.to} onDone={clearFlight}>

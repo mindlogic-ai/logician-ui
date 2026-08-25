@@ -30,6 +30,10 @@ const ease = cubicBezier('emphasized');
  * Under reduced motion the final value renders immediately — the number is the
  * information, and the count is the decoration.
  *
+ * **Renders a single `<span>` and wraps nothing.** The other primitives here put
+ * a wrapper around their children; this one takes no children and *is* the
+ * element, so it drops into running text or a heading with nothing in between.
+ *
  * ```tsx
  * <CountUp from={previousBalance} to={balance} />
  * ```

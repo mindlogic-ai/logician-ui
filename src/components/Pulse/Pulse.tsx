@@ -25,6 +25,13 @@ import { PulseProps } from './Pulse.types';
  * a refusal reads as congratulation and emphasis reads as an error the reader
  * then goes looking for.
  *
+ * **Adds one `div` around `children`**, and layout props land on that wrapper
+ * rather than on the child. Usually the same result — but the child is no longer
+ * a *direct* child of what surrounds it, so animate the inner element instead of
+ * wrapping when the parent needs its children directly: a `<tr>` needs `<td>`s,
+ * and Ark parts (`Menu.List`, `Tree`) walk their own children for focus and
+ * typeahead.
+ *
  * ```tsx
  * <Pulse trigger={balance}>
  *   <Text textStyle="h2">{balance}</Text>

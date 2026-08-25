@@ -25,6 +25,13 @@ import { RevealProps } from './Reveal.types';
  * Inherent to opening to content-height. Keep it on small blocks — not a long
  * list, a table, or anything with nested scroll.
  *
+ * **Adds two elements** — the grid whose track animates, and the `div` inside it
+ * that clips. Layout props land on the outer one, and `children` is no longer a
+ * *direct* child of what surrounds it, so animate the inner element instead of
+ * wrapping when the parent needs its children directly: a `<tr>` needs `<td>`s,
+ * and Ark parts (`Menu.List`, `Tree`) walk their own children for focus and
+ * typeahead.
+ *
  * ```tsx
  * {showRationale && <Reveal><Text>{rationale}</Text></Reveal>}
  * ```

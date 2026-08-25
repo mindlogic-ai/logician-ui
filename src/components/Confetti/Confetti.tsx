@@ -91,6 +91,11 @@ const scatter = (seed: number) => {
  * stated: these do not follow a re-theme and do not adapt to dark mode. `colors`
  * is a prop for an app that needs its own.
  *
+ * **Takes no children — it is an overlay, not a wrapper.** It renders absolutely
+ * against the nearest positioned ancestor, which is therefore the stage: give
+ * that element `position: relative`, or the burst resolves against the page and
+ * rains over everything.
+ *
  * ```tsx
  * {justPurchased && <Confetti />}
  * ```

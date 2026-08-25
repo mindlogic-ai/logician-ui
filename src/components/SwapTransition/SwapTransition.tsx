@@ -33,6 +33,13 @@ import { SwapTransitionProps } from './SwapTransition.types';
  * general answer to the same problem. Here the problem is one element and one
  * exit, so the general answer costs more than it returns.
  *
+ * **Adds two elements** — the grid that stacks both states in one cell, and the
+ * `div` that actually slides. Layout props land on the outer one, and `children`
+ * is no longer a *direct* child of what surrounds it, so animate the inner
+ * element instead of wrapping when the parent needs its children directly: a
+ * `<tr>` needs `<td>`s, and Ark parts (`Menu.List`, `Tree`) walk their own
+ * children for focus and typeahead.
+ *
  * ```tsx
  * <SwapTransition transitionKey={step}>
  *   {STEPS[step]}
