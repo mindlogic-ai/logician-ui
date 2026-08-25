@@ -18,9 +18,9 @@ import { defineConfig } from '@chakra-ui/react';
  * - warm near-black `#1A1714` (dark-mode canvas family, via `grayDark.*`)
  * - sage `#93C7A9` → success ramp, steel blue `#5D9FBF` → secondary ramp
  *
- * Audited pairs (all pass, WCAG 2.1): primary.main on surface 6.5:1, white
- * label on primary.fill 6.5:1, fg.default on canvas 9.4:1, fg.subtle on
- * bg.muted 4.8:1, dark-mode fg.default on canvas 12.8:1, dark-mode
+ * Audited pairs (all pass, WCAG 2.1): primary.main on surface 6.6:1, white
+ * label on primary.fill 6.6:1, fg.default on canvas 10.0:1, fg.subtle on
+ * bg.muted 5.2:1, dark-mode fg.default on canvas 12.8:1, dark-mode
  * primary.main on canvas 4.6:1 — full table in the exploration PR.
  *
  * `rose.*` (danger) and `gold.*` (warning) are deliberately not overridden:
@@ -68,13 +68,15 @@ export const bazeColors = {
     800: { value: '#005232' },
     900: { value: '#002A17' },
   },
-  // Light neutrals — cream sand → warm ink (replaces gray.*)
+  // Light neutrals — cream sand → warm ink (replaces gray.*). Light end sits
+  // ~1 step lighter than the raw splash-screen cream: the brand cream reads
+  // right on a poster but too heavy as a working canvas.
   gray: {
-    0: { value: '#F4EFE2' },
-    50: { value: '#EEE8D7' },
-    100: { value: '#E7E0CC' },
-    200: { value: '#DCD4BD' },
-    300: { value: '#C9C0A6' },
+    0: { value: '#F9F6EC' },
+    50: { value: '#F4F0E1' },
+    100: { value: '#EDE8D5' },
+    200: { value: '#E2DBC5' },
+    300: { value: '#CCC4AB' },
     400: { value: '#B5AF9E' },
     500: { value: '#9C9585' },
     600: { value: '#837C6B' },
@@ -114,7 +116,7 @@ export const bazeColors = {
   // BAZE has no pure white/black anywhere: `white` backs bg.surface/raised/
   // panel and the labels on solid brand fills, so warm paper here is what
   // makes cards and button labels read cream instead of clinical white.
-  white: { value: '#FCFAF4' },
+  white: { value: '#FDFCF7' },
   black: { value: '#14110D' },
 };
 
