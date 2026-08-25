@@ -81,6 +81,16 @@ const scatter = (seed: number) => {
  * nothing, and doing it in CSS keeps the decision on the same media query as
  * every other preset instead of on a hook that has to guess before hydration.
  *
+ * **The default colours are literal hex, and this is the one place in the
+ * library deliberately off the palette.** Semantic tokens mean things, and
+ * raining `danger.main` over "payment complete" says something the screen does
+ * not — confetti is the one element on a page with nothing to communicate. The
+ * palette is also built for interface legibility on a light surface, so it runs
+ * dark and narrow (average lightness 47%, three of five in the blue range) and
+ * fifty pieces of it read as a chart legend falling. The cost is real and
+ * stated: these do not follow a re-theme and do not adapt to dark mode. `colors`
+ * is a prop for an app that needs its own.
+ *
  * ```tsx
  * {justPurchased && <Confetti />}
  * ```

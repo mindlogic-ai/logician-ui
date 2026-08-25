@@ -71,24 +71,3 @@ export const Default: Story = {
   },
 };
 
-/** The caller owns mounting. It opens; it does not close. */
-export const OpensOnly: Story = {
-  render: () => (
-    <Stack gap={3} maxW="64ch">
-      <Text fontWeight="600" mb={0}>
-        열고 닫는 것이라면 Collapsible입니다
-      </Text>
-      <Subtext color="fg.muted" mb={0}>
-        <code>Reveal</code>은 마운트될 때 열립니다. 닫히는 애니메이션이 필요하면
-        노드가 남아 있어야 하고, 그게 <code>presence</code>를 쓰는{' '}
-        <code>Collapsible</code>입니다. <code>FlyTo</code>와 같은 계약 — 보여줄
-        때 렌더하고, 끝나면 호출부가 내립니다.
-      </Subtext>
-      <Subtext color="warning.main" mb={0}>
-        ⚠️ 매 프레임 레이아웃 비용이 듭니다. content-height로 여는 일에 내재된
-        비용이라 <b>작은 블록에만</b> 쓰세요 — 긴 목록, 테이블, 중첩 스크롤은 안
-        됩니다.
-      </Subtext>
-    </Stack>
-  ),
-};

@@ -20,6 +20,11 @@ import { PulseProps } from './Pulse.types';
  * The first render never pops. A counter that mounts already at 12 has not just
  * become 12, and an interface that celebrates its own initial paint is noise.
  *
+ * Not a `Shake`. Both replay on a trigger, and the pair has to stay apart: a
+ * pulse draws the eye to something *good* that landed, a shake refuses. Swapped,
+ * a refusal reads as congratulation and emphasis reads as an error the reader
+ * then goes looking for.
+ *
  * ```tsx
  * <Pulse trigger={balance}>
  *   <Text textStyle="h2">{balance}</Text>

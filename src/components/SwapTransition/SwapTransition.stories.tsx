@@ -139,20 +139,3 @@ export const Direction: Story = {
   },
 };
 
-/** `transitionKey` must identify the content, not merely change. */
-export const KeyChoice: Story = {
-  name: 'transitionKey 고르기',
-  render: () => (
-    <Stack gap={3} maxW="64ch">
-      <Subtext color="fg.muted" mb={0}>
-        스텝 인덱스나 레코드 id처럼 <b>내용을 실제로 식별하는 값</b>을 쓰세요.
-        무관한 리렌더에도 바뀌는 값을 넣으면 내용이 자기 자신과 교체되면서 계속
-        미끄러집니다.
-      </Subtext>
-      <Subtext color="fg.muted" mb={0}>
-        같은 키로 리렌더되면 애니메이션 없이 제자리에서 갱신됩니다 — 스트리밍
-        중인 텍스트가 매 청크마다 다시 들어오지 않도록.
-      </Subtext>
-    </Stack>
-  ),
-};

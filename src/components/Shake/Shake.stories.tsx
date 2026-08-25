@@ -1,9 +1,9 @@
-import { Box, HStack, Stack } from '@chakra-ui/react';
+import { Box, Grid, HStack, Stack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
 import { Button } from '../Button';
-import { Subtext, Text } from '../Typography';
+import { Subtext } from '../Typography';
 import { Shake } from '.';
 
 /**
@@ -91,21 +91,71 @@ export const Distance: Story = {
 };
 
 /**
- * Removed entirely under reduced motion, so for some readers nothing happens at
- * all. It can never be the only signal.
+ * What a reader who asked for less motion actually gets.
+ *
+ * The shake is `animationName: none` under `prefers-reduced-motion`, which
+ * makes the wrapper a no-op — so the right-hand column, rendered without it, is
+ * literally what those readers see. If the refusal is not legible there, the
+ * component is carrying meaning it cannot deliver.
  */
-export const NeverTheOnlySignal: Story = {
-  render: () => (
-    <Stack gap={3} maxW="60ch">
-      <Text fontWeight="600" mb={0}>
-        색 · 아이콘 · 문구 중 하나는 반드시 같이
-      </Text>
-      <Subtext color="fg.muted" mb={0}>
-        <code>prefers-reduced-motion</code>에서는 흔들림이 통째로 사라집니다.
-        흔들림만으로 거절을 말하면 그 사람에게는 아무 일도 일어나지 않은
-        화면입니다. 위 예시가 테두리 색과 ✕ 아이콘과 문구를 함께 쓰는
-        이유입니다.
-      </Subtext>
-    </Stack>
-  ),
+export const ReducedMotion: Story = {
+  name: '동작 줄이기에서 남는 것',
+  render: () => {
+    const [n, setN] = useState(0);
+
+    const Field = ({ signalled }: { signalled: boolean }) => (
+      <Box
+        px={4}
+        py={2}
+        borderRadius="md"
+        border="1px solid"
+        borderColor={signalled ? 'danger.main' : 'border.default'}
+        bg={signalled ? 'danger.lightest' : 'bg.surface'}
+        color={signalled ? 'danger.main' : 'fg.default'}
+        fontWeight={signalled ? '600' : '400'}
+        fontSize="sm"
+        w="100%"
+      >
+        {signalled ? '✕ 다시 시도해 주세요' : '답을 입력하세요'}
+      </Box>
+    );
+
+    return (
+      <Stack gap={5} align="flex-start" maxW="620px">
+        <Button size="sm" variant="outline" onClick={() => setN((a) => a + 1)}>
+          틀린 답 제출
+        </Button>
+
+        <Grid templateColumns={{ base: '1fr', md: '1fr 1fr' }} gap={6} w="100%">
+          {[
+            { label: '보통', reduced: false },
+            { label: '동작 줄이기 켠 사람이 보는 것', reduced: true },
+          ].map((col) => (
+            <Stack key={col.label} gap={2}>
+              <Subtext
+                fontSize="2xs"
+                color={col.reduced ? 'warning.main' : 'fg.muted'}
+                mb={0}
+              >
+                {col.label}
+              </Subtext>
+              {col.reduced ? (
+                <Field signalled={n > 0} />
+              ) : (
+                <Shake trigger={n} display="block">
+                  <Field signalled={n > 0} />
+                </Shake>
+              )}
+            </Stack>
+          ))}
+        </Grid>
+
+        <Subtext color="fg.muted" mb={0}>
+          오른쪽에서도 거절이 읽히는 이유는 <b>테두리 색 · ✕ 아이콘 · 문구</b>가
+          같이 바뀌기 때문입니다. 흔들림만 있었다면 저 사람에게는 아무 일도
+          일어나지 않은 화면입니다.
+        </Subtext>
+      </Stack>
+    );
+  },
 };

@@ -82,15 +82,3 @@ export const Peak: Story = {
   },
 };
 
-/**
- * The counterpart is `Shake`. Both replay on a trigger, and they must not be
- * swapped: a pulse draws the eye to something good, a shake refuses something.
- */
-export const NotAShake: Story = {
-  render: () => (
-    <Subtext color="fg.muted" mb={0}>
-      강조가 필요하면 Pulse, 거절이 필요하면 Shake입니다. 거절 자리에 Pulse를
-      쓰면 「잘됐다」로 읽히고, 강조 자리에 Shake를 쓰면 에러로 읽힙니다.
-    </Subtext>
-  ),
-};
