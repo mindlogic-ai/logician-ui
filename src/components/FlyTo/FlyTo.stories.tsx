@@ -19,7 +19,7 @@ import { FlyTo } from '.';
  * here has to render its own instance after laying the two elements out.
  */
 const meta = {
-  title: 'Components/FlyTo',
+  title: 'Components/Motion/FlyTo',
   component: FlyTo,
 } satisfies Meta;
 

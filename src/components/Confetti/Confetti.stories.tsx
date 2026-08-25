@@ -14,7 +14,7 @@ import { Confetti } from '.';
  * fall against it.
  */
 const meta = {
-  title: 'Components/Confetti',
+  title: 'Components/Motion/Confetti',
   component: Confetti,
 } satisfies Meta<typeof Confetti>;
 

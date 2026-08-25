@@ -15,7 +15,7 @@ import { SwapTransition } from '.';
  * render the new one.
  */
 const meta = {
-  title: 'Components/SwapTransition',
+  title: 'Components/Motion/SwapTransition',
   component: SwapTransition,
   args: { transitionKey: 0 },
 } satisfies Meta<typeof SwapTransition>;

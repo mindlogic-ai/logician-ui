@@ -13,7 +13,7 @@ import { CountUp } from '.';
  * JavaScript — and reads the same curve CSS would have, through `cubicBezier`.
  */
 const meta = {
-  title: 'Components/CountUp',
+  title: 'Components/Motion/CountUp',
   component: CountUp,
   args: { to: 1250 },
 } satisfies Meta<typeof CountUp>;

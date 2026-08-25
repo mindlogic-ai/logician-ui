@@ -15,7 +15,7 @@ import { Reveal } from '.';
  * JavaScript before.
  */
 const meta = {
-  title: 'Components/Reveal',
+  title: 'Components/Motion/Reveal',
   component: Reveal,
 } satisfies Meta<typeof Reveal>;
 

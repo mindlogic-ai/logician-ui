@@ -12,7 +12,7 @@ import { Pulse } from '.';
  * runs its animation from the top.
  */
 const meta = {
-  title: 'Components/Pulse',
+  title: 'Components/Motion/Pulse',
   component: Pulse,
   args: { trigger: 0 },
 } satisfies Meta<typeof Pulse>;

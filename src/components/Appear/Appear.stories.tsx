@@ -14,7 +14,7 @@ import { Appear } from '.';
  * see **어느 것을 쓸까**.
  */
 const meta = {
-  title: 'Components/Appear',
+  title: 'Components/Motion/Appear',
   component: Appear,
 } satisfies Meta<typeof Appear>;
 

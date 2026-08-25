@@ -11,7 +11,7 @@ import { Shake } from '.';
  * refused action. Replays whenever `trigger` changes.
  */
 const meta = {
-  title: 'Components/Shake',
+  title: 'Components/Motion/Shake',
   component: Shake,
   args: { trigger: 0 },
 } satisfies Meta<typeof Shake>;
