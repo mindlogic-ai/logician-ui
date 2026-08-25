@@ -3,6 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
 import { Button } from '../Button';
+import { Card } from '../Card';
 import { Subtext, Text } from '../Typography';
 import { SwapTransition } from '.';
 
@@ -60,21 +61,14 @@ export const Default: Story = {
           minH="96px"
           overflow="hidden"
         >
-          <Box
-            px={4}
-            py={4}
-            borderRadius="md"
-            border="1px solid"
-            borderColor="border.subtle"
-            bg="bg.surface"
-          >
+          <Card p={4}>
             <Text fontWeight="700" mb={1}>
               {step + 1}. {STEPS[step].title}
             </Text>
             <Subtext color="fg.muted" mb={0}>
               {STEPS[step].body}
             </Subtext>
-          </Box>
+          </Card>
         </SwapTransition>
 
         <Subtext color="fg.muted" mb={0}>
@@ -123,11 +117,11 @@ export const Direction: Story = {
           minH="64px"
           overflow="hidden"
         >
-          <Box px={4} py={3} borderRadius="md" bg="bg.subtle">
+          <Card p={3} variant="default">
             <Text fontWeight="600" mb={0}>
               {STEPS[step].title}
             </Text>
-          </Box>
+          </Card>
         </SwapTransition>
 
         <Subtext color="fg.muted" mb={0}>
@@ -138,4 +132,3 @@ export const Direction: Story = {
     );
   },
 };
-

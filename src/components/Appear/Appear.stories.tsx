@@ -2,7 +2,10 @@ import { Box, Grid, HStack, Stack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
+import { Badge } from '../Badge';
 import { Button } from '../Button';
+import { Card } from '../Card';
+import { Chip } from '../Chip';
 import { Collapsible } from '../Collapsible';
 import { Menu } from '../Menu';
 import { Subtext, Text } from '../Typography';
@@ -42,17 +45,9 @@ export const Default: Story = {
           ].map((v) => (
             <Stack key={v.label} gap={2} align="center" w="110px">
               <Appear key={`${v.label}-${run}`} {...v.props}>
-                <Box
-                  px={4}
-                  py={3}
-                  borderRadius="md"
-                  bg="primary.lightest"
-                  color="primary.main"
-                  fontWeight="600"
-                  fontSize="sm"
-                >
+                <Chip colorScheme="primary" variant="soft">
                   {v.label}
-                </Box>
+                </Chip>
               </Appear>
               <Subtext fontFamily="mono" fontSize="2xs" color="fg.muted" mb={0}>
                 {v.label === '페이드'
@@ -81,18 +76,7 @@ export const Sequenced: Story = {
         </Button>
         <HStack gap={3} align="center" minH="60px">
           <Appear key={`a-${run}`} scaleFrom={0.5}>
-            <Box
-              w="40px"
-              h="40px"
-              borderRadius="full"
-              bg="success.main"
-              color="fg.inverse"
-              display="grid"
-              placeItems="center"
-              fontWeight="700"
-            >
-              ✓
-            </Box>
+            <Badge variant="success">✓ 정답</Badge>
           </Appear>
           <Appear key={`b-${run}`} rise={6} delayMs={140}>
             <Text fontWeight="600" mb={0}>
@@ -187,17 +171,14 @@ export const WhichOne: Story = {
             </Subtext>
             <Stack key={run} gap="2px">
               {['첫째 줄', '둘째 줄', '셋째 줄', '넷째 줄'].map((t, i) => (
-                <Box
+                <Chip
                   key={t}
-                  px={3}
-                  py={2}
-                  borderRadius="sm"
-                  bg="bg.subtle"
-                  fontSize="xs"
+                  colorScheme="neutral"
+                  variant="outline"
                   {...staggerProps(i)}
                 >
                   {t}
-                </Box>
+                </Chip>
               ))}
             </Stack>
           </Stack>
@@ -212,19 +193,7 @@ export const WhichOne: Story = {
             </Subtext>
             <HStack gap={2} align="center" minH="44px">
               <Appear key={`a-${run}`} scaleFrom={0.5}>
-                <Box
-                  w="32px"
-                  h="32px"
-                  borderRadius="full"
-                  bg="success.main"
-                  color="fg.inverse"
-                  display="grid"
-                  placeItems="center"
-                  fontWeight="700"
-                  fontSize="sm"
-                >
-                  ✓
-                </Box>
+                <Badge variant="success">✓</Badge>
               </Appear>
               <Appear key={`b-${run}`} rise={6} delayMs={140}>
                 <Text fontSize="sm" fontWeight="600" mb={0}>

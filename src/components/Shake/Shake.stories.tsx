@@ -3,6 +3,8 @@ import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
 import { Button } from '../Button';
+import { Chip } from '../Chip';
+import { Input } from '../Input';
 import { Subtext } from '../Typography';
 import { Shake } from '.';
 
@@ -34,18 +36,9 @@ export const Default: Story = {
           틀린 답 제출
         </Button>
         <Shake trigger={attempts}>
-          <Box
-            px={4}
-            py={2}
-            borderRadius="md"
-            border="1px solid"
-            borderColor="danger.main"
-            bg="danger.lightest"
-            color="danger.main"
-            fontWeight="600"
-          >
+          <Chip colorScheme="danger" variant="soft">
             ✕ 다시 시도해 주세요
-          </Box>
+          </Chip>
         </Shake>
         <Subtext color="fg.muted" mb={0}>
           같은 답을 두 번 내도 두 번 흔들립니다 — 값이 아니라 사건을 셉니다.
@@ -103,21 +96,22 @@ export const ReducedMotion: Story = {
   render: () => {
     const [n, setN] = useState(0);
 
+    // The real form primitives, so the demo shows what an invalid field
+    // actually looks like rather than an approximation of one.
     const Field = ({ signalled }: { signalled: boolean }) => (
-      <Box
-        px={4}
-        py={2}
-        borderRadius="md"
-        border="1px solid"
-        borderColor={signalled ? 'danger.main' : 'border.default'}
-        bg={signalled ? 'danger.lightest' : 'bg.surface'}
-        color={signalled ? 'danger.main' : 'fg.default'}
-        fontWeight={signalled ? '600' : '400'}
-        fontSize="sm"
-        w="100%"
-      >
-        {signalled ? '✕ 다시 시도해 주세요' : '답을 입력하세요'}
-      </Box>
+      <Stack gap={1} w="100%">
+        <Input
+          value={signalled ? '1998' : ''}
+          readOnly
+          aria-invalid={signalled || undefined}
+          placeholder="답을 입력하세요"
+        />
+        {signalled && (
+          <Chip colorScheme="danger" variant="soft">
+            ✕ 다시 시도해 주세요
+          </Chip>
+        )}
+      </Stack>
     );
 
     return (

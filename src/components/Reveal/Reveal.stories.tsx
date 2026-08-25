@@ -3,6 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
 import { Button } from '../Button';
+import { Card } from '../Card';
 import { Subtext, Text } from '../Typography';
 import { Reveal } from '.';
 
@@ -29,18 +30,11 @@ export const Default: Story = {
 
     return (
       <Stack gap={3} align="flex-start" maxW="440px">
-        <Box
-          px={4}
-          py={3}
-          borderRadius="md"
-          border="1px solid"
-          borderColor="border.default"
-          w="100%"
-        >
+        <Card p={4} w="100%">
           <Text fontWeight="600" mb={0}>
             지구의 대기는 78%가 질소다
           </Text>
-        </Box>
+        </Card>
 
         <Button size="xs" variant="outline" onClick={() => setShown((v) => !v)}>
           {shown ? '숨기기' : '근거 보기'}
@@ -48,17 +42,12 @@ export const Default: Story = {
 
         {shown && (
           <Reveal>
-            <Box
-              px={4}
-              py={3}
-              borderRadius="md"
-              bg="bg.subtle"
-              fontSize="sm"
-              color="fg.muted"
-            >
-              건조 공기 기준 질소 78.08%, 산소 20.95%, 아르곤 0.93%입니다.
-              수증기를 포함하면 비율이 달라집니다.
-            </Box>
+            <Card p={4} variant="default">
+              <Subtext mb={0}>
+                건조 공기 기준 질소 78.08%, 산소 20.95%, 아르곤 0.93%입니다.
+                수증기를 포함하면 비율이 달라집니다.
+              </Subtext>
+            </Card>
           </Reveal>
         )}
 
@@ -70,4 +59,3 @@ export const Default: Story = {
     );
   },
 };
-

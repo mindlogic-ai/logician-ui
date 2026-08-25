@@ -1,9 +1,11 @@
-import { Box, HStack, Stack } from '@chakra-ui/react';
+import { HStack, Stack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
+import { Badge } from '../Badge';
 import { Button } from '../Button';
-import { Subtext, Text } from '../Typography';
+import { Tag } from '../Tag';
+import { Subtext } from '../Typography';
 import { Pulse } from '.';
 
 /**
@@ -32,9 +34,9 @@ export const Default: Story = {
           +50 크레딧
         </Button>
         <Pulse trigger={balance}>
-          <Text fontSize="2xl" fontWeight="700" mb={0}>
+          <Tag colorPalette="primary" variant="soft">
             {balance.toLocaleString()} 크레딧
-          </Text>
+          </Tag>
         </Pulse>
         <Subtext color="fg.muted" mb={0}>
           마운트할 때는 조용하고, 값이 바뀔 때만 튑니다.
@@ -58,18 +60,7 @@ export const Peak: Story = {
           {[1.12, 1.3, 1.6].map((peak) => (
             <Stack key={peak} gap={2} align="center">
               <Pulse trigger={run} peak={peak}>
-                <Box
-                  w="56px"
-                  h="56px"
-                  borderRadius="full"
-                  bg="primary.main"
-                  color="fg.inverse"
-                  display="grid"
-                  placeItems="center"
-                  fontWeight="700"
-                >
-                  ✓
-                </Box>
+                <Badge variant="success">완료</Badge>
               </Pulse>
               <Subtext fontFamily="mono" fontSize="2xs" color="fg.muted" mb={0}>
                 {peak}
@@ -81,4 +72,3 @@ export const Peak: Story = {
     );
   },
 };
-
