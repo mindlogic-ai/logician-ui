@@ -2,9 +2,22 @@ import React, { useEffect } from 'react';
 import type { Preview } from '@storybook/react';
 
 import { LogicianProvider } from '../src/components/LogicianProvider/LogicianProvider';
+import { bazeThemeConfig } from '../src/theme/baze';
 
 const preview: Preview = {
   globalTypes: {
+    theme: {
+      description: 'Design-token theme override',
+      toolbar: {
+        title: 'Theme',
+        icon: 'paintbrush',
+        items: [
+          { value: 'default', title: 'Logician (default)' },
+          { value: 'baze', title: 'BAZE exploration' },
+        ],
+        dynamicTitle: true,
+      },
+    },
     language: {
       description: 'Language for internationalization',
       toolbar: {
@@ -36,6 +49,7 @@ const preview: Preview = {
   initialGlobals: {
     language: 'en',
     colorMode: 'light',
+    theme: 'default',
   },
   parameters: {
     // Global parameters for all stories
@@ -66,6 +80,11 @@ const preview: Preview = {
       const language = context.globals?.language || 'en';
       const colorMode: 'light' | 'dark' =
         context.globals?.colorMode === 'dark' ? 'dark' : 'light';
+      // Theme toolbar: render any story under a token-override config (the
+      // BAZE exploration) instead of the default Logician palette. Undefined
+      // keeps LogicianProvider on the prebuilt default system.
+      const themeConfig =
+        context.globals?.theme === 'baze' ? bazeThemeConfig : undefined;
 
       // Drive the same `.dark` class + `color-scheme` the runtime provider would,
       // so token `_dark` conditions resolve and the canvas reflects the mode. The
@@ -84,7 +103,11 @@ const preview: Preview = {
       }
 
       return (
-        <LogicianProvider language={language} forcedColorMode={colorMode}>
+        <LogicianProvider
+          language={language}
+          forcedColorMode={colorMode}
+          config={themeConfig}
+        >
           <Story />
         </LogicianProvider>
       );
