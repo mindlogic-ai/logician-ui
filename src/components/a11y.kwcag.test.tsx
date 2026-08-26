@@ -13,7 +13,8 @@ import {
   SliderThumb,
   SliderTrack,
 } from '@/components/Slider';
-import { Link, Subtitle } from '@/components/Typography';
+import { Link, LINK_RAMP, Subtitle } from '@/components/Typography';
+import { colors } from '@/theme/colors';
 
 /**
  * Regressions for the accessibility defects a KWCAG 2.1 (한국형 웹 콘텐츠 접근성
@@ -291,5 +292,121 @@ describe('axe — 구조·ARIA 규칙', () => {
   ])('%s', async (_name, ui) => {
     const { container } = withProvider(ui);
     expect(await axeViolations(container)).toEqual([]);
+  });
+});
+
+/**
+ * The link ramp's HOVER states, measured rather than rendered.
+ *
+ * The resting colour has a test above; the hover did not, and that is exactly
+ * where the defect got in. `defaultHoverColor` was written as "one step darker"
+ * — correct against a white page, and backwards on a dark one, where darker
+ * means *toward* the background. The dark hover landed on 4.19:1 while the
+ * resting colour it replaced had just been fixed to clear 4.5:1.
+ *
+ * No scanner catches this: axe measures the resting state only, and jsdom
+ * cannot resolve an emotion conditional into a colour. So this asserts the
+ * palette arithmetic directly, against the raw scale — which also holds if
+ * someone re-pegs `blue.100` or `rose.100` later for an unrelated reason.
+ *
+ * KWCAG 2.2 5.3.3 텍스트 콘텐츠의 명도 대비 applies to text in every state a
+ * user can put it in, and hover is a state a mouse user is IN while reading.
+ */
+describe('Link 색 대비 — 링크 램프의 hover 상태', () => {
+  const relativeLuminance = (hex: string) => {
+    const n = hex.replace('#', '');
+    const channels = [0, 2, 4].map(
+      (i) => parseInt(n.slice(i, i + 2), 16) / 255
+    );
+    const [r, g, b] = channels.map((c) =>
+      c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4
+    );
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const contrast = (a: string, b: string) => {
+    const [hi, lo] = [relativeLuminance(a), relativeLuminance(b)].sort(
+      (x, y) => y - x
+    );
+    return (hi + 0.05) / (lo + 0.05);
+  };
+
+  /** The canvas each mode's text is read against (`bg.surface`). */
+  const LIGHT_CANVAS = '#FFFFFF';
+  const DARK_CANVAS = '#181A20';
+  const AA_BODY_TEXT = 4.5;
+
+  /**
+   * Semantic token → raw hex, per mode. Only the steps this ramp uses; kept
+   * literal so the test breaks loudly if the semantic layer is re-pointed
+   * rather than silently measuring the wrong colour.
+   */
+  const RESOLVED: Record<string, { base: string; _dark: string }> = {
+    'primary.main': {
+      base: colors.blue[500].value,
+      _dark: colors.blue[300].value,
+    },
+    'primary.dark': {
+      base: colors.blue[700].value,
+      _dark: colors.blue[200].value,
+    },
+    'primary.darker': {
+      base: colors.blue[900].value,
+      _dark: colors.blue[100].value,
+    },
+    'danger.main': {
+      base: colors.rose[500].value,
+      _dark: colors.rose[300].value,
+    },
+    'danger.dark': {
+      base: colors.rose[700].value,
+      _dark: colors.rose[200].value,
+    },
+    'danger.darker': {
+      base: colors.rose[900].value,
+      _dark: colors.rose[100].value,
+    },
+  };
+
+  const resolve = (token: string, mode: 'base' | '_dark') => {
+    const entry = RESOLVED[token];
+    if (!entry) throw new Error(`토큰 ${token} 의 원색이 이 표에 없다`);
+    return entry[mode];
+  };
+
+  it.each([
+    ['기본 링크', LINK_RAMP.default],
+    ['기본 링크 hover', LINK_RAMP.defaultHover],
+    ['오류 링크', LINK_RAMP.error],
+    ['오류 링크 hover', LINK_RAMP.errorHover],
+  ])('%s 가 라이트·다크 양쪽에서 4.5:1 을 넘는다', (_what, ramp) => {
+    // Reads the tokens the COMPONENT actually uses. A version of this test that
+    // hardcoded the expected steps passed just fine with the hover pointing at
+    // `primary.main` — measuring the right arithmetic about the wrong colour.
+    expect(
+      contrast(resolve(ramp.base, 'base'), LIGHT_CANVAS)
+    ).toBeGreaterThanOrEqual(AA_BODY_TEXT);
+    expect(
+      contrast(resolve(ramp._dark, '_dark'), DARK_CANVAS)
+    ).toBeGreaterThanOrEqual(AA_BODY_TEXT);
+  });
+
+  it('hover 가 배경 반대쪽으로 간다 — 양쪽 모드에서', () => {
+    // The invariant the defect broke: hovering must make the link stand out
+    // MORE. "One step darker" is correct on a white page and backwards on a
+    // dark one, where darker means toward the background.
+    for (const [mode, canvas] of [
+      ['base', LIGHT_CANVAS],
+      ['_dark', DARK_CANVAS],
+    ] as const) {
+      const resting = contrast(resolve(LINK_RAMP.default[mode], mode), canvas);
+      const hover = contrast(
+        resolve(LINK_RAMP.defaultHover[mode], mode),
+        canvas
+      );
+      expect(
+        hover,
+        `${mode} 에서 hover 가 resting 보다 흐리다`
+      ).toBeGreaterThan(resting);
+    }
   });
 });
