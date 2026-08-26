@@ -20,6 +20,7 @@
     "hoist-form-primitives",
     "icon-2xs-boxsize",
     "inline-code-step-down",
+    "kwcag-accessibility-fixes",
     "pin-light-on-shadowed-neutral-tokens",
     "remove-mdxeditor",
     "remove-react-spinners-loaders",
