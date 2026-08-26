@@ -27,8 +27,12 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
     };
 
     return (
+      // No `role="button"` on this wrapper. It is not a button — the `<label>`
+      // inside is what activates the file input — and claiming the role put an
+      // interactive element inside another (axe `nested-interactive`), which is
+      // a state screen readers have no sensible way to announce
+      // (KWCAG 2.1 5.4.2.1 웹 애플리케이션 접근성 준수).
       <Flex
-        role="button"
         w="100%"
         h="100%"
         maxH={32}
@@ -42,8 +46,13 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
         borderRadius="md"
         {...containerStyle}
       >
+        {/* `className="group"`, not `role="group"`. The role was doing nothing for
+            assistive tech (a `<label>` may not be a group — axe
+            `aria-allowed-role`) and nothing for the hover effect either: Chakra's
+            `_groupHover` compiles to `.group:hover &`, so it needs the CLASS.
+            The reveal-on-hover below has therefore never fired. */}
         <label
-          role="group"
+          className="group"
           style={{ width: '100%', height: '100%', cursor: 'pointer' }}
         >
           {bgImage && (

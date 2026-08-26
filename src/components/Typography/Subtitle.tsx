@@ -1,6 +1,23 @@
 import { forwardRef } from 'react';
 import { Text, TextProps } from '@chakra-ui/react';
 
+/**
+ * Supporting text under a heading — a subtitle by role in the page, not by
+ * document structure.
+ *
+ * Renders a paragraph. It used to render `<h6>`, which made every call site a
+ * level-6 heading in the document outline: a sentence of helper copy under an
+ * `<h1>` announced as a heading to a screen reader, and a jump from level 1 to
+ * level 6 in the heading list (KWCAG 2.1 5.2.4.2 제목 제공 / axe `heading-order`).
+ * A component chosen for its type scale should not decide the outline.
+ *
+ * A subtitle that genuinely IS the next heading level still says so at the call
+ * site, which is where that is known:
+ *
+ * ```tsx
+ * <Subtitle as="h2">{sectionTitle}</Subtitle>
+ * ```
+ */
 export const Subtitle = forwardRef<HTMLParagraphElement, TextProps>(
   (props, ref) => {
     const { fontSize, ...rest } = props;
@@ -8,7 +25,6 @@ export const Subtitle = forwardRef<HTMLParagraphElement, TextProps>(
     return (
       <Text
         ref={ref}
-        as="h6"
         textStyle={fontSize ? undefined : 'subtitle'}
         fontSize={fontSize}
         color="fg.muted"

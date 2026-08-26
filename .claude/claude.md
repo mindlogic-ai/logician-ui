@@ -4,6 +4,18 @@ React component library built on Chakra UI v3.3+. Published to npm as `@mindlogi
 
 **Stack**: TypeScript, tsup (esbuild), Storybook 8.5, Changesets, Yarn
 
+## 접근성 — 먼저 읽을 것
+
+이 저장소의 컴포넌트로 그려지는 앱(FactChat)은 **KWCAG 2.1 웹 접근성 품질인증**을
+유지해야 합니다. 여기서 난 결함 하나는 그 컴포넌트를 쓰는 **모든 화면**에서 납니다.
+
+컴포넌트를 만들거나 파트 조합(`Select` · `Combobox` · `Slider` · `Menu` · `Popover`
+…)을 바꾸기 전에 **[`ACCESSIBILITY.md`](../ACCESSIBILITY.md)** 를 읽으십시오. 실제로
+났던 결함 아홉 가지가 어떤 모양이었는지가 적혀 있고, 그중 셋은 같은 원인이었습니다 —
+레이블 파트를 렌더하지 않으면 컨트롤은 레이블이 없는 게 아니라 **이름이 없습니다**.
+
+`yarn test` 가 그 결함들을 붙잡고 있고 매 PR 에서 돕니다.
+
 ## Development Workflow
 
 ### Common Commands
