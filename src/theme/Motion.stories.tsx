@@ -2,8 +2,12 @@ import { Box, Grid, HStack, Stack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
+import { Appear } from '../components/Appear';
+import { Badge } from '../components/Badge';
 import { Button } from '../components/Button';
+import { Chip } from '../components/Chip';
 import { Collapsible } from '../components/Collapsible';
+import { CountUp } from '../components/CountUp';
 import { FileList } from '../components/FileList';
 import { Menu } from '../components/Menu';
 import {
@@ -13,7 +17,10 @@ import {
   ModalHeader,
 } from '../components/Modal';
 import { Popover } from '../components/Popover';
+import { Pulse } from '../components/Pulse';
+import { Reveal } from '../components/Reveal';
 import { SelectField } from '../components/Select';
+import { Shake } from '../components/Shake';
 import { Switch } from '../components/Switch';
 import { Tooltip } from '../components/Tooltip';
 import { H2, H3, Subtext, Text } from '../components/Typography';
@@ -426,6 +433,108 @@ const Preset = ({ name, timing, lead, code, demo, children }: PresetProps) => (
     </Grid>
   </Box>
 );
+
+/**
+ * The eight primitives, named and findable.
+ *
+ * This page used to close by pointing at "여덟 개" in prose, without naming one
+ * of them — so someone who needed `Pulse` could read the whole page, agree with
+ * it, and still hand-roll the thing with `composite`. A name you cannot grep for
+ * is not a pointer.
+ *
+ * Four of them replay live here because they fit on one line. The other four are
+ * not stubs to fill in later: `Reveal` needs a block to open into, `FlyTo` needs
+ * two measured rects, `Confetti` needs a stage, and `SwapTransition` needs a
+ * sequence. Each has its own story with room for that — repeating those demos
+ * here would make this page longer without making it more useful.
+ */
+const PRIMITIVES: [string, string, boolean][] = [
+  ['Pulse', '값이 방금 올랐다 — 한 번 튀기고 만다', true],
+  ['Shake', '거절. Pulse와 짝이고, 절대 바꿔 쓰지 않습니다', true],
+  ['Appear', '요소 하나가 마운트되며 등장 (페이드 · 스탬프 · 도착)', true],
+  ['CountUp', '숫자가 올라감. 텍스트라 CSS로는 불가능한 유일한 것', true],
+  ['Reveal', '읽던 것 아래로 블록이 펼쳐짐 — 레이아웃 점프 방지', false],
+  ['FlyTo', '이게 저기로 갔다. 잰 rect 두 개 사이를 나는 고스트', false],
+  ['Confetti', '축하 한 번. 유일하게 팔레트 밖 색을 씁니다', false],
+  ['SwapTransition', '내용이 교체됨 — 단계 이동, 같은 자리의 다른 레코드', false],
+];
+
+const PrimitiveIndex = () => {
+  const [play, setPlay] = useState(0);
+  const [shown, setShown] = useState(false);
+
+  return (
+    <Box borderTop="1px solid" borderColor="border.subtle" pt={5}>
+      <HStack gap={3} mb={5} align="center">
+        <Button size="xs" variant="outline" onClick={() => setPlay((n) => n + 1)}>
+          재생
+        </Button>
+        <Pulse trigger={play}>
+          <Badge variant="success">Pulse</Badge>
+        </Pulse>
+        <Shake trigger={play}>
+          <Chip colorScheme="danger" variant="soft">
+            Shake
+          </Chip>
+        </Shake>
+        {/* Keyed so it remounts — Appear plays on mount, which is the point. */}
+        <Appear key={play} scaleFrom={0.6}>
+          <Chip colorScheme="primary" variant="soft">
+            Appear
+          </Chip>
+        </Appear>
+        {/* No `format` — the default `groupDigits` rounds and groups. Passing a
+            bare `${n}` here rendered mid-flight values like `1180.00698…`. */}
+        <CountUp key={`c${play}`} from={0} to={1250} />
+      </HStack>
+
+      <Stack gap={2}>
+        {PRIMITIVES.map(([name, use, live]) => (
+          <Grid
+            key={name}
+            templateColumns={{ base: '1fr', md: '150px 1fr' }}
+            gap={{ base: 0, md: 4 }}
+            alignItems="baseline"
+          >
+            <Text
+              fontFamily="mono"
+              fontSize="xs"
+              fontWeight="600"
+              color={live ? 'fg.default' : 'fg.muted'}
+              mb={0}
+            >
+              {name}
+            </Text>
+            <Subtext color="fg.muted" mb={0}>
+              {use}
+            </Subtext>
+          </Grid>
+        ))}
+      </Stack>
+
+      <Box mt={5}>
+        <Button
+          size="xs"
+          variant="outline"
+          onClick={() => setShown((v) => !v)}
+          mb={shown ? 2 : 0}
+        >
+          {shown ? 'Reveal 닫기' : 'Reveal 열어보기'}
+        </Button>
+        {shown && (
+          <Reveal>
+            <Subtext color="fg.muted" mb={0}>
+              여덟 개 전부 <code>Components / Motion</code> 아래에 각자 스토리가
+              있습니다. 어느 것을 쓸지는 <code>Appear</code>의 TSDoc에 있는 세
+              가지 등장(<code>presence</code> · <code>stagger</code> ·{' '}
+              <code>Appear</code>) 구분이 출발점입니다.
+            </Subtext>
+          </Reveal>
+        )}
+      </Box>
+    </Box>
+  );
+};
 
 /**
  * What to type.
@@ -933,12 +1042,14 @@ export const buttonTransition = [
           체크마크 그리기, 라디오 점, 세그먼트 인디케이터도 마찬가지입니다.
           기준과 그 이유는 <b>3. 규칙</b>에 있습니다.
         </Text>
-        <Text color="fg.muted" mb={0}>
+        <Text color="fg.muted" mb={4}>
           한 번 튀기·흔들기·등장·펼치기처럼 <b>컴포넌트로 감싸야 하는 모션</b>도
-          여기 없습니다 — <code>Components / Motion</code> 아래 여덟 개가 그
-          자리입니다. 프리셋은 이미 있는 요소에 시계를 얹는 것이고, 그쪽은
-          요소를 <b>만들어 내거나 붙잡아 두는</b> 것이라 컴포넌트여야 합니다.
+          프리셋이 아닙니다. 프리셋은 <b>이미 있는 요소</b>에 시계를 얹는
+          것이고, 아래 여덟 개는 요소를 <b>만들어 내거나 붙잡아 두는</b> 것이라
+          컴포넌트여야 합니다 — <code>animationStyle</code>로는 표현할 자리가
+          없습니다.
         </Text>
+        <PrimitiveIndex />
       </Box>
     );
   },
@@ -1357,6 +1468,12 @@ const MAP = [
     'Modal.styles.ts',
     '이름만 지역 · 시계는 presence',
   ],
+  [
+    'Pulse · Shake · Appear · Reveal',
+    'components/*',
+    '요소를 만들거나 붙잡아야 해서 컴포넌트',
+  ],
+  ['FlyTo · Confetti · CountUp · SwapTransition', 'components/*', '위와 같음'],
 ];
 
 /**
