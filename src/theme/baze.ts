@@ -13,7 +13,10 @@ import { defineConfig } from '@chakra-ui/react';
  *
  * Anchors sampled from the brand boards:
  * - terracotta `#D98E80` (app-icon clay — pinned verbatim at `blue.200`; the
- *   text/action steps are darker clay so `primary.main` keeps AA on cream)
+ *   text/action steps are darker clay so `primary.main` keeps AA on cream, and
+ *   the 700–900 deep end is darkened + desaturated toward warm ink: at equal
+ *   luminance a saturated warm hue reads lighter than the old navy, so
+ *   emphasis-text roles like `primary.dark` looked washed out)
  * - cream `#F2EDE0` (canvas), warm ink for the text ramp
  * - warm near-black `#1A1714` (dark-mode canvas family, via `grayDark.*`)
  * - sage `#93C7A9` → success ramp, steel blue `#5D9FBF` → secondary ramp
@@ -38,9 +41,9 @@ export const bazeColors = {
     300: { value: '#BC6657' },
     500: { value: '#954234' },
     600: { value: '#7E2D21' },
-    700: { value: '#67170C' },
-    800: { value: '#490702' },
-    900: { value: '#250503' },
+    700: { value: '#4B1E17' },
+    800: { value: '#35140E' },
+    900: { value: '#1F0906' },
   },
   // Secondary — muted steel blue (replaces violet.*)
   violet: {
