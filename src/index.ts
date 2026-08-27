@@ -107,6 +107,7 @@ export {
   H4,
   H5,
   Link,
+  LINK_RAMP,
   Overline,
   Subtext,
   Subtitle,

@@ -96,6 +96,8 @@ export const FileList = ({
           css={{
             all: 'unset',
             display: 'flex',
+            width: '100%',
+            justifyContent: 'center',
             gap: '0.25rem',
             cursor: 'pointer',
           }}

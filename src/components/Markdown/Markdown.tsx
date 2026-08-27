@@ -22,7 +22,12 @@ const H2Wrapper = (props: any) => <H2 {...props} />;
 const H3Wrapper = (props: any) => <H3 {...props} />;
 const H4Wrapper = (props: any) => <H4 {...props} />;
 const H5Wrapper = (props: any) => <H5 {...props} />;
-const SubtitleWrapper = (props: any) => <Subtitle {...props} />;
+// `as="h6"` explicitly. `Subtitle` renders a paragraph by default now (its call
+// sites are overwhelmingly helper copy that was never a heading), but this
+// wrapper is markdown's `h6` — a heading the author actually wrote. Inheriting
+// the new default here would silently drop `###### 제목` out of the document
+// outline, which is the same KWCAG 5.2.4.2 (제목 제공) defect inverted.
+const SubtitleWrapper = (props: any) => <Subtitle as="h6" {...props} />;
 const TheadWrapper = (props: any) => <Thead {...props} />;
 const TbodyWrapper = (props: any) => <Tbody {...props} />;
 const TrWrapper = (props: any) => <Tr {...props} />;

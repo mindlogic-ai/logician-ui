@@ -78,6 +78,7 @@ export const Td = ({
 
   const {
     registerStickyColumn,
+    hasStickyWidth,
     getStickyOffset,
     isLastStickyColumn,
     ...scrollState
@@ -90,6 +91,8 @@ export const Td = ({
     direction: stickyDirection,
     index: stickyIndex,
     register: registerStickyColumn,
+    hasWidth: hasStickyWidth,
+    role: 'body',
   });
 
   // Get the sticky offset based on the column's position

@@ -19,6 +19,7 @@ export function ComboboxField<T = string>({
   onChange,
   placeholder,
   label,
+  ariaLabel,
   size = 'md',
   invalid,
   disabled,
@@ -60,7 +61,16 @@ export function ComboboxField<T = string>({
       }}
       onInputValueChange={(details) => filter(details.inputValue)}
     >
-      {label != null && <Combobox.Label>{label}</Combobox.Label>}
+      {/* Same as `SelectField`: the label part is the target of the input's
+          `aria-labelledby`, so omitting it leaves the control unnamed rather
+          than unlabelled (KWCAG 5.3.4.1 레이블 제공). */}
+      {label != null ? (
+        <Combobox.Label>{label}</Combobox.Label>
+      ) : (
+        (ariaLabel ?? placeholder) && (
+          <Combobox.Label srOnly>{ariaLabel ?? placeholder}</Combobox.Label>
+        )
+      )}
       <Combobox.Control>
         <Combobox.Input placeholder={placeholder} />
         <Combobox.IndicatorGroup>

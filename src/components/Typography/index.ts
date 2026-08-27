@@ -5,7 +5,7 @@ export { H2 } from './H2';
 export { H3 } from './H3';
 export { H4 } from './H4';
 export { H5 } from './H5';
-export { Link } from './Link';
+export { Link, LINK_RAMP } from './Link';
 export { Overline } from './Overline';
 export { Subtext } from './Subtext';
 export { Subtitle } from './Subtitle';

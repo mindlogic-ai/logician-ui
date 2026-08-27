@@ -1,5 +1,70 @@
 # Changelog
 
+## 4.0.0-alpha.22
+
+### Minor Changes
+
+- 590944b: Fix the accessibility defects a KWCAG 2.1 audit found in `Subtitle`, `SelectField`, `ComboboxField`, `Slider`, `Radio`, `FileInput`, `ErrorFallback` and the workflow `NodePalette`.
+
+  Every one of these was invisible in review — the screen looked right, and only the accessibility tree or the serialized markup said otherwise. Each is now held by a test in `src/components/a11y.kwcag.test.tsx`, named by the 검사항목 an evaluator works from.
+
+  **`Subtitle` renders a paragraph, not `<h6>`** (KWCAG 5.2.4.2 제목 제공). It was `Text as="h6"`, so every call site put a level-6 heading into the document outline: a sentence of helper copy announced as a heading, and a jump from whatever level preceded it (axe `heading-order`). A component chosen for its type scale should not decide the outline. Call sites that genuinely are the next heading say so themselves — `<Subtitle as="h2">` — which is where that is known. This also fixes `Pagination`'s page counter and `ErrorFallback`'s subtitle, both of which were `<h6>` by inheritance.
+
+  **`SelectField` and `ComboboxField` take an `ariaLabel`** (KWCAG 5.3.4.1 레이블 제공). The trigger's `aria-labelledby` is emitted whether or not the label part is rendered, so a field composed without a visible `label` was not merely unlabelled — the reference dangled and the control resolved to **no accessible name at all**, announcing as a bare "button" however much text it showed (axe `button-name`). Both now render the label part whenever they have anything to put in it: visibly when there is a `label`, visually hidden when the name lives elsewhere on screen (`ariaLabel`, falling back to `placeholder`). A field composed with none of the three is still nameless — the type does not yet forbid it, so that case is a call-site review item rather than something this fixes. Rendered as a hidden label rather than an `aria-label` attribute so the name is in the server-rendered markup — an attribute applied after hydration leaves a window in which the control is nameless. `Pagination`'s rows-per-page select now passes its own name.
+
+  **`Slider` takes an `ariaLabel`** (KWCAG 5.3.4.1). Same shape of bug one layer down: Zag points each thumb's `aria-labelledby` at a label part, so a slider composed without one has unnamed thumbs (axe `aria-input-field-name`). Media controls — a seek bar beside a time display, a volume slider beside a mute button — are exactly the compositions that carry their label as an adjacent control.
+
+  **`Radio.Control` no longer emits a duplicate id** (KWCAG 5.4.1.1 마크업 오류 방지). Chakra derives the indicator's id from the same `ids.itemControl` as the control it sits inside, so every radio on a page shipped two elements with one id. Duplicate ids are still a live 검사항목 for Korean evaluators even though WCAG 2.2 dropped SC 4.1.1 — and `getElementById` returning whichever came first is its own bug. The indicator is the dot inside the control; nothing references it, so it takes a `useId()` value that stays stable across server and client render.
+
+  **`FileInput` drops two roles that were wrong** (KWCAG 5.4.2.1 웹 애플리케이션 접근성 준수). `role="button"` on the wrapper put the real `<input>` inside another interactive element (axe `nested-interactive`), and `role="group"` on a `<label>` is not an allowed pairing (`aria-allowed-role`). The label now carries `className="group"`, which is what Chakra's `_groupHover` actually compiles against (`.group:hover &`) — so the reveal-on-hover overlay, which had never fired, now works.
+
+  **`ErrorFallback` renders a landmark and an ordered outline** (KWCAG 5.2.4.1 반복 영역 건너뛰기 / 5.2.4.2). This card replaces whatever failed — often the whole page, taking the host's `<main>` with it — and left a screen-reader user with nothing to navigate by. It is now a `<section>` labelled by its own error title: a region landmark wherever it renders, which `<main>` would not be, since a segment-level boundary leaves the host's `<main>` in place and two of those is its own failure. The support-details block moves from `<h4>` to level 2, under the card's `<h1>`.
+
+  **The workflow `NodePalette` is a labelled region** rather than a level-6 heading. Its title is a `Subtitle`, so the tag fix above removed the `<h6>`; the panel now says what it is the way a panel should — `role="region"` named by that title.
+
+  **Markdown's `h6` keeps its tag.** `Subtitle`'s default moved to a paragraph, and the markdown component map routes `h6` through `Subtitle` — so inheriting that default would have demoted every author-written `###### 제목` out of the document outline, the same 5.2.4.2 defect pointed the other way. The map now says `as="h6"` explicitly. Downstream maps that route `h6` through `Subtitle` need the same, and FactChat's does.
+
+  **`Link`'s default colour is theme-aware, and it no longer discards a colour the call site gave it** (KWCAG 5.1.3.3 텍스트 콘텐츠의 명도 대비). `.main` is tuned against a white page: on the dark canvas (#181A20) `primary.main` measures 4.19:1 and `danger.main` 4.26:1, both under the 4.5:1 body text needs — and since this is the DEFAULT, every link in a consuming app inherited it. The `.dark` end of each ramp is the far side from the PAGE rather than a fixed lightness, so in dark mode it resolves lighter: 6.68:1 and 6.38:1.
+
+  The second half is what made the first unfixable downstream. `linkColor` was `(typeof color === 'string' ? color : undefined) || defaultColor`, so a call site passing a per-theme `{ base, _dark }` — the documented Chakra way to fix exactly this — got the default back, with no error in the types or at runtime. A prop the type accepts and the component throws away is worse than one it rejects: the fix looks applied, the rendered class is unchanged, and only measuring the pixels says otherwise. It is `color ?? defaultColor` now.
+
+  **Not fixed here, and still worked around downstream:** the icon set's `<defs>` ids are named after the source file (`chat.svg` → `chat_svg__a`), so the same icon twice on a page is a duplicate id. That is an SVGR build-time constant, and making it per-instance means generating the ids at runtime — a change to the icon pipeline rather than to a component, and worth doing deliberately.
+
+## 4.0.0-alpha.21
+
+### Patch Changes
+
+- aa1b088: Stop a `Table` from re-rendering every cell on each render of its owner.
+
+  `TableContext.Provider` took an object literal as its value, so every render of
+  `TableProvider` produced a new context value. `Th`, `Td` and `Tr` all call
+  `useTableContext()`, so that re-rendered every cell in the table even when
+  neither the scroll state nor a sticky column width had changed. `React.memo` on
+  a row does not prevent it — React propagates a context change into subtrees it
+  has already bailed out of.
+
+  In a virtualised table this dominates scrolling. Measured on a consumer's
+  12,000-row admin table (production build), one scroll step that mounted a single
+  new row re-rendered `Td` **794 times**; it now re-renders 11.
+
+  Also in this release: a sticky column's width is measured once by its header
+  cell rather than once per body cell (68 → 6.7 `getBoundingClientRect` calls per
+  scroll step, 28 → 0 new `ResizeObserver`s).
+
+  No API change.
+
+## 4.0.0-alpha.20
+
+### Patch Changes
+
+- f32bf54: fix(FileList): center the "see more" load-more button
+
+  The load-more button used `css={{ all: 'unset', display: 'flex' }}`, and
+  `all: unset` wiped the `w="100%"` prop while nothing set `justify-content`, so
+  the button shrank to its content and stuck to the left edge of the list instead
+  of reading as a centered full-width footer action. Restore `width: 100%` and add
+  `justifyContent: center` inside the css block.
+
 ## 4.0.0-alpha.19
 
 ### Patch Changes
