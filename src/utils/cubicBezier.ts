@@ -14,6 +14,14 @@ import { MOTION_EASE, type MotionEaseToken } from '@/theme/motion';
  * count-up next to a card ends up on a different curve from the card. The point
  * of a scale is that the exceptions stay on it.
  *
+ * **Shared rather than local, even though `CountUp` is its only caller in this
+ * library.** The rule that sends a one-caller motion down next to its component
+ * (`spin` → `Spinner.styles.ts`) is about compositions the library owns; this is
+ * a reader of the scale, and its real audience is app code driving motion the
+ * library never sees — a framer-motion `animate`, an `Element.animate`, a rAF
+ * loop. Filing it under `CountUp/` would mean reaching into a component folder
+ * for a curve, which is the wrong shape for the thing it is.
+ *
  * ```ts
  * const ease = cubicBezier('emphasized');
  * const value = from + (to - from) * ease(elapsed / duration);
