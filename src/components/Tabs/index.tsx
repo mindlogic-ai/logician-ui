@@ -1,5 +1,5 @@
 export type { TabProps } from './Tab';
-export { Tab } from './Tab';
+export { Tab, TAB_RAMP } from './Tab';
 export type { TabListProps } from './TabList';
 export { TabList } from './TabList';
 export type { TabPanelProps } from './TabPanel';
