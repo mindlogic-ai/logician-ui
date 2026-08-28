@@ -60,36 +60,11 @@
  * <Badge bgColor="success.lightest" color="success.dark" />
  * ```
  */
-/**
- * Halved-saturation counterpart of each primitive `gray.N` — same hue and
- * lightness, HSL saturation cut by ~50% (e.g. `gray.1300` #1E2433 @ 26% →
- * #23262E @ 13%). The blue-tinted `gray` ramp reads as the right neutral in
- * light mode but turns muddy/over-chromatic as a dark surface, so every
- * dark-mode neutral below (`slate.*`, and the `_dark` of `bg`/`fg`/`border`)
- * resolves to this desaturated mirror instead of the raw `gray` step. Light
- * mode is untouched — it keeps referencing `{colors.gray.*}` verbatim.
- *
- * Single source of truth: change a dark neutral here, not at each token.
- */
-const desaturatedGray = {
-  0: '#FEFEFF',
-  50: '#F8F9FB',
-  100: '#F2F4F7',
-  200: '#E5E8EC',
-  300: '#D2D5DB',
-  400: '#B6BAC3',
-  500: '#A2A6B1',
-  600: '#8E939F',
-  700: '#7C818D',
-  800: '#6A6F7C',
-  900: '#595E6B',
-  1000: '#4A4E5A',
-  1100: '#3C404B',
-  1200: '#30343C',
-  1300: '#23262E',
-  1400: '#181A20',
-  1500: '#0E1014',
-} as const;
+// The dark-mode neutral family now lives in `colors.grayDark` (see below) so
+// consumers can retint dark surfaces by overriding a primitive scale — exactly
+// like `blue.*` for the brand ramp — instead of these values being unreachable
+// hex literals. Every dark-mode neutral in the semantic tokens (`slate.*`, and
+// the `_dark` of `bg`/`fg`/`border`) references `{colors.grayDark.N}`.
 
 export const semanticTokens = {
   colors: {
@@ -303,48 +278,56 @@ export const semanticTokens = {
      * dark canvas/surface — the straight mirrors measured ~3.0–3.9 there.
      */
     slate: {
-      0: { value: { base: '{colors.gray.0}', _dark: desaturatedGray[1500] } },
-      50: { value: { base: '{colors.gray.50}', _dark: desaturatedGray[1400] } },
+      0: {
+        value: { base: '{colors.gray.0}', _dark: '{colors.grayDark.1500}' },
+      },
+      50: {
+        value: { base: '{colors.gray.50}', _dark: '{colors.grayDark.1400}' },
+      },
       100: {
-        value: { base: '{colors.gray.100}', _dark: desaturatedGray[1300] },
+        value: { base: '{colors.gray.100}', _dark: '{colors.grayDark.1300}' },
       },
       200: {
-        value: { base: '{colors.gray.200}', _dark: desaturatedGray[1200] },
+        value: { base: '{colors.gray.200}', _dark: '{colors.grayDark.1200}' },
       },
       300: {
-        value: { base: '{colors.gray.300}', _dark: desaturatedGray[1100] },
+        value: { base: '{colors.gray.300}', _dark: '{colors.grayDark.1100}' },
       },
       400: {
-        value: { base: '{colors.gray.400}', _dark: desaturatedGray[1000] },
+        value: { base: '{colors.gray.400}', _dark: '{colors.grayDark.1000}' },
       },
       500: {
-        value: { base: '{colors.gray.500}', _dark: desaturatedGray[900] },
+        value: { base: '{colors.gray.500}', _dark: '{colors.grayDark.900}' },
       },
-      600: { value: { base: '{colors.gray.600}', _dark: '#898E99' } },
-      700: { value: { base: '{colors.gray.700}', _dark: '#8D919D' } },
+      600: {
+        value: { base: '{colors.gray.600}', _dark: '{colors.grayDark.fg600}' },
+      },
+      700: {
+        value: { base: '{colors.gray.700}', _dark: '{colors.grayDark.fg700}' },
+      },
       800: {
-        value: { base: '{colors.gray.800}', _dark: desaturatedGray[600] },
+        value: { base: '{colors.gray.800}', _dark: '{colors.grayDark.600}' },
       },
       900: {
-        value: { base: '{colors.gray.900}', _dark: desaturatedGray[500] },
+        value: { base: '{colors.gray.900}', _dark: '{colors.grayDark.500}' },
       },
       1000: {
-        value: { base: '{colors.gray.1000}', _dark: desaturatedGray[400] },
+        value: { base: '{colors.gray.1000}', _dark: '{colors.grayDark.400}' },
       },
       1100: {
-        value: { base: '{colors.gray.1100}', _dark: desaturatedGray[300] },
+        value: { base: '{colors.gray.1100}', _dark: '{colors.grayDark.300}' },
       },
       1200: {
-        value: { base: '{colors.gray.1200}', _dark: desaturatedGray[200] },
+        value: { base: '{colors.gray.1200}', _dark: '{colors.grayDark.200}' },
       },
       1300: {
-        value: { base: '{colors.gray.1300}', _dark: desaturatedGray[100] },
+        value: { base: '{colors.gray.1300}', _dark: '{colors.grayDark.100}' },
       },
       1400: {
-        value: { base: '{colors.gray.1400}', _dark: desaturatedGray[50] },
+        value: { base: '{colors.gray.1400}', _dark: '{colors.grayDark.50}' },
       },
       1500: {
-        value: { base: '{colors.gray.1500}', _dark: desaturatedGray[0] },
+        value: { base: '{colors.gray.1500}', _dark: '{colors.grayDark.0}' },
       },
     },
 
@@ -366,13 +349,13 @@ export const semanticTokens = {
       // value, so light is untouched); `_dark` rejoins our neutral floor instead
       // of Chakra's off-palette black.
       DEFAULT: {
-        value: { _light: '{colors.white}', _dark: desaturatedGray[1500] },
+        value: { _light: '{colors.white}', _dark: '{colors.grayDark.1500}' },
       },
       canvas: {
-        value: { base: '{colors.gray.0}', _dark: desaturatedGray[1500] },
+        value: { base: '{colors.gray.0}', _dark: '{colors.grayDark.1500}' },
       },
       surface: {
-        value: { base: '{colors.white}', _dark: desaturatedGray[1400] },
+        value: { base: '{colors.white}', _dark: '{colors.grayDark.1400}' },
       },
       // Strongly-raised neutral surface — one level above `surface` (e.g. the
       // selected thumb of a SegmentedControl). In dark this is the *lightest*
@@ -384,7 +367,7 @@ export const semanticTokens = {
       // cannot be overridden via semanticTokens in this setup (it keeps
       // resolving to Chakra's own gray.200), whereas a fresh name is honoured.
       raised: {
-        value: { base: '{colors.white}', _dark: desaturatedGray[1100] },
+        value: { base: '{colors.white}', _dark: '{colors.grayDark.1100}' },
       },
       // `_light` (not `base`): Chakra's defaults for `bg.subtle`/`bg.muted` are
       // `{ _light: gray.50 }` / `{ _light: gray.100 }`, which outrank `base` in
@@ -393,13 +376,13 @@ export const semanticTokens = {
       // either value ever diverges (as `border.subtle`/`fg.muted`/`fg.subtle`
       // already did). No visible change.
       subtle: {
-        value: { _light: '{colors.gray.50}', _dark: desaturatedGray[1300] },
+        value: { _light: '{colors.gray.50}', _dark: '{colors.grayDark.1300}' },
       },
       muted: {
-        value: { _light: '{colors.gray.100}', _dark: desaturatedGray[1200] },
+        value: { _light: '{colors.gray.100}', _dark: '{colors.grayDark.1200}' },
       },
       inverse: {
-        value: { base: '{colors.gray.1300}', _dark: desaturatedGray[50] },
+        value: { base: '{colors.gray.1300}', _dark: '{colors.grayDark.50}' },
       },
       // Sunken page wash for list/overview surfaces: a gray floor in light so
       // `bg.surface` cards read as raised above it. In dark the `bg.*` ramp is
@@ -407,7 +390,7 @@ export const semanticTokens = {
       // that elevation — so the dark value drops to the canvas floor instead.
       // Component-level fills (hover, chips, inner blocks) keep using `bg.subtle`.
       sunken: {
-        value: { base: '{colors.gray.50}', _dark: desaturatedGray[1500] },
+        value: { base: '{colors.gray.50}', _dark: '{colors.grayDark.1500}' },
       },
       // Recessed control-track surface for "meter"-style components whose
       // unfilled track carries meaning (Switch off-state, Slider rail,
@@ -415,11 +398,11 @@ export const semanticTokens = {
       // `bg.muted` (gray.50 / gray.100), which collapse into the `bg.sunken`
       // page wash in light mode, this sits at gray.300 so the track reads as a
       // filled surface on any background. Dark keeps the `bg.muted` value
-      // (desaturatedGray[1200]) — already lighter than the dark canvas/surface,
+      // (grayDark.1200) — already lighter than the dark canvas/surface,
       // so it reads there without change. Use this only for control tracks, not
       // as a general fill (that stays `bg.subtle` / `bg.muted`).
       track: {
-        value: { base: '{colors.gray.300}', _dark: desaturatedGray[1200] },
+        value: { base: '{colors.gray.300}', _dark: '{colors.grayDark.1200}' },
       },
       // Override Chakra's default `bg.panel` (whose `_dark` resolves to Chakra's
       // own gray.950 = #111111, off our slate palette). Light value is white —
@@ -428,7 +411,7 @@ export const semanticTokens = {
       // (not `base`) for the same reason as `bg.subtle`/`bg.muted`: Chakra's
       // default `bg.panel` is `{ _light: white }`, which would outrank `base`.
       panel: {
-        value: { _light: '{colors.white}', _dark: desaturatedGray[1400] },
+        value: { _light: '{colors.white}', _dark: '{colors.grayDark.1400}' },
       },
       /**
        * Row/selection state tints. Use these for selected rows,
@@ -466,14 +449,14 @@ export const semanticTokens = {
       // `_light` repeats Chakra's value (black); `_dark` rejoins our desaturated
       // neutral so legacy html-level text tracks `fg.default`.
       DEFAULT: {
-        value: { _light: '{colors.black}', _dark: desaturatedGray[50] },
+        value: { _light: '{colors.black}', _dark: '{colors.grayDark.50}' },
       },
       // Strongest text — headings, titles, key figures, emphasis. This is the
       // near-black step that `fg.default` used to be; `default` is now re-pegged
       // to a lighter body weight (see below), so reach for `emphasized` when you
       // specifically want maximum contrast.
       emphasized: {
-        value: { base: '{colors.gray.1300}', _dark: desaturatedGray[200] },
+        value: { base: '{colors.gray.1300}', _dark: '{colors.grayDark.200}' },
       },
       default: {
         // Primary *body* text. Re-pegged from gray.1300 → gray.1000: near-black
@@ -481,7 +464,7 @@ export const semanticTokens = {
         // real product usage clustered well below it. gray.1000 (~9:1) is a
         // comfortable AAA body weight; the old near-black step lives on as
         // `fg.emphasized`. _dark drops one step from emphasized for hierarchy.
-        value: { base: '{colors.gray.1000}', _dark: desaturatedGray[300] },
+        value: { base: '{colors.gray.1000}', _dark: '{colors.grayDark.300}' },
       },
       muted: {
         // Secondary text. `_light` (not `base`): Chakra's default `fg.muted` is
@@ -489,19 +472,22 @@ export const semanticTokens = {
         // was shadowed and secondary text rendered gray.600, lighter than our
         // intended gray.900. _dark sits one step below `default` (~9.5:1 on the
         // dark canvas) to keep the default→muted hierarchy gap.
-        value: { _light: '{colors.gray.900}', _dark: desaturatedGray[400] },
+        value: { _light: '{colors.gray.900}', _dark: '{colors.grayDark.400}' },
       },
       subtle: {
         // Tertiary / placeholder / icon text. `_light` (not `base`): Chakra's
         // default `fg.subtle` is `{ _light: gray.400 }`, which outranks `base` in
         // light mode — so `base` was shadowed and this rendered gray.400, much
         // lighter than our intended gray.700. _dark a11y-bumped from the straight
-        // mirror (desaturatedGray[600] #8E939F, ~4.06:1 on bg.muted) to #989DA9
+        // mirror (grayDark.600 #8E939F, ~4.06:1 on bg.muted) to #989DA9
         // (~4.6:1) so it clears AA while staying below fg.muted.
-        value: { _light: '{colors.gray.700}', _dark: '#989DA9' },
+        value: {
+          _light: '{colors.gray.700}',
+          _dark: '{colors.grayDark.fgSubtle}',
+        },
       },
       inverse: {
-        value: { base: '{colors.gray.0}', _dark: desaturatedGray[1400] },
+        value: { base: '{colors.gray.0}', _dark: '{colors.grayDark.1400}' },
       },
     },
 
@@ -518,10 +504,10 @@ export const semanticTokens = {
       // straight halved-saturation mirror (no a11y bump). `_light` repeats
       // Chakra's value so light is untouched.
       DEFAULT: {
-        value: { _light: '{colors.gray.200}', _dark: desaturatedGray[800] },
+        value: { _light: '{colors.gray.200}', _dark: '{colors.grayDark.800}' },
       },
       default: {
-        value: { base: '{colors.gray.300}', _dark: desaturatedGray[1100] },
+        value: { base: '{colors.gray.300}', _dark: '{colors.grayDark.1100}' },
       },
       subtle: {
         // `_light` (not `base`): Chakra's default `border.subtle` is
@@ -530,10 +516,10 @@ export const semanticTokens = {
         // Chakra's near-white gray.50 (dividers/frames vanish). Pin `_light` so
         // our gray.200 wins. (`border.default`/`strong` are safe: Chakra has no
         // default for those names, so `base` is honoured.)
-        value: { _light: '{colors.gray.200}', _dark: desaturatedGray[1300] },
+        value: { _light: '{colors.gray.200}', _dark: '{colors.grayDark.1300}' },
       },
       strong: {
-        value: { base: '{colors.gray.500}', _dark: desaturatedGray[900] },
+        value: { base: '{colors.gray.500}', _dark: '{colors.grayDark.900}' },
       },
     },
   },
@@ -746,6 +732,50 @@ export const colors = {
     1300: { value: '#1E2433' }, // Primary text, headings
     1400: { value: '#141924' }, // Dark backgrounds
     1500: { value: '#0B0E17' }, // Darkest background
+  },
+
+  /**
+   * Dark-mode neutral palette — the halved-saturation counterpart of each
+   * primitive `gray.N` (same hue and lightness, HSL saturation cut by ~50%,
+   * e.g. `gray.1300` #1E2433 @ 26% → #23262E @ 13%). The blue-tinted `gray`
+   * ramp reads as the right neutral in light mode but turns muddy/
+   * over-chromatic as a dark surface, so every dark-mode neutral in the
+   * semantic layer (`slate.*`, and the `_dark` of `bg`/`fg`/`border`) resolves
+   * to a step of this scale instead of a raw `gray` step. Light mode is
+   * untouched — it keeps referencing `{colors.gray.*}` verbatim.
+   *
+   * Exposed as a primitive scale (rather than the previous inlined hex
+   * literals) so a consumer theme — e.g. FactChat's per-tenant
+   * `theme_color_overrides` — can rebrand dark mode by overriding these
+   * tokens, the same way overriding `blue.*` retints the `primary.*` ramp.
+   *
+   * The three `fg*` steps are the hand-tuned a11y lifts documented at their
+   * consuming tokens (`slate.600`/`slate.700`/`fg.subtle` in dark mode): the
+   * straight mirrors measured under WCAG AA 4.5:1 on the dark canvas/surface,
+   * so these sit slightly lighter than their scale neighbours.
+   */
+  grayDark: {
+    0: { value: '#FEFEFF' },
+    50: { value: '#F8F9FB' },
+    100: { value: '#F2F4F7' },
+    200: { value: '#E5E8EC' },
+    300: { value: '#D2D5DB' },
+    400: { value: '#B6BAC3' },
+    500: { value: '#A2A6B1' },
+    600: { value: '#8E939F' },
+    700: { value: '#7C818D' },
+    800: { value: '#6A6F7C' },
+    900: { value: '#595E6B' },
+    1000: { value: '#4A4E5A' },
+    1100: { value: '#3C404B' },
+    1200: { value: '#30343C' },
+    1300: { value: '#23262E' },
+    1400: { value: '#181A20' },
+    1500: { value: '#0E1014' },
+    // A11y-lifted foreground steps (see scale doc above).
+    fg600: { value: '#898E99' },
+    fg700: { value: '#8D919D' },
+    fgSubtle: { value: '#989DA9' },
   },
 
   /**
