@@ -1,4 +1,7 @@
+import type { ElementType } from 'react';
 import { IconButtonProps as ChakraIconButtonProps } from '@chakra-ui/react';
+
+import type { PolymorphicProps } from '../../types/polymorphic';
 
 // Re-export Button types for consistency
 export type { ButtonVariant } from '../Button/Button.types';
@@ -35,9 +38,9 @@ export type IconButtonVariant = 'solid' | 'soft' | 'outline' | 'ghost';
  * <IconButton colorPalette="danger" variant="soft"><Icon /></IconButton>
  * ```
  */
-export type IconButtonProps = Omit<
+export type IconButtonOwnProps = Omit<
   ChakraIconButtonProps,
-  'variant' | 'colorPalette' | 'colorScheme' | 'icon'
+  'variant' | 'colorPalette' | 'colorScheme' | 'icon' | 'as'
 > & {
   /**
    * The color scheme of the icon button (semantic color family).
@@ -52,3 +55,17 @@ export type IconButtonProps = Omit<
    */
   variant?: IconButtonVariant;
 };
+
+/**
+ * Props for `IconButton`, typed for whatever element `as` renders.
+ *
+ * Defaults to `'button'`, so `IconButtonProps` on its own is unchanged. Same
+ * shape and same reasoning as `ButtonProps` — see `Button.types.ts` and
+ * `src/types/polymorphic.ts`.
+ *
+ * ```tsx
+ * <IconButton as="a" href={file} download aria-label="내려받기"><Icon /></IconButton>
+ * ```
+ */
+export type IconButtonProps<TElement extends ElementType = 'button'> =
+  PolymorphicProps<TElement, IconButtonOwnProps>;

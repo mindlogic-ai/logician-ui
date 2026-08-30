@@ -1,8 +1,9 @@
-import { ForwardedRef, forwardRef } from 'react';
+import { ElementType, ForwardedRef, forwardRef, ReactElement } from 'react';
 import { IconButton as ChakraIconButton } from '@chakra-ui/react';
 
 import { focusRing } from '@/utils/focusRing';
 
+import type { PolymorphicRef } from '../../types/polymorphic';
 import { getIconButtonStyles } from './IconButton.styles';
 import { IconButtonProps } from './IconButton.types';
 
@@ -19,7 +20,7 @@ import { IconButtonProps } from './IconButton.types';
  * <IconButton colorPalette="neutral" variant="ghost"><Icon /></IconButton>
  * ```
  */
-export const IconButton = forwardRef(
+const IconButtonImpl = forwardRef(
   (
     {
       colorPalette = 'neutral',
@@ -46,4 +47,13 @@ export const IconButton = forwardRef(
   }
 );
 
-IconButton.displayName = 'IconButton';
+IconButtonImpl.displayName = 'IconButton';
+
+/**
+ * Type-level polymorphism over the same runtime — see the note on `Button`.
+ */
+export const IconButton = IconButtonImpl as (<
+  TElement extends ElementType = 'button',
+>(
+  props: IconButtonProps<TElement> & { ref?: PolymorphicRef<TElement> }
+) => ReactElement) & { displayName?: string };

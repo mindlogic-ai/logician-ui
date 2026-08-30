@@ -1,8 +1,9 @@
-import { forwardRef } from 'react';
+import { ElementType, forwardRef, ReactElement } from 'react';
 import { Button as ChakraButton } from '@chakra-ui/react';
 
 import { focusRing } from '@/utils/focusRing';
 
+import type { PolymorphicRef } from '../../types/polymorphic';
 import { getButtonStyles } from './Button.styles';
 import { ButtonProps } from './Button.types';
 
@@ -18,9 +19,12 @@ import { ButtonProps } from './Button.types';
  * <Button colorPalette="danger" variant="solid">Delete</Button>
  * <Button colorPalette="secondary" variant="outline">Cancel</Button>
  * <Button colorPalette="neutral" variant="ghost">Close</Button>
+ *
+ * // `as` carries the element's own props (see Button.types.ts):
+ * <Button as="a" href="/docs" target="_blank">문서</Button>
  * ```
  */
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ colorPalette, variant = 'soft', size, children, ...rest }, ref) => {
     const palette = colorPalette ?? 'primary';
 
@@ -58,4 +62,21 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   }
 );
 
-Button.displayName = 'Button';
+ButtonImpl.displayName = 'Button';
+
+/**
+ * The runtime is `ButtonImpl`; this cast is what gives the call site the props
+ * of the element `as` picked.
+ *
+ * `forwardRef` erases generics — its signature is fixed at the type it was
+ * instantiated with, so a generic component cannot be expressed through it
+ * directly. Re-declaring the call signature is the standard way around that,
+ * and it is a TYPE-level change only: the component, its behaviour and its
+ * `displayName` are untouched.
+ *
+ * `as` defaults to `'button'`, so nothing that already compiles stops
+ * compiling.
+ */
+export const Button = ButtonImpl as (<TElement extends ElementType = 'button'>(
+  props: ButtonProps<TElement> & { ref?: PolymorphicRef<TElement> }
+) => ReactElement) & { displayName?: string };
