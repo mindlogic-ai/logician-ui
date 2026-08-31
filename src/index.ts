@@ -120,4 +120,9 @@ export {
 } from './theme/colors';
 
 // Shared Types
-export type { PolymorphicProps, PolymorphicRef } from './types/polymorphic';
+export type {
+  PolymorphicComponent,
+  PolymorphicProps,
+  PolymorphicRef,
+} from './types/polymorphic';
+export { polymorphic } from './types/polymorphic';
