@@ -89,6 +89,20 @@ export type PolymorphicComponent<TOwn, TDefault extends ElementType> = (<
  * `displayName` stays on the implementation, where `react/display-name` can
  * see it — the lint rule is the thing that stops a component shipping without
  * one, and it cannot follow a name through this call.
+ *
+ * ## Consumers wrapping these components
+ *
+ * Prefer casting against `PolymorphicComponent` directly:
+ *
+ * ```ts
+ * export const ClickableCard =
+ *   ClickableCardImpl as unknown as PolymorphicComponent<ClickableCardOwnProps, 'div'>;
+ * ```
+ *
+ * Identical result, but this helper is a RUNTIME import for a compile-time
+ * operation, so every test that mocks `@mindlogic-ai/logician-ui` would have
+ * to remember to mock it too. Two FactChat suites failed exactly that way the
+ * first time a wrapper reached for the helper. A type costs the mocks nothing.
  */
 export function polymorphic<TOwn, TDefault extends ElementType = 'button'>(
   Impl: unknown
