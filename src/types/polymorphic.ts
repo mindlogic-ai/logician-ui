@@ -92,17 +92,20 @@ export type PolymorphicComponent<TOwn, TDefault extends ElementType> = (<
  *
  * ## Consumers wrapping these components
  *
- * Prefer casting against `PolymorphicComponent` directly:
+ * Call this the same way the components above do — a wrapper that pins the
+ * element back to its default undoes the polymorphism one layer up:
  *
  * ```ts
- * export const ClickableCard =
- *   ClickableCardImpl as unknown as PolymorphicComponent<ClickableCardOwnProps, 'div'>;
+ * export const ClickableCard = polymorphic<ClickableCardOwnProps, 'div'>(ClickableCardImpl);
  * ```
  *
- * Identical result, but this helper is a RUNTIME import for a compile-time
- * operation, so every test that mocks `@mindlogic-ai/logician-ui` would have
- * to remember to mock it too. Two FactChat suites failed exactly that way the
- * first time a wrapper reached for the helper. A type costs the mocks nothing.
+ * One thing to know: this is a runtime export, so a test that mocks
+ * `@mindlogic-ai/logician-ui` wholesale has to include it or the wrapper's
+ * module throws on import. The mock is `<T,>(Impl: T) => Impl` — this function
+ * is a type-level identity, so that IS the implementation. Casting against
+ * `PolymorphicComponent` instead works and needs no mock, but it costs the call
+ * site an `as unknown as` double cast, which is the kind of escape hatch a
+ * wrapper should not have to write.
  */
 export function polymorphic<TOwn, TDefault extends ElementType = 'button'>(
   Impl: unknown
