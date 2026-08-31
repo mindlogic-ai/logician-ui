@@ -105,6 +105,26 @@ export {
   Subtitle,
   Text,
 } from './components/Typography';
+// …and their prop types, which the block above never exported — so a consumer
+// could not type a wrapper over `H3`/`Text` at all. `LinkProps` is deliberately
+// left out: the root already exports a `Link` component from elsewhere and the
+// name would collide.
+export type {
+  CaptionProps,
+  H1Props,
+  H2Props,
+  H3Props,
+  H4Props,
+  H5Props,
+  HeadingOwnProps,
+  HeadingProps,
+  OverlineProps,
+  SubtextProps,
+  SubtitleProps,
+  TextProps,
+  TypographyOwnProps,
+  TypographyProps,
+} from './components/Typography';
 
 // Hooks
 export { useHasHover } from './hooks/useHasHover';
