@@ -1,5 +1,8 @@
 import { forwardRef } from 'react';
-import { Text, TextProps } from '@chakra-ui/react';
+import { Text } from '@chakra-ui/react';
+
+import { polymorphic } from '../../types/polymorphic';
+import { TypographyOwnProps } from './Typography.types';
 
 /**
  * Small, uppercase, letter-spaced label used as a section "eyebrow" or category
@@ -12,7 +15,7 @@ import { Text, TextProps } from '@chakra-ui/react';
  * brand/status variants are a single override (e.g. `color="primary.main"`,
  * `fontWeight="extrabold"`).
  */
-export const Overline = forwardRef<HTMLParagraphElement, TextProps>(
+const OverlineImpl = forwardRef<HTMLParagraphElement, TypographyOwnProps>(
   (props, ref) => {
     const { fontSize, ...rest } = props;
 
@@ -30,4 +33,7 @@ export const Overline = forwardRef<HTMLParagraphElement, TextProps>(
   }
 );
 
-Overline.displayName = 'Overline';
+OverlineImpl.displayName = 'Overline';
+
+/** Type-level polymorphism over the same runtime — see `polymorphic`. */
+export const Overline = polymorphic<TypographyOwnProps, 'p'>(OverlineImpl);

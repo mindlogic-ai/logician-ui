@@ -1,5 +1,8 @@
 import { forwardRef } from 'react';
-import { Text, TextProps } from '@chakra-ui/react';
+import { Text } from '@chakra-ui/react';
+
+import { polymorphic } from '../../types/polymorphic';
+import { TypographyOwnProps } from './Typography.types';
 
 /**
  * Supporting text under a heading — a subtitle by role in the page, not by
@@ -18,7 +21,7 @@ import { Text, TextProps } from '@chakra-ui/react';
  * <Subtitle as="h2">{sectionTitle}</Subtitle>
  * ```
  */
-export const Subtitle = forwardRef<HTMLParagraphElement, TextProps>(
+const SubtitleImpl = forwardRef<HTMLParagraphElement, TypographyOwnProps>(
   (props, ref) => {
     const { fontSize, ...rest } = props;
 
@@ -35,4 +38,7 @@ export const Subtitle = forwardRef<HTMLParagraphElement, TextProps>(
   }
 );
 
-Subtitle.displayName = 'Subtitle';
+SubtitleImpl.displayName = 'Subtitle';
+
+/** Type-level polymorphism over the same runtime — see `polymorphic`. */
+export const Subtitle = polymorphic<TypographyOwnProps, 'p'>(SubtitleImpl);

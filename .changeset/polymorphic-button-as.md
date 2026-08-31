@@ -2,20 +2,26 @@
 '@mindlogic-ai/logician-ui': minor
 ---
 
-Make `as` carry the rendered element's props — a reusable mechanism, applied to `Button`, `IconButton`, `MenuItem`, `Card` and `Badge`.
+Make `as` carry the rendered element's props — a reusable mechanism, applied to 19 components.
 
 `as` has always swapped what renders; it did not swap what type-checks. Chakra v3's prop types are bound to one element (`ButtonProps extends HTMLChakraProps<"button">`) and v2's polymorphic `ComponentWithAs` is gone, so `<Button as="a" href="/docs">` rendered an anchor while TypeScript still saw a `<button>` — and `href` was an error. Consumers reached for `@ts-expect-error`: FactChat carries 60 of them, 45 of which this retires across 33 files.
 
 `asChild` remains the right tool when you own the markup, because the child types itself. It is the wrong tool for the "link-shaped button" case, where the consumer wants the component plus one extra prop, not a restructured call site with a nested child.
 
+Applied to the components where swapping the element is a normal, safe thing to do: `Button`, `IconButton`, `MenuItem`, `Card`, `Badge`, `Chip`, `Tag`, `Container`, `SeeMoreButton`, `Link`, and the whole typography scale (`Text`, `Subtitle`, `Subtext`, `Caption`, `Overline`, `H1`–`H5`).
+
 ```tsx
 <Button as="a" href="/docs" target="_blank" rel="noreferrer">문서</Button>
 <MenuItem value="admin" as={NextLink} href="/admin">관리자</MenuItem>
 <Card clickable as="button" type="button">눌러서 자세히 보기</Card>
-<IconButton as="a" href={file} download aria-label="내려받기"><Download /></IconButton>
+<H3 as="h2">h3 크기, 문서 구조상 h2</H3>
+<Text as="label" htmlFor="email">이메일</Text>
+<Container as="main" id="content">…</Container>
 ```
 
-Several of these are accessibility fixes as much as typing ones. A card whose whole surface is one target should *be* a `<button>` rather than a `<div>` with an `onClick` — that is what puts it in the tab order and makes Enter/Space work. A menu item that navigates should be a real link, so middle-click and "open in new tab" keep working. The types stopped consumers doing the right thing.
+Deliberately **not** applied to components whose element is their semantics — form widgets (`Checkbox`, `Radio`, `Switch`, `Slider`, `Select`, `Input`, `Textarea`, `PinInput`) and structural parts (`Table`/`Th`/`Td`/`Tr`, `Tree*`, `Tabs`, `Accordion`, `Modal`, `Popover`). Typing `as` there would make it easier to reach for, and reaching for it breaks the role, the keyboard behaviour, or the table/tree semantics that KWCAG grades. Two more are skipped for mechanical reasons: `Avatar` attaches sub-components with `Object.assign`, which the helper's return type would drop, and `Breadcrumb`'s root *is* the `<nav>` landmark (the `as` a breadcrumb wants belongs on the link item, which consumers pass in).
+
+Several of these are accessibility fixes as much as typing ones, and that is the main reason to go past the components with suppressions against them. A card whose whole surface is one target should *be* a `<button>` rather than a `<div>` with an `onClick` — that is what puts it in the tab order and makes Enter/Space work. A menu item that navigates should be a real link. The typography scale is a *type* scale, not a document outline, so `as` is how a call site keeps the size while fixing the heading level that KWCAG 제목 제공 actually grades. And `<Text as="label" htmlFor="email">` did not compile at all before — `as="label"` was accepted, but `htmlFor` was not, so the label could not be pointed at a control.
 
 **The mechanism, not just the five components.** `PolymorphicProps`, `PolymorphicRef` and `polymorphic()` are exported. Applying them to another component is one line, and a consumer can carry `as` through its own wrapper the same way:
 

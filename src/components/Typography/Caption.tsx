@@ -1,5 +1,8 @@
 import { forwardRef } from 'react';
-import { Text, TextProps } from '@chakra-ui/react';
+import { Text } from '@chakra-ui/react';
+
+import { polymorphic } from '../../types/polymorphic';
+import { TypographyOwnProps } from './Typography.types';
 
 /**
  * The smallest tier in the body type scale (`textStyle="caption"`, ~11–12px),
@@ -14,7 +17,7 @@ import { Text, TextProps } from '@chakra-ui/react';
  * (e.g. `color="danger.main"`). Passing `fontSize` opts out of the baked-in
  * `textStyle` so an explicit size wins.
  */
-export const Caption = forwardRef<HTMLParagraphElement, TextProps>(
+const CaptionImpl = forwardRef<HTMLParagraphElement, TypographyOwnProps>(
   (props, ref) => {
     const { fontSize, ...rest } = props;
 
@@ -32,4 +35,7 @@ export const Caption = forwardRef<HTMLParagraphElement, TextProps>(
   }
 );
 
-Caption.displayName = 'Caption';
+CaptionImpl.displayName = 'Caption';
+
+/** Type-level polymorphism over the same runtime — see `polymorphic`. */
+export const Caption = polymorphic<TypographyOwnProps, 'p'>(CaptionImpl);
