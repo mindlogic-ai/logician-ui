@@ -1,11 +1,11 @@
-import { ElementType, forwardRef, ReactElement } from 'react';
+import { forwardRef } from 'react';
 import { Button as ChakraButton } from '@chakra-ui/react';
 
 import { focusRing } from '@/utils/focusRing';
 
-import type { PolymorphicRef } from '../../types/polymorphic';
+import { polymorphic } from '../../types/polymorphic';
 import { getButtonStyles } from './Button.styles';
-import { ButtonProps } from './Button.types';
+import { ButtonOwnProps, ButtonProps } from './Button.types';
 
 /**
  * Button component with two-dimensional variant system.
@@ -62,21 +62,13 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
   }
 );
 
-ButtonImpl.displayName = 'Button';
-
 /**
- * The runtime is `ButtonImpl`; this cast is what gives the call site the props
- * of the element `as` picked.
- *
- * `forwardRef` erases generics — its signature is fixed at the type it was
- * instantiated with, so a generic component cannot be expressed through it
- * directly. Re-declaring the call signature is the standard way around that,
- * and it is a TYPE-level change only: the component, its behaviour and its
- * `displayName` are untouched.
+ * Type-level polymorphism over the same runtime — see `polymorphic` in
+ * `src/types/polymorphic.ts` for what the cast does and why it is needed.
  *
  * `as` defaults to `'button'`, so nothing that already compiles stops
  * compiling.
  */
-export const Button = ButtonImpl as (<TElement extends ElementType = 'button'>(
-  props: ButtonProps<TElement> & { ref?: PolymorphicRef<TElement> }
-) => ReactElement) & { displayName?: string };
+ButtonImpl.displayName = 'Button';
+
+export const Button = polymorphic<ButtonOwnProps>(ButtonImpl);
