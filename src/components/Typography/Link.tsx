@@ -1,9 +1,24 @@
+import type { ElementType } from 'react';
 import { forwardRef } from 'react';
 import { Link as ChakraLink, LinkProps } from '@chakra-ui/react';
 
-export interface LinkCustomProps extends Omit<LinkProps, 'variant'> {
+// Relative, NOT `@/types/*` — see `src/types/polymorphic.ts`.
+import type { PolymorphicProps } from '../../types/polymorphic';
+import { polymorphic } from '../../types/polymorphic';
+
+export type LinkOwnProps = Omit<LinkProps, 'variant' | 'as'> & {
   variant?: 'error';
-}
+};
+
+/**
+ * Props for `Link`, typed for whatever element `as` renders.
+ *
+ * Defaults to `'a'`, so the bare type is unchanged. `as={NextLink}` is the
+ * reason this exists — the router link's own props (`href`, `prefetch`,
+ * `replace`) now come with it instead of arriving anonymously in `...rest`.
+ */
+export type LinkCustomProps<TElement extends ElementType = 'a'> =
+  PolymorphicProps<TElement, LinkOwnProps>;
 
 /**
  * The ramp steps the link paints, exported so a test can assert BOTH halves at
@@ -19,7 +34,7 @@ export const LINK_RAMP = {
   errorHover: { base: 'danger.dark', _dark: 'danger.darker' },
 } as const;
 
-export const Link = forwardRef<HTMLAnchorElement, LinkCustomProps>(
+const LinkImpl = forwardRef<HTMLAnchorElement, LinkOwnProps>(
   ({ color, variant, ...rest }, ref) => {
     // Theme-aware, because `.main` is tuned against a WHITE page. On the dark
     // canvas (#181A20) `primary.main` measures 4.19:1 and `danger.main` 4.26:1
@@ -77,4 +92,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkCustomProps>(
   }
 );
 
-Link.displayName = 'Link';
+LinkImpl.displayName = 'Link';
+
+/** Type-level polymorphism over the same runtime — see `polymorphic`. */
+export const Link = polymorphic<LinkOwnProps, 'a'>(LinkImpl);

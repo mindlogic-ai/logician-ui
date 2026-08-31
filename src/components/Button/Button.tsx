@@ -3,8 +3,9 @@ import { Button as ChakraButton } from '@chakra-ui/react';
 
 import { focusRing } from '@/utils/focusRing';
 
+import { polymorphic } from '../../types/polymorphic';
 import { getButtonStyles } from './Button.styles';
-import { ButtonProps } from './Button.types';
+import { ButtonOwnProps, ButtonProps } from './Button.types';
 
 /**
  * Button component with two-dimensional variant system.
@@ -18,9 +19,12 @@ import { ButtonProps } from './Button.types';
  * <Button colorPalette="danger" variant="solid">Delete</Button>
  * <Button colorPalette="secondary" variant="outline">Cancel</Button>
  * <Button colorPalette="neutral" variant="ghost">Close</Button>
+ *
+ * // `as` carries the element's own props (see Button.types.ts):
+ * <Button as="a" href="/docs" target="_blank">문서</Button>
  * ```
  */
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ colorPalette, variant = 'soft', size, children, ...rest }, ref) => {
     const palette = colorPalette ?? 'primary';
 
@@ -58,4 +62,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   }
 );
 
-Button.displayName = 'Button';
+/**
+ * Type-level polymorphism over the same runtime — see `polymorphic` in
+ * `src/types/polymorphic.ts` for what the cast does and why it is needed.
+ *
+ * `as` defaults to `'button'`, so nothing that already compiles stops
+ * compiling.
+ */
+ButtonImpl.displayName = 'Button';
+
+export const Button = polymorphic<ButtonOwnProps>(ButtonImpl);

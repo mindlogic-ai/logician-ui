@@ -118,3 +118,6 @@ export {
   type SemanticColorToken,
   semanticTokens,
 } from './theme/colors';
+
+// Shared Types
+export type { PolymorphicProps, PolymorphicRef } from './types/polymorphic';

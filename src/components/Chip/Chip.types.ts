@@ -1,4 +1,8 @@
+import type { ElementType } from 'react';
 import { BadgeProps as ChakraBadgeProps } from '@chakra-ui/react';
+
+// Relative, NOT `@/types/*` — see `src/types/polymorphic.ts`.
+import type { PolymorphicProps } from '../../types/polymorphic';
 
 /**
  * Chip color schemes - determines the semantic color of the chip.
@@ -34,10 +38,21 @@ export type ChipVariant = 'solid' | 'soft' | 'outline';
  *
  * This matches the Button component's architecture for consistency.
  */
-export interface ChipProps extends Omit<
+export type ChipOwnProps = Omit<
   ChakraBadgeProps,
-  'colorScheme' | 'variant'
-> {
+  'colorScheme' | 'variant' | 'as'
+> & {
   colorScheme?: ChipColorScheme;
   variant?: ChipVariant;
-}
+};
+
+/**
+ * Props for `Chip`, typed for whatever element `as` renders. Defaults to
+ * `'span'`, so the bare type is unchanged. A filter chip that navigates is the
+ * case that needs this — as a real link it keeps middle-click and
+ * open-in-new-tab.
+ */
+export type ChipProps<TElement extends ElementType = 'span'> = PolymorphicProps<
+  TElement,
+  ChipOwnProps
+>;

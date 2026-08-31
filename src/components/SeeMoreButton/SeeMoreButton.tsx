@@ -4,8 +4,9 @@ import { Button } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@/components/Icon';
 import { useTranslate } from '@/hooks/useTranslate';
 
+import { polymorphic } from '../../types/polymorphic';
 import { seeMoreButtonStyles } from './SeeMoreButton.styles';
-import { SeeMoreButtonProps } from './SeeMoreButton.types';
+import { SeeMoreButtonOwnProps } from './SeeMoreButton.types';
 
 /**
  * A button component that allows users to load or see more items.
@@ -15,11 +16,11 @@ import { SeeMoreButtonProps } from './SeeMoreButton.types';
  * @param {number} props.currentCount - The current number of items shown.
  * @param {number} props.maxCount - The maximum number of items available.
  */
-export const SeeMoreButton = ({
+const SeeMoreButtonImpl = ({
   currentCount,
   maxCount,
   ...rest
-}: SeeMoreButtonProps) => {
+}: SeeMoreButtonOwnProps) => {
   const translate = useTranslate();
 
   return (
@@ -29,3 +30,9 @@ export const SeeMoreButton = ({
     </Button>
   );
 };
+
+SeeMoreButtonImpl.displayName = 'SeeMoreButton';
+
+/** Type-level polymorphism over the same runtime — see `polymorphic`. */
+export const SeeMoreButton =
+  polymorphic<SeeMoreButtonOwnProps>(SeeMoreButtonImpl);

@@ -19,12 +19,17 @@ export type {
   TypographyProps as SubtextProps,
   TypographyProps as SubtitleProps,
   TypographyProps as TextProps,
+  TypographyOwnProps,
   TypographyProps,
 } from './Typography.types';
+// The heading props now come from our own polymorphic type rather than
+// Chakra's, so `as` carries the element's props with it.
 export type {
   HeadingProps as H1Props,
   HeadingProps as H2Props,
   HeadingProps as H3Props,
   HeadingProps as H4Props,
   HeadingProps as H5Props,
-} from '@chakra-ui/react';
+  HeadingOwnProps,
+  HeadingProps,
+} from './Typography.types';

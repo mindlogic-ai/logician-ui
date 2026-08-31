@@ -1,7 +1,10 @@
 import { forwardRef } from 'react';
-import { Heading, HeadingProps } from '@chakra-ui/react';
+import { Heading } from '@chakra-ui/react';
 
-export const H1 = forwardRef<HTMLHeadingElement, HeadingProps>((props, ref) => {
+import { polymorphic } from '../../types/polymorphic';
+import { HeadingOwnProps } from './Typography.types';
+
+const H1Impl = forwardRef<HTMLHeadingElement, HeadingOwnProps>((props, ref) => {
   const { fontSize, ...rest } = props;
 
   return (
@@ -17,4 +20,7 @@ export const H1 = forwardRef<HTMLHeadingElement, HeadingProps>((props, ref) => {
   );
 });
 
-H1.displayName = 'H1';
+H1Impl.displayName = 'H1';
+
+/** Type-level polymorphism over the same runtime — see `polymorphic`. */
+export const H1 = polymorphic<HeadingOwnProps, 'h1'>(H1Impl);
