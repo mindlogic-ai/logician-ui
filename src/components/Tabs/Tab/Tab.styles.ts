@@ -74,6 +74,12 @@ export const verticalSelectedStyles = {
     insetInlineEnd: 'unset',
     insetBlock: 0,
     width: '2px',
-    background: 'primary.main',
+    // Follows the label, like the horizontal tab's underline does. This one was
+    // missed when selection moved to ink: the vertical rail carries its OWN
+    // indicator here rather than through `TAB_RAMP.indicator`, so changing the
+    // ramp left an azure bar beside an ink label — the half-migrated look the
+    // ink change existed to remove. Reads through the ramp now so the two
+    // orientations cannot drift apart again.
+    background: TAB_RAMP.indicator,
   },
 };
