@@ -1,5 +1,382 @@
 # Changelog
 
+## 4.0.0-alpha.27
+
+### Major Changes
+
+- b63e961: `ExpandableText` clips by lines and animates open.
+
+  **Breaking: `charLimit` is gone, replaced by `lineClamp` (default 3).** The old
+  prop counted characters, which meant the collapsed and expanded states were two
+  different node trees — the component swapped one for the other, and everything
+  below jumped in a single frame. This is text someone is part-way through
+  reading, so a jump costs them their place.
+
+  Both states now render the same children and only the clipping differs, which is
+  what makes the height animatable at all. Opening and closing run on `travel`.
+
+  ```tsx
+  -(<ExpandableText charLimit={100}>{text}</ExpandableText>) +
+  <ExpandableText lineClamp={3}>{text}</ExpandableText>;
+  ```
+
+  `charLimit` still type-checks and is ignored, so nothing breaks at build time —
+  but any call site passing it will show three lines rather than its old character
+  budget, and should be revisited.
+
+  Two details worth knowing if you touch this:
+
+  **Not `-webkit-line-clamp`.** It would put an ellipsis on the cut line, but under
+  a clamp `scrollHeight` collapses to the clipped height — which is the only way to
+  ask whether anything is hidden, so the link that opens the text could never
+  appear. A `max-height` of whole `lh` units cuts on the same line boundary, keeps
+  the measurement honest, and is the thing being animated anyway.
+
+  **The height settles back to `none`,** not to the measured pixel count, so a
+  later reflow (a resize, a font swap) is not trapped under a stale number. Closing
+  therefore pins the height it is leaving for one frame before releasing it, since
+  `none` cannot be interpolated from.
+
+### Minor Changes
+
+- 3be33d4: `Button` gains an opt-in `lift`.
+
+  ```tsx
+  <Button colorPalette="primary" variant="solid" lift>
+    시작하기
+  </Button>
+  ```
+
+  Raises the button 1px toward the pointer on hover with a shadow under it;
+  pressing sets it back down, underneath the existing `scale` press. Off by
+  default and deliberately not a house style — a lift is emphasis, and a row of
+  six buttons all lifting is noise. Reach for it where one button is the point of
+  the screen.
+
+  The shadow is a `filter: drop-shadow`, not a `box-shadow`. The keyboard focus
+  ring is a box-shadow, and Chakra emits `:hover` _after_ `:focus-visible`, so a
+  box-shadow here would have taken the ring off any button that was focused and
+  hovered at once — a real accessibility regression that looks like nothing in
+  review. A different property cannot collide with it, and it follows the border
+  radius for free. It deepens in dark mode, where a black shadow does nothing.
+
+  `translate` and `filter` joined the button's transition list unconditionally: a
+  property nobody changes costs nothing, and leaving them out would make the
+  opt-in jump rather than move.
+
+- 7f0eb3d: Add the motion layer: a timing scale, a seven-preset vocabulary, and eight
+  primitives.
+
+  There was no timing layer, so every animated surface invented its own numbers —
+  `Button` over `0.25s`, `ProgressBar` over `0.3s`, `Tree` over `0.15s`, with
+  nothing tying them together. Nothing here changes an API a consumer types
+  against except where noted, so the thing to check after upgrading is **feel**.
+  `Theme/Motion` in Storybook is the reference.
+
+  ## The scale
+
+  Durations are prefixed (`motion.instant` / `motion.press` / `motion.base` /
+  `motion.slow` / `motion.slower` / `motion.celebrate.*` / `motion.loop.*`) rather
+  than merged into Chakra's. Chakra already defines `fast` (150ms), `slow` (300ms)
+  and `slower` (400ms), and our `slow`/`slower` mean 500ms/700ms — redefining them
+  would silently retime every Chakra component that reads them (`dialog`, `drawer`
+  and `progress` all do), so a Modal backdrop would start fading over 500ms
+  because a reward flight wanted that duration. **A shared library must not change
+  the meaning of a token it did not define.** For 150ms and 200ms there are
+  deliberately no `motion.*` tokens: Chakra's `fast` and `moderate` already cover
+  them exactly, and two names for one number is worse than remembering which scale
+  to reach into.
+
+  Easings (`standard` / `emphasized` / `overshoot`) need no prefix — Chakra's are
+  `ease-in` / `ease-out` / `ease-in-out` / `ease-in-smooth`, so nothing collides.
+
+  Raw values are exported too (`MOTION_DURATION_MS`, `MOTION_DURATION_S`,
+  `MOTION_EASE`, `MOTION_EASE_CSS`) for animation tech that cannot read a CSS
+  variable, plus `cubicBezier(curve)` for motion JavaScript has to drive frame by
+  frame — without it a count-up beside a card reaches for an `easeOutCubic` off
+  the internet and lands on a different curve from the card.
+
+  ## The vocabulary — seven presets, and seven is the policy
+
+  Components pick a preset **by intent** and the timing comes with it. They live
+  in `theme.animationStyles`, the same composition slot `textStyles` uses, so they
+  apply like a text style and a consuming app can remap one from its own config:
+
+  ```tsx
+  <Switch.Thumb   animationStyle="spring" transitionProperty="translate" />
+  <Progress.Range animationStyle="travel" transitionProperty="width" />
+  ```
+
+  `press` (contact) · `feedback` (hover and state) · `travel` (moving to a new
+  position) · `spring` (a physical flip, or two things crossing) · `presence`
+  (a part with both an open and a closed state) · `stagger` (siblings arriving in
+  sequence) · `composite` (the escape hatch, for an element needing two clocks).
+
+  **That is the whole list, and the count is deliberate** — twenty presets is the
+  same as none. Six motions that had exactly one caller moved _out_ of the shared
+  layer and next to that caller instead: `spin` → `Spinner.styles.ts`,
+  `indeterminate` → `ProgressBar.styles.ts`, `checkmarkDraw` →
+  `Checkbox.styles.ts`, `dotPop` → `Radio.styles.ts`, the Ark indicator hatch →
+  `SegmentedControl.styles.ts`, and the Modal's two keyframes →
+  `Modal.styles.ts`. Rendered output is unchanged; every one was measured in a
+  browser before and after. The duration tokens they read stay global — that is
+  the scale, and only the _composition_ was local.
+
+  Two things are baked into the preset definitions rather than left to each
+  component:
+  - **`transitionProperty` defaults to `none`.** CSS defaults it to `all`, so a
+    preset without one would quietly animate every property on the element —
+    which is the bug `Button` had, moving a call site's width and padding on
+    hover. Forgetting the prop now means nothing moves, which is _visible_.
+  - **Reduced motion.** "Anything that animates must honour
+    `prefers-reduced-motion`" is a policy, not a per-component decision; written
+    by hand it was already spread across 13 places, and the 14th component is the
+    one that forgets. Loops are the exception and do not zero out — a frozen
+    spinner reads as a dead request, so it slows instead.
+
+  ## presence — leaving takes half as long as arriving
+
+  An enter has to be _read_. An exit has already been decided, so every
+  millisecond the leaving element still owns the screen is a millisecond of
+  waiting. **300ms in on `emphasized`, 150ms out on `standard`**, applied to
+  `Menu`, `Popover`, `Tooltip`, `Select`, `Combobox` and `Collapsible`, all of
+  which were on Chakra's defaults: near-symmetric (`Tooltip` 150/150) or so short
+  leaving that the surface reads as cut off rather than dismissed (`Select` 50ms,
+  `Combobox` `0s`). **Enters lengthen from 150ms to 300ms — the visible half of
+  this change, and the one worth judging in Storybook.** `Modal` already had the
+  ratio and now reads the preset rather than restating the numbers.
+
+  The preset declares only the clock, never `animation-name`. That is what lets
+  one preset sit on seven unrelated parts: the menu keeps sliding from its
+  trigger, the popover keeps scaling from its origin, the collapsible keeps
+  interpolating the height Ark measures. A test walks the vocabulary and asserts
+  that any preset declaring `_open` declares `_closed`, and that the closed
+  duration _resolves_ to strictly fewer milliseconds — the ratio is enforced, not
+  remembered.
+
+  Not applied to `Toast`: Chakra moves it with a `transition` shorthand rather
+  than a keyframe, so an `animation-*` clock lands on it and does nothing at all.
+  Shipping the prop would have looked applied and changed nothing.
+
+  ## stagger — CSS only, enter only
+
+  `staggerProps(index)` sets one inline custom property; the preset owns the
+  keyframe, duration, curve and cap. No JS timers, no wrapper component — a
+  wrapper needs a DOM node, and an extra element inside `Menu.Content` is not
+  free, since Ark walks those children for typeahead and roving focus.
+
+  **The cap is the point.** Uncapped, the delay is linear in the index, so the
+  fortieth row arrives 1.4s after the first — not staggered, late. Six steps of
+  35ms tops out at 210ms and everything past the sixth item arrives together,
+  which nobody notices.
+
+  It is an `animation-delay`, not a `transition-delay`, deliberately: a transition
+  delay applies to every _later_ property change on the element, so a hover would
+  wait its index out and a filter keystroke would re-deal the whole list.
+
+  Opt-in on `Menu.List`, `SelectField` and `FileList`. Deliberately not wired on
+  `ComboboxField` (options remount on every keystroke — the failure mode above),
+  `Toast` (they arrive one at a time), `Tree` (child composition belongs to the
+  call site, so the library cannot know the index), and `Masonry` / `Table` (long,
+  virtualizable, re-sorted on click).
+
+  ## What moves differently
+  - **Button** splits the press out of its blanket transition — `all` at a flat
+    `0.25s` put the press on the same clock as a colour change. The press is now
+    the individual `scale` property rather than `transform: scale()`, which used
+    to _replace_ a transform the call site had set for positioning.
+  - **SegmentedControl** runs on house timing rather than Ark's 150ms default.
+    Ark writes that part's `transition-*` **inline**, and an inline declaration
+    beats any class rule — which is why `transitionDuration` as a prop never
+    reached it. Retiming goes through the custom properties those inline `var()`s
+    read.
+  - **Switch** gives the thumb `overshoot`, the only curve that survives ~16px of
+    travel, because it reverses direction.
+  - **Checkbox** strokes its tick on rather than flashing it, 60ms after the box
+    fills, so the two read as "pressed" then "confirmed".
+  - **ColorModeToggle**'s icons rotate through each other instead of being swapped
+    by a ternary. The page-wide colour flip stays instant.
+  - **ProgressBar** drops `ease-in-out` for `emphasized` — easing in is a fiction
+    for a value that only moves one way — and gains `indeterminate`, for work with
+    no denominator.
+  - **Spinner**'s hardcoded `0.65s` is now `motion.loop.turn`, the same 650ms.
+
+  Folding onto the presets also normalised timings that had drifted: the same "a
+  colour changes on hover" was written with four different easings across four
+  files. `Card` hover now runs at 150ms rather than 300ms, `ColorModeToggle` at
+  300ms rather than 500ms, `FileInput` at 150ms rather than 200ms.
+
+  ## Eight primitives
+
+  FactChat had built its own motion layer — `src/components/motion/`, seven
+  components on a duplicated copy of these tokens, all of them on framer-motion.
+  Rebuilding them here answered a question the vocabulary alone could not: what
+  does the scale actually hold once real motion goes through it?
+
+  **`Pulse`** pops once when `trigger` changes. **`Shake`** is its counterpart and
+  refuses; keep them apart, because a shake used as emphasis reads as an error.
+  Both replay through a changed `key` — a new element runs its animation from the
+  top, the same trick `stagger` uses to replay on reopen.
+
+  **`Appear`** brings an element in on mount. It is the third of three entrances
+  and the one to reach for last: if the element can close, `presence`; if siblings
+  arrive with it, `stagger`; otherwise this. **`Reveal`** opens a block out of
+  nothing through `grid-template-rows: 0fr → 1fr` rather than measuring a height.
+  **`FlyTo`** arcs a ghost between two measured rects. **`Confetti`** bursts.
+  **`CountUp`** counts. **`SwapTransition`** slides one piece of content out and
+  the next in, and is the only one keeping React state — the outgoing subtree has
+  to stay on screen long enough to leave while React has already been told to
+  render the new one. Fifteen lines holding one child through one exit.
+
+  **No framer-motion.** It stays a devDependency.
+
+  Each primitive's TSDoc states what it adds to the DOM, since it varies: `Pulse`,
+  `Shake` and `Appear` wrap children in one `div`; `Reveal` and `SwapTransition`
+  in two; `FlyTo` portals and adds nothing in place; `Confetti` is an overlay and
+  `CountUp` is itself the `<span>`.
+
+  The scale gained `motion.celebrate` — `burst` (900ms) and `fall` (1800ms) —
+  split for the reason `loop` splits into `turn` and `sweep`: the period is set by
+  how far the thing travels. Everything below it answers "how long until the
+  interface responded", and its ceiling was `slower` (700ms) because past that a
+  response reads as a wait. A celebration inverts that; it exists to be watched.
+  Both codebases had already written the literal.
+
+  `Confetti`'s default colours are literal hex, the one place here deliberately
+  off the palette. Semantic tokens mean things, and raining the error red over
+  "payment complete" says something the screen does not. The palette is also built
+  for interface legibility — average lightness 47%, three of five in the blue
+  range — so fifty pieces of it read as a chart legend falling. The cost is stated
+  rather than hidden: these do not follow a re-theme and do not adapt to dark
+  mode. `colors` is a prop for apps that need their own.
+
+  ## Three lint rules, because types cannot do this
+
+  Chakra declares the prop as
+  `ConditionalValue<UtilityValues["animationStyle"] | CssVars | AnyString>`, so
+  `AnyString` accepts every typo and `ConditionalValue` accepts every array —
+  both compile, and both then do something other than what was written. A typo
+  does nothing at all; an array is read as **responsive breakpoints**, one motion
+  below `sm` and another above, which is the mistake that looks correct on the
+  machine that wrote it.
+
+  So `animationStyle` now rejects a name outside the vocabulary, rejects the array
+  and breakpoint-object forms, and rejects a transition preset with no
+  `transitionProperty` to scope it. All three were run across the library first to
+  confirm zero false positives, and `motionGuards.test.ts` lints the cases through
+  ESLint and asserts which report — so the rules cannot be deleted in an unrelated
+  cleanup without something failing.
+
+  ## Three transitions that were declared but never played
+
+  All for the same reason: invalid CSS is dropped silently, so the code read as if
+  it animated.
+  - `Card` set `transitionDuration="normal"`, a Chakra v2 token that no longer
+    exists in v3. It fell through as a literal, `transition-duration: normal` is
+    not valid CSS, and the declaration was discarded — the card's hover changed
+    instantly.
+  - `FileInput` set `transition="ease-in"` — a shorthand with a timing function
+    but no duration resolves to `0s`, so the `_groupHover` fade snapped in one
+    frame.
+  - `SectionLoader` set `transition="0.3 opacity ease"` — the missing `s` made the
+    value unparseable and the whole declaration was dropped. Its sibling
+    `PageLoader` has the same line written correctly.
+
+  `Card` and `FileInput` also gain `_motionReduce`, since both now actually
+  animate.
+
+  ## New exports
+
+  The eight primitives, `staggerProps`, `cubicBezier`, and from the theme:
+  `durations`, `easings`, `animationStyles`, `MOTION_DURATION_MS`,
+  `MOTION_DURATION_S`, `MOTION_EASE`, `MOTION_EASE_CSS`, `MOTION_STAGGER_MAX`,
+  and the `MotionDurationToken` / `MotionEaseToken` / `MotionStyleToken` types.
+
+  `keyframes` is deliberately **not** exported — it is registered with the theme
+  and referenced by name in CSS, so a consumer never needs the object, and
+  exporting it would invite redefining a keyframe under a name we do not own.
+
+- 0bceb74: `CopyableCode` confirms a copy without moving under the cursor.
+
+  A button whose label changes is a moving target. "복사" → "복사 완료" widened the
+  button by 28px, and because it sits against the right edge of the code block it
+  grew _leftwards_ over the code the instant it was clicked — under the cursor that
+  had just clicked it.
+
+  Both labels now render into the same grid cell, so the box is always as wide as
+  its widest state and the inactive one stays in the layout holding that width,
+  transparent and `aria-hidden`. Sizing this way rather than with a hand-tuned
+  `minW` matters for a translated product: the longest string is rarely the one you
+  measured, and `Copy completed` is nearly three times `복사`.
+
+  The swap runs on two clocks: opacity clears over `fast` so the outgoing label is
+  not read through the incoming one, while the 8px of travel takes `motion.base` so
+  it reads as one thing replacing another rather than a flicker. The idle label
+  leaves upward and the confirmation rises from below, which is what makes it one
+  movement rather than two.
+
+  This was briefly a `Swap` component. It is not exported: one call site is not a
+  component, and the general form of the same idea now ships as
+  `SwapTransition`, which swaps _content_ rather than holding a width.
+
+### Patch Changes
+
+- ec852da: A call site that presses too no longer erases the Button's own press.
+
+  `_hover` and `_active` arrived through the prop spread, and a spread replaces
+  the whole object — so a button that added one line (FactChat's quiz footer adds
+  a 2px press ledge) silently lost the variant's pressed colour _and_ the press
+  `scale` along with it, and stopped reading as pressed at all. Both are now
+  merged the way `lift` already merged them: the call site's own keys still win,
+  they just no longer erase the ones they did not mention.
+
+  `transform` also rejoins the Button's transition. Nothing in the component sets
+  it — the press deliberately uses `scale` so it cannot clobber a call site — but
+  call sites do set it, and naming the transition properties took away the cover
+  the old `transitionProperty: all` gave them. Their transforms were snapping.
+
+- 0bceb74: Modal enters from below and leaves in half the time.
+
+  Chakra's default `motionPreset: "scale"` already had the ratio right — 200ms in,
+  100ms out — but it scales from a flat `0.95` with no vertical travel and no
+  named curve, so the dialog appeared in place rather than arriving.
+
+  Content now enters over `motion.base` on `emphasized`, from `scale(0.94)` and
+  10px below, and leaves over `fast` by shrinking to `0.97` **without** the
+  travel: an exit only has to get out of the way, and moving away draws the eye to
+  something that is leaving. The backdrop was retimed to match — it exited over
+  200ms while the content now leaves in 150, so the scrim outlasted the dialog it
+  was dimming for. This had to be set in `Modal` itself as well as `ModalOverlay`,
+  because `Modal` renders `Dialog.Backdrop` directly and never uses the exported
+  overlay component.
+
+  Under `prefers-reduced-motion` this keeps a plain fade rather than dropping to
+  `0ms` like the transition presets do. A modal that appears with no transition at
+  all reads as a page swap; what has to go is the movement, not the fact that
+  something changed.
+
+- c363e5e: `Radio` springs its dot in instead of flashing it.
+
+  The checkbox half of this shipped already; the radio half did not, because the
+  obvious approach does not apply to it. Chakra's radio mark is not a stroked
+  path — it is a `.dot` element the recipe rests at `scale: 0.4` — so there is no
+  line to draw on. It is also only mounted once the item is checked, which rules
+  out a transition: nothing precedes it to interpolate from.
+
+  So the dot grows from nothing, as a keyframe, on `overshoot` — the one curve
+  that stays legible across 8px, because it reverses direction. The ring fills
+  first and the dot follows 60ms later, the same two beats the checkbox has:
+  pressed, then confirmed. Measured frame by frame, it peaks at `0.439` around
+  240ms and settles at exactly `0.4`, which is where the recipe rests it — landing
+  anywhere else would make the dot jump the moment the animation hands back.
+
+  Unlike the checkmark, the reduced-motion branch only switches the animation off:
+  the resting scale is already declared, so nothing needs undoing. The checkmark's
+  dash pattern is only correct _while_ its animation runs, which is why that one
+  has to clean up after itself.
+
+  The ring's own fill now eases too — it had no transition at all.
+
 ## 4.0.0-alpha.26
 
 ### Patch Changes
