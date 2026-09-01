@@ -133,19 +133,34 @@ export const Input = forwardRef(
       string | number | readonly string[] | undefined
     >(getFormattedValue(propValue));
 
+    /** The latest value from outside, including one that arrives mid-composition. */
+    const externalValue = useRef(propValue);
+    /** What the outside value was when the current composition opened. */
+    const externalValueAtCompositionStart = useRef(propValue);
+    /**
+     * The text the node held when a composition just ended. Browsers often fire
+     * a trailing `input` carrying exactly that text, which would emit the same
+     * change twice; the next change matching this is swallowed.
+     */
+    const textAtCompositionEnd = useRef<string | null>(null);
+
+    // Adopt the outside value only *between* compositions. Writing `.value`
+    // onto the node while an IME composition is open ends that composition:
+    // the half-built jamo is left behind as literal text and the finished
+    // syllable lands on top of it (`학사지원` typed → `학사ㅈ지원`). A write
+    // that lands mid-composition is deferred, not discarded — see
+    // handleCompositionEnd.
     useEffect(() => {
+      externalValue.current = propValue;
+      if (isComposing.current) return;
       setCurrentValue(getFormattedValue(propValue));
     }, [propValue]);
 
     // 한글 타이핑 관련 버그 해결을 위해 composition event handler들을 사용합니다
     const handleCompositionStart = (e: CompositionEvent<HTMLInputElement>) => {
       isComposing.current = true;
+      externalValueAtCompositionStart.current = externalValue.current;
       if (onCompositionStart) onCompositionStart(e);
-    };
-
-    const handleCompositionEnd = (e: any) => {
-      isComposing.current = false;
-      if (onCompositionEnd) onCompositionEnd(e);
     };
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -195,7 +210,10 @@ export const Input = forwardRef(
       return syntheticEvent;
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Applies the formatting/filtering rules and emits outward. Only ever
+    // called when no composition is open, so the value it writes back onto the
+    // node cannot interrupt an IME.
+    const commitChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       let processedValue = e.target.value;
 
       // Handle trimWhiteSpace: prevent initial spaces and trim pasted content
@@ -260,6 +278,45 @@ export const Input = forwardRef(
           onChange(createSyntheticEvent(e, processedValue));
         }
       }
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      // The trailing `input` a browser fires right after `compositionend`
+      // carries text this component has already committed. Emitting it again
+      // would double the change for the consumer.
+      const alreadyCommitted = textAtCompositionEnd.current;
+      textAtCompositionEnd.current = null;
+      if (!isComposing.current && alreadyCommitted === e.target.value) return;
+
+      if (isComposing.current) {
+        // Mid-composition: show exactly what the IME put in the node and emit
+        // nothing. Any transform here would be written back onto the node and
+        // end the composition. The rules are applied to the finished text in
+        // handleCompositionEnd instead.
+        setCurrentValue(e.target.value);
+        return;
+      }
+
+      commitChange(e);
+    };
+
+    const handleCompositionEnd = (e: CompositionEvent<HTMLInputElement>) => {
+      isComposing.current = false;
+      const node = e.currentTarget;
+      textAtCompositionEnd.current = node.value;
+
+      if (externalValue.current !== externalValueAtCompositionStart.current) {
+        // Something outside moved the value while the syllable was in flight —
+        // a form reset, a filter clear. Refusing it during the composition was
+        // about not breaking the IME, not about ignoring it, so apply it now.
+        setCurrentValue(getFormattedValue(externalValue.current));
+      } else {
+        // `compositionend`'s target is the same input node, so the fields
+        // commitChange reads (`value`, `name`, `selectionStart`) are all there.
+        commitChange(e as unknown as React.ChangeEvent<HTMLInputElement>);
+      }
+
+      if (onCompositionEnd) onCompositionEnd(e);
     };
 
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
