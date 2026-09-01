@@ -13,6 +13,7 @@ import {
   SliderThumb,
   SliderTrack,
 } from '@/components/Slider';
+import { TAB_RAMP } from '@/components/Tabs';
 import { Link, LINK_RAMP, Subtitle } from '@/components/Typography';
 import { colors } from '@/theme/colors';
 
@@ -312,7 +313,11 @@ describe('axe — 구조·ARIA 규칙', () => {
  * KWCAG 2.2 5.3.3 텍스트 콘텐츠의 명도 대비 applies to text in every state a
  * user can put it in, and hover is a state a mouse user is IN while reading.
  */
-describe('Link 색 대비 — 링크 램프의 hover 상태', () => {
+// Both ramps live here because they share one defect and one measuring
+// table: `primary.main`/`danger.main` are tuned against a WHITE page and
+// go under AA as TEXT in dark. `Link` was the first component caught;
+// `Tab`'s selected label was the third.
+describe('브랜드 색 대비 — Link · Tab 램프', () => {
   const relativeLuminance = (hex: string) => {
     const n = hex.replace('#', '');
     const channels = [0, 2, 4].map(
@@ -408,5 +413,33 @@ describe('Link 색 대비 — 링크 램프의 hover 상태', () => {
         `${mode} 에서 hover 가 resting 보다 흐리다`
       ).toBeGreaterThan(resting);
     }
+  });
+
+  it('선택된 가로 탭의 레이블이 라이트·다크 양쪽에서 4.5:1 을 넘는다', () => {
+    // Measured against `DARK_CANVAS` (#181A20), the RAISED surface — not the
+    // page background (#0E1014). That distinction is the whole defect:
+    // `primary.main` is 4.59:1 on the page and 4.19:1 here, so the selected tab
+    // passed every full-page scan and failed the first time a tab list rendered
+    // inside a modal. The stricter of the two surfaces is the one to hold.
+    expect(
+      contrast(resolve(TAB_RAMP.label.base, 'base'), LIGHT_CANVAS)
+    ).toBeGreaterThanOrEqual(AA_BODY_TEXT);
+    expect(
+      contrast(resolve(TAB_RAMP.label._dark, '_dark'), DARK_CANVAS)
+    ).toBeGreaterThanOrEqual(AA_BODY_TEXT);
+  });
+
+  it('선택 표시 밑줄은 그래픽 기준 3:1 을 넘는다', () => {
+    // The underline is not text, so its bar is 3:1 (KWCAG 5.3.4 콘텐츠 간의
+    // 구분 / WCAG 1.4.11), which is why it keeps `primary.main` while the label
+    // moves. Held here so a later "make them match" edit has to be deliberate
+    // rather than arriving as a silent contrast change.
+    const AA_NON_TEXT = 3;
+    expect(
+      contrast(resolve(TAB_RAMP.indicator, 'base'), LIGHT_CANVAS)
+    ).toBeGreaterThanOrEqual(AA_NON_TEXT);
+    expect(
+      contrast(resolve(TAB_RAMP.indicator, '_dark'), DARK_CANVAS)
+    ).toBeGreaterThanOrEqual(AA_NON_TEXT);
   });
 });

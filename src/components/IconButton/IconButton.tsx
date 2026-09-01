@@ -3,8 +3,9 @@ import { IconButton as ChakraIconButton } from '@chakra-ui/react';
 
 import { focusRing } from '@/utils/focusRing';
 
+import { polymorphic } from '../../types/polymorphic';
 import { getIconButtonStyles } from './IconButton.styles';
-import { IconButtonProps } from './IconButton.types';
+import { IconButtonOwnProps, IconButtonProps } from './IconButton.types';
 
 /**
  * IconButton component with two-dimensional variant system.
@@ -19,7 +20,7 @@ import { IconButtonProps } from './IconButton.types';
  * <IconButton colorPalette="neutral" variant="ghost"><Icon /></IconButton>
  * ```
  */
-export const IconButton = forwardRef(
+const IconButtonImpl = forwardRef(
   (
     {
       colorPalette = 'neutral',
@@ -46,4 +47,7 @@ export const IconButton = forwardRef(
   }
 );
 
-IconButton.displayName = 'IconButton';
+/** Type-level polymorphism over the same runtime — see the note on `Button`. */
+IconButtonImpl.displayName = 'IconButton';
+
+export const IconButton = polymorphic<IconButtonOwnProps>(IconButtonImpl);

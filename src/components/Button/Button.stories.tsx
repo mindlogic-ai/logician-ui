@@ -430,3 +430,36 @@ export const Lift: Story = {
     </VStack>
   ),
 };
+
+/**
+ * `as` swaps the rendered element **and** the props it accepts.
+ *
+ * A link-shaped button is a real pattern — a call to action that navigates
+ * rather than acts. Rendering it as an `<a>` is also the accessible choice:
+ * it lands in the tab order as a link, announces as one, and keeps
+ * middle-click, "open in new tab" and "copy link address" working.
+ *
+ * `href`, `target` and `rel` below are `<a>` props, and they type-check
+ * because `as="a"` carried them in. The same works for a router link —
+ * `<Button as={NextLink} href="/admin" prefetch={false}>`.
+ */
+export const AsLink: Story = {
+  render: () => (
+    <Flex gap={4} wrap="wrap" align="center">
+      <Button as="a" href="#" colorPalette="primary" variant="solid">
+        같은 탭에서 열기
+      </Button>
+      <Button
+        as="a"
+        href="https://example.com"
+        target="_blank"
+        rel="noreferrer"
+        colorPalette="secondary"
+        variant="outline"
+      >
+        새 탭에서 열기
+      </Button>
+    </Flex>
+
+  ),
+};

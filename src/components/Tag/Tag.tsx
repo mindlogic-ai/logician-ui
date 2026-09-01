@@ -1,8 +1,9 @@
 import { ForwardedRef, forwardRef } from 'react';
 import { Tag as ChakraTag } from '@chakra-ui/react';
 
+import { polymorphic } from '../../types/polymorphic';
 import { getTagStyles } from './Tag.styles';
-import { TagProps } from './Tag.types';
+import { TagOwnProps } from './Tag.types';
 
 /**
  * Tag component for categorization, filtering, and labeling.
@@ -23,9 +24,14 @@ import { TagProps } from './Tag.types';
  * </Tag>
  * ```
  */
-export const Tag = forwardRef(
+const TagImpl = forwardRef(
   (
-    { colorPalette = 'neutral', variant = 'soft', children, ...rest }: TagProps,
+    {
+      colorPalette = 'neutral',
+      variant = 'soft',
+      children,
+      ...rest
+    }: TagOwnProps,
     ref?: ForwardedRef<HTMLDivElement>
   ) => {
     const styles = getTagStyles(colorPalette, variant);
@@ -47,4 +53,7 @@ export const Tag = forwardRef(
   }
 );
 
-Tag.displayName = 'Tag';
+TagImpl.displayName = 'Tag';
+
+/** Type-level polymorphism over the same runtime — see `polymorphic`. */
+export const Tag = polymorphic<TagOwnProps, 'span'>(TagImpl);

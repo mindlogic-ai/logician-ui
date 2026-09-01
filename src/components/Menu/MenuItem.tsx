@@ -2,16 +2,17 @@ import { Menu, Spacer } from '@chakra-ui/react';
 
 import { focusRing } from '@/utils/focusRing';
 
-import { ItemVariant, MenuItemProps } from './MenuItem.types';
+import { polymorphic } from '../../types/polymorphic';
+import { ItemVariant, MenuItemOwnProps } from './MenuItem.types';
 
-export const MenuItem = ({
+const MenuItemImpl = ({
   variant = ItemVariant.Default,
   value,
   children,
   icon,
   rightIcon,
   ...rest
-}: MenuItemProps) => {
+}: MenuItemOwnProps) => {
   const isDangerVariant = variant === ItemVariant.Danger;
 
   return (
@@ -40,3 +41,8 @@ export const MenuItem = ({
     </Menu.Item>
   );
 };
+
+/** Type-level polymorphism over the same runtime — see the note on `Button`. */
+MenuItemImpl.displayName = 'MenuItem';
+
+export const MenuItem = polymorphic<MenuItemOwnProps, 'div'>(MenuItemImpl);

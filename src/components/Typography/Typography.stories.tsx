@@ -93,3 +93,29 @@ export const InlineCodeInTextStyles: Story = {
     );
   },
 };
+
+/**
+ * `as` swaps the rendered element **and** the props it accepts.
+ *
+ * This scale is a *type* scale, not a document outline. The two are chosen for
+ * different reasons — size by layout, heading level by structure — so `as` is
+ * how a call site keeps one while fixing the other. KWCAG 제목 제공 grades the
+ * level, and a screen reader's heading list is built from it; neither can see
+ * how large the text looks.
+ *
+ * `htmlFor` on the last line is a `<label>` prop, and it type-checks because
+ * `as="label"` carried it in. Before, `as="label"` rendered a label that no
+ * form control could be pointed at.
+ */
+export const AsElement: Story = {
+  render: () => (
+    <>
+      <H3 as="h2">h3 크기, 문서 구조상 h2</H3>
+      <Subtitle as="h2">제목이 맞을 때만 제목으로</Subtitle>
+      <Subtitle>보통은 문단으로 남는다</Subtitle>
+      <Text as="label" htmlFor="email">
+        이메일
+      </Text>
+    </>
+  ),
+};

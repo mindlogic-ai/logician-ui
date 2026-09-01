@@ -1,5 +1,134 @@
 # Changelog
 
+## 4.0.0-alpha.26
+
+### Patch Changes
+
+- f5a6bb8: Export the pieces `4.0.0-alpha.25` documented but did not ship.
+
+  alpha.25 made 19 components polymorphic and told consumers they could carry `as` through their own wrappers. They could not: three things never reached the package root.
+  - **`polymorphic` and `PolymorphicComponent`** — `src/index.ts` re-exported the module with `export type`, which cannot carry a value, so the helper function was unreachable. A consumer got `has no exported member named 'polymorphic'`.
+  - **Every `*OwnProps`** — declared in each `*.types.ts` but absent from the component barrels, so `CardOwnProps`, `ButtonOwnProps`, `ChipOwnProps` and the rest were unreachable too. `Button`, `IconButton` and `SeeMoreButton` route through `index.tsx` barrels that still listed only the old prop type.
+  - **The typography prop types** — the root exported `Text`, `Subtitle`, `H1`–`H5` and friends but none of their prop types, so a wrapper over `H3` or `Text` could not be typed at all.
+
+  All three were found the same way: by writing a real consumer wrapper against alpha.25. FactChat's `ClickableCard` needs `CardOwnProps` and `polymorphic` to carry `as="button"` through, and failed to compile on all four counts.
+
+  Also corrects the guidance in `polymorphic.ts`. It previously steered consumer wrappers toward `as unknown as PolymorphicComponent<…>`, which was reached backwards from a test failure — FactChat's review conventions ban type escape hatches outright. The failure was one line: the suites mocking this package route through a single shared mock, which needs `polymorphic: <T,>(Impl: T) => Impl`. Since this function is a type-level identity, that is not a stub — it is the implementation. Both options stay documented, with the tradeoff stated instead of a recommendation dressed up as one.
+
+  No runtime or type behaviour changes for anything that already compiled; this only widens what the entry point re-exports.
+
+## 4.0.0-alpha.25
+
+### Minor Changes
+
+- ed54d79: Make `as` carry the rendered element's props — a reusable mechanism, applied to 19 components.
+
+  `as` has always swapped what renders; it did not swap what type-checks. Chakra v3's prop types are bound to one element (`ButtonProps extends HTMLChakraProps<"button">`) and v2's polymorphic `ComponentWithAs` is gone, so `<Button as="a" href="/docs">` rendered an anchor while TypeScript still saw a `<button>` — and `href` was an error. Consumers reached for `@ts-expect-error`: FactChat carries 60 of them, 45 of which this retires across 33 files.
+
+  `asChild` remains the right tool when you own the markup, because the child types itself. It is the wrong tool for the "link-shaped button" case, where the consumer wants the component plus one extra prop, not a restructured call site with a nested child.
+
+  Applied to the components where swapping the element is a normal, safe thing to do: `Button`, `IconButton`, `MenuItem`, `Card`, `Badge`, `Chip`, `Tag`, `Container`, `SeeMoreButton`, `Link`, and the whole typography scale (`Text`, `Subtitle`, `Subtext`, `Caption`, `Overline`, `H1`–`H5`).
+
+  ```tsx
+  <Button as="a" href="/docs" target="_blank" rel="noreferrer">문서</Button>
+  <MenuItem value="admin" as={NextLink} href="/admin">관리자</MenuItem>
+  <Card clickable as="button" type="button">눌러서 자세히 보기</Card>
+  <H3 as="h2">h3 크기, 문서 구조상 h2</H3>
+  <Text as="label" htmlFor="email">이메일</Text>
+  <Container as="main" id="content">…</Container>
+  ```
+
+  Deliberately **not** applied to components whose element is their semantics — form widgets (`Checkbox`, `Radio`, `Switch`, `Slider`, `Select`, `Input`, `Textarea`, `PinInput`) and structural parts (`Table`/`Th`/`Td`/`Tr`, `Tree*`, `Tabs`, `Accordion`, `Modal`, `Popover`). Typing `as` there would make it easier to reach for, and reaching for it breaks the role, the keyboard behaviour, or the table/tree semantics that KWCAG grades. Two more are skipped for mechanical reasons: `Avatar` attaches sub-components with `Object.assign`, which the helper's return type would drop, and `Breadcrumb`'s root _is_ the `<nav>` landmark (the `as` a breadcrumb wants belongs on the link item, which consumers pass in).
+
+  Several of these are accessibility fixes as much as typing ones, and that is the main reason to go past the components with suppressions against them. A card whose whole surface is one target should _be_ a `<button>` rather than a `<div>` with an `onClick` — that is what puts it in the tab order and makes Enter/Space work. A menu item that navigates should be a real link. The typography scale is a _type_ scale, not a document outline, so `as` is how a call site keeps the size while fixing the heading level that KWCAG 제목 제공 actually grades. And `<Text as="label" htmlFor="email">` did not compile at all before — `as="label"` was accepted, but `htmlFor` was not, so the label could not be pointed at a control.
+
+  **The mechanism, not just the five components.** `PolymorphicProps`, `PolymorphicRef` and `polymorphic()` are exported. Applying them to another component is one line, and a consumer can carry `as` through its own wrapper the same way:
+
+  ```ts
+  const CardImpl = forwardRef<HTMLDivElement, CardOwnProps>(…);
+  CardImpl.displayName = 'Card';
+  export const Card = polymorphic<CardOwnProps, 'div'>(CardImpl);
+  ```
+
+  `forwardRef` erases generics — its signature is fixed at the type it was instantiated with — so re-declaring the call signature is the standard way around that, and `polymorphic()` is that cast in one place instead of a dozen lines per component. `displayName` deliberately stays on the implementation, where `react/display-name` can still see it.
+
+  Type-level only: runtime components, behaviour, `displayName` and rendered markup are untouched. Every `as` keeps its previous default (`'button'`, `'div'`, `'span'`), so the bare prop types mean exactly what they meant before and every existing call site keeps its type. Own props are also split out (`ButtonOwnProps`, `MenuItemOwnProps`, `CardOwnProps`, …) for wrappers that need them.
+
+  Where an element's props collide with the component's, the component wins — `color` stays a Chakra style prop rather than `<a>`'s deprecated presentational attribute — so a component's contract is never silently widened by the element it happens to render.
+
+  One call-site shape stops compiling, by design: spreading a runtime-conditional `as` (`...(cond ? { as: Link, href } : {})`) asks TypeScript to infer one element type for two different elements. Render the two branches explicitly instead.
+
+## 4.0.0-alpha.24
+
+### Patch Changes
+
+- ca533a3: Fix the selected horizontal `Tab` label failing AA contrast in dark mode.
+
+  `horizontalSelectedStyles` painted the selected label `primary.main`, which
+  resolves to `blue.300` (#4A79DC) in dark. That is 4.59:1 on the page background
+  (#0E1014) and only **4.19:1** on a raised surface (#181A20) — under the 4.5:1
+  that KWCAG 5.3.3 (텍스트 콘텐츠의 명도 대비) and WCAG AA ask of text.
+
+  The gap between those two numbers is why this went unnoticed for so long: the
+  selected tab cleared the bar on every full-page layout and failed it only when
+  a tab list rendered inside a modal or a popover. A consuming app's audit had
+  been green across 89 surfaces and turned red the first time a modal containing
+  tabs was added to the scan.
+
+  The label now uses the `.dark` end of the ramp in dark mode
+  (`{ base: 'primary.main', _dark: 'primary.dark' }` — `blue.200`, 6.68:1 on the
+  surface and 7.31:1 on the page), the same shape as the `Link` fix in
+  `4.0.0-alpha.22`. Light mode is untouched: `primary.main` is 6.62:1 on white.
+
+  The 2px underline deliberately keeps `primary.main`. It is a graphic, judged at
+  3:1, which 4.19:1 clears — moving it would be a visual change the standard does
+  not ask for.
+
+  `primary.main` itself is NOT re-pegged, and should not be: it is also a solid
+  fill under white labels (`Checkbox`, `Switch`, `Banner`), where white on
+  `blue.200` measures 2.60:1. This is the same reasoning that already produced
+  `secondary.main`'s dark step, which moved violet off `.300` at 4.29:1 for
+  exactly this reason. Blue never got the same treatment.
+
+  The steps are exported as `TAB_RAMP` so the contrast regression in
+  `a11y.kwcag.test.tsx` measures the tokens the component actually renders rather
+  than restating the arithmetic.
+
+  Also exports `LINK_RAMP` from `src/index.ts`. It was added to the Typography
+  barrel in `4.0.0-alpha.22` but never to the main one, which has left
+  `yarn lint` (`check-component-exports`) failing on `dev` since.
+
+## 4.0.0-alpha.23
+
+### Minor Changes
+
+- 9a248cf: Expose the dark-mode neutrals as an overridable `colors.grayDark` primitive scale.
+
+  The desaturated dark neutrals were inlined as hex literals inside the semantic tokens (the internal `desaturatedGray` table, plus the three a11y-lifted text steps on `slate.600`/`slate.700`/`fg.subtle`). Because they were literals rather than token references, a consumer merging its own config into `LogicianProvider` could retint light mode through `gray.*` but had no way to reach dark mode — dark surfaces stayed cool slate under any brand palette.
+
+  Those values now live in `colors.grayDark` (steps `0`–`1500`, plus `fg600`/`fg700`/`fgSubtle`), and every dark-mode neutral in the semantic layer — `slate.*` and the `_dark` arm of `bg.*`/`fg.*`/`border.*` — references `{colors.grayDark.N}`. A consumer can now override the dark neutral ramp exactly the way it overrides `blue.*` for the primary ramp.
+
+  Default rendering is unchanged: all 154 resolved semantic color values are byte-identical before and after.
+
+### Patch Changes
+
+- 8817a6d: Fix `Link`'s hover contrast in dark mode (KWCAG 5.3.3 · WCAG 1.4.3).
+
+  The hover was `{ base: 'primary.dark', _dark: 'primary.main' }` — "one step
+  darker", which is correct against a white page and backwards against a dark one,
+  where darker means _toward_ the background. Hovering a link in dark mode dropped
+  it from 6.68:1 to **4.19:1**, under the same 4.5:1 the resting colour clears.
+  The error variant did the same thing (`danger.main`, 4.26:1).
+
+  Now `primary.darker` / `danger.darker` — the step past `.dark` at both ends of
+  the ramp, so one token is right in both modes with no special-casing. Light is
+  unchanged at 11.98:1 and 10.83:1; dark becomes 10.68:1 and 10.34:1.
+
+  No scanner would have caught this: axe measures the resting state only, and the
+  contrast bar applies to text in every state a user can put it in. The ramp is
+  now exported as `LINK_RAMP` so the regression test asserts the tokens the
+  component actually uses, not just that some correct-looking hex passes.
+
 ## 4.0.0-alpha.22
 
 ### Minor Changes

@@ -1,10 +1,11 @@
 import { forwardRef } from 'react';
 import { Card as ChakraCard } from '@chakra-ui/react';
 
+import { polymorphic } from '../../types/polymorphic';
 import { clickableStyles, variantStyles } from './Card.styles';
-import { CardProps } from './Card.types';
+import { CardOwnProps } from './Card.types';
 
-export const Card = forwardRef<HTMLDivElement, CardProps>(
+const CardImpl = forwardRef<HTMLDivElement, CardOwnProps>(
   ({ clickable, variant = 'default', _hover, ...rest }, ref) => {
     const mergedHover = clickable
       ? { ...clickableStyles._hover, ..._hover }
@@ -39,4 +40,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
   }
 );
 
-Card.displayName = 'Card';
+/** Type-level polymorphism over the same runtime — see the note on `Button`. */
+CardImpl.displayName = 'Card';
+
+export const Card = polymorphic<CardOwnProps, 'div'>(CardImpl);

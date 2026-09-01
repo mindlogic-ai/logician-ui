@@ -3,8 +3,9 @@ import { Badge as ChakraBadge } from '@chakra-ui/react';
 
 import { focusRing } from '@/utils/focusRing';
 
+import { polymorphic } from '../../types/polymorphic';
 import { baseStyles, getChipStyles } from './Chip.styles';
-import { ChipProps } from './Chip.types';
+import { ChipOwnProps } from './Chip.types';
 
 /**
  * A chip component for displaying tags, labels, or status indicators.
@@ -20,9 +21,9 @@ import { ChipProps } from './Chip.types';
  * <Chip colorScheme="success" variant="outline">Completed</Chip>
  * ```
  */
-export const Chip = forwardRef(
+const ChipImpl = forwardRef(
   (
-    { colorScheme = 'primary', variant = 'soft', ...rest }: ChipProps,
+    { colorScheme = 'primary', variant = 'soft', ...rest }: ChipOwnProps,
     ref?: ForwardedRef<HTMLButtonElement>
   ) => {
     const styles = getChipStyles(colorScheme, variant);
@@ -39,4 +40,7 @@ export const Chip = forwardRef(
   }
 );
 
-Chip.displayName = 'Chip';
+ChipImpl.displayName = 'Chip';
+
+/** Type-level polymorphism over the same runtime — see `polymorphic`. */
+export const Chip = polymorphic<ChipOwnProps, 'span'>(ChipImpl);

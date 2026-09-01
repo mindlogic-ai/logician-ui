@@ -1,13 +1,15 @@
 'use client';
-import { Container as ChakraContainer, ContainerProps } from '@chakra-ui/react';
+import { Container as ChakraContainer } from '@chakra-ui/react';
 
+import { polymorphic } from '../../types/polymorphic';
+import { ContainerOwnProps } from './Container.types';
 import useContainerSize from './useContainerSize';
 
-export const Container = ({
+const ContainerImpl = ({
   style,
   disableResponsive,
   ...rest
-}: ContainerProps & { disableResponsive?: boolean }) => {
+}: ContainerOwnProps) => {
   const containerSize = useContainerSize();
   return (
     <ChakraContainer
@@ -19,3 +21,8 @@ export const Container = ({
     />
   );
 };
+
+ContainerImpl.displayName = 'Container';
+
+/** Type-level polymorphism over the same runtime — see `polymorphic`. */
+export const Container = polymorphic<ContainerOwnProps, 'div'>(ContainerImpl);

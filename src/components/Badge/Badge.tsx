@@ -1,8 +1,9 @@
 import { ForwardedRef, forwardRef } from 'react';
 import { Badge as ChakraBadge } from '@chakra-ui/react';
 
+import { polymorphic } from '../../types/polymorphic';
 import { baseStyles, variantStyles } from './Badge.styles';
-import { BadgeProps } from './Badge.types';
+import { BadgeOwnProps } from './Badge.types';
 
 /**
  * Badge component with color variants using the Golden Ratio color system.
@@ -17,9 +18,9 @@ import { BadgeProps } from './Badge.types';
  * <Badge variant="neutral">Draft</Badge>
  * ```
  */
-export const Badge = forwardRef(
+const BadgeImpl = forwardRef(
   (
-    { textTransform = 'none', variant = 'primary', ...rest }: BadgeProps,
+    { textTransform = 'none', variant = 'primary', ...rest }: BadgeOwnProps,
     ref?: ForwardedRef<HTMLButtonElement>
   ) => {
     return (
@@ -35,4 +36,7 @@ export const Badge = forwardRef(
   }
 );
 
-Badge.displayName = 'Badge';
+/** Type-level polymorphism over the same runtime — see the note on `Button`. */
+BadgeImpl.displayName = 'Badge';
+
+export const Badge = polymorphic<BadgeOwnProps, 'span'>(BadgeImpl);

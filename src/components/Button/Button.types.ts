@@ -1,4 +1,12 @@
+import type { ElementType } from 'react';
 import { ButtonProps as ChakraButtonProps } from '@chakra-ui/react';
+
+// Relative, NOT `@/types/polymorphic`. Path aliases survive into the emitted
+// `.d.ts`, where they are resolved against the CONSUMER's tsconfig — so an app
+// with its own `@/*` alias either binds this to its own file or fails to
+// resolve it and silently degrades the type to `any`. Measured: with the alias,
+// `<Button as="a" nonsense={1}>` stopped erroring in FactChat. See the PR body.
+import type { PolymorphicProps } from '../../types/polymorphic';
 
 /**
  * Button color palette - defines the semantic color family.
@@ -51,9 +59,9 @@ export type ButtonVariant = 'solid' | 'soft' | 'outline' | 'ghost';
  * <Button colorPalette="secondary" variant="outline">Cancel</Button>
  * ```
  */
-export type ButtonProps = Omit<
+export type ButtonOwnProps = Omit<
   ChakraButtonProps,
-  'variant' | 'colorScheme' | 'colorPalette' | 'leftIcon' | 'rightIcon'
+  'variant' | 'colorScheme' | 'colorPalette' | 'leftIcon' | 'rightIcon' | 'as'
 > & {
   /**
    * The color palette of the button (semantic color family).
@@ -84,3 +92,24 @@ export type ButtonProps = Omit<
    */
   lift?: boolean;
 };
+
+/**
+ * Props for `Button`, typed for whatever element `as` renders.
+ *
+ * Defaults to `'button'`, so `ButtonProps` on its own means exactly what it
+ * meant before this became polymorphic — every existing call site and every
+ * `ComponentProps<typeof Button>` keeps its type.
+ *
+ * `as` now carries the element's own props with it:
+ *
+ * ```tsx
+ * <Button as="a" href="/docs" target="_blank" rel="noreferrer">문서</Button>
+ * <Button as={Link} href="/admin" prefetch={false}>관리자</Button>
+ * ```
+ *
+ * Before, `as` swapped the rendered element but not the type — `href` was not a
+ * `<button>` prop, so consumers reached for `@ts-expect-error`. See
+ * `src/types/polymorphic.ts` for why `asChild` does not cover this case.
+ */
+export type ButtonProps<TElement extends ElementType = 'button'> =
+  PolymorphicProps<TElement, ButtonOwnProps>;
