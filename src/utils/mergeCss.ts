@@ -1,5 +1,5 @@
 import type { SystemStyleObject } from '@chakra-ui/react';
-import { merge } from 'lodash';
+import merge from 'lodash/merge';
 
 export const mergeCss = (
   ...styles: (SystemStyleObject | undefined | null | false)[]
