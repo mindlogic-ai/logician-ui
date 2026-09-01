@@ -369,16 +369,38 @@ export const buttonColorPaletteStyles: Record<
    * Neutral (Gray) color scheme
    */
   neutral: {
+    /**
+     * The INK action — the one high-emphasis fill in the system with no hue.
+     *
+     * Was `gray.700` under a white label, which failed AA in **both** modes and
+     * failed worse in the one nobody screenshots: white on `#737D96` measures
+     * **4.12:1** in light, and the semantic gray scale inverts, so in dark the
+     * same token resolves to `grayDark.fg700` `#8D919D` and the label lands at
+     * **3.15:1**. This was the only palette x variant combination in the system
+     * below the 4.5:1 text gate.
+     *
+     * "One step darker" does not fix it — `gray.800` is 5.32:1 light but
+     * **3.08:1** dark, i.e. worse, because darkening the light arm lightens the
+     * dark one. A neutral fill has to INVERT, not shift, which is exactly what
+     * `bg.inverse` / `fg.inverse` already do: ink under a near-white label on a
+     * light page, brand paper under an ink label on a dark one. Measured
+     * **15.11:1** and **15.88:1**, with the fill itself 15.49:1 / 16.36:1 clear
+     * of its canvas so it still reads as a control.
+     *
+     * `gray.1200` / `gray.1100` for hover and active for the same reason: both
+     * step AWAY from the resting fill toward the page in whichever mode is
+     * live, because they invert too. Labels stay 10.8:1 or better throughout.
+     */
     solid: {
-      borderColor: 'gray.700',
-      bgColor: 'gray.700', // #737D96
-      color: 'white',
+      borderColor: 'bg.inverse',
+      bgColor: 'bg.inverse',
+      color: 'fg.inverse',
       _hover: {
-        borderColor: 'gray.800',
-        bgColor: 'gray.800', // #616B85
+        borderColor: 'gray.1200',
+        bgColor: 'gray.1200',
       },
       _active: {
-        bgColor: 'gray.900', // #505A74
+        bgColor: 'gray.1100',
         scale: '0.97',
       },
     },

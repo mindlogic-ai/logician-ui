@@ -2,6 +2,7 @@ import { render } from '@testing-library/react';
 import axe from 'axe-core';
 import { beforeAll, describe, expect, it } from 'vitest';
 
+import { buttonColorPaletteStyles } from '@/components/Button/Button.styles';
 import { FileInput } from '@/components/FileInput';
 import { LogicianProvider } from '@/components/LogicianProvider';
 import { baseMarkdownComponents } from '@/components/Markdown/Markdown';
@@ -370,6 +371,21 @@ describe('브랜드 색 대비 — Link · Tab 램프', () => {
       base: colors.rose[900].value,
       _dark: colors.rose[100].value,
     },
+    // The ink steps. These INVERT rather than shift — that is the whole point,
+    // and the reason the neutral button and the selected tab can be one token
+    // in both modes instead of a two-arm ramp.
+    'fg.emphasized': {
+      base: colors.gray[1300].value,
+      _dark: colors.grayDark[200].value,
+    },
+    'bg.inverse': {
+      base: colors.gray[1300].value,
+      _dark: colors.grayDark[50].value,
+    },
+    'fg.inverse': {
+      base: colors.gray[0].value,
+      _dark: colors.grayDark[1400].value,
+    },
   };
 
   const resolve = (token: string, mode: 'base' | '_dark') => {
@@ -422,10 +438,10 @@ describe('브랜드 색 대비 — Link · Tab 램프', () => {
     // passed every full-page scan and failed the first time a tab list rendered
     // inside a modal. The stricter of the two surfaces is the one to hold.
     expect(
-      contrast(resolve(TAB_RAMP.label.base, 'base'), LIGHT_CANVAS)
+      contrast(resolve(TAB_RAMP.label, 'base'), LIGHT_CANVAS)
     ).toBeGreaterThanOrEqual(AA_BODY_TEXT);
     expect(
-      contrast(resolve(TAB_RAMP.label._dark, '_dark'), DARK_CANVAS)
+      contrast(resolve(TAB_RAMP.label, '_dark'), DARK_CANVAS)
     ).toBeGreaterThanOrEqual(AA_BODY_TEXT);
   });
 
@@ -440,6 +456,47 @@ describe('브랜드 색 대비 — Link · Tab 램프', () => {
     ).toBeGreaterThanOrEqual(AA_NON_TEXT);
     expect(
       contrast(resolve(TAB_RAMP.indicator, '_dark'), DARK_CANVAS)
+    ).toBeGreaterThanOrEqual(AA_NON_TEXT);
+  });
+
+  /**
+   * The regression this file did not have, and the defect it would have caught:
+   * `neutral` + `solid` shipped a white label on `gray.700`, which is 4.12:1 in
+   * light and 3.15:1 in dark. A neutral fill has to INVERT with the mode — a
+   * shift fixes one arm and breaks the other, which is exactly what the obvious
+   * "one step darker" does (5.32:1 light, 3.08:1 dark).
+   */
+  it('중립 solid 버튼의 레이블이 라이트·다크 양쪽에서 4.5:1 을 넘는다', () => {
+    const { bgColor, color } = buttonColorPaletteStyles.neutral.solid;
+
+    expect(
+      contrast(
+        resolve(color as string, 'base'),
+        resolve(bgColor as string, 'base')
+      )
+    ).toBeGreaterThanOrEqual(AA_BODY_TEXT);
+    expect(
+      contrast(
+        resolve(color as string, '_dark'),
+        resolve(bgColor as string, '_dark')
+      )
+    ).toBeGreaterThanOrEqual(AA_BODY_TEXT);
+  });
+
+  /**
+   * A fill that does not separate from its own page is a label floating in
+   * space. Ink on charcoal is the failure mode: a FIXED near-black would be
+   * ~1.2:1 against a dark canvas, which is why `bg.inverse` inverts.
+   */
+  it('중립 solid 버튼의 면이 양쪽 모드에서 캔버스와 3:1 이상 갈라진다', () => {
+    const AA_NON_TEXT = 3;
+    const { bgColor } = buttonColorPaletteStyles.neutral.solid;
+
+    expect(
+      contrast(resolve(bgColor as string, 'base'), LIGHT_CANVAS)
+    ).toBeGreaterThanOrEqual(AA_NON_TEXT);
+    expect(
+      contrast(resolve(bgColor as string, '_dark'), DARK_CANVAS)
     ).toBeGreaterThanOrEqual(AA_NON_TEXT);
   });
 });
