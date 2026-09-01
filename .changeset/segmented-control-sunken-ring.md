@@ -20,7 +20,7 @@ The fix follows the element's own contrast story:
     normally has no outline).
   - `InlineCode` — `border.default` ring (a chip is too small for a fill to
     register).
-- **Meter surfaces get a darker fill.** Their unfilled track *is* the information
+- **Meter surfaces get a darker fill.** Their unfilled track _is_ the information
   and a thin rail can't be read from an edge alone, so the fill must contrast.
   Introduces a new semantic token **`bg.track`** (`gray.300` light /
   `desaturatedGray[1200]` dark) for recessed control tracks that must read on any

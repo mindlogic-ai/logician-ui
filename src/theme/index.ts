@@ -7,6 +7,7 @@ import {
 
 import { colors, semanticTokens } from './colors';
 import { globalCss } from './global';
+import { animationStyles, durations, easings, keyframes } from './motion';
 import { tableSlotRecipe } from './recipes/table';
 
 /**
@@ -212,8 +213,17 @@ export const textStyles = defineTextStyles({
 const config = defineConfig({
   globalCss,
   theme: {
+    // The motion vocabulary, consumed as `animationStyle="feedback"` — the same
+    // composition slot `textStyles` uses, so a consuming app can remap a preset
+    // from its own config.
+    animationStyles,
+    keyframes,
     tokens: {
       colors,
+      // Merged with Chakra's own scales, not replacing them — see ./motion for
+      // why the durations carry a `motion.` prefix and the easings don't.
+      durations,
+      easings,
       fonts: {
         body: {
           value: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif',

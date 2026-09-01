@@ -2,6 +2,7 @@ import React from 'react';
 import { Dialog } from '@chakra-ui/react';
 
 import { ScaledContext } from '../../ScaledContext';
+import { modalAnimation } from '../Modal.styles';
 import { useModalContext } from '../ModalContext';
 import { ModalContentProps } from './ModalContent.types';
 
@@ -27,7 +28,15 @@ export const ModalContent = ({ children, ...rest }: ModalContentProps) => {
 
   return (
     <Dialog.Positioner>
-      <Dialog.Content mdDown={mobileStyles} {...rest}>
+      {/* Enters from slightly lower and smaller, leaves in half the time by
+          shrinking in place. Chakra's default preset already exits in half its
+          enter time; this keeps that ratio and adds the travel and the curve. */}
+      <Dialog.Content
+        animationStyle="presence"
+        css={modalAnimation}
+        mdDown={mobileStyles}
+        {...rest}
+      >
         <ScaledContext fontSize="14px" css={{ display: 'contents' }}>
           {children}
         </ScaledContext>

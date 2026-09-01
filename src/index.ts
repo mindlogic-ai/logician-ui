@@ -1,5 +1,6 @@
 // Core Components
 export * from './components/Accordion';
+export * from './components/Appear';
 export * from './components/Avatar';
 export * from './components/Badge';
 export * from './components/Banner';
@@ -12,11 +13,14 @@ export * from './components/Code';
 export * from './components/CodeTabs';
 export * from './components/Collapsible';
 export * from './components/ColorMode';
+export * from './components/Confetti';
 export * from './components/Container';
 export * from './components/CopyableCode';
+export * from './components/CountUp';
 export * from './components/DatePicker';
 export * from './components/ErrorFallback';
 export * from './components/ExpandableText';
+export * from './components/FlyTo';
 
 // File Components
 export * from './components/FileInput';
@@ -71,14 +75,18 @@ export * from './components/ProgressBar';
 export * from './components/RadialProgress';
 
 // Interactive Components
+export * from './components/Pulse';
 export * from './components/Radio';
+export * from './components/Reveal';
 export * from './components/ScaledContext';
 export * from './components/SeeMoreButton';
 export * from './components/SegmentedControl';
 export * from './components/SegmentedProgressBar';
 export * from './components/Select';
+export * from './components/Shake';
 export * from './components/Slider';
 export * from './components/Spinner';
+export * from './components/SwapTransition';
 export * from './components/Switch';
 
 // Layout Components
@@ -138,6 +146,25 @@ export {
   type SemanticColorToken,
   semanticTokens,
 } from './theme/colors';
+export {
+  animationStyles,
+  durations,
+  easings,
+  MOTION_DURATION_MS,
+  MOTION_DURATION_S,
+  MOTION_EASE,
+  MOTION_EASE_CSS,
+  MOTION_STAGGER_MAX,
+  type MotionDurationToken,
+  type MotionEaseToken,
+  type MotionStyleToken,
+} from './theme/motion';
+export { cubicBezier } from './utils/cubicBezier';
+export {
+  staggerDelayMs,
+  type StaggerProps,
+  staggerProps,
+} from './utils/staggerProps';
 
 // Shared Types
 export type {

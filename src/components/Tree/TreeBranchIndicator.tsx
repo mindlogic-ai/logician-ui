@@ -15,9 +15,9 @@ export const TreeBranchIndicator = forwardRef<
       display="inline-flex"
       alignItems="center"
       justifyContent="center"
-      transition="transform 0.15s ease-out"
+      animationStyle="feedback"
+      transitionProperty="transform"
       _open={{ transform: 'rotate(90deg)' }}
-      _motionReduce={{ transition: 'none' }}
       {...rest}
     >
       {children ?? <ChevronRightIcon boxSize="xs" />}

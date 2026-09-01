@@ -6,12 +6,129 @@ The Logician UI theme system extends Chakra UI's theming capabilities with the *
 
 ```
 src/theme/
-├── index.ts          # Main theme export
+├── index.ts          # Main theme export (also defines textStyles)
 ├── colors.ts         # Color palette & semantic tokens
+├── motion.ts         # Duration/easing scales & the animationStyle presets
 ├── font.ts           # Font family definitions
 ├── global.ts         # Global CSS styles
-└── Palette.stories.tsx  # Visual color palette reference
+├── Palette.stories.tsx  # Visual color palette reference
+└── Motion.stories.tsx   # Motion preset & scale reference
 ```
+
+## Motion
+
+**Never write a duration or a curve as a literal.** Everything below exists so
+that `300ms` and `cubic-bezier(...)` do not appear in component code.
+
+### Start here — which of the three
+
+```
+An element already on screen, one of its values changes   →  a preset
+An element appears / disappears / has to replay           →  a component
+You are using a library component (Switch, Card, …)       →  nothing. It is done.
+```
+
+The third is the common case. Reaching for `animationStyle` by hand means you
+are building something the library does not have.
+
+### Presets — `animationStyle`
+
+A name carries duration, curve and reduced-motion together, the way
+`textStyle="h3"` carries family, size, weight, leading and tracking.
+
+```tsx
+<Switch.Control
+  _checked={{ bg: 'primary.main' }}      // when it changes
+  animationStyle="feedback"              // how long, what curve
+  transitionProperty="background-color"  // what moves
+/>
+```
+
+Those three roles are separate and all three are required. A preset is a clock —
+it never knows *what* moves, so `transitionProperty` stays at the call site.
+
+| Preset | For |
+|---|---|
+| `press` | Contact — a button going down under the pointer |
+| `feedback` | Hover and state colour |
+| `travel` | Something moving to a new position or size |
+| `spring` | A physical flip, or two things crossing |
+| `presence` | A part with **both** an open and a closed state |
+| `stagger` | Siblings arriving in sequence (with `staggerProps(index)`) |
+| `composite` | Escape hatch — one element needing two different clocks |
+
+**Seven is the whole list and that is policy.** A motion with one caller belongs
+next to that caller, not here (see `Spinner.styles.ts`, `Checkbox.styles.ts`).
+Adding an eighth needs two real call sites that the existing seven cannot
+express.
+
+Three rules are inside the preset definitions, so no component has to remember
+them:
+
+- **`transitionProperty` defaults to `none`.** CSS defaults it to `all`, which
+  would animate every property on the element — including ones the call site
+  set. Forgetting the prop means nothing moves, which is visible; the CSS
+  default fails invisibly.
+- **`prefers-reduced-motion`** is handled. Loops are the exception and slow down
+  rather than stopping — a frozen spinner reads as a dead request.
+- **Enter is 300ms, exit is 150ms** for `presence`, enforced by a test.
+
+Three things `animationStyle` accepts and should never be given — all three
+compile, and all three are caught by lint instead of by types, because Chakra
+types the prop as `… | AnyString`:
+
+```tsx
+<Box animationStyle="feedbak" />                  // typo — silently does nothing
+<Box animationStyle="feedback" />                 // no scope — nothing moves
+<Box animationStyle={['travel', 'spring']} />     // read as RESPONSIVE BREAKPOINTS,
+                                                  // not as two motions
+```
+
+### Components — `Components/Motion/*` in Storybook
+
+CSS transitions need a before-value to interpolate from, so they cannot animate
+something that did not exist a moment ago, and cannot be replayed on demand.
+That is what these are for.
+
+| Component | For |
+|---|---|
+| `Pulse` | A value just landed — pop once |
+| `Shake` | Refusal. Never use it for emphasis |
+| `Appear` | One element entering on mount |
+| `Reveal` | A block opening underneath what is being read |
+| `FlyTo` | This went there — a ghost between two measured rects |
+| `Confetti` | One celebratory burst |
+| `CountUp` | A number rising |
+| `SwapTransition` | Content being replaced — steps, records |
+
+`Pulse` and `Shake` replay when `trigger` **changes**, and never on first render
+(a counter that mounts at 12 has not just become 12).
+
+They are not interchangeable with the presets and not a fallback for them. If
+the element can close, use `presence`; if siblings arrive with it, `stagger`.
+
+Each wraps differently, so check its TSDoc before putting one inside a `<tr>` or
+an Ark part that walks its own children: `Pulse` / `Shake` / `Appear` add one
+`div`, `Reveal` / `SwapTransition` add two, `FlyTo` portals, `Confetti` is an
+overlay, `CountUp` is the `<span>` itself.
+
+### Raw values — the escape hatch
+
+`durations` and `easings` are registered in the theme, so `motion.base` and
+`overshoot` resolve anywhere CSS does. Reach for the raw exports only where CSS
+cannot: `MOTION_DURATION_MS` / `MOTION_DURATION_S` / `MOTION_EASE` /
+`MOTION_EASE_CSS` for a third-party animation API, and `cubicBezier(curve)` to
+evaluate a house curve in JavaScript (a count-up that invents its own
+`easeOutCubic` lands on a different curve from the card beside it).
+
+Durations carry a `motion.` prefix so they sit alongside Chakra's scale rather
+than redefining `slow` / `slower`, which its `dialog`, `drawer` and `progress`
+recipes read — redefining a token you did not author retimes every component
+that reads it. There are deliberately no `motion.*` tokens for 150ms and 200ms:
+Chakra's `fast` and `moderate` are exactly those, and two names for one number
+is worse than remembering which scale to reach into.
+
+`Theme/Motion` in Storybook is the live version of this page.
 
 ## Golden Ratio Color System
 

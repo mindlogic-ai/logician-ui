@@ -25,9 +25,11 @@ const CardImpl = forwardRef<HTMLDivElement, CardOwnProps>(
         // edge in both modes. The `gradient` variant keeps its primary.light border.
         borderColor="border.default"
         borderRadius="lg"
+        // Was `transitionDuration="normal"` — a Chakra v2 token absent from v3.
+        // It fell through as a literal, `transition-duration: normal` is invalid
+        // CSS, and the whole declaration was dropped, so hover never transitioned.
+        animationStyle="feedback"
         transitionProperty="common"
-        transitionDuration="normal"
-        transitionTimingFunction="ease"
         p={8}
         {...(clickable ? { cursor: clickableStyles.cursor } : {})}
         {...variantStyles[variant]}

@@ -45,7 +45,16 @@ interface FieldBaseProps<T> {
   width?: string | number;
 }
 
-export type SelectFieldProps<T = string> = FieldBaseProps<T>;
+export interface SelectFieldProps<T = string> extends FieldBaseProps<T> {
+  /**
+   * Deal the options in one after another when the list opens.
+   *
+   * Deliberately absent from `ComboboxField`, which is the same list behind a
+   * filter: its options remount on every keystroke, so each character typed
+   * would re-deal the results the reader is trying to read.
+   */
+  stagger?: boolean;
+}
 
 export interface ComboboxFieldProps<T = string> extends FieldBaseProps<T> {
   /** Content shown when no option matches the typed query. */

@@ -75,6 +75,22 @@ export type ButtonOwnProps = Omit<
    * @default 'solid'
    */
   variant?: ButtonVariant;
+  /**
+   * Raises the button 1px on hover and puts a shadow under it, so it reads as
+   * lifting toward the pointer. Pressing sets it back down, under the existing
+   * `scale` press.
+   *
+   * Off by default and deliberately opt-in: a lift is emphasis, and a form of
+   * six buttons all lifting is noise. Use it where one button is the point of
+   * the screen — a primary call to action, a card that is itself a button — not
+   * as a house style.
+   *
+   * The shadow yields to the keyboard focus ring, which is also a `box-shadow`;
+   * a focused button that is also hovered keeps its ring and still lifts.
+   *
+   * @default false
+   */
+  lift?: boolean;
 };
 
 /**

@@ -3,6 +3,7 @@ import { SegmentGroup } from '@chakra-ui/react';
 
 import { mergeCss } from '@/utils/mergeCss';
 
+import { indicatorTravel } from './SegmentedControl.styles';
 import {
   SegmentedControlOption,
   SegmentedControlProps,
@@ -107,7 +108,12 @@ export const SegmentedControl = forwardRef<
         css
       )}
     >
-      <SegmentGroup.Indicator borderRadius={indicatorRadius} />
+      <SegmentGroup.Indicator
+        borderRadius={indicatorRadius}
+        // `travel`, delivered through custom properties — see the comment on
+        // `indicatorTravel` for why the ordinary preset cannot reach this part.
+        css={indicatorTravel}
+      />
       {items.map((item) => (
         <SegmentGroup.Item
           key={item.value}

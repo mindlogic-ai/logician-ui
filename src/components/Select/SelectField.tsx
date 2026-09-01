@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import { createListCollection, Portal } from '@chakra-ui/react';
 
+import { staggerProps } from '@/utils/staggerProps';
+
 import { Select } from './Select';
 import { SelectFieldProps } from './Select.types';
 
@@ -27,6 +29,7 @@ export function SelectField<T = string>({
   required,
   name,
   width = 'full',
+  stagger = false,
 }: SelectFieldProps<T>) {
   const collection = useMemo(
     () =>
@@ -86,8 +89,12 @@ export function SelectField<T = string>({
       <Portal>
         <Select.Positioner>
           <Select.Content>
-            {options.map((option) => (
-              <Select.Item item={option} key={String(option.value)}>
+            {options.map((option, index) => (
+              <Select.Item
+                item={option}
+                key={String(option.value)}
+                {...(stagger ? staggerProps(index) : {})}
+              >
                 <Select.ItemText>{option.label}</Select.ItemText>
                 <Select.ItemIndicator />
               </Select.Item>

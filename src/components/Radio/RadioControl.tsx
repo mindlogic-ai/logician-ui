@@ -3,6 +3,8 @@ import { RadioGroup, RadioGroupItemControlProps } from '@chakra-ui/react';
 
 import { focusRing } from '@/utils/focusRing';
 
+import { dotPop } from './Radio.styles';
+
 export const RadioControl = forwardRef<
   HTMLDivElement,
   RadioGroupItemControlProps
@@ -20,8 +22,19 @@ export const RadioControl = forwardRef<
   const indicatorId = useId();
 
   return (
-    <RadioGroup.ItemControl ref={ref} {...focusRing} {...props}>
-      <RadioGroup.ItemIndicator id={indicatorId} />
+    <RadioGroup.ItemControl
+      ref={ref}
+      // The outer ring is fully covered by the indicator below, but it carries
+      // the same checked fill — left untimed it would snap behind the one that
+      // eases.
+      animationStyle="feedback"
+      transitionProperty="background-color, border-color"
+      {...focusRing}
+      {...props}
+    >
+      {/* `ItemIndicator` is the mark that actually holds `.dot`; it renders its
+          own `ItemControl` internally, which is why this is nested. */}
+      <RadioGroup.ItemIndicator id={indicatorId} css={dotPop} />
     </RadioGroup.ItemControl>
   );
 });

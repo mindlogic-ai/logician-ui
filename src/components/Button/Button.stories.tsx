@@ -1,4 +1,12 @@
-import { Box, Flex, VStack, HStack, Text, Grid, GridItem } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  VStack,
+  HStack,
+  Text,
+  Grid,
+  GridItem,
+} from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
 import { Sparkles } from '../Icon';
@@ -386,6 +394,44 @@ export const GhostVariant: Story = {
 };
 
 /**
+ * `lift` raises the button 1px toward the pointer on hover and puts a shadow
+ * under it; pressing sets it back down under the existing `scale`.
+ *
+ * Off by default on purpose. A lift is emphasis, and a row of six lifting
+ * buttons is noise — use it where one button is the point of the screen.
+ *
+ * The shadow is a `filter: drop-shadow`, not a `box-shadow`: the keyboard focus
+ * ring is a box-shadow and Chakra emits `:hover` after `:focus-visible`, so a
+ * box-shadow here would eat the ring on a button that is both focused and
+ * hovered. Tab to these and then hover them to check.
+ */
+export const Lift: Story = {
+  render: () => (
+    <VStack align="flex-start" gap={6} p={4}>
+      <HStack gap={4}>
+        <Button colorPalette="primary" variant="solid" lift>
+          시작하기
+        </Button>
+        <Button colorPalette="primary" variant="solid">
+          기본 (lift 없음)
+        </Button>
+      </HStack>
+      <HStack gap={4}>
+        <Button colorPalette="neutral" variant="outline" lift>
+          Outline
+        </Button>
+        <Button colorPalette="primary" variant="soft" lift>
+          Soft
+        </Button>
+        <Button colorPalette="primary" variant="solid" lift disabled>
+          Disabled
+        </Button>
+      </HStack>
+    </VStack>
+  ),
+};
+
+/**
  * `as` swaps the rendered element **and** the props it accepts.
  *
  * A link-shaped button is a real pattern — a call to action that navigates
@@ -414,5 +460,6 @@ export const AsLink: Story = {
         새 탭에서 열기
       </Button>
     </Flex>
+
   ),
 };

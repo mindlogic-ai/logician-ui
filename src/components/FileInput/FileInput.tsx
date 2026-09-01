@@ -85,7 +85,10 @@ export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
             align="center"
             bgColor="color-mix(in srgb, var(--chakra-colors-bg-surface) 85%, transparent)"
             opacity={bgImage ? 0 : 1}
-            transition="ease-in"
+            // Was `transition="ease-in"` — a shorthand with only a timing
+            // function resolves to 0s, so the hover fade snapped in one frame.
+            animationStyle="feedback"
+            transitionProperty="opacity"
             _groupHover={{ opacity: 1 }} // Set opacity to 1 on parent hover
           >
             {isLoading ? (

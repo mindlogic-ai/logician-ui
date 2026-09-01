@@ -17,7 +17,7 @@ export const SectionLoader = ({
       align="center"
       justify="center"
       bg="bg.canvas"
-      transition="0.3 opacity ease"
+      transition="0.3s opacity ease"
       zIndex={9999}
       {...rest}
     >
