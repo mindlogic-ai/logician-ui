@@ -14,29 +14,33 @@ export const verticalStyles = {
  * the contrast regression in `src/components/a11y.kwcag.test.tsx` measures what
  * this component actually renders rather than an arithmetic restatement of it.
  *
- * `label` is mode-aware for the same reason `LINK_RAMP` is. `primary.main`
- * resolves to `blue.300` (#4A79DC) in dark, which is 4.59:1 on the page
- * background (#0E1014) but only **4.19:1** on a raised surface (#181A20) — so
- * the selected tab cleared AA on a full-page layout and failed it the moment
- * the same tab list rendered inside a modal or a popover. KWCAG 5.3.3
- * (텍스트 콘텐츠의 명도 대비) asks 4.5:1 of text, and this is text. The `.dark`
- * end of the ramp is `blue.200` (#7DA0E8): 6.68:1 on the surface, 7.31:1 on the
- * page. Light is untouched — `primary.main` is 6.62:1 on white.
+ * **A selected tab is a PLACE, not a value.** It answers "where am I", which is
+ * the same question the app nav rail answers — so it is carried by ink and
+ * weight rather than by the brand hue. Colour is reserved for what a control
+ * MEANS (primary action, danger, success); spending it on chrome is what stops
+ * a state colour from registering when it appears.
  *
- * `indicator` stays `primary.main` deliberately. The 2px underline is a
- * GRAPHIC, judged at 3:1, which 4.19:1 clears; moving it would be a visual
- * change the standard does not ask for.
+ * Ink also retires the defect the previous ramp was written around. The old
+ * `primary.main` label was 4.59:1 on the dark PAGE but only **4.19:1** on a
+ * raised surface, so a tab list passed every full-page scan and failed the
+ * first time it rendered inside a modal or a popover. `fg.emphasized` is the
+ * near-black/near-white step by construction — **15.49:1** on the light canvas
+ * and **13.62:1** on the dark raised surface — so no surface it can land on is
+ * marginal, and the mode-aware two-arm ramp is no longer needed.
  *
- * `primary.main` itself is not re-pegged, and should not be: it is also a solid
- * fill under white labels (`Checkbox`, `Switch`, `Banner`), where white on
- * `blue.200` measures 2.60:1. The same reasoning already produced
- * `secondary.main`'s `_dark` step — see its note in `theme/colors.ts`, which
- * moved violet off `.300` at 4.29:1 for exactly this. Blue never got the same
- * treatment.
+ * The indicator moves with the label. It was left on `primary.main` because a
+ * 2px underline is a GRAPHIC judged at 3:1, which the old value cleared — but
+ * that argument only justified LEAVING it, and an azure bar under an ink label
+ * is the half-migrated look.
+ *
+ * `primary.main` itself is not re-pegged, and should not be: it is a solid fill
+ * under white labels (`Checkbox`, `Switch`, `Banner`) where white on
+ * `blue.200` measures 2.60:1. Form controls keep the brand hue on purpose —
+ * a checkbox is a VALUE, not a place.
  */
 export const TAB_RAMP = {
-  label: { base: 'primary.main', _dark: 'primary.dark' },
-  indicator: 'primary.main',
+  label: 'fg.emphasized',
+  indicator: 'fg.emphasized',
 } as const;
 
 export const horizontalSelectedStyles = {
@@ -55,8 +59,11 @@ export const horizontalSelectedStyles = {
 };
 
 export const verticalSelectedStyles = {
-  backgroundColor: 'primary.extralight', // #E8EEFB
-  color: 'primary.dark', // #0D317D
+  // Neutral fill, not a brand tint, for the same reason the label is ink: the
+  // vertical tab rail is navigation chrome. `bg.muted` inverts with the mode,
+  // where `primary.extralight` was a fixed light wash.
+  backgroundColor: 'bg.muted',
+  color: 'fg.emphasized',
   fontWeight: 'bold',
   _after: { content: 'none' },
   _before: {
