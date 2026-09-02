@@ -132,3 +132,98 @@ export const Direction: Story = {
     );
   },
 };
+
+/**
+ * The two shapes that broke in the product, side by side — click both.
+ *
+ * Neither was reachable from the demos above, which is why they shipped. Those
+ * change the key on every click and sit in ordinary flow; the app did neither.
+ * A story is the author's idea of how a component is used, and these two are
+ * what the call sites actually did.
+ *
+ * **Left — content that changes without a new key.** `transitionKey` is fixed,
+ * and picking an option only re-renders. The first version rendered a *copy* of
+ * `children` held in state and refreshed it from an effect keyed on
+ * `transitionKey`, so a render like this never reached the screen: the option
+ * stayed unpicked and the panel read as dead.
+ *
+ * **Right — a full-height pane with a bar pinned under it.** The wrapper is told
+ * to fill (`display="flex" flex={1} minH={0}`) so the bar sits on the bottom
+ * edge. The first version put the content one element further in than those
+ * props, so the fill stopped short, the pane sized to its content, and the bar
+ * rode up with dead space beneath it.
+ *
+ * Both should now behave: the option fills in, and the bar stays at the bottom
+ * through a swap.
+ */
+export const CallSiteShapes: Story = {
+  render: () => {
+    const [picked, setPicked] = useState<string | null>(null);
+    const [step, setStep] = useState(0);
+
+    return (
+      <HStack align="stretch" gap={8} p={4} h="360px">
+        <Stack flex={1} gap={3} minW={0}>
+          <Subtext color="fg.muted" mb={0}>
+            키 고정 · 내용만 변경
+          </Subtext>
+          <SwapTransition transitionKey="fixed">
+            <Card p={4} variant="default">
+              <Text fontWeight="600" mb={3}>
+                딥러닝 기반 AI의 특징은?
+              </Text>
+              <Stack gap={2}>
+                {['많은 데이터를 학습한다', '인터넷 없이 작동한다'].map((o) => (
+                  <Button
+                    key={o}
+                    size="sm"
+                    variant={picked === o ? 'solid' : 'outline'}
+                    colorPalette={picked === o ? 'primary' : 'neutral'}
+                    onClick={() => setPicked(o)}
+                  >
+                    {o}
+                  </Button>
+                ))}
+              </Stack>
+            </Card>
+          </SwapTransition>
+        </Stack>
+
+        <Stack
+          flex={1}
+          minW={0}
+          gap={0}
+          borderWidth="1px"
+          borderColor="border.default"
+          borderRadius="md"
+          overflow="hidden"
+        >
+          <Box p={3} borderBottomWidth="1px" borderColor="border.subtle">
+            <Subtext mb={0}>전체 높이 페인 · 바닥에 붙은 액션 바</Subtext>
+          </Box>
+          <SwapTransition
+            transitionKey={step}
+            display="flex"
+            flexDirection="column"
+            flex={1}
+            minH={0}
+          >
+            <Box p={4} flex={1} minH={0}>
+              <Text fontWeight="600" mb={1}>
+                {STEPS[step % STEPS.length].title}
+              </Text>
+              <Subtext color="fg.muted" mb={0}>
+                {STEPS[step % STEPS.length].body}
+              </Subtext>
+            </Box>
+          </SwapTransition>
+          <Box p={3} borderTopWidth="1px" borderColor="border.subtle">
+            <Button size="sm" w="100%" onClick={() => setStep((s) => s + 1)}>
+              다음 단계
+            </Button>
+          </Box>
+        </Stack>
+      </HStack>
+    );
+  },
+};
