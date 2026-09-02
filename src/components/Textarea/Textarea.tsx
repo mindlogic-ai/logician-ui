@@ -1,4 +1,11 @@
-import { ChangeEvent, forwardRef, useEffect, useState } from 'react';
+import {
+  ChangeEvent,
+  CompositionEvent,
+  forwardRef,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Textarea as ChakraTextarea } from '@chakra-ui/react';
 
 import { mergeCss } from '@/utils/mergeCss';
@@ -10,6 +17,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     {
       placeholder,
       onChange,
+      onCompositionStart,
+      onCompositionEnd,
       value: propValue,
       _focusVisible,
       _hover,
@@ -27,16 +36,77 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       string | number | readonly string[] | undefined
     >(propValue);
 
+    const isComposing = useRef(false);
+    /** The latest value from outside, including one that arrives mid-composition. */
+    const externalValue = useRef(propValue);
+    /** What the outside value was when the current composition opened. */
+    const externalValueAtCompositionStart = useRef(propValue);
+    /**
+     * The text the node held when a composition just ended. Browsers often fire
+     * a trailing `input` carrying exactly that text, which would emit the same
+     * change twice; the next change matching this is swallowed.
+     */
+    const textAtCompositionEnd = useRef<string | null>(null);
+
+    // Adopt the outside value only *between* compositions. Writing `.value`
+    // onto the node while an IME composition is open ends that composition:
+    // the half-built jamo is left behind as literal text and the finished
+    // syllable lands on top of it (`학사지원` typed → `학사ㅈ지원`). A write
+    // that lands mid-composition is deferred, not discarded — see
+    // handleCompositionEnd.
     useEffect(() => {
+      externalValue.current = propValue;
+      if (isComposing.current) return;
       setCurrentValue(propValue);
     }, [propValue]);
 
     const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+      // The trailing `input` a browser fires right after `compositionend`
+      // carries text this component has already emitted.
+      const alreadyEmitted = textAtCompositionEnd.current;
+      textAtCompositionEnd.current = null;
+      if (!isComposing.current && alreadyEmitted === e.target.value) return;
+
       setCurrentValue(e.target.value);
+
+      // Mid-composition: display only. Emitting would let the consumer write
+      // the value back and end the composition.
+      if (isComposing.current) return;
 
       if (onChange) {
         onChange(e);
       }
+    };
+
+    const handleCompositionStart = (
+      e: CompositionEvent<HTMLTextAreaElement>
+    ) => {
+      isComposing.current = true;
+      externalValueAtCompositionStart.current = externalValue.current;
+      if (onCompositionStart) onCompositionStart(e);
+    };
+
+    const handleCompositionEnd = (e: CompositionEvent<HTMLTextAreaElement>) => {
+      isComposing.current = false;
+      const node = e.currentTarget;
+      textAtCompositionEnd.current = node.value;
+
+      if (externalValue.current !== externalValueAtCompositionStart.current) {
+        // Something outside moved the value while the syllable was in flight —
+        // a form reset, a filter clear. Refusing it during the composition was
+        // about not breaking the IME, not about ignoring it, so apply it now.
+        setCurrentValue(externalValue.current);
+      } else {
+        setCurrentValue(node.value);
+        // `compositionend`'s target is the same textarea node, so
+        // `event.target.value` / `event.currentTarget.value` are the finished
+        // text the consumer needs.
+        if (onChange) {
+          onChange(e as unknown as ChangeEvent<HTMLTextAreaElement>);
+        }
+      }
+
+      if (onCompositionEnd) onCompositionEnd(e);
     };
 
     return (
@@ -45,6 +115,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         placeholder={placeholder}
         value={currentValue}
         onChange={handleChange}
+        onCompositionStart={handleCompositionStart}
+        onCompositionEnd={handleCompositionEnd}
         disabled={disabled}
         readOnly={readOnly}
         data-invalid={invalid || undefined}
