@@ -15,8 +15,11 @@ import { ShakeProps } from './Shake.types';
  * shake refuses. A shake used as emphasis reads as an error the reader then goes
  * looking for.
  *
- * Replays the same way `Pulse` does — a changed `key` is a new element, and a
- * new element runs its animation from the top. The first render never shakes.
+ * Replays the same way `Pulse` does — two byte-identical keyframes alternating
+ * by play count, because a CSS animation restarts when its name changes. The
+ * DOM is left alone, which matters more here than anywhere: a shake fires on a
+ * refusal, so the earlier `key`-driven replay took the keyboard focus of the
+ * person who had just been told no. The first render never shakes.
  *
  * **Never let this be the only signal.** It is removed entirely under reduced
  * motion, so for some readers nothing happens at all; pair it with colour, an
@@ -55,12 +58,11 @@ export const Shake = forwardRef(
         ref={ref}
         display="inline-flex"
         {...rest}
-        key={plays.current}
         css={
           plays.current === 0
             ? css
             : mergeCss(
-                shakeX,
+                shakeX(plays.current),
                 distance === undefined
                   ? undefined
                   : { '--shake-distance': `${distance}px` },

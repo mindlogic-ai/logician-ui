@@ -19,11 +19,24 @@ import type { SystemStyleObject } from '@chakra-ui/react';
  * the eye to has already changed by the time this plays, so nothing is lost but
  * the emphasis.
  */
-export const pulsePop: SystemStyleObject = {
-  animationName: 'pulse-pop',
+/**
+ * A function of the play count, because the *name* is what restarts it.
+ *
+ * A CSS animation replays when `animation-name` changes, so alternating between
+ * two byte-identical keyframes restarts the pop on every trigger without
+ * touching the DOM. The earlier version restarted it by changing the React
+ * `key`, which remounts the subtree — and a remount throws away whatever was
+ * inside it: the user's focus (measured: it lands on `<body>`), any uncontrolled
+ * input state, and any child animation mid-flight. A pop that draws the eye to a
+ * changed value must not also move the keyboard out from under someone, and
+ * `Shake` is worse on this axis than `Pulse` is: it fires on a rejected answer,
+ * which is exactly when a keyboard user is mid-interaction.
+ */
+export const pulsePop = (play: number): SystemStyleObject => ({
+  animationName: play % 2 === 0 ? 'pulse-pop-alt' : 'pulse-pop',
   animationDuration: 'motion.slow',
   animationTimingFunction: 'overshoot',
   animationFillMode: 'both',
   transformOrigin: 'center',
   _motionReduce: { animationName: 'none' },
-};
+});

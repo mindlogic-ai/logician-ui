@@ -16,11 +16,16 @@ import type { SystemStyleObject } from '@chakra-ui/react';
  * the only signal. Pair it with colour, an icon, or copy that says the same
  * thing, because for some readers this simply will not happen.
  */
-export const shakeX: SystemStyleObject = {
-  animationName: 'shake-x',
+/**
+ * A function of the play count — see `pulsePop` for why. The stake is higher
+ * here: a shake fires on a refusal, so the remount the earlier version used to
+ * replay it would drop the keyboard focus of the person who just got told no.
+ */
+export const shakeX = (play: number): SystemStyleObject => ({
+  animationName: play % 2 === 0 ? 'shake-x-alt' : 'shake-x',
   animationDuration: 'motion.base',
   animationTimingFunction: 'standard',
   animationFillMode: 'both',
   transformOrigin: 'center',
   _motionReduce: { animationName: 'none' },
-};
+});

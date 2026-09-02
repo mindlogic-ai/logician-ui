@@ -8,17 +8,18 @@ import { Pulse } from '../Pulse';
 import { Shake } from '../Shake';
 
 /**
- * `Pulse` and `Shake` replay by changing a `key`, which means the subtree they
- * wrap is **remounted** on every trigger. That is the mechanism, not an
- * accident — a changed key is a new element and a new element runs its
- * animation from the top — but it has a consequence worth pinning, because the
- * framer-motion implementations these replaced drove an imperative control and
- * never remounted anything.
+ * `Pulse` and `Shake` replay **without remounting**, and these hold that down.
  *
- * A remount discards a child's *internal* state. Controlled children are safe
- * (their value lives in the parent, which is the ordinary case and the one
- * FactChat's quiz options use); uncontrolled ones are not. These tests state
- * which is which so the contract is visible rather than discovered.
+ * The first version restarted the animation by changing the React `key`, which
+ * is the cheapest way to replay a CSS animation and also throws away the whole
+ * subtree. Measured cost: focus landed on `<body>`, uncontrolled inputs reset,
+ * and any child animation mid-flight started over. `Shake` made it worst — it
+ * fires on a refusal, so it took the keyboard away from the person who had just
+ * been told no.
+ *
+ * Now the *name* changes instead: two byte-identical keyframes, alternating by
+ * play count. CSS restarts an animation whose name changed, and the DOM is left
+ * alone.
  */
 const wrap = (ui: React.ReactNode) =>
   render(<ChakraProvider value={system}>{ui}</ChakraProvider>);
@@ -54,10 +55,8 @@ describe('trigger-driven replay and child state', () => {
     expect(screen.getByLabelText('controlled')).toHaveValue('typed');
   });
 
-  it('discards an UNCONTROLLED child state on replay — known cost of the key', () => {
-    // Documented rather than fixed. Making the replay preserve it would mean
-    // not remounting, which is the whole replay mechanism; the answer for a
-    // caller that needs both is to lift the state above the wrapper.
+  it('keeps an uncontrolled child intact across a replay', () => {
+    // The regression this replaced: a `key`-driven replay reset it.
     const Harness = () => {
       const [count, setCount] = useState(0);
       return (
@@ -78,7 +77,61 @@ describe('trigger-driven replay and child state', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'bump' }));
 
-    expect(screen.getByLabelText('uncontrolled')).toHaveValue('');
+    expect(screen.getByLabelText('uncontrolled')).toHaveValue('typed');
+  });
+
+  it('keeps keyboard focus inside the subtree across a replay', () => {
+    // The sharpest form of the same regression, and the reason it is a defect
+    // rather than a documented cost: `Shake` fires on a rejected answer, so a
+    // remount here moves the keyboard out from under someone mid-interaction.
+    // Their next Tab would start from the top of the page.
+    const Harness = () => {
+      const [n, setN] = useState(0);
+      return (
+        <>
+          <button onClick={() => setN((c) => c + 1)}>reject</button>
+          <Shake trigger={n}>
+            <input aria-label="answer" />
+          </Shake>
+        </>
+      );
+    };
+
+    wrap(<Harness />);
+    const input = screen.getByLabelText('answer');
+    input.focus();
+
+    fireEvent.click(screen.getByRole('button', { name: 'reject' }));
+
+    expect(document.activeElement).toBe(screen.getByLabelText('answer'));
+  });
+
+  it('replays by changing the animation name, not by remounting', () => {
+    // The mechanism itself, so a later "simplification" back to a key fails.
+    const Harness = ({ n }: { n: number }) => (
+      <Pulse trigger={n}>
+        <span>value</span>
+      </Pulse>
+    );
+
+    const { container, rerender } = wrap(<Harness n={0} />);
+    const node = container.firstElementChild;
+
+    const names: string[] = [];
+    for (const n of [1, 2, 3]) {
+      rerender(
+        <ChakraProvider value={system}>
+          <Harness n={n} />
+        </ChakraProvider>
+      );
+      names.push(getComputedStyle(container.firstElementChild!).animationName);
+    }
+
+    // Same DOM node throughout — nothing was thrown away.
+    expect(container.firstElementChild).toBe(node);
+    // And a different name each time, which is what restarts it.
+    expect(names[0]).not.toBe(names[1]);
+    expect(names[1]).not.toBe(names[2]);
   });
 
   it('does not remount before the first trigger change', () => {
