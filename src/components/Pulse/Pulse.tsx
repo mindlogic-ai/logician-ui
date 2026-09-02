@@ -12,10 +12,15 @@ import { PulseProps } from './Pulse.types';
  *
  * Pure CSS. The obvious implementation reaches for an animation library, since
  * "replay this on demand" is what their imperative controls are for, but CSS
- * already has the mechanism: an element whose `key` changes is a *new* element,
- * and a new element runs its animation from the top. That is the same trick the
- * `stagger` preset uses to replay on reopen, and it is why this needs no
- * dependency, no ref plumbing and no effect.
+ * already has the mechanism: an animation restarts when its **name** changes, so
+ * this alternates between two byte-identical keyframes. No dependency, no ref
+ * plumbing, no effect.
+ *
+ * Not a changed React `key`, which also restarts it and was how this shipped
+ * first. A new key is a new element, so the whole subtree is thrown away and
+ * rebuilt — measured cost: keyboard focus lands on `<body>`, uncontrolled inputs
+ * reset, child animations restart. A pop that draws the eye to a value must not
+ * also move the keyboard out from under someone.
  *
  * The first render never pops. A counter that mounts already at 12 has not just
  * become 12, and an interface that celebrates its own initial paint is noise.
@@ -58,18 +63,12 @@ export const Pulse = forwardRef(
         ref={ref}
         display="inline-flex"
         {...rest}
-        // Remounts on every change, which restarts the animation. `plays` is 0
-        // until the first change, so the initial mount renders the branch that
-        // has no animation on it at all.
-        key={plays.current}
         css={
           plays.current === 0
             ? css
             : mergeCss(
-                {
-                  ...pulsePop,
-                  ...(peak === undefined ? {} : { '--pulse-peak': peak }),
-                },
+                pulsePop(plays.current),
+                peak === undefined ? undefined : { '--pulse-peak': peak },
                 css
               )
         }

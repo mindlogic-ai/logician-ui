@@ -479,15 +479,14 @@ animationTimingFunction: 'standard',`}
 );
 
 // framer-motion useAnimationControls`}
-        after={`// key가 바뀌면 새 요소 = 애니메이션 재생.
-// stagger 프리셋이 재열림을 처리하는 방법과 같습니다
-key={plays.current}
+        after={`// 이름이 바뀌면 애니메이션이 재시작합니다.
+// 내용이 같은 keyframe 두 개를 번갈아 씁니다
+animationName: play % 2 ? 'pulse-pop' : 'pulse-pop-alt',
 
 // Pulse.styles.ts
-animationName: 'pulse-pop',
 animationDuration: 'motion.slow',      // 500ms
 animationTimingFunction: 'overshoot',`}
-        verdict="값 동일. 「명령형으로 다시 재생」이 애니메이션 라이브러리를 부르는 대표적인 이유인데, CSS에는 이미 방법이 있습니다 — key가 바뀐 요소는 새 요소고, 새 요소는 애니메이션을 처음부터 돌립니다."
+        verdict="값 동일. 「명령형으로 다시 재생」이 애니메이션 라이브러리를 부르는 대표적인 이유인데, CSS에는 이미 방법이 있습니다 — animation-name이 바뀌면 재시작합니다. 처음에는 React key를 바꿔서 재생했고 그것도 재시작시키지만, subtree를 통째로 버리는 방식이라 안에 있던 포커스와 비제어 입력값을 함께 잃었습니다. 이름만 바꾸면 DOM은 그대로입니다."
         demo={
           <Pulse trigger={0} display="block">
             <Subtext color="fg.muted" mb={0}>

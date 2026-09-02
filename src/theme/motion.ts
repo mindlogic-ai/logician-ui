@@ -445,6 +445,14 @@ export const keyframes = {
     '60%': { translate: 'calc(var(--shake-distance, 6px) * -0.6) 0' },
     '80%': { translate: 'calc(var(--shake-distance, 6px) * 0.6) 0' },
   },
+  /** Identical to `shake-x` — see `pulse-pop-alt` for why there are two. */
+  'shake-x-alt': {
+    '0%, 100%': { translate: '0 0' },
+    '20%': { translate: 'calc(var(--shake-distance, 6px) * -1) 0' },
+    '40%': { translate: 'var(--shake-distance, 6px) 0' },
+    '60%': { translate: 'calc(var(--shake-distance, 6px) * -0.6) 0' },
+    '80%': { translate: 'calc(var(--shake-distance, 6px) * 0.6) 0' },
+  },
 
   // Opening a block out of nothing, through the grid track rather than through
   // `height`. `height: auto` is not interpolable, which is why the framer-motion
@@ -483,6 +491,20 @@ export const keyframes = {
   // Overshoot and settle. `scale` rather than `transform: scale()` so a call
   // site that is already translating the element keeps its translate.
   'pulse-pop': {
+    '0%': { scale: '1' },
+    '50%': { scale: 'var(--pulse-peak, 1.12)' },
+    '100%': { scale: '1' },
+  },
+  /**
+   * Byte-identical to `pulse-pop`, and that is the whole point.
+   *
+   * A CSS animation restarts when its *name* changes. `Pulse` alternates
+   * between the two on each replay, which restarts the pop without remounting
+   * anything — the earlier approach, a changed React `key`, threw away the
+   * subtree and with it the user's focus and any uncontrolled state inside.
+   * Two names is the price of not doing that.
+   */
+  'pulse-pop-alt': {
     '0%': { scale: '1' },
     '50%': { scale: 'var(--pulse-peak, 1.12)' },
     '100%': { scale: '1' },
