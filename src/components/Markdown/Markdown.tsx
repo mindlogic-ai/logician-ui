@@ -13,6 +13,7 @@ import { Code } from '../Code';
 import { InlineCode } from '../InlineCode';
 import { Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '../Table';
 import { H1, H2, H3, H4, H5, Link, Subtitle, Text } from '../Typography';
+import { remarkTrimAutolink } from '../../utils/remarkTrimAutolink';
 import MarkdownStyles from './Markdown.module.css';
 import { MarkdownProps } from './Markdown.types';
 
@@ -131,6 +132,9 @@ export const Markdown = ({
       <ReactMarkdown
         remarkPlugins={[
           remarkGfm,
+          // Must follow remarkGfm: it repairs hrefs that GFM's autolink literal
+          // extension over-captured out of Korean prose (`홈페이지(URL)의`).
+          remarkTrimAutolink,
           remarkFlexibleMarkers,
           remarkBreaks,
           remarkMath,
