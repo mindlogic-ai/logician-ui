@@ -418,21 +418,44 @@ export const semanticTokens = {
        * validation-error rows, and transient highlights instead of
        * hand-picking `primary.*`/`danger.*` tints at the call site.
        *
-       * Values mirror `primary.lightest` / `danger.lightest` /
+       * Light mirrors `primary.lightest` / `danger.lightest` /
        * `warning.lightest` (this Chakra version doesn't resolve
-       * semantic→semantic token references, so the primitive pairs are
-       * repeated here — keep them in sync with the brand ramps above).
+       * semantic→semantic token references, so the primitive is repeated
+       * here — keep it in sync with the brand ramps above).
+       *
+       * Dark does NOT mirror `*.lightest`. There the "lightest" hue step is the
+       * `900` of the ramp, which is darker than `bg.surface` (`grayDark.1400`),
+       * so a selected row rendered as a block sunk *below* its neighbours
+       * instead of a tint lifted above them. Instead the hue's `200` step (the
+       * dark-mode `main`/hover step of each family) is mixed 20% into the row
+       * surface. That keeps the tint one step lighter than the surface
+       * (~1.4:1, the same separation the old value had, in the right
+       * direction), keeps `fg.default` on it above 8:1, and stays
+       * tenant-restageable because it reads the ramp rather than a literal.
+       * Primitives only inside the mix — see the note above on references.
        */
       selected: {
-        value: { base: '{colors.blue.25}', _dark: '{colors.blue.900}' },
+        value: {
+          base: '{colors.blue.25}',
+          _dark:
+            'color-mix(in oklab, {colors.blue.200} 20%, {colors.grayDark.1400})',
+        },
       },
       invalid: {
         subtle: {
-          value: { base: '{colors.rose.25}', _dark: '{colors.rose.900}' },
+          value: {
+            base: '{colors.rose.25}',
+            _dark:
+              'color-mix(in oklab, {colors.rose.200} 20%, {colors.grayDark.1400})',
+          },
         },
       },
       highlighted: {
-        value: { base: '{colors.gold.25}', _dark: '{colors.gold.900}' },
+        value: {
+          base: '{colors.gold.25}',
+          _dark:
+            'color-mix(in oklab, {colors.gold.200} 20%, {colors.grayDark.1400})',
+        },
       },
     },
 
