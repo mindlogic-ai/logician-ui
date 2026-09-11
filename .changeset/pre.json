@@ -29,6 +29,7 @@
     "link-hover-dark-contrast",
     "modal-enter-exit",
     "motion",
+    "no-zoom-on-focus",
     "pin-light-on-shadowed-neutral-tokens",
     "polymorphic-button-as",
     "polymorphic-export-gaps",
