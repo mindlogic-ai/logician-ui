@@ -1,6 +1,7 @@
 import { ChangeEvent, forwardRef, useEffect, useState } from 'react';
 import { Textarea as ChakraTextarea } from '@chakra-ui/react';
 
+import { noZoomOnFocus } from '@/theme/formControls';
 import { mergeCss } from '@/utils/mergeCss';
 
 import { TextareaProps } from './Textarea.types';
@@ -93,6 +94,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         }}
         {...props}
         css={mergeCss(
+          noZoomOnFocus,
           {
             '--focus-color': 'var(--chakra-colors-primary-main)',
             '--error-color': 'var(--chakra-colors-danger-main)',

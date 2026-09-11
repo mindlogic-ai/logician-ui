@@ -9,6 +9,7 @@ import {
 } from 'react';
 import { Input as ChakraInput, InputGroup } from '@chakra-ui/react';
 
+import { noZoomOnFocus } from '@/theme/formControls';
 import { formatNumber } from '@/utils/formatNumber';
 import { mergeCss } from '@/utils/mergeCss';
 
@@ -357,6 +358,7 @@ export const Input = forwardRef(
           }}
           {...rest}
           css={mergeCss(
+            noZoomOnFocus,
             {
               paddingInlineEnd: rightElementWidth,
               '--focus-color': 'var(--chakra-colors-primary-main)',

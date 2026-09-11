@@ -146,6 +146,7 @@ export {
   type SemanticColorToken,
   semanticTokens,
 } from './theme/colors';
+export { noZoomOnFocus } from './theme/formControls';
 export {
   animationStyles,
   durations,
