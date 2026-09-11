@@ -15,6 +15,7 @@ import {
 import { format, isAfter, isSameMonth } from 'date-fns';
 
 import { Text } from '@/components/Typography';
+import { noZoomOnFocus } from '@/theme/formControls';
 import useLanguage from '@/hooks/useLanguage';
 import { useTranslate } from '@/hooks/useTranslate';
 
@@ -305,6 +306,13 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
                 disabled={disabled}
                 cursor={disabled ? 'not-allowed' : 'pointer'}
                 onClick={disabled ? undefined : onOpen}
+                // Chakra's Input, not this library's, so it does not inherit
+                // the touch-device size rule the way `components/Input` does.
+                // `readOnly` does not take it out of scope: the field is still
+                // focusable, and a consumer cannot reach it to fix this —
+                // `MonthPickerProps` exposes no `inputProps` and this element
+                // receives no `...rest`.
+                css={noZoomOnFocus}
               />
             </InputGroup>
           </Box>
