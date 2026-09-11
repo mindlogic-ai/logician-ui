@@ -9,6 +9,7 @@ import postcss from 'rollup-plugin-postcss';
 const input = {
   index: 'src/index.ts',
   icons: 'src/icons.ts',
+  styles: 'src/styles.ts',
 };
 
 // External dependencies - don't bundle these
