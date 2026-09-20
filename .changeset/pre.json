@@ -28,6 +28,7 @@
     "kwcag-accessibility-fixes",
     "link-hover-dark-contrast",
     "modal-enter-exit",
+    "modal-no-fullscreen-default",
     "motion",
     "no-zoom-on-focus",
     "pin-light-on-shadowed-neutral-tokens",
