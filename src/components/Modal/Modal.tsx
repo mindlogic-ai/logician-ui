@@ -9,7 +9,7 @@ export const Modal = ({
   open,
   onOpenChange,
   portalProps,
-  fullScreenOnMobile = true,
+  fullScreenOnMobile = false,
   ...rest
 }: ModalProps) => {
   const ctx = useMemo(() => ({ fullScreenOnMobile }), [fullScreenOnMobile]);
