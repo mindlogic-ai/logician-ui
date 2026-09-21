@@ -4,7 +4,11 @@ import { CardRootProps as ChakraCardRootProps } from '@chakra-ui/react';
 // Relative, NOT `@/types/*` — see `src/types/polymorphic.ts`.
 import type { PolymorphicProps } from '../../types/polymorphic';
 
-export type CardVariant = 'default' | 'gradient' | 'elevated';
+/**
+ * `gradient` is a deprecated alias of `wash` and renders identically; it stays
+ * so consumers on the alpha line keep compiling while they migrate.
+ */
+export type CardVariant = 'default' | 'wash' | 'gradient' | 'elevated';
 
 export type CardOwnProps = Omit<ChakraCardRootProps, 'as'> & {
   clickable?: boolean;

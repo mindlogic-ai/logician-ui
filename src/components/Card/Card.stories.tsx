@@ -16,10 +16,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Gradient: Story = {
+export const Wash: Story = {
   args: {
-    variant: 'gradient',
-    children: 'Gradient Card',
+    variant: 'wash',
+    children: 'Wash Card',
   },
 };
 
