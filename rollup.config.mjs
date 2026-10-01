@@ -20,6 +20,10 @@ const external = [
   'react/jsx-runtime',
   // Chakra UI ecosystem
   '@chakra-ui/react',
+  // Ark is Chakra's own headless layer. It must stay external so the app's
+  // single copy (the one Chakra itself imports) owns every part's context —
+  // `BottomSheet` imports `@ark-ui/react/drawer` directly.
+  '@ark-ui/react',
   '@emotion/react',
   '@emotion/styled',
   'framer-motion',
