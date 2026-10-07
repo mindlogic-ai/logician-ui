@@ -1,5 +1,5 @@
 import { ChakraProvider } from '@chakra-ui/react';
-import { render } from '@testing-library/react';
+import { act, fireEvent, render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { system } from '../../theme';
@@ -40,8 +40,15 @@ const rulesFor = (el: Element) => {
 };
 
 describe('SegmentedControl indicator timing', () => {
-  it('Ark still reads the duration from a custom property', () => {
+  it('Ark still reads the duration from a custom property', async () => {
     const { container } = setup();
+    // Since zag 1.43 (Ark 5.39) the indicator only carries its transition
+    // while it is travelling between two values — at rest the inline duration
+    // is a flat `0ms`. Move it once so the declaration under test exists.
+    const radios = container.querySelectorAll('input[type="radio"]');
+    await act(async () => {
+      fireEvent.click(radios[1]);
+    });
     const inline =
       container
         .querySelector('[data-part="indicator"]')

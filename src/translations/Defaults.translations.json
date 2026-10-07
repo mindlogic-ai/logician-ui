@@ -229,5 +229,12 @@
     "zh": "删除中",
     "ja": "削除中",
     "es": "Eliminando"
+  },
+  "close": {
+    "ko": "닫기",
+    "en": "Close",
+    "zh": "关闭",
+    "ja": "閉じる",
+    "es": "Cerrar"
   }
 }
