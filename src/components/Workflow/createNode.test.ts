@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { nextNodeId } from './createNode';
-import type { GraphNode } from './Workflow.types';
+import { createNodeFromType, nextNodeId } from './createNode';
+import type { GraphNode, NodeTypeDef } from './Workflow.types';
 
 const node = (id: string, kind: string): GraphNode => ({
   id,
@@ -57,5 +57,43 @@ describe('nextNodeId', () => {
     // The user deleted agent_2; the next add still continues past the max.
     const nodes = [node('agent_1', 'agent'), node('agent_3', 'agent')];
     expect(nextNodeId('agent', nodes)).toBe('agent_4');
+  });
+});
+
+describe('nextNodeId with namespaced kinds', () => {
+  it('treats the dot in a kind literally', () => {
+    // Unescaped, `math.add` would match `mathXadd_7` and jump to _8.
+    const nodes = [
+      node('mathXadd_7', 'math.add'),
+      node('math.add_2', 'math.add'),
+    ];
+    expect(nextNodeId('math.add', nodes)).toBe('math.add_3');
+  });
+});
+
+describe('createNodeFromType', () => {
+  const def = {
+    kind: 'agent',
+    defaultConfig: () => ({ name: 'Agent', model: 'static', temp: 1 }),
+    localizeDefaults: (t: (k: string) => string) => ({ name: t('agent_name') }),
+    hostDefaults: (bridge: unknown) => ({
+      model: (bridge as { model: string }).model,
+    }),
+    handles: () => ({ inputs: [], outputs: [] }),
+  } as unknown as NodeTypeDef;
+
+  it('layers defaultConfig, then localizeDefaults, then hostDefaults', () => {
+    const created = createNodeFromType(def, {
+      position: { x: 1, y: 2 },
+      nodes: [node('agent_4', 'agent')],
+      translate: (key) => `t:${key}`,
+      hostBridge: { model: 'live' },
+    });
+    expect(created).toEqual({
+      id: 'agent_5',
+      kind: 'agent',
+      position: { x: 1, y: 2 },
+      config: { name: 't:agent_name', model: 'live', temp: 1 },
+    });
   });
 });

@@ -36,6 +36,7 @@ export function Workflow({
   onEdgeClick,
   onSelectionChange,
   onIssuesChange,
+  renderSelectedNodeToolbar,
   footer,
   children,
   categoryTokens,
@@ -169,6 +170,7 @@ export function Workflow({
           showPalette={showPalette && !readOnly}
           onNodeClick={onNodeClick}
           onEdgeClick={onEdgeClick}
+          renderSelectedNodeToolbar={renderSelectedNodeToolbar}
         >
           {children}
         </Canvas>

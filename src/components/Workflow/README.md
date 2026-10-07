@@ -182,6 +182,69 @@ to keep the built-in drawer but also highlight the selection elsewhere.
 
 ---
 
+## Adding nodes from your own UI (`useWorkflowActions`)
+
+The palette is drag-and-drop. For anything else — a tap-to-add sheet on touch
+devices, a "+" beside a node, a command menu — call `useWorkflowActions()` from a
+component rendered inside `<Workflow>` (its `children` or
+`renderSelectedNodeToolbar`). It uses the same node builder as a palette drop
+(`{kind}_{N}` id; `defaultConfig` → `localizeDefaults` → `hostDefaults`), so you
+never rebuild ids, configs or placement, and you never import `@xyflow/react`.
+
+```tsx
+import {
+  useWorkflow,
+  useWorkflowActions,
+  Workflow,
+} from '@mindlogic-ai/logician-ui';
+
+function AddAgentButton() {
+  const { editor } = useWorkflow();
+  const { addNode, getAddAfterSource } = useWorkflowActions();
+  const after = getAddAfterSource(editor.selectedNodeId);
+  return (
+    <button
+      onClick={() =>
+        addNode(
+          'agent',
+          after ? { after: after.nodeId } : { at: 'viewportCenter' }
+        )
+      }
+    >
+      {after ? `Add after ${after.label}` : 'Add at centre'}
+    </button>
+  );
+}
+
+<Workflow
+  nodeTypes={NODE_TYPES}
+  renderSelectedNodeToolbar={(node) => <PlusAfter nodeId={node.id} />}
+>
+  <AddAgentButton />
+</Workflow>;
+```
+
+- `addNode(kind, target, { inspector? })` → `{ nodeId, edgeId | null } | null`.
+  - `{ after: nodeId }` places the node to that node's right and wires it from the
+    first free exit. No edge when the new kind has no entry (Note) or a
+    `canConnect` hook / connection rule rejects it. A node with no free exit (End,
+    Note, every exit taken) falls back to the viewport centre.
+  - `{ at: 'viewportCenter' }` places it unconnected in the middle of the view.
+  - Either way the node moves down past anything already there, becomes the
+    selection, and the view pans to it. Node + edge are **one undo step**.
+  - `inspector`: `'follow'` (default — an open inspector moves to the new node),
+    `'open'`, or `'close'`.
+  - Returns `null` without changing anything when read-only, the kind is not
+    registered, or its id is taken (a second `start`).
+- `getAddAfterSource(nodeId)` → `{ nodeId, sourceHandle, label } | null` — the
+  exit an add-after would use; `null` means the add would land at the centre.
+  `canAddAfter(nodeId)` is the boolean form.
+- `renderSelectedNodeToolbar(node)` (a `<Workflow>` prop) renders your content
+  beside the selected node's exit side, in screen space (constant size at any
+  zoom). Return `null` to show nothing.
+
+---
+
 ## Controlled vs uncontrolled graph
 
 - **Controlled:** pass `graph` and `onGraphChange`. You own the source of truth.
@@ -335,6 +398,7 @@ surfaces.
 | `onArrange` | `(g: Graph) => void` | After one-click auto-arrange. |
 | `onHistoryNavigate` | `(g: Graph) => void` | After undo/redo. |
 | `children` | `ReactNode` | Canvas overlay slot (mount `<NodeInspector>` here). |
+| `renderSelectedNodeToolbar` | `(node) => ReactNode` | Content beside the selected node (e.g. a "+"). |
 | `footer` | `ReactNode` | Slot below the canvas. |
 | `categoryTokens` | `CategoryTokenMap` | Override category → color tokens. |
 | `hostBridge` | `unknown` | Opaque host data for inspectors. |

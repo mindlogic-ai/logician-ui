@@ -122,11 +122,11 @@ function orderEdgesForDagre(
  * height is a typical two-row card. Callers should pass real measured sizes
  * when available so ranks pack tightly.
  */
-const FALLBACK_WIDTH = parseInt(CARD_WIDTH, 10);
-const FALLBACK_HEIGHT = 76;
+export const FALLBACK_WIDTH = parseInt(CARD_WIDTH, 10);
+export const FALLBACK_HEIGHT = 76;
 
-const DEFAULT_RANK_GAP = 80;
-const DEFAULT_NODE_GAP = 40;
+export const DEFAULT_RANK_GAP = 80;
+export const DEFAULT_NODE_GAP = 40;
 
 /**
  * Compute a tidy, hierarchical layout for a workflow graph and return a new
