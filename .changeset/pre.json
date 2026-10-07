@@ -53,6 +53,7 @@
     "tree-elbow-last-row-and-guide-color",
     "tree-indent-guide-elbow",
     "vertical-tab-indicator-ink",
+    "workflow-add-node-api",
     "workflow-editor-component"
   ]
 }
