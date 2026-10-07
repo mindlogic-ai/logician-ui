@@ -35,6 +35,14 @@ export {
 } from './graphObserver';
 export type { GraphAction } from './graphReducer';
 export { emptyGraph, graphReducer } from './graphReducer';
+export type {
+  AddAfterSource,
+  AddNodeOptions,
+  AddNodeResult,
+  AddNodeTarget,
+  WorkflowActions,
+} from './useWorkflowActions';
+export { useWorkflowActions } from './useWorkflowActions';
 export { Workflow } from './Workflow';
 export type {
   ConnectionCtx,

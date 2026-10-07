@@ -21,7 +21,9 @@ import {
   IsValidConnection,
   MiniMap,
   NodeChange,
+  NodeToolbar,
   NodeTypes,
+  Position as HandleSide,
   ReactFlow,
   ReactFlowProvider,
   useReactFlow,
@@ -34,7 +36,11 @@ import {
   isValidConnection as isValidWorkflowConnection,
   soleEdgeToHandle,
 } from '../../connectionRules';
-import { genId } from '../../createNode';
+import {
+  createNodeFromType,
+  genId,
+  toDefaultsTranslate,
+} from '../../createNode';
 import {
   autoLayout,
   estimateLabelOverhang,
@@ -47,7 +53,6 @@ import type {
   GraphNode,
   Position,
 } from '../../Workflow.types';
-import { resolveDefaultConfig } from '../../Workflow.types';
 import { useWorkflow, useWorkflowTranslate } from '../../WorkflowContext';
 import type { WorkflowReactFlowNode } from '../GenericNode';
 import { GenericNode } from '../GenericNode';
@@ -107,17 +112,22 @@ function graphToReactFlow(
   };
 }
 
-function CanvasInner({
-  showPalette,
-  onNodeClick: onNodeClickHost,
-  onEdgeClick: onEdgeClickHost,
-  children,
-}: {
-  showPalette: boolean;
+type CanvasProps = {
+  showPalette?: boolean;
   onNodeClick?: (node: GraphNode) => void;
   onEdgeClick?: (edge: GraphEdge) => void;
+  /** See `WorkflowProps.renderSelectedNodeToolbar`. */
+  renderSelectedNodeToolbar?: (node: GraphNode) => ReactNode;
   children?: ReactNode;
-}) {
+};
+
+function CanvasInner({
+  showPalette = true,
+  onNodeClick: onNodeClickHost,
+  onEdgeClick: onEdgeClickHost,
+  renderSelectedNodeToolbar,
+  children,
+}: CanvasProps) {
   const {
     graph,
     dispatch,
@@ -144,13 +154,6 @@ function CanvasInner({
   const [isPaletteOpen, setIsPaletteOpen] = useState(true);
 
   const translate = useWorkflowTranslate();
-  // Tear off only the string lookup so `localizeDefaults` doesn't depend
-  // on the React-fragment interpolation path.
-  const t = useCallback(
-    (key: string, params?: Record<string, string>) =>
-      translate(key, params) as string,
-    [translate]
-  );
 
   useWorkflowKeyboard();
 
@@ -606,31 +609,36 @@ function CanvasInner({
       if (!kind) return;
       const def = getNodeType(kind);
       if (!def) return;
-      const position = screenToFlowPosition({ x: e.clientX, y: e.clientY });
-      const base = resolveDefaultConfig(def) as Record<string, unknown>;
-      const overlay = def.localizeDefaults?.(t) as
-        | Record<string, unknown>
-        | undefined;
-      // Host-data overlay (e.g. a starting LLM picked from the tenant's live
-      // model list) — applied last so it wins over any static placeholder in
-      // `defaultConfig`. Keyed on the opaque `hostBridge`; the node type narrows
-      // it. Absent on a generic host, leaving the static defaults in place.
-      const bridged = def.hostDefaults?.(hostBridge) as
-        | Record<string, unknown>
-        | undefined;
-      const node = {
-        id: genId(kind),
-        kind,
-        position,
-        config: { ...base, ...overlay, ...bridged },
-      };
+      // Same builder `useWorkflowActions().addNode` uses, so a drop and a
+      // programmatic add get the same `{kind}_{N}` id and starting config.
+      const node = createNodeFromType(def, {
+        position: screenToFlowPosition({ x: e.clientX, y: e.clientY }),
+        nodes: graph.nodes,
+        translate: toDefaultsTranslate(translate),
+        hostBridge,
+      });
 
       // Dropped nodes land unconnected — authors wire edges explicitly by
       // dragging from an exit point.
       dispatch({ type: 'addNode', node });
     },
-    [dispatch, getNodeType, screenToFlowPosition, t, hostBridge]
+    [
+      dispatch,
+      getNodeType,
+      screenToFlowPosition,
+      graph.nodes,
+      translate,
+      hostBridge,
+    ]
   );
+
+  const selectedNode = selectedNodeId
+    ? graph.nodes.find((n) => n.id === selectedNodeId)
+    : undefined;
+  const selectedNodeToolbar =
+    selectedNode && renderSelectedNodeToolbar
+      ? renderSelectedNodeToolbar(selectedNode)
+      : null;
 
   // Does the canvas top-left corner actually hold overlay chrome the zoom
   // controls should tuck under? The palette toggle docks there when the palette
@@ -716,6 +724,18 @@ function CanvasInner({
           proOptions={{ hideAttribution: true }}
         >
           <Background />
+          {selectedNode && selectedNodeToolbar ? (
+            // Positioned in screen space beside the node's exit side, so the
+            // host's content keeps its size at any zoom.
+            <NodeToolbar
+              nodeId={selectedNode.id}
+              isVisible
+              position={HandleSide.Right}
+              offset={4}
+            >
+              {selectedNodeToolbar}
+            </NodeToolbar>
+          ) : null}
           <CanvasControls
             readOnly={readOnly}
             onAutoArrange={onAutoArrange}
@@ -748,26 +768,10 @@ function CanvasInner({
   );
 }
 
-export function Canvas({
-  showPalette = true,
-  onNodeClick,
-  onEdgeClick,
-  children,
-}: {
-  showPalette?: boolean;
-  onNodeClick?: (node: GraphNode) => void;
-  onEdgeClick?: (edge: GraphEdge) => void;
-  children?: ReactNode;
-}) {
+export function Canvas(props: CanvasProps) {
   return (
     <ReactFlowProvider>
-      <CanvasInner
-        showPalette={showPalette}
-        onNodeClick={onNodeClick}
-        onEdgeClick={onEdgeClick}
-      >
-        {children}
-      </CanvasInner>
+      <CanvasInner {...props} />
     </ReactFlowProvider>
   );
 }

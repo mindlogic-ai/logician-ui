@@ -1,4 +1,10 @@
-import type { GraphNode } from './Workflow.types';
+import type {
+  GraphNode,
+  NodeTypeDef,
+  Position,
+  WorkflowTranslate,
+} from './Workflow.types';
+import { resolveDefaultConfig } from './Workflow.types';
 
 /**
  * Unique id for edges and other internal graph elements that aren't referenced
@@ -29,7 +35,10 @@ export function nextNodeId(
   nodes: ReadonlyArray<GraphNode>
 ): string {
   if (kind === 'start') return 'start';
-  const re = new RegExp(`^${kind}_(\\d+)$`);
+  // Escape the kind: namespaced kinds (`math.add`) would otherwise read `.` as
+  // a wildcard and count unrelated ids toward the counter.
+  const escaped = kind.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const re = new RegExp(`^${escaped}_(\\d+)$`);
   let max = 0;
   for (const n of nodes) {
     const m = re.exec(n.id);
@@ -63,5 +72,64 @@ export function cloneNode(
       y: node.position.y + DUPLICATE_OFFSET,
     },
     config: structuredClone(node.config),
+  };
+}
+
+/** String-only translator handed to `NodeTypeDef.localizeDefaults`. */
+export type DefaultsTranslate = (
+  key: string,
+  params?: Record<string, string>
+) => string;
+
+/**
+ * Tear the string lookup off the host translator so `localizeDefaults` doesn't
+ * depend on the React-fragment interpolation path.
+ */
+export function toDefaultsTranslate(
+  translate: WorkflowTranslate
+): DefaultsTranslate {
+  return (key, params) => translate(key, params) as string;
+}
+
+/**
+ * Build a fresh node of `def`'s kind — the ONE place a node is created from a
+ * node type, shared by the palette drop and `useWorkflowActions().addNode`, so
+ * both paths produce the same id and starting config:
+ *
+ * - id: `nextNodeId` (`{kind}_{N}`), so authors can type it into `{{...}}`
+ *   references — the same scheme duplicate/paste use;
+ * - config: `defaultConfig`, then `localizeDefaults(translate)`, then
+ *   `hostDefaults(hostBridge)`, each shallow-merged over the previous.
+ */
+export function createNodeFromType(
+  def: NodeTypeDef,
+  {
+    position,
+    nodes,
+    translate,
+    hostBridge,
+  }: {
+    position: Position;
+    /** Current node list — continues the per-kind id counter. */
+    nodes: ReadonlyArray<GraphNode>;
+    translate: DefaultsTranslate;
+    hostBridge?: unknown;
+  }
+): GraphNode {
+  const base = resolveDefaultConfig(def) as Record<string, unknown>;
+  const overlay = def.localizeDefaults?.(translate) as
+    | Record<string, unknown>
+    | undefined;
+  // Host-data overlay (e.g. a starting LLM picked from the tenant's live model
+  // list) — applied last so it wins over any static placeholder in
+  // `defaultConfig`. Absent on a generic host, leaving the static defaults.
+  const bridged = def.hostDefaults?.(hostBridge) as
+    | Record<string, unknown>
+    | undefined;
+  return {
+    id: nextNodeId(def.kind, nodes),
+    kind: def.kind,
+    position,
+    config: { ...base, ...overlay, ...bridged },
   };
 }

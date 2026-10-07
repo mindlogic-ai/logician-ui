@@ -444,6 +444,16 @@ export type WorkflowProps = {
   children?: ReactNode;
 
   /**
+   * Content rendered beside the selected node, on its exit (right) side — e.g.
+   * a "+" that adds a node after it via `useWorkflowActions().addNode`. Called
+   * with the selected node whenever one is selected; return `null` to show
+   * nothing. The library positions it in screen space (it keeps its size at
+   * any zoom) and renders it inside the editor, so the content may call
+   * `useWorkflow` / `useWorkflowActions`. Hosts never touch React Flow.
+   */
+  renderSelectedNodeToolbar?: (node: GraphNode) => ReactNode;
+
+  /**
    * Notified whenever the issues array identity changes. Mostly a Storybook
    * convenience now that validation is owned entirely by the backend — prod
    * surfaces read `backendIssues` directly off their save response.

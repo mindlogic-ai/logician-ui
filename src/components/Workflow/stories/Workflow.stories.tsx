@@ -2,11 +2,16 @@ import { Box, HStack, VStack } from '@chakra-ui/react';
 import type { Meta, StoryFn } from '@storybook/react';
 import { useState } from 'react';
 
+import { Button } from '@/components/Button';
+import { PlusIcon } from '@/components/Icon';
+import { IconButton } from '@/components/IconButton';
 import { Subtext, Subtitle } from '@/components/Typography';
 
 import { NodeInspector } from '../canvas/DrawerShell';
+import { useWorkflowActions } from '../useWorkflowActions';
 import { Workflow } from '../Workflow';
 import type { Graph, WorkflowSelection } from '../Workflow.types';
+import { useWorkflow } from '../WorkflowContext';
 import { toyGraph, toyNodeTypes } from './toyNodeTypes';
 
 /**
@@ -107,5 +112,79 @@ export const LeftDockedInspector: StoryFn<typeof Workflow> = () => (
     showPalette={false}
   >
     <NodeInspector dock="left" />
+  </Workflow>
+);
+
+/** "+" beside the selected node: adds an Add node wired after it. */
+function AddAfterButton({ nodeId }: { nodeId: string }) {
+  const { addNode, getAddAfterSource } = useWorkflowActions();
+  const source = getAddAfterSource(nodeId);
+  if (!source) return null;
+  return (
+    <IconButton
+      aria-label={`Add after ${source.label}`}
+      size="sm"
+      variant="solid"
+      colorPalette="primary"
+      borderRadius="full"
+      onClick={() => addNode('math.add', { after: nodeId })}
+    >
+      <PlusIcon boxSize="xs" aria-hidden />
+    </IconButton>
+  );
+}
+
+/** Click-to-add list — what a touch palette does instead of drag-and-drop. */
+function TapPalette() {
+  const { nodeTypes, editor } = useWorkflow();
+  const { addNode, getAddAfterSource } = useWorkflowActions();
+  const source = getAddAfterSource(editor.selectedNodeId);
+  return (
+    <VStack
+      w="240px"
+      p={4}
+      align="stretch"
+      borderLeftWidth="1px"
+      borderColor="border.default"
+      bg="bg.surface"
+    >
+      <Subtitle>Tap to add</Subtitle>
+      <Subtext color="slate.500" data-testid="add-target">
+        {source ? `Connect after ${source.label}` : 'Add at the centre'}
+      </Subtext>
+      {Object.values(nodeTypes).map((def) => (
+        <Button
+          key={def.kind}
+          size="sm"
+          variant="outline"
+          onClick={() =>
+            addNode(
+              def.kind,
+              source ? { after: source.nodeId } : { at: 'viewportCenter' }
+            )
+          }
+        >
+          {def.label}
+        </Button>
+      ))}
+    </VStack>
+  );
+}
+
+/**
+ * `useWorkflowActions().addNode` + `renderSelectedNodeToolbar`: add nodes
+ * without drag-and-drop. Select a node and press its "+" (or a button in the
+ * side list) to add a node wired from its first free exit; with nothing
+ * selected — or a node with no free exit — the node lands at the view centre.
+ * One undo (⌘Z) reverts node and edge together.
+ */
+export const AddNodeWithoutDrag: StoryFn<typeof Workflow> = () => (
+  <Workflow
+    nodeTypes={toyNodeTypes}
+    defaultGraph={toyGraph as Graph}
+    showPalette={false}
+    renderSelectedNodeToolbar={(node) => <AddAfterButton nodeId={node.id} />}
+  >
+    <TapPalette />
   </Workflow>
 );
