@@ -1,6 +1,10 @@
 import { useRef } from 'react';
 
-import { toastStyles } from './Toast.styles';
+import {
+  TOAST_ACTION_DURATION,
+  TOAST_DEFAULT_DURATION,
+  toastStyles,
+} from './Toast.styles';
 import {
   ToasterCreateOptions,
   ToastStatusChangeDetails,
@@ -22,9 +26,19 @@ export const useToast = () => {
     title,
     description,
     styles: stylesProp,
-    duration = 5000,
+    duration: durationProp,
+    action,
     ...rest
   }: UseToastOptions) => {
+    // A toast with an action stays longer, unless the caller chose a duration
+    // (including `null` / `Infinity` for a persistent toast).
+    const duration =
+      durationProp !== undefined
+        ? durationProp
+        : action
+          ? TOAST_ACTION_DURATION
+          : TOAST_DEFAULT_DURATION;
+
     // NOTE: placement is not supported - must be configured in Toaster.tsx createToaster()
     const styles = {
       ...toastStyles[status],
@@ -49,6 +63,7 @@ export const useToast = () => {
       meta: {
         // Pass custom data through meta
         styles, // for custom toast style
+        action, // ReactNode label, so it travels in meta rather than `action`
         onClose: () => toaster.dismiss(toastId), // Custom close handler
       },
       onStatusChange: (details: ToastStatusChangeDetails) => {
