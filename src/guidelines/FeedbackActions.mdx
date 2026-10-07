@@ -1,0 +1,133 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Guidelines/Actions in feedback surfaces" />
+
+# Actions in feedback surfaces
+
+Toasts, inline banners, panes and dialogs often need a control: "buy credits",
+"undo", "open file". This page covers which control goes where and how it
+should look.
+
+The test for every case: **does the control look like it belongs to the
+container it sits in?**
+
+> Visual prototype with before/after and a playground:
+> [feedback-actions-proto.apps.mindlogic.tools](https://feedback-actions-proto.apps.mindlogic.tools/)
+> (company login).
+
+---
+
+## Why this exists
+
+Until `Toast` had an `action` prop, callers who wanted a button in a toast put
+a `<Button>` inside `description` and styled it themselves. On the credit-402
+toast in FactChat that produced a neutral outline button (`#494949` text, ink
+hairline) on a rose toast (`#FFE6E8` background, `#69000A` text). It carried
+none of the toast's colors, so it read as a separate card dropped on top.
+
+The fix is one recipe for every toast: the action uses the toast's own text
+color, the same treatment as the close ×.
+
+---
+
+## Rules
+
+### 1. Match the container's weight
+
+Toasts and inline banners carry **text actions**. Buttons belong to surfaces
+that own the space: a pane, a dialog, an empty state.
+
+### 2. The action takes the status color
+
+Inside a tinted container the action uses **that container's text color**
+(`danger.dark` on an error toast, `primary.dark` on an info toast). Never a
+neutral control.
+
+### 3. One action per toast; dismiss is ×
+
+No 「닫기」 or 「취소」 button in a toast; the × already does that. If a
+message needs two actions, it is not a toast; use a dialog or a pane.
+
+### 4. Don't repeat the action in the copy
+
+If the action says 「크레딧 구매」, the message doesn't also say "purchase
+credits to continue". Toast copy stays **within 2 lines**.
+
+### 5. In a pane, the fix is the primary
+
+In a pane or empty state, the action that fixes the problem is the primary
+(ink solid, `colorPalette="neutral" variant="solid"`). Dismiss is outline
+neutral (`colorPalette="neutral" variant="outline"`).
+
+### 6. Toasts with an action stay longer
+
+The reader has to read the message and then decide to act. A toast with an
+action defaults to **8s** instead of 5s. `useToast` does this for you when
+`duration` is not given.
+
+---
+
+## Which control goes where
+
+| Surface            | Primary action                                     | Secondary / dismiss              | Max actions | Copy                                       |
+| ------------------ | -------------------------------------------------- | -------------------------------- | ----------- | ------------------------------------------ |
+| Toast              | Text action in status color, via the `action` prop | × only                           | 1           | ≤ 2 lines, no hint that repeats the action |
+| Inline banner      | Trailing text action in status color               | × if dismissible                 | 1           | 1 line, wraps on mobile                    |
+| Pane / empty state | Ink solid (`neutral` `solid`)                      | Outline neutral                  | 2           | Title + reason + optional hint             |
+| Dialog             | Ink solid, right                                   | Outline neutral, left of primary | 2           | Title + body                               |
+
+---
+
+## Usage
+
+```tsx
+import { useToast } from '@mindlogic-ai/logician-ui';
+
+const showToast = useToast();
+
+showToast({
+  status: 'error',
+  description: '크레딧이 부족해 응답을 생성하지 못했습니다.',
+  action: {
+    label: '크레딧 구매',
+    onClick: openCreditPurchaseModal,
+  },
+  // duration defaults to 8000 because an action is set
+});
+```
+
+- The action renders under the description, aligned with the text column, in
+  the toast's status color with the same hover tint as the ×.
+- Clicking it calls `onClick` and dismisses the toast.
+- `label` accepts any `ReactNode`, but keep it a short verb phrase.
+- An explicit `duration` (including `null` for a persistent toast) always wins.
+- Chakra's own `toaster.create({ action: { label, onClick } })` renders the
+  same way; with that route the label must be a string and the duration
+  default is Chakra's, not 8s.
+
+### Don't: a button inside `description`
+
+```tsx
+// ✗ A neutral control dropped onto a tinted toast; it carries none of the
+//   toast's colors, adds a third line, and dismissal is left to the caller.
+showToast({
+  status: 'error',
+  description: (
+    <>
+      크레딧이 부족합니다. 크레딧을 구매하면 계속 사용할 수 있습니다.
+      <Button colorPalette="neutral" variant="outline" onClick={buy}>
+        크레딧 구매
+      </Button>
+    </>
+  ),
+});
+
+// ✓ One action, in the toast's color, and the copy doesn't repeat it.
+showToast({
+  status: 'error',
+  description: '크레딧이 부족합니다.',
+  action: { label: '크레딧 구매', onClick: buy },
+});
+```
+
+See **Components/Toast → Action / …** for each status and a short-message case.

@@ -1,20 +1,25 @@
 import { Flex, Stack, Toast as ChakraToast } from '@chakra-ui/react';
 
-import { closeButtonStyles } from './Toast.styles';
+import { actionStyles, closeButtonStyles } from './Toast.styles';
 import { ToastProps } from './Toast.types';
 import { ToastIcon } from './ToastIcon/ToastIcon';
 
 /**
  * Toast component using Chakra UI v3 composition pattern
  *
- * Uses Toast.Root, Toast.Title, Toast.Description, and Toast.CloseTrigger
- * for better composition and customization.
+ * Uses Toast.Root, Toast.Title, Toast.Description, Toast.ActionTrigger and
+ * Toast.CloseTrigger for better composition and customization.
+ *
+ * `action` renders under the description as a text action in the status
+ * color, aligned with the text column. Don't put a `<Button>` in
+ * `description` — use `action`.
  */
 export const Toast = ({
   title,
   description,
   status = 'success',
   onClose,
+  action,
   ...rest
 }: ToastProps) => (
   <ChakraToast.Root
@@ -38,6 +43,14 @@ export const Toast = ({
           <ChakraToast.Description color="inherit" fontWeight="semibold">
             {description}
           </ChakraToast.Description>
+        )}
+        {action && (
+          <ChakraToast.ActionTrigger
+            onClick={action.onClick}
+            {...(actionStyles[status] as any)}
+          >
+            {action.label}
+          </ChakraToast.ActionTrigger>
         )}
       </Stack>
     </Flex>
