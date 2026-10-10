@@ -75,7 +75,9 @@ User Agent: ${errorInfo.userAgent}`;
     <Flex
       as="section"
       aria-labelledby={titleId}
-      minH="100vh"
+      // `svh`: `100vh` is the largest mobile viewport and overflows under
+      // the URL bar.
+      minH="100svh"
       align="center"
       justify="center"
       p={8}

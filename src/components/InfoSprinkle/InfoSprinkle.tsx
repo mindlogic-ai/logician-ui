@@ -51,7 +51,6 @@ export const InfoSprinkle = ({
         <IconButton
           aria-label="Info"
           opacity={0.5}
-          transition="opacity 0.2s"
           _hover={{ opacity: 1, ...(iconButtonProps?._hover as any) }}
           {...iconButtonProps}
           onClick={(e) => {

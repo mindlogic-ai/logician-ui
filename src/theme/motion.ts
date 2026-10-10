@@ -192,7 +192,7 @@ const REDUCED = { _motionReduce: { transitionDuration: 'motion.instant' } };
  * at all reads as a page swap. The movement is what has to go, not the fact
  * that something changed.
  */
-const PRESENCE_TIMING = {
+export const PRESENCE_TIMING = {
   _open: {
     animationDuration: 'motion.base',
     animationTimingFunction: 'emphasized',
