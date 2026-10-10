@@ -175,7 +175,8 @@ const REDUCED = { _motionReduce: { transitionDuration: 'motion.instant' } };
  * most of the distance early and settles. An exit has already been decided:
  * the reader dismissed the thing and is looking at what is behind it, so every
  * millisecond the leaving element still owns the screen is a millisecond of
- * waiting. Half the time, on the neutral curve.
+ * waiting. Half the time, on the same ease-out — a symmetric curve would
+ * start the exit slowly, which is the one place a dismissal must not lag.
  *
  * Only the *clock* is here, never `animation-name`. Each Chakra recipe already
  * names the right movement for its part — the menu slides from its trigger,
@@ -199,7 +200,7 @@ const PRESENCE_TIMING = {
   },
   _closed: {
     animationDuration: 'fast',
-    animationTimingFunction: 'standard',
+    animationTimingFunction: 'emphasized',
   },
   _motionReduce: {
     _open: { animationName: 'fade-in' },
@@ -239,7 +240,9 @@ export const animationStyles = {
       // The one preset with a real default: a press is a scale, always.
       transitionProperty: 'scale',
       transitionDuration: 'motion.press',
-      transitionTimingFunction: 'standard',
+      // Ease-out, not `standard`: `standard` starts slowly, so the first frames
+      // of the press lag behind the finger.
+      transitionTimingFunction: 'emphasized',
       ...REDUCED,
     },
   },
@@ -365,12 +368,13 @@ export const keyframes = {
     from: { opacity: '1', scale: '1' },
     to: { opacity: '0', scale: '0.97' },
   },
-  // The dot only mounts on check, so it grows from nothing. `0.4` is where
-  // Chakra's radiomark recipe rests it; ending anywhere else would make the dot
-  // jump the moment the animation hands back.
+  // The dot only mounts on check. It starts small and transparent rather than
+  // at `scale: 0` — nothing real appears from nothing, and a dot growing from a
+  // point reads as a glitch. `0.4` is where Chakra's radiomark recipe rests it;
+  // ending anywhere else would make the dot jump when the animation hands back.
   'dot-pop': {
-    from: { scale: '0' },
-    to: { scale: '0.4' },
+    from: { scale: '0.25', opacity: '0' },
+    to: { scale: '0.4', opacity: '1' },
   },
   'checkmark-draw': {
     // Negative, not positive. Chakra's polyline runs `20 6 → 9 17 → 4 12`, so

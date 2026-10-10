@@ -106,7 +106,7 @@ describe('motion vocabulary', () => {
     const d = (n: string) => `var(--chakra-durations-${n})`;
     const e = (n: string) => `var(--chakra-easings-${n})`;
 
-    expect(timing('press')).toEqual([d('motion-press'), e('standard')]);
+    expect(timing('press')).toEqual([d('motion-press'), e('emphasized')]);
     expect(timing('feedback')).toEqual([d('fast'), e('standard')]);
     expect(timing('travel')).toEqual([d('motion-base'), e('emphasized')]);
     expect(timing('spring')).toEqual([d('motion-base'), e('overshoot')]);

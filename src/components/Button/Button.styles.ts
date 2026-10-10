@@ -31,9 +31,12 @@ type StyleProps = Partial<ChakraButtonProps>;
 const PRESS = 'var(--chakra-durations-motion-press)';
 const FEEDBACK = 'var(--chakra-durations-fast)';
 const STANDARD = 'var(--chakra-easings-standard)';
+// The press is contact, so it eases out: `standard` starts slowly and the
+// first frames lag behind the finger.
+const EMPHASIZED = 'var(--chakra-easings-emphasized)';
 
 export const buttonTransition = [
-  `scale ${PRESS} ${STANDARD}`,
+  `scale ${PRESS} ${EMPHASIZED}`,
   ...[
     'background-color',
     'border-color',
