@@ -133,11 +133,12 @@ describe('the enter/exit policy', () => {
     // A guard on the guard: if the condition Chakra emits for `_open` ever
     // changes spelling, `withOpen` silently empties and every assertion below
     // passes over nothing.
-    // `presence` is the only global preset with an open state — the Modal now
-    // carries its own two keyframe names and borrows this clock. The walk stays
-    // a walk rather than an assertion about `presence` alone, so the next
-    // preset with an `_open` branch is covered the day it is written.
-    expect(withOpen).toEqual(['presence']);
+    // `presence` and its shorter anchored twin are the only global presets
+    // with an open state — the Modal carries its own two keyframe names and
+    // borrows the `presence` clock. The walk stays a walk rather than an
+    // assertion about these two alone, so the next preset with an `_open`
+    // branch is covered the day it is written.
+    expect(withOpen).toEqual(['presence', 'presence-anchored']);
   });
 
   it('never declares an enter without the matching exit', () => {
@@ -162,8 +163,23 @@ describe('the enter/exit policy', () => {
     // The reason one preset can sit on a menu that slides, a popover that
     // scales and a collapsible that interpolates a measured height. A name here
     // would flatten all three into whatever it named.
-    const presence = applied('presence') as Css;
-    expect(presence[OPEN].animationName).toBeUndefined();
-    expect(presence[CLOSED].animationName).toBeUndefined();
+    withOpen.forEach((name) => {
+      const css = applied(name) as Css;
+      expect(css[OPEN].animationName, name).toBeUndefined();
+      expect(css[CLOSED].animationName, name).toBeUndefined();
+    });
+  });
+
+  it('opens anchored popups faster than dialogs, on the same curves', () => {
+    const full = applied('presence') as Css;
+    const anchored = applied('presence-anchored') as Css;
+    expect(DURATION_MS[anchored[OPEN].animationDuration]).toBe(200);
+    expect(DURATION_MS[anchored[CLOSED].animationDuration]).toBe(100);
+    expect(anchored[OPEN].animationTimingFunction).toBe(
+      full[OPEN].animationTimingFunction
+    );
+    expect(anchored[CLOSED].animationTimingFunction).toBe(
+      full[CLOSED].animationTimingFunction
+    );
   });
 });

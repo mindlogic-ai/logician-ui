@@ -18,8 +18,8 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
           borderWidth="1px"
           borderColor="border.subtle"
           // Scales from its arrow's origin on the recipe's keyframes, on our
-          // clock — see `presence`.
-          animationStyle="presence"
+          // clock — see `presence-anchored`.
+          animationStyle="presence-anchored"
           {...props}
         >
           <ScaledContext fontSize={baseFontSize}>{children}</ScaledContext>

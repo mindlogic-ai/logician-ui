@@ -208,6 +208,27 @@ const PRESENCE_TIMING = {
 } as const;
 
 /**
+ * The same policy, on a shorter clock, for parts anchored to a trigger —
+ * Menu, Select, Combobox, Popover, Tooltip.
+ *
+ * These open tens of times a day, under a pointer that is already on its way
+ * to the first item, so the enter has much less to be read than a dialog does:
+ * the reader asked for it and knows where it will appear. 300ms there is twice
+ * Chakra's stock 150ms and feels like waiting; 200ms keeps a visible slide from
+ * the trigger and finishes before the pointer arrives. The exit keeps the
+ * half-the-enter ratio. Curves and the reduced-motion fade come from
+ * {@link PRESENCE_TIMING}, so the two cannot drift apart.
+ *
+ * Modal, BottomSheet and Collapsible stay on the full `presence` clock — they
+ * move more of the screen and are not anchored to anything.
+ */
+const ANCHORED_PRESENCE_TIMING = {
+  ...PRESENCE_TIMING,
+  _open: { ...PRESENCE_TIMING._open, animationDuration: 'moderate' },
+  _closed: { ...PRESENCE_TIMING._closed, animationDuration: 'faster' },
+} as const;
+
+/**
  * Dash length for the `checkmark-draw` keyframe. Declared once so the pattern
  * the tick is hidden behind and the offset the keyframe animates away are the
  * same number. Chakra's polyline measures ~22.6 user units; 24 clears it.
@@ -298,6 +319,15 @@ export const animationStyles = {
    */
   presence: {
     value: { ...PRESENCE_TIMING },
+  },
+
+  /**
+   * `presence` for a part anchored to its trigger — menu, select, combobox,
+   * popover and tooltip content. 200ms in, 100ms out; see
+   * {@link ANCHORED_PRESENCE_TIMING}.
+   */
+  'presence-anchored': {
+    value: { ...ANCHORED_PRESENCE_TIMING },
   },
 
   /**
