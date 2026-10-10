@@ -38,7 +38,8 @@ export const buttonTransition = [
     'background-color',
     'border-color',
     'color',
-    'box-shadow',
+    // No `box-shadow`: no variant sets one, so the only box-shadow that ever
+    // changes here is the keyboard focus ring, and that should appear at once.
     'opacity',
     // Both moved by `lift`, listed unconditionally because a property nobody
     // changes costs nothing, and leaving them out would make the opt-in jump.

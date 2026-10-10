@@ -56,7 +56,16 @@ export const Tooltip = forwardRef(
               animationStyle="presence"
               {...contentProps}
               css={mergeCss(
-                { '--tooltip-bg': 'var(--chakra-colors-gray-1200)' },
+                {
+                  '--tooltip-bg': 'var(--chakra-colors-gray-1200)',
+                  // zag sets `data-instant` when the pointer moves from one
+                  // open tooltip to the next. It already skips the delay
+                  // there; skip the enter/exit too, so sweeping a toolbar
+                  // doesn't replay the animation on every button. The extra
+                  // `[data-state]` outranks the presence clock's
+                  // `:is([data-state=open])`.
+                  '&[data-instant][data-state]': { animationDuration: '0ms' },
+                },
                 contentProps?.css
               )}
             >
