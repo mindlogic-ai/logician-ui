@@ -804,7 +804,7 @@ export const Choose: Story = {
 
         <Preset
           name="presence"
-          timing="진입 300ms / 퇴장 150ms · 둘 다 emphasized"
+          timing="진입 300ms · emphasized / 퇴장 150ms · standard"
           lead="열리고 닫히는 모든 것. 진입은 읽혀야 하고 퇴장은 이미 결정된 일이라 절반입니다. Menu · Popover · Tooltip · Select · Collapsible · Modal 여섯이 이 하나를 나눠 씁니다."
           code={`<Menu.List animationStyle="presence" />
 
