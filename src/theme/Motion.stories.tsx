@@ -733,7 +733,7 @@ export const Choose: Story = {
 
         <Preset
           name="press"
-          timing="120ms · standard"
+          timing="120ms · emphasized"
           lead="포인터가 눌리는 순간의 접촉감. 유일하게 property를 안 적어도 되는 프리셋입니다 — 프레스는 언제나 scale이라 기본값이 들어 있습니다."
           code={`<Box
   scale="1"
@@ -804,7 +804,7 @@ export const Choose: Story = {
 
         <Preset
           name="presence"
-          timing="진입 300ms · emphasized / 퇴장 150ms · standard"
+          timing="진입 300ms / 퇴장 150ms · 둘 다 emphasized"
           lead="열리고 닫히는 모든 것. 진입은 읽혀야 하고 퇴장은 이미 결정된 일이라 절반입니다. Menu · Popover · Tooltip · Select · Collapsible · Modal 여섯이 이 하나를 나눠 씁니다."
           code={`<Menu.List animationStyle="presence" />
 
@@ -956,7 +956,7 @@ export const Choose: Story = {
           lead="한 요소 안에서 속성마다 다른 속도가 필요할 때만. Button은 프레스가 120ms인데 색은 150ms라 duration 하나로 표현이 안 됩니다. composite가 주는 것은 동작 줄이기 가드 하나뿐이고, 값은 반드시 토큰 var()로 적으세요."
           code={`// Button.styles.ts
 export const buttonTransition = [
-  'scale            var(--chakra-durations-motion-press) var(--chakra-easings-standard)',
+  'scale            var(--chakra-durations-motion-press) var(--chakra-easings-emphasized)',
   'background-color var(--chakra-durations-fast)         var(--chakra-easings-standard)',
 ].join(', ');
 
@@ -1097,13 +1097,13 @@ const CURVES = [
     name: 'standard',
     d: 'M0,100 C40,100 20,0 100,0',
     half: '50%',
-    use: 'press · feedback · presence 퇴장',
+    use: 'feedback',
   },
   {
     name: 'emphasized',
     d: 'M0,100 C22,0 36,0 100,0',
     half: '96%',
-    use: 'travel · presence 진입',
+    use: 'press · travel · presence 진입·퇴장',
   },
   {
     name: 'overshoot',
