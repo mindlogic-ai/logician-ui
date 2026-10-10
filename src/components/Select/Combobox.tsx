@@ -24,7 +24,7 @@ const Content = forwardRef<HTMLDivElement, ChakraCombobox.ContentProps>(
         ref={ref}
         // Chakra gives this one `animationDuration: 0s` on close — the list
         // vanishes mid-keystroke with no exit at all. Same policy as Select.
-        animationStyle="presence"
+        animationStyle="presence-anchored"
         {...props}
         css={mergeCss(contentStyles, css)}
       />

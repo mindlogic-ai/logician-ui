@@ -75,9 +75,9 @@ module.exports = {
       {
         // Chakra ignores a name it does not know, so a typo is silence.
         selector:
-          "JSXAttribute[name.name='animationStyle'] > Literal[value!=/^(press|feedback|travel|spring|presence|stagger|composite|slide-fade-in|slide-fade-out|scale-fade-in|scale-fade-out)$/]",
+          "JSXAttribute[name.name='animationStyle'] > Literal[value!=/^(press|feedback|travel|spring|presence|presence-anchored|stagger|composite|slide-fade-in|slide-fade-out|scale-fade-in|scale-fade-out)$/]",
         message:
-          "Unknown animationStyle. The vocabulary is press, feedback, travel, spring, presence, stagger, composite (plus Chakra's slide-fade-*/scale-fade-*). A motion only one component uses belongs in that component's .styles.ts.",
+          "Unknown animationStyle. The vocabulary is press, feedback, travel, spring, presence, presence-anchored, stagger, composite (plus Chakra's slide-fade-*/scale-fade-*). A motion only one component uses belongs in that component's .styles.ts.",
       },
       {
         // The three transition presets set `transition-property: none` on

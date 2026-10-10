@@ -53,7 +53,7 @@ export const Tooltip = forwardRef(
               // ways — which is why a tooltip used to feel like it was being
               // peeled off the trigger. It has the shortest dwell of anything
               // here, so the exit being half the enter matters most.
-              animationStyle="presence"
+              animationStyle="presence-anchored"
               {...contentProps}
               css={mergeCss(
                 { '--tooltip-bg': 'var(--chakra-colors-gray-1200)' },

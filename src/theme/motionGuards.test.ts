@@ -37,6 +37,7 @@ const CASES = {
   // The two presets that carry their own scope and must not be asked for one.
   pressNeedsNoScope: `<div animationStyle="press" />`,
   presenceNeedsNoScope: `<div animationStyle="presence" />`,
+  anchoredNeedsNoScope: `<div animationStyle="presence-anchored" />`,
 };
 
 type Case = keyof typeof CASES;
@@ -126,6 +127,7 @@ describe('the scope guard', () => {
   it.each([
     ['press', 'pressNeedsNoScope'],
     ['presence', 'presenceNeedsNoScope'],
+    ['presence-anchored', 'anchoredNeedsNoScope'],
   ] as const)('leaves %s alone, since it carries its own scope', (_n, key) => {
     // press defaults to `scale`; presence is an `animation-*` preset and its
     // keyframe already names what moves. Asking either for a property would

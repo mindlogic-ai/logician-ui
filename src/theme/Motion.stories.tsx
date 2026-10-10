@@ -179,6 +179,11 @@ const VOCAB = [
     line: 'animationStyle="presence"',
   },
   {
+    when: '트리거에 붙은 팝업이 열리고 닫힌다',
+    name: 'presence-anchored',
+    line: 'animationStyle="presence-anchored"',
+  },
+  {
     when: '목록이 차례로 도착한다',
     name: 'stagger',
     line: '{...staggerProps(index)}',
@@ -805,7 +810,7 @@ export const Choose: Story = {
         <Preset
           name="presence"
           timing="진입 300ms · emphasized / 퇴장 150ms · standard"
-          lead="열리고 닫히는 모든 것. 진입은 읽혀야 하고 퇴장은 이미 결정된 일이라 절반입니다. Menu · Popover · Tooltip · Select · Collapsible · Modal 여섯이 이 하나를 나눠 씁니다."
+          lead="열리고 닫히는 모든 것. 진입은 읽혀야 하고 퇴장은 이미 결정된 일이라 절반입니다. Modal · BottomSheet · Collapsible 은 300 / 150, 트리거에 붙은 Menu · Select · Combobox · Popover · Tooltip 은 presence-anchored 로 200 / 100 입니다."
           code={`<Menu.List animationStyle="presence" />
 
 // 무엇이 움직이는지는 각 recipe의 것이고, presence는 시계만 바꿉니다 —
@@ -819,10 +824,10 @@ export const Choose: Story = {
             <Stack gap={4}>
               <Stack gap={1}>
                 {[
-                  ['Menu', '150 / 100 → 300 / 150'],
-                  ['Popover', '150 / 100 → 300 / 150'],
-                  ['Tooltip', '150 / 150 → 300 / 150'],
-                  ['Select', '150 / 50 → 300 / 150'],
+                  ['Menu', '150 / 100 → 200 / 100 (anchored)'],
+                  ['Popover', '150 / 100 → 200 / 100 (anchored)'],
+                  ['Tooltip', '150 / 150 → 200 / 100 (anchored)'],
+                  ['Select', '150 / 50 → 200 / 100 (anchored)'],
                   ['Collapsible', '200 / 200 → 300 / 150'],
                   ['Modal', '자체 keyframe + presence 시계'],
                 ].map(([name, change]) => (
@@ -1087,7 +1092,8 @@ const OURS = [
 
 const CHAKRAS = [
   { name: 'fast', ms: 150, use: 'feedback 프리셋 · presence 퇴장' },
-  { name: 'moderate', ms: 200, use: '200ms가 필요하면 이걸 쓰세요' },
+  { name: 'faster', ms: 100, use: 'presence-anchored 퇴장' },
+  { name: 'moderate', ms: 200, use: 'presence-anchored 진입' },
   { name: 'slow', ms: 300, use: '⚠️ 우리 motion.slow(500ms)와 다른 값' },
   { name: 'slower', ms: 400, use: '⚠️ 우리 motion.slower(700ms)와 다른 값' },
 ];
