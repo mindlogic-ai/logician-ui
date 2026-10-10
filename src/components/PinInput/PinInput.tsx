@@ -28,12 +28,18 @@ export const PinInput = ({
       initialValue={value}
       onChange={onChange}
       type={isNumberOnly ? 'numeric' : 'custom'}
-      inputMode={isNumberOnly ? 'number' : 'text'}
+      // `numeric`, not `number`: `number` is not a valid `inputmode` value, so
+      // browsers fell back to the full text keyboard.
+      inputMode={isNumberOnly ? 'numeric' : 'text'}
       inputStyle={{
         borderColor: grayColor,
         borderRadius: '8px',
         width: '48px',
         height: '48px',
+        // iOS Safari zooms the page when focus lands on an input under 16px.
+        // An inline style cannot carry the `(pointer: coarse)` query that
+        // `noZoomOnFocus` uses, so the floor is unconditional here.
+        fontSize: '16px',
         ...inputStyle,
       }}
       inputFocusStyle={{

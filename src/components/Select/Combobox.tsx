@@ -1,6 +1,7 @@
 import { forwardRef } from 'react';
 import { Combobox as ChakraCombobox } from '@chakra-ui/react';
 
+import { noZoomOnFocus } from '@/theme/formControls';
 import { mergeCss } from '@/utils/mergeCss';
 
 import { contentStyles, inputStyles, itemStyles } from './Select.styles';
@@ -11,7 +12,9 @@ const Input = forwardRef<HTMLInputElement, ChakraCombobox.InputProps>(
       <ChakraCombobox.Input
         ref={ref}
         {...props}
-        css={mergeCss(inputStyles, css)}
+        // The one typeable listbox: unlike Select's button trigger, iOS Safari
+        // zooms toward this input when its text is under 16px.
+        css={mergeCss(noZoomOnFocus, inputStyles, css)}
       />
     );
   }
