@@ -102,7 +102,9 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
         // so a call site's `_disabled` cannot drop it.
         _disabled={{
           ...('_disabled' in styles ? styles._disabled : undefined),
-          cursor: 'not-allowed',
+          // Chakra disables a `loading` button too; it is working, not
+          // forbidden, so it gets `progress`.
+          cursor: rest.loading ? 'progress' : 'not-allowed',
           ...disabledProp,
         }}
         {...focusRing}

@@ -50,4 +50,11 @@ describe('Button disabled cursor', () => {
       'not-allowed'
     );
   });
+
+  it('loading shows progress, not not-allowed', () => {
+    wrap(<Button loading>busy</Button>);
+    const button = screen.getByRole('button');
+    expect(button).toBeDisabled();
+    expect(getComputedStyle(button).cursor).toBe('progress');
+  });
 });

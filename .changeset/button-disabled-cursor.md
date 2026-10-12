@@ -10,3 +10,6 @@ pointer always won and a disabled control read as clickable. The disabled
 cursor (`not-allowed`) now sits beside it. On `Button` it is merged with the
 call site's `_disabled` the way `_hover`/`_active` already are, so a call site
 that styles its disabled state does not lose the cursor.
+
+A `loading` Button (which Chakra also disables) shows `progress` instead: it is
+working, not forbidden.
