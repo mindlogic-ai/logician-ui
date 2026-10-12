@@ -35,6 +35,7 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       _hover: hoverProp,
       _active: activeProp,
+      _disabled: disabledProp,
       ...rest
     },
     ref
@@ -94,6 +95,16 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
         // no longer erases the ones it did not mention.
         _hover={{ ...styles._hover, ...hoverProp }}
         _active={{ ...styles._active, ...activeProp }}
+        // `cursor` is a style prop, so it lands outside Chakra's
+        // `@layer recipes` and beat the recipe's disabled cursor — every
+        // disabled Button showed a pointer and read as clickable. The
+        // disabled cursor has to sit at this level, merged like the two above
+        // so a call site's `_disabled` cannot drop it.
+        _disabled={{
+          ...('_disabled' in styles ? styles._disabled : undefined),
+          cursor: 'not-allowed',
+          ...disabledProp,
+        }}
         {...focusRing}
         cursor="pointer"
         // Explicit identity so the press transitions from a definite value

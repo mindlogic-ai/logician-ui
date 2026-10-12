@@ -27,6 +27,8 @@ const MenuItemImpl = ({
       fontWeight="semibold"
       gap={3}
       cursor="pointer"
+      // Same as `Button`: the style prop outranks the recipe's disabled cursor.
+      _disabled={{ cursor: 'not-allowed' }}
       _hover={{
         color: isDangerVariant ? 'danger.main' : 'fg.default',
         backgroundColor: isDangerVariant ? 'danger.lightest' : 'bg.subtle',
