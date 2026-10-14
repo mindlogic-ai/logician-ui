@@ -2,6 +2,7 @@ import {
   createSystem,
   defaultConfig,
   defineConfig,
+  defineSlotRecipe,
   defineTextStyles,
 } from '@chakra-ui/react';
 
@@ -226,6 +227,22 @@ const formControlLgOverride = {
   },
 };
 
+// Same `lg` step as Input, and the same height as Input `lg` (Chakra puts the
+// select trigger one token taller). Chakra's `py: 3` is em-based, so at 16px it
+// alone pushes the trigger past the min height; let the height token win.
+const selectSlotRecipe = defineSlotRecipe({
+  slots: ['root', 'trigger', 'content'],
+  variants: {
+    size: {
+      lg: {
+        root: { '--select-trigger-height': 'sizes.11' },
+        trigger: { fontSize: FORM_CONTROL_LG_FONT_SIZE, py: '1.5' },
+        content: { fontSize: FORM_CONTROL_LG_FONT_SIZE },
+      },
+    },
+  },
+});
+
 /**
  * Chakra UI v3 theme configuration for Logician UI
  *
@@ -311,21 +328,7 @@ const config = defineConfig({
     },
     slotRecipes: {
       table: tableSlotRecipe,
-      // Same `lg` step as Input, and the same height as Input `lg`
-      // (Chakra puts the select trigger one token taller).
-      select: {
-        variants: {
-          size: {
-            lg: {
-              root: { '--select-trigger-height': 'sizes.11' },
-              // Chakra's `py: 3` is em-based, so at 16px it alone pushes
-              // the trigger past the min height; let the height token win.
-              trigger: { fontSize: FORM_CONTROL_LG_FONT_SIZE, py: '1.5' },
-              content: { fontSize: FORM_CONTROL_LG_FONT_SIZE },
-            },
-          },
-        },
-      },
+      select: selectSlotRecipe,
     },
   },
 });
