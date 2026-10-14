@@ -54,10 +54,11 @@ it never knows *what* moves, so `transitionProperty` stays at the call site.
 | `travel` | Something moving to a new position or size |
 | `spring` | A physical flip, or two things crossing |
 | `presence` | A part with **both** an open and a closed state |
+| `presence-anchored` | The same, for a popup anchored to a trigger (Menu, Select, Combobox, Popover, Tooltip) |
 | `stagger` | Siblings arriving in sequence (with `staggerProps(index)`) |
 | `composite` | Escape hatch — one element needing two different clocks |
 
-**Seven is the whole list and that is policy.** A motion with one caller belongs
+**Eight is the whole list and that is policy.** A motion with one caller belongs
 next to that caller, not here (see `Spinner.styles.ts`, `Checkbox.styles.ts`).
 Adding an eighth needs two real call sites that the existing seven cannot
 express.
@@ -71,7 +72,8 @@ them:
   default fails invisibly.
 - **`prefers-reduced-motion`** is handled. Loops are the exception and slow down
   rather than stopping — a frozen spinner reads as a dead request.
-- **Enter is 300ms, exit is 150ms** for `presence`, enforced by a test.
+- **Enter is 300ms, exit is 150ms** for `presence` (Modal, BottomSheet,
+  Collapsible) and **200ms / 100ms** for `presence-anchored`, enforced by a test.
 
 Three things `animationStyle` accepts and should never be given — all three
 compile, and all three are caught by lint instead of by types, because Chakra

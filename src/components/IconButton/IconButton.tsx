@@ -4,6 +4,7 @@ import { IconButton as ChakraIconButton } from '@chakra-ui/react';
 import { focusRing } from '@/utils/focusRing';
 
 import { polymorphic } from '../../types/polymorphic';
+import { buttonTransition } from '../Button/Button.styles';
 import { getIconButtonStyles } from './IconButton.styles';
 import { IconButtonOwnProps, IconButtonProps } from './IconButton.types';
 
@@ -39,6 +40,12 @@ const IconButtonImpl = forwardRef(
         rounded="full"
         {...styles}
         {...focusRing}
+        // Same press as Button: it inherits the `_active` scale from the shared
+        // styles, but Chakra's `common` transition list has no `scale`, so the
+        // press used to snap. Same clock and reduced-motion guard as Button.
+        scale="1"
+        transition={buttonTransition}
+        animationStyle="composite"
         {...rest}
       >
         {children}

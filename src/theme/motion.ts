@@ -175,7 +175,8 @@ const REDUCED = { _motionReduce: { transitionDuration: 'motion.instant' } };
  * most of the distance early and settles. An exit has already been decided:
  * the reader dismissed the thing and is looking at what is behind it, so every
  * millisecond the leaving element still owns the screen is a millisecond of
- * waiting. Half the time, on the neutral curve.
+ * waiting. Half the time, on the same ease-out — a symmetric curve would
+ * start the exit slowly, which is the one place a dismissal must not lag.
  *
  * Only the *clock* is here, never `animation-name`. Each Chakra recipe already
  * names the right movement for its part — the menu slides from its trigger,
@@ -192,19 +193,40 @@ const REDUCED = { _motionReduce: { transitionDuration: 'motion.instant' } };
  * at all reads as a page swap. The movement is what has to go, not the fact
  * that something changed.
  */
-const PRESENCE_TIMING = {
+export const PRESENCE_TIMING = {
   _open: {
     animationDuration: 'motion.base',
     animationTimingFunction: 'emphasized',
   },
   _closed: {
     animationDuration: 'fast',
-    animationTimingFunction: 'standard',
+    animationTimingFunction: 'emphasized',
   },
   _motionReduce: {
     _open: { animationName: 'fade-in' },
     _closed: { animationName: 'fade-out' },
   },
+} as const;
+
+/**
+ * The same policy, on a shorter clock, for parts anchored to a trigger —
+ * Menu, Select, Combobox, Popover, Tooltip.
+ *
+ * These open tens of times a day, under a pointer that is already on its way
+ * to the first item, so the enter has much less to be read than a dialog does:
+ * the reader asked for it and knows where it will appear. 300ms there is twice
+ * Chakra's stock 150ms and feels like waiting; 200ms keeps a visible slide from
+ * the trigger and finishes before the pointer arrives. The exit keeps the
+ * half-the-enter ratio. Curves and the reduced-motion fade come from
+ * {@link PRESENCE_TIMING}, so the two cannot drift apart.
+ *
+ * Modal, BottomSheet and Collapsible stay on the full `presence` clock — they
+ * move more of the screen and are not anchored to anything.
+ */
+const ANCHORED_PRESENCE_TIMING = {
+  ...PRESENCE_TIMING,
+  _open: { ...PRESENCE_TIMING._open, animationDuration: 'moderate' },
+  _closed: { ...PRESENCE_TIMING._closed, animationDuration: 'faster' },
 } as const;
 
 /**
@@ -239,7 +261,9 @@ export const animationStyles = {
       // The one preset with a real default: a press is a scale, always.
       transitionProperty: 'scale',
       transitionDuration: 'motion.press',
-      transitionTimingFunction: 'standard',
+      // Ease-out, not `standard`: `standard` starts slowly, so the first frames
+      // of the press lag behind the finger.
+      transitionTimingFunction: 'emphasized',
       ...REDUCED,
     },
   },
@@ -298,6 +322,15 @@ export const animationStyles = {
    */
   presence: {
     value: { ...PRESENCE_TIMING },
+  },
+
+  /**
+   * `presence` for a part anchored to its trigger — menu, select, combobox,
+   * popover and tooltip content. 200ms in, 100ms out; see
+   * {@link ANCHORED_PRESENCE_TIMING}.
+   */
+  'presence-anchored': {
+    value: { ...ANCHORED_PRESENCE_TIMING },
   },
 
   /**
@@ -365,12 +398,13 @@ export const keyframes = {
     from: { opacity: '1', scale: '1' },
     to: { opacity: '0', scale: '0.97' },
   },
-  // The dot only mounts on check, so it grows from nothing. `0.4` is where
-  // Chakra's radiomark recipe rests it; ending anywhere else would make the dot
-  // jump the moment the animation hands back.
+  // The dot only mounts on check. It starts small and transparent rather than
+  // at `scale: 0` — nothing real appears from nothing, and a dot growing from a
+  // point reads as a glitch. `0.4` is where Chakra's radiomark recipe rests it;
+  // ending anywhere else would make the dot jump when the animation hands back.
   'dot-pop': {
-    from: { scale: '0' },
-    to: { scale: '0.4' },
+    from: { scale: '0.25', opacity: '0' },
+    to: { scale: '0.4', opacity: '1' },
   },
   'checkmark-draw': {
     // Negative, not positive. Chakra's polyline runs `20 6 → 9 17 → 4 12`, so

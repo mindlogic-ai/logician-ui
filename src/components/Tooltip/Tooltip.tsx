@@ -53,10 +53,19 @@ export const Tooltip = forwardRef(
               // ways — which is why a tooltip used to feel like it was being
               // peeled off the trigger. It has the shortest dwell of anything
               // here, so the exit being half the enter matters most.
-              animationStyle="presence"
+              animationStyle="presence-anchored"
               {...contentProps}
               css={mergeCss(
-                { '--tooltip-bg': 'var(--chakra-colors-gray-1200)' },
+                {
+                  '--tooltip-bg': 'var(--chakra-colors-gray-1200)',
+                  // zag sets `data-instant` when the pointer moves from one
+                  // open tooltip to the next. It already skips the delay
+                  // there; skip the enter/exit too, so sweeping a toolbar
+                  // doesn't replay the animation on every button. The extra
+                  // `[data-state]` outranks the presence clock's
+                  // `:is([data-state=open])`.
+                  '&[data-instant][data-state]': { animationDuration: '0ms' },
+                },
                 contentProps?.css
               )}
             >
