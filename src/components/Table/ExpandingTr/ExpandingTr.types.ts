@@ -1,4 +1,4 @@
-import { TableRowProps } from '@chakra-ui/react';
+import { TableRowProps } from '../Table.types';
 
 export interface ExpandingTrProps extends TableRowProps {
   children: React.ReactNode;

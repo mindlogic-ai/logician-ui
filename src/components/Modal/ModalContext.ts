@@ -7,7 +7,7 @@ interface ModalContextValue {
 }
 
 export const ModalContext = createContext<ModalContextValue>({
-  fullScreenOnMobile: true,
+  fullScreenOnMobile: false,
 });
 
 export const useModalContext = () => useContext(ModalContext);

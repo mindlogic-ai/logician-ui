@@ -31,7 +31,7 @@ const AvatarComponent = forwardRef<HTMLDivElement, AvatarProps>(
       <ChakraAvatar.Root
         ref={ref}
         borderWidth="1px"
-        borderColor="gray.200"
+        borderColor="border.subtle"
         overflow="hidden"
         bgColor="transparent"
         {...rest}

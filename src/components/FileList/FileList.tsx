@@ -3,15 +3,17 @@ import { Box, Button, List } from '@chakra-ui/react';
 
 import { FileItem } from '@/components/FileItem';
 import { FileGroupProps } from '@/components/FileList/FileList.types';
-import { IoChevronDownOutline } from '@/components/Icon';
+import { ChevronDownIcon } from '@/components/Icon';
 import { Subtitle } from '@/components/Typography';
 import { useTranslate } from '@/hooks/useTranslate';
+import { staggerProps } from '@/utils/staggerProps';
 
 export const FileList = ({
   files,
   onFileDelete,
   onFileDownload,
   visibleCount = 3,
+  stagger = false,
 }: FileGroupProps) => {
   const [currentVisibleCount, setCurrentVisibleCount] = useState<number>(
     visibleCount ?? 3
@@ -48,13 +50,20 @@ export const FileList = ({
     <Box
       w="100%"
       border="1px solid"
-      borderColor="gray.200"
+      borderColor="border.subtle"
       borderRadius="md"
       overflow="hidden"
     >
       <List.Root>
-        {files?.slice(0, currentVisibleCount).map((file) => (
-          <List.Item key={file.id} listStyle="none">
+        {files?.slice(0, currentVisibleCount).map((file, index) => (
+          // The stagger sits on the row, not on `FileItem`, so a row that is
+          // only revealed by "see more" animates in on its own index rather
+          // than inheriting the delay of the row above it.
+          <List.Item
+            key={file.id}
+            listStyle="none"
+            {...(stagger ? staggerProps(index) : {})}
+          >
             <FileItem
               fileName={file.name}
               onFileDelete={
@@ -67,7 +76,7 @@ export const FileList = ({
               }
               border={0}
               borderBottom="1px solid"
-              borderBottomColor="gray.50"
+              borderBottomColor="border.subtle"
               progress={file.progress}
               error={file.error}
               fileSize={file.size}
@@ -87,14 +96,16 @@ export const FileList = ({
           css={{
             all: 'unset',
             display: 'flex',
+            width: '100%',
+            justifyContent: 'center',
             gap: '0.25rem',
             cursor: 'pointer',
           }}
         >
-          <Subtitle color="gray.600">
+          <Subtitle color="fg.subtle">
             {translate('see_more')} ({visibleCount}/{files.length})
           </Subtitle>
-          <IoChevronDownOutline color="gray.600" />
+          <ChevronDownIcon color="fg.subtle" />
         </Button>
       )}
     </Box>

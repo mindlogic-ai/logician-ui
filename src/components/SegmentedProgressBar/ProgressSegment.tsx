@@ -10,7 +10,7 @@ export const ProgressSegment = ({ value, ...rest }: ProgressSegmentProps) => {
       max={value}
       width={`${(value / max) * 100}%`}
       height="100%"
-      bg="gray.200"
+      bg="bg.muted"
       borderRadius={0}
       {...rest}
     />

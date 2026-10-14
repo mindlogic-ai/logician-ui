@@ -1,14 +1,12 @@
 import { useMemo, useState } from 'react';
-import { SingleValue } from 'react-select';
 import { Flex } from '@chakra-ui/react';
 
-import { IoChevronForward, IoIosArrowBack } from '@/components/Icon';
+import { ChevronLeftIcon, ChevronRightIcon } from '@/components/Icon';
 import { IconButton } from '@/components/IconButton';
 import { Subtext, Subtitle } from '@/components/Typography';
 import { useTranslate } from '@/hooks/useTranslate';
 
-import { Select } from '../Select';
-import { SelectOption } from '../Select/Select.types';
+import { SelectField } from '../Select';
 import { PaginationProps } from './Pagination.types';
 
 /**
@@ -61,11 +59,8 @@ export const Pagination = ({
     }
   };
 
-  const handleItemsPerPageOptionChange = (
-    newValue: SingleValue<SelectOption<number>>
-  ) => {
-    if (newValue) {
-      const newItemsPerPage = newValue.value;
+  const handleItemsPerPageOptionChange = (newItemsPerPage: number | null) => {
+    if (newItemsPerPage != null) {
       onItemsPerPageOptionChange?.(newItemsPerPage);
 
       const newMaxPage = Math.ceil(numTotalItems / newItemsPerPage);
@@ -83,28 +78,19 @@ export const Pagination = ({
       <Flex align="center" gap={2}>
         {itemsPerPageOptions && (
           <Flex align="center" gap={2}>
-            <Select
-              menuPlacement="auto"
-              styles={{
-                control: (base, _state) => ({
-                  ...base,
-                  fontSize: '0.875rem',
-                  padding: 0,
-                  minHeight: '28px',
-                }),
-                dropdownIndicator: (base, _props) => ({
-                  ...base,
-                  padding: '0 4px',
-                }),
-              }}
+            <SelectField<number>
+              size="sm"
+              width="5.5rem"
+              // The visible label for this control is the "개씩 보기" text beside
+              // it, which the select itself cannot claim — so it carries the
+              // same words as its own hidden label rather than shipping
+              // nameless (KWCAG 5.3.4.1 레이블 제공).
+              ariaLabel={translate('pagination_items_per_page') as string}
               options={itemsPerPageOptions.map((option) => ({
                 label: option.toString(),
                 value: option,
               }))}
-              value={{
-                label: itemsPerPage.toString(),
-                value: itemsPerPage,
-              }}
+              value={itemsPerPage}
               onChange={handleItemsPerPageOptionChange}
             />
             <Subtext whiteSpace="nowrap">
@@ -125,9 +111,9 @@ export const Pagination = ({
               aria-label={translate('previous') as string}
               onClick={handleBack}
               disabled={currentPage <= 1}
-              color={currentPage === 1 ? 'gray.400' : 'gray.1000'}
+              color={currentPage === 1 ? 'fg.subtle' : 'fg.muted'}
             >
-              <IoIosArrowBack boxSize="sm" />
+              <ChevronLeftIcon boxSize="sm" />
             </IconButton>
             <IconButton
               colorPalette="neutral"
@@ -135,9 +121,9 @@ export const Pagination = ({
               aria-label={translate('go_next_page_button') as string}
               onClick={handleNext}
               disabled={currentPage >= maxPage}
-              color={currentPage === maxPage ? 'gray.400' : 'gray.1000'}
+              color={currentPage === maxPage ? 'fg.subtle' : 'fg.muted'}
             >
-              <IoChevronForward boxSize="sm" />
+              <ChevronRightIcon boxSize="sm" />
             </IconButton>
           </Flex>
         )}

@@ -1,4 +1,8 @@
+import type { ElementType } from 'react';
 import { TagRootProps } from '@chakra-ui/react';
+
+// Relative, NOT `@/types/*` — see `src/types/polymorphic.ts`.
+import type { PolymorphicProps } from '../../types/polymorphic';
 
 /**
  * Tag color schemes - determines the semantic color of the tag.
@@ -40,10 +44,19 @@ export type TagVariant = 'soft' | 'solid' | 'outline';
  * </Tag>
  * ```
  */
-export interface TagProps extends Omit<
+export type TagOwnProps = Omit<
   TagRootProps,
-  'colorPalette' | 'variant'
-> {
+  'colorPalette' | 'variant' | 'as'
+> & {
   colorPalette?: TagColorPalette;
   variant?: TagVariant;
-}
+};
+
+/**
+ * Props for `Tag`, typed for whatever element `as` renders. Defaults to
+ * `'span'`, so the bare type is unchanged.
+ */
+export type TagProps<TElement extends ElementType = 'span'> = PolymorphicProps<
+  TElement,
+  TagOwnProps
+>;

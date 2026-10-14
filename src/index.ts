@@ -1,8 +1,10 @@
 // Core Components
 export * from './components/Accordion';
+export * from './components/Appear';
 export * from './components/Avatar';
 export * from './components/Badge';
 export * from './components/Banner';
+export * from './components/BottomSheet';
 export * from './components/Breadcrumb';
 export * from './components/Button';
 export * from './components/Card';
@@ -11,11 +13,15 @@ export * from './components/Chip';
 export * from './components/Code';
 export * from './components/CodeTabs';
 export * from './components/Collapsible';
+export * from './components/ColorMode';
+export * from './components/Confetti';
 export * from './components/Container';
 export * from './components/CopyableCode';
+export * from './components/CountUp';
 export * from './components/DatePicker';
 export * from './components/ErrorFallback';
 export * from './components/ExpandableText';
+export * from './components/FlyTo';
 
 // File Components
 export * from './components/FileInput';
@@ -23,6 +29,7 @@ export * from './components/FileItem';
 export * from './components/FileList';
 
 // Form Components
+export * from './components/Form';
 export * from './components/FormControl';
 export * from './components/FormLabel';
 
@@ -52,7 +59,6 @@ export * from './components/LogicianProvider';
 export * from './components/Markdown';
 export * from './components/Masonry';
 export * from './components/MaxLengthIndicator';
-export * from './components/MDXEditor';
 export * from './components/Menu';
 export * from './components/Modal';
 export * from './components/MonthPicker';
@@ -70,14 +76,18 @@ export * from './components/ProgressBar';
 export * from './components/RadialProgress';
 
 // Interactive Components
+export * from './components/Pulse';
 export * from './components/Radio';
+export * from './components/Reveal';
 export * from './components/ScaledContext';
 export * from './components/SeeMoreButton';
 export * from './components/SegmentedControl';
 export * from './components/SegmentedProgressBar';
 export * from './components/Select';
+export * from './components/Shake';
 export * from './components/Slider';
 export * from './components/Spinner';
+export * from './components/SwapTransition';
 export * from './components/Switch';
 
 // Layout Components
@@ -87,22 +97,81 @@ export * from './components/Tag';
 export * from './components/Textarea';
 export * from './components/Toast';
 export * from './components/Tooltip';
+export * from './components/Tree';
+export * from './components/Workflow';
 // Typography Components (excluding Link to avoid conflict with Link component)
 export {
+  Caption,
   H1,
   H2,
   H3,
   H4,
   H5,
   Link,
+  LINK_RAMP,
+  Overline,
   Subtext,
   Subtitle,
   Text,
 } from './components/Typography';
+// …and their prop types, which the block above never exported — so a consumer
+// could not type a wrapper over `H3`/`Text` at all. `LinkProps` is deliberately
+// left out: the root already exports a `Link` component from elsewhere and the
+// name would collide.
+export type {
+  CaptionProps,
+  H1Props,
+  H2Props,
+  H3Props,
+  H4Props,
+  H5Props,
+  HeadingOwnProps,
+  HeadingProps,
+  OverlineProps,
+  SubtextProps,
+  SubtitleProps,
+  TextProps,
+  TypographyOwnProps,
+  TypographyProps,
+} from './components/Typography';
 
 // Hooks
+export { useHasHover } from './hooks/useHasHover';
 export type { LanguageContextValue } from './hooks/useLanguage';
 export { LanguageContext, useLanguage } from './hooks/useLanguage';
 
 // Theme exports
 export { logicianConfig, system, theme } from './theme';
+export {
+  colors,
+  type SemanticColorToken,
+  semanticTokens,
+} from './theme/colors';
+export { noZoomOnFocus } from './theme/formControls';
+export {
+  animationStyles,
+  durations,
+  easings,
+  MOTION_DURATION_MS,
+  MOTION_DURATION_S,
+  MOTION_EASE,
+  MOTION_EASE_CSS,
+  MOTION_STAGGER_MAX,
+  type MotionDurationToken,
+  type MotionEaseToken,
+  type MotionStyleToken,
+} from './theme/motion';
+export { cubicBezier } from './utils/cubicBezier';
+export {
+  staggerDelayMs,
+  type StaggerProps,
+  staggerProps,
+} from './utils/staggerProps';
+
+// Shared Types
+export type {
+  PolymorphicComponent,
+  PolymorphicProps,
+  PolymorphicRef,
+} from './types/polymorphic';
+export { polymorphic } from './types/polymorphic';

@@ -13,7 +13,7 @@ export const TabList = ({ children, css, ...props }: TabListProps) => {
       <Box
         width="100%"
         borderBottom="1px solid"
-        borderColor="gray.100"
+        borderColor="border.subtle"
         {...tabListStyles}
         {...props}
         css={mergeCss(

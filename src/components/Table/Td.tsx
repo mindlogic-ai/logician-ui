@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { Table, useToken } from '@chakra-ui/react';
 
 import { getStickyStyles } from './Table.styles';
 import { TableCellProps } from './Table.types';
 import { useTableContext } from './TableContext';
+import { useRegisterStickyWidth } from './useRegisterStickyWidth';
 
 export const Td = ({
   wrap,
@@ -77,18 +78,22 @@ export const Td = ({
 
   const {
     registerStickyColumn,
+    hasStickyWidth,
     getStickyOffset,
     isLastStickyColumn,
     ...scrollState
   } = tableContext;
 
-  // Update width when element is mounted and dimensions change
-  useEffect(() => {
-    if (isSticky && cellRef.current) {
-      const width = cellRef.current.getBoundingClientRect().width;
-      registerStickyColumn(stickyDirection, stickyIndex, width);
-    }
-  }, [isSticky, registerStickyColumn, stickyDirection, stickyIndex]);
+  // Keep this column's width registered so the cumulative sticky offsets stay
+  // correct across layout changes (font swap, resize, fit -> overflow).
+  useRegisterStickyWidth(cellRef, {
+    isSticky,
+    direction: stickyDirection,
+    index: stickyIndex,
+    register: registerStickyColumn,
+    hasWidth: hasStickyWidth,
+    role: 'body',
+  });
 
   // Get the sticky offset based on the column's position
   const stickyOffset = isSticky

@@ -15,7 +15,7 @@ export const PinInput = ({
 }: PinInputProps) => {
   const pinInputRef = useRef<ReactPinInput>(null);
   const primaryColor = useToken('colors', 'primary.main')[0];
-  const grayColor = useToken('colors', 'gray.200')[0];
+  const grayColor = useToken('colors', 'border.default')[0];
 
   useEffect(() => {
     // Automatically focus the PinInput component on mount

@@ -482,13 +482,14 @@ export const PreventOutsideClick: Story = {
 /**
  * 모바일 풀스크린 모달 (기본값)
  *
- * fullScreenOnMobile이 true(기본값)이면 모바일 뷰포트에서
+ * fullScreenOnMobile을 true로 주면 모바일 뷰포트에서
  * 모달이 전체 화면으로 표시됩니다 (100vw × 100dvh, border-radius 0).
+ * 기본값은 false이니 전체 화면이 필요한 곳에서만 켜세요.
  * 브라우저를 좁혀서 확인해보세요.
  */
 export const FullScreenOnMobile: Story = {
   args: {
-    headerTitle: 'Full Screen on Mobile (Default)',
+    headerTitle: 'Full Screen on Mobile (opt-in)',
   },
   render: (args) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -507,7 +508,7 @@ export const FullScreenOnMobile: Story = {
             <ModalCloseButton />
             <ModalBody>
               모바일에서 이 모달은 전체 화면으로 표시됩니다. 브라우저 창을 좁혀서
-              확인해보세요. fullScreenOnMobile은 기본값이 true입니다.
+              확인해보세요. fullScreenOnMobile은 기본값이 false라 직접 켜야 합니다.
             </ModalBody>
             <ModalFooter>
               <Button variant="ghost" onClick={() => setIsOpen(false)}>
@@ -527,13 +528,13 @@ export const FullScreenOnMobile: Story = {
 /**
  * 모바일에서 인라인 모달
  *
- * fullScreenOnMobile={false}이면 모바일에서도 풀스크린이 아닌
+ * fullScreenOnMobile={false}(기본값)이면 모바일에서도 풀스크린이 아닌
  * 일반 모달로 표시되며, 좌우 마진(mx: 4)이 적용됩니다.
- * Confirm 모달 등 작은 모달에 적합합니다.
+ * Confirm 모달 등 대부분의 모달이 여기에 해당합니다.
  */
 export const NoFullScreenOnMobile: Story = {
   args: {
-    headerTitle: 'Inline on Mobile',
+    headerTitle: 'Inline on Mobile (default)',
   },
   render: (args) => {
     const [isOpen, setIsOpen] = useState(false);

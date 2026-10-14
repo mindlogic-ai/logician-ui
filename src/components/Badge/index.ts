@@ -3,4 +3,4 @@ export {
   baseStyles as badgeStyles,
   variantStyles as badgeVariantStyles,
 } from './Badge.styles';
-export type { BadgeProps, BadgeVariant } from './Badge.types';
+export type { BadgeOwnProps, BadgeProps, BadgeVariant } from './Badge.types';

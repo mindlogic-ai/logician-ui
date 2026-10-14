@@ -13,6 +13,21 @@ import {
 export type ToastStatus = 'info' | 'warning' | 'success' | 'error';
 
 /**
+ * The single action a toast can carry.
+ *
+ * Rendered as a text action in the toast's status color, under the
+ * description. Clicking it calls `onClick` and dismisses the toast.
+ * One action per toast — dismiss is the ×, never a second action.
+ * See the "Guidelines/Actions in feedback surfaces" page in Storybook.
+ */
+export interface ToastAction {
+  /** Action label — keep it to a short verb phrase ("크레딧 구매", "Undo") */
+  label: ReactNode;
+  /** Called when the action is clicked; the toast is dismissed afterwards */
+  onClick: () => void;
+}
+
+/**
  * Toast component props
  * Uses ToastRootProps as base and overrides title for ReactNode support
  */
@@ -25,15 +40,23 @@ export interface ToastProps extends Omit<ToastRootProps, 'title'> {
   status?: ToastStatus;
   /** Custom close handler */
   onClose?: () => void;
+  /** One action, rendered as a text action in the status color */
+  action?: ToastAction;
 }
 
 /**
  * Options for useToast hook
  * Extends Chakra's ToastOptions with custom properties
  */
-export interface UseToastOptions extends ToastOptions {
+export interface UseToastOptions extends Omit<ToastOptions, 'action'> {
   /** Toast status - restricted to common statuses */
   status?: ToastStatus;
+  /**
+   * One action, rendered as a text action in the status color.
+   * Unlike Chakra's `action`, the label accepts any ReactNode.
+   * When set and `duration` is not given, the toast stays for 8s instead of 5s.
+   */
+  action?: ToastAction;
   /** Custom styles to apply to the toast */
   styles?: BoxProps;
 }
@@ -47,6 +70,8 @@ export interface ToasterCreateOptions extends ToastOptions {
   meta?: {
     /** Custom close handler for the toast */
     onClose?: () => void;
+    /** Toast action (ReactNode label); takes precedence over Chakra's `action` */
+    action?: ToastAction;
     /** Custom styles to merge with default toast styles */
     styles?: BoxProps;
     /** Allow additional custom metadata */

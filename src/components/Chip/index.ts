@@ -5,4 +5,9 @@ export {
   getChipStyles,
   variants,
 } from './Chip.styles';
-export type { ChipColorScheme, ChipProps, ChipVariant } from './Chip.types';
+export type {
+  ChipColorScheme,
+  ChipOwnProps,
+  ChipProps,
+  ChipVariant,
+} from './Chip.types';

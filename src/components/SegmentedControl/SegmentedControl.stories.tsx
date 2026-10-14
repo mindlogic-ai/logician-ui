@@ -1,4 +1,4 @@
-import { HStack, Icon, Text } from '@chakra-ui/react';
+import { HStack, Icon, Stack, Text, VStack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 import React, { useState } from 'react';
 import { FiHome, FiSettings, FiUser } from 'react-icons/fi';
@@ -141,6 +141,32 @@ export const EditableLabel: StoryObj<
       ]}
     />
   ),
+};
+
+/**
+ * The same control rendered on each of the three main page-background tokens.
+ * The track fill (`bg.subtle`) matches `bg.sunken` in light mode, so without a
+ * defining ring the control would disappear on a sunken list/overview page.
+ * Confirm the control reads as a bounded control on all three surfaces, in both
+ * light and dark (flip the **Color mode** toolbar control).
+ */
+export const OnPageBackgrounds: Story = {
+  parameters: { layout: 'fullscreen' },
+  render: (props) => {
+    const surfaces = ['bg.surface', 'bg.sunken', 'bg.canvas'] as const;
+    return (
+      <Stack gap={0}>
+        {surfaces.map((surface) => (
+          <VStack key={surface} bg={surface} p={8} align="start" gap={3}>
+            <Text fontSize="sm" fontWeight="600" color="fg.muted">
+              on {surface}
+            </Text>
+            <SegmentedControl {...props} />
+          </VStack>
+        ))}
+      </Stack>
+    );
+  },
 };
 
 export const WithCustomContent = {

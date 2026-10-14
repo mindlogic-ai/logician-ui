@@ -155,7 +155,7 @@ export const Sizes: Story = {
       <VStack maxW="1400px" gap={4} align="start">
         <Text fontWeight="bold">크기 조절</Text>
         <HStack gap={4} align="center">
-          {['xs', 'sm', 'md', 'lg', 'xl'].map((size) => (
+          {['2xs', 'xs', 'sm', 'md', 'lg', 'xl'].map((size) => (
             <VStack key={size}>
               <SampleIcon boxSize={size} color="blue.500" />
               <Text textStyle="subtext">{size}</Text>
@@ -223,6 +223,10 @@ const CustomBuildingIcon = createIcon(
       <Box borderTop="1px solid" borderColor="gray.200" pt={4}>
         <Text fontWeight="semibold" mb={3}>결과:</Text>
         <HStack gap={6}>
+          <VStack>
+            <CustomBuildingIcon boxSize="2xs" color="blue.500" />
+            <Text textStyle="subtext">2xs (14px)</Text>
+          </VStack>
           <VStack>
             <CustomBuildingIcon boxSize="xs" color="blue.500" />
             <Text textStyle="subtext">xs (16px)</Text>
@@ -305,7 +309,7 @@ const MyCustomIcon = createIcon(
     <Box w="100%" bg="blue.50" p={4} borderRadius="md" borderLeft="4px solid" borderColor="blue.500">
       <Text fontWeight="bold" mb={2}>✨ 주요 기능</Text>
       <VStack align="start" gap={2} textStyle="subtext">
-        <Text>• <strong>boxSize 지원:</strong> xs, sm, md, lg, xl (16px ~ 40px)</Text>
+        <Text>• <strong>boxSize 지원:</strong> 2xs, xs, sm, md, lg, xl (14px ~ 40px)</Text>
         <Text>• <strong>Chakra UI 스타일링:</strong> color, bg, margin, padding 등 모든 Box props 사용 가능</Text>
         <Text>• <strong>Tree shaking:</strong> 사용하지 않는 아이콘은 번들에서 제외됨</Text>
         <Text>• <strong>TypeScript 지원:</strong> 완전한 타입 안전성 제공</Text>

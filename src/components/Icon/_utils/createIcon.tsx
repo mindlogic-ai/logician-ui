@@ -7,6 +7,7 @@ export type IconProps = Partial<SVGProps<SVGElement>> &
 
 // Static size mapping (SSR-safe)
 const sizeMapping: Record<string, string> = {
+  '2xs': '3.5',
   xs: '4',
   sm: '5',
   md: '6',

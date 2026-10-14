@@ -36,7 +36,7 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <Box p={8} bg="white" borderRadius="md">
+      <Box p={8} bg="bg.surface" borderRadius="md">
         <Story />
       </Box>
     ),

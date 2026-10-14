@@ -26,6 +26,7 @@
       "@/utils/*": ["./src/utils/*"],
       "@/hooks/*": ["./src/hooks/*"],
       "@/theme/*": ["./src/theme/*"],
+      "@/types/*": ["./src/types/*"],
       "@/translations/*": ["./src/translations/*"]
     }
   },
@@ -34,6 +35,7 @@
     "node_modules",
     "dist",
     "**/*.test.tsx",
+    "**/*.test.ts",
 
     "src/components/Skeleton/SkeletonGrid/**/*",
     "src/components/Skeleton/SkeletonTable/**/*"

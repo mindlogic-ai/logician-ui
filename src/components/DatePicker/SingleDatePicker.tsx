@@ -40,7 +40,7 @@ export const SingleDatePicker = ({
         triggerBtnProps: {
           justifyContent: 'left',
           fontWeight: 'regular',
-          color: 'gray.1500',
+          color: 'fg.default',
           fontSize: 'md',
           ...propsConfigs?.triggerBtnProps,
         },
@@ -82,7 +82,7 @@ export const SingleDatePicker = ({
         },
         weekdayLabelProps: {
           mb: 2,
-          color: 'gray.1000',
+          color: 'fg.muted',
           fontWeight: 'regular',
           ...propsConfigs?.weekdayLabelProps,
         },
@@ -90,7 +90,7 @@ export const SingleDatePicker = ({
           defaultBtnProps: {
             width: 34,
             height: 34,
-            color: 'gray.1500',
+            color: 'fg.default',
             fontSize: 'sm',
             fontWeight: 'regular',
             _hover: {
@@ -124,7 +124,7 @@ export const SingleDatePicker = ({
             {...(propsConfigs?.triggerBtnProps as ButtonProps)}
           >
             <MdOutlineCalendarToday
-              color="gray.400"
+              color="fg.subtle"
               style={{ marginInlineEnd: 3 }}
             />
             {selectedDate

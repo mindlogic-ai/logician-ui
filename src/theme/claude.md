@@ -6,12 +6,129 @@ The Logician UI theme system extends Chakra UI's theming capabilities with the *
 
 ```
 src/theme/
-├── index.ts          # Main theme export
+├── index.ts          # Main theme export (also defines textStyles)
 ├── colors.ts         # Color palette & semantic tokens
+├── motion.ts         # Duration/easing scales & the animationStyle presets
 ├── font.ts           # Font family definitions
 ├── global.ts         # Global CSS styles
-└── Palette.stories.tsx  # Visual color palette reference
+├── Palette.stories.tsx  # Visual color palette reference
+└── Motion.stories.tsx   # Motion preset & scale reference
 ```
+
+## Motion
+
+**Never write a duration or a curve as a literal.** Everything below exists so
+that `300ms` and `cubic-bezier(...)` do not appear in component code.
+
+### Start here — which of the three
+
+```
+An element already on screen, one of its values changes   →  a preset
+An element appears / disappears / has to replay           →  a component
+You are using a library component (Switch, Card, …)       →  nothing. It is done.
+```
+
+The third is the common case. Reaching for `animationStyle` by hand means you
+are building something the library does not have.
+
+### Presets — `animationStyle`
+
+A name carries duration, curve and reduced-motion together, the way
+`textStyle="h3"` carries family, size, weight, leading and tracking.
+
+```tsx
+<Switch.Control
+  _checked={{ bg: 'primary.main' }}      // when it changes
+  animationStyle="feedback"              // how long, what curve
+  transitionProperty="background-color"  // what moves
+/>
+```
+
+Those three roles are separate and all three are required. A preset is a clock —
+it never knows *what* moves, so `transitionProperty` stays at the call site.
+
+| Preset | For |
+|---|---|
+| `press` | Contact — a button going down under the pointer |
+| `feedback` | Hover and state colour |
+| `travel` | Something moving to a new position or size |
+| `spring` | A physical flip, or two things crossing |
+| `presence` | A part with **both** an open and a closed state |
+| `stagger` | Siblings arriving in sequence (with `staggerProps(index)`) |
+| `composite` | Escape hatch — one element needing two different clocks |
+
+**Seven is the whole list and that is policy.** A motion with one caller belongs
+next to that caller, not here (see `Spinner.styles.ts`, `Checkbox.styles.ts`).
+Adding an eighth needs two real call sites that the existing seven cannot
+express.
+
+Three rules are inside the preset definitions, so no component has to remember
+them:
+
+- **`transitionProperty` defaults to `none`.** CSS defaults it to `all`, which
+  would animate every property on the element — including ones the call site
+  set. Forgetting the prop means nothing moves, which is visible; the CSS
+  default fails invisibly.
+- **`prefers-reduced-motion`** is handled. Loops are the exception and slow down
+  rather than stopping — a frozen spinner reads as a dead request.
+- **Enter is 300ms, exit is 150ms** for `presence`, enforced by a test.
+
+Three things `animationStyle` accepts and should never be given — all three
+compile, and all three are caught by lint instead of by types, because Chakra
+types the prop as `… | AnyString`:
+
+```tsx
+<Box animationStyle="feedbak" />                  // typo — silently does nothing
+<Box animationStyle="feedback" />                 // no scope — nothing moves
+<Box animationStyle={['travel', 'spring']} />     // read as RESPONSIVE BREAKPOINTS,
+                                                  // not as two motions
+```
+
+### Components — `Components/Motion/*` in Storybook
+
+CSS transitions need a before-value to interpolate from, so they cannot animate
+something that did not exist a moment ago, and cannot be replayed on demand.
+That is what these are for.
+
+| Component | For |
+|---|---|
+| `Pulse` | A value just landed — pop once |
+| `Shake` | Refusal. Never use it for emphasis |
+| `Appear` | One element entering on mount |
+| `Reveal` | A block opening underneath what is being read |
+| `FlyTo` | This went there — a ghost between two measured rects |
+| `Confetti` | One celebratory burst |
+| `CountUp` | A number rising |
+| `SwapTransition` | Content being replaced — steps, records |
+
+`Pulse` and `Shake` replay when `trigger` **changes**, and never on first render
+(a counter that mounts at 12 has not just become 12).
+
+They are not interchangeable with the presets and not a fallback for them. If
+the element can close, use `presence`; if siblings arrive with it, `stagger`.
+
+Each wraps differently, so check its TSDoc before putting one inside a `<tr>` or
+an Ark part that walks its own children: `Pulse` / `Shake` / `Appear` add one
+`div`, `Reveal` / `SwapTransition` add two, `FlyTo` portals, `Confetti` is an
+overlay, `CountUp` is the `<span>` itself.
+
+### Raw values — the escape hatch
+
+`durations` and `easings` are registered in the theme, so `motion.base` and
+`overshoot` resolve anywhere CSS does. Reach for the raw exports only where CSS
+cannot: `MOTION_DURATION_MS` / `MOTION_DURATION_S` / `MOTION_EASE` /
+`MOTION_EASE_CSS` for a third-party animation API, and `cubicBezier(curve)` to
+evaluate a house curve in JavaScript (a count-up that invents its own
+`easeOutCubic` lands on a different curve from the card beside it).
+
+Durations carry a `motion.` prefix so they sit alongside Chakra's scale rather
+than redefining `slow` / `slower`, which its `dialog`, `drawer` and `progress`
+recipes read — redefining a token you did not author retimes every component
+that reads it. There are deliberately no `motion.*` tokens for 150ms and 200ms:
+Chakra's `fast` and `moderate` are exactly those, and two names for one number
+is worse than remembering which scale to reach into.
+
+`Theme/Motion` in Storybook is the live version of this page.
 
 ## Golden Ratio Color System
 
@@ -20,7 +137,9 @@ src/theme/
 1. **Accessibility First**: All semantic color combinations meet WCAG 2.1 AA standards (4.5:1 minimum contrast)
 2. **Cool Gray Foundation**: Slate-based grays with blue undertone for a modern, professional feel
 3. **Consistent Scale**: Each color has 50/100/200/300/500/600/700/800/900 steps
-4. **Light Mode Optimized**: Designed for light mode with semantic token flexibility
+4. **Light & Dark Mode**: Neutral semantic tokens (`bg.*`/`fg.*`/`border.*`) carry a `_dark`
+   variant and flip automatically by color mode. Use them instead of raw `gray.*`/`white`
+   primitives so components work in both modes (see [Neutral Semantic Tokens](#neutral-semantic-tokens-dark-mode)).
 
 ### Primitive Color Palettes
 
@@ -52,8 +171,8 @@ Error and destructive action states.
 | `rose.100` | `#F3B9BD` | Light error fills |
 | `rose.200` | `#E87D84` | Error borders, icons |
 | `rose.300` | `#DC4A53` | Error accents |
-| `rose.500` | `#D01721` | **Danger main** - error states |
-| `rose.600` | `#A6121A` | Hover on main |
+| `rose.500` | `#C1232C` | **Danger main** - error states |
+| `rose.600` | `#9C1C23` | Hover on main |
 | `rose.700` | `#7D0D14` | Error text |
 | `rose.800` | `#53090D` | Dark emphasis |
 | `rose.900` | `#2A0407` | Darkest, high contrast |
@@ -159,7 +278,7 @@ semanticTokens: {
       extralight: 'rose.50',   // #FBE8E9 - Extra-light backgrounds
       lighter: 'rose.100',     // #F3B9BD - Light error fills
       light: 'rose.200',       // #E87D84 - Error borders
-      main: 'rose.500',        // #D01721 - Error states
+      main: 'rose.500',        // #C1232C - Error states
       dark: 'rose.700',        // #7D0D14 - Error text on light bg
       darker: 'rose.900',      // #2A0407 - High contrast error text
     },
@@ -185,6 +304,59 @@ semanticTokens: {
 }
 ```
 
+### Neutral Semantic Tokens (Dark Mode)
+
+The brand semantics above carry `_dark` variants, but the **neutral** tokens below are
+the ones to reach for on surfaces, text, and borders. Each maps onto the `gray.0–1500`
+scale and resolves to a different step under `.dark` (Chakra v3's class strategy), so a
+component built with them flips for free — **no `_dark` overrides needed**.
+
+```tsx
+semanticTokens: {
+  colors: {
+    // Backgrounds                base (light) → _dark
+    bg: {
+      canvas:  'gray.0',    // app background        → gray.1500
+      surface: 'white',     // cards, menus, popovers → gray.1400
+      subtle:  'gray.50',   // secondary surface      → gray.1300
+      muted:   'gray.100',  // tertiary fill, hover   → gray.1200
+      inverse: 'gray.1300', // high-contrast surface  → gray.50
+    },
+    // Foreground (text / icons)
+    fg: {
+      default: 'gray.1300', // primary text → gray.200
+      muted:   'gray.900',  // secondary    → gray.300
+      subtle:  'gray.700',  // tertiary     → gray.600
+      inverse: 'gray.0',    // text on inverse → gray.1400
+    },
+    // Borders / dividers
+    border: {
+      default: 'gray.300',  // standard borders → gray.1100
+      subtle:  'gray.200',  // low-emphasis     → gray.1300
+      strong:  'gray.500',  // high-emphasis    → gray.900
+    },
+  },
+}
+```
+
+```tsx
+// ✅ Flips with color mode
+<Box bg="bg.surface" color="fg.default" borderColor="border.default" />
+
+// ❌ Stuck in light mode — a white panel / dark text that never flips
+<Box bg="white" color="gray.1300" borderColor="gray.300" />
+```
+
+**Exceptions (intentionally do not flip):**
+- Solid brand fills and their white labels (`bg="primary.main" color="white"`) are
+  mode-invariant by design — keep them as primitives.
+- White slider knobs and always-dark surfaces (Tooltip, CodeTabs) stay fixed.
+- **Third-party renderers that don't resolve Chakra tokens** (e.g. recharts in
+  `LineGraph`): feed the resolved CSS var instead — `var(--chakra-colors-fg-muted)`.
+- **Translucency**: when you need a semi-transparent surface that still flips, mix the
+  CSS var instead of hardcoding rgba — e.g.
+  `color-mix(in srgb, var(--chakra-colors-bg-surface) 85%, transparent)` (see `FileInput`).
+
 ### WCAG Contrast Ratios
 
 All semantic color combinations meet WCAG 2.1 accessibility standards:
@@ -194,7 +366,7 @@ All semantic color combinations meet WCAG 2.1 accessibility standards:
 | `primary.lightest` + `primary.dark` | 7.2:1 | AAA |
 | `primary.main` + white | 5.9:1 | AA |
 | `danger.lightest` + `danger.dark` | 7.4:1 | AAA |
-| `danger.main` + white | 5.2:1 | AA |
+| `danger.main` + white | 5.9:1 | AA |
 | `success.lightest` + `success.dark` | 6.1:1 | AA |
 | `warning.lightest` + `warning.dark` | 5.8:1 | AA |
 | `gray.0` + `gray.1300` | 11.2:1 | AAA |
@@ -214,13 +386,24 @@ All semantic color combinations meet WCAG 2.1 accessibility standards:
 <Box bg="warning.lighter" color="warning.dark" />
 ```
 
+### Neutral Surfaces / Text / Borders: use `bg.*` / `fg.*` / `border.*`
+
+These flip with color mode — prefer them over raw `gray.*`/`white` for anything neutral:
+
+```tsx
+// ✅ Best - flips between light and dark
+<Box bgColor="bg.surface" borderColor="border.default" />
+<Text color="fg.default">Primary text</Text>
+<Text color="fg.subtle">Secondary text</Text>
+```
+
 ### Alternative: Primitive Colors
 
 ```tsx
-// ✅ Acceptable - when no semantic token applies
-<Box borderColor="gray.300" bgColor="gray.0" />
-<Text color="gray.1300">Primary text</Text>
-<Text color="gray.700">Secondary text</Text>
+// ⚠️ Only when the value must stay fixed across modes (rare for neutrals).
+// Raw gray.*/white do NOT flip, so a `white` surface or `gray.1300` text will be
+// stuck in light mode under .dark. Reach for bg.*/fg.*/border.* above instead.
+<Box bgColor="primary.main" color="white" /> // mode-invariant brand fill — OK
 ```
 
 ### Accessing Theme in Components
@@ -340,13 +523,17 @@ const color = theme.semanticTokens.colors.primary.main;
 const color = '#1751D0';
 ```
 
-### 3. Consistent Gray Usage
+### 3. Consistent Gray Usage — prefer flipping neutral tokens
 
 ```tsx
-// ✅ Good - semantic gray usage
-<Text color="gray.1300">Primary text</Text>
-<Text color="gray.700">Secondary text</Text>
-<Box borderColor="gray.300" />
+// ✅ Best - neutral semantic tokens flip with color mode
+<Text color="fg.default">Primary text</Text>
+<Text color="fg.subtle">Secondary text</Text>
+<Box bgColor="bg.surface" borderColor="border.default" />
+
+// ⚠️ Stuck in light mode - raw gray.*/white never flip under .dark
+<Text color="gray.1300" /> // use fg.default
+<Box bgColor="white" />    // use bg.surface
 
 // ❌ Bad - arbitrary values
 <Text color="#333" />

@@ -16,93 +16,102 @@ export const tagColorPaletteStyles: Record<
   primary: {
     soft: {
       bgColor: 'primary.extralight',
-      borderColor: 'primary.light',
-      color: 'primary.dark',
+      borderColor: 'primary.lighter',
+      color: 'primary.darker',
     },
     solid: {
-      bgColor: 'primary.main',
-      borderColor: 'primary.main',
+      bgColor: 'blue.500',
+      borderColor: 'blue.500',
       color: 'white',
     },
     outline: {
       bgColor: 'transparent',
       borderColor: 'primary.main',
-      color: 'primary.main',
+      color: 'primary.dark',
     },
   },
   secondary: {
     soft: {
       bgColor: 'secondary.extralight',
-      borderColor: 'secondary.light',
-      color: 'secondary.dark',
+      borderColor: 'secondary.lighter',
+      color: 'secondary.darker',
     },
     solid: {
-      bgColor: 'secondary.main',
-      borderColor: 'secondary.main',
+      bgColor: 'violet.500',
+      borderColor: 'violet.500',
       color: 'white',
     },
     outline: {
       bgColor: 'transparent',
       borderColor: 'secondary.main',
-      color: 'secondary.main',
+      color: 'secondary.dark',
     },
   },
   danger: {
     soft: {
       bgColor: 'danger.extralight',
-      borderColor: 'danger.light',
-      color: 'danger.dark',
+      borderColor: 'danger.lighter',
+      color: 'danger.darker',
     },
     solid: {
-      bgColor: 'danger.main',
-      borderColor: 'danger.main',
+      bgColor: 'rose.500',
+      borderColor: 'rose.500',
       color: 'white',
     },
     outline: {
       bgColor: 'transparent',
       borderColor: 'danger.main',
-      color: 'danger.main',
+      color: 'danger.dark',
     },
   },
   success: {
     soft: {
       bgColor: 'success.extralight',
-      borderColor: 'success.light',
-      color: 'success.dark',
+      borderColor: 'success.lighter',
+      color: 'success.darker',
     },
     solid: {
-      bgColor: 'success.main',
-      borderColor: 'success.main',
+      bgColor: 'green.600',
+      borderColor: 'green.600',
       color: 'white',
     },
     outline: {
       bgColor: 'transparent',
       borderColor: 'success.main',
-      color: 'success.main',
+      color: 'success.dark',
     },
   },
   warning: {
     soft: {
       bgColor: 'warning.extralight',
-      borderColor: 'warning.light',
-      color: 'warning.dark',
+      borderColor: 'warning.lighter',
+      color: 'warning.darker',
     },
     solid: {
-      bgColor: 'warning.main',
-      borderColor: 'warning.main',
+      // Deepened from gold.500 so white text clears AA and the chip matches the
+      // other solids (white on a saturated fill). White/gold.500 was only
+      // 2.39:1; white/gold.700 = 5.86:1 ✓ AA. Bright gold + near-black text read
+      // harsh on the dark canvas.
+      bgColor: 'gold.700',
+      borderColor: 'gold.700',
       color: 'white',
     },
     outline: {
       bgColor: 'transparent',
       borderColor: 'warning.main',
-      color: 'warning.main',
+      // warning.dark (gold.700, 5.8:1 AA) over warning.main (gold.500, 3.0:1) —
+      // darker text also lifts this off the palette's AA-risk step.
+      color: 'warning.dark',
     },
   },
   neutral: {
     soft: {
-      bgColor: 'gray.100',
-      borderColor: 'gray.300',
-      color: 'gray.800',
+      // Flip surface + border with the mode so the fg.default text stays legible
+      // in dark. Light values preserved (bg.muted → gray.100, border.default →
+      // gray.300).
+      bgColor: 'bg.muted',
+      borderColor: 'border.default',
+      color: 'fg.default',
     },
     solid: {
       bgColor: 'gray.800',
@@ -111,8 +120,8 @@ export const tagColorPaletteStyles: Record<
     },
     outline: {
       bgColor: 'transparent',
-      borderColor: 'gray.500',
-      color: 'gray.700',
+      borderColor: 'border.strong', // gray.500 / gray.900 (_dark)
+      color: 'fg.muted',
     },
   },
 };

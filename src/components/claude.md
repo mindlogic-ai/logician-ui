@@ -146,7 +146,10 @@ const Component = () => {
 **Semantic tokens to use:**
 - `primary.main`, `primary.light` - Primary brand colors
 - `danger.main` - Error/danger states
-- `gray.*` - Neutral colors (gray.50 to gray.1200)
+- `bg.*` / `fg.*` / `border.*` - Neutral surfaces, text, and borders that **flip with
+  color mode**. Prefer these over raw `gray.*`/`white` so components work in dark mode
+  (see `src/theme/claude.md` → Neutral Semantic Tokens). Raw `gray.*` is only for values
+  that must stay fixed across modes.
 
 ### Common Style Patterns
 
@@ -348,7 +351,9 @@ See `.storybook/claude.md` for Storybook-specific patterns.
 
 1. **Forgetting forwardRef**: Always use it for components wrapping DOM elements
 2. **Not setting displayName**: Required for React DevTools
-3. **Hardcoded colors**: Use theme tokens instead
+3. **Hardcoded / non-flipping colors**: Use theme tokens instead — and for neutrals use the
+   flipping `bg.*`/`fg.*`/`border.*` tokens, not raw `gray.*`/`white` (which stay stuck in
+   light mode under `.dark`)
 4. **Missing focus states**: Required for accessibility
 5. **Props in wrong order**: Custom props before spread
 6. **Not handling IME**: Important for international users
@@ -381,6 +386,7 @@ Before considering a component complete:
 - [ ] Disabled states work correctly
 - [ ] Hover states are visible
 - [ ] Theme tokens are used (no hardcoded colors)
+- [ ] Neutral colors use flipping `bg.*`/`fg.*`/`border.*` tokens; verified in dark mode
 - [ ] Storybook story is created
 - [ ] Component is exported from src/index.ts
 - [ ] Works with keyboard navigation
