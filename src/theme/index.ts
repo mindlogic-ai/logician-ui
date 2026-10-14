@@ -318,7 +318,9 @@ const config = defineConfig({
           size: {
             lg: {
               root: { '--select-trigger-height': 'sizes.11' },
-              trigger: { fontSize: FORM_CONTROL_LG_FONT_SIZE },
+              // Chakra's `py: 3` is em-based, so at 16px it alone pushes
+              // the trigger past the min height; let the height token win.
+              trigger: { fontSize: FORM_CONTROL_LG_FONT_SIZE, py: '1.5' },
               content: { fontSize: FORM_CONTROL_LG_FONT_SIZE },
             },
           },
