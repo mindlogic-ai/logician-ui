@@ -3,6 +3,8 @@
 import { forwardRef } from 'react';
 import { PinInput as ChakraPinInput } from '@chakra-ui/react';
 
+import { noZoomOnFocus } from '@/theme/formControls';
+
 import { PinInputProps } from './PinInput.types';
 
 export const PinInput = forwardRef<HTMLInputElement, PinInputProps>(
@@ -46,6 +48,7 @@ export const PinInput = forwardRef<HTMLInputElement, PinInputProps>(
               _focus={{ borderColor: 'primary.main' }}
               _invalid={{ borderColor: 'danger.main' }}
               _disabled={{ borderColor: 'border.subtle', bg: 'bg.subtle' }}
+              css={noZoomOnFocus}
             />
           ))}
         </ChakraPinInput.Control>
