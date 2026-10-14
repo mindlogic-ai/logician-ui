@@ -297,3 +297,20 @@ function App() {
   Responsive Button
 </Button>
 ```
+
+### 5. Actions in Feedback Surfaces
+
+- A toast takes at most one action, through the `action` prop; dismiss is the ×
+- Never put a `<Button>` inside a toast's `description`
+- Inside a tinted toast or banner, the action uses the status color
+- Panes and dialogs carry buttons: ink solid primary + outline neutral
+
+Full rules and the surface matrix: Storybook → **Guidelines / Actions in feedback surfaces** (`src/guidelines/FeedbackActions.mdx`).
+
+```tsx
+showToast({
+  status: 'error',
+  description: '크레딧이 부족합니다.',
+  action: { label: '크레딧 구매', onClick: openCreditPurchaseModal },
+});
+```

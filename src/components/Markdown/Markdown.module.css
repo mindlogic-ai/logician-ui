@@ -1,5 +1,5 @@
 .markdownStyles {
-  color: black;
+  color: var(--chakra-colors-fg-default, #1e2433);
   display: flex;
   flex-direction: column;
   gap: 1em; /* Intended for longer form content like update modals */

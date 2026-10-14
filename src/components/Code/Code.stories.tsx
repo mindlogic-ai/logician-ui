@@ -1,12 +1,19 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import { Code } from './Code';
+import { BUNDLED_LANGUAGES } from './shikiAdapter';
 
 const meta = {
   title: 'Components/Code',
   component: Code,
   args: {
     children: `const t = 'test';`,
+  },
+  argTypes: {
+    language: {
+      control: 'select',
+      options: BUNDLED_LANGUAGES,
+    },
   },
 } satisfies Meta<typeof Code>;
 
@@ -17,16 +24,6 @@ type Story = StoryObj<typeof Code>;
 export const Basic: Story = {
   args: {
     children: `const t = 'test';`,
-  },
-};
-
-export const Copyable: Story = {
-  args: {
-    children: `const t = 'test';`,
-    onCopy: (str) => {
-      navigator.clipboard.writeText(str);
-      console.log(str);
-    },
   },
 };
 
@@ -50,18 +47,6 @@ export const Example = () => (
   },
 };
 
-export const JavaScript: Story = {
-  args: {
-    language: 'javascript',
-    children: `function greet(name) {
-  return \`Hello, \${name}!\`;
-}
-
-const message = greet('world');
-console.log(message);`,
-  },
-};
-
 export const TypeScript: Story = {
   args: {
     language: 'typescript',
@@ -75,36 +60,6 @@ const getUser = async (id: string): Promise<User> => {
   const res = await fetch(\`/api/users/\${id}\`);
   return res.json();
 };`,
-  },
-};
-
-export const TSX: Story = {
-  args: {
-    language: 'tsx',
-    children: `import { Button } from '@mindlogic-ai/logician-ui';
-
-type Props = {
-  onClick: () => void;
-};
-
-export const SubmitButton = ({ onClick }: Props) => (
-  <Button variant="primary" onClick={onClick}>
-    Submit
-  </Button>
-);`,
-  },
-};
-
-export const Python: Story = {
-  args: {
-    language: 'python',
-    children: `def fibonacci(n: int) -> list[int]:
-    seq = [0, 1]
-    while len(seq) < n:
-        seq.append(seq[-1] + seq[-2])
-    return seq[:n]
-
-print(fibonacci(10))`,
   },
 };
 
@@ -135,114 +90,6 @@ yarn build`,
   },
 };
 
-export const SQL: Story = {
-  args: {
-    language: 'sql',
-    children: `SELECT u.id, u.name, COUNT(o.id) AS order_count
-FROM users u
-LEFT JOIN orders o ON o.user_id = u.id
-WHERE u.created_at > '2025-01-01'
-GROUP BY u.id, u.name
-ORDER BY order_count DESC
-LIMIT 10;`,
-  },
-};
-
-export const HTML: Story = {
-  args: {
-    language: 'html',
-    children: `<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Logician UI</title>
-  </head>
-  <body>
-    <main id="root"></main>
-  </body>
-</html>`,
-  },
-};
-
-export const CSS: Story = {
-  args: {
-    language: 'css',
-    children: `.ml-code {
-  border-radius: 0;
-  overflow: hidden;
-}
-
-.ml-code-header {
-  padding: 8px 16px;
-  background-color: white;
-  border-bottom: 1px solid var(--chakra-colors-primary-light);
-}`,
-  },
-};
-
-export const Go: Story = {
-  args: {
-    language: 'go',
-    children: `package main
-
-import "fmt"
-
-func main() {
-	names := []string{"Alice", "Bob", "Carol"}
-	for i, name := range names {
-		fmt.Printf("%d: Hello, %s!\\n", i, name)
-	}
-}`,
-  },
-};
-
-export const Rust: Story = {
-  args: {
-    language: 'rust',
-    children: `fn main() {
-    let numbers = vec![1, 2, 3, 4, 5];
-    let sum: i32 = numbers.iter().sum();
-    println!("Sum: {}", sum);
-}`,
-  },
-};
-
-export const YAML: Story = {
-  args: {
-    language: 'yaml',
-    children: `name: CI
-on:
-  push:
-    branches: [main, dev]
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: yarn install
-      - run: yarn type-check`,
-  },
-};
-
-export const Markdown: Story = {
-  args: {
-    language: 'markdown',
-    children: `# Logician UI
-
-A React component library built on **Chakra UI**.
-
-## Installation
-
-\`\`\`bash
-yarn add @mindlogic-ai/logician-ui
-\`\`\`
-
-- Accessible
-- Themeable
-- TypeScript-first`,
-  },
-};
-
 export const JsAlias: Story = {
   args: {
     language: 'js',
@@ -257,6 +104,24 @@ export const HiddenHeader: Story = {
     language: 'typescript',
     hideHeader: true,
     children: `const sum = (a: number, b: number) => a + b;`,
+  },
+};
+
+export const HiddenHeaderWithCopy: Story = {
+  args: {
+    language: 'typescript',
+    hideHeader: true,
+    onCopy: (str) => navigator.clipboard.writeText(str),
+    children: `type User = {
+  id: string;
+  name: string;
+  email: string;
+};
+
+const getUser = async (id: string): Promise<User> => {
+  const res = await fetch(\`/api/users/\${id}\`);
+  return res.json();
+};`,
   },
 };
 
@@ -316,6 +181,7 @@ export const WithLineNumbers: Story = {
   args: {
     language: 'typescript',
     showLineNumbers: true,
+    onCopy: (str) => navigator.clipboard.writeText(str),
     children: `type User = {
   id: string;
   name: string;
@@ -326,21 +192,6 @@ const getUser = async (id: string): Promise<User> => {
   const res = await fetch(\`/api/users/\${id}\`);
   return res.json();
 };`,
-  },
-};
-
-export const WithLineNumbersAndCopy: Story = {
-  args: {
-    language: 'tsx',
-    showLineNumbers: true,
-    onCopy: (str) => navigator.clipboard.writeText(str),
-    children: `import { Code } from '@mindlogic-ai/logician-ui';
-
-export const Example = () => (
-  <Code language="tsx" showLineNumbers>
-    {'const greeting = "hello";'}
-  </Code>
-);`,
   },
 };
 

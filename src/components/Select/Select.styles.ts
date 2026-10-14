@@ -1,73 +1,76 @@
 /**
- * Select component styles (Chakra v3 compatible)
+ * Shared style objects for the Select and Combobox components.
  *
- * Note: These functions accept resolved color values from useToken()
- * since Chakra v3 doesn't export useTheme() hook.
+ * These mirror the Input component (`Input.tsx`) so the form controls share
+ * the same border, hover, focus and disabled behavior. They are applied on
+ * top of Chakra's built-in `select` / `combobox` slot recipes via the `css`
+ * prop — only the design-system deltas live here. When `Input.tsx` changes,
+ * update these values to match.
  */
 
-export type SelectColors = Record<string, string>;
+const focusVars = {
+  '--focus-color': 'var(--chakra-colors-primary-main)',
+  '--error-color': 'var(--chakra-colors-danger-main)',
+};
 
-export const getPlaceholderStyles = (colors: SelectColors) => ({
-  color: colors.gray600,
-  fontSize: '14px',
-  fontWeight: 'semibold',
-});
-
-export const getMenuStyles = (colors: SelectColors) => ({
-  width: 'max-content',
-  minWidth: '100%',
-  backgroundColor: 'white',
-  borderRadius: 8,
-  border: `1px solid ${colors.gray300}`,
-  marginTop: 12,
-  boxShadow: '0px 5px 20px 0px rgba(0, 0, 0, 0.10)',
-  zIndex: 9,
-});
-
-export const getOptionStyles = ({
-  isSelected,
-  isDisabled,
-  colors,
-}: {
-  isSelected: boolean;
-  isDisabled: boolean;
-  colors?: SelectColors;
-}) => ({
-  cursor: isDisabled ? 'not-allowed' : 'pointer',
-  minHeight: 36,
-  margin: '4px 0',
-  borderRadius: 4,
-  fontSize: 14,
-  backgroundColor: isSelected ? colors.primaryLightest : 'white',
-  color: isSelected
-    ? colors.primaryDark
-    : isDisabled
-      ? colors.gray500
-      : colors.gray1200,
-  fontWeight: isSelected ? 700 : 400,
-  '&:hover': {
-    backgroundColor: isSelected ? colors.primaryLightest : colors.gray50,
+const fieldBase = {
+  ...focusVars,
+  bg: 'bg.surface',
+  color: 'fg.default',
+  borderColor: 'border.default',
+  _hover: { borderColor: 'primary.lighter' },
+  _focus: { borderColor: 'primary.main' },
+  _invalid: {
+    borderColor: 'danger.main',
+    _hover: { borderColor: 'danger.main' },
+    _focus: { borderColor: 'danger.main' },
   },
-});
+  _disabled: {
+    opacity: 1,
+    cursor: 'not-allowed',
+    bg: 'bg.subtle',
+    color: { base: 'gray.1000', _dark: 'gray.400' },
+    fontWeight: 'semibold',
+  },
+};
 
-export const getControlStyles = (variant: string, colors: SelectColors) => {
-  const baseStyles = {
-    borderRadius: 6,
-    cursor: 'pointer',
-    minHeight: 40,
-    fontSize: 14,
-    fontWeight: 600,
-    paddingLeft: 4,
-    paddingRight: 3,
-  };
+/** Select trigger — the clickable control. */
+export const triggerStyles = {
+  ...fieldBase,
+  cursor: 'pointer',
+  _open: { borderColor: 'primary.main' },
+};
 
-  if (variant === 'danger') {
-    return {
-      ...baseStyles,
-      border: `1px solid ${colors.dangerColor}`,
-      boxShadow: `0 0 0 1px ${colors.dangerColor}`,
-    };
-  }
+/** Combobox text input — the typeable control. */
+export const inputStyles = {
+  ...fieldBase,
+};
 
-  return baseStyles;
+/** Dropdown panel for both Select and Combobox. */
+export const contentStyles = {
+  bg: 'bg.surface',
+  borderColor: 'border.default',
+  borderWidth: '1px',
+  borderRadius: '8px',
+  boxShadow: '0px 5px 20px 0px rgba(0, 0, 0, 0.10)',
+  padding: '4px',
+};
+
+/** Individual option for both Select and Combobox. */
+export const itemStyles = {
+  borderRadius: '4px',
+  cursor: 'pointer',
+  color: 'fg.default',
+  _highlighted: { bg: 'bg.subtle' },
+  _checked: {
+    bg: 'primary.extralight',
+    color: 'primary.dark',
+    fontWeight: 'bold',
+  },
+  _disabled: { color: 'fg.subtle', cursor: 'not-allowed' },
+};
+
+/** Dropdown chevron — softened so it doesn't outweigh adjacent icons. */
+export const indicatorStyles = {
+  color: 'fg.muted',
 };

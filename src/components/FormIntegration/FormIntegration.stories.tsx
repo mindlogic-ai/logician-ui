@@ -8,7 +8,7 @@ import { Button } from '../Button';
 import { FormLabel } from '../FormLabel';
 import { Input } from '../Input';
 import { Textarea } from '../Textarea';
-import { Select } from '../Select';
+import { SelectField } from '../Select';
 import { FileInput } from '../FileInput';
 import { Radio } from '../Radio';
 import { RadioGroup } from '../Radio/RadioGroup';
@@ -34,7 +34,7 @@ interface FormValues {
   name: string;
   email: string;
   bio: string;
-  country: { value: string; label: string } | null;
+  country: string | null;
   gender: string;
   experience: number;
   files: FileList | null;
@@ -60,13 +60,7 @@ const validationSchema = Yup.object({
     .min(10, '자기소개는 최소 10글자 이상이어야 합니다')
     .max(200, '자기소개는 최대 200글자까지 가능합니다')
     .required('자기소개는 필수입니다'),
-  country: Yup.object()
-    .shape({
-      value: Yup.string().required(),
-      label: Yup.string().required(),
-    })
-    .nullable()
-    .required('국가를 선택해주세요'),
+  country: Yup.string().nullable().required('국가를 선택해주세요'),
   gender: Yup.string()
     .oneOf(['male', 'female', 'other'], '성별을 선택해주세요')
     .required('성별은 필수입니다'),
@@ -115,7 +109,7 @@ export const FormikFormExample: StoryObj = {
         console.log('👤 이름:', values.name);
         console.log('📧 이메일:', values.email);
         console.log('📝 자기소개:', values.bio);
-        console.log('🌍 국가:', values.country?.label);
+        console.log('🌍 국가:', values.country);
         console.log('👫 성별:', values.gender);
         console.log('💼 경력:', `${values.experience}년`);
         console.log(
@@ -231,7 +225,7 @@ export const FormikFormExample: StoryObj = {
                   <FormLabel>
                     국가 <Field.RequiredIndicator />
                   </FormLabel>
-                  <Select
+                  <SelectField
                     name="country"
                     options={countryOptions}
                     value={values.country}
@@ -445,7 +439,7 @@ export const RegularFormExample: StoryObj = {
         console.log('👤 이름:', formData.name);
         console.log('📧 이메일:', formData.email);
         console.log('📝 자기소개:', formData.bio);
-        console.log('🌍 국가:', formData.country?.label);
+        console.log('🌍 국가:', formData.country);
         console.log('👫 성별:', formData.gender);
         console.log('💼 경력:', `${formData.experience}년`);
         console.log(
@@ -561,7 +555,7 @@ export const RegularFormExample: StoryObj = {
               <FormLabel>
                 국가 <Field.RequiredIndicator />
               </FormLabel>
-              <Select
+              <SelectField
                 name="country"
                 options={countryOptions}
                 value={formData.country}

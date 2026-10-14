@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import { Box, Flex, VStack } from '@chakra-ui/react';
 
 import { useTranslate } from '@/hooks/useTranslate';
@@ -20,6 +21,8 @@ export function ErrorFallback({
 }: ErrorFallbackProps) {
   const translate = useTranslate();
   const showToast = useToast();
+  // Names the landmark below with the same words the card shows as its title.
+  const titleId = useId();
 
   const errorInfo = {
     errorId:
@@ -61,13 +64,28 @@ User Agent: ${errorInfo.userAgent}`;
   };
 
   return (
-    <Flex minH="100vh" align="center" justify="center" p={8}>
+    // A landmark, and a named one. This card replaces whatever failed — often
+    // the whole page, so the host's `<main>` goes with it — and a screen-reader
+    // user then has nothing to navigate by: axe reports every node under
+    // `region`, and there is no landmark to jump to (KWCAG 2.1 5.2.4.1 반복
+    // 영역 건너뛰기). A `<section>` labelled by the error title is a region
+    // landmark wherever it renders, which `<main>` would not be — a segment-level
+    // boundary leaves the host's `<main>` in place, and two of those is its own
+    // failure.
+    <Flex
+      as="section"
+      aria-labelledby={titleId}
+      minH="100vh"
+      align="center"
+      justify="center"
+      p={8}
+    >
       <Container disableResponsive maxW="container.sm">
         <Card
           p={12}
           textAlign="center"
           w="full"
-          bgColor="white"
+          bgColor="bg.surface"
           boxShadow="2xl"
         >
           <VStack gap={6} align="center" w="full" mx="auto">
@@ -83,10 +101,15 @@ User Agent: ${errorInfo.userAgent}`;
 
             {/* Error Title */}
             <VStack gap={3} align="center" w="full">
-              <H1 color="gray.1200" textStyle="h2" fontWeight="bold">
+              <H1
+                id={titleId}
+                color="fg.default"
+                textStyle="h2"
+                fontWeight="bold"
+              >
                 {translate('error_boundary_title')}
               </H1>
-              <Subtitle color="gray.1000" textStyle="h5" maxW="md">
+              <Subtitle color="fg.muted" textStyle="h5" maxW="md">
                 {translate('error_boundary_subtitle')}
               </Subtitle>
             </VStack>
@@ -115,7 +138,11 @@ User Agent: ${errorInfo.userAgent}`;
               p={6}
               w="full"
             >
-              <H4 color="primary.dark" mb={4} textAlign="center">
+              {/* `as="h2"`: `H4` is the type size wanted here, but this block
+                  sits directly under the card's `<h1>` — an `<h4>` there skips
+                  two levels and tells a screen-reader user there are sections
+                  they missed (KWCAG 5.2.4.2 제목 제공). */}
+              <H4 as="h2" color="primary.dark" mb={4} textAlign="center">
                 {translate('support_information')}
               </H4>
               <VStack gap={2} align="stretch" mb={4}>

@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { Button } from '../Button';
 import { Toast } from './Toast';
+import type { UseToastOptions } from './Toast.types';
 import { Toaster } from './Toaster';
 import { useToast } from './useToast';
 
@@ -480,4 +481,114 @@ export const RapidFire: Story = {
       </>
     );
   },
+};
+
+/**
+ * Toasts with an action.
+ *
+ * The action is a text action in the toast's own status color, under the
+ * description and aligned with it — not a neutral `<Button>` inside
+ * `description`. One action per toast; dismiss stays on the ×. A toast with
+ * an action stays for 8s unless `duration` is given.
+ *
+ * See "Guidelines/Actions in feedback surfaces".
+ */
+const ActionStory = ({
+  label,
+  options,
+}: {
+  label: string;
+  /** Builds the toast options; `fired` reports a click back to the story */
+  options: (fired: (message: string) => () => void) => UseToastOptions;
+}) => {
+  const showToast = useToast();
+  const [log, setLog] = useState<string | null>(null);
+  const fired = (message: string) => () => setLog(`onClick: ${message}`);
+
+  return (
+    <>
+      <Toaster />
+      <Stack gap={3} align="center">
+        <Button onClick={() => showToast(options(fired))}>{label}</Button>
+        {log && (
+          <Text fontSize="sm" color="fg.muted">
+            {log}
+          </Text>
+        )}
+      </Stack>
+    </>
+  );
+};
+
+export const ActionError: Story = {
+  name: 'Action / Error',
+  render: () => (
+    <ActionStory
+      label="Show error toast with action"
+      options={(fired) => ({
+        status: 'error',
+        description:
+          '크레딧이 부족해 응답을 생성하지 못했습니다. 이번 달 남은 크레딧: 0',
+        action: { label: '크레딧 구매', onClick: fired('크레딧 구매') },
+      })}
+    />
+  ),
+};
+
+export const ActionWarning: Story = {
+  name: 'Action / Warning',
+  render: () => (
+    <ActionStory
+      label="Show warning toast with action"
+      options={(fired) => ({
+        status: 'warning',
+        title: '모델 지원 종료',
+        description: '이 채팅의 모델이 지원 종료되어 기본 모델로 바뀌었습니다.',
+        action: { label: '모델 선택', onClick: fired('모델 선택') },
+      })}
+    />
+  ),
+};
+
+export const ActionInfo: Story = {
+  name: 'Action / Info',
+  render: () => (
+    <ActionStory
+      label="Show info toast with action"
+      options={(fired) => ({
+        status: 'info',
+        description: '내보내기가 끝났습니다. 파일을 다운로드할 수 있습니다.',
+        action: { label: '파일 열기', onClick: fired('파일 열기') },
+      })}
+    />
+  ),
+};
+
+export const ActionSuccess: Story = {
+  name: 'Action / Success',
+  render: () => (
+    <ActionStory
+      label="Show success toast with action"
+      options={(fired) => ({
+        status: 'success',
+        title: '업로드 완료',
+        description: '문서 3개를 프로젝트에 추가했습니다.',
+        action: { label: '프로젝트 보기', onClick: fired('프로젝트 보기') },
+      })}
+    />
+  ),
+};
+
+export const ActionShortMessage: Story = {
+  name: 'Action / Short message',
+  render: () => (
+    <ActionStory
+      label="Show short toast with undo"
+      options={(fired) => ({
+        status: 'success',
+        description: '채팅을 삭제했습니다.',
+        action: { label: '되돌리기', onClick: fired('되돌리기') },
+      })}
+    />
+  ),
 };

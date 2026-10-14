@@ -3,6 +3,7 @@ import { SegmentGroup } from '@chakra-ui/react';
 
 import { mergeCss } from '@/utils/mergeCss';
 
+import { indicatorTravel } from './SegmentedControl.styles';
 import {
   SegmentedControlOption,
   SegmentedControlProps,
@@ -66,21 +67,53 @@ export const SegmentedControl = forwardRef<
         }
       }}
       size={size}
-      bg="gray.50"
+      // Track is bg.subtle (gray.50 light) and the selected indicator rides on
+      // `bg.raised` — a raised neutral surface that resolves white in light and
+      // the lightest neutral (gray.1100) in dark, so the thumb reads as lifted
+      // above the track in both modes (`bg.surface` could not: its dark value is
+      // darker than the track). The indicator also gains a shadow: an md drop
+      // shadow in light, and in dark — where a drop shadow is invisible on a
+      // dark canvas — a soft ambient shadow + a translucent-white hairline edge.
+      //
+      // The track itself only contrasts where the page wash is darker (light) or
+      // lighter (dark) than the fill. It vanishes when the page matches the
+      // track: a `bg.sunken` list/overview page is gray.50 in light — identical
+      // to the bg.subtle track — and a `bg.surface` card is lighter than the
+      // track in dark. In either case the control would read as floating text,
+      // so a hairline ring defines its bounds on *any* background: a neutral
+      // `border.default` ring in light, a translucent-white ring in dark. (The
+      // ring — not the track fill — does the work here: the selected thumb is a
+      // raised white surface lifted by its shadow, a relationship that depends
+      // on the track staying light, so we outline the group rather than darken
+      // it. `border.default` keeps the edge present but light — `border.strong`
+      // reads as a heavy box for a control that normally has no outline.) Both
+      // rings are box-shadows (not borders) so the matched item-height math is
+      // preserved.
+      bg="bg.subtle"
       p="1"
       borderRadius={borderRadius}
-      boxShadow="none"
       w="fit-content"
       {...rest}
       css={mergeCss(
         {
-          '--segment-indicator-bg': `var(--chakra-colors-gray-0)`,
+          '--segment-indicator-bg': `var(--chakra-colors-bg-raised)`,
           '--segment-indicator-shadow': `var(--chakra-shadows-md)`,
+          boxShadow: '0 0 0 1px var(--chakra-colors-border-default)',
+          '.dark &': {
+            '--segment-indicator-shadow':
+              '0 1px 2px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08)',
+            boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.12)',
+          },
         },
         css
       )}
     >
-      <SegmentGroup.Indicator borderRadius={indicatorRadius} />
+      <SegmentGroup.Indicator
+        borderRadius={indicatorRadius}
+        // `travel`, delivered through custom properties — see the comment on
+        // `indicatorTravel` for why the ordinary preset cannot reach this part.
+        css={indicatorTravel}
+      />
       {items.map((item) => (
         <SegmentGroup.Item
           key={item.value}
@@ -93,7 +126,7 @@ export const SegmentedControl = forwardRef<
         >
           <SegmentGroup.ItemText
             data-text={typeof item.label === 'string' ? item.label : undefined}
-            color="gray.800"
+            color="fg.muted"
             fontWeight="500"
             fontSize={fontSize}
             whiteSpace="nowrap"
@@ -111,7 +144,7 @@ export const SegmentedControl = forwardRef<
                 pointerEvents: 'none',
               },
               '[data-state="checked"] &': {
-                color: 'var(--chakra-colors-gray-1500)',
+                color: 'var(--chakra-colors-fg-default)',
                 fontWeight: '600',
               },
             }}

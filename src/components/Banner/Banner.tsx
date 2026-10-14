@@ -51,7 +51,7 @@ export const Banner = forwardRef(
         <Flex align="stretch" gap={2}>
           {!hideIcon && (
             <Box>
-              <Icon mr={2} color={color} boxSize="md" />
+              <Icon mr={2} color={color} boxSize={styles.icon.boxSize} />
             </Box>
           )}
           {typeof children === 'string' ? (

@@ -62,3 +62,63 @@ export const closeButtonStyles: Record<ToastStatus, BoxProps> = {
     },
   },
 };
+
+/**
+ * Action styles for each toast status.
+ *
+ * A toast's action is a text action in the toast's own text color — the same
+ * palette as `toastStyles[status].color` — with the hover tint of the close ×.
+ * No border and no fill: a neutral or outlined button inside a tinted toast
+ * reads as a separate card dropped on top of it.
+ *
+ * `ml: -2` cancels the horizontal padding so the label lines up with the
+ * description text above it.
+ */
+const actionBase: BoxProps = {
+  fontWeight: 'bold',
+  px: 2,
+  py: 1,
+  ml: -2,
+  height: 'auto',
+  alignSelf: 'flex-start',
+  borderRadius: 'sm',
+  borderWidth: 0,
+  bg: 'transparent',
+  cursor: 'pointer',
+};
+
+export const actionStyles: Record<ToastStatus, BoxProps> = {
+  info: {
+    ...actionBase,
+    color: 'primary.dark',
+    _hover: { bg: 'primary.lighter' },
+    _focusVisible: { outline: '2px solid', outlineColor: 'primary.dark' },
+  },
+  warning: {
+    ...actionBase,
+    color: 'warning.dark',
+    _hover: { bg: 'warning.lighter' },
+    _focusVisible: { outline: '2px solid', outlineColor: 'warning.dark' },
+  },
+  success: {
+    ...actionBase,
+    color: 'success.dark',
+    _hover: { bg: 'success.lighter' },
+    _focusVisible: { outline: '2px solid', outlineColor: 'success.dark' },
+  },
+  error: {
+    ...actionBase,
+    color: 'danger.dark',
+    _hover: { bg: 'danger.lighter' },
+    _focusVisible: { outline: '2px solid', outlineColor: 'danger.dark' },
+  },
+};
+
+/** Default duration (ms) of a toast without an action, when none is given */
+export const TOAST_DEFAULT_DURATION = 5000;
+
+/**
+ * Default duration (ms) of a toast that carries an action, when none is given.
+ * The reader needs time to read the message *and* decide to act.
+ */
+export const TOAST_ACTION_DURATION = 8000;

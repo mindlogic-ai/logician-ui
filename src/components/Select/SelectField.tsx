@@ -1,0 +1,107 @@
+import { useMemo } from 'react';
+import { createListCollection, Portal } from '@chakra-ui/react';
+
+import { staggerProps } from '@/utils/staggerProps';
+
+import { Select } from './Select';
+import { SelectFieldProps } from './Select.types';
+
+/**
+ * Single-select dropdown with the Logician design-system styling applied.
+ * The ergonomic counterpart to `Input` — pass `options`, `value` and
+ * `onChange` and it renders the full Select composition internally.
+ *
+ * For multi-select, grouped options or custom layouts, compose the `Select`
+ * primitives directly.
+ */
+export function SelectField<T = string>({
+  options,
+  value,
+  defaultValue,
+  onChange,
+  placeholder,
+  label,
+  ariaLabel,
+  size = 'md',
+  invalid,
+  disabled,
+  readOnly,
+  required,
+  name,
+  width = 'full',
+  stagger = false,
+}: SelectFieldProps<T>) {
+  const collection = useMemo(
+    () =>
+      createListCollection({
+        items: options,
+        itemToValue: (item) => String(item.value),
+        itemToString: (item) => item.label,
+        isItemDisabled: (item) => Boolean(item.disabled),
+      }),
+    [options]
+  );
+
+  const toKeys = (val: T | null | undefined) =>
+    val === null || val === undefined ? [] : [String(val)];
+
+  return (
+    <Select.Root
+      collection={collection}
+      size={size}
+      width={width}
+      invalid={invalid}
+      disabled={disabled}
+      readOnly={readOnly}
+      required={required}
+      name={name}
+      value={value === undefined ? undefined : toKeys(value)}
+      defaultValue={
+        defaultValue === undefined ? undefined : toKeys(defaultValue)
+      }
+      onValueChange={(details) => {
+        const selected = details.items[0];
+        onChange?.(selected ? selected.value : null);
+      }}
+    >
+      <Select.HiddenSelect />
+      {/* The label part is what the trigger's `aria-labelledby` points at, and
+          Chakra emits that reference whether or not the part is rendered. Leave
+          it out and the reference dangles, so the trigger resolves to no name —
+          a "button" to a screen reader, whatever the selected option says
+          (KWCAG 5.3.4.1 레이블 제공). So it is always rendered: visibly when the
+          field has a label, hidden when the name lives elsewhere on screen. */}
+      {label != null ? (
+        <Select.Label>{label}</Select.Label>
+      ) : (
+        (ariaLabel ?? placeholder) && (
+          <Select.Label srOnly>{ariaLabel ?? placeholder}</Select.Label>
+        )
+      )}
+      <Select.Control>
+        <Select.Trigger>
+          <Select.ValueText placeholder={placeholder} />
+        </Select.Trigger>
+        <Select.IndicatorGroup>
+          <Select.Indicator />
+        </Select.IndicatorGroup>
+      </Select.Control>
+      <Portal>
+        <Select.Positioner>
+          <Select.Content>
+            {options.map((option, index) => (
+              <Select.Item
+                item={option}
+                key={String(option.value)}
+                {...(stagger ? staggerProps(index) : {})}
+              >
+                <Select.ItemText>{option.label}</Select.ItemText>
+                <Select.ItemIndicator />
+              </Select.Item>
+            ))}
+          </Select.Content>
+        </Select.Positioner>
+      </Portal>
+    </Select.Root>
+  );
+}

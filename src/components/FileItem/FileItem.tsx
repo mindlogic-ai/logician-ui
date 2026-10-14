@@ -3,11 +3,11 @@ import { Box, Flex } from '@chakra-ui/react';
 
 import { FileItemProps } from '@/components/FileItem/FileItem.types';
 import {
-  CiFileOn,
-  FaRegTrashAlt,
-  IoClose,
-  LuDownload,
-  MdError,
+  AlertCircleFilledIcon,
+  CloseIcon,
+  DownloadIcon,
+  FileIcon,
+  TrashIcon,
 } from '@/components/Icon';
 import { IconButton } from '@/components/IconButton';
 import { ProgressBar } from '@/components/ProgressBar';
@@ -44,7 +44,7 @@ export const FileItem = ({
       justifyContent="space-between"
       alignItems="center"
       border="1px solid"
-      borderColor="gray.200"
+      borderColor="border.subtle"
       w="100%"
       position="relative"
       _before={{
@@ -60,7 +60,7 @@ export const FileItem = ({
     >
       <Flex w="60%" alignItems="center" gap={2}>
         <Box minW={5}>
-          <CiFileOn color={error ? errorColor : 'gray.800'} />
+          <FileIcon color={error ? errorColor : 'fg.muted'} />
         </Box>
         <Text truncate color={error ? errorColor : undefined}>
           {fileName}
@@ -70,7 +70,7 @@ export const FileItem = ({
         {error ? (
           <Flex w="100%" justify="flex-end" align="center" gap={2}>
             <Tooltip content={error} placement="top">
-              <MdError color={errorColor} />
+              <AlertCircleFilledIcon color={errorColor} />
             </Tooltip>
             {/* TODO: implement retry button */}
           </Flex>
@@ -89,7 +89,7 @@ export const FileItem = ({
                   colorPalette="neutral"
                   variant="ghost"
                 >
-                  <IoClose color="gray.600" boxSize="md" />
+                  <CloseIcon color="fg.subtle" boxSize="md" />
                 </IconButton>
               </Flex>
             )}
@@ -113,7 +113,7 @@ export const FileItem = ({
                       colorPalette="neutral"
                       variant="ghost"
                     >
-                      <LuDownload color="gray.800" />
+                      <DownloadIcon color="fg.muted" />
                     </IconButton>
                   </Tooltip>
                 )}
@@ -134,7 +134,7 @@ export const FileItem = ({
                       colorPalette="neutral"
                       variant="ghost"
                     >
-                      <FaRegTrashAlt boxSize="sm" color="gray.800" />
+                      <TrashIcon boxSize="sm" color="fg.muted" />
                     </IconButton>
                   </Tooltip>
                 )}

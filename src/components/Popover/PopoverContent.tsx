@@ -16,7 +16,10 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
         <ChakraPopover.Content
           ref={ref}
           borderWidth="1px"
-          borderColor="gray.200"
+          borderColor="border.subtle"
+          // Scales from its arrow's origin on the recipe's keyframes, on our
+          // clock — see `presence`.
+          animationStyle="presence"
           {...props}
         >
           <ScaledContext fontSize={baseFontSize}>{children}</ScaledContext>

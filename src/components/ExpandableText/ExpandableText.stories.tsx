@@ -6,11 +6,11 @@ const meta = {
   title: 'Components/ExpandableText',
   component: ExpandableText,
   args: {
-    charLimit: 100,
+    lineClamp: 3,
     component: 'Text',
   },
   argTypes: {
-    charLimit: { control: 'number' },
+    lineClamp: { control: 'number' },
     component: {
       control: 'select',
       options: ['Text', 'Subtitle', 'Subtext', 'H1', 'H2', 'H3', 'H4', 'H5'],
@@ -121,7 +121,7 @@ export const AsHeading: Story = {
     component: 'H3',
     children: `This is a heading (H3) with expandable text that demonstrates how headings
       can also use this functionality`,
-    charLimit: 50,
+    lineClamp: 2,
   },
 };
 
@@ -134,28 +134,28 @@ export const ComponentComparison: Story = {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <div>
           <strong>Text Component:</strong>
-          <ExpandableText {...args} component="Text" charLimit={80}>
+          <ExpandableText {...args} component="Text" lineClamp={2}>
             {longText}
           </ExpandableText>
         </div>
 
         <div>
           <strong>Subtitle Component:</strong>
-          <ExpandableText {...args} component="Subtitle" charLimit={80}>
+          <ExpandableText {...args} component="Subtitle" lineClamp={2}>
             {longText}
           </ExpandableText>
         </div>
 
         <div>
           <strong>Subtext Component:</strong>
-          <ExpandableText {...args} component="Subtext" charLimit={80}>
+          <ExpandableText {...args} component="Subtext" lineClamp={2}>
             {longText}
           </ExpandableText>
         </div>
 
         <div>
           <strong>H4 Component:</strong>
-          <ExpandableText {...args} component="H4" charLimit={80}>
+          <ExpandableText {...args} component="H4" lineClamp={2}>
             {longText}
           </ExpandableText>
         </div>

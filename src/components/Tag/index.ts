@@ -7,7 +7,12 @@ export {
   tagColorPaletteStyles,
   tagVariants,
 } from './Tag.styles';
-export type { TagColorPalette, TagProps, TagVariant } from './Tag.types';
+export type {
+  TagColorPalette,
+  TagOwnProps,
+  TagProps,
+  TagVariant,
+} from './Tag.types';
 export * from './TagCloseButton';
 export * from './TagLabel';
 

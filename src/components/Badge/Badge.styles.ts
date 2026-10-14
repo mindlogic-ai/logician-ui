@@ -64,10 +64,12 @@ export const variantStyles: Record<
 
   /**
    * Neutral badge - Neutral information
-   * Gray background with dark gray text
+   * Muted neutral surface with default foreground; both flip in dark mode.
+   * Light values are unchanged (bg.muted → gray.100; fg.default → gray.1300,
+   * one imperceptible step from the previous gray.1200).
    */
   neutral: {
-    bgColor: 'gray.100', // #F0F3F9
-    color: 'gray.1200', // #2A3142
+    bgColor: 'bg.muted', // gray.100 / gray.1200 (_dark)
+    color: 'fg.default', // gray.1300 / gray.50 (_dark)
   },
 };

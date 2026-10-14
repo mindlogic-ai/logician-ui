@@ -7,6 +7,8 @@ import {
 
 import { colors, semanticTokens } from './colors';
 import { globalCss } from './global';
+import { animationStyles, durations, easings, keyframes } from './motion';
+import { tableSlotRecipe } from './recipes/table';
 
 /**
  * Shared textStyle value objects for DRY principle
@@ -17,21 +19,25 @@ const SHARED_TEXT_STYLE_VALUES = {
   h1: {
     fontFamily: 'heading',
     fontSize: { base: '2.4em', md: '3em' }, // 38.4px → 48px
-    fontWeight: 'bold',
+    // Display sizes carry the heaviest weight; the tight negative tracking
+    // above keeps extrabold from reading loose at 48px.
+    fontWeight: 'extrabold',
     lineHeight: '1.33',
     letterSpacing: '-0.02em',
   },
   h2: {
     fontFamily: 'heading',
     fontSize: { base: '2em', md: '2.5em' }, // 32px → 40px
-    fontWeight: 'semibold',
+    fontWeight: 'extrabold',
     lineHeight: '1.33',
     letterSpacing: '-0.01em',
   },
   h3: {
     fontFamily: 'heading',
     fontSize: { base: '1.5em', md: '1.75em' }, // 24px → 28px
-    fontWeight: 'semibold',
+    // Steps down to bold — the weight ramp tapers as size shrinks so heavy
+    // display weights don't muddy the smaller headings (h4/h5 stay lighter).
+    fontWeight: 'bold',
     lineHeight: '1.33',
     letterSpacing: '-0.01em',
   },
@@ -59,13 +65,29 @@ const SHARED_TEXT_STYLE_VALUES = {
     fontWeight: '500',
     lineHeight: '1.5',
   },
+  caption: {
+    fontFamily: 'body',
+    fontSize: { base: '0.688em', md: '0.75em' }, // 11px → 12px
+    fontWeight: '500',
+    // Tighter leading than the body scale (1.5): captions are compact,
+    // typically single-line metadata (timestamps, counts, helper microcopy).
+    lineHeight: '1.4',
+  },
+  overline: {
+    fontFamily: 'body',
+    fontSize: { base: '0.805em', md: '0.875em' }, // 12.88px → 14px (matches subtext)
+    fontWeight: '500',
+    lineHeight: '1.5',
+    letterSpacing: '0.05em', // Chakra 'wider' tracking
+    textTransform: 'uppercase',
+  },
 } as const;
 
 /**
  * Text styles for consistent typography across the application
  * Names match fontSize tokens for easy migration: fontStyle="h1" → textStyle="h1"
  *
- * Base font size: 16px (set in global.ts)
+ * Base font size: 14px (set in global.ts)
  * Responsive scaling using em units (relative to nearest ancestor font-size):
  * - Mobile (base): Slightly smaller for better readability on small screens
  * - Desktop (md+): Original design sizes
@@ -168,8 +190,18 @@ export const textStyles = defineTextStyles({
     value: SHARED_TEXT_STYLE_VALUES.subtitleAndP,
   },
   subtext: {
-    description: 'Small caption text - responsive 12.88-14px',
+    description: 'Supporting / secondary text - responsive 12.88-14px',
     value: SHARED_TEXT_STYLE_VALUES.subtext,
+  },
+  caption: {
+    description:
+      'Smallest metadata tier — timestamps, counts, helper microcopy (11-12px)',
+    value: SHARED_TEXT_STYLE_VALUES.caption,
+  },
+  overline: {
+    description:
+      'Eyebrow / section label - uppercase, wider tracking (12.88-14px)',
+    value: SHARED_TEXT_STYLE_VALUES.overline,
   },
 });
 
@@ -181,8 +213,17 @@ export const textStyles = defineTextStyles({
 const config = defineConfig({
   globalCss,
   theme: {
+    // The motion vocabulary, consumed as `animationStyle="feedback"` — the same
+    // composition slot `textStyles` uses, so a consuming app can remap a preset
+    // from its own config.
+    animationStyles,
+    keyframes,
     tokens: {
       colors,
+      // Merged with Chakra's own scales, not replacing them — see ./motion for
+      // why the durations carry a `motion.` prefix and the easings don't.
+      durations,
+      easings,
       fonts: {
         body: {
           value: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif',
@@ -243,6 +284,9 @@ const config = defineConfig({
       colors: semanticTokens.colors,
     },
     textStyles,
+    slotRecipes: {
+      table: tableSlotRecipe,
+    },
   },
 });
 

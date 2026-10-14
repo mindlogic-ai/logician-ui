@@ -9,6 +9,7 @@ import {
 } from 'react';
 import { Input as ChakraInput, InputGroup } from '@chakra-ui/react';
 
+import { noZoomOnFocus } from '@/theme/formControls';
 import { formatNumber } from '@/utils/formatNumber';
 import { mergeCss } from '@/utils/mergeCss';
 
@@ -74,6 +75,7 @@ export const Input = forwardRef(
       disabled,
       invalid,
       readOnly,
+      borderColor,
       css,
       ...rest
     }: InputProps,
@@ -318,8 +320,11 @@ export const Input = forwardRef(
           disabled={disabled}
           readOnly={readOnly}
           data-invalid={invalid || undefined}
-          bg="white"
-          borderColor={invalid ? 'danger.main' : 'gray.400'}
+          bg="bg.surface"
+          color="fg.default"
+          borderColor={
+            borderColor ?? (invalid ? 'danger.main' : 'border.default')
+          }
           _hover={{
             borderColor: invalid ? 'danger.main' : 'primary.lighter',
             ..._hover,
@@ -340,19 +345,20 @@ export const Input = forwardRef(
           _readOnly={{
             opacity: 1,
             cursor: 'not-allowed',
-            bg: 'gray.50',
-            color: 'gray.600',
-            borderColor: 'gray.200',
+            bg: 'bg.subtle',
+            color: 'fg.muted',
+            borderColor: 'border.subtle',
           }}
           _disabled={{
             opacity: 1,
             cursor: 'not-allowed',
-            bg: 'gray.50',
-            color: 'gray.1000',
+            bg: 'bg.subtle',
+            color: { base: 'gray.1000', _dark: 'gray.400' },
             fontWeight: 'semibold',
           }}
           {...rest}
           css={mergeCss(
+            noZoomOnFocus,
             {
               paddingInlineEnd: rightElementWidth,
               '--focus-color': 'var(--chakra-colors-primary-main)',

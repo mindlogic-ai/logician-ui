@@ -9,7 +9,7 @@ export const CollapsibleRoot = forwardRef<HTMLDivElement, CollapsibleRootProps>(
       <ChakraCollapsible.Root
         ref={ref}
         borderWidth="1px"
-        borderColor="gray.200"
+        borderColor="border.subtle"
         rounded="md"
         overflow="hidden"
         {...props}

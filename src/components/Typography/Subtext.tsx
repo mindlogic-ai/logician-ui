@@ -1,7 +1,10 @@
 import React, { forwardRef } from 'react';
-import { Text, TextProps } from '@chakra-ui/react';
+import { Text } from '@chakra-ui/react';
 
-export const Subtext = forwardRef<HTMLParagraphElement, TextProps>(
+import { polymorphic } from '../../types/polymorphic';
+import { TypographyOwnProps } from './Typography.types';
+
+const SubtextImpl = forwardRef<HTMLParagraphElement, TypographyOwnProps>(
   (props, ref) => {
     const { fontSize, ...rest } = props;
 
@@ -10,7 +13,7 @@ export const Subtext = forwardRef<HTMLParagraphElement, TextProps>(
         ref={ref}
         textStyle={fontSize ? undefined : 'subtext'}
         fontSize={fontSize}
-        color="gray.1500"
+        color="fg.default"
         wordBreak="keep-all"
         {...rest}
       />
@@ -18,4 +21,7 @@ export const Subtext = forwardRef<HTMLParagraphElement, TextProps>(
   }
 );
 
-Subtext.displayName = 'Subtext';
+SubtextImpl.displayName = 'Subtext';
+
+/** Type-level polymorphism over the same runtime — see `polymorphic`. */
+export const Subtext = polymorphic<TypographyOwnProps, 'p'>(SubtextImpl);

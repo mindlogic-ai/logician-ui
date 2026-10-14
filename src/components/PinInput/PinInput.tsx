@@ -39,12 +39,13 @@ export const PinInput = forwardRef<HTMLInputElement, PinInputProps>(
               h={12}
               fontSize="lg"
               borderRadius="md"
-              bg="white"
-              borderColor="gray.400"
+              bg="bg.surface"
+              color="fg.default"
+              borderColor="border.default"
               _hover={{ borderColor: 'primary.lighter' }}
               _focus={{ borderColor: 'primary.main' }}
               _invalid={{ borderColor: 'danger.main' }}
-              _disabled={{ borderColor: 'gray.200', bg: 'gray.50' }}
+              _disabled={{ borderColor: 'border.subtle', bg: 'bg.subtle' }}
             />
           ))}
         </ChakraPinInput.Control>

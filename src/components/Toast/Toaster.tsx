@@ -7,6 +7,7 @@ import {
 
 import { Toast } from './Toast';
 import { toastStyles } from './Toast.styles';
+import type { ToastAction } from './Toast.types';
 
 /**
  * Global toaster instance for managing toast notifications
@@ -61,6 +62,15 @@ export const Toaster = () => (
         // Extract custom data from meta
         const customStyles = toast.meta?.styles || {};
         const onClose = toast.meta?.onClose;
+        // `useToast` passes the action through meta so its label can be a
+        // ReactNode. A plain `toaster.create({ action })` (Chakra's own option)
+        // also works: Toast.ActionTrigger already calls `toast.action.onClick`
+        // itself, so the handler passed down here must not call it again.
+        const action: ToastAction | undefined =
+          toast.meta?.action ??
+          (toast.action
+            ? { label: toast.action.label, onClick: () => {} }
+            : undefined);
 
         return (
           <Toast
@@ -68,6 +78,7 @@ export const Toaster = () => (
             description={toast.description}
             status={toast.type}
             onClose={onClose}
+            action={action}
             {...toastStyles[toast.type as keyof typeof toastStyles]}
             {...customStyles}
           />

@@ -9,7 +9,7 @@ export const SliderFilledTrack = forwardRef(
       <Slider.Range
         bg="primary.main"
         _disabled={{
-          bg: 'gray.400',
+          bg: 'bg.muted',
         }}
         {...rest}
         ref={ref}

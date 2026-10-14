@@ -1,7 +1,7 @@
 import { Box, Field } from '@chakra-ui/react';
 
 export const FormLabel = (props: Field.LabelProps) => (
-  <Box color="gray.1000">
+  <Box color="fg.muted">
     <Field.Label
       {...props}
       style={{

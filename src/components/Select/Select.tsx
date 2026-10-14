@@ -1,166 +1,87 @@
-import ReactSelect, { GroupBase } from 'react-select';
-import { useToken } from '@chakra-ui/react';
+import { forwardRef } from 'react';
+import { Select as ChakraSelect } from '@chakra-ui/react';
+
+import { mergeCss } from '@/utils/mergeCss';
 
 import {
-  getControlStyles,
-  getMenuStyles,
-  getOptionStyles,
-  getPlaceholderStyles,
-  SelectColors,
+  contentStyles,
+  indicatorStyles,
+  itemStyles,
+  triggerStyles,
 } from './Select.styles';
-import { SelectProps } from './Select.types';
 
-export const Select = <
-  Option,
-  IsMulti extends boolean = false,
-  Group extends GroupBase<Option> = GroupBase<Option>,
->({
-  variant = 'default',
-  invalid = false,
-  styles,
-  ...rest
-}: SelectProps<Option, IsMulti, Group>) => {
-  const [
-    primaryColor,
-    primaryLightest,
-    primaryDark,
-    dangerColor,
-    gray50,
-    gray300,
-    gray400,
-    gray500,
-    gray600,
-    gray1200,
-  ] = useToken('colors', [
-    'primary.main',
-    'primary.extralight',
-    'primary.dark',
-    'danger.main',
-    'gray.50',
-    'gray.300',
-    'gray.400',
-    'gray.500',
-    'gray.600',
-    'gray.1200',
-  ]);
+const Trigger = forwardRef<HTMLButtonElement, ChakraSelect.TriggerProps>(
+  function SelectTrigger({ css, ...props }, ref) {
+    return (
+      <ChakraSelect.Trigger
+        ref={ref}
+        {...props}
+        css={mergeCss(triggerStyles, css)}
+      />
+    );
+  }
+);
 
-  const colors: SelectColors = {
-    primaryColor,
-    primaryLightest,
-    primaryDark,
-    dangerColor,
-    gray50,
-    gray300,
-    gray400,
-    gray500,
-    gray600,
-    gray1200,
-  };
+const Content = forwardRef<HTMLDivElement, ChakraSelect.ContentProps>(
+  function SelectContent({ css, ...props }, ref) {
+    return (
+      <ChakraSelect.Content
+        ref={ref}
+        // Chakra closes this one over `fastest` (50ms), which is fast enough to
+        // read as the list being cut off rather than dismissed.
+        animationStyle="presence"
+        {...props}
+        css={mergeCss(contentStyles, css)}
+      />
+    );
+  }
+);
 
-  // invalid prop이 true이면 variant를 'danger'로 오버라이드
-  const effectiveVariant = invalid ? 'danger' : variant;
+const Item = forwardRef<HTMLDivElement, ChakraSelect.ItemProps>(
+  function SelectItem({ css, ...props }, ref) {
+    return (
+      <ChakraSelect.Item ref={ref} {...props} css={mergeCss(itemStyles, css)} />
+    );
+  }
+);
 
-  return (
-    <ReactSelect<Option, IsMulti, Group>
-      closeMenuOnSelect
-      closeMenuOnScroll
-      isSearchable={false}
-      {...rest}
-      // 사용자 styles 콜백에 react-select 원본 base 대신 Logician 스타일이 적용된
-      // merged를 넘겨서, 사용자가 ...base로 spread해도 Logician 스타일이 유지되도록 함
-      styles={{
-        container: (base, state) => {
-          const merged = { ...base, width: '100%' };
-          return styles?.container ? styles.container(merged, state) : merged;
-        },
-        control: (base, state) => {
-          const merged = {
-            ...base,
-            ...getControlStyles(effectiveVariant, colors),
-            width: '100%',
-            border: `1px solid ${
-              invalid ? dangerColor : state.isFocused ? primaryColor : gray300
-            }`,
-            boxShadow: 'none',
-            '&:hover': {
-              borderColor: invalid
-                ? dangerColor
-                : state.isFocused
-                  ? primaryColor
-                  : gray400,
-            },
-          };
-          return styles?.control ? styles.control(merged, state) : merged;
-        },
-        placeholder: (base, state) => {
-          const merged = { ...base, ...getPlaceholderStyles(colors) };
-          return styles?.placeholder
-            ? styles.placeholder(merged, state)
-            : merged;
-        },
-        menu: (base, state) => {
-          const merged = { ...base, ...getMenuStyles(colors) };
-          return styles?.menu ? styles.menu(merged, state) : merged;
-        },
-        menuList: (base, state) => {
-          const merged = { ...base, padding: '0px 4px' };
-          return styles?.menuList ? styles.menuList(merged, state) : merged;
-        },
-        option: (base, state) => {
-          const merged = {
-            ...base,
-            ...getOptionStyles({
-              isSelected: state.isSelected,
-              isDisabled: state.isDisabled,
-              colors,
-            }),
-          };
-          return styles?.option ? styles.option(merged, state) : merged;
-        },
-        singleValue: (base, state) => {
-          const merged = { ...base, margin: 0, color: gray1200 };
-          return styles?.singleValue
-            ? styles.singleValue(merged, state)
-            : merged;
-        },
-        valueContainer: (base, state) => {
-          const merged = {
-            ...base,
-            display: 'flex',
-            alignItems: 'center',
-            textAlign: 'left' as const,
-          };
-          return styles?.valueContainer
-            ? styles.valueContainer(merged, state)
-            : merged;
-        },
-        indicatorSeparator: (base, state) => {
-          const merged = { ...base, display: 'none' };
-          return styles?.indicatorSeparator
-            ? styles.indicatorSeparator(merged, state)
-            : merged;
-        },
-        dropdownIndicator: (base, state) => {
-          const merged = { ...base, color: gray1200 };
-          return styles?.dropdownIndicator
-            ? styles.dropdownIndicator(merged, state)
-            : merged;
-        },
-        indicatorsContainer: (base, state) => {
-          const merged = {
-            ...base,
-            display: 'flex',
-            alignItems: 'center',
-          };
-          return styles?.indicatorsContainer
-            ? styles.indicatorsContainer(merged, state)
-            : merged;
-        },
-        menuPortal: (base, state) => {
-          const merged = { ...base, zIndex: 9999 };
-          return styles?.menuPortal ? styles.menuPortal(merged, state) : merged;
-        },
-      }}
-    />
-  );
+const Indicator = forwardRef<HTMLDivElement, ChakraSelect.IndicatorProps>(
+  function SelectIndicator({ css, ...props }, ref) {
+    return (
+      <ChakraSelect.Indicator
+        ref={ref}
+        {...props}
+        css={mergeCss(indicatorStyles, css)}
+      />
+    );
+  }
+);
+
+/**
+ * Compound Select primitives — Chakra's `Select` namespace with the Logician
+ * design-system styling baked into the visual parts (`Trigger`, `Content`,
+ * `Item`, `Indicator`). Use these directly for full compositional control
+ * (multi-select, grouped options, custom layouts); use `SelectField` for the
+ * common single-select case.
+ */
+export const Select = {
+  Root: ChakraSelect.Root,
+  PropsProvider: ChakraSelect.PropsProvider,
+  Context: ChakraSelect.Context,
+  Label: ChakraSelect.Label,
+  Control: ChakraSelect.Control,
+  Trigger,
+  ValueText: ChakraSelect.ValueText,
+  IndicatorGroup: ChakraSelect.IndicatorGroup,
+  Indicator,
+  ClearTrigger: ChakraSelect.ClearTrigger,
+  HiddenSelect: ChakraSelect.HiddenSelect,
+  Positioner: ChakraSelect.Positioner,
+  Content,
+  ItemGroup: ChakraSelect.ItemGroup,
+  ItemGroupLabel: ChakraSelect.ItemGroupLabel,
+  Item,
+  ItemText: ChakraSelect.ItemText,
+  ItemIndicator: ChakraSelect.ItemIndicator,
+  ItemContext: ChakraSelect.ItemContext,
 };
