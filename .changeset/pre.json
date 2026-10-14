@@ -29,6 +29,7 @@
     "inline-code-step-down",
     "kwcag-accessibility-fixes",
     "link-hover-dark-contrast",
+    "lodash-merge-deep-import",
     "modal-enter-exit",
     "modal-no-fullscreen-default",
     "motion",

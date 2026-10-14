@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.0.0-alpha.39
+
+### Patch Changes
+
+- f3e7834: Use `lodash/merge` deep import instead of the full `lodash` package so consumers only bundle the merge function
+
 ## 4.0.0-alpha.38
 
 ### Minor Changes
