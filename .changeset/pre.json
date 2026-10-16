@@ -34,6 +34,7 @@
     "modal-no-fullscreen-default",
     "motion",
     "no-zoom-on-focus",
+    "pin-input-chakra-v3",
     "pin-light-on-shadowed-neutral-tokens",
     "polymorphic-button-as",
     "polymorphic-export-gaps",
