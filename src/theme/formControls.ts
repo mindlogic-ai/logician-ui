@@ -33,14 +33,13 @@ import type { SystemStyleObject } from '@chakra-ui/react';
  *
  * `Combobox`'s input spreads it too — it is the one typeable listbox.
  *
- * `Select` deliberately does NOT, because the zoom does not reach it: it is a
- * `<button>` trigger over a portalled list, plus a visually hidden native
- * `<select>` that exists only for form submission and never takes visible
- * focus; Safari zooms toward text entry, not toward a button. `PinInput` wraps
- * `react-pin-input`, which takes an inline `style` object, and an inline style
- * cannot carry a media query at all — so it sets an unconditional 16px instead.
- * A consumer that builds OTP boxes on `ChakraPinInput` has to spread this
- * itself.
+ * Two components deliberately do NOT, because the zoom does not reach them.
+ * `Select` is a listbox — a `<button>` trigger over a portalled list, plus a
+ * visually hidden native `<select>` that exists only for form submission and
+ * never takes visible focus; Safari zooms toward text entry, not toward a
+ * button. `PinInput` wraps `react-pin-input`, which takes an inline `style`
+ * object, and an inline style cannot carry a media query at all — a consumer
+ * that builds OTP boxes on `ChakraPinInput` instead has to spread this itself.
  *
  * Spread it yourself on any editable surface the design system does not own —
  * a Lexical/ProseMirror `contenteditable`, a bare Chakra `Input`, or a
