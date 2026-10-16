@@ -59,9 +59,9 @@ export const MenuList = forwardRef<HTMLDivElement, MenuListProps>(
           p="1.5"
           // Chakra's recipe opens the menu in 150ms and closes it in 100 —
           // nearly symmetric, and shorter than everything else that appears
-          // over the page. `presence` puts it on the house enter/exit ratio;
+          // over the page. `presence-anchored` puts it on the house enter/exit ratio;
           // the slide-from-the-trigger movement is the recipe's and stays.
-          animationStyle="presence"
+          animationStyle="presence-anchored"
           {...rest}
         >
           <ScaledContext fontSize={baseFontSize}>{rows}</ScaledContext>

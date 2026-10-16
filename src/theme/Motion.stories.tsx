@@ -179,6 +179,11 @@ const VOCAB = [
     line: 'animationStyle="presence"',
   },
   {
+    when: '트리거에 붙은 팝업이 열리고 닫힌다',
+    name: 'presence-anchored',
+    line: 'animationStyle="presence-anchored"',
+  },
+  {
     when: '목록이 차례로 도착한다',
     name: 'stagger',
     line: '{...staggerProps(index)}',
@@ -733,7 +738,7 @@ export const Choose: Story = {
 
         <Preset
           name="press"
-          timing="120ms · standard"
+          timing="120ms · emphasized"
           lead="포인터가 눌리는 순간의 접촉감. 유일하게 property를 안 적어도 되는 프리셋입니다 — 프레스는 언제나 scale이라 기본값이 들어 있습니다."
           code={`<Box
   scale="1"
@@ -805,7 +810,7 @@ export const Choose: Story = {
         <Preset
           name="presence"
           timing="진입 300ms · emphasized / 퇴장 150ms · standard"
-          lead="열리고 닫히는 모든 것. 진입은 읽혀야 하고 퇴장은 이미 결정된 일이라 절반입니다. Menu · Popover · Tooltip · Select · Collapsible · Modal 여섯이 이 하나를 나눠 씁니다."
+          lead="열리고 닫히는 모든 것. 진입은 읽혀야 하고 퇴장은 이미 결정된 일이라 절반입니다. Modal · BottomSheet · Collapsible 은 300 / 150, 트리거에 붙은 Menu · Select · Combobox · Popover · Tooltip 은 presence-anchored 로 200 / 100 입니다."
           code={`<Menu.List animationStyle="presence" />
 
 // 무엇이 움직이는지는 각 recipe의 것이고, presence는 시계만 바꿉니다 —
@@ -819,10 +824,10 @@ export const Choose: Story = {
             <Stack gap={4}>
               <Stack gap={1}>
                 {[
-                  ['Menu', '150 / 100 → 300 / 150'],
-                  ['Popover', '150 / 100 → 300 / 150'],
-                  ['Tooltip', '150 / 150 → 300 / 150'],
-                  ['Select', '150 / 50 → 300 / 150'],
+                  ['Menu', '150 / 100 → 200 / 100 (anchored)'],
+                  ['Popover', '150 / 100 → 200 / 100 (anchored)'],
+                  ['Tooltip', '150 / 150 → 200 / 100 (anchored)'],
+                  ['Select', '150 / 50 → 200 / 100 (anchored)'],
                   ['Collapsible', '200 / 200 → 300 / 150'],
                   ['Modal', '자체 keyframe + presence 시계'],
                 ].map(([name, change]) => (
@@ -956,7 +961,7 @@ export const Choose: Story = {
           lead="한 요소 안에서 속성마다 다른 속도가 필요할 때만. Button은 프레스가 120ms인데 색은 150ms라 duration 하나로 표현이 안 됩니다. composite가 주는 것은 동작 줄이기 가드 하나뿐이고, 값은 반드시 토큰 var()로 적으세요."
           code={`// Button.styles.ts
 export const buttonTransition = [
-  'scale            var(--chakra-durations-motion-press) var(--chakra-easings-standard)',
+  'scale            var(--chakra-durations-motion-press) var(--chakra-easings-emphasized)',
   'background-color var(--chakra-durations-fast)         var(--chakra-easings-standard)',
 ].join(', ');
 
@@ -1087,7 +1092,8 @@ const OURS = [
 
 const CHAKRAS = [
   { name: 'fast', ms: 150, use: 'feedback 프리셋 · presence 퇴장' },
-  { name: 'moderate', ms: 200, use: '200ms가 필요하면 이걸 쓰세요' },
+  { name: 'faster', ms: 100, use: 'presence-anchored 퇴장' },
+  { name: 'moderate', ms: 200, use: 'presence-anchored 진입' },
   { name: 'slow', ms: 300, use: '⚠️ 우리 motion.slow(500ms)와 다른 값' },
   { name: 'slower', ms: 400, use: '⚠️ 우리 motion.slower(700ms)와 다른 값' },
 ];
@@ -1097,13 +1103,13 @@ const CURVES = [
     name: 'standard',
     d: 'M0,100 C40,100 20,0 100,0',
     half: '50%',
-    use: 'press · feedback · presence 퇴장',
+    use: 'feedback',
   },
   {
     name: 'emphasized',
     d: 'M0,100 C22,0 36,0 100,0',
     half: '96%',
-    use: 'travel · presence 진입',
+    use: 'press · travel · presence 진입·퇴장',
   },
   {
     name: 'overshoot',

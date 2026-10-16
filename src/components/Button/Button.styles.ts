@@ -31,14 +31,18 @@ type StyleProps = Partial<ChakraButtonProps>;
 const PRESS = 'var(--chakra-durations-motion-press)';
 const FEEDBACK = 'var(--chakra-durations-fast)';
 const STANDARD = 'var(--chakra-easings-standard)';
+// The press is contact, so it eases out: `standard` starts slowly and the
+// first frames lag behind the finger.
+const EMPHASIZED = 'var(--chakra-easings-emphasized)';
 
 export const buttonTransition = [
-  `scale ${PRESS} ${STANDARD}`,
+  `scale ${PRESS} ${EMPHASIZED}`,
   ...[
     'background-color',
     'border-color',
     'color',
-    'box-shadow',
+    // No `box-shadow`: no variant sets one, so the only box-shadow that ever
+    // changes here is the keyboard focus ring, and that should appear at once.
     'opacity',
     // Both moved by `lift`, listed unconditionally because a property nobody
     // changes costs nothing, and leaving them out would make the opt-in jump.
