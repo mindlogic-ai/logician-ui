@@ -13,3 +13,8 @@ that styles its disabled state does not lose the cursor.
 
 A `loading` Button (which Chakra also disables) shows `progress` instead: it is
 working, not forbidden.
+
+`_hover`, `_active` and `_disabled` from the call site are now deep-merged with
+the variant's own (`mergeCss`), so a nested condition such as `_dark` adds to
+the variant's instead of replacing it — e.g. `lift`'s dark-mode hover shadow
+survives a call site's `_hover={{ _dark: … }}`.
