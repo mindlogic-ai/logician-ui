@@ -31,6 +31,8 @@ import type { SystemStyleObject } from '@chakra-ui/react';
  * `Input`, `Textarea` and `PinInput` already spread this, so their call sites
  * need nothing, and `PasswordInput` composes `Input` so it inherits.
  *
+ * `Combobox`'s input spreads it too — it is the one typeable listbox.
+ *
  * `Select` deliberately does NOT, because the zoom does not reach it. It is a
  * listbox — a `<button>` trigger over a portalled list, plus a
  * visually hidden native `<select>` that exists only for form submission and
