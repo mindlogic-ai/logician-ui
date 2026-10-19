@@ -61,3 +61,22 @@ export const SideBySide = () => (
     </Row>
   </Stack>
 );
+
+/**
+ * The four form-control sizes, Input / Select / Textarea per row.
+ */
+export const SizeProgression = () => (
+  <Stack gap={8} maxW="360px">
+    {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
+      <Row key={size} label={`size="${size}"`}>
+        <Input size={size} placeholder={`Input ${size}`} />
+        <SelectField
+          size={size}
+          options={categoryOptions}
+          placeholder={`Select ${size}`}
+        />
+        <Textarea size={size} placeholder={`Textarea ${size}`} />
+      </Row>
+    ))}
+  </Stack>
+);

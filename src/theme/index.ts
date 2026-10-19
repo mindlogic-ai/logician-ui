@@ -2,6 +2,7 @@ import {
   createSystem,
   defaultConfig,
   defineConfig,
+  defineSlotRecipe,
   defineTextStyles,
 } from '@chakra-ui/react';
 
@@ -206,6 +207,49 @@ export const textStyles = defineTextStyles({
 });
 
 /**
+ * `lg`/`xl` form-control font size.
+ *
+ * Chakra's input, textarea and select recipes put `sm`/`md` on the `sm`
+ * textStyle and `lg`/`xl` on `md`. This theme maps both textStyles to
+ * `subtitleAndP`, so every size rendered at the same 14px and only the height
+ * changed. `lg`/`xl` get their own step here (desktop 16px, phone 14px);
+ * `xs`/`sm`/`md` keep their current size on purpose, so call sites that do not
+ * pass `size` render exactly as before.
+ *
+ * Spacing tokens are em-based, so Chakra's `lg` `px: 4` grows with the font to
+ * 16px. `lg` drops to `px: 3` (12px) to stay close to `md`'s 10.5px.
+ */
+const FORM_CONTROL_LG_FONT_SIZE = { base: '1em', md: '1.143em' } as const;
+
+const formControlLgOverride = {
+  variants: {
+    size: {
+      lg: { fontSize: FORM_CONTROL_LG_FONT_SIZE, px: '3' },
+      xl: { fontSize: FORM_CONTROL_LG_FONT_SIZE },
+    },
+  },
+};
+
+// Same `lg` step as Input, and the same height as Input `lg` (Chakra puts the
+// select trigger one token taller). Chakra's `py: 3` is em-based, so at 16px it
+// alone pushes the trigger past the min height; let the height token win.
+const selectSlotRecipe = defineSlotRecipe({
+  slots: ['root', 'trigger', 'content'],
+  variants: {
+    size: {
+      lg: {
+        root: {
+          '--select-trigger-height': 'sizes.11',
+          '--select-trigger-padding-x': 'spacing.3',
+        },
+        trigger: { fontSize: FORM_CONTROL_LG_FONT_SIZE, py: '1.5' },
+        content: { fontSize: FORM_CONTROL_LG_FONT_SIZE },
+      },
+    },
+  },
+});
+
+/**
  * Chakra UI v3 theme configuration for Logician UI
  *
  * Uses the Golden Ratio color system with cool slate-based grays.
@@ -284,8 +328,13 @@ const config = defineConfig({
       colors: semanticTokens.colors,
     },
     textStyles,
+    recipes: {
+      input: formControlLgOverride,
+      textarea: formControlLgOverride,
+    },
     slotRecipes: {
       table: tableSlotRecipe,
+      select: selectSlotRecipe,
     },
   },
 });
