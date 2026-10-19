@@ -12,6 +12,7 @@
     "banner-icon-size-per-size",
     "base-font-size-14px",
     "bolder-headings-darker-tags",
+    "button-disabled-cursor",
     "button-lift",
     "button-press-callsite",
     "card-elevated-variant",
