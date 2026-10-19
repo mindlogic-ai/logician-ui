@@ -215,13 +215,16 @@ export const textStyles = defineTextStyles({
  * changed. `lg`/`xl` get their own step here (desktop 16px, phone 14px);
  * `xs`/`sm`/`md` keep their current size on purpose, so call sites that do not
  * pass `size` render exactly as before.
+ *
+ * Spacing tokens are em-based, so Chakra's `lg` `px: 4` grows with the font to
+ * 16px. `lg` drops to `px: 3` (12px) to stay close to `md`'s 10.5px.
  */
 const FORM_CONTROL_LG_FONT_SIZE = { base: '1em', md: '1.143em' } as const;
 
 const formControlLgOverride = {
   variants: {
     size: {
-      lg: { fontSize: FORM_CONTROL_LG_FONT_SIZE },
+      lg: { fontSize: FORM_CONTROL_LG_FONT_SIZE, px: '3' },
       xl: { fontSize: FORM_CONTROL_LG_FONT_SIZE },
     },
   },
@@ -235,7 +238,10 @@ const selectSlotRecipe = defineSlotRecipe({
   variants: {
     size: {
       lg: {
-        root: { '--select-trigger-height': 'sizes.11' },
+        root: {
+          '--select-trigger-height': 'sizes.11',
+          '--select-trigger-padding-x': 'spacing.3',
+        },
         trigger: { fontSize: FORM_CONTROL_LG_FONT_SIZE, py: '1.5' },
         content: { fontSize: FORM_CONTROL_LG_FONT_SIZE },
       },
