@@ -2,6 +2,7 @@ import { forwardRef } from 'react';
 import { Button as ChakraButton } from '@chakra-ui/react';
 
 import { focusRing } from '@/utils/focusRing';
+import { mergeCss } from '@/utils/mergeCss';
 
 import { polymorphic } from '../../types/polymorphic';
 import { buttonTransition, getButtonStyles } from './Button.styles';
@@ -35,6 +36,7 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       _hover: hoverProp,
       _active: activeProp,
+      _disabled: disabledProp,
       ...rest
     },
     ref
@@ -91,9 +93,22 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
         // FactChat puts on its quiz buttons — used to silently drop the
         // variant's pressed colour *and* the scale with it, and the button
         // stopped reading as pressed at all. Its own keys still win; it just
-        // no longer erases the ones it did not mention.
-        _hover={{ ...styles._hover, ...hoverProp }}
-        _active={{ ...styles._active, ...activeProp }}
+        // no longer erases the ones it did not mention. Deep, so a nested
+        // condition (lift's `_hover._dark`) survives a call site's own `_dark`.
+        _hover={mergeCss(styles._hover, hoverProp)}
+        _active={mergeCss(styles._active, activeProp)}
+        // `cursor` is a style prop, so it lands outside Chakra's
+        // `@layer recipes` and beat the recipe's disabled cursor — every
+        // disabled Button showed a pointer and read as clickable. The
+        // disabled cursor has to sit at this level, merged like the two above
+        // so a call site's `_disabled` cannot drop it.
+        _disabled={mergeCss(
+          '_disabled' in styles ? styles._disabled : undefined,
+          // Chakra disables a `loading` button too; it is working, not
+          // forbidden, so it gets `progress`.
+          { cursor: rest.loading ? 'progress' : 'not-allowed' },
+          disabledProp
+        )}
         {...focusRing}
         cursor="pointer"
         // Explicit identity so the press transitions from a definite value
