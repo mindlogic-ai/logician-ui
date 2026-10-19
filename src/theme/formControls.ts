@@ -28,18 +28,16 @@ import type { SystemStyleObject } from '@chakra-ui/react';
  * browser zoom has a ~640px CSS viewport, so a width rule enlarges their form
  * controls and pushes wide tables off-screen, making the low-vision case worse.
  *
- * `Input` and `Textarea` already spread this, so their call sites need nothing,
- * and `PasswordInput` composes `Input` so it inherits.
+ * `Input`, `Textarea` and `PinInput` already spread this, so their call sites
+ * need nothing, and `PasswordInput` composes `Input` so it inherits.
  *
  * `Combobox`'s input spreads it too — it is the one typeable listbox.
  *
- * Two components deliberately do NOT, because the zoom does not reach them.
- * `Select` is a listbox — a `<button>` trigger over a portalled list, plus a
+ * `Select` deliberately does NOT, because the zoom does not reach it. It is a
+ * listbox — a `<button>` trigger over a portalled list, plus a
  * visually hidden native `<select>` that exists only for form submission and
  * never takes visible focus; Safari zooms toward text entry, not toward a
- * button. `PinInput` wraps `react-pin-input`, which takes an inline `style`
- * object, and an inline style cannot carry a media query at all — a consumer
- * that builds OTP boxes on `ChakraPinInput` instead has to spread this itself.
+ * button.
  *
  * Spread it yourself on any editable surface the design system does not own —
  * a Lexical/ProseMirror `contenteditable`, a bare Chakra `Input`, or a
