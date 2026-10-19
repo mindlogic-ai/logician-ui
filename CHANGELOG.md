@@ -1,5 +1,12 @@
 # Changelog
 
+## 4.0.0-alpha.42
+
+### Patch Changes
+
+- b749205: No more iOS zoom on focus: `Combobox.Input` takes `noZoomOnFocus` (16px on
+  touch).
+
 ## 4.0.0-alpha.41
 
 ### Patch Changes
