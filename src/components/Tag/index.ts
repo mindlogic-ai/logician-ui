@@ -1,7 +1,7 @@
 import { Icon } from '@chakra-ui/react';
 
 export { Tag } from './Tag';
-export type { TagStyleOptions } from './Tag.styles';
+export type { LegacyTagResolution, TagStyleOptions } from './Tag.styles';
 export {
   getTagStyles,
   mapLegacyTagProps,

@@ -27,16 +27,36 @@ export type ChipVariant = 'solid' | 'soft' | 'outline';
  * @deprecated `Chip` is an alias of `Tag` since 5.0 — use `TagOwnProps`.
  * Removed in 6.0.
  *
- * Mapping of the old props: `outline` → neutral, `primary` + `solid` →
- * `selected`, `danger` / `success` / `warning` → that `tone`, everything else
- * → neutral. New Tag props (`tone`, `selected`, `category`) win when given.
+ * `colorScheme` / `variant` / `colorPalette` are still in the type ONLY so
+ * unmigrated 4.x call sites keep compiling; they are deprecated aliases,
+ * mapped at runtime by `mapLegacyTagProps` (with a once-per-combination dev
+ * warning) and removed with Chip in 6.0:
+ *
+ * - `primary` / `secondary` / `neutral` × `soft` (default) or `outline` → neutral
+ * - `primary` / `secondary` / `neutral` × `solid` → `selected` (look only — not
+ *   a toggle unless `selected` is passed explicitly)
+ * - `danger` / `success` / `warning` × `soft` → that `tone`
+ * - `danger` / `success` / `warning` × `solid` → that `tone` (no solid fill
+ *   in 5.0 — warns "choose by hand")
+ * - `danger` / `success` / `warning` × `outline` → neutral (warns "choose by hand")
+ *
+ * New Tag props (`tone`, `selected`, `category`) win when given.
  */
 export type ChipOwnProps = TagOwnProps & {
-  /** @deprecated Use Tag's `tone` / `selected`. */
+  /**
+   * @deprecated 4.x alias, mapped at runtime — use Tag's `tone` / `selected`.
+   * Defaults to `primary` (the 4.x Chip default).
+   */
   colorScheme?: ChipColorScheme;
-  /** @deprecated Use Tag's `tone` / `selected`. */
+  /**
+   * @deprecated 4.x alias, mapped at runtime — use Tag's `selected` (for
+   * `solid`) or nothing. Defaults to `soft`.
+   */
   variant?: ChipVariant;
-  /** @deprecated Accepted for 4.x call sites that passed Chakra's palette. */
+  /**
+   * @deprecated 4.x alias of `colorScheme` (Chakra's palette prop), mapped
+   * at runtime. `colorScheme` wins when both are given.
+   */
   colorPalette?: ChipColorScheme;
 };
 

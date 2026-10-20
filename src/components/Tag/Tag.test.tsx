@@ -41,15 +41,18 @@ describe('Tag 5.0 API', () => {
   });
 
   it('maps 4.x colorPalette × variant', () => {
-    expect(mapLegacyTagProps('primary', 'solid')).toEqual({
+    // Full table: Tag.legacy.test.tsx.
+    expect(mapLegacyTagProps('primary', 'solid')).toMatchObject({
       tone: 'neutral',
       selected: true,
     });
-    expect(mapLegacyTagProps('danger', 'soft')).toEqual({ tone: 'danger' });
-    expect(mapLegacyTagProps('success', 'outline')).toEqual({
+    expect(mapLegacyTagProps('danger', 'soft')).toMatchObject({
+      tone: 'danger',
+    });
+    expect(mapLegacyTagProps('success', 'outline')).toMatchObject({
       tone: 'neutral',
     });
-    expect(mapLegacyTagProps('secondary', 'soft')).toEqual({
+    expect(mapLegacyTagProps('secondary', 'soft')).toMatchObject({
       tone: 'neutral',
     });
   });

@@ -7,7 +7,7 @@ import { polymorphic } from '../../types/polymorphic';
 import {
   getTagStyles,
   mapLegacyTagProps,
-  warnTagDeprecation,
+  warnLegacyTagProps,
 } from './Tag.styles';
 import { TagOwnProps } from './Tag.types';
 
@@ -16,6 +16,12 @@ type LegacyTagInput = {
   colorPalette?: string;
   variant?: string;
   as?: ElementType;
+  href?: string;
+  /**
+   * @internal Set by the deprecated `Chip` alias so the 4.x warning names the
+   * component the call site actually wrote. Never forwarded to the DOM.
+   */
+  __legacyComponent?: 'Chip';
 };
 
 /**
@@ -52,26 +58,39 @@ const TagImpl = forwardRef(
       colorPalette: legacyPalette,
       variant: legacyVariant,
       as,
+      __legacyComponent: legacyComponent,
       ...rest
     } = props as TagOwnProps & LegacyTagInput;
 
     let tone = toneProp;
     let selected = selectedProp;
-    if (legacyPalette !== undefined || legacyVariant !== undefined) {
-      warnTagDeprecation(
-        'tag-legacy-props',
-        '<Tag colorPalette / variant> were removed in 5.0. Use tone="neutral|success|warning|danger|info", ' +
-          'selected (filter chip on) or category="<hue>". The old props are mapped for now.'
-      );
+    if (
+      legacyComponent !== undefined ||
+      legacyPalette !== undefined ||
+      legacyVariant !== undefined
+    ) {
+      // Mapped `selected` is the look only: `selectedProp` (below) still
+      // decides whether the tag is a toggle.
       const mapped = mapLegacyTagProps(legacyPalette, legacyVariant);
+      warnLegacyTagProps(
+        legacyComponent ?? 'Tag',
+        legacyPalette,
+        legacyVariant,
+        mapped
+      );
       tone ??= mapped.tone;
       selected ??= mapped.selected;
     }
 
     const isButton = as === 'button';
-    const interactive =
-      !disabled &&
-      (onClick != null || isButton || as === 'a' || selectedProp !== undefined);
+    const isLink = as === 'a' || rest.href != null;
+    const wantsInteraction =
+      onClick != null || isButton || isLink || selectedProp !== undefined;
+    const interactive = !disabled && wantsInteraction;
+    // A disabled tag that would otherwise be operable (a link, a clickable
+    // span) has no native `disabled`, so say so and take it out of the tab
+    // order. `as="button"` gets the real attribute instead.
+    const disabledNonNative = disabled && wantsInteraction && !isButton;
 
     const styles = getTagStyles({ tone, selected, category, interactive });
 
@@ -93,10 +112,12 @@ const TagImpl = forwardRef(
         aria-pressed={
           isButton && selectedProp !== undefined ? !!selected : undefined
         }
-        aria-disabled={disabled && !isButton && onClick ? true : undefined}
+        aria-disabled={disabledNonNative ? true : undefined}
         {...(isButton && { type: 'button', disabled })}
         onClick={handleClick}
         {...rest}
+        // After `rest`: a disabled link must not stay reachable by Tab.
+        {...(disabledNonNative && { tabIndex: -1 })}
         as={as}
         ref={ref}
       >

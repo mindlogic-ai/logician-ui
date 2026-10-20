@@ -1,3 +1,5 @@
+import { isDev } from '@/utils/isDev';
+
 import { BadgeVariant } from './Badge.types';
 
 /**
@@ -67,12 +69,7 @@ export const resolveBadgeVariant = (variant: unknown): BadgeVariant => {
   ) {
     return variant as BadgeVariant;
   }
-  if (
-    variant !== undefined &&
-    typeof process !== 'undefined' &&
-    process.env?.NODE_ENV !== 'production' &&
-    !warned.has(String(variant))
-  ) {
+  if (variant !== undefined && isDev() && !warned.has(String(variant))) {
     warned.add(String(variant));
     console.warn(
       `[logician-ui] <Badge variant="${String(variant)}"> was removed in 5.0 and now renders as "neutral". ` +

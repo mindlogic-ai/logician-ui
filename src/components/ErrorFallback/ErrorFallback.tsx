@@ -203,10 +203,9 @@ User Agent: ${errorInfo.userAgent}`;
                 onClick={onErrorReset}
                 size="lg"
                 variant="primary"
-                _hover={{
-                  transform: 'translateY(-1px)',
-                  boxShadow: 'lg',
-                }}
+                // `lift`, not a hand-rolled `_hover` box-shadow: the focus
+                // ring is a box-shadow too, and a hover one replaced it.
+                lift
                 w="full"
                 maxW="300px"
               >

@@ -19,7 +19,20 @@ import { CountBadgeProps } from './CountBadge.types';
  *   given a `label` — then it is an `img` with that name.
  *
  * Give it a `label` whenever the number alone would not make sense out of
- * context (a count on an icon-only button: "읽지 않은 메시지 5개").
+ * context and the badge sits in readable content — next to a nav item's
+ * text, in a list row.
+ *
+ * NOT on an icon-only button: the button's `aria-label` replaces its whole
+ * subtree as the accessible name, so the badge's hidden label is never
+ * announced. Put the count in the button's `aria-label` instead and leave
+ * the badge unlabelled (it is then only the visible number):
+ *
+ * ```tsx
+ * <IconButton aria-label={`알림, 읽지 않음 ${n}개`} variant="ghost">
+ *   <BellIcon />
+ *   <CountBadge count={n} position="absolute" top={0} right={0} />
+ * </IconButton>
+ * ```
  *
  * @example
  * ```tsx

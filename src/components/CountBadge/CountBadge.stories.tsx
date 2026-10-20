@@ -1,6 +1,8 @@
 import { Flex, HStack, Text } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
+import { BellIcon } from '../Icon';
+import { IconButton } from '../IconButton';
 import { CountBadge } from '.';
 
 const meta = {
@@ -76,4 +78,32 @@ export const InContext: Story = {
       <CountBadge count={12} label="읽지 않은 메시지 12개" />
     </HStack>
   ),
+};
+
+/**
+ * On an icon-only button the count belongs in the BUTTON's `aria-label`:
+ * that label replaces the button's whole subtree as its accessible name, so a
+ * `label` on the badge would never be announced. The badge stays unlabelled
+ * and is only the visible number.
+ */
+export const OnIconButton: Story = {
+  render: () => {
+    const unread = 5;
+    return (
+      <IconButton
+        aria-label={`알림, 읽지 않음 ${unread}개`}
+        variant="ghost"
+        position="relative"
+      >
+        <BellIcon />
+        <CountBadge
+          count={unread}
+          size="sm"
+          position="absolute"
+          top="-2px"
+          right="-2px"
+        />
+      </IconButton>
+    );
+  },
 };

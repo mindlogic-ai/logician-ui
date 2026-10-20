@@ -23,6 +23,10 @@ export type CountBadgeProps = Omit<BoxProps, 'children'> & {
    * (e.g. "읽지 않은 알림 120개" rather than "99+"); in dot mode it is what
    * makes the dot visible to assistive tech at all — without it the dot is
    * `aria-hidden`. `aria-label` is accepted as an alias.
+   *
+   * Inside an element that has its own `aria-label` (an icon-only button) it
+   * is never announced — that `aria-label` replaces the subtree. Put the
+   * count in the button's `aria-label` there instead.
    */
   label?: string;
   /** @default 'md' */

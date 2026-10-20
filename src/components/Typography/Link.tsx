@@ -27,17 +27,17 @@ export type LinkCustomProps<TElement extends ElementType = 'a'> =
  * passes while the component points somewhere else entirely — which is how the
  * dark hover regressed with a green suite.
  *
- * 5.0: `fg.link` / `fg.linkHover` are flipping semantic roles — each already
- * resolves to the right hex in both light and dark, so the ramp points the
- * same token at both `base` and `_dark` instead of hand-picking a different
- * step per mode the way the 4.x `primary.*` ramp had to. There is no darker
- * danger token than `danger.fg` today, so the error ramp is flat too.
+ * 5.0: every entry is a flipping semantic role — `fg.link` / `fg.linkHover` /
+ * `danger.fg` each already resolve to the right hex in light and dark — so a
+ * ramp step is one token, not the 4.x `{ base, _dark }` pair of hand-picked
+ * steps. There is no darker danger token than `danger.fg` today, so the error
+ * link does not change colour on hover (only its underline thickens).
  */
 export const LINK_RAMP = {
-  default: { base: 'fg.link', _dark: 'fg.link' },
-  error: { base: 'danger.fg', _dark: 'danger.fg' },
-  defaultHover: { base: 'fg.linkHover', _dark: 'fg.linkHover' },
-  errorHover: { base: 'danger.fg', _dark: 'danger.fg' },
+  default: 'fg.link',
+  error: 'danger.fg',
+  defaultHover: 'fg.linkHover',
+  errorHover: 'danger.fg',
 } as const;
 
 const LinkImpl = forwardRef<HTMLAnchorElement, LinkOwnProps>(
@@ -45,9 +45,10 @@ const LinkImpl = forwardRef<HTMLAnchorElement, LinkOwnProps>(
     // `fg.link` / `danger.fg` are flipping semantic roles, tuned against their
     // own canvas in both modes — unlike the 4.x `primary.*` ramp, there is no
     // light/dark arm to hand-pick here. KWCAG 2.1 5.1.3.3 (명도 대비) still
-    // applies to every state a user can put the link in, which is why hover
-    // gets its own token (`fg.linkHover`) rather than relying on the
-    // thicker underline alone to signal the state change.
+    // applies to every state a user can put the link in: the default link's
+    // hover has its own token (`fg.linkHover`); the error link's hover keeps
+    // `danger.fg` (no darker danger token exists), so for it the thicker
+    // underline is the only hover cue.
     const defaultColor = LINK_RAMP.default;
     const errorColor = LINK_RAMP.error;
     const defaultHoverColor = LINK_RAMP.defaultHover;

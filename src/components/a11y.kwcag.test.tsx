@@ -374,10 +374,10 @@ describe('브랜드 색 대비 — Link · Tab 램프', () => {
     // hardcoded the expected steps passed just fine with the hover pointing at
     // `primary.main` — measuring the right arithmetic about the wrong colour.
     expect(
-      contrast(resolve(ramp.base, 'base'), LIGHT_CANVAS)
+      contrast(resolve(ramp, 'base'), LIGHT_CANVAS)
     ).toBeGreaterThanOrEqual(AA_BODY_TEXT);
     expect(
-      contrast(resolve(ramp._dark, '_dark'), DARK_CANVAS)
+      contrast(resolve(ramp, '_dark'), DARK_CANVAS)
     ).toBeGreaterThanOrEqual(AA_BODY_TEXT);
   });
 
@@ -386,11 +386,11 @@ describe('브랜드 색 대비 — Link · Tab 램프', () => {
     // MORE. "One step darker" is correct on a white page and backwards on a
     // dark one, where darker means toward the background.
     const resting = contrast(
-      resolve(LINK_RAMP.default.base, 'base'),
+      resolve(LINK_RAMP.default, 'base'),
       LIGHT_CANVAS
     );
     const hover = contrast(
-      resolve(LINK_RAMP.defaultHover.base, 'base'),
+      resolve(LINK_RAMP.defaultHover, 'base'),
       LIGHT_CANVAS
     );
     expect(hover).toBeGreaterThan(resting);
@@ -407,11 +407,11 @@ describe('브랜드 색 대비 — Link · Tab 램프', () => {
     'hover 가 배경 반대쪽으로 간다 — 다크 (BAZE 가이드 값 확인 필요)',
     () => {
       const resting = contrast(
-        resolve(LINK_RAMP.default._dark, '_dark'),
+        resolve(LINK_RAMP.default, '_dark'),
         DARK_CANVAS
       );
       const hover = contrast(
-        resolve(LINK_RAMP.defaultHover._dark, '_dark'),
+        resolve(LINK_RAMP.defaultHover, '_dark'),
         DARK_CANVAS
       );
       expect(hover).toBeGreaterThan(resting);

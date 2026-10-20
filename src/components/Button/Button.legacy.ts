@@ -1,3 +1,6 @@
+import { isDev } from '@/utils/isDev';
+
+import type { IconButtonVariant } from '../IconButton/IconButton.types';
 import type { ButtonVariant } from './Button.types';
 
 /**
@@ -22,22 +25,34 @@ export type LegacyResolution = {
   needsHuman: boolean;
 };
 
-const NEW_BUTTON_VARIANTS = new Set<string>([
-  'primary',
-  'action',
-  'secondary',
-  'subtle',
-  'ghost',
-  'danger',
-]);
+/**
+ * Exhaustive records, not hand-written lists: adding a role to
+ * `ButtonVariant` / `IconButtonVariant` is a compile error here until it is
+ * listed, so a new 5.0 variant can never be mistaken for a 4.x one.
+ */
+const BUTTON_VARIANT_KEYS: Record<ButtonVariant, true> = {
+  primary: true,
+  action: true,
+  secondary: true,
+  subtle: true,
+  ghost: true,
+  danger: true,
+};
 
-const NEW_ICON_VARIANTS = new Set<string>([
-  'ghost',
-  'secondary',
-  'primary',
-  'danger',
-  'action',
-]);
+const ICON_VARIANT_KEYS: Record<IconButtonVariant, true> = {
+  ghost: true,
+  secondary: true,
+  primary: true,
+  danger: true,
+  action: true,
+};
+
+const NEW_BUTTON_VARIANTS: ReadonlySet<string> = new Set(
+  Object.keys(BUTTON_VARIANT_KEYS)
+);
+const NEW_ICON_VARIANTS: ReadonlySet<string> = new Set(
+  Object.keys(ICON_VARIANT_KEYS)
+);
 
 /**
  * Whether a variant/colorPalette pair is a 4.x one that needs mapping. A new
@@ -83,10 +98,11 @@ export const resolveLegacyButtonVariant = (
     variant == null ? (kind === 'icon' ? 'ghost' : 'soft') : String(variant);
 
   const valid = kind === 'icon' ? NEW_ICON_VARIANTS : NEW_BUTTON_VARIANTS;
+  // `ghost` is both a 4.x and a 5.0 name; it is handled by the switch below,
+  // which gives the same answer.
   if (valid.has(v) && v !== 'ghost') {
     // Already a 5.0 role; a stray colorPalette only contributes "danger".
-    const destructiveCapable =
-      v === 'secondary' || v === 'subtle' || v === 'ghost';
+    const destructiveCapable = v === 'secondary' || v === 'subtle';
     return {
       variant: v as MappedVariant,
       isDestructive: isDanger && destructiveCapable,
@@ -142,7 +158,7 @@ export const warnLegacyButtonProps = (
   variant: unknown,
   resolved: LegacyResolution
 ): void => {
-  if (process.env.NODE_ENV === 'production') return;
+  if (!isDev()) return;
   const key = `${component}|${String(colorPalette)}|${String(variant)}`;
   if (warned.has(key)) return;
   warned.add(key);

@@ -28,7 +28,9 @@ export type AvatarProps = ChakraAvatarRootProps & {
    * Overrides the hue the fallback initials are tinted — by default a stable
    * hash of `name` picks one of the 12 `category.*` hues (see
    * {@link hueForName}), so the same person reads as the same colour
-   * everywhere without a colour being stored anywhere.
+   * everywhere without a colour being stored anywhere. With no `name` and no
+   * `colorHue` the fallback is the neutral beige pair
+   * (`secondary.surface` / `secondary.fgStrong`), not a hue.
    */
   colorHue?: SystemHue;
 };
@@ -41,8 +43,13 @@ export type AvatarProps = ChakraAvatarRootProps & {
  * collision between two people's initials is a cosmetic coincidence, not a
  * data bug.
  */
-export function hueForName(name: string | undefined): SystemHue {
-  if (!name) return SYSTEM_HUE_NAMES[0];
+export function hueForName(name: string): SystemHue;
+export function hueForName(name: string | undefined): SystemHue | undefined;
+export function hueForName(name: string | undefined): SystemHue | undefined {
+  // No name, no identity to colour: `undefined` so the caller falls back to
+  // the neutral pair. `SYSTEM_HUE_NAMES[0]` is red, and a red placeholder
+  // avatar reads as an error state.
+  if (!name) return undefined;
   let hash = 0;
   for (let i = 0; i < name.length; i += 1) {
     // `| 0` keeps the running hash a 32-bit int so it can't grow unbounded
@@ -53,10 +60,23 @@ export function hueForName(name: string | undefined): SystemHue {
   return SYSTEM_HUE_NAMES[index];
 }
 
+/**
+ * Fallback (initials / icon) colours: the person's hue when there is one,
+ * otherwise the neutral beige small-surface pair Badge `neutral` uses.
+ */
+export function avatarFallbackColors(
+  name: string | undefined,
+  colorHue?: SystemHue
+): { bg: string; color: string } {
+  const hue = colorHue ?? hueForName(name);
+  if (!hue) return { bg: 'secondary.surface', color: 'secondary.fgStrong' };
+  return { bg: `category.${hue}.surface`, color: `category.${hue}.fg` };
+}
+
 const AvatarComponent = forwardRef<HTMLDivElement, AvatarProps>(
   (props, ref) => {
     const { src, name, colorHue, ...rest } = props;
-    const hue = colorHue ?? hueForName(name);
+    const fallback = avatarFallbackColors(name, colorHue);
     return (
       <ChakraAvatar.Root
         ref={ref}
@@ -68,8 +88,8 @@ const AvatarComponent = forwardRef<HTMLDivElement, AvatarProps>(
       >
         <ChakraAvatar.Fallback
           name={name}
-          bg={`category.${hue}.surface`}
-          color={`category.${hue}.fg`}
+          bg={fallback.bg}
+          color={fallback.color}
         />
         <ChakraAvatar.Image src={src} />
       </ChakraAvatar.Root>
