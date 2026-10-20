@@ -92,13 +92,8 @@ User Agent: ${errorInfo.userAgent}`;
         >
           <VStack gap={6} align="center" w="full" mx="auto">
             {/* Error Icon */}
-            <Box
-              position="relative"
-              p={4}
-              bg="danger.extralight"
-              borderRadius="full"
-            >
-              <MdError boxSize="xl" color="danger.main" />
+            <Box position="relative" p={4} bg="danger.bg" borderRadius="full">
+              <MdError boxSize="xl" color="danger.fg" />
             </Box>
 
             {/* Error Title */}
@@ -118,25 +113,21 @@ User Agent: ${errorInfo.userAgent}`;
 
             {/* Error Message */}
             <Card
-              bg="danger.extralight"
+              bg="danger.bg"
               border="1px solid"
-              borderColor="danger.lighter"
+              borderColor="danger.border"
               p={4}
               w="full"
             >
-              <Text
-                color="danger.dark"
-                fontFamily="mono"
-                wordBreak="break-word"
-              >
+              <Text color="danger.fg" fontFamily="mono" wordBreak="break-word">
                 {error?.message || translate('error_boundary_default_message')}
               </Text>
             </Card>
 
             {/* Support Information */}
             <Card
-              bg="primary.extralight"
-              borderColor="primary.lighter"
+              bg="secondary.surface"
+              borderColor="secondary.border"
               p={6}
               w="full"
             >
@@ -144,18 +135,18 @@ User Agent: ${errorInfo.userAgent}`;
                   sits directly under the card's `<h1>` — an `<h4>` there skips
                   two levels and tells a screen-reader user there are sections
                   they missed (KWCAG 5.2.4.2 제목 제공). */}
-              <H4 as="h2" color="primary.dark" mb={4} textAlign="center">
+              <H4 as="h2" color="fg.default" mb={4} textAlign="center">
                 {translate('support_information')}
               </H4>
               <VStack gap={2} align="stretch" mb={4}>
                 <Flex justify="space-between">
-                  <Text color="primary.main" fontWeight="semibold">
+                  <Text color="fg.muted" fontWeight="semibold">
                     {translate('error_id')}:
                   </Text>
                   <Text fontFamily="mono">{errorInfo.errorId}</Text>
                 </Flex>
                 <Flex justify="space-between">
-                  <Text color="primary.main" fontWeight="semibold">
+                  <Text color="fg.muted" fontWeight="semibold">
                     {translate('time')}:
                   </Text>
                   <Subtext fontFamily="mono">
@@ -163,7 +154,7 @@ User Agent: ${errorInfo.userAgent}`;
                   </Subtext>
                 </Flex>
                 <Flex justify="space-between">
-                  <Text color="primary.main" fontWeight="semibold">
+                  <Text color="fg.muted" fontWeight="semibold">
                     {translate('component')}:
                   </Text>
                   <Text fontFamily="mono">
@@ -171,7 +162,7 @@ User Agent: ${errorInfo.userAgent}`;
                   </Text>
                 </Flex>
                 <Flex justify="space-between">
-                  <Text color="primary.main" fontWeight="semibold">
+                  <Text color="fg.muted" fontWeight="semibold">
                     {translate('user_id')}:
                   </Text>
                   <Text fontFamily="mono">
@@ -180,7 +171,7 @@ User Agent: ${errorInfo.userAgent}`;
                 </Flex>
                 {typeof window !== 'undefined' && (
                   <Flex justify="space-between">
-                    <Text color="primary.main" fontWeight="semibold">
+                    <Text color="fg.muted" fontWeight="semibold">
                       {translate('page')}:
                     </Text>
                     <Subtext fontFamily="mono">
@@ -211,7 +202,7 @@ User Agent: ${errorInfo.userAgent}`;
               <Button
                 onClick={onErrorReset}
                 size="lg"
-                variant="solid"
+                variant="primary"
                 _hover={{
                   transform: 'translateY(-1px)',
                   boxShadow: 'lg',

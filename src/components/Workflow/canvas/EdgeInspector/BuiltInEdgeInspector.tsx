@@ -84,7 +84,7 @@ export function BuiltInEdgeInspector({
         </FieldWrapper>
 
         <Stack gap={1.5}>
-          <Subtext fontWeight="semibold" color="slate.1300">
+          <Subtext fontWeight="semibold" color="fg.default">
             {translate('workflow_edge_endpoints_heading') as string}
           </Subtext>
           <Stack gap={2}>
@@ -127,9 +127,9 @@ function EndpointRow({
 }) {
   return (
     <Stack gap={0.5}>
-      <Subtext color="slate.900">{label}</Subtext>
-      <Subtext color="slate.1200">{title}</Subtext>
-      {portLabel ? <Subtext color="slate.700">{portLabel}</Subtext> : null}
+      <Subtext color="fg.muted">{label}</Subtext>
+      <Subtext color="fg.default">{title}</Subtext>
+      {portLabel ? <Subtext color="fg.subtle">{portLabel}</Subtext> : null}
     </Stack>
   );
 }

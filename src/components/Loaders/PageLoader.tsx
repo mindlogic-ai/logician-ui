@@ -2,10 +2,15 @@ import { Box, Flex, FlexProps } from '@chakra-ui/react';
 
 import { Spinner } from '@/components/Spinner';
 
+import { ThinkingDots } from './ThinkingDots';
+
+export type LoaderVariant = 'default' | 'thinking';
+
 export const PageLoader = ({
   isLoading,
+  variant = 'default',
   ...rest
-}: FlexProps & { isLoading: boolean }) => {
+}: FlexProps & { isLoading: boolean; variant?: LoaderVariant }) => {
   return (
     <Flex
       position="fixed"
@@ -22,11 +27,18 @@ export const PageLoader = ({
       transitionProperty="opacity"
       bg="bg.canvas"
       zIndex={9999}
+      role="status"
+      aria-live="polite"
+      aria-label="Loading"
       {...rest}
     >
-      <Box position="relative">
-        <Spinner boxSize="60px" borderWidth="6px" css={{ zIndex: 999 }} />
-      </Box>
+      {variant === 'thinking' ? (
+        <ThinkingDots />
+      ) : (
+        <Box position="relative">
+          <Spinner boxSize="60px" borderWidth="6px" css={{ zIndex: 999 }} />
+        </Box>
+      )}
     </Flex>
   );
 };

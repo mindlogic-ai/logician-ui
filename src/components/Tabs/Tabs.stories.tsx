@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { Button, CloseButton, Heading, Text } from '@chakra-ui/react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import { Tab } from '@/components/Tabs/Tab/Tab';
 import { TabList } from '@/components/Tabs/TabList';
@@ -76,23 +76,23 @@ export const CustomStyles: Story = {
     defaultValue: 'profile',
     children: (
       <>
-        <TabList borderBottom="2px solid" borderColor="gray.200" gap={1}>
+        <TabList borderBottom="2px solid" borderColor="border.subtle" gap={1}>
           <Tab
             value="profile"
             bg="transparent"
-            color="gray.600"
+            color="fg.muted"
             fontWeight="medium"
             px={6}
             py={3}
             borderRadius="md"
             _selected={{
-              bg: 'blue.500',
-              color: 'white',
+              bg: 'category.blue.fg',
+              color: 'fg.onPrimary',
               fontWeight: 'bold',
             }}
             _hover={{
-              bg: 'blue.50',
-              color: 'blue.700',
+              bg: 'category.blue.surface',
+              color: 'category.blue.fg',
             }}
           >
             Profile
@@ -100,19 +100,19 @@ export const CustomStyles: Story = {
           <Tab
             value="settings"
             bg="transparent"
-            color="gray.600"
+            color="fg.muted"
             fontWeight="medium"
             px={6}
             py={3}
             borderRadius="md"
             _selected={{
-              bg: 'green.500',
-              color: 'white',
+              bg: 'category.green.fg',
+              color: 'fg.onPrimary',
               fontWeight: 'bold',
             }}
             _hover={{
-              bg: 'green.50',
-              color: 'green.700',
+              bg: 'category.green.surface',
+              color: 'category.green.fg',
             }}
           >
             Settings
@@ -120,51 +120,63 @@ export const CustomStyles: Story = {
           <Tab
             value="notifications"
             bg="transparent"
-            color="gray.600"
+            color="fg.muted"
             fontWeight="medium"
             px={6}
             py={3}
             borderRadius="md"
             _selected={{
-              bg: 'purple.500',
-              color: 'white',
+              bg: 'category.purple.fg',
+              color: 'fg.onPrimary',
               fontWeight: 'bold',
             }}
             _hover={{
-              bg: 'purple.50',
-              color: 'purple.700',
+              bg: 'category.purple.surface',
+              color: 'category.purple.fg',
             }}
           >
             Notifications
           </Tab>
         </TabList>
-        <TabPanel value="profile" bg="blue.50" p={6} borderRadius="md" mt={4}>
-          <Heading size="md" mb={3} color="blue.900">
+        <TabPanel
+          value="profile"
+          bg="category.blue.surface"
+          p={6}
+          borderRadius="md"
+          mt={4}
+        >
+          <Heading size="md" mb={3} color="category.blue.fg">
             Profile Settings
           </Heading>
-          <Text color="gray.700">
+          <Text color="fg.muted">
             Manage your profile information and preferences.
           </Text>
         </TabPanel>
-        <TabPanel value="settings" bg="green.50" p={6} borderRadius="md" mt={4}>
-          <Heading size="md" mb={3} color="green.900">
+        <TabPanel
+          value="settings"
+          bg="category.green.surface"
+          p={6}
+          borderRadius="md"
+          mt={4}
+        >
+          <Heading size="md" mb={3} color="category.green.fg">
             General Settings
           </Heading>
-          <Text color="gray.700">
+          <Text color="fg.muted">
             Configure your account settings and preferences.
           </Text>
         </TabPanel>
         <TabPanel
           value="notifications"
-          bg="purple.50"
+          bg="category.purple.surface"
           p={6}
           borderRadius="md"
           mt={4}
         >
-          <Heading size="md" mb={3} color="purple.900">
+          <Heading size="md" mb={3} color="category.purple.fg">
             Notification Preferences
           </Heading>
-          <Text color="gray.700">
+          <Text color="fg.muted">
             Manage how and when you receive notifications.
           </Text>
         </TabPanel>

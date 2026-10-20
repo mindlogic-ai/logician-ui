@@ -54,7 +54,7 @@ export const PORT_STYLE: PortStyle = {
   width: 8,
   height: 8,
   background: colorVar('bg.surface'),
-  border: `1.5px solid ${colorVar('slate.700')}`,
+  border: `1.5px solid ${colorVar('border.strong')}`,
 };
 
 /**
@@ -79,6 +79,6 @@ export const metaChipStyles = {
  */
 export const metaChipToneStyles = {
   default: {},
-  danger: { bg: 'danger.lightest', color: 'danger.dark' },
-  warning: { bg: 'warning.lightest', color: 'warning.dark' },
+  danger: { bg: 'danger.bg', color: 'danger.fg' },
+  warning: { bg: 'warning.bg', color: 'warning.fg' },
 } as const;

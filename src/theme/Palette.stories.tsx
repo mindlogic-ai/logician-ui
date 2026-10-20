@@ -1,10 +1,4 @@
-import {
-  Box,
-  Separator,
-  Flex,
-  Grid,
-  VStack,
-} from '@chakra-ui/react';
+import { Box, Separator, Flex, Grid, VStack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 import { readableColor } from 'polished';
 import { MouseEventHandler, useState } from 'react';
@@ -24,7 +18,7 @@ import { colors, semanticTokens } from './colors';
 
 /**
  * Helper function to resolve a semantic token reference to its actual hex value.
- * E.g., '{colors.blue.500}' -> '#1751D0'
+ * E.g., '{colors.ink.11}' -> '#252525'
  */
 const resolveTokenReference = (reference: string | undefined): string => {
   if (!reference) return '';
@@ -55,9 +49,7 @@ const resolveTokenReference = (reference: string | undefined): string => {
  * mode-conditional object with any of `base` / `_light` / `_dark`. Resolve it to
  * concrete light/dark hex codes so the palette can show both modes side by side.
  */
-type TokenValue =
-  | string
-  | { base?: string; _light?: string; _dark?: string };
+type TokenValue = string | { base?: string; _light?: string; _dark?: string };
 
 const resolveTokenValue = (
   value: TokenValue | undefined
@@ -128,13 +120,7 @@ const safeReadableColor = (color: string) => {
   }
 };
 
-const SwatchHalf = ({
-  label,
-  hex,
-}: {
-  label: string;
-  hex: string;
-}) => {
+const SwatchHalf = ({ label, hex }: { label: string; hex: string }) => {
   const [wasCopied, setWasCopied] = useState<boolean>();
   const handleClick: MouseEventHandler<HTMLButtonElement> = () => {
     navigator.clipboard.writeText(hex);
@@ -261,408 +247,74 @@ const PrimitiveColorCard = ({
           )}
         </Flex>
       </Tooltip>
-      <Text color="gray.1200" mt={1} textStyle="subtext">
+      <Text color="fg.default" mt={1} textStyle="subtext">
         {name}.{shade}
       </Text>
     </Flex>
   );
 };
 
-/**
- * Semantic tokens provide meaning-based color references for UI elements.
- * These are the recommended colors to use in components.
- */
-export const SemanticTokens: Story = {
-  name: 'Semantic Tokens',
-  render: () => {
-    return (
-      <VStack gap={6} align="flex-start" w="full">
-        <Box>
-          <H4 color="gray.1300" mb={2}>
-            Semantic Color Tokens
-          </H4>
-          <Subtext color="gray.700">
-            Use these tokens in components for consistent theming. Click to copy
-            hex value.
-          </Subtext>
-        </Box>
+// Colour stories moved to `BazePalette.stories.tsx` (Setup/Theme/BAZE Palette) in 5.0.
 
-        <Separator />
-
-        {Object.entries(semanticTokens.colors)
-          .filter(([color]) => !color.startsWith('chakra'))
-          .map(([color, shades]) => (
-            <Flex key={color} gap={4} align="flex-start" wrap="wrap" w="full">
-              <H4
-                mt={2}
-                w="120px"
-                flexShrink={0}
-                textTransform="capitalize"
-                color="gray.1200"
-              >
-                {color}
-              </H4>
-              <Grid templateColumns="repeat(auto-fill, minmax(132px, 1fr))" gap={2} flex="1" minW="0">
-                {Object.entries(shades).flatMap(([shade, shadeValue]) => {
-                  const node = shadeValue as any;
-                  // Leaf token: render its value directly.
-                  if (node && node.value !== undefined) {
-                    return [
-                      <ColorCard
-                        key={shade}
-                        color={color}
-                        shade={shade}
-                        shadeValue={node.value as TokenValue}
-                      />,
-                    ];
-                  }
-                  // Nested group (e.g. bg.invalid → bg.invalid.subtle): render
-                  // each leaf beneath it as `<shade>.<sub>`.
-                  if (node && typeof node === 'object') {
-                    return Object.entries(node)
-                      .filter(([, sub]) => (sub as any)?.value !== undefined)
-                      .map(([subShade, sub]) => (
-                        <ColorCard
-                          key={`${shade}.${subShade}`}
-                          color={color}
-                          shade={`${shade}.${subShade}`}
-                          shadeValue={(sub as any).value as TokenValue}
-                        />
-                      ));
-                  }
-                  return [];
-                })}
-              </Grid>
-            </Flex>
-          ))}
-      </VStack>
-    );
-  },
-};
-
-/**
- * Primitive colors are the raw color values organized by hue.
- * Use semantic tokens when possible, but these are available for edge cases.
- */
-export const PrimitiveColors: Story = {
-  name: 'Primitive Colors',
-  render: () => {
-    const primitiveColors = {
-      blue: colors.blue,
-      rose: colors.rose,
-      green: colors.green,
-      violet: colors.violet,
-      gold: colors.gold,
-    };
-
-    return (
-      <VStack gap={6} align="flex-start" w="full">
-        <Box>
-          <H4 color="gray.1300" mb={2}>
-            Primitive Color Palettes
-          </H4>
-          <Subtext color="gray.700">
-            Raw color values organized by hue. Prefer semantic tokens when
-            possible.
-          </Subtext>
-        </Box>
-
-        <Separator />
-
-        {Object.entries(primitiveColors).map(([name, shades]) => (
-          <Box key={name} w="full">
-            <Subtitle
-              color="gray.1100"
-              textTransform="capitalize"
-              mb={2}
-              fontWeight="semibold"
-            >
-              {name}
-            </Subtitle>
-            <Flex gap={1} wrap="wrap">
-              {Object.entries(shades).map(([shade, hex]) => {
-                const hexValue = hex
-                  ? (typeof hex === 'object' && 'value' in hex
-                    ? (hex as any).value as string
-                    : hex as string)
-                  : '';
-                return (
-                  <PrimitiveColorCard
-                    key={shade}
-                    name={name}
-                    shade={shade}
-                    hex={hexValue}
-                  />
-                );
-              })}
-            </Flex>
-          </Box>
-        ))}
-      </VStack>
-    );
-  },
-};
-
-/**
- * Extended gray scale with 16 shades (0-1500) for fine-grained control.
- * Based on a cool slate palette with subtle blue undertone.
- */
-export const GrayScale: Story = {
-  name: 'Gray Scale (Slate)',
-  render: () => {
-    return (
-      <VStack gap={6} align="flex-start" w="full">
-        <Box>
-          <H4 color="gray.1300" mb={2}>
-            Gray Scale (Slate-based)
-          </H4>
-          <Subtext color="gray.700">
-            Extended 16-shade gray scale with cool blue undertone. Optimized for
-            WCAG contrast ratios.
-          </Subtext>
-        </Box>
-
-        <Separator />
-
-        <Grid templateColumns="repeat(auto-fill, minmax(80px, 1fr))" gap={2}>
-          {Object.entries(colors.gray).map(([shade, hex]) => {
-            const hexValue = hex
-              ? (typeof hex === 'object' && 'value' in hex
-                ? (hex as any).value as string
-                : hex as string)
-              : '';
-            return (
-              <PrimitiveColorCard
-                key={shade}
-                name="gray"
-                shade={shade}
-                hex={hexValue}
-              />
-            );
-          })}
-        </Grid>
-
-        <Box mt={4} p={4} bg="gray.50" borderRadius="md" w="full">
-          <Subtitle color="gray.1100" mb={2} fontWeight="semibold">
-            Recommended Usage
-          </Subtitle>
-          <VStack align="flex-start" gap={1}>
-            <Subtext color="gray.800">
-              • <strong>gray.0-200</strong>: Backgrounds, subtle borders
-            </Subtext>
-            <Subtext color="gray.800">
-              • <strong>gray.300-500</strong>: Borders, disabled states,
-              placeholders
-            </Subtext>
-            <Subtext color="gray.800">
-              • <strong>gray.600-800</strong>: Secondary text, icons
-            </Subtext>
-            <Subtext color="gray.800">
-              • <strong>gray.900-1200</strong>: Primary text, headings
-            </Subtext>
-            <Subtext color="gray.800">
-              • <strong>gray.1300-1500</strong>: High-contrast text, dark
-              backgrounds
-            </Subtext>
-          </VStack>
-        </Box>
-      </VStack>
-    );
-  },
-};
-
-/**
- * Contrast ratio reference for accessibility compliance.
- */
-export const ContrastReference: Story = {
-  name: 'Contrast Reference',
-  render: () => {
-    const contrastPairs = [
-      {
-        bg: 'primary.extralight',
-        text: 'primary.dark',
-        label: 'primary.extralight + dark',
-        ratio: '7.2:1',
-        badge: 'AAA',
-      },
-      {
-        bg: 'primary.main',
-        text: 'white',
-        label: 'primary.main + white',
-        ratio: '5.9:1',
-        badge: 'AA',
-      },
-      {
-        bg: 'danger.extralight',
-        text: 'danger.dark',
-        label: 'danger.extralight + dark',
-        ratio: '7.4:1',
-        badge: 'AAA',
-      },
-      {
-        bg: 'danger.main',
-        text: 'white',
-        label: 'danger.main + white',
-        ratio: '5.9:1',
-        badge: 'AA',
-      },
-      {
-        bg: 'success.extralight',
-        text: 'success.dark',
-        label: 'success.extralight + dark',
-        ratio: '6.1:1',
-        badge: 'AA',
-      },
-      {
-        bg: 'warning.extralight',
-        text: 'warning.dark',
-        label: 'warning.extralight + dark',
-        ratio: '5.8:1',
-        badge: 'AA',
-      },
-      {
-        bg: 'gray.0',
-        text: 'gray.1300',
-        label: 'gray.0 + gray.1300',
-        ratio: '11.2:1',
-        badge: 'AAA',
-      },
-      {
-        bg: 'gray.50',
-        text: 'gray.900',
-        label: 'gray.50 + gray.900',
-        ratio: '6.2:1',
-        badge: 'AA',
-      },
-    ];
-
-    return (
-      <VStack gap={6} align="flex-start" w="full">
-        <Box>
-          <H4 color="gray.1300" mb={2}>
-            WCAG Contrast Reference
-          </H4>
-          <Subtext color="gray.700">
-            All semantic color combinations meet WCAG 2.1 AA standards (4.5:1
-            minimum).
-          </Subtext>
-        </Box>
-
-        <Separator />
-
-        <Grid templateColumns="repeat(auto-fill, minmax(240px, 1fr))" gap={4}>
-          {contrastPairs.map((pair) => (
-            <Box
-              key={pair.label}
-              borderRadius="lg"
-              overflow="hidden"
-              border="1px solid"
-              borderColor="gray.200"
-            >
-              <Flex
-                bg={pair.bg}
-                p={6}
-                justify="center"
-                align="center"
-                minH="80px"
-              >
-                <Text color={pair.text} fontWeight="semibold">
-                  Sample Text
-                </Text>
-              </Flex>
-              <Flex
-                p={3}
-                bg="gray.50"
-                justify="space-between"
-                align="center"
-                borderTop="1px solid"
-                borderColor="gray.200"
-              >
-                <Subtext color="gray.800">{pair.label}</Subtext>
-                <Flex align="center" gap={2}>
-                  <Text fontFamily="mono" textStyle="subtext" color="gray.700">
-                    {pair.ratio}
-                  </Text>
-                  <Box
-                    px={2}
-                    py={0.5}
-                    borderRadius="sm"
-                    bg={pair.badge === 'AAA' ? 'success.extralight' : 'gold.100'}
-                    color={pair.badge === 'AAA' ? 'success.dark' : 'gold.700'}
-                  >
-                    <Text fontSize="10px" fontWeight="bold">
-                      {pair.badge}
-                    </Text>
-                  </Box>
-                </Flex>
-              </Flex>
-            </Box>
-          ))}
-        </Grid>
-      </VStack>
-    );
-  },
-};
-
-/**
- * Typography components showcasing the font size scale.
- * Each component uses responsive em units for scalability.
- */
 export const FontSizes: Story = {
   name: 'Font Sizes',
   render: () => {
     const typographyItems = [
       {
-        component: <H1 color="gray.1200">H1 - Page titles</H1>,
+        component: <H1 color="fg.default">H1 - Page titles</H1>,
         name: 'H1',
         token: 'h1',
         base: '2.4rem',
         md: '3rem',
       },
       {
-        component: <H2 color="gray.1200">H2 - Section headers</H2>,
+        component: <H2 color="fg.default">H2 - Section headers</H2>,
         name: 'H2',
         token: 'h2',
         base: '2rem',
         md: '2.5rem',
       },
       {
-        component: <H3 color="gray.1200">H3 - Subsection headers</H3>,
+        component: <H3 color="fg.default">H3 - Subsection headers</H3>,
         name: 'H3',
         token: 'h3',
         base: '1.5rem',
         md: '1.75rem',
       },
       {
-        component: <H4 color="gray.1200">H4 - Card titles</H4>,
+        component: <H4 color="fg.default">H4 - Card titles</H4>,
         name: 'H4',
         token: 'h4',
         base: '1.25rem',
         md: '1.44rem',
       },
       {
-        component: <H5 color="gray.1200">H5 - Small headings</H5>,
+        component: <H5 color="fg.default">H5 - Small headings</H5>,
         name: 'H5',
         token: 'h5',
         base: '1.1rem',
         md: '1.2rem',
       },
       {
-        component: <Text color="gray.1200">Text - Body text</Text>,
+        component: <Text color="fg.default">Text - Body text</Text>,
         name: 'Text',
         token: 'p',
         base: '0.875rem',
         md: '1rem',
       },
       {
-        component: <Subtitle color="gray.1200">Subtitle - Subtitle text</Subtitle>,
+        component: (
+          <Subtitle color="fg.default">Subtitle - Subtitle text</Subtitle>
+        ),
         name: 'Subtitle',
         token: 'subtitle',
         base: '0.875rem',
         md: '1rem',
       },
       {
-        component: <Subtext color="gray.800">Subtext - Helper text, captions</Subtext>,
+        component: (
+          <Subtext color="gray.800">Subtext - Helper text, captions</Subtext>
+        ),
         name: 'Subtext',
         token: 'subtext',
         base: '0.805rem',
@@ -677,7 +329,8 @@ export const FontSizes: Story = {
             Typography Components
           </H4>
           <Subtext color="gray.700">
-            Responsive typography using em units. Use the token with fontSize prop on any component.
+            Responsive typography using em units. Use the token with fontSize
+            prop on any component.
           </Subtext>
         </Box>
 
@@ -732,7 +385,13 @@ export const FontSizes: Story = {
                 >
                   {item.token}
                 </Box>
-                <Text w="120px" fontFamily="mono" textStyle="subtext" color="gray.600" textAlign="right">
+                <Text
+                  w="120px"
+                  fontFamily="mono"
+                  textStyle="subtext"
+                  color="gray.600"
+                  textAlign="right"
+                >
                   {item.base} → {item.md}
                 </Text>
               </Flex>
@@ -747,8 +406,8 @@ export const FontSizes: Story = {
           <Box
             as="pre"
             p={3}
-            bg="gray.800"
-            color="gray.100"
+            bg="bg.inverse"
+            color="fg.inverse"
             borderRadius="md"
             textStyle="subtext"
             overflow="auto"
@@ -778,10 +437,21 @@ export const Default: Story = {
           .filter(([color]) => !color.startsWith('chakra'))
           .map(([color, shades]) => (
             <Flex key={color} gap={4} align="flex-start" w="full">
-              <H4 mt={2} w="120px" flexShrink={0} textTransform="capitalize" color="gray.1200">
+              <H4
+                mt={2}
+                w="120px"
+                flexShrink={0}
+                textTransform="capitalize"
+                color="fg.default"
+              >
                 {color}
               </H4>
-              <Grid templateColumns="repeat(auto-fill, minmax(132px, 1fr))" gap={2} flex="1" minW="0">
+              <Grid
+                templateColumns="repeat(auto-fill, minmax(132px, 1fr))"
+                gap={2}
+                flex="1"
+                minW="0"
+              >
                 {Object.entries(shades).flatMap(([shade, shadeValue]) => {
                   const node = shadeValue as any;
                   // Leaf token: render its value directly.

@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { Box, Flex, Text, VStack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import { Tag, tagColorPalettes, tagVariants } from '.';
+import { SYSTEM_HUE_NAMES } from '@/theme/colors';
+
+import { Tag, tagTones } from '.';
 import { TagCloseButton } from './TagCloseButton';
 
 const meta = {
@@ -11,16 +14,21 @@ const meta = {
     children: 'Tag',
   },
   argTypes: {
-    colorPalette: {
+    tone: {
       control: 'select',
-      options: tagColorPalettes,
-      description: 'Semantic color of the tag',
+      options: tagTones,
+      description: 'Colour role; `neutral` (beige) is the default',
     },
-    variant: {
+    selected: {
+      control: 'boolean',
+      description: 'Filter-chip "on" state (black fill)',
+    },
+    category: {
       control: 'select',
-      options: tagVariants,
-      description: 'Visual style of the tag',
+      options: [undefined, ...SYSTEM_HUE_NAMES],
+      description: 'Decorative category hue (no status meaning)',
     },
+    disabled: { control: 'boolean' },
   },
 } satisfies Meta<typeof Tag>;
 
@@ -30,194 +38,145 @@ type Story = StoryObj<typeof meta>;
 
 export const Basic: Story = {};
 
-export const Primary: Story = {
-  args: {
-    colorPalette: 'primary',
-    children: 'Primary',
-  },
-};
-
-export const Secondary: Story = {
-  args: {
-    colorPalette: 'secondary',
-    children: 'Secondary',
-  },
-};
-
-export const Success: Story = {
-  args: {
-    colorPalette: 'success',
-    children: 'Success',
-  },
-};
-
-export const Warning: Story = {
-  args: {
-    colorPalette: 'warning',
-    children: 'Warning',
-  },
-};
-
-export const Danger: Story = {
-  args: {
-    colorPalette: 'danger',
-    children: 'Danger',
-  },
-};
-
-export const Neutral: Story = {
-  args: {
-    colorPalette: 'neutral',
-    children: 'Neutral',
-  },
-};
-
-export const Soft: Story = {
-  args: {
-    colorPalette: 'primary',
-    variant: 'soft',
-    children: 'Soft',
-  },
-};
-
-export const Solid: Story = {
-  args: {
-    colorPalette: 'primary',
-    variant: 'solid',
-    children: 'Solid',
-  },
-};
-
-export const Outline: Story = {
-  args: {
-    colorPalette: 'primary',
-    variant: 'outline',
-    children: 'Outline',
-  },
-};
-
-/**
- * Tags with close button for removable items.
- */
-export const Closable: Story = {
+/** `neutral` + the four status tones. */
+export const Tones: Story = {
   render: () => (
     <Flex gap={2} wrap="wrap">
-      {tagColorPalettes.map((colorPalette) => (
-        <Tag key={colorPalette} colorPalette={colorPalette} variant="soft">
-          {colorPalette}
-          <TagCloseButton />
+      {tagTones.map((tone) => (
+        <Tag key={tone} tone={tone}>
+          {tone}
         </Tag>
       ))}
     </Flex>
   ),
 };
 
-/**
- * Shows all combinations of colorPalette × variant in a matrix layout.
- */
-export const AllCombinations: Story = {
-  render: () => (
-    <Box>
-      {/* Header row */}
-      <Flex mb={4} gap={4} align="center">
-        <Box w="100px" />
-        {tagVariants.map((variant) => (
-          <Box key={variant} w="100px" textAlign="center">
-            <Text fontWeight="bold" textStyle="subtext">
-              {variant}
-            </Text>
-          </Box>
-        ))}
-      </Flex>
+export const Neutral: Story = { args: { tone: 'neutral', children: 'Draft' } };
+export const Success: Story = {
+  args: { tone: 'success', children: 'Active' },
+};
+export const Warning: Story = {
+  args: { tone: 'warning', children: 'Review' },
+};
+export const Danger: Story = { args: { tone: 'danger', children: 'Blocked' } };
+export const Info: Story = { args: { tone: 'info', children: 'Beta' } };
 
-      {/* Color scheme rows */}
-      {tagColorPalettes.map((colorPalette) => (
-        <Flex key={colorPalette} mb={4} gap={4} align="center">
-          <Box w="100px">
-            <Text fontWeight="medium" textStyle="subtext">
-              {colorPalette}
-            </Text>
-          </Box>
-          {tagVariants.map((variant) => (
-            <Box key={`${colorPalette}-${variant}`} w="100px" textAlign="center">
-              <Tag colorPalette={colorPalette} variant={variant}>
-                Tag
-              </Tag>
-            </Box>
-          ))}
-        </Flex>
-      ))}
-    </Box>
-  ),
+/**
+ * Filter chips (what `Chip` used to be). Rendered `as="button"` so they are
+ * focusable; `selected` fills them black and sets `aria-pressed`.
+ */
+export const FilterChips: Story = {
+  render: function FilterChipsStory() {
+    const [on, setOn] = useState<string[]>(['Images']);
+    const toggle = (name: string) =>
+      setOn((prev) =>
+        prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]
+      );
+    return (
+      <Flex gap={2} wrap="wrap">
+        {['All', 'Images', 'Documents', 'Code'].map((name) => (
+          <Tag
+            key={name}
+            as="button"
+            selected={on.includes(name)}
+            onClick={() => toggle(name)}
+          >
+            {name}
+          </Tag>
+        ))}
+        <Tag as="button" selected={false} disabled>
+          Disabled
+        </Tag>
+      </Flex>
+    );
+  },
 };
 
-/**
- * Example use case: categorization tags
- */
+/** The 12 category hues, each with a leading mark in `category.{hue}.fg`. */
 export const Categories: Story = {
   render: () => (
-    <VStack align="start" gap={4}>
-      <Box>
-        <Text fontWeight="bold" mb={2}>
-          Article Categories
-        </Text>
-        <Flex gap={2} wrap="wrap">
-          <Tag colorPalette="primary" variant="soft">Technology</Tag>
-          <Tag colorPalette="secondary" variant="soft">Design</Tag>
-          <Tag colorPalette="success" variant="soft">Business</Tag>
-          <Tag colorPalette="warning" variant="soft">Opinion</Tag>
-        </Flex>
-      </Box>
-
-      <Box>
-        <Text fontWeight="bold" mb={2}>
-          Task Status
-        </Text>
-        <Flex gap={2} wrap="wrap">
-          <Tag colorPalette="neutral" variant="outline">Draft</Tag>
-          <Tag colorPalette="primary" variant="solid">In Progress</Tag>
-          <Tag colorPalette="warning" variant="soft">Review</Tag>
-          <Tag colorPalette="success" variant="solid">Completed</Tag>
-          <Tag colorPalette="danger" variant="soft">Blocked</Tag>
-        </Flex>
-      </Box>
-
-      <Box>
-        <Text fontWeight="bold" mb={2}>
-          Priority Labels
-        </Text>
-        <Flex gap={2} wrap="wrap">
-          <Tag colorPalette="danger" variant="solid">Critical</Tag>
-          <Tag colorPalette="warning" variant="solid">High</Tag>
-          <Tag colorPalette="primary" variant="soft">Medium</Tag>
-          <Tag colorPalette="neutral" variant="soft">Low</Tag>
-        </Flex>
-      </Box>
-    </VStack>
+    <Flex gap={2} wrap="wrap">
+      {SYSTEM_HUE_NAMES.map((hue) => (
+        <Tag key={hue} category={hue} icon="#">
+          {hue}
+        </Tag>
+      ))}
+    </Flex>
   ),
 };
 
-/**
- * Removable filter tags
- */
-export const FilterTags: Story = {
+/** Tags with a close button for removable items. */
+export const Closable: Story = {
+  render: () => (
+    <Flex gap={2} wrap="wrap">
+      {tagTones.map((tone) => (
+        <Tag key={tone} tone={tone}>
+          {tone}
+          <TagCloseButton aria-label={`${tone} 삭제`} />
+        </Tag>
+      ))}
+    </Flex>
+  ),
+};
+
+export const Disabled: Story = {
+  render: () => (
+    <Flex gap={2} wrap="wrap">
+      <Tag disabled>Neutral</Tag>
+      <Tag tone="danger" disabled>
+        Danger
+      </Tag>
+      <Tag as="button" selected disabled>
+        Selected
+      </Tag>
+    </Flex>
+  ),
+};
+
+/** Example use cases. */
+export const UseCases: Story = {
   render: () => (
     <VStack align="start" gap={4}>
-      <Text fontWeight="bold">Active Filters</Text>
-      <Flex gap={2} wrap="wrap">
-        <Tag colorPalette="primary" variant="soft">
-          Category: Design
-          <TagCloseButton />
-        </Tag>
-        <Tag colorPalette="primary" variant="soft">
-          Status: Active
-          <TagCloseButton />
-        </Tag>
-        <Tag colorPalette="primary" variant="soft">
-          Date: Last 7 days
-          <TagCloseButton />
-        </Tag>
-      </Flex>
+      <Box>
+        <Text fontWeight="bold" mb={2}>
+          Article categories
+        </Text>
+        <Flex gap={2} wrap="wrap">
+          <Tag category="blue">Technology</Tag>
+          <Tag category="purple">Design</Tag>
+          <Tag category="green">Business</Tag>
+          <Tag category="orange">Opinion</Tag>
+        </Flex>
+      </Box>
+
+      <Box>
+        <Text fontWeight="bold" mb={2}>
+          Task status
+        </Text>
+        <Flex gap={2} wrap="wrap">
+          <Tag>Draft</Tag>
+          <Tag tone="info">In progress</Tag>
+          <Tag tone="warning">Review</Tag>
+          <Tag tone="success">Completed</Tag>
+          <Tag tone="danger">Blocked</Tag>
+        </Flex>
+      </Box>
+
+      <Box>
+        <Text fontWeight="bold" mb={2}>
+          Active filters
+        </Text>
+        <Flex gap={2} wrap="wrap">
+          <Tag>
+            Category: Design
+            <TagCloseButton aria-label="Category: Design 필터 삭제" />
+          </Tag>
+          <Tag>
+            Status: Active
+            <TagCloseButton aria-label="Status: Active 필터 삭제" />
+          </Tag>
+        </Flex>
+      </Box>
     </VStack>
   ),
 };

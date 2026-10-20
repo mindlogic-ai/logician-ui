@@ -199,7 +199,7 @@ describe('Tree.BranchIndentGuide elbow', () => {
   });
 
   it('paints the guide with the custom guideColor token', () => {
-    const cls = renderGuide(true, { guideColor: 'red.500' });
+    const cls = renderGuide(true, { guideColor: 'danger.fg' });
     const anchor = styleAnchor(cls);
     const css = sheetText();
     const footRule =
@@ -208,6 +208,6 @@ describe('Tree.BranchIndentGuide elbow', () => {
           `${anchor}\\s*~\\s*\\[data-part="item"\\]::before\\s*\\{[^}]*\\}`
         )
       )?.[0] ?? '';
-    expect(footRule).toMatch(/--chakra-colors-red-500|red\.500/);
+    expect(footRule).toMatch(/--chakra-colors-danger-fg|danger\.fg/);
   });
 });

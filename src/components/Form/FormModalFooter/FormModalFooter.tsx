@@ -48,8 +48,7 @@ export const FormModalFooter = ({
     >
       {onDelete && (
         <Button
-          colorPalette="danger"
-          variant="solid"
+          variant="danger"
           type="button"
           onClick={onDelete}
           disabled={isSubmitting}
@@ -60,8 +59,7 @@ export const FormModalFooter = ({
         </Button>
       )}
       <Button
-        colorPalette="neutral"
-        variant="outline"
+        variant="secondary"
         type="button"
         onClick={onCancel}
         disabled={isSubmitting}
@@ -69,8 +67,9 @@ export const FormModalFooter = ({
         {cancelLabel}
       </Button>
       <Button
-        colorPalette={submitColorPalette}
-        variant="solid"
+        // 5.0 has no colour axis: the deprecated `submitColorPalette` only
+        // picks between the two filled roles.
+        variant={submitColorPalette === 'danger' ? 'danger' : 'primary'}
         type={onSubmit ? 'button' : 'submit'}
         onClick={onSubmit}
         loading={isSubmitting}

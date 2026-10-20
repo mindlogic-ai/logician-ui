@@ -47,7 +47,6 @@ export const CopyButton = ({ onCopy, code }: CopyButtonProps) => {
         aria-label="Copy"
         borderRadius="full"
         size="sm"
-        colorPalette="neutral"
         variant="ghost"
         color="fg.muted"
         _hover={{

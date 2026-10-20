@@ -23,7 +23,7 @@ export const Default: Story = {
   render: args => (
     <Popover {...args}>
       <Popover.Trigger asChild>
-        <Button variant="outline">Open Popover</Button>
+        <Button variant="secondary">Open Popover</Button>
       </Popover.Trigger>
       <Popover.Content>
         <Popover.Arrow>
@@ -44,7 +44,7 @@ export const WithForm: Story = {
   render: args => (
     <Popover {...args}>
       <Popover.Trigger asChild>
-        <Button variant="outline">Settings</Button>
+        <Button variant="secondary">Settings</Button>
       </Popover.Trigger>
       <Popover.Content>
         <Popover.Arrow>
@@ -74,7 +74,7 @@ export const SmallFontSize: Story = {
   render: args => (
     <Popover {...args}>
       <Popover.Trigger asChild>
-        <Button variant="outline">Compact (12px)</Button>
+        <Button variant="secondary">Compact (12px)</Button>
       </Popover.Trigger>
       <Popover.Content>
         <Popover.Arrow>
@@ -94,7 +94,7 @@ export const LargeFontSize: Story = {
   render: args => (
     <Popover {...args}>
       <Popover.Trigger asChild>
-        <Button variant="outline">Spacious (18px)</Button>
+        <Button variant="secondary">Spacious (18px)</Button>
       </Popover.Trigger>
       <Popover.Content>
         <Popover.Arrow>
@@ -123,7 +123,7 @@ export const Comparison: Story = {
       {(['12px', '14px', '18px'] as const).map(size => (
         <Popover key={size} baseFontSize={size} open>
           <Popover.Trigger asChild>
-            <Button variant="outline" size="sm">{size}</Button>
+            <Button variant="secondary" size="sm">{size}</Button>
           </Popover.Trigger>
           <Popover.Content>
             <Popover.Arrow>

@@ -77,7 +77,7 @@ export const CustomSelectionPanel: StoryFn<typeof Workflow> = () => {
       >
         <Subtitle>My own panel</Subtitle>
         <Subtext
-          color={selection ? undefined : 'slate.500'}
+          color={selection ? undefined : 'fg.subtle'}
           data-testid="selection-readout"
         >
           {selection
@@ -124,8 +124,7 @@ function AddAfterButton({ nodeId }: { nodeId: string }) {
     <IconButton
       aria-label={`Add after ${source.label}`}
       size="sm"
-      variant="solid"
-      colorPalette="primary"
+      variant="primary"
       borderRadius="full"
       onClick={() => addNode('math.add', { after: nodeId })}
     >
@@ -149,14 +148,14 @@ function TapPalette() {
       bg="bg.surface"
     >
       <Subtitle>Tap to add</Subtitle>
-      <Subtext color="slate.500" data-testid="add-target">
+      <Subtext color="fg.subtle" data-testid="add-target">
         {source ? `Connect after ${source.label}` : 'Add at the centre'}
       </Subtext>
       {Object.values(nodeTypes).map((def) => (
         <Button
           key={def.kind}
           size="sm"
-          variant="outline"
+          variant="secondary"
           onClick={() =>
             addNode(
               def.kind,

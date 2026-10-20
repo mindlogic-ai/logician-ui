@@ -6,4 +6,4 @@ export type {
   AvatarProps,
   AvatarRootProps,
 } from './Avatar';
-export { Avatar } from './Avatar';
+export { Avatar, hueForName } from './Avatar';

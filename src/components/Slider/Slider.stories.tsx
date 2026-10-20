@@ -124,7 +124,9 @@ export const RangeWithSliderThumbs: Story = {
     const [value, setValue] = useState([20, 80]);
     return (
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-        <span>Range: {value[0]} - {value[1]}</span>
+        <span>
+          Range: {value[0]} - {value[1]}
+        </span>
         <div style={{ flex: 1 }}>
           <Slider
             value={value}
@@ -154,7 +156,9 @@ export const CustomStyledThumbs: Story = {
     const [value, setValue] = useState([30, 70]);
     return (
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-        <span>Range: {value[0]} - {value[1]}</span>
+        <span>
+          Range: {value[0]} - {value[1]}
+        </span>
         <div style={{ flex: 1 }}>
           <Slider
             value={value}
@@ -162,11 +166,23 @@ export const CustomStyledThumbs: Story = {
             max={100}
             onValueChange={(details) => setValue(details.value)}
           >
-            <SliderTrack bg="gray.100">
-              <SliderFilledTrack bg="blue.500" />
+            <SliderTrack bg="bg.track">
+              <SliderFilledTrack bg="primary.main" />
             </SliderTrack>
-            <SliderThumb index={0} boxSize={5} bg="blue.500" borderWidth={2} borderColor="white" />
-            <SliderThumb index={1} boxSize={5} bg="purple.500" borderWidth={2} borderColor="white" />
+            <SliderThumb
+              index={0}
+              boxSize={5}
+              bg="bg.canvas"
+              borderWidth={2}
+              borderColor="primary.main"
+            />
+            <SliderThumb
+              index={1}
+              boxSize={5}
+              bg="bg.canvas"
+              borderWidth={2}
+              borderColor="category.purple.fg"
+            />
           </Slider>
         </div>
       </div>
@@ -187,7 +203,13 @@ export const Sizes: Story = {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
         <div>
-          <div style={{ marginBottom: '0.5rem', fontSize: '0.875rem', color: '#666' }}>
+          <div
+            style={{
+              marginBottom: '0.5rem',
+              fontSize: '0.875rem',
+              color: 'var(--chakra-colors-fg-muted)',
+            }}
+          >
             Small (sm) - Value: {smallValue[0]}
           </div>
           <Slider
@@ -205,7 +227,13 @@ export const Sizes: Story = {
         </div>
 
         <div>
-          <div style={{ marginBottom: '0.5rem', fontSize: '0.875rem', color: '#666' }}>
+          <div
+            style={{
+              marginBottom: '0.5rem',
+              fontSize: '0.875rem',
+              color: 'var(--chakra-colors-fg-muted)',
+            }}
+          >
             Medium (md) - Value: {mediumValue[0]}
           </div>
           <Slider
@@ -223,7 +251,13 @@ export const Sizes: Story = {
         </div>
 
         <div>
-          <div style={{ marginBottom: '0.5rem', fontSize: '0.875rem', color: '#666' }}>
+          <div
+            style={{
+              marginBottom: '0.5rem',
+              fontSize: '0.875rem',
+              color: 'var(--chakra-colors-fg-muted)',
+            }}
+          >
             Large (lg) - Value: {largeValue[0]}
           </div>
           <Slider

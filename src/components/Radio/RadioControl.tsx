@@ -1,6 +1,7 @@
 import { forwardRef, useId } from 'react';
 import { RadioGroup, RadioGroupItemControlProps } from '@chakra-ui/react';
 
+import { disabledControl } from '@/utils/disabledControl';
 import { focusRing } from '@/utils/focusRing';
 
 import { dotPop } from './Radio.styles';
@@ -24,11 +25,18 @@ export const RadioControl = forwardRef<
   return (
     <RadioGroup.ItemControl
       ref={ref}
+      // Same unchecked treatment as Checkbox: border.control is the 3:1
+      // non-text-contrast token for input/checkbox/radio borders, on the
+      // same raised surface as Input. Overrides Chakra's default
+      // `border.emphasized`, which isn't one of our tokens.
+      bg="bg.surface"
+      borderColor="border.control"
       // The outer ring is fully covered by the indicator below, but it carries
       // the same checked fill — left untimed it would snap behind the one that
       // eases.
       animationStyle="feedback"
       transitionProperty="background-color, border-color"
+      _disabled={{ ...disabledControl, cursor: 'not-allowed' }}
       {...focusRing}
       {...props}
     >

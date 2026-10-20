@@ -1,4 +1,13 @@
-import { Box, Code, HStack, SimpleGrid, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react';
+import {
+  Box,
+  Code,
+  HStack,
+  SimpleGrid,
+  Text,
+  VStack,
+  Wrap,
+  WrapItem,
+} from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 import { useMemo } from 'react';
 import { FaBuildingUser } from 'react-icons/fa6';
@@ -17,19 +26,38 @@ export default meta;
 
 type Story = StoryObj<typeof Analytics>;
 
-const IconGroup = ({ title, icons, color = "gray.700" }: {
+const IconGroup = ({
+  title,
+  icons,
+  color = 'fg.icon',
+}: {
   title: string;
   icons: Array<{ component: React.ComponentType<any>; name: string }>;
   color?: string;
 }) => (
   <Box mb={6}>
-    <Text fontWeight="bold" mb={3}>{title}</Text>
+    <Text fontWeight="bold" mb={3}>
+      {title}
+    </Text>
     <Wrap gap={6}>
       {icons.map(({ component: IconComponent, name }) => (
         <WrapItem key={name}>
-          <VStack gap={4} p={2} borderRadius="md" bg="gray.50" minW="140px" maxW="140px">
+          <VStack
+            gap={4}
+            p={2}
+            borderRadius="md"
+            bg="bg.subtle"
+            minW="140px"
+            maxW="140px"
+          >
             <IconComponent boxSize="24px" color={color} />
-            <Text fontSize="12px" color="gray.1500" textAlign="center" lineHeight="1.1" lineClamp={2}>
+            <Text
+              fontSize="12px"
+              color="fg.default"
+              textAlign="center"
+              lineHeight="1.1"
+              lineClamp={2}
+            >
               {name}
             </Text>
           </VStack>
@@ -44,10 +72,19 @@ export const AllIcons: Story = {
     // Icons 객체에서 자동으로 카테고리별 분류
     const iconCategories = useMemo(() => {
       const categories = {
-        customSvg: [] as Array<{ component: React.ComponentType<any>; name: string }>,
-        filled: [] as Array<{ component: React.ComponentType<any>; name: string }>,
+        customSvg: [] as Array<{
+          component: React.ComponentType<any>;
+          name: string;
+        }>,
+        filled: [] as Array<{
+          component: React.ComponentType<any>;
+          name: string;
+        }>,
         fa: [] as Array<{ component: React.ComponentType<any>; name: string }>,
-        other: [] as Array<{ component: React.ComponentType<any>; name: string }>,
+        other: [] as Array<{
+          component: React.ComponentType<any>;
+          name: string;
+        }>,
       };
 
       Object.entries(Icons).forEach(([name, IconComponent]) => {
@@ -69,40 +106,47 @@ export const AllIcons: Story = {
 
       // 각 카테고리를 이름순으로 정렬
       Object.keys(categories).forEach((key) => {
-        categories[key as keyof typeof categories].sort((a, b) => a.name.localeCompare(b.name));
+        categories[key as keyof typeof categories].sort((a, b) =>
+          a.name.localeCompare(b.name)
+        );
       });
 
       return categories;
     }, []);
 
-    const totalCount = Object.values(iconCategories).reduce((sum, arr) => sum + arr.length, 0);
+    const totalCount = Object.values(iconCategories).reduce(
+      (sum, arr) => sum + arr.length,
+      0
+    );
 
     return (
       <VStack gap={4} align="start">
-        <Text fontWeight="bold">모든 아이콘 라이브러리 (총 {totalCount}개) - 자동 생성됨! 🎉</Text>
+        <Text fontWeight="bold">
+          모든 아이콘 라이브러리 (총 {totalCount}개) - 자동 생성됨! 🎉
+        </Text>
 
         <IconGroup
           title={`🎨 커스텀 SVG 아이콘 (${iconCategories.customSvg.length}개)`}
           icons={iconCategories.customSvg}
-          color="blue.500"
+          color="category.blue.fg"
         />
 
         <IconGroup
           title={`🟦 Filled 아이콘 (${iconCategories.filled.length}개)`}
           icons={iconCategories.filled}
-          color="purple.500"
+          color="category.purple.fg"
         />
 
         <IconGroup
           title={`⚛️ React 아이콘 - FA 시리즈 (${iconCategories.fa.length}개)`}
           icons={iconCategories.fa}
-          color="green.500"
+          color="category.green.fg"
         />
 
         <IconGroup
           title={`🌟 React 아이콘 - 기타 (${iconCategories.other.length}개)`}
           icons={iconCategories.other}
-          color="teal.500"
+          color="category.teal.fg"
         />
       </VStack>
     );
@@ -115,16 +159,34 @@ export const BasicUsage: Story = {
     const sampleIcons = useMemo(() => {
       const iconNames = Object.keys(Icons);
       return [
-        { name: iconNames.find(name => !name.match(/^(Bi|Bs|Ci|Fa|Gi|Go|Gr|Hi|Io|Lia|Lu|Md|Pi|Rx|Sl|Tb|Filled)/)) || iconNames[0], type: '커스텀 SVG', color: 'blue.500' },
-        { name: iconNames.find(name => name.startsWith('Io')) || iconNames[1], type: 'UI 아이콘', color: 'green.500' },
-        { name: iconNames.find(name => name.startsWith('Fa')) || iconNames[2], type: 'React 아이콘', color: 'purple.500' },
+        {
+          name:
+            iconNames.find(
+              (name) =>
+                !name.match(
+                  /^(Bi|Bs|Ci|Fa|Gi|Go|Gr|Hi|Io|Lia|Lu|Md|Pi|Rx|Sl|Tb|Filled)/
+                )
+            ) || iconNames[0],
+          type: '커스텀 SVG',
+          color: 'category.blue.fg',
+        },
+        {
+          name: iconNames.find((name) => name.startsWith('Io')) || iconNames[1],
+          type: 'UI 아이콘',
+          color: 'category.green.fg',
+        },
+        {
+          name: iconNames.find((name) => name.startsWith('Fa')) || iconNames[2],
+          type: 'React 아이콘',
+          color: 'category.purple.fg',
+        },
       ];
     }, []);
 
     return (
       <VStack gap={6} align="start">
         <Text fontWeight="bold">기본 사용법</Text>
-        <Text color="gray.600" mb={4}>
+        <Text color="fg.muted" mb={4}>
           각 아이콘을 개별적으로 import해서 사용할 수 있습니다.
         </Text>
 
@@ -135,7 +197,7 @@ export const BasicUsage: Story = {
               <VStack key={name}>
                 <IconComponent boxSize="xs" color={color} />
                 <Text fontWeight="bold">&lt;{name} /&gt;</Text>
-                <Text color="gray.500">{type}</Text>
+                <Text color="fg.subtle">{type}</Text>
               </VStack>
             ) : null;
           })}
@@ -157,7 +219,7 @@ export const Sizes: Story = {
         <HStack gap={4} align="center">
           {['2xs', 'xs', 'sm', 'md', 'lg', 'xl'].map((size) => (
             <VStack key={size}>
-              <SampleIcon boxSize={size} color="blue.500" />
+              <SampleIcon boxSize={size} color="category.blue.fg" />
               <Text textStyle="subtext">{size}</Text>
             </VStack>
           ))}
@@ -173,7 +235,13 @@ export const Colors: Story = {
     const sampleIconName = Object.keys(Icons)[0];
     const SampleIcon = Icons[sampleIconName];
 
-    const colors = ['red.500', 'green.500', 'blue.500', 'purple.500', 'orange.500'];
+    const colors = [
+      'category.red.fg',
+      'category.green.fg',
+      'category.blue.fg',
+      'category.purple.fg',
+      'category.orange.fg',
+    ];
 
     return (
       <VStack gap={4} align="start">
@@ -197,18 +265,23 @@ const CustomDashboardIcon = createIcon(MdDashboard, 'CustomDashboardIcon');
 
 export const CreateIconDemo: Story = {
   render: () => (
-  <VStack gap={8} align="start" maxW="900px">
-    <Box>
-      <Text textStyle="h5" fontWeight="bold" mb={4}>createIcon 유틸리티 사용법</Text>
-      <Text color="gray.600" mb={4}>
-        <Code>createIcon</Code> 유틸리티를 사용하면 React Icons나 커스텀 SVG를 logician-ui의 아이콘 시스템으로 쉽게 변환할 수 있습니다.
-      </Text>
-    </Box>
+    <VStack gap={8} align="start" maxW="900px">
+      <Box>
+        <Text textStyle="h5" fontWeight="bold" mb={4}>
+          createIcon 유틸리티 사용법
+        </Text>
+        <Text color="fg.muted" mb={4}>
+          <Code>createIcon</Code> 유틸리티를 사용하면 React Icons나 커스텀 SVG를
+          logician-ui의 아이콘 시스템으로 쉽게 변환할 수 있습니다.
+        </Text>
+      </Box>
 
-    <Box w="100%" bg="gray.50" p={4} borderRadius="md">
-      <Text fontWeight="bold" mb={3}>1. React Icons로 커스텀 아이콘 생성</Text>
-      <Code display="block" whiteSpace="pre" p={3} mb={4} textStyle="subtext">
-{`import { createIcon } from '@mindlogic-ai/logician-ui';
+      <Box w="100%" bg="bg.subtle" p={4} borderRadius="md">
+        <Text fontWeight="bold" mb={3}>
+          1. React Icons로 커스텀 아이콘 생성
+        </Text>
+        <Code display="block" whiteSpace="pre" p={3} mb={4} textStyle="subtext">
+          {`import { createIcon } from '@mindlogic-ai/logician-ui';
 import { FaBuildingUser } from 'react-icons/fa6';
 
 const CustomBuildingIcon = createIcon(
@@ -217,79 +290,87 @@ const CustomBuildingIcon = createIcon(
 );
 
 // 사용
-<CustomBuildingIcon boxSize="md" color="blue.500" />`}
-      </Code>
+<CustomBuildingIcon boxSize="md" color="category.blue.fg" />`}
+        </Code>
 
-      <Box borderTop="1px solid" borderColor="gray.200" pt={4}>
-        <Text fontWeight="semibold" mb={3}>결과:</Text>
-        <HStack gap={6}>
-          <VStack>
-            <CustomBuildingIcon boxSize="2xs" color="blue.500" />
-            <Text textStyle="subtext">2xs (14px)</Text>
-          </VStack>
-          <VStack>
-            <CustomBuildingIcon boxSize="xs" color="blue.500" />
-            <Text textStyle="subtext">xs (16px)</Text>
-          </VStack>
-          <VStack>
-            <CustomBuildingIcon boxSize="sm" color="blue.500" />
-            <Text textStyle="subtext">sm (20px)</Text>
-          </VStack>
-          <VStack>
-            <CustomBuildingIcon boxSize="md" color="blue.500" />
-            <Text textStyle="subtext">md (24px)</Text>
-          </VStack>
-          <VStack>
-            <CustomBuildingIcon boxSize="lg" color="blue.500" />
-            <Text textStyle="subtext">lg (32px)</Text>
-          </VStack>
-          <VStack>
-            <CustomBuildingIcon boxSize="xl" color="blue.500" />
-            <Text textStyle="subtext">xl (40px)</Text>
-          </VStack>
-        </HStack>
+        <Box borderTop="1px solid" borderColor="border.subtle" pt={4}>
+          <Text fontWeight="semibold" mb={3}>
+            결과:
+          </Text>
+          <HStack gap={6}>
+            <VStack>
+              <CustomBuildingIcon boxSize="2xs" color="category.blue.fg" />
+              <Text textStyle="subtext">2xs (14px)</Text>
+            </VStack>
+            <VStack>
+              <CustomBuildingIcon boxSize="xs" color="category.blue.fg" />
+              <Text textStyle="subtext">xs (16px)</Text>
+            </VStack>
+            <VStack>
+              <CustomBuildingIcon boxSize="sm" color="category.blue.fg" />
+              <Text textStyle="subtext">sm (20px)</Text>
+            </VStack>
+            <VStack>
+              <CustomBuildingIcon boxSize="md" color="category.blue.fg" />
+              <Text textStyle="subtext">md (24px)</Text>
+            </VStack>
+            <VStack>
+              <CustomBuildingIcon boxSize="lg" color="category.blue.fg" />
+              <Text textStyle="subtext">lg (32px)</Text>
+            </VStack>
+            <VStack>
+              <CustomBuildingIcon boxSize="xl" color="category.blue.fg" />
+              <Text textStyle="subtext">xl (40px)</Text>
+            </VStack>
+          </HStack>
+        </Box>
       </Box>
-    </Box>
 
-    <Box w="100%" bg="gray.50" p={4} borderRadius="md">
-      <Text fontWeight="bold" mb={3}>2. 다른 React Icon으로 생성</Text>
-      <Code display="block" whiteSpace="pre" p={3} mb={4} textStyle="subtext">
-{`import { createIcon } from '@mindlogic-ai/logician-ui';
+      <Box w="100%" bg="bg.subtle" p={4} borderRadius="md">
+        <Text fontWeight="bold" mb={3}>
+          2. 다른 React Icon으로 생성
+        </Text>
+        <Code display="block" whiteSpace="pre" p={3} mb={4} textStyle="subtext">
+          {`import { createIcon } from '@mindlogic-ai/logician-ui';
 import { MdDashboard } from 'react-icons/md';
 
 const CustomDashboardIcon = createIcon(
   MdDashboard,
   'CustomDashboardIcon'
 );`}
-      </Code>
+        </Code>
 
-      <Box borderTop="1px solid" borderColor="gray.200" pt={4}>
-        <Text fontWeight="semibold" mb={3}>결과 (색상 변경):</Text>
-        <HStack gap={6}>
-          <VStack>
-            <CustomDashboardIcon boxSize="md" color="red.500" />
-            <Text textStyle="subtext">red.500</Text>
-          </VStack>
-          <VStack>
-            <CustomDashboardIcon boxSize="md" color="green.500" />
-            <Text textStyle="subtext">green.500</Text>
-          </VStack>
-          <VStack>
-            <CustomDashboardIcon boxSize="md" color="purple.500" />
-            <Text textStyle="subtext">purple.500</Text>
-          </VStack>
-          <VStack>
-            <CustomDashboardIcon boxSize="md" color="orange.500" />
-            <Text textStyle="subtext">orange.500</Text>
-          </VStack>
-        </HStack>
+        <Box borderTop="1px solid" borderColor="border.subtle" pt={4}>
+          <Text fontWeight="semibold" mb={3}>
+            결과 (색상 변경):
+          </Text>
+          <HStack gap={6}>
+            <VStack>
+              <CustomDashboardIcon boxSize="md" color="category.red.fg" />
+              <Text textStyle="subtext">category.red.fg</Text>
+            </VStack>
+            <VStack>
+              <CustomDashboardIcon boxSize="md" color="category.green.fg" />
+              <Text textStyle="subtext">category.green.fg</Text>
+            </VStack>
+            <VStack>
+              <CustomDashboardIcon boxSize="md" color="category.purple.fg" />
+              <Text textStyle="subtext">category.purple.fg</Text>
+            </VStack>
+            <VStack>
+              <CustomDashboardIcon boxSize="md" color="category.orange.fg" />
+              <Text textStyle="subtext">category.orange.fg</Text>
+            </VStack>
+          </HStack>
+        </Box>
       </Box>
-    </Box>
 
-    <Box w="100%" bg="gray.50" p={4} borderRadius="md">
-      <Text fontWeight="bold" mb={3}>3. SVG 파일로 커스텀 아이콘 생성</Text>
-      <Code display="block" whiteSpace="pre" p={3} mb={4} textStyle="subtext">
-{`import { createIcon } from '@mindlogic-ai/logician-ui';
+      <Box w="100%" bg="bg.subtle" p={4} borderRadius="md">
+        <Text fontWeight="bold" mb={3}>
+          3. SVG 파일로 커스텀 아이콘 생성
+        </Text>
+        <Code display="block" whiteSpace="pre" p={3} mb={4} textStyle="subtext">
+          {`import { createIcon } from '@mindlogic-ai/logician-ui';
 import CustomSvg from './custom-icon.svg';
 
 const MyCustomIcon = createIcon(
@@ -298,24 +379,47 @@ const MyCustomIcon = createIcon(
 );
 
 // 사용
-<MyCustomIcon boxSize="lg" color="teal.500" />`}
-      </Code>
+<MyCustomIcon boxSize="lg" color="category.teal.fg" />`}
+        </Code>
 
-      <Text color="gray.600" mt={2}>
-        💡 SVG 파일을 import하려면 프로젝트에 @svgr/webpack이 설정되어 있어야 합니다.
-      </Text>
-    </Box>
+        <Text color="fg.muted" mt={2}>
+          💡 SVG 파일을 import하려면 프로젝트에 @svgr/webpack이 설정되어 있어야
+          합니다.
+        </Text>
+      </Box>
 
-    <Box w="100%" bg="blue.50" p={4} borderRadius="md" borderLeft="4px solid" borderColor="blue.500">
-      <Text fontWeight="bold" mb={2}>✨ 주요 기능</Text>
-      <VStack align="start" gap={2} textStyle="subtext">
-        <Text>• <strong>boxSize 지원:</strong> 2xs, xs, sm, md, lg, xl (14px ~ 40px)</Text>
-        <Text>• <strong>Chakra UI 스타일링:</strong> color, bg, margin, padding 등 모든 Box props 사용 가능</Text>
-        <Text>• <strong>Tree shaking:</strong> 사용하지 않는 아이콘은 번들에서 제외됨</Text>
-        <Text>• <strong>TypeScript 지원:</strong> 완전한 타입 안전성 제공</Text>
-        <Text>• <strong>forwardRef:</strong> ref 전달 가능</Text>
-      </VStack>
-    </Box>
-  </VStack>
+      <Box
+        w="100%"
+        bg="info.bg"
+        p={4}
+        borderRadius="md"
+        borderLeft="4px solid"
+        borderColor="info.solid"
+      >
+        <Text fontWeight="bold" mb={2}>
+          ✨ 주요 기능
+        </Text>
+        <VStack align="start" gap={2} textStyle="subtext">
+          <Text>
+            • <strong>boxSize 지원:</strong> 2xs, xs, sm, md, lg, xl (14px ~
+            40px)
+          </Text>
+          <Text>
+            • <strong>Chakra UI 스타일링:</strong> color, bg, margin, padding 등
+            모든 Box props 사용 가능
+          </Text>
+          <Text>
+            • <strong>Tree shaking:</strong> 사용하지 않는 아이콘은 번들에서
+            제외됨
+          </Text>
+          <Text>
+            • <strong>TypeScript 지원:</strong> 완전한 타입 안전성 제공
+          </Text>
+          <Text>
+            • <strong>forwardRef:</strong> ref 전달 가능
+          </Text>
+        </VStack>
+      </Box>
+    </VStack>
   ),
 };

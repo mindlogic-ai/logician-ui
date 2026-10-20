@@ -60,12 +60,20 @@ function normalizeChip(spec: MetaChipSpec): {
 }
 
 /**
- * Ring + body-border treatment per state. Notes keep their warm border in
- * all states but still surface the primary ring when selected so the active
+ * Ring + body treatment per state. Notes keep their warm border in all
+ * states but still surface the primary ring when selected so the active
  * annotation is visible.
  *
- * Precedence for the ring color: running > error > selected > warning.
- * The default-case border is `slate.300`.
+ * Precedence: running > failed (run error or a validation issue) > completed
+ * > selected > warning > default. Running and selected share the same 1px
+ * `primary.main` ring — both mean "this is the node in focus" — while failed
+ * and completed get the stronger treatment a ring can't give: the whole card
+ * tints with the status colour (`danger.bg`/`success.bg`), so it still reads
+ * at a glance once the selection highlight moves on. A node's own validation
+ * issues (`hasError`) get the same failed treatment as a runtime error
+ * (`runState === 'error'`) — both mean "something is wrong with this node"
+ * and a reader does not need a third visual bucket to tell them apart.
+ * The default-case border is `border.default`.
  */
 function getRingChrome(
   category: NodeCategory,
@@ -79,8 +87,8 @@ function getRingChrome(
     if (selected) {
       return {
         borderColor: noteBorder,
-        outline: '3px solid',
-        outlineColor: 'primary.lighter',
+        outline: '1px solid',
+        outlineColor: 'primary.main',
       };
     }
     return { borderColor: noteBorder };
@@ -88,32 +96,31 @@ function getRingChrome(
   if (runState === 'running') {
     return {
       borderColor: 'primary.main',
-      outline: '3px solid',
-      outlineColor: 'primary.lighter',
+      outline: '1px solid',
+      outlineColor: 'primary.main',
     };
   }
-  if (hasError) {
-    return {
-      borderColor: 'danger.main',
-      outline: '3px solid',
-      outlineColor: 'danger.lighter',
-    };
+  if (runState === 'error' || hasError) {
+    return { borderColor: 'danger.border', bg: 'danger.bg' };
+  }
+  if (runState === 'done') {
+    return { borderColor: 'success.border', bg: 'success.bg' };
   }
   if (selected) {
     return {
       borderColor: 'primary.main',
-      outline: '3px solid',
-      outlineColor: 'primary.lighter',
+      outline: '1px solid',
+      outlineColor: 'primary.main',
     };
   }
-  if (hasWarning) return { borderColor: 'warning.main' };
-  return { borderColor: 'slate.300' };
+  if (hasWarning) return { borderColor: 'warning.border' };
+  return { borderColor: 'border.default' };
 }
 
 /**
  * Header glyph independently selected from the ring. Error wins over
  * warning wins over running's status dot — so an error inside a running
- * node still surfaces the alert, instead of being hidden by the green
+ * node still surfaces the alert, instead of being hidden by the primary
  * dot.
  */
 function getHeaderBadge(
@@ -123,26 +130,29 @@ function getHeaderBadge(
 ): ReactNode {
   if (hasError) {
     return (
-      <Box color="danger.main" display="flex" alignItems="center">
+      <Box color="danger.fg" display="flex" alignItems="center">
         <AlertTriangleIcon boxSize="xs" />
       </Box>
     );
   }
   if (hasWarning) {
     return (
-      <Box color="warning.dark" display="flex" alignItems="center">
+      <Box color="warning.fg" display="flex" alignItems="center">
         <AlertTriangleIcon boxSize="xs" />
       </Box>
     );
   }
   if (runState === 'running') {
+    // Matches the ring colour (`primary.main`) rather than `success.*` — a
+    // green "running" dot read as a false "done" signal sitting right next
+    // to the real completed state's green card fill.
     return (
       <Box
         boxSize="2.5"
         borderRadius="full"
-        bg="success.main"
+        bg="primary.main"
         outline="3px solid"
-        outlineColor="success.lighter"
+        outlineColor="primary.wash"
       />
     );
   }
@@ -205,7 +215,7 @@ export function NodeShell({
       outline={ring.outline}
       outlineColor={ring.outlineColor}
       boxShadow="sm"
-      bg={isNote ? tokens.bg : 'bg.surface'}
+      bg={isNote ? tokens.bg : (ring.bg ?? 'bg.surface')}
       position="relative"
       // Center the body within the port-driven min-height so a content-light
       // node (e.g. Start) sits mid-card rather than pinned to the top edge.
@@ -217,18 +227,18 @@ export function NodeShell({
         <Stack gap={1} px={3} py={2}>
           <HStack
             gap={1}
-            color="warning.dark"
+            color="warning.fg"
             fontWeight="bold"
             letterSpacing="wider"
             textTransform="uppercase"
           >
             <StickyNoteIcon boxSize="xs" />
-            <Subtext color="warning.dark" fontWeight="bold">
+            <Subtext color="warning.fg" fontWeight="bold">
               Note
             </Subtext>
           </HStack>
           {customBody ?? (
-            <Subtext color="slate.1200" lineHeight={1.45}>
+            <Subtext color="fg.default" lineHeight={1.45}>
               {instanceTitle ?? label}
             </Subtext>
           )}
@@ -248,11 +258,11 @@ export function NodeShell({
                 tokens={categoryTokens}
               />
               <Stack gap={0} flex={1} minWidth={0}>
-                <Subtext fontWeight="semibold" color="slate.1200" lineClamp={1}>
+                <Subtext fontWeight="semibold" color="fg.default" lineClamp={1}>
                   {label}
                 </Subtext>
                 {instanceTitle ? (
-                  <Subtext color="slate.900" lineClamp={1}>
+                  <Subtext color="fg.muted" lineClamp={1}>
                     {instanceTitle}
                   </Subtext>
                 ) : null}

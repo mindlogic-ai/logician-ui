@@ -4,6 +4,7 @@ export {
   iconButtonColorPalettes,
   iconButtonColorPaletteStyles,
   iconButtonVariants,
+  iconButtonVariantStyles,
 } from './IconButton.styles';
 export type {
   IconButtonColorPalette,

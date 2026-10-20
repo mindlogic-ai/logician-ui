@@ -12,7 +12,7 @@ import { TypographyOwnProps } from './Typography.types';
  * Part of the typography scale alongside `Subtext` — it shares the subtext size
  * but adds the baked-in overline styling (`textStyle="overline"`: uppercase,
  * wider tracking, medium weight). Every aspect stays one Chakra prop away, so
- * brand/status variants are a single override (e.g. `color="primary.main"`,
+ * brand/status variants are a single override (e.g. `color="fg.default"`,
  * `fontWeight="extrabold"`).
  */
 const OverlineImpl = forwardRef<HTMLParagraphElement, TypographyOwnProps>(
@@ -25,7 +25,7 @@ const OverlineImpl = forwardRef<HTMLParagraphElement, TypographyOwnProps>(
         // If fontSize is provided, disable textStyle to allow the override
         textStyle={fontSize ? undefined : 'overline'}
         fontSize={fontSize}
-        color="slate.800"
+        color="fg.muted"
         wordBreak="keep-all"
         {...rest}
       />

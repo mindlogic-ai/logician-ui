@@ -22,7 +22,7 @@ export const useToast = () => {
   const activeToasts = useRef<string[]>([]); // Track active toast IDs
 
   const showToast = ({
-    status = 'success',
+    status = 'neutral',
     title,
     description,
     styles: stylesProp,
@@ -59,9 +59,16 @@ export const useToast = () => {
       duration,
       title,
       description,
-      type: status, // Maps to our status
+      // Zag's own toast store only knows `info/success/warning/error/loading`
+      // and REQUIRES one — `neutral` is ours, not Zag's, and both omitting
+      // `type` and passing `'neutral'` throw from inside the machine.
+      // `'info'` here only feeds Zag's priority sort; the status that
+      // actually renders travels through `meta.status` below and is read
+      // back out in `Toaster`.
+      type: status === 'neutral' ? 'info' : status,
       meta: {
         // Pass custom data through meta
+        status, // the real status — `Toaster` renders from this, not `type`
         styles, // for custom toast style
         action, // ReactNode label, so it travels in meta rather than `action`
         onClose: () => toaster.dismiss(toastId), // Custom close handler

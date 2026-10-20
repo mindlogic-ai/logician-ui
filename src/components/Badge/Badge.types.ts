@@ -5,30 +5,34 @@ import { BadgeProps as ChakraBadgeProps } from '@chakra-ui/react';
 import type { PolymorphicProps } from '../../types/polymorphic';
 
 /**
- * Badge variant types for the Golden Ratio color system.
+ * Badge variants (5.0).
  *
- * Each variant uses the `lightest` background shade with `dark` text
- * for optimal readability and WCAG AA compliance.
+ * - `neutral` (default): beige `secondary.surface` with `secondary.fgStrong`
+ *   text — the everyday label ("Pro", "Beta", "Draft").
+ * - `success` / `warning` / `danger` / `info`: the status family's soft
+ *   `{status}.bg` surface with `{status}.fg` text. Use these ONLY when the
+ *   badge reports a status — never as decoration.
  *
- * - `primary`: Default blue badge for general purpose
- * - `secondary`: Violet accent badge
- * - `success`: Green badge for positive states
- * - `warning`: Gold badge for caution states
- * - `danger`: Rose badge for error/negative states
- * - `neutral`: Gray badge for neutral information
+ * **Breaking in 5.0:** `primary` and `secondary` were removed. At runtime they
+ * still render (as `neutral`) and warn once in development.
  */
 export type BadgeVariant =
-  | 'primary'
-  | 'secondary'
+  | 'neutral'
   | 'success'
   | 'warning'
   | 'danger'
-  | 'neutral';
+  | 'info';
+
+/**
+ * 4.x variants that 5.0 maps to `neutral` at runtime.
+ * @deprecated Removed from the type in 5.0; use `neutral`.
+ */
+export type LegacyBadgeVariant = 'primary' | 'secondary';
 
 export type BadgeOwnProps = Omit<ChakraBadgeProps, 'variant' | 'as'> & {
   /**
-   * The color variant of the badge.
-   * @default 'primary'
+   * The colour role of the badge.
+   * @default 'neutral'
    */
   variant?: BadgeVariant;
 };

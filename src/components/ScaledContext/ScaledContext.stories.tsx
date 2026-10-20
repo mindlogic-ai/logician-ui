@@ -19,8 +19,14 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const SampleContent = () => (
-  <Stack gap={3} p={3} borderWidth="1px" borderColor="gray.300" borderRadius="md">
-    <Button variant="outline">Button</Button>
+  <Stack
+    gap={3}
+    p={3}
+    borderWidth="1px"
+    borderColor="border.default"
+    borderRadius="md"
+  >
+    <Button variant="secondary">Button</Button>
     <Checkbox>
       <Checkbox.Control />
       <Checkbox.Label>Checkbox</Checkbox.Label>
@@ -30,7 +36,7 @@ const SampleContent = () => (
 
 export const Default: Story = {
   args: { fontSize: '1rem' },
-  render: args => (
+  render: (args) => (
     <ScaledContext {...args}>
       <SampleContent />
     </ScaledContext>
@@ -49,9 +55,9 @@ export const ScalingRem: Story = {
   },
   render: () => (
     <HStack align="start" gap={8} flexWrap="wrap">
-      {(['0.75rem', '1rem', '1.25rem', '1.5rem'] as const).map(size => (
+      {(['0.75rem', '1rem', '1.25rem', '1.5rem'] as const).map((size) => (
         <Box key={size}>
-          <Text fontSize="xs" color="gray.500" mb={2} fontFamily="mono">
+          <Text fontSize="xs" color="fg.muted" mb={2} fontFamily="mono">
             {size}
           </Text>
           <ScaledContext fontSize={size}>
@@ -68,15 +74,16 @@ export const ScalingPx: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'px values work too — spacing tokens still scale relative to the given font size.',
+        story:
+          'px values work too — spacing tokens still scale relative to the given font size.',
       },
     },
   },
   render: () => (
     <HStack align="start" gap={8} flexWrap="wrap">
-      {(['12px', '14px', '16px', '20px', '24px'] as const).map(size => (
+      {(['12px', '14px', '16px', '20px', '24px'] as const).map((size) => (
         <Box key={size}>
-          <Text fontSize="xs" color="gray.500" mb={2} fontFamily="mono">
+          <Text fontSize="xs" color="fg.muted" mb={2} fontFamily="mono">
             {size}
           </Text>
           <ScaledContext fontSize={size}>
@@ -103,26 +110,26 @@ export const NestedScaling: Story = {
       fontSize="0.875rem"
       p={4}
       borderWidth="1px"
-      borderColor="gray.200"
+      borderColor="border.subtle"
       borderRadius="md"
     >
       <Stack gap={3}>
-        <Text fontSize="xs" color="gray.500" fontFamily="mono">
+        <Text fontSize="xs" color="fg.muted" fontFamily="mono">
           Outer: 0.875rem (compact)
         </Text>
-        <Button variant="outline">Outer Button</Button>
+        <Button variant="secondary">Outer Button</Button>
         <ScaledContext
           fontSize="1.25rem"
           p={3}
           borderWidth="1px"
-          borderColor="primary.light"
+          borderColor="border.strong"
           borderRadius="md"
         >
           <Stack gap={3}>
-            <Text fontSize="xs" color="gray.500" fontFamily="mono">
+            <Text fontSize="xs" color="fg.muted" fontFamily="mono">
               Inner: 1.25rem (spacious)
             </Text>
-            <Button variant="outline">Inner Button</Button>
+            <Button variant="secondary">Inner Button</Button>
             <Checkbox>
               <Checkbox.Control />
               <Checkbox.Label>Inner Checkbox</Checkbox.Label>

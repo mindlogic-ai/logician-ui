@@ -2,6 +2,7 @@ import { ChangeEvent, forwardRef, useEffect, useState } from 'react';
 import { Textarea as ChakraTextarea } from '@chakra-ui/react';
 
 import { noZoomOnFocus } from '@/theme/formControls';
+import { disabledControl } from '@/utils/disabledControl';
 import { mergeCss } from '@/utils/mergeCss';
 
 import { TextareaProps } from './Textarea.types';
@@ -57,25 +58,28 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         // `Textarea` recipe does not — so the focus ring defaults to
         // `colorPalette.focusRing` (gray.400) and ends up visibly
         // different from Input/Select. Mirror Input's chain explicitly.
-        focusRingColor={invalid ? 'danger.main' : 'primary.main'}
+        focusRingColor={invalid ? 'danger.solid' : 'primary.main'}
         borderColor={
-          borderColor ?? (invalid ? 'danger.main' : 'border.default')
+          borderColor ?? (invalid ? 'danger.solid' : 'border.control')
         }
         _hover={{
-          borderColor: invalid ? 'danger.main' : 'primary.lighter',
+          borderColor: invalid ? 'danger.solid' : 'fg.icon',
           ..._hover,
         }}
         _focus={{
-          borderColor: invalid ? 'danger.main' : 'primary.main',
+          borderColor: invalid ? 'danger.solid' : 'primary.main',
+          boxShadow: invalid
+            ? 'none'
+            : '0 0 0 1px var(--chakra-colors-primary-main)',
           ..._focus,
         }}
         _invalid={{
-          borderColor: 'danger.main',
+          borderColor: 'danger.solid',
           _hover: {
-            borderColor: 'danger.main',
+            borderColor: 'danger.solid',
           },
           _focus: {
-            borderColor: 'danger.main',
+            borderColor: 'danger.solid',
           },
         }}
         _readOnly={{
@@ -86,10 +90,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           borderColor: 'border.subtle',
         }}
         _disabled={{
-          opacity: 1,
+          ...disabledControl,
           cursor: 'not-allowed',
-          bg: 'bg.subtle',
-          color: { base: 'gray.1000', _dark: 'gray.400' },
           fontWeight: 'semibold',
         }}
         {...props}
@@ -97,7 +99,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           noZoomOnFocus,
           {
             '--focus-color': 'var(--chakra-colors-primary-main)',
-            '--error-color': 'var(--chakra-colors-danger-main)',
+            '--error-color': 'var(--chakra-colors-danger-solid)',
           },
           css
         )}

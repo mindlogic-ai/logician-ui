@@ -36,7 +36,11 @@ export const Default: Story = {
           </Text>
         </Card>
 
-        <Button size="xs" variant="outline" onClick={() => setShown((v) => !v)}>
+        <Button
+          size="xs"
+          variant="secondary"
+          onClick={() => setShown((v) => !v)}
+        >
           {shown ? '숨기기' : '근거 보기'}
         </Button>
 

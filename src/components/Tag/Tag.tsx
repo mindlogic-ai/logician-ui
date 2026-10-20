@@ -1,40 +1,83 @@
-import { ForwardedRef, forwardRef } from 'react';
+import { ElementType, ForwardedRef, forwardRef, MouseEvent } from 'react';
 import { Tag as ChakraTag } from '@chakra-ui/react';
 
+import { focusRing } from '@/utils/focusRing';
+
 import { polymorphic } from '../../types/polymorphic';
-import { getTagStyles } from './Tag.styles';
+import {
+  getTagStyles,
+  mapLegacyTagProps,
+  warnTagDeprecation,
+} from './Tag.styles';
 import { TagOwnProps } from './Tag.types';
 
+/** 4.x props that are no longer in the type but may still arrive at runtime. */
+type LegacyTagInput = {
+  colorPalette?: string;
+  variant?: string;
+  as?: ElementType;
+};
+
 /**
- * Tag component for categorization, filtering, and labeling.
+ * Tag — a label for categorising, filtering and removable selections. Since
+ * 5.0 it also replaces `Chip`.
  *
- * Uses a two-dimensional variant system:
- * - `colorPalette`: What semantic color (primary, secondary, danger, etc.)
- * - `variant`: How it looks visually (soft, solid, outline)
+ * - `tone`: `neutral` (default, beige) · `success` · `warning` · `danger` · `info`
+ * - `selected`: filter-chip "on" (black fill)
+ * - `category`: decorative hue (`blue`, `green`, …) with an optional `icon` mark
  *
- * Supports close button via TagCloseButton sub-component.
+ * A tag is interactive (hover border, pointer) when it has `onClick`, is a
+ * toggle (`selected` passed) or renders as a `button` / `a`. Render filter
+ * chips `as="button"` so they are keyboard-operable.
  *
  * @example
  * ```tsx
- * <Tag colorPalette="primary">Category</Tag>
- * <Tag colorPalette="danger" variant="solid">Error</Tag>
- * <Tag colorPalette="success" variant="outline">
- *   Completed
- *   <TagCloseButton />
- * </Tag>
+ * <Tag>Draft</Tag>
+ * <Tag tone="danger">Failed</Tag>
+ * <Tag as="button" selected={on} onClick={toggle}>Images</Tag>
+ * <Tag category="purple" icon="#">research</Tag>
+ * <Tag>Removable<TagCloseButton /></Tag>
  * ```
  */
 const TagImpl = forwardRef(
-  (
-    {
-      colorPalette = 'neutral',
-      variant = 'soft',
+  (props: TagOwnProps, ref?: ForwardedRef<HTMLDivElement>) => {
+    const {
+      tone: toneProp,
+      selected: selectedProp,
+      category,
+      icon,
+      disabled = false,
+      onClick,
       children,
+      colorPalette: legacyPalette,
+      variant: legacyVariant,
+      as,
       ...rest
-    }: TagOwnProps,
-    ref?: ForwardedRef<HTMLDivElement>
-  ) => {
-    const styles = getTagStyles(colorPalette, variant);
+    } = props as TagOwnProps & LegacyTagInput;
+
+    let tone = toneProp;
+    let selected = selectedProp;
+    if (legacyPalette !== undefined || legacyVariant !== undefined) {
+      warnTagDeprecation(
+        'tag-legacy-props',
+        '<Tag colorPalette / variant> were removed in 5.0. Use tone="neutral|success|warning|danger|info", ' +
+          'selected (filter chip on) or category="<hue>". The old props are mapped for now.'
+      );
+      const mapped = mapLegacyTagProps(legacyPalette, legacyVariant);
+      tone ??= mapped.tone;
+      selected ??= mapped.selected;
+    }
+
+    const isButton = as === 'button';
+    const interactive =
+      !disabled &&
+      (onClick != null || isButton || as === 'a' || selectedProp !== undefined);
+
+    const styles = getTagStyles({ tone, selected, category, interactive });
+
+    const handleClick = disabled
+      ? (event: MouseEvent<HTMLSpanElement>) => event.preventDefault()
+      : onClick;
 
     return (
       <ChakraTag.Root
@@ -44,9 +87,27 @@ const TagImpl = forwardRef(
         fontSize="sm"
         fontWeight="semibold"
         {...styles}
+        {...focusRing}
+        data-selected={selected ? '' : undefined}
+        data-disabled={disabled ? '' : undefined}
+        aria-pressed={
+          isButton && selectedProp !== undefined ? !!selected : undefined
+        }
+        aria-disabled={disabled && !isButton && onClick ? true : undefined}
+        {...(isButton && { type: 'button', disabled })}
+        onClick={handleClick}
         {...rest}
+        as={as}
         ref={ref}
       >
+        {icon != null ? (
+          <ChakraTag.StartElement
+            color={category ? `category.${category}.fg` : undefined}
+            fontWeight="bold"
+          >
+            {icon}
+          </ChakraTag.StartElement>
+        ) : null}
         {children}
       </ChakraTag.Root>
     );

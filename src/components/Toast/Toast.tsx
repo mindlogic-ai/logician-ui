@@ -17,7 +17,7 @@ import { ToastIcon } from './ToastIcon/ToastIcon';
 export const Toast = ({
   title,
   description,
-  status = 'success',
+  status = 'neutral',
   onClose,
   action,
   ...rest

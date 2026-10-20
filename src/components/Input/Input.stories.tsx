@@ -54,7 +54,7 @@ export const ControlledWithValue: Story = {
           value={value}
           onChange={(e) => setValue(e.target.value)}
         />
-        <Text fontSize="sm" color="gray.600">
+        <Text fontSize="sm" color="fg.muted">
           Current value: "{value}"
         </Text>
       </Stack>
@@ -148,7 +148,7 @@ export const LeftIcon: Story = {
     placeholder: 'Phone number',
     size: 'md',
     disabled: false,
-    leftIcon: <PhoneFilledIcon color="gray.300" />,
+    leftIcon: <PhoneFilledIcon color="fg.icon" />,
   },
 };
 
@@ -157,15 +157,15 @@ export const RightIcon: Story = {
     placeholder: 'Search...',
     size: 'md',
     disabled: false,
-    rightIcon: <SearchIcon color="gray.300" />,
+    rightIcon: <SearchIcon color="fg.icon" />,
   },
 };
 
 export const BothIcons: Story = {
   args: {
     placeholder: 'Email address',
-    leftIcon: <MailIcon color="gray.300" />,
-    rightIcon: <SearchIcon color="gray.300" />,
+    leftIcon: <MailIcon color="fg.icon" />,
+    rightIcon: <SearchIcon color="fg.icon" />,
   },
 };
 
@@ -185,10 +185,10 @@ export const NumberWithMask: Story = {
           value={value}
           onChange={(e) => setValue(e.target.value)}
         />
-        <Text fontSize="sm" color="gray.600">
+        <Text fontSize="sm" color="fg.muted">
           Raw value: {value}
         </Text>
-        <Text fontSize="xs" color="gray.500">
+        <Text fontSize="xs" color="fg.subtle">
           Numbers are automatically formatted with commas
         </Text>
       </Stack>
@@ -211,7 +211,7 @@ export const TrimWhiteSpace: Story = {
           value={value}
           onChange={(e) => setValue(e.target.value)}
         />
-        <Text fontSize="xs" color="gray.500">
+        <Text fontSize="xs" color="fg.subtle">
           Try typing spaces at the beginning or end
         </Text>
       </Stack>
@@ -234,7 +234,7 @@ export const NoSpaces: Story = {
           value={value}
           onChange={(e) => setValue(e.target.value)}
         />
-        <Text fontSize="xs" color="gray.500">
+        <Text fontSize="xs" color="fg.subtle">
           Try typing spaces - they will be removed
         </Text>
       </Stack>
@@ -250,7 +250,7 @@ export const FocusState: Story = {
     return (
       <Stack gap={2}>
         <Input {...args} />
-        <Text fontSize="xs" color="gray.500">
+        <Text fontSize="xs" color="fg.subtle">
           Focus border should be primary.main color
         </Text>
       </Stack>

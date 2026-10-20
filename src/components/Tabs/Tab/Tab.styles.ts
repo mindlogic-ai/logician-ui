@@ -28,19 +28,17 @@ export const verticalStyles = {
  * and **13.62:1** on the dark raised surface — so no surface it can land on is
  * marginal, and the mode-aware two-arm ramp is no longer needed.
  *
- * The indicator moves with the label. It was left on `primary.main` because a
- * 2px underline is a GRAPHIC judged at 3:1, which the old value cleared — but
- * that argument only justified LEAVING it, and an azure bar under an ink label
- * is the half-migrated look.
- *
- * `primary.main` itself is not re-pegged, and should not be: it is a solid fill
- * under white labels (`Checkbox`, `Switch`, `Banner`) where white on
- * `blue.200` measures 2.60:1. Form controls keep the brand hue on purpose —
- * a checkbox is a VALUE, not a place.
+ * The indicator moves with the label, EXCEPT on 5.0's BAZE palette: the
+ * indicator is a 2px underline — a GRAPHIC judged at 3:1, not text at 4.5:1 —
+ * so it reads the brand accent `primary.main` directly (black in light, the
+ * inverted cream fill in dark), matching the house gallery spec. The label
+ * stays on `fg.emphasized` (= `fg.default`): it is still a PLACE, not a
+ * value, and `primary.main` in dark mode is a solid-fill colour tuned for a
+ * button face under `fg.onPrimary`, not for text on the page.
  */
 export const TAB_RAMP = {
   label: 'fg.emphasized',
-  indicator: 'fg.emphasized',
+  indicator: 'primary.main',
 } as const;
 
 export const horizontalSelectedStyles = {

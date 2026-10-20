@@ -1,6 +1,6 @@
+import { useState } from 'react';
 import { Box, Button, HStack, IconButton, VStack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
-import { useState } from 'react';
 
 import { FaRegCopy } from '../Icon';
 import { Tooltip } from './Tooltip';
@@ -143,8 +143,8 @@ export const CustomStylesWithArrow: Story = {
           content="Danger color tooltip"
           showArrow
           contentProps={{
-            css: { '--tooltip-bg': 'var(--chakra-colors-danger-main)' },
-            bgColor: 'danger.main',
+            css: { '--tooltip-bg': 'var(--chakra-colors-danger-solid)' },
+            bgColor: 'danger.solid',
           }}
         >
           <Button colorPalette="danger" variant="outline">
@@ -156,8 +156,8 @@ export const CustomStylesWithArrow: Story = {
           content="Success color tooltip"
           showArrow
           contentProps={{
-            css: { '--tooltip-bg': 'var(--chakra-colors-success-main)' },
-            bgColor: 'success.main',
+            css: { '--tooltip-bg': 'var(--chakra-colors-success-solid)' },
+            bgColor: 'success.solid',
           }}
         >
           <Button colorPalette="success" variant="outline">
@@ -169,9 +169,9 @@ export const CustomStylesWithArrow: Story = {
           content="Warning color tooltip"
           showArrow
           contentProps={{
-            css: { '--tooltip-bg': 'var(--chakra-colors-warning-main)' },
-            bgColor: 'warning.main',
-            color: 'gray.1500',
+            css: { '--tooltip-bg': 'var(--chakra-colors-warning-solid)' },
+            bgColor: 'warning.solid',
+            color: 'warning.onSolid',
           }}
         >
           <Button colorPalette="warning" variant="outline">
@@ -225,7 +225,7 @@ export const CustomStylesWithoutArrow: Story = {
         <Tooltip
           content="Danger color tooltip"
           contentProps={{
-            bgColor: 'danger.main',
+            bgColor: 'danger.solid',
           }}
         >
           <Button colorPalette="danger" variant="outline">
@@ -236,7 +236,7 @@ export const CustomStylesWithoutArrow: Story = {
         <Tooltip
           content="Success color tooltip"
           contentProps={{
-            bgColor: 'success.main',
+            bgColor: 'success.solid',
           }}
         >
           <Button colorPalette="success" variant="outline">
@@ -247,8 +247,8 @@ export const CustomStylesWithoutArrow: Story = {
         <Tooltip
           content="Warning color tooltip"
           contentProps={{
-            bgColor: 'warning.main',
-            color: 'gray.1500',
+            bgColor: 'warning.solid',
+            color: 'warning.onSolid',
           }}
         >
           <Button colorPalette="warning" variant="outline">

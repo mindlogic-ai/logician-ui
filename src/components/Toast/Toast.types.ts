@@ -10,7 +10,7 @@ import {
  * Toast status type - common toast statuses used in Logician UI
  * Subset of Zag.js Type, excluding 'loading' for UI consistency
  */
-export type ToastStatus = 'info' | 'warning' | 'success' | 'error';
+export type ToastStatus = 'info' | 'warning' | 'success' | 'error' | 'neutral';
 
 /**
  * The single action a toast can carry.

@@ -106,7 +106,6 @@ export const Pagination = ({
         {maxPage > 1 && (
           <Flex align="center">
             <IconButton
-              colorPalette="neutral"
               variant="ghost"
               aria-label={translate('previous') as string}
               onClick={handleBack}
@@ -116,7 +115,6 @@ export const Pagination = ({
               <ChevronLeftIcon boxSize="sm" />
             </IconButton>
             <IconButton
-              colorPalette="neutral"
               variant="ghost"
               aria-label={translate('go_next_page_button') as string}
               onClick={handleNext}

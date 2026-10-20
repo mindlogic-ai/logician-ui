@@ -19,7 +19,12 @@ export const CodeTabs = ({ code, onCopy, ...rest }: CodeTabsProps) => {
 
   return (
     <Tabs
-      bgColor="gray.1500"
+      // Fixed dark chrome to match the Shiki `github-dark` code theme below it
+      // (Code.tsx), which doesn't flip with the app's mode either. `bg.inverse`
+      // is the token built for exactly this — a surface that stays visually
+      // distinct from the page in both light and dark — rather than the
+      // removed `gray.1500` raw primitive.
+      bgColor="bg.inverse"
       borderRadius="md"
       value={selectedValue}
       onValueChange={(details) => setSelectedValue(details.value)}
@@ -39,7 +44,7 @@ export const CodeTabs = ({ code, onCopy, ...rest }: CodeTabsProps) => {
               textTransform="uppercase"
               fontWeight="bold"
               textStyle="subtext"
-              _selected={{ color: 'white' }}
+              _selected={{ color: 'fg.inverse' }}
               _hover={{
                 bgColor: 'whiteAlpha.500',
               }}

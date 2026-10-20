@@ -14,7 +14,7 @@ export const SliderThumb = forwardRef(
       <Slider.Thumb
         index={index}
         boxSize={4}
-        bg="white"
+        bg="bg.canvas"
         borderColor="primary.main"
         borderWidth={3}
         borderStyle="solid"

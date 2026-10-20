@@ -17,9 +17,11 @@
  *
  * @see ModalCloseButton.tsx - 구현 세부사항 확인
  */
+import { useState } from 'react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import { useState } from 'react';
+import { Button } from '../Button';
+import { ButtonVariant } from '../Button/Button.types';
 import {
   Modal,
   ModalBody,
@@ -28,8 +30,6 @@ import {
   ModalFooter,
   ModalHeader,
 } from '.';
-import { Button } from '../Button';
-import { ButtonVariant } from '../Button/Button.types';
 
 interface ModalArgs {
   headerTitle: string;
@@ -74,7 +74,7 @@ export const Default: Story = {
             {args.footerButtons && (
               <ModalFooter>
                 {args.footerButtons.map((button, index) => (
-                  <Button key={index} variant={button.variant || 'soft'}>
+                  <Button key={index} variant={button.variant || 'subtle'}>
                     {button.label}
                   </Button>
                 ))}
@@ -105,7 +105,7 @@ export const WithHeader: Story = {
             {args.footerButtons && (
               <ModalFooter>
                 {args.footerButtons.map((button, index) => (
-                  <Button key={index} variant={button.variant || 'soft'}>
+                  <Button key={index} variant={button.variant || 'subtle'}>
                     {button.label}
                   </Button>
                 ))}
@@ -137,7 +137,7 @@ export const WithFooterButton: Story = {
             {args.footerButtons && (
               <ModalFooter>
                 {args.footerButtons.map((button, index) => (
-                  <Button key={index} variant={button.variant || 'soft'}>
+                  <Button key={index} variant={button.variant || 'subtle'}>
                     {button.label}
                   </Button>
                 ))}
@@ -154,7 +154,7 @@ export const TwoButtons: Story = {
   args: {
     footerButtons: [
       { label: 'Cancel', variant: 'ghost' },
-      { label: 'Save', variant: 'solid' },
+      { label: 'Save', variant: 'primary' },
     ],
   },
   render: (args) => {
@@ -171,7 +171,7 @@ export const TwoButtons: Story = {
             {args.footerButtons && (
               <ModalFooter>
                 {args.footerButtons.map((button, index) => (
-                  <Button key={index} variant={button.variant || 'soft'}>
+                  <Button key={index} variant={button.variant || 'subtle'}>
                     {button.label}
                   </Button>
                 ))}
@@ -207,8 +207,8 @@ export const WithCloseButton: Story = {
             {/* ModalCloseButton: Dialog.CloseTrigger + CloseButton 조합 */}
             <ModalCloseButton />
             <ModalBody>
-              이 모달은 우측 상단에 닫기 버튼이 있습니다. 버튼을 클릭하거나 ESC 키를
-              눌러 닫을 수 있습니다.
+              이 모달은 우측 상단에 닫기 버튼이 있습니다. 버튼을 클릭하거나 ESC
+              키를 눌러 닫을 수 있습니다.
             </ModalBody>
           </ModalContent>
         </Modal>
@@ -266,7 +266,7 @@ export const WithoutHeader: Story = {
               <Button variant="ghost" onClick={() => setIsOpen(false)}>
                 Cancel
               </Button>
-              <Button variant="solid" onClick={() => setIsOpen(false)}>
+              <Button variant="primary" onClick={() => setIsOpen(false)}>
                 Confirm
               </Button>
             </ModalFooter>
@@ -308,7 +308,7 @@ export const FullFeatured: Story = {
     hasCloseButton: true,
     footerButtons: [
       { label: 'Cancel', variant: 'ghost' },
-      { label: 'Delete', variant: 'solid' },
+      { label: 'Delete', variant: 'danger' },
     ],
   },
   render: (args) => {
@@ -322,14 +322,14 @@ export const FullFeatured: Story = {
             <ModalHeader>{args.headerTitle}</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              헤더, 바디, 푸터, 닫기 버튼이 모두 포함된 완전한 모달 예제입니다. 모든
-              요소가 조화롭게 배치되어 있습니다.
+              헤더, 바디, 푸터, 닫기 버튼이 모두 포함된 완전한 모달 예제입니다.
+              모든 요소가 조화롭게 배치되어 있습니다.
             </ModalBody>
             <ModalFooter>
               {args.footerButtons?.map((button, index) => (
                 <Button
                   key={index}
-                  variant={button.variant || 'soft'}
+                  variant={button.variant || 'subtle'}
                   onClick={() => setIsOpen(false)}
                 >
                   {button.label}
@@ -393,7 +393,8 @@ export const DifferentSizes: Story = {
             <ModalHeader>Modal Size: {openSize?.toUpperCase()}</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              현재 모달 크기는 {openSize}입니다. 다양한 크기의 모달을 테스트해보세요.
+              현재 모달 크기는 {openSize}입니다. 다양한 크기의 모달을
+              테스트해보세요.
             </ModalBody>
             <ModalFooter>
               <Button onClick={() => setOpenSize(null)}>Close</Button>
@@ -433,7 +434,12 @@ export const DifferentPlacements: Story = {
             </ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              모달이 화면의 {openPlacement === 'top' ? '상단' : openPlacement === 'center' ? '중앙' : '하단'}
+              모달이 화면의{' '}
+              {openPlacement === 'top'
+                ? '상단'
+                : openPlacement === 'center'
+                  ? '중앙'
+                  : '하단'}
               에 표시됩니다.
             </ModalBody>
             <ModalFooter>
@@ -466,8 +472,8 @@ export const PreventOutsideClick: Story = {
             <ModalHeader>{args.headerTitle}</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              이 모달은 Overlay를 클릭해도 닫히지 않습니다. 닫기 버튼이나 ESC 키를
-              사용하세요.
+              이 모달은 Overlay를 클릭해도 닫히지 않습니다. 닫기 버튼이나 ESC
+              키를 사용하세요.
             </ModalBody>
             <ModalFooter>
               <Button onClick={() => setIsOpen(false)}>Close</Button>
@@ -507,14 +513,15 @@ export const FullScreenOnMobile: Story = {
             <ModalHeader>{args.headerTitle}</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              모바일에서 이 모달은 전체 화면으로 표시됩니다. 브라우저 창을 좁혀서
-              확인해보세요. fullScreenOnMobile은 기본값이 false라 직접 켜야 합니다.
+              모바일에서 이 모달은 전체 화면으로 표시됩니다. 브라우저 창을
+              좁혀서 확인해보세요. fullScreenOnMobile은 기본값이 false라 직접
+              켜야 합니다.
             </ModalBody>
             <ModalFooter>
               <Button variant="ghost" onClick={() => setIsOpen(false)}>
                 Cancel
               </Button>
-              <Button variant="solid" onClick={() => setIsOpen(false)}>
+              <Button variant="primary" onClick={() => setIsOpen(false)}>
                 Confirm
               </Button>
             </ModalFooter>
@@ -552,17 +559,61 @@ export const NoFullScreenOnMobile: Story = {
             <ModalHeader>{args.headerTitle}</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              fullScreenOnMobile={'{false}'}로 설정하면 모바일에서도 풀스크린이 아닌
-              인라인 모달로 표시됩니다. 좌우에 마진이 적용됩니다.
+              fullScreenOnMobile={'{false}'}로 설정하면 모바일에서도 풀스크린이
+              아닌 인라인 모달로 표시됩니다. 좌우에 마진이 적용됩니다.
             </ModalBody>
             <ModalFooter>
               <Button variant="ghost" onClick={() => setIsOpen(false)}>
                 Cancel
               </Button>
-              <Button variant="solid" onClick={() => setIsOpen(false)}>
+              <Button variant="primary" onClick={() => setIsOpen(false)}>
                 Confirm
               </Button>
             </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </>
+    );
+  },
+};
+
+/**
+ * `headerTone="brand"` bands the header in `secondary.surfaceStrong` for a
+ * modal that wants brand presence up top. `ModalHeader`'s `subtitle` prop
+ * renders a second line under the title in `secondary.fgStrong`.
+ */
+export const BrandHeader: Story = {
+  args: {
+    headerTitle: 'Welcome to Mindlogic!',
+    footerButtons: [{ label: 'Get started', variant: 'primary' }],
+  },
+  render: (args) => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    return (
+      <>
+        <Button onClick={() => setIsOpen(true)}>Open Brand Modal</Button>
+        <Modal
+          {...args}
+          headerTone="brand"
+          open={isOpen}
+          onOpenChange={(e) => setIsOpen(e.open)}
+        >
+          <ModalContent>
+            <ModalHeader subtitle="Let's set up your workspace.">
+              {args.headerTitle}
+            </ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>열려라 참깨!</ModalBody>
+            {args.footerButtons && (
+              <ModalFooter>
+                {args.footerButtons.map((button, index) => (
+                  <Button key={index} variant={button.variant || 'subtle'}>
+                    {button.label}
+                  </Button>
+                ))}
+              </ModalFooter>
+            )}
           </ModalContent>
         </Modal>
       </>

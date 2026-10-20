@@ -314,7 +314,7 @@ const CountUpLab = () => {
 
   return (
     <Stack gap={4}>
-      <Button size="xs" variant="outline" onClick={() => setRun((r) => r + 1)}>
+      <Button size="xs" variant="secondary" onClick={() => setRun((r) => r + 1)}>
         셋 동시 재생
       </Button>
 

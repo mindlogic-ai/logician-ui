@@ -2,40 +2,38 @@ import { ForwardedRef, forwardRef, useMemo } from 'react';
 import { Box } from '@chakra-ui/react';
 
 import { MOTION_DURATION_MS } from '../../theme/motion';
+import { CORAL, RAMPS, SYSTEM_HUES } from '../../theme/palette.generated';
 import { confettiPiece } from './Confetti.styles';
 import { ConfettiProps } from './Confetti.types';
 
 /**
  * Literal hex, and the one place in this library that is deliberately off the
- * palette.
+ * semantic layer.
  *
- * The first version reached for `primary.main` / `success.main` /
- * `warning.main` / `danger.main`, which was wrong twice over. **Semantically**,
- * those colours mean things: raining the error red and the warning amber over
- * "payment complete" says something the screen does not. Confetti is the one
- * element on a page with nothing to communicate, so a colour that communicates
- * is the wrong kind of colour.
+ * `canvas.getContext('2d')`-free here (these paint via a CSS `bg` prop, not a
+ * canvas), but the reasoning is the same as any renderer that cannot resolve
+ * `var(--chakra-colors-…)`: a confetti piece has to pick ONE colour per piece,
+ * up front, in the `useMemo` below — there is no element whose computed style
+ * a browser could resolve for us, so each piece gets the resolved hex rather
+ * than a token string.
  *
- * **And optically**, the palette is built for interface legibility — text and
- * controls on a light surface — so it sits dark and desaturated: average
- * lightness 47%, nothing above 80% saturation, and three of the five in the
- * blue range. Fifty pieces of that read as a chart legend falling. These six
- * average 56% lightness, four of them are fully saturated, and they span the
- * whole wheel (9°–330°), which is what makes a burst read as a burst.
+ * The first version invented six bespoke hex values. This one is on-brand
+ * instead: the house coral (`CORAL.base`, the same red `action.mark` reads),
+ * the house beige (`RAMPS.sand.light['8']`, the raw step behind
+ * `secondary.fg`), and the 12 system hue bases (`SYSTEM_HUES.*.base` — the
+ * same colours `category.*` resolves to) — the full decorative set the
+ * palette already ships, imported raw because this is a canvas-shaped
+ * renderer, not a styled one.
  *
- * The cost, stated rather than hidden: these do not follow a re-theme, and they
- * do not adapt to dark mode — a bright hex on a dark surface is brighter still.
- * That is acceptable for a burst that lasts two seconds and carries no
- * information, and it is why `colors` is a prop: an app that needs its own
- * festival palette passes one.
+ * The cost, stated rather than hidden: these are the LIGHT-mode values and do
+ * not flip for dark mode — a burst that lasts two seconds and carries no
+ * information is an acceptable place to spend that. `colors` is a prop for an
+ * app that needs its own.
  */
 const DEFAULT_COLORS = [
-  '#FFD700', // gold
-  '#FF69B4', // hot pink
-  '#00CED1', // turquoise
-  '#FF6347', // tomato
-  '#9370DB', // medium purple
-  '#32CD32', // lime
+  CORAL.base,
+  RAMPS.sand.light['8'],
+  ...Object.values(SYSTEM_HUES).map((hue) => hue.base),
 ];
 
 /**
@@ -81,15 +79,15 @@ const scatter = (seed: number) => {
  * nothing, and doing it in CSS keeps the decision on the same media query as
  * every other preset instead of on a hook that has to guess before hydration.
  *
- * **The default colours are literal hex, and this is the one place in the
- * library deliberately off the palette.** Semantic tokens mean things, and
- * raining `danger.main` over "payment complete" says something the screen does
- * not — confetti is the one element on a page with nothing to communicate. The
- * palette is also built for interface legibility on a light surface, so it runs
- * dark and narrow (average lightness 47%, three of five in the blue range) and
- * fifty pieces of it read as a chart legend falling. The cost is real and
- * stated: these do not follow a re-theme and do not adapt to dark mode. `colors`
- * is a prop for an app that needs its own.
+ * **The default colours are the house decorative set — coral, beige and the 12
+ * system hues — imported as raw hex from `palette.generated`, not read as
+ * tokens.** Status tokens (`danger.main` and friends) mean things, and raining
+ * the error red over "payment complete" says something the screen does not —
+ * confetti is the one element on a page with nothing to communicate. The
+ * decorative set carries no such meaning and already spans the full wheel, so
+ * a burst of it reads as a burst rather than a status message. The cost is
+ * real and stated: these are light-mode values and do not flip for dark mode.
+ * `colors` is a prop for an app that needs its own.
  *
  * **Takes no children — it is an overlay, not a wrapper.** It renders absolutely
  * against the nearest positioned ancestor, which is therefore the stage: give

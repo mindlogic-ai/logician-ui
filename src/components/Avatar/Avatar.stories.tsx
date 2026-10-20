@@ -1,6 +1,8 @@
 import { Box, Flex, VStack, HStack, Text } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
+import { SYSTEM_HUE_NAMES } from '@/theme/colors';
+
 import { Avatar } from '.';
 
 const meta = {
@@ -50,13 +52,13 @@ export const Sizes: Story = {
       <VStack gap={8} align="stretch">
         {/* Sizes with name fallback */}
         <Box>
-          <Text fontSize="lg" fontWeight="bold" mb={4} color="gray.700">
+          <Text fontSize="lg" fontWeight="bold" mb={4} color="fg.default">
             Sizes with Name Fallback
           </Text>
           <Flex gap={4} wrap="wrap" align="center">
             {sizes.map((size) => (
               <VStack key={size} gap={2} align="center">
-                <Text fontSize="sm" color="gray.600" fontWeight="medium">
+                <Text fontSize="sm" color="fg.muted" fontWeight="medium">
                   {size}
                 </Text>
                 <Avatar name="John Doe" size={size} />
@@ -67,13 +69,13 @@ export const Sizes: Story = {
 
         {/* Sizes with image */}
         <Box>
-          <Text fontSize="lg" fontWeight="bold" mb={4} color="gray.700">
+          <Text fontSize="lg" fontWeight="bold" mb={4} color="fg.default">
             Sizes with Image
           </Text>
           <Flex gap={4} wrap="wrap" align="center">
             {sizes.map((size) => (
               <VStack key={size} gap={2} align="center">
-                <Text fontSize="sm" color="gray.600" fontWeight="medium">
+                <Text fontSize="sm" color="fg.muted" fontWeight="medium">
                   {size}
                 </Text>
                 <Avatar
@@ -88,7 +90,7 @@ export const Sizes: Story = {
 
         {/* Sizes comparison */}
         <Box>
-          <Text fontSize="lg" fontWeight="bold" mb={4} color="gray.700">
+          <Text fontSize="lg" fontWeight="bold" mb={4} color="fg.default">
             Size Comparison
           </Text>
           <HStack gap={4} align="flex-end">
@@ -99,7 +101,7 @@ export const Sizes: Story = {
                   src="https://i.pravatar.cc/150?img=2"
                   size={size}
                 />
-                <Text fontSize="xs" color="gray.600">
+                <Text fontSize="xs" color="fg.muted">
                   {size}
                 </Text>
               </VStack>
@@ -120,7 +122,7 @@ export const WithImage: Story = {
     <VStack gap={8} align="stretch">
       {/* Regular image */}
       <Box>
-        <Text fontSize="lg" fontWeight="bold" mb={4} color="gray.700">
+        <Text fontSize="lg" fontWeight="bold" mb={4} color="fg.default">
           Regular Image
         </Text>
         <HStack gap={4}>
@@ -143,7 +145,7 @@ export const WithImage: Story = {
       </Box>
       {/* Custom background override */}
       <Box>
-        <Text fontSize="lg" fontWeight="bold" mb={4} color="gray.700">
+        <Text fontSize="lg" fontWeight="bold" mb={4} color="fg.default">
           Custom Background (bg prop)
         </Text>
         <HStack gap={4}>
@@ -154,7 +156,7 @@ export const WithImage: Story = {
               size="lg"
               bg="white"
             />
-            <Text fontSize="xs" color="gray.600">
+            <Text fontSize="xs" color="fg.muted">
               bg="white"
             </Text>
           </VStack>
@@ -163,10 +165,10 @@ export const WithImage: Story = {
               name="React"
               src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
               size="lg"
-              bg="blue.100"
+              bg="category.blue.surface"
             />
-            <Text fontSize="xs" color="gray.600">
-              bg="blue.100"
+            <Text fontSize="xs" color="fg.muted">
+              bg="category.blue.surface"
             </Text>
           </VStack>
         </HStack>
@@ -202,7 +204,7 @@ export const Group: Story = {
     <VStack gap={8} align="stretch">
       {/* Small group */}
       <Box>
-        <Text fontSize="lg" fontWeight="bold" mb={4} color="gray.700">
+        <Text fontSize="lg" fontWeight="bold" mb={4} color="fg.default">
           Small Group (md size)
         </Text>
         <HStack gap={-2}>
@@ -214,7 +216,7 @@ export const Group: Story = {
 
       {/* Large group with size variation */}
       <Box>
-        <Text fontSize="lg" fontWeight="bold" mb={4} color="gray.700">
+        <Text fontSize="lg" fontWeight="bold" mb={4} color="fg.default">
           Large Group (sm size)
         </Text>
         <HStack gap={-2}>
@@ -244,7 +246,7 @@ export const Group: Story = {
 
       {/* Extra large group */}
       <Box>
-        <Text fontSize="lg" fontWeight="bold" mb={4} color="gray.700">
+        <Text fontSize="lg" fontWeight="bold" mb={4} color="fg.default">
           Extra Large Group (lg size)
         </Text>
         <HStack gap={-3}>
@@ -276,31 +278,31 @@ export const Group: Story = {
 export const Initials: Story = {
   render: () => (
     <VStack gap={4} align="stretch">
-      <Text fontSize="lg" fontWeight="bold" mb={2} color="gray.700">
+      <Text fontSize="lg" fontWeight="bold" mb={2} color="fg.default">
         Different Name Formats
       </Text>
       <Flex gap={4} wrap="wrap">
         <VStack gap={1}>
           <Avatar name="John Doe" size="lg" />
-          <Text fontSize="sm" color="gray.600">
+          <Text fontSize="sm" color="fg.muted">
             John Doe
           </Text>
         </VStack>
         <VStack gap={1}>
           <Avatar name="Jane" size="lg" />
-          <Text fontSize="sm" color="gray.600">
+          <Text fontSize="sm" color="fg.muted">
             Jane
           </Text>
         </VStack>
         <VStack gap={1}>
           <Avatar name="A B C" size="lg" />
-          <Text fontSize="sm" color="gray.600">
+          <Text fontSize="sm" color="fg.muted">
             A B C
           </Text>
         </VStack>
         <VStack gap={1}>
           <Avatar name="김철수" size="lg" />
-          <Text fontSize="sm" color="gray.600">
+          <Text fontSize="sm" color="fg.muted">
             김철수
           </Text>
         </VStack>
@@ -328,7 +330,7 @@ export const SizeMatrix: Story = {
           <Box w="120px" />
           {sizes.map((size) => (
             <Box key={size} w="80px" textAlign="center">
-              <Text fontWeight="bold" color="gray.600">
+              <Text fontWeight="bold" color="fg.muted">
                 {size}
               </Text>
             </Box>
@@ -339,7 +341,7 @@ export const SizeMatrix: Story = {
         {users.map((user, idx) => (
           <HStack key={idx} gap={4} align="center">
             <Box w="120px">
-              <Text fontWeight="medium" color="gray.600">
+              <Text fontWeight="medium" color="fg.muted">
                 {user.name}
               </Text>
             </Box>
@@ -354,7 +356,7 @@ export const SizeMatrix: Story = {
         {/* Fallback row */}
         <HStack gap={4} align="center">
           <Box w="120px">
-            <Text fontWeight="medium" color="gray.600">
+            <Text fontWeight="medium" color="fg.muted">
               Fallback
             </Text>
           </Box>
@@ -367,4 +369,58 @@ export const SizeMatrix: Story = {
       </VStack>
     );
   },
+};
+
+/**
+ * No image, no `src` that loads — the fallback initials tint by a stable hash
+ * of `name` over the 12 `category.*` hues, so the same person reads as the
+ * same colour everywhere and different people spread across the wheel
+ * instead of all landing on one colour.
+ */
+export const FallbackHues: Story = {
+  render: () => {
+    const names = [
+      'Jaeho Shin',
+      'Jeongbin Kim',
+      'Sean Park',
+      'Kunyoung Park',
+      'Namkyung Jo',
+      'Taehoon Kim',
+      'Minjae Kim',
+      'Hyungjoon Yang',
+      'Hyunwoo Kim',
+      'Joonpyo Lee',
+      'Seungwook Kim',
+      'WonJoon Shin',
+    ];
+
+    return (
+      <Flex gap={4} wrap="wrap">
+        {names.map((name) => (
+          <VStack key={name} gap={2} align="center">
+            <Avatar name={name} size="lg" />
+            <Text fontSize="xs" color="fg.muted">
+              {name}
+            </Text>
+          </VStack>
+        ))}
+      </Flex>
+    );
+  },
+};
+
+/** `colorHue` overrides the hashed hue when a caller needs a specific one. */
+export const ExplicitHue: Story = {
+  render: () => (
+    <Flex gap={4} wrap="wrap">
+      {SYSTEM_HUE_NAMES.map((hue) => (
+        <VStack key={hue} gap={2} align="center">
+          <Avatar name="Same Name" colorHue={hue} size="lg" />
+          <Text fontSize="xs" color="fg.muted">
+            {hue}
+          </Text>
+        </VStack>
+      ))}
+    </Flex>
+  ),
 };

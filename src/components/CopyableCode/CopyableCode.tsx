@@ -121,8 +121,7 @@ export const CopyableCode = ({
         />
       </Card>
       <Button
-        colorPalette={copied ? 'success' : 'primary'}
-        variant="solid"
+        variant="primary"
         size="xs"
         onClick={handleCopy}
         position="absolute"

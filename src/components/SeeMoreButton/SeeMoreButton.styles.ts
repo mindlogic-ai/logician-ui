@@ -1,12 +1,14 @@
+/**
+ * Layout only. Colours, hover/press and disabled come from the ghost Button
+ * recipe (`<Button variant="ghost">`), so SeeMoreButton cannot drift from it.
+ * The top hairline is structural (it separates the button from the list it
+ * extends), so it keeps a divider colour on top of the ghost recipe.
+ */
 export const seeMoreButtonStyles = {
   alignSelf: 'stretch',
   w: '100%',
-  variant: 'unstyled' as any,
   display: 'flex',
-  borderTop: '1px solid',
   borderRadius: 'none',
-  borderColor: 'border.default',
-  color: 'fg.subtle',
+  borderTopColor: 'border.subtle',
   fontSize: 'subtitle',
-  cursor: 'pointer',
-};
+} as const;

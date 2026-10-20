@@ -23,7 +23,7 @@ export const TreeItem = forwardRef<HTMLDivElement, TreeItemProps>(
         cursor="pointer"
         color="fg.default"
         _hover={{ bg: 'bg.subtle' }}
-        _selected={{ bg: 'primary.lightest', color: 'primary.dark' }}
+        _selected={{ bg: 'primary.selected', color: 'fg.default' }}
         {...focusRing}
         {...props}
       />

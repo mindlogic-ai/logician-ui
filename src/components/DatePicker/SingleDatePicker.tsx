@@ -45,7 +45,7 @@ export const SingleDatePicker = ({
           ...propsConfigs?.triggerBtnProps,
         },
         inputProps: {
-          color: 'primary.dark',
+          color: 'fg.default',
           ...propsConfigs?.inputProps,
         },
         popoverCompProps: {
@@ -94,17 +94,18 @@ export const SingleDatePicker = ({
             fontSize: 'sm',
             fontWeight: 'regular',
             _hover: {
-              background: 'primary.extralight',
+              background: 'primary.wash',
               ...propsConfigs?.dayOfMonthBtnProps?.defaultBtnProps?._hover,
             },
             ...propsConfigs?.dayOfMonthBtnProps?.defaultBtnProps,
           },
           todayBtnProps: {
             fontWeight: 'semibold',
+            boxShadow: 'inset 0 0 0 1px var(--chakra-colors-border-strong)',
             ...propsConfigs?.dayOfMonthBtnProps?.todayBtnProps,
           },
           selectedBtnProps: {
-            color: 'white',
+            color: 'fg.onPrimary',
             border: 'none',
             background: 'primary.main',
             borderRadius: 'full',
@@ -119,8 +120,7 @@ export const SingleDatePicker = ({
         <Popover.Trigger asChild>
           <Button
             pl={2}
-            colorPalette="neutral"
-            variant="outline"
+            variant="secondary"
             {...(propsConfigs?.triggerBtnProps as ButtonProps)}
           >
             <MdOutlineCalendarToday

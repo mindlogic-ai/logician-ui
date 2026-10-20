@@ -1,10 +1,7 @@
 import React, { memo } from 'react';
 
 import { Button } from '@/components/Button';
-import {
-  ButtonColorPalette,
-  ButtonVariant,
-} from '@/components/Button/Button.types';
+import { ButtonVariant } from '@/components/Button/Button.types';
 
 import {
   isMonthDisabled,
@@ -17,7 +14,6 @@ import { MonthRange } from '../MonthPicker.types';
 import { MonthButtonProps } from './MonthButton.types';
 
 type MonthButtonStyle = {
-  colorScheme: ButtonColorPalette;
   variant: ButtonVariant;
 };
 
@@ -63,17 +59,17 @@ export const MonthButton: React.FC<MonthButtonProps> = memo(
       selectionStart?: Date | null,
       hoveredMonth?: { month: number; year: number } | null
     ): MonthButtonStyle => {
-      // Selected months get solid primary
+      // Selected months get the primary fill
       if (isMonthSelected(month, year, selectedRange)) {
-        return { colorScheme: 'primary', variant: 'solid' };
+        return { variant: 'primary' };
       }
       if (isSelectionStart(month, year, selectionStart)) {
-        return { colorScheme: 'primary', variant: 'solid' };
+        return { variant: 'primary' };
       }
 
-      // In-range months get soft primary
+      // In-range months get the subtle wash
       if (isMonthInRange(month, year, selectedRange)) {
-        return { colorScheme: 'primary', variant: 'soft' };
+        return { variant: 'subtle' };
       }
 
       // Preview range when hovering with a selection start
@@ -85,11 +81,11 @@ export const MonthButton: React.FC<MonthButtonProps> = memo(
           hoveredMonth || null
         )
       ) {
-        return { colorScheme: 'primary', variant: 'soft' };
+        return { variant: 'subtle' };
       }
 
-      // Default: ghost neutral
-      return { colorScheme: 'neutral', variant: 'outline' };
+      // Default: outlined
+      return { variant: 'secondary' };
     };
 
     const style = getMonthButtonStyle(
@@ -103,7 +99,6 @@ export const MonthButton: React.FC<MonthButtonProps> = memo(
     return (
       <Button
         size="sm"
-        colorPalette={style.colorScheme}
         variant={style.variant}
         onClick={handleClick}
         onMouseEnter={handleMouseEnter}

@@ -26,37 +26,30 @@ export type LinkCustomProps<TElement extends ElementType = 'a'> =
  * still clear the contrast bar. Asserting only the second half is a test that
  * passes while the component points somewhere else entirely — which is how the
  * dark hover regressed with a green suite.
+ *
+ * 5.0: `fg.link` / `fg.linkHover` are flipping semantic roles — each already
+ * resolves to the right hex in both light and dark, so the ramp points the
+ * same token at both `base` and `_dark` instead of hand-picking a different
+ * step per mode the way the 4.x `primary.*` ramp had to. There is no darker
+ * danger token than `danger.fg` today, so the error ramp is flat too.
  */
 export const LINK_RAMP = {
-  default: { base: 'primary.main', _dark: 'primary.dark' },
-  error: { base: 'danger.main', _dark: 'danger.dark' },
-  defaultHover: { base: 'primary.dark', _dark: 'primary.darker' },
-  errorHover: { base: 'danger.dark', _dark: 'danger.darker' },
+  default: { base: 'fg.link', _dark: 'fg.link' },
+  error: { base: 'danger.fg', _dark: 'danger.fg' },
+  defaultHover: { base: 'fg.linkHover', _dark: 'fg.linkHover' },
+  errorHover: { base: 'danger.fg', _dark: 'danger.fg' },
 } as const;
 
 const LinkImpl = forwardRef<HTMLAnchorElement, LinkOwnProps>(
   ({ color, variant, ...rest }, ref) => {
-    // Theme-aware, because `.main` is tuned against a WHITE page. On the dark
-    // canvas (#181A20) `primary.main` measures 4.19:1 and `danger.main` 4.26:1
-    // — both under the 4.5:1 that KWCAG 2.1 5.1.3.3 (명도 대비) asks of body
-    // text, and every link in a consuming app inherits it. The `.dark` end of
-    // each ramp is the far side from the PAGE rather than a fixed lightness, so
-    // in dark mode it resolves lighter: 6.68:1 and 6.38:1.
+    // `fg.link` / `danger.fg` are flipping semantic roles, tuned against their
+    // own canvas in both modes — unlike the 4.x `primary.*` ramp, there is no
+    // light/dark arm to hand-pick here. KWCAG 2.1 5.1.3.3 (명도 대비) still
+    // applies to every state a user can put the link in, which is why hover
+    // gets its own token (`fg.linkHover`) rather than relying on the
+    // thicker underline alone to signal the state change.
     const defaultColor = LINK_RAMP.default;
     const errorColor = LINK_RAMP.error;
-    // The hover has to move AWAY from the page in BOTH modes, and `.main` is
-    // the wrong end of the ramp to move toward in dark. Mirroring the light
-    // step ("one darker") instead of reflecting it sent the dark hover back
-    // toward the background: resting 6.68:1 → hovering **4.19:1**, under the
-    // same 4.5:1 the resting colour above was just fixed to clear. KWCAG
-    // 5.3.3 applies to text in every state a user can put it in, and hover is
-    // a state a mouse user is IN while reading the link.
-    //
-    // `.darker` is the step past `.dark` at both ends, so one token is correct
-    // in both modes with no special-casing: light 11.98:1 (unchanged from
-    // before), dark 10.68:1. Error the same: 10.83:1 and 10.34:1.
-    //
-    // No axe rule would have caught this — it measures the resting state only.
     const defaultHoverColor = LINK_RAMP.defaultHover;
     const errorHoverColor = LINK_RAMP.errorHover;
 
@@ -75,16 +68,20 @@ const LinkImpl = forwardRef<HTMLAnchorElement, LinkOwnProps>(
     return (
       <ChakraLink
         ref={ref}
-        // Inherit the surrounding text weight so an inline link reads as part of
-        // its sentence (extrabold inside an H1, body weight inside a paragraph)
-        // rather than a fixed-semibold patch. Color + underline carry the link
-        // affordance. Override with an explicit `fontWeight` when needed.
-        fontWeight="inherit"
+        // 5.0: links carry their own weight (500) instead of inheriting the
+        // surrounding text's, because colour alone (`fg.link`) no longer
+        // reads as an affordance against every body-text colour in the fg.*
+        // scale the way `primary.main` used to. `{...rest}` below still lets
+        // a call site override it.
+        fontWeight={500}
         wordBreak="keep-all"
         color={linkColor}
+        textDecoration="underline"
+        textDecorationThickness="1px"
+        textUnderlineOffset="3px"
         _hover={{
           color: hoverColor,
-          textDecor: 'none',
+          textDecorationThickness: '2px',
         }}
         {...rest}
       />

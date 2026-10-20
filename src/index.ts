@@ -17,6 +17,7 @@ export * from './components/ColorMode';
 export * from './components/Confetti';
 export * from './components/Container';
 export * from './components/CopyableCode';
+export * from './components/CountBadge';
 export * from './components/CountUp';
 export * from './components/DatePicker';
 export * from './components/ErrorFallback';

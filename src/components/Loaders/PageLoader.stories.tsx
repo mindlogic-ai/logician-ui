@@ -22,7 +22,21 @@ export const Basic: Story = {
   },
   render: (args) => {
     return (
-      <Box position="relative" p="128px" bg="red">
+      <Box position="relative" p="128px" bg="danger.bg">
+        <PageLoader {...args} />
+      </Box>
+    );
+  },
+};
+
+export const Thinking: Story = {
+  args: {
+    isLoading: true,
+    variant: 'thinking',
+  },
+  render: (args) => {
+    return (
+      <Box position="relative" p="128px" bg="danger.bg">
         <PageLoader {...args} />
       </Box>
     );

@@ -60,7 +60,7 @@ export function DrawerHeader({
       px={4}
       py={3}
       borderBottom="1px solid"
-      borderColor="slate.200"
+      borderColor="border.default"
     >
       <HStack gap={2} minW={0} flex="1">
         {icon}
@@ -68,7 +68,7 @@ export function DrawerHeader({
           {title}
         </Text>
         {subtitle ? (
-          <Subtext color="slate.700" flexShrink={0}>
+          <Subtext color="fg.subtle" flexShrink={0}>
             {subtitle}
           </Subtext>
         ) : null}
@@ -81,7 +81,6 @@ export function DrawerHeader({
                 aria-label={translate('workflow_node_overflow_label') as string}
                 size="xs"
                 variant="ghost"
-                colorPalette="neutral"
               >
                 <DotsHorizontalIcon boxSize="xs" />
               </IconButton>
@@ -93,7 +92,6 @@ export function DrawerHeader({
           aria-label={translate('workflow_node_close') as string}
           size="xs"
           variant="ghost"
-          colorPalette="neutral"
           onClick={onClose}
         >
           <CloseIcon boxSize="xs" aria-hidden />

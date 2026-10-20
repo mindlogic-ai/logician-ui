@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Badge } from '../Badge';
 import { Button } from '../Button';
 import { Card } from '../Card';
-import { Chip } from '../Chip';
+import { Tag } from '../Tag';
 import { Collapsible } from '../Collapsible';
 import { Menu } from '../Menu';
 import { Subtext, Text } from '../Typography';
@@ -45,9 +45,7 @@ export const Default: Story = {
           ].map((v) => (
             <Stack key={v.label} gap={2} align="center" w="110px">
               <Appear key={`${v.label}-${run}`} {...v.props}>
-                <Chip colorScheme="primary" variant="soft">
-                  {v.label}
-                </Chip>
+                <Tag>{v.label}</Tag>
               </Appear>
               <Subtext fontFamily="mono" fontSize="2xs" color="fg.muted" mb={0}>
                 {v.label === '페이드'
@@ -114,7 +112,7 @@ export const WhichOne: Story = {
           </Button>
           <Button
             size="sm"
-            variant="outline"
+            variant="secondary"
             onClick={() => setOpen((v) => !v)}
           >
             {open ? '닫기' : '열기'} — presence만 가능
@@ -137,7 +135,7 @@ export const WhichOne: Story = {
             </Subtext>
             <Menu>
               <Menu.Trigger asChild>
-                <Button size="xs" variant="outline">
+                <Button size="xs" variant="secondary">
                   메뉴 열기
                 </Button>
               </Menu.Trigger>
@@ -171,14 +169,9 @@ export const WhichOne: Story = {
             </Subtext>
             <Stack key={run} gap="2px">
               {['첫째 줄', '둘째 줄', '셋째 줄', '넷째 줄'].map((t, i) => (
-                <Chip
-                  key={t}
-                  colorScheme="neutral"
-                  variant="outline"
-                  {...staggerProps(i)}
-                >
+                <Tag key={t} {...staggerProps(i)}>
                   {t}
-                </Chip>
+                </Tag>
               ))}
             </Stack>
           </Stack>

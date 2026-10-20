@@ -8,46 +8,57 @@ import { BannerProps, BannerSize } from './Banner.types';
 type VariantType = NonNullable<BannerProps['variant']>;
 
 /**
- * Banner variant styles using the Golden Ratio color system.
+ * Banner variant styles on the BAZE token set.
  *
- * Uses `lightest` backgrounds with `lighter` borders and `dark` text
- * for optimal readability and WCAG AA compliance.
+ * Every status variant is border `{s}.border` + bg `{s}.bg` + text/icon
+ * `{s}.fg`, with a `{s}.solid` left accent bar — `info` now reads its own
+ * `info.*` family instead of borrowing `primary.*`. `neutral` is the brand
+ * notice band: border `secondary.border`, bar `primary.main`, bg
+ * `secondary.surface`, text `fg.default`.
  */
 export const bannerStyles: Record<VariantType, BoxProps> = {
   info: {
-    bg: 'primary.extralight', // #E8EEFB
-    borderColor: 'primary.lighter', // #B9CBF3
-    color: 'primary.dark', // #0D317D
+    bg: 'info.bg',
+    borderColor: 'info.border',
+    color: 'info.fg',
   },
   success: {
-    bg: 'success.extralight', // #E9FBE8
-    borderColor: 'success.lighter', // #BDF3B9
-    color: 'success.dark', // #147D0D
+    bg: 'success.bg',
+    borderColor: 'success.border',
+    color: 'success.fg',
   },
   warning: {
-    bg: 'warning.extralight', // #FBF6E8
-    borderColor: 'warning.lighter', // #F3E4B9
-    color: 'warning.dark', // #7D610D
+    bg: 'warning.bg',
+    borderColor: 'warning.border',
+    color: 'warning.fg',
   },
   danger: {
-    bg: 'danger.extralight', // #FBE8E9
-    borderColor: 'danger.lighter', // #F3B9BD
-    color: 'danger.dark', // #7D0D14
+    bg: 'danger.bg',
+    borderColor: 'danger.border',
+    color: 'danger.fg',
+  },
+  neutral: {
+    bg: 'secondary.surface',
+    borderColor: 'secondary.border',
+    color: 'fg.default',
   },
 };
 
 export const accentStyles: Record<VariantType, BoxProps['_before']> = {
   info: {
-    bg: 'primary.main',
+    bg: 'info.solid',
   },
   success: {
-    bg: 'success.main',
+    bg: 'success.solid',
   },
   warning: {
-    bg: 'warning.main',
+    bg: 'warning.solid',
   },
   danger: {
-    bg: 'danger.dark',
+    bg: 'danger.solid',
+  },
+  neutral: {
+    bg: 'primary.main',
   },
 };
 
@@ -55,24 +66,28 @@ export const iconConfig: Record<
   VariantType,
   { Icon: React.ComponentType<IconProps>; color: string }
 > = {
-  info: { Icon: LuInfo, color: 'primary.main' },
-  success: { Icon: IoIosCheckmarkCircle, color: 'success.main' },
-  warning: { Icon: IoWarning, color: 'warning.main' },
-  danger: { Icon: MdError, color: 'danger.main' },
+  info: { Icon: LuInfo, color: 'info.fg' },
+  success: { Icon: IoIosCheckmarkCircle, color: 'success.fg' },
+  warning: { Icon: IoWarning, color: 'warning.fg' },
+  danger: { Icon: MdError, color: 'danger.fg' },
+  neutral: { Icon: LuInfo, color: 'fg.default' },
 };
 
 export const textStyles: Record<VariantType, TypographyProps> = {
   info: {
-    color: 'primary.dark',
+    color: 'info.fg',
   },
   success: {
-    color: 'success.dark',
+    color: 'success.fg',
   },
   warning: {
-    color: 'warning.dark',
+    color: 'warning.fg',
   },
   danger: {
-    color: 'danger.dark',
+    color: 'danger.fg',
+  },
+  neutral: {
+    color: 'fg.default',
   },
 };
 

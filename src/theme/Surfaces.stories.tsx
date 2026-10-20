@@ -30,11 +30,11 @@ import { H4, Subtext, Text } from '../components/Typography';
  * | token | light | role |
  * | --- | --- | --- |
  * | `bg.surface` | `white` | cards / elevated surfaces |
- * | `bg.sunken` | `gray.50` | primary page wash for list / overview pages |
- * | `bg.canvas` | `gray.0` | navigation chrome |
+ * | `bg.sunken` | `neutral.1` | primary page wash for list / overview pages |
+ * | `bg.canvas` | `white` | navigation chrome |
  *
  * The trap: several component fills also live in the lightest grays — `bg.subtle`
- * is `gray.50` (**identical to `bg.sunken`**) and `bg.muted` is `gray.100`
+ * is `neutral.1` (**identical to `bg.sunken`**) and `bg.muted` is `neutral.2`
  * (~1.03:1 against `bg.sunken`). A component that paints a resting surface with
  * those tokens reads fine on a `bg.surface` card but loses its bounds on a
  * `bg.sunken` page. These stories exist to catch exactly that — a control should

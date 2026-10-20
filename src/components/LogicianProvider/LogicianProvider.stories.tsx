@@ -52,22 +52,20 @@ export const Default: Story = {
         {/* Border radius showcase */}
         <Box>
           <Button
-            colorPalette="primary"
-            variant="soft"
+            variant="subtle"
             mr={4}
             borderRadius="md"
           >
             Medium Radius (8px)
           </Button>
           <Button
-            colorPalette="secondary"
-            variant="soft"
+            variant="subtle"
             mr={4}
             borderRadius="lg"
           >
             Large Radius (12px)
           </Button>
-          <Button colorPalette="primary" variant="outline" borderRadius="xl">
+          <Button variant="secondary" borderRadius="xl">
             XL Radius (32px)
           </Button>
         </Box>
@@ -226,22 +224,20 @@ export const WithCustomConfig: Story = {
           {/* Border radius showcase */}
           <Box>
             <Button
-              colorPalette="primary"
-              variant="soft"
+              variant="subtle"
               mr={4}
               borderRadius="md"
             >
               Medium Radius (4px)
             </Button>
             <Button
-              colorPalette="secondary"
-              variant="soft"
+              variant="subtle"
               mr={4}
               borderRadius="lg"
             >
               Large Radius (20px)
             </Button>
-            <Button colorPalette="primary" variant="outline" borderRadius="xl">
+            <Button variant="secondary" borderRadius="xl">
               XL Radius (50px)
             </Button>
           </Box>

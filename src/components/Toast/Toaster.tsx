@@ -71,15 +71,20 @@ export const Toaster = () => (
           (toast.action
             ? { label: toast.action.label, onClick: () => {} }
             : undefined);
+        // `useToast` carries the real status in `meta.status` because Zag's
+        // own `type` is required and does not know `neutral` — see the note
+        // in `useToast.tsx`. A plain `toaster.create({ type })` (no `meta`)
+        // still renders correctly off `toast.type`.
+        const status = toast.meta?.status ?? toast.type;
 
         return (
           <Toast
             title={toast.title}
             description={toast.description}
-            status={toast.type}
+            status={status}
             onClose={onClose}
             action={action}
-            {...toastStyles[toast.type as keyof typeof toastStyles]}
+            {...toastStyles[status as keyof typeof toastStyles]}
             {...customStyles}
           />
         );

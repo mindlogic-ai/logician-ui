@@ -181,8 +181,8 @@ export function LabeledEdge({
                   aria-label={translate('workflow_edge_delete') as string}
                   onClick={onDelete}
                   size="xs"
-                  variant="outline"
-                  colorPalette="danger"
+                  variant="secondary"
+                  isDestructive
                   bg="bg.surface"
                   borderRadius="full"
                 >

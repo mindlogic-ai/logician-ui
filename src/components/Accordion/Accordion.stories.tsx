@@ -1,5 +1,5 @@
-import { Meta, StoryObj } from '@storybook/react';
 import { Box, Flex, Text } from '@chakra-ui/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { Accordion, AccordionButton, AccordionItem, AccordionPanel } from '.';
 
@@ -172,26 +172,30 @@ export const WithCustomContent: Story = {
   },
   render: (args) => {
     return (
-      <Accordion {...args} borderColor="red.500">
+      <Accordion {...args} borderColor="danger.border">
         <AccordionItem value="errors">
-          <AccordionButton bg="red.50" p={3} borderBottomColor="red.500">
+          <AccordionButton
+            bg="danger.bg"
+            p={3}
+            borderBottomColor="danger.border"
+          >
             <Flex align="center" gap={2}>
               <Box
                 as="span"
                 fontSize="xl"
-                color="red.500"
+                color="danger.fg"
                 aria-label="Error icon"
               >
                 ⚠️
               </Box>
-              <Text fontWeight="bold" color="gray.800">
+              <Text fontWeight="bold" color="fg.default">
                 Failed Upload Rows (3 errors)
               </Text>
             </Flex>
           </AccordionButton>
           <AccordionPanel p={4}>
-            <Box bg="gray.50" p={4} borderRadius="md">
-              <Text fontSize="sm" color="gray.700" mb={2}>
+            <Box bg="bg.subtle" p={4} borderRadius="md">
+              <Text fontSize="sm" color="fg.muted" mb={2}>
                 This heavy content is lazy-loaded only when expanded
               </Text>
               <Box as="ul" pl={4}>
@@ -203,24 +207,28 @@ export const WithCustomContent: Story = {
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem value="warnings">
-          <AccordionButton bg="yellow.50" p={3} borderBottomColor="yellow.500">
+          <AccordionButton
+            bg="warning.bg"
+            p={3}
+            borderBottomColor="warning.border"
+          >
             <Flex align="center" gap={2}>
               <Box
                 as="span"
                 fontSize="xl"
-                color="yellow.600"
+                color="warning.fg"
                 aria-label="Warning icon"
               >
                 ⚡
               </Box>
-              <Text fontWeight="bold" color="gray.800">
+              <Text fontWeight="bold" color="fg.default">
                 Warning Messages (2 warnings)
               </Text>
             </Flex>
           </AccordionButton>
           <AccordionPanel p={4}>
-            <Box bg="gray.50" p={4} borderRadius="md">
-              <Text fontSize="sm" color="gray.700">
+            <Box bg="bg.subtle" p={4} borderRadius="md">
+              <Text fontSize="sm" color="fg.muted">
                 Content is mounted when expanded and unmounted when collapsed
                 (check React DevTools)
               </Text>

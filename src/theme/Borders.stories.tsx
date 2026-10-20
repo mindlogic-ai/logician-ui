@@ -26,9 +26,9 @@ import { H3, H4, Subtext, Text } from '../components/Typography';
  * The roles resolve to:
  * | role | light | intended use |
  * | --- | --- | --- |
- * | `border.subtle` | `gray.200` | low-emphasis dividers, row separators |
- * | `border.default` | `gray.300` | standard borders: inputs, cards, panels |
- * | `border.strong` | `gray.500` | high-emphasis: hover/focus on neutral controls |
+ * | `border.subtle` | `neutral.4` | low-emphasis dividers, row separators |
+ * | `border.default` | `neutral.5` | standard borders: cards, panels (inputs use `border.control`) |
+ * | `border.strong` | `neutral.6` | high-emphasis: hover/focus on neutral controls |
  *
  * These stories are intentionally not bound to a single component — they exist
  * to validate that borders read as a coherent system across a page rather than
@@ -60,9 +60,9 @@ const PLAN_OPTIONS = [
 export const RoleReference: Story = {
   render: () => {
     const roles = [
-      { token: 'border.subtle', light: 'gray.200', use: 'dividers' },
-      { token: 'border.default', light: 'gray.300', use: 'inputs, cards' },
-      { token: 'border.strong', light: 'gray.500', use: 'hover / focus' },
+      { token: 'border.subtle', light: 'neutral.4', use: 'dividers' },
+      { token: 'border.default', light: 'neutral.5', use: 'inputs, cards' },
+      { token: 'border.strong', light: 'neutral.6', use: 'hover / focus' },
     ] as const;
 
     const Swatches = ({ surface }: { surface: 'bg.surface' | 'bg.canvas' }) => (
@@ -207,10 +207,10 @@ export const SettingsForm: Story = {
 
               {/* Footer */}
               <HStack justify="flex-end" gap={3} p={6}>
-                <Button colorPalette="neutral" variant="outline">
+                <Button variant="secondary">
                   Cancel
                 </Button>
-                <Button colorPalette="primary" variant="solid">
+                <Button variant="primary">
                   Save changes
                 </Button>
               </HStack>
@@ -290,7 +290,7 @@ export const Dashboard: Story = {
               borderColor="border.subtle"
             >
               <Text fontWeight="600">Recent</Text>
-              <Button colorPalette="neutral" variant="ghost" size="sm">
+              <Button variant="ghost" size="sm">
                 View all
               </Button>
             </HStack>

@@ -8,28 +8,31 @@
  * update these values to match.
  */
 
+import { disabledControl } from '@/utils/disabledControl';
+
 const focusVars = {
   '--focus-color': 'var(--chakra-colors-primary-main)',
-  '--error-color': 'var(--chakra-colors-danger-main)',
+  '--error-color': 'var(--chakra-colors-danger-solid)',
 };
 
 const fieldBase = {
   ...focusVars,
   bg: 'bg.surface',
   color: 'fg.default',
-  borderColor: 'border.default',
-  _hover: { borderColor: 'primary.lighter' },
-  _focus: { borderColor: 'primary.main' },
+  borderColor: 'border.control',
+  _hover: { borderColor: 'fg.icon' },
+  _focus: {
+    borderColor: 'primary.main',
+    boxShadow: '0 0 0 1px var(--chakra-colors-primary-main)',
+  },
   _invalid: {
-    borderColor: 'danger.main',
-    _hover: { borderColor: 'danger.main' },
-    _focus: { borderColor: 'danger.main' },
+    borderColor: 'danger.solid',
+    _hover: { borderColor: 'danger.solid' },
+    _focus: { borderColor: 'danger.solid' },
   },
   _disabled: {
-    opacity: 1,
+    ...disabledControl,
     cursor: 'not-allowed',
-    bg: 'bg.subtle',
-    color: { base: 'gray.1000', _dark: 'gray.400' },
     fontWeight: 'semibold',
   },
 };
@@ -38,7 +41,10 @@ const fieldBase = {
 export const triggerStyles = {
   ...fieldBase,
   cursor: 'pointer',
-  _open: { borderColor: 'primary.main' },
+  _open: {
+    borderColor: 'primary.main',
+    boxShadow: '0 0 0 1px var(--chakra-colors-primary-main)',
+  },
 };
 
 /** Combobox text input — the typeable control. */
@@ -61,10 +67,10 @@ export const itemStyles = {
   borderRadius: '4px',
   cursor: 'pointer',
   color: 'fg.default',
-  _highlighted: { bg: 'bg.subtle' },
+  _highlighted: { bg: 'primary.wash' },
   _checked: {
-    bg: 'primary.extralight',
-    color: 'primary.dark',
+    bg: 'primary.selected',
+    color: 'fg.default',
     fontWeight: 'bold',
   },
   _disabled: { color: 'fg.subtle', cursor: 'not-allowed' },

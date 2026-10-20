@@ -58,7 +58,7 @@ export function IssueList({
           py={1.5}
           align="center"
           cursor={onIssueClick ? 'pointer' : undefined}
-          _hover={onIssueClick ? { bg: 'slate.50' } : undefined}
+          _hover={onIssueClick ? { bg: 'primary.wash' } : undefined}
           onClick={
             onIssueClick
               ? (e) => {
@@ -72,9 +72,9 @@ export function IssueList({
             w="3px"
             flexShrink={0}
             borderRadius="full"
-            bg={severityColorToken(issue.severity)}
+            bg={severityColorToken(issue.severity, 'solid')}
           />
-          <Text fontSize="sm" color="slate.1200">
+          <Text fontSize="sm" color="fg.default">
             {resolveMessage ? resolveMessage(issue) : issue.message}
           </Text>
         </Flex>

@@ -1,7 +1,7 @@
 import { BoxProps } from '@chakra-ui/react';
 
 export interface Segment {
-  /** Color value - supports hex colors, CSS color names, and Chakra UI color tokens (e.g., 'primary.500', 'red.400') */
+  /** Color value - supports hex colors, CSS color names, and Chakra UI color tokens (e.g., 'primary.main', 'danger.solid') */
   color: string;
   value: number;
 }

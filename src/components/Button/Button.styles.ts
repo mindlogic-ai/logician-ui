@@ -1,6 +1,13 @@
 import { ButtonProps as ChakraButtonProps } from '@chakra-ui/react';
 
-import { ButtonColorPalette, ButtonVariant } from './Button.types';
+import { disabledControl, disabledText } from '@/utils/disabledControl';
+
+import { resolveLegacyButtonVariant } from './Button.legacy';
+import {
+  ButtonColorPalette,
+  ButtonVariant,
+  LegacyButtonVariant,
+} from './Button.types';
 
 type StyleProps = Partial<ChakraButtonProps>;
 
@@ -59,412 +66,137 @@ export const buttonTransition = [
 ].join(', ');
 
 /**
- * Two-dimensional Button styles using the Golden Ratio color system.
- *
- * Combines `colorPalette` (semantic color) with `variant` (visual appearance)
- * to create a flexible, consistent button styling system.
- *
- * ## Color Palettes:
- * - `primary`: Blue - main brand actions
- * - `secondary`: Violet - accent actions
- * - `danger`: Rose - destructive actions
- * - `success`: Green - positive actions
- * - `warning`: Gold - caution actions
- * - `neutral`: Gray - low-emphasis actions
- *
- * ## Variants:
- * - `solid`: Filled background (most prominent)
- * - `soft`: Light tinted background (subtle)
- * - `outline`: Border only (medium emphasis)
- * - `ghost`: No background or border (lowest emphasis)
+ * The pressed scale every variant shares. Contact feedback, not colour — see
+ * `buttonTransition` for why it is `scale` and not `transform`.
  */
-export const buttonColorPaletteStyles: Record<
-  ButtonColorPalette,
-  Record<ButtonVariant, StyleProps>
-> = {
-  /**
-   * Primary (Blue) color scheme
-   */
+const PRESSED = '0.97';
+
+/**
+ * Button styles per role (5.0 BAZE palette).
+ *
+ * Token-to-state assignments follow the prototype gallery (`.btn.*`). Every
+ * variant owns `_hover`, `_active` (colour + the shared `scale` press) and
+ * `_disabled`. Disabled is a fixed colour pair (`disabledControl`, or
+ * `disabledText` for the fill-less ghost) — never opacity — and Chakra's
+ * `_hover` / `_active` conditions already exclude `:disabled`, so a disabled
+ * button does not change on hover or press.
+ *
+ * ## The `action` icon
+ * `action` is the black "run" button whose icon is coral. The coral is applied
+ * by a `& > svg` rule (`css` key below), i.e. to every icon that is a direct
+ * child of the button — the leading icon in practice, since Button has no
+ * `leftIcon` prop. Text stays `action.fg`. Disabled turns the icon to
+ * `disabled.fg` with the label. An icon wrapped in another element is not
+ * recoloured; give it `color="action.iconOnSolid"` yourself if you need that.
+ */
+export const buttonVariantStyles: Record<ButtonVariant, StyleProps> = {
   primary: {
-    solid: {
-      borderColor: 'blue.500',
-      bgColor: 'blue.500',
-      color: 'white',
-      _hover: {
-        borderColor: 'blue.600',
-        bgColor: 'blue.600',
-      },
-      _active: {
-        bgColor: 'blue.700',
-        scale: '0.97',
-      },
+    borderColor: 'primary.main',
+    bgColor: 'primary.main',
+    color: 'fg.onPrimary',
+    _hover: { borderColor: 'primary.hover', bgColor: 'primary.hover' },
+    _active: {
+      borderColor: 'primary.active',
+      bgColor: 'primary.active',
+      scale: PRESSED,
     },
-    soft: {
-      // Same-hue hairline so soft reads as a defined control on white, not a
-      // floating fill. `lighter` sits well below `outline`'s `.main` border, so
-      // soft stays the quieter of the two bordered variants; it also equals the
-      // hover/active fill, so the border melts into the fill on interaction.
-      borderColor: 'primary.lighter',
-      bgColor: 'primary.extralight', // #E8EEFB
-      color: 'primary.dark', // #0D317D
-      _hover: {
-        borderColor: 'primary.lighter',
-        bgColor: 'primary.lighter', // #B9CBF3
-      },
-      _active: {
-        bgColor: 'primary.lighter', // #B9CBF3 — same as hover, scale provides pressed feedback
-        scale: '0.97',
-      },
-    },
-    outline: {
-      borderColor: 'primary.main',
-      bgColor: 'transparent',
-      color: 'primary.main',
-      _hover: {
-        bgColor: 'primary.extralight', // #E8EEFB
-      },
-      _active: {
-        bgColor: 'primary.lighter', // #B9CBF3
-        scale: '0.97',
-      },
-    },
-    ghost: {
-      borderColor: 'transparent',
-      bgColor: 'transparent',
-      color: 'primary.main',
-      _hover: {
-        bgColor: 'primary.extralight', // #E8EEFB
-      },
-      _active: {
-        bgColor: 'primary.lighter', // #B9CBF3
-        scale: '0.97',
+    _disabled: { ...disabledControl },
+  },
+  action: {
+    borderColor: 'action.border',
+    bgColor: 'action.bg',
+    color: 'action.fg',
+    _hover: { bgColor: 'action.bgHover' },
+    _active: { bgColor: 'action.bgActive', scale: PRESSED },
+    _disabled: { ...disabledControl },
+    css: {
+      '& > svg': { color: 'action.iconOnSolid' },
+      '&:is(:disabled, [disabled], [data-disabled]) > svg': {
+        color: 'disabled.fg',
       },
     },
   },
-
-  /**
-   * Secondary (Violet) color scheme
-   */
   secondary: {
-    solid: {
-      borderColor: 'violet.500',
-      bgColor: 'violet.500',
-      color: 'white',
-      _hover: {
-        borderColor: 'violet.600',
-        bgColor: 'violet.600',
-      },
-      _active: {
-        bgColor: 'violet.700',
-        scale: '0.97',
-      },
-    },
-    soft: {
-      borderColor: 'secondary.lighter',
-      bgColor: 'secondary.extralight', // #F4E8FB
-      color: 'secondary.dark', // #570D7D
-      _hover: {
-        borderColor: 'secondary.lighter',
-        bgColor: 'secondary.lighter', // #DEB9F3
-      },
-      _active: {
-        bgColor: 'secondary.lighter', // #DEB9F3 — same as hover, scale provides pressed feedback
-        scale: '0.97',
-      },
-    },
-    outline: {
-      borderColor: 'secondary.main',
-      bgColor: 'transparent',
-      color: 'secondary.main',
-      _hover: {
-        bgColor: 'secondary.extralight', // #F4E8FB
-      },
-      _active: {
-        bgColor: 'secondary.lighter', // #DEB9F3
-        scale: '0.97',
-      },
-    },
-    ghost: {
-      borderColor: 'transparent',
-      bgColor: 'transparent',
-      color: 'secondary.main',
-      _hover: {
-        bgColor: 'secondary.extralight', // #F4E8FB
-      },
-      _active: {
-        bgColor: 'secondary.lighter', // #DEB9F3
-        scale: '0.97',
-      },
-    },
+    borderColor: 'border.default',
+    bgColor: 'bg.surface',
+    color: 'fg.default',
+    _hover: { bgColor: 'primary.wash' },
+    _active: { bgColor: 'primary.washActive', scale: PRESSED },
+    _disabled: { ...disabledControl },
   },
-
-  /**
-   * Danger (Rose) color scheme
-   */
+  subtle: {
+    borderColor: 'transparent',
+    bgColor: 'primary.wash',
+    color: 'fg.default',
+    _hover: { bgColor: 'primary.washActive' },
+    _active: { bgColor: 'primary.selected', scale: PRESSED },
+    _disabled: { ...disabledControl },
+  },
+  ghost: {
+    borderColor: 'transparent',
+    bgColor: 'transparent',
+    color: 'fg.default',
+    _hover: { bgColor: 'primary.wash' },
+    _active: { bgColor: 'primary.washActive', scale: PRESSED },
+    _disabled: { ...disabledText },
+  },
   danger: {
-    solid: {
-      borderColor: 'rose.500',
-      bgColor: 'rose.500',
-      color: 'white',
-      _hover: {
-        borderColor: 'rose.600',
-        bgColor: 'rose.600',
-      },
-      _active: {
-        bgColor: 'rose.700',
-        scale: '0.97',
-      },
+    borderColor: 'danger.solid',
+    bgColor: 'danger.solid',
+    color: 'danger.onSolid',
+    _hover: { borderColor: 'danger.solidHover', bgColor: 'danger.solidHover' },
+    _active: {
+      borderColor: 'danger.solidActive',
+      bgColor: 'danger.solidActive',
+      scale: PRESSED,
     },
-    soft: {
-      borderColor: 'danger.lighter',
-      bgColor: 'danger.extralight', // #FBE8E9
-      color: 'danger.dark', // #7D0D14
-      _hover: {
-        borderColor: 'danger.lighter',
-        bgColor: 'danger.lighter', // #F3B9BD
-      },
-      _active: {
-        bgColor: 'danger.lighter', // #F3B9BD — same as hover, scale provides pressed feedback
-        scale: '0.97',
-      },
-    },
-    outline: {
-      borderColor: 'danger.main',
-      bgColor: 'transparent',
-      color: 'danger.main',
-      _hover: {
-        bgColor: 'danger.extralight', // #FBE8E9
-      },
-      _active: {
-        bgColor: 'danger.lighter', // #F3B9BD
-        scale: '0.97',
-      },
-    },
-    ghost: {
-      borderColor: 'transparent',
-      bgColor: 'transparent',
-      color: 'danger.main',
-      _hover: {
-        bgColor: 'danger.extralight', // #FBE8E9
-      },
-      _active: {
-        bgColor: 'danger.lighter', // #F3B9BD
-        scale: '0.97',
-      },
-    },
-  },
-
-  /**
-   * Success (Green) color scheme
-   */
-  success: {
-    solid: {
-      borderColor: 'green.600',
-      bgColor: 'green.600',
-      color: 'white',
-      _hover: {
-        borderColor: 'green.700',
-        bgColor: 'green.700',
-      },
-      _active: {
-        bgColor: 'green.800',
-        scale: '0.97',
-      },
-    },
-    soft: {
-      borderColor: 'success.lighter',
-      bgColor: 'success.extralight', // #E9FBE8
-      color: 'success.dark', // #147D0D
-      _hover: {
-        borderColor: 'success.lighter',
-        bgColor: 'success.lighter', // #BDF3B9
-      },
-      _active: {
-        bgColor: 'success.lighter', // #BDF3B9 — same as hover, scale provides pressed feedback
-        scale: '0.97',
-      },
-    },
-    outline: {
-      borderColor: 'success.main',
-      bgColor: 'transparent',
-      color: 'success.main',
-      _hover: {
-        bgColor: 'success.extralight', // #E9FBE8
-      },
-      _active: {
-        bgColor: 'success.lighter', // #BDF3B9
-        scale: '0.97',
-      },
-    },
-    ghost: {
-      borderColor: 'transparent',
-      bgColor: 'transparent',
-      color: 'success.main',
-      _hover: {
-        bgColor: 'success.extralight', // #E9FBE8
-      },
-      _active: {
-        bgColor: 'success.lighter', // #BDF3B9
-        scale: '0.97',
-      },
-    },
-  },
-
-  /**
-   * Warning (Gold) color scheme
-   */
-  warning: {
-    solid: {
-      borderColor: 'gold.500',
-      bgColor: 'gold.500',
-      // Dark text on gold (white/gold was 2.39:1 in BOTH modes). gold.900 on
-      // gold.500 = 6.73:1; active stays gold.600 (4.42:1) rather than gold.700
-      // (2.75:1) so dark text keeps contrast on press.
-      color: 'gold.900',
-      _hover: {
-        borderColor: 'gold.600',
-        bgColor: 'gold.600',
-      },
-      _active: {
-        bgColor: 'gold.600',
-        scale: '0.97',
-      },
-    },
-    soft: {
-      borderColor: 'warning.lighter',
-      bgColor: 'warning.extralight', // #FBF6E8
-      color: 'warning.dark', // #7D610D
-      _hover: {
-        borderColor: 'warning.lighter',
-        bgColor: 'warning.lighter', // #F3E4B9
-      },
-      _active: {
-        bgColor: 'warning.lighter', // #F3E4B9 — same as hover, scale provides pressed feedback
-        scale: '0.97',
-      },
-    },
-    outline: {
-      borderColor: 'warning.main',
-      bgColor: 'transparent',
-      color: 'warning.dark', // Use dark for better contrast
-      _hover: {
-        bgColor: 'warning.extralight', // #FBF6E8
-      },
-      _active: {
-        bgColor: 'warning.lighter', // #F3E4B9
-        scale: '0.97',
-      },
-    },
-    ghost: {
-      borderColor: 'transparent',
-      bgColor: 'transparent',
-      color: 'warning.dark', // Use dark for better contrast
-      _hover: {
-        bgColor: 'warning.extralight', // #FBF6E8
-      },
-      _active: {
-        bgColor: 'warning.lighter', // #F3E4B9
-        scale: '0.97',
-      },
-    },
-  },
-
-  /**
-   * Neutral (Gray) color scheme
-   */
-  neutral: {
-    /**
-     * The INK action — the one high-emphasis fill in the system with no hue.
-     *
-     * Was `gray.700` under a white label, which failed AA in **both** modes and
-     * failed worse in the one nobody screenshots: white on `#737D96` measures
-     * **4.12:1** in light, and the semantic gray scale inverts, so in dark the
-     * same token resolves to `grayDark.fg700` `#8D919D` and the label lands at
-     * **3.15:1**. This was the only palette x variant combination in the system
-     * below the 4.5:1 text gate.
-     *
-     * "One step darker" does not fix it — `gray.800` is 5.32:1 light but
-     * **3.08:1** dark, i.e. worse, because darkening the light arm lightens the
-     * dark one. A neutral fill has to INVERT, not shift, which is exactly what
-     * `bg.inverse` / `fg.inverse` already do: ink under a near-white label on a
-     * light page, brand paper under an ink label on a dark one. Measured
-     * **15.11:1** and **15.88:1**, with the fill itself 15.49:1 / 16.36:1 clear
-     * of its canvas so it still reads as a control.
-     *
-     * `gray.1200` / `gray.1100` for hover and active for the same reason: both
-     * step AWAY from the resting fill toward the page in whichever mode is
-     * live, because they invert too. Labels stay 10.8:1 or better throughout.
-     */
-    solid: {
-      borderColor: 'bg.inverse',
-      bgColor: 'bg.inverse',
-      color: 'fg.inverse',
-      _hover: {
-        borderColor: 'gray.1200',
-        bgColor: 'gray.1200',
-      },
-      _active: {
-        bgColor: 'gray.1100',
-        scale: '0.97',
-      },
-    },
-    soft: {
-      // `border.default` (not a gray tint) so the neutral hairline stays visible
-      // in dark mode, where `border.subtle` collapses into the fill.
-      borderColor: 'border.default', // gray.300 / gray.1100 (_dark)
-      // Neutral fills flip with the mode (light values preserved: bg.subtle →
-      // gray.50, bg.muted → gray.100). Without this the surface stayed light in
-      // dark mode while the fg.default text flipped to light = invisible.
-      bgColor: 'bg.subtle', // gray.50 / gray.1300 (_dark)
-      color: 'fg.default',
-      _hover: {
-        borderColor: 'border.default',
-        bgColor: 'bg.muted', // gray.100 / gray.1200 (_dark)
-      },
-      _active: {
-        bgColor: 'bg.muted', // matches hover; scale provides pressed feedback
-        scale: '0.97',
-      },
-    },
-    outline: {
-      borderColor: 'border.default', // gray.300 / gray.1100 (_dark)
-      bgColor: 'transparent',
-      color: 'fg.default',
-      _hover: {
-        bgColor: 'bg.subtle', // gray.50 / gray.1300 (_dark)
-      },
-      _active: {
-        bgColor: 'bg.muted', // gray.100 / gray.1200 (_dark)
-        scale: '0.97',
-      },
-    },
-    ghost: {
-      borderColor: 'transparent',
-      bgColor: 'transparent',
-      color: 'fg.default',
-      _hover: {
-        bgColor: 'bg.subtle', // gray.50 / gray.1300 (_dark)
-      },
-      _active: {
-        bgColor: 'bg.muted', // gray.100 / gray.1200 (_dark)
-        scale: '0.97',
-      },
-    },
+    _disabled: { ...disabledControl },
   },
 };
 
+/** Variants on which `isDestructive` recolours the label. */
+export const destructiveCapableVariants: readonly ButtonVariant[] = [
+  'secondary',
+  'subtle',
+  'ghost',
+];
+
 /**
- * Get button styles for a given colorPalette and variant combination.
+ * Get the styles for a variant, optionally destructive.
+ *
+ * `isDestructive` swaps only the text colour to `danger.fg` (prototype
+ * `.btn.destr`); fill, border and states stay the variant's. Disabled still
+ * wins, because `_disabled` sets its own colour.
  */
 export const getButtonStyles = (
-  colorPalette: ButtonColorPalette = 'primary',
-  variant: ButtonVariant = 'solid'
+  variant: ButtonVariant = 'subtle',
+  isDestructive = false
 ): StyleProps => {
-  return buttonColorPaletteStyles[colorPalette][variant];
+  const base = buttonVariantStyles[variant] ?? buttonVariantStyles.subtle;
+  if (!isDestructive || !destructiveCapableVariants.includes(variant)) {
+    return base;
+  }
+  return {
+    ...base,
+    color: 'danger.fg',
+    _hover: { ...(base._hover as object), color: 'danger.fg' },
+  };
 };
 
 /**
- * List of all available color palettes.
+ * List of all available variants.
+ */
+export const buttonVariants: ButtonVariant[] = [
+  'primary',
+  'action',
+  'secondary',
+  'subtle',
+  'ghost',
+  'danger',
+];
+
+/**
+ * @deprecated 5.0 removed `colorPalette`. Kept so imports keep resolving.
  */
 export const buttonColorPalettes: ButtonColorPalette[] = [
   'primary',
@@ -475,22 +207,38 @@ export const buttonColorPalettes: ButtonColorPalette[] = [
   'neutral',
 ];
 
-/**
- * @deprecated Use buttonColorPalettes instead. Will be removed in next major version.
- */
-export const buttonColorSchemes = buttonColorPalettes;
-
-/**
- * @deprecated Use buttonColorPaletteStyles instead. Will be removed in next major version.
- */
-export const buttonColorSchemeStyles = buttonColorPaletteStyles;
-
-/**
- * List of all available variants.
- */
-export const buttonVariants: ButtonVariant[] = [
+const legacyVariants: LegacyButtonVariant[] = [
   'solid',
   'soft',
   'outline',
   'ghost',
 ];
+
+/**
+ * @deprecated 4.x `colorPalette × variant` grid, now *derived* from
+ * `buttonVariantStyles` through the same codemod table the runtime uses for
+ * old props (e.g. `neutral.solid` → `primary`, `danger.outline` →
+ * `secondary` + destructive). Use `buttonVariantStyles[variant]` /
+ * `getButtonStyles(variant, isDestructive)` instead. Removed in 6.0.
+ */
+export const buttonColorPaletteStyles = Object.fromEntries(
+  buttonColorPalettes.map((palette) => [
+    palette,
+    Object.fromEntries(
+      legacyVariants.map((variant) => {
+        const mapped = resolveLegacyButtonVariant('button', palette, variant);
+        return [variant, getButtonStyles(mapped.variant, mapped.isDestructive)];
+      })
+    ),
+  ])
+) as Record<ButtonColorPalette, Record<LegacyButtonVariant, StyleProps>>;
+
+/**
+ * @deprecated Use buttonVariants instead. Will be removed in next major version.
+ */
+export const buttonColorSchemes = buttonColorPalettes;
+
+/**
+ * @deprecated Use buttonVariantStyles instead. Will be removed in next major version.
+ */
+export const buttonColorSchemeStyles = buttonColorPaletteStyles;

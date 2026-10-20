@@ -19,7 +19,7 @@ import createIcon, { CreatedIcon } from './createIcon';
  *
  * // Usage
  * <icons.Home boxSize="lg" />
- * <icons.User color="blue.500" />
+ * <icons.User color="fg.icon" />
  * <icons.Custom boxSize="md" />
  * ```
  */

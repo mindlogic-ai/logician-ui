@@ -20,7 +20,7 @@ export const BreadcrumbLink = forwardRef(
   ) => {
     return (
       <Breadcrumb.Link
-        color="primary.dark"
+        color="fg.default"
         _hover={{
           textDecoration: 'underline',
         }}

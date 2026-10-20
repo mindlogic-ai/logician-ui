@@ -1,26 +1,30 @@
 import { forwardRef } from 'react';
-import { Button as ChakraButton } from '@chakra-ui/react';
+import { Button as ChakraButton, SystemStyleObject } from '@chakra-ui/react';
 
 import { focusRing } from '@/utils/focusRing';
 import { mergeCss } from '@/utils/mergeCss';
 
 import { polymorphic } from '../../types/polymorphic';
+import {
+  isLegacyButtonProps,
+  resolveLegacyButtonVariant,
+  warnLegacyButtonProps,
+} from './Button.legacy';
 import { buttonTransition, getButtonStyles } from './Button.styles';
-import { ButtonOwnProps, ButtonProps } from './Button.types';
+import { ButtonOwnProps, ButtonProps, ButtonVariant } from './Button.types';
 
 /**
- * Button component with two-dimensional variant system.
- *
- * Combines `colorPalette` (semantic color) with `variant` (visual appearance)
- * for flexible, consistent button styling.
+ * Button — one `variant` role per button (5.0 BAZE palette).
  *
  * @example
  * ```tsx
- * <Button colorPalette="primary" variant="soft">Submit</Button>
- * <Button colorPalette="danger" variant="solid">Delete</Button>
- * <Button colorPalette="secondary" variant="outline">Cancel</Button>
- * <Button colorPalette="neutral" variant="ghost">Close</Button>
- * <Button colorPalette="primary" variant="solid" lift>Get started</Button>
+ * <Button variant="primary">저장</Button>
+ * <Button variant="secondary">취소</Button>
+ * <Button>더 보기</Button> // subtle
+ * <Button variant="ghost" isDestructive>삭제</Button>
+ * <Button variant="danger">영구 삭제</Button>
+ * <Button variant="action"><Sparkles />실행</Button> // coral icon
+ * <Button variant="primary" lift>Get started</Button>
  *
  * // `as` carries the element's own props (see Button.types.ts):
  * <Button as="a" href="/docs" target="_blank">문서</Button>
@@ -29,21 +33,39 @@ import { ButtonOwnProps, ButtonProps } from './Button.types';
 const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
-      colorPalette,
-      variant = 'soft',
+      variant: variantProp,
+      isDestructive: isDestructiveProp = false,
       size,
       lift,
       children,
       _hover: hoverProp,
       _active: activeProp,
       _disabled: disabledProp,
-      ...rest
+      css: cssProp,
+      ...restWithLegacy
     },
     ref
   ) => {
-    const palette = colorPalette ?? 'primary';
+    // 4.x callers (untyped JS, `as any`) can still hand us `colorPalette` and
+    // an old variant name. Strip it so it never reaches Chakra's own recipe,
+    // and map the pair onto a 5.0 role — see `Button.legacy.ts`.
+    const { colorPalette: legacyPalette, ...rest } =
+      restWithLegacy as typeof restWithLegacy & { colorPalette?: unknown };
 
-    const base = getButtonStyles(palette, variant);
+    let variant: ButtonVariant = variantProp ?? 'subtle';
+    let isDestructive = isDestructiveProp;
+    if (isLegacyButtonProps('button', legacyPalette, variantProp)) {
+      const resolved = resolveLegacyButtonVariant(
+        'button',
+        legacyPalette,
+        variantProp
+      );
+      warnLegacyButtonProps('Button', legacyPalette, variantProp, resolved);
+      variant = resolved.variant;
+      isDestructive = isDestructive || resolved.isDestructive;
+    }
+
+    const base = getButtonStyles(variant, isDestructive);
 
     // Merged rather than spread after: each variant already owns `_hover` and
     // `_active` for its colours, and replacing either would drop them.
@@ -66,7 +88,12 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
           _active: { ...base._active, translate: '0 0', filter: 'none' },
           // `:hover` still matches a disabled button, so the lift has to be
           // switched off here rather than left to pointer-events.
-          _disabled: { translate: '0 0', filter: 'none' },
+          // Merged so the variant's fixed disabled colours survive.
+          _disabled: {
+            ...(base._disabled as object),
+            translate: '0 0',
+            filter: 'none',
+          },
         }
       : base;
 
@@ -120,7 +147,12 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
         transition={buttonTransition}
         animationStyle="composite"
         ref={ref}
+        data-variant={variant}
+        data-destructive={isDestructive || undefined}
         {...rest}
+        // The `action` icon rule lives in `css` (a nested selector cannot be a
+        // style prop); merged so a call site's `css` adds to it.
+        css={mergeCss(base.css as SystemStyleObject | undefined, cssProp)}
       >
         {children}
       </ChakraButton>

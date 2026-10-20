@@ -10,6 +10,7 @@ import {
 import { Input as ChakraInput, InputGroup } from '@chakra-ui/react';
 
 import { noZoomOnFocus } from '@/theme/formControls';
+import { disabledControl } from '@/utils/disabledControl';
 import { formatNumber } from '@/utils/formatNumber';
 import { mergeCss } from '@/utils/mergeCss';
 
@@ -323,23 +324,26 @@ export const Input = forwardRef(
           bg="bg.surface"
           color="fg.default"
           borderColor={
-            borderColor ?? (invalid ? 'danger.main' : 'border.default')
+            borderColor ?? (invalid ? 'danger.solid' : 'border.control')
           }
           _hover={{
-            borderColor: invalid ? 'danger.main' : 'primary.lighter',
+            borderColor: invalid ? 'danger.solid' : 'fg.icon',
             ..._hover,
           }}
           _focus={{
-            borderColor: invalid ? 'danger.main' : 'primary.main',
+            borderColor: invalid ? 'danger.solid' : 'primary.main',
+            boxShadow: invalid
+              ? 'none'
+              : '0 0 0 1px var(--chakra-colors-primary-main)',
             ..._focus,
           }}
           _invalid={{
-            borderColor: 'danger.main',
+            borderColor: 'danger.solid',
             _hover: {
-              borderColor: 'danger.main',
+              borderColor: 'danger.solid',
             },
             _focus: {
-              borderColor: 'danger.main',
+              borderColor: 'danger.solid',
             },
           }}
           _readOnly={{
@@ -350,10 +354,8 @@ export const Input = forwardRef(
             borderColor: 'border.subtle',
           }}
           _disabled={{
-            opacity: 1,
+            ...disabledControl,
             cursor: 'not-allowed',
-            bg: 'bg.subtle',
-            color: { base: 'gray.1000', _dark: 'gray.400' },
             fontWeight: 'semibold',
           }}
           {...rest}
@@ -362,7 +364,7 @@ export const Input = forwardRef(
             {
               paddingInlineEnd: rightElementWidth,
               '--focus-color': 'var(--chakra-colors-primary-main)',
-              '--error-color': 'var(--chakra-colors-danger-main)',
+              '--error-color': 'var(--chakra-colors-danger-solid)',
             },
             css
           )}

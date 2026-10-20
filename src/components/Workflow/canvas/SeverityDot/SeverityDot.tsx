@@ -8,17 +8,18 @@ import { severityColorToken } from '../issueSeverity';
 interface SeverityDotProps extends BoxProps {
   severity: IssueSeverity;
   /**
-   * Shade of the severity colour. `dark` reads better as a small marker on a
-   * tinted callout background; `main` suits a header dot on white. Defaults to
-   * `main`.
+   * Which half of the status family fills the dot. `fg` reads better as a
+   * small marker on a tinted callout background (it's tuned to work on
+   * `.bg` too); `solid` suits a header dot on a plain surface. Defaults to
+   * `solid`.
    */
-  tone?: 'main' | 'dark';
+  tone?: 'solid' | 'fg';
 }
 
 /** Small round severity marker shared by the issue callout and the issue list. */
 export function SeverityDot({
   severity,
-  tone = 'main',
+  tone = 'solid',
   ...rest
 }: SeverityDotProps) {
   return (

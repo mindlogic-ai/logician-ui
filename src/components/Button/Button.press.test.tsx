@@ -3,7 +3,20 @@ import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { system } from '../../theme';
-import { buttonColorPaletteStyles } from './Button.styles';
+import { iconButtonVariantStyles } from '../IconButton/IconButton.styles';
+import { buttonVariantStyles } from './Button.styles';
+
+const everyVariant = Object.entries({
+  ...Object.fromEntries(
+    Object.entries(buttonVariantStyles).map(([k, v]) => [`Button.${k}`, v])
+  ),
+  ...Object.fromEntries(
+    Object.entries(iconButtonVariantStyles).map(([k, v]) => [
+      `IconButton.${k}`,
+      v,
+    ])
+  ),
+});
 
 /**
  * The press must not travel through `transform`.
@@ -16,26 +29,18 @@ import { buttonColorPaletteStyles } from './Button.styles';
 describe('Button press does not clobber a call-site transform', () => {
   it('no variant presses via transform', () => {
     const offenders: string[] = [];
-    Object.entries(buttonColorPaletteStyles).forEach(([palette, variants]) => {
-      Object.entries(variants).forEach(([variant, style]) => {
-        const active = (style as Record<string, Record<string, unknown>>)
-          ._active;
-        if (active && 'transform' in active)
-          offenders.push(`${palette}.${variant}`);
-      });
+    everyVariant.forEach(([name, style]) => {
+      const active = (style as Record<string, Record<string, unknown>>)._active;
+      if (active && 'transform' in active) offenders.push(name);
     });
     expect(offenders).toEqual([]);
   });
 
   it('every variant still presses, via scale', () => {
     const missing: string[] = [];
-    Object.entries(buttonColorPaletteStyles).forEach(([palette, variants]) => {
-      Object.entries(variants).forEach(([variant, style]) => {
-        const active = (style as Record<string, Record<string, unknown>>)
-          ._active;
-        if (!active || active.scale !== '0.97')
-          missing.push(`${palette}.${variant}`);
-      });
+    everyVariant.forEach(([name, style]) => {
+      const active = (style as Record<string, Record<string, unknown>>)._active;
+      if (!active || active.scale !== '0.97') missing.push(name);
     });
     expect(missing).toEqual([]);
   });

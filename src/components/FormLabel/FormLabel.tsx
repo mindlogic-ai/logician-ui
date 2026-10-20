@@ -17,7 +17,7 @@ export const FormLabel = (props: Field.LabelProps) => (
         field.required가 falsy면 null을 반환하므로, props 없이도 조건부 렌더링됩니다.
         @see node_modules/@chakra-ui/react/dist/esm/components/field/field.js
       */}
-      <Field.RequiredIndicator />
+      <Field.RequiredIndicator color="danger.fg" />
     </Field.Label>
   </Box>
 );

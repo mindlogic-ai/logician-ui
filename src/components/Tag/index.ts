@@ -1,16 +1,18 @@
 import { Icon } from '@chakra-ui/react';
 
 export { Tag } from './Tag';
+export type { TagStyleOptions } from './Tag.styles';
 export {
   getTagStyles,
-  tagColorPalettes,
-  tagColorPaletteStyles,
-  tagVariants,
+  mapLegacyTagProps,
+  tagTones,
+  tagToneStyles,
 } from './Tag.styles';
 export type {
   TagColorPalette,
   TagOwnProps,
   TagProps,
+  TagTone,
   TagVariant,
 } from './Tag.types';
 export * from './TagCloseButton';

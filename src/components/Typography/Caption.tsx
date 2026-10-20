@@ -12,10 +12,10 @@ import { TypographyOwnProps } from './Typography.types';
  *
  * Scale: `Text` (p, 14–16px) → `Subtext` (12.88–14px) → `Caption` (11–12px).
  *
- * Defaults to `fg.muted` since captions are secondary by nature; every aspect
- * stays one Chakra prop away, so a brand/status variant is a single override
- * (e.g. `color="danger.main"`). Passing `fontSize` opts out of the baked-in
- * `textStyle` so an explicit size wins.
+ * Defaults to `fg.subtle` since captions are the most de-emphasised tier in
+ * the scale; every aspect stays one Chakra prop away, so a brand/status
+ * variant is a single override (e.g. `color="danger.fg"`). Passing `fontSize`
+ * opts out of the baked-in `textStyle` so an explicit size wins.
  */
 const CaptionImpl = forwardRef<HTMLParagraphElement, TypographyOwnProps>(
   (props, ref) => {
@@ -27,7 +27,7 @@ const CaptionImpl = forwardRef<HTMLParagraphElement, TypographyOwnProps>(
         // If fontSize is provided, disable textStyle to allow the override
         textStyle={fontSize ? undefined : 'caption'}
         fontSize={fontSize}
-        color="fg.muted"
+        color="fg.subtle"
         wordBreak="keep-all"
         {...rest}
       />

@@ -1,38 +1,48 @@
 import { ForwardedRef, forwardRef } from 'react';
-import { Badge as ChakraBadge } from '@chakra-ui/react';
-
-import { focusRing } from '@/utils/focusRing';
 
 import { polymorphic } from '../../types/polymorphic';
-import { baseStyles, getChipStyles } from './Chip.styles';
+import { Tag } from '../Tag/Tag';
+import { mapLegacyTagProps, warnTagDeprecation } from '../Tag/Tag.styles';
 import { ChipOwnProps } from './Chip.types';
 
 /**
- * A chip component for displaying tags, labels, or status indicators.
+ * @deprecated Since 5.0 `Chip` is a thin alias of `Tag` and will be removed in
+ * 6.0. Replace `<Chip colorScheme="danger" variant="soft">` with
+ * `<Tag tone="danger">`, a "solid primary" filter chip with
+ * `<Tag as="button" selected>`, and everything else with `<Tag>`.
  *
- * Uses a two-dimensional variant system:
- * - `colorScheme`: What semantic color (primary, secondary, danger, etc.)
- * - `variant`: How it looks visually (solid, soft, outline)
- *
- * @example
- * ```tsx
- * <Chip colorScheme="primary" variant="solid">Active</Chip>
- * <Chip colorScheme="danger" variant="soft">Error</Chip>
- * <Chip colorScheme="success" variant="outline">Completed</Chip>
- * ```
+ * The alias keeps Chip's pill shape (32px radius, roomier padding) so an
+ * unmigrated screen does not shift.
  */
 const ChipImpl = forwardRef(
   (
-    { colorScheme = 'primary', variant = 'soft', ...rest }: ChipOwnProps,
-    ref?: ForwardedRef<HTMLButtonElement>
+    {
+      colorScheme,
+      colorPalette,
+      variant = 'soft',
+      tone,
+      selected,
+      ...rest
+    }: ChipOwnProps,
+    ref?: ForwardedRef<HTMLDivElement>
   ) => {
-    const styles = getChipStyles(colorScheme, variant);
-
+    warnTagDeprecation(
+      'chip-deprecated',
+      '<Chip> is deprecated since 5.0 and will be removed in 6.0. Use <Tag tone | selected | category> instead.'
+    );
+    const mapped = mapLegacyTagProps(
+      colorScheme ?? colorPalette ?? 'primary',
+      variant
+    );
     return (
-      <ChakraBadge
-        {...baseStyles}
-        {...styles}
-        {...focusRing}
+      <Tag
+        borderRadius="32px"
+        px={3}
+        py={2}
+        fontWeight="medium"
+        textTransform="none"
+        tone={tone ?? mapped.tone}
+        selected={selected ?? mapped.selected}
         {...rest}
         ref={ref}
       />
@@ -42,5 +52,9 @@ const ChipImpl = forwardRef(
 
 ChipImpl.displayName = 'Chip';
 
-/** Type-level polymorphism over the same runtime — see `polymorphic`. */
+/**
+ * @deprecated Use `Tag`. Removed in 6.0.
+ *
+ * Type-level polymorphism over the same runtime — see `polymorphic`.
+ */
 export const Chip = polymorphic<ChipOwnProps, 'span'>(ChipImpl);

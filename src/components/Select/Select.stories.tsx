@@ -220,7 +220,7 @@ export const OptionsWithDescription = () => (
               <Select.Item item={item} key={item.value}>
                 <Stack gap={0}>
                   <Select.ItemText>{item.label}</Select.ItemText>
-                  <Span fontSize="xs" color="gray.600">
+                  <Span fontSize="xs" color="fg.muted">
                     {item.description}
                   </Span>
                 </Stack>
@@ -341,12 +341,12 @@ export const HierarchicalOptions = () => (
                   .map((item) => (
                     <Select.Item item={item} key={item.value}>
                       <HStack gap={1}>
-                        <Span color="gray.500" fontWeight="bold">
+                        <Span color="fg.subtle" fontWeight="bold">
                           ∟
                         </Span>
                         <Select.ItemText>{item.label}</Select.ItemText>
                         {item.myGroup && (
-                          <Badge variant="primary">My group</Badge>
+                          <Badge variant="neutral">My group</Badge>
                         )}
                       </HStack>
                       <Select.ItemIndicator />
@@ -397,14 +397,14 @@ export const CustomTriggerValue = () => {
           <Select.Trigger>
             {selected ? (
               <HStack gap={1}>
-                <Span color="gray.600">{selected.groupType}</Span>
-                <Span color="gray.500">&gt;</Span>
-                <Span color="gray.1200" fontWeight="medium">
+                <Span color="fg.muted">{selected.groupType}</Span>
+                <Span color="fg.subtle">&gt;</Span>
+                <Span color="fg.default" fontWeight="medium">
                   {selected.label}
                 </Span>
               </HStack>
             ) : (
-              <Span color="gray.500">Select a group</Span>
+              <Span color="fg.subtle">Select a group</Span>
             )}
           </Select.Trigger>
           <Select.IndicatorGroup>
@@ -463,7 +463,7 @@ export const MultiSelectCustomTags = () => {
         <Select.Control>
           <Select.Trigger>
             {value.length === 0 ? (
-              <Span color="gray.500">Select skills</Span>
+              <Span color="fg.subtle">Select skills</Span>
             ) : (
               <HStack gap={1} flexWrap="wrap">
                 {value.map((val) => {
@@ -475,8 +475,8 @@ export const MultiSelectCustomTags = () => {
                     <HStack
                       key={val}
                       gap={1}
-                      bg="primary.extralight"
-                      color="primary.dark"
+                      bg="primary.selected"
+                      color="fg.default"
                       borderRadius="4px"
                       px={2}
                       py={0.5}
@@ -592,22 +592,22 @@ export const InsideScrollableContainer = () => (
     maxH="140px"
     overflow="auto"
     borderWidth="1px"
-    borderColor="gray.300"
+    borderColor="border.default"
     borderRadius="8px"
     p={3}
   >
     <Stack gap={3}>
-      <Span fontSize="sm" color="gray.600">
+      <Span fontSize="sm" color="fg.muted">
         Scrollable container — open the select, it escapes the clip.
       </Span>
       <SelectField options={options} placeholder="Select an option" />
-      <Span fontSize="sm" color="gray.600">
+      <Span fontSize="sm" color="fg.muted">
         More rows below…
       </Span>
-      <Span fontSize="sm" color="gray.600">
+      <Span fontSize="sm" color="fg.muted">
         …to force the container to scroll.
       </Span>
-      <Span fontSize="sm" color="gray.600">
+      <Span fontSize="sm" color="fg.muted">
         …and a little more.
       </Span>
     </Stack>
@@ -638,12 +638,12 @@ export const StyledParts = () => (
       </Select.Control>
       <Portal>
         <Select.Positioner>
-          <Select.Content css={{ bg: 'gray.50' }}>
+          <Select.Content css={{ bg: 'bg.subtle' }}>
             {frameworkCollection.items.map((item) => (
               <Select.Item
                 item={item}
                 key={item.value}
-                css={{ _highlighted: { bg: 'primary.extralight' } }}
+                css={{ _highlighted: { bg: 'primary.wash' } }}
               >
                 <Select.ItemText>{item.label}</Select.ItemText>
                 <Select.ItemIndicator />
@@ -703,13 +703,13 @@ export const WithOpenChange = () => {
           w="220px"
           p={3}
           borderWidth="1px"
-          borderColor="gray.300"
+          borderColor="border.default"
           borderRadius="8px"
-          bg="gray.50"
+          bg="bg.subtle"
         >
-          <Span fontSize="sm" color="gray.600">
-            Side panel — visible only while the dropdown is open, the same
-            way `LlmModelSelect` reveals its model details panel.
+          <Span fontSize="sm" color="fg.muted">
+            Side panel — visible only while the dropdown is open, the same way
+            `LlmModelSelect` reveals its model details panel.
           </Span>
         </Box>
       )}

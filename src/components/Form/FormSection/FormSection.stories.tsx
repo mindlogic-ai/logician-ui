@@ -38,7 +38,7 @@ export const WithDescription: Story = {
 export const WithAction: Story = {
   args: {
     action: (
-      <Button size="sm" variant="outline">
+      <Button size="sm" variant="secondary">
         Add
       </Button>
     ),

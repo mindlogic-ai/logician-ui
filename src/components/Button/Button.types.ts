@@ -9,17 +9,38 @@ import { ButtonProps as ChakraButtonProps } from '@chakra-ui/react';
 import type { PolymorphicProps } from '../../types/polymorphic';
 
 /**
- * Button color palette - defines the semantic color family.
+ * Button variant — one role per value (5.0 BAZE palette).
  *
- * This overrides Chakra UI's colorPalette prop with our Golden Ratio
- * color system values. Chakra's default colorPalettes are not supported.
+ * Overrides Chakra UI's `variant` prop; Chakra's own variants are not supported.
+ * There is no separate colour axis any more: the role *is* the colour.
  *
- * - `primary`: Blue - main brand actions, CTAs
- * - `secondary`: Violet - accent actions, highlights
- * - `danger`: Rose - destructive actions, errors
- * - `success`: Green - positive actions, confirmations
- * - `warning`: Gold - caution actions, alerts
- * - `neutral`: Gray - low-emphasis, tertiary actions
+ * - `primary`: BAZE black fill — the one main action of a screen
+ * - `action`: black "run" button whose icon is coral (`action.iconOnSolid`)
+ * - `secondary`: outlined surface button — cancel, alternative actions
+ * - `subtle`: quiet warm-wash fill — low-emphasis actions (the default)
+ * - `ghost`: no fill, no border — toolbars, inline actions
+ * - `danger`: red fill — a confirmed destructive action
+ *
+ * For a *secondary* destructive action (a "delete" link-ish button next to a
+ * form) keep `secondary`/`ghost`/`subtle` and add `isDestructive`.
+ */
+export type ButtonVariant =
+  | 'primary'
+  | 'action'
+  | 'secondary'
+  | 'subtle'
+  | 'ghost'
+  | 'danger';
+
+/**
+ * @deprecated 5.0 removed the colour axis — `colorPalette` is no longer a
+ * Button prop. Pick a `variant` role instead (and `isDestructive` for a
+ * danger-coloured secondary/ghost/subtle button). Kept only so existing type
+ * imports get a deprecation instead of a hard error; will be removed in 6.0.
+ *
+ * Old → new: `primary|neutral` + `solid` → `primary`; `danger` + `solid` →
+ * `danger`; any + `outline` → `secondary`; any + `soft` → `subtle`;
+ * `danger` + `outline|ghost|soft` → same role + `isDestructive`.
  */
 export type ButtonColorPalette =
   | 'primary'
@@ -30,33 +51,23 @@ export type ButtonColorPalette =
   | 'neutral';
 
 /**
- * Button variant - defines the visual appearance/fill style.
- *
- * This overrides Chakra UI's variant prop with our custom variants.
- * Chakra's default variants (solid, outline, ghost, link) are replaced
- * with our Golden Ratio-based styling system.
- *
- * - `solid`: Filled background with contrasting text (most prominent)
- * - `soft`: Light tinted background with darker text (subtle)
- * - `outline`: Transparent with colored border (medium emphasis)
- * - `ghost`: Transparent with no border (lowest emphasis)
+ * @deprecated 4.x variant names. Still accepted at runtime (mapped, with a
+ * development warning) but no longer part of `ButtonVariant`.
  */
-export type ButtonVariant = 'solid' | 'soft' | 'outline' | 'ghost';
+export type LegacyButtonVariant = 'solid' | 'soft' | 'outline' | 'ghost';
 
 /**
- * Button props with two-dimensional variant system.
+ * Button props.
  *
- * Combines `colorPalette` (what color) with `variant` (how it looks)
- * for flexible, consistent button styling.
- *
- * @note Overrides Chakra UI's `variant` and `colorPalette` props.
- *       Chakra's default values are not supported.
+ * @note Overrides Chakra UI's `variant`; Chakra's `colorPalette` /
+ *       `colorScheme` are not accepted.
  *
  * @example
  * ```tsx
- * <Button colorPalette="primary" variant="solid">Submit</Button>
- * <Button colorPalette="danger" variant="soft">Delete</Button>
- * <Button colorPalette="secondary" variant="outline">Cancel</Button>
+ * <Button variant="primary">저장</Button>
+ * <Button variant="secondary">취소</Button>
+ * <Button variant="ghost" isDestructive>삭제</Button>
+ * <Button variant="danger">영구 삭제</Button>
  * ```
  */
 export type ButtonOwnProps = Omit<
@@ -64,17 +75,19 @@ export type ButtonOwnProps = Omit<
   'variant' | 'colorScheme' | 'colorPalette' | 'leftIcon' | 'rightIcon' | 'as'
 > & {
   /**
-   * The color palette of the button (semantic color family).
-   * Overrides Chakra UI's colorPalette prop (Chakra v3).
-   * @default 'primary'
-   */
-  colorPalette?: ButtonColorPalette;
-  /**
-   * The visual variant of the button (fill style).
+   * The role of the button (fill, border and text colour together).
    * Overrides Chakra UI's variant prop.
-   * @default 'solid'
+   * @default 'subtle'
    */
   variant?: ButtonVariant;
+  /**
+   * Danger-coloured text (`danger.fg`) for a destructive action that does not
+   * deserve a red fill. Applies to `secondary`, `ghost` and `subtle`; the
+   * border and fill stay the variant's own. Ignored on `primary`, `action` and
+   * `danger` (use `variant="danger"` for a filled destructive button).
+   * @default false
+   */
+  isDestructive?: boolean;
   /**
    * Raises the button 1px on hover and puts a shadow under it, so it reads as
    * lifting toward the pointer. Pressing sets it back down, under the existing

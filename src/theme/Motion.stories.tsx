@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Appear } from '../components/Appear';
 import { Badge } from '../components/Badge';
 import { Button } from '../components/Button';
-import { Chip } from '../components/Chip';
+import { Tag } from '../components/Tag';
 import { Collapsible } from '../components/Collapsible';
 import { CountUp } from '../components/CountUp';
 import { FileList } from '../components/FileList';
@@ -232,7 +232,7 @@ const Runner = ({
         transitionProperty="left"
       />
     </Box>
-    <Button size="xs" variant="outline" onClick={onPlay} flexShrink={0}>
+    <Button size="xs" variant="secondary" onClick={onPlay} flexShrink={0}>
       재생
     </Button>
   </HStack>
@@ -244,7 +244,7 @@ const ModalDemo = () => {
 
   return (
     <>
-      <Button size="xs" variant="outline" onClick={() => setOpen(true)}>
+      <Button size="xs" variant="secondary" onClick={() => setOpen(true)}>
         모달 열기
       </Button>
       <Modal open={open} onOpenChange={(e) => setOpen(e.open)}>
@@ -275,7 +275,7 @@ const RatioDemo = () => {
 
   return (
     <Stack gap={4} maxW="440px">
-      <Button size="xs" variant="outline" onClick={() => setOpen((v) => !v)}>
+      <Button size="xs" variant="secondary" onClick={() => setOpen((v) => !v)}>
         {open ? '닫기' : '열기'}
       </Button>
       {[
@@ -341,7 +341,7 @@ const StaggerLab = () => {
           <Button
             key={n}
             size="xs"
-            variant={count === n ? 'solid' : 'outline'}
+            variant={count === n ? 'primary' : 'secondary'}
             onClick={() => {
               setCount(n);
               setRun((r) => r + 1);
@@ -352,7 +352,7 @@ const StaggerLab = () => {
         ))}
         <Button
           size="xs"
-          variant="outline"
+          variant="secondary"
           onClick={() => setRun((r) => r + 1)}
         >
           다시 재생
@@ -471,22 +471,22 @@ const PrimitiveIndex = () => {
   return (
     <Box borderTop="1px solid" borderColor="border.subtle" pt={5}>
       <HStack gap={3} mb={5} align="center">
-        <Button size="xs" variant="outline" onClick={() => setPlay((n) => n + 1)}>
+        <Button size="xs" variant="secondary" onClick={() => setPlay((n) => n + 1)}>
           재생
         </Button>
         <Pulse trigger={play}>
           <Badge variant="success">Pulse</Badge>
         </Pulse>
         <Shake trigger={play}>
-          <Chip colorScheme="danger" variant="soft">
+          <Tag tone="danger">
             Shake
-          </Chip>
+          </Tag>
         </Shake>
         {/* Keyed so it remounts — Appear plays on mount, which is the point. */}
         <Appear key={play} scaleFrom={0.6}>
-          <Chip colorScheme="primary" variant="soft">
+          <Tag>
             Appear
-          </Chip>
+          </Tag>
         </Appear>
         {/* No `format` — the default `groupDigits` rounds and groups. Passing a
             bare `${n}` here rendered mid-flight values like `1180.00698…`. */}
@@ -520,7 +520,7 @@ const PrimitiveIndex = () => {
       <Box mt={5}>
         <Button
           size="xs"
-          variant="outline"
+          variant="secondary"
           onClick={() => setShown((v) => !v)}
           mb={shown ? 2 : 0}
         >
@@ -845,7 +845,7 @@ export const Choose: Story = {
               <HStack gap={4} wrap="wrap">
                 <Menu>
                   <Menu.Trigger asChild>
-                    <Button size="xs" variant="outline">
+                    <Button size="xs" variant="secondary">
                       Menu
                     </Button>
                   </Menu.Trigger>
@@ -858,7 +858,7 @@ export const Choose: Story = {
 
                 <Popover>
                   <Popover.Trigger asChild>
-                    <Button size="xs" variant="outline">
+                    <Button size="xs" variant="secondary">
                       Popover
                     </Button>
                   </Popover.Trigger>
@@ -870,7 +870,7 @@ export const Choose: Story = {
                 </Popover>
 
                 <Tooltip content="가장 짧게 머무는 파트라 퇴장 시간이 가장 크게 체감됩니다">
-                  <Button size="xs" variant="outline">
+                  <Button size="xs" variant="secondary">
                     Tooltip
                   </Button>
                 </Tooltip>
@@ -911,7 +911,7 @@ export const Choose: Story = {
           demo={
             <Menu>
               <Menu.Trigger asChild>
-                <Button size="xs" variant="outline">
+                <Button size="xs" variant="secondary">
                   Menu stagger
                 </Button>
               </Menu.Trigger>
@@ -969,10 +969,10 @@ export const buttonTransition = [
 <ChakraButton transition={buttonTransition} animationStyle="composite" />`}
           demo={
             <HStack gap={3}>
-              <Button colorPalette="primary" variant="solid">
+              <Button variant="primary">
                 눌러보세요
               </Button>
-              <Button colorPalette="neutral" variant="outline">
+              <Button variant="secondary">
                 Outline
               </Button>
             </HStack>
@@ -1343,7 +1343,7 @@ export const spinAnimation = {
               <Button
                 key={v}
                 size="xs"
-                variant={ms === v ? 'solid' : 'outline'}
+                variant={ms === v ? 'primary' : 'secondary'}
                 onClick={() => setMs(v)}
               >
                 {v}ms

@@ -44,7 +44,7 @@ export const RangeDatePicker = ({
           ...propsConfigs?.triggerBtnProps,
         },
         inputProps: {
-          color: 'primary.dark',
+          color: 'fg.default',
           ...propsConfigs?.inputProps,
         },
         popoverCompProps: {
@@ -80,7 +80,7 @@ export const RangeDatePicker = ({
             px: 6,
             py: 4,
             borderWidth: '1px',
-            borderColor: 'primary.extralight',
+            borderColor: 'border.default',
             borderRadius: 16,
             bg: 'bg.surface',
             ...propsConfigs?.calendarPanelProps?.contentProps,
@@ -110,17 +110,18 @@ export const RangeDatePicker = ({
             color: 'fg.default',
             fontWeight: 'regular',
             _hover: {
-              background: 'primary.extralight',
+              background: 'primary.wash',
               ...propsConfigs?.dayOfMonthBtnProps?.defaultBtnProps?._hover,
             },
             ...propsConfigs?.dayOfMonthBtnProps?.defaultBtnProps,
           },
           todayBtnProps: {
             fontWeight: 'semibold',
+            boxShadow: 'inset 0 0 0 1px var(--chakra-colors-border-strong)',
             ...propsConfigs?.dayOfMonthBtnProps?.todayBtnProps,
           },
           selectedBtnProps: {
-            color: 'white',
+            color: 'fg.onPrimary',
             background: 'primary.main',
             fontWeight: 'semibold',
             position: 'relative',
@@ -129,8 +130,8 @@ export const RangeDatePicker = ({
             ...propsConfigs?.dayOfMonthBtnProps?.selectedBtnProps,
           },
           isInRangeBtnProps: {
-            color: 'primary.main',
-            background: 'primary.extralight',
+            color: 'fg.default',
+            background: 'secondary.surfaceStrong',
             borderRadius: 'none',
             css: {
               // pressed="true" 직전의 pressed="false" 요소에 borderRight
@@ -161,8 +162,7 @@ export const RangeDatePicker = ({
         <Popover.Trigger asChild>
           <Button
             pl={2}
-            colorPalette="neutral"
-            variant="outline"
+            variant="secondary"
             {...(propsConfigs?.triggerBtnProps as ButtonProps)}
           >
             <MdOutlineCalendarToday

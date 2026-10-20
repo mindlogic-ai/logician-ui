@@ -19,9 +19,7 @@ const MenuItemImpl = ({
     <Menu.Item
       value={value}
       // Map item text/hover onto semantic tokens so they flip with the mode.
-      // Was gray.1000 / hover gray.1500 / hover bg gray.50 — none flipped, so
-      // items rendered dim and hover went near-black on a dark menu.
-      color={isDangerVariant ? 'danger.main' : 'fg.muted'}
+      color={isDangerVariant ? 'danger.fg' : 'fg.muted'}
       py={2}
       minW="fit-content"
       fontWeight="semibold"
@@ -30,8 +28,8 @@ const MenuItemImpl = ({
       // Same as `Button`: the style prop outranks the recipe's disabled cursor.
       _disabled={{ cursor: 'not-allowed' }}
       _hover={{
-        color: isDangerVariant ? 'danger.main' : 'fg.default',
-        backgroundColor: isDangerVariant ? 'danger.lightest' : 'bg.subtle',
+        color: isDangerVariant ? 'danger.fg' : 'fg.default',
+        backgroundColor: isDangerVariant ? 'danger.bg' : 'primary.wash',
       }}
       {...focusRing}
       {...rest}

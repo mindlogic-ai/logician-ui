@@ -3,31 +3,38 @@ import { BoxProps } from '@chakra-ui/react';
 import type { ToastStatus } from './Toast.types';
 
 /**
- * Toast variant styles using the Golden Ratio color system.
+ * Toast variant styles on the BAZE token set.
  *
- * Uses `lightest` backgrounds with `lighter` borders and `dark` text
- * for optimal readability and WCAG AA compliance.
+ * Each status is bg `{s}.bg` + text `{s}.fg` + a 1px `{s}.border` outline —
+ * `info` reads its own `info.*` family instead of borrowing `primary.*`.
+ * `neutral` carries no status (it is the default when none is given):
+ * `border.default` / `bg.surface` / `fg.default`.
  */
 export const toastStyles: Record<ToastStatus, BoxProps> = {
   info: {
-    bg: 'primary.extralight', // #E8EEFB
-    color: 'primary.dark', // #0D317D
-    borderColor: 'primary.lighter', // #B9CBF3
+    bg: 'info.bg',
+    color: 'info.fg',
+    borderColor: 'info.border',
   },
   warning: {
-    bg: 'warning.extralight', // #FBF6E8
-    color: 'warning.dark', // #7D610D
-    borderColor: 'warning.lighter', // #F3E4B9
+    bg: 'warning.bg',
+    color: 'warning.fg',
+    borderColor: 'warning.border',
   },
   success: {
-    bg: 'success.extralight', // #E9FBE8
-    color: 'success.dark', // #147D0D
-    borderColor: 'success.lighter', // #BDF3B9
+    bg: 'success.bg',
+    color: 'success.fg',
+    borderColor: 'success.border',
   },
   error: {
-    bg: 'danger.extralight', // #FBE8E9
-    color: 'danger.dark', // #7D0D14
-    borderColor: 'danger.lighter', // #F3B9BD
+    bg: 'danger.bg',
+    color: 'danger.fg',
+    borderColor: 'danger.border',
+  },
+  neutral: {
+    bg: 'bg.surface',
+    color: 'fg.default',
+    borderColor: 'border.default',
   },
 };
 
@@ -38,27 +45,33 @@ export const toastStyles: Record<ToastStatus, BoxProps> = {
  */
 export const closeButtonStyles: Record<ToastStatus, BoxProps> = {
   info: {
-    color: 'primary.darker',
+    color: 'info.fg',
     _hover: {
-      bg: 'primary.lighter',
+      bg: 'info.border',
     },
   },
   warning: {
-    color: 'warning.darker',
+    color: 'warning.fg',
     _hover: {
-      bg: 'warning.lighter',
+      bg: 'warning.border',
     },
   },
   success: {
-    color: 'success.darker',
+    color: 'success.fg',
     _hover: {
-      bg: 'success.lighter',
+      bg: 'success.border',
     },
   },
   error: {
-    color: 'danger.darker',
+    color: 'danger.fg',
     _hover: {
-      bg: 'danger.lighter',
+      bg: 'danger.border',
+    },
+  },
+  neutral: {
+    color: 'fg.default',
+    _hover: {
+      bg: 'bg.muted',
     },
   },
 };
@@ -90,27 +103,33 @@ const actionBase: BoxProps = {
 export const actionStyles: Record<ToastStatus, BoxProps> = {
   info: {
     ...actionBase,
-    color: 'primary.dark',
-    _hover: { bg: 'primary.lighter' },
-    _focusVisible: { outline: '2px solid', outlineColor: 'primary.dark' },
+    color: 'info.fg',
+    _hover: { bg: 'info.border' },
+    _focusVisible: { outline: '2px solid', outlineColor: 'info.fg' },
   },
   warning: {
     ...actionBase,
-    color: 'warning.dark',
-    _hover: { bg: 'warning.lighter' },
-    _focusVisible: { outline: '2px solid', outlineColor: 'warning.dark' },
+    color: 'warning.fg',
+    _hover: { bg: 'warning.border' },
+    _focusVisible: { outline: '2px solid', outlineColor: 'warning.fg' },
   },
   success: {
     ...actionBase,
-    color: 'success.dark',
-    _hover: { bg: 'success.lighter' },
-    _focusVisible: { outline: '2px solid', outlineColor: 'success.dark' },
+    color: 'success.fg',
+    _hover: { bg: 'success.border' },
+    _focusVisible: { outline: '2px solid', outlineColor: 'success.fg' },
   },
   error: {
     ...actionBase,
-    color: 'danger.dark',
-    _hover: { bg: 'danger.lighter' },
-    _focusVisible: { outline: '2px solid', outlineColor: 'danger.dark' },
+    color: 'danger.fg',
+    _hover: { bg: 'danger.border' },
+    _focusVisible: { outline: '2px solid', outlineColor: 'danger.fg' },
+  },
+  neutral: {
+    ...actionBase,
+    color: 'fg.default',
+    _hover: { bg: 'bg.muted' },
+    _focusVisible: { outline: '2px solid', outlineColor: 'fg.default' },
   },
 };
 

@@ -1,160 +1,155 @@
 import { TagRootProps } from '@chakra-ui/react';
 
-import { TagColorPalette, TagVariant } from './Tag.types';
+import type { SystemHue } from '@/theme/colors';
+import { disabledControl } from '@/utils/disabledControl';
+
+import { TagColorPalette, TagTone, TagVariant } from './Tag.types';
+
+type StyleProps = Partial<TagRootProps>;
 
 /**
- * Tag styles using a two-dimensional variant system.
- *
- * Structure: tagColorPaletteStyles[colorPalette][variant]
- *
- * Uses semantic color tokens from the Golden Ratio color system.
+ * Colour per tone (5.0 BAZE tokens). `hoverBorder` is applied only when the
+ * tag is interactive (clickable / toggle).
  */
-export const tagColorPaletteStyles: Record<
-  TagColorPalette,
-  Record<TagVariant, Partial<TagRootProps>>
+export const tagToneStyles: Record<
+  TagTone,
+  { bgColor: string; color: string; hoverBorder: string }
 > = {
-  primary: {
-    soft: {
-      bgColor: 'primary.extralight',
-      borderColor: 'primary.lighter',
-      color: 'primary.darker',
-    },
-    solid: {
-      bgColor: 'blue.500',
-      borderColor: 'blue.500',
-      color: 'white',
-    },
-    outline: {
-      bgColor: 'transparent',
-      borderColor: 'primary.main',
-      color: 'primary.dark',
-    },
-  },
-  secondary: {
-    soft: {
-      bgColor: 'secondary.extralight',
-      borderColor: 'secondary.lighter',
-      color: 'secondary.darker',
-    },
-    solid: {
-      bgColor: 'violet.500',
-      borderColor: 'violet.500',
-      color: 'white',
-    },
-    outline: {
-      bgColor: 'transparent',
-      borderColor: 'secondary.main',
-      color: 'secondary.dark',
-    },
-  },
-  danger: {
-    soft: {
-      bgColor: 'danger.extralight',
-      borderColor: 'danger.lighter',
-      color: 'danger.darker',
-    },
-    solid: {
-      bgColor: 'rose.500',
-      borderColor: 'rose.500',
-      color: 'white',
-    },
-    outline: {
-      bgColor: 'transparent',
-      borderColor: 'danger.main',
-      color: 'danger.dark',
-    },
+  neutral: {
+    bgColor: 'secondary.surface',
+    color: 'fg.default',
+    hoverBorder: 'secondary.border',
   },
   success: {
-    soft: {
-      bgColor: 'success.extralight',
-      borderColor: 'success.lighter',
-      color: 'success.darker',
-    },
-    solid: {
-      bgColor: 'green.600',
-      borderColor: 'green.600',
-      color: 'white',
-    },
-    outline: {
-      bgColor: 'transparent',
-      borderColor: 'success.main',
-      color: 'success.dark',
-    },
+    bgColor: 'success.bg',
+    color: 'success.fg',
+    hoverBorder: 'success.border',
   },
   warning: {
-    soft: {
-      bgColor: 'warning.extralight',
-      borderColor: 'warning.lighter',
-      color: 'warning.darker',
-    },
-    solid: {
-      // Deepened from gold.500 so white text clears AA and the chip matches the
-      // other solids (white on a saturated fill). White/gold.500 was only
-      // 2.39:1; white/gold.700 = 5.86:1 ✓ AA. Bright gold + near-black text read
-      // harsh on the dark canvas.
-      bgColor: 'gold.700',
-      borderColor: 'gold.700',
-      color: 'white',
-    },
-    outline: {
-      bgColor: 'transparent',
-      borderColor: 'warning.main',
-      // warning.dark (gold.700, 5.8:1 AA) over warning.main (gold.500, 3.0:1) —
-      // darker text also lifts this off the palette's AA-risk step.
-      color: 'warning.dark',
-    },
+    bgColor: 'warning.bg',
+    color: 'warning.fg',
+    hoverBorder: 'warning.border',
   },
-  neutral: {
-    soft: {
-      // Flip surface + border with the mode so the fg.default text stays legible
-      // in dark. Light values preserved (bg.muted → gray.100, border.default →
-      // gray.300).
-      bgColor: 'bg.muted',
-      borderColor: 'border.default',
-      color: 'fg.default',
-    },
-    solid: {
-      bgColor: 'gray.800',
-      borderColor: 'gray.800',
-      color: 'white',
-    },
-    outline: {
-      bgColor: 'transparent',
-      borderColor: 'border.strong', // gray.500 / gray.900 (_dark)
-      color: 'fg.muted',
-    },
+  danger: {
+    bgColor: 'danger.bg',
+    color: 'danger.fg',
+    hoverBorder: 'danger.border',
+  },
+  info: {
+    bgColor: 'info.bg',
+    color: 'info.fg',
+    hoverBorder: 'info.border',
   },
 };
 
-/**
- * Helper function to get tag styles for a given colorPalette and variant.
- */
-export const getTagStyles = (
-  colorPalette: TagColorPalette = 'neutral',
-  variant: TagVariant = 'soft'
-): Partial<TagRootProps> => {
-  return tagColorPaletteStyles[colorPalette][variant];
-};
-
-/** All available color palettes */
-export const tagColorPalettes: TagColorPalette[] = [
-  'primary',
-  'secondary',
-  'danger',
+/** Every 5.0 tone, in display order. */
+export const tagTones: TagTone[] = [
+  'neutral',
   'success',
   'warning',
-  'neutral',
+  'danger',
+  'info',
 ];
 
-/**
- * @deprecated Use tagColorPalettes instead. Will be removed in next major version.
- */
-export const tagColorSchemes = tagColorPalettes;
+/** Colour transition only — a focus ring or press must not lag. */
+const TAG_TRANSITION: StyleProps = {
+  transitionProperty: 'background-color, border-color, color',
+  transitionDuration: 'fast',
+  transitionTimingFunction: 'standard',
+};
+
+export interface TagStyleOptions {
+  tone?: TagTone;
+  selected?: boolean;
+  category?: SystemHue;
+  interactive?: boolean;
+}
 
 /**
- * @deprecated Use tagColorPaletteStyles instead. Will be removed in next major version.
+ * Resolve the colour styles for a tag. Precedence: `selected` > `category` >
+ * `tone`.
  */
-export const tagColorSchemeStyles = tagColorPaletteStyles;
+export const getTagStyles = ({
+  tone = 'neutral',
+  selected = false,
+  category,
+  interactive = false,
+}: TagStyleOptions = {}): StyleProps => {
+  let colors: StyleProps;
+  if (selected) {
+    colors = {
+      bgColor: 'primary.main',
+      color: 'fg.onPrimary',
+      ...(interactive && {
+        _hover: { bgColor: 'primary.hover' },
+        _active: { bgColor: 'primary.active' },
+      }),
+    };
+  } else if (category) {
+    colors = {
+      bgColor: `category.${category}.surface`,
+      color: 'fg.default',
+      ...(interactive && { _hover: { borderColor: 'secondary.border' } }),
+    };
+  } else {
+    const { bgColor, color, hoverBorder } =
+      tagToneStyles[tone] ?? tagToneStyles.neutral;
+    colors = {
+      bgColor,
+      color,
+      ...(interactive && { _hover: { borderColor: hoverBorder } }),
+    };
+  }
 
-/** All available variants */
-export const tagVariants: TagVariant[] = ['soft', 'solid', 'outline'];
+  return {
+    borderColor: 'transparent',
+    ...colors,
+    ...TAG_TRANSITION,
+    cursor: interactive ? 'pointer' : undefined,
+    _disabled: { ...disabledControl, cursor: 'not-allowed' },
+  };
+};
+
+const warned = new Set<string>();
+
+const warnOnce = (key: string, message: string) => {
+  if (
+    typeof process === 'undefined' ||
+    process.env?.NODE_ENV === 'production' ||
+    warned.has(key)
+  ) {
+    return;
+  }
+  warned.add(key);
+  console.warn(`[logician-ui] ${message}`);
+};
+
+/** @internal Exposed for the deprecated `Chip` alias. */
+export const warnTagDeprecation = warnOnce;
+
+/**
+ * Map 4.x `colorPalette` × `variant` (or Chip's `colorScheme` × `variant`) to
+ * 5.0 Tag props.
+ *
+ * - `variant="outline"` → `neutral`
+ * - `primary` + `solid` → `selected`
+ * - `danger` / `success` / `warning` → that `tone`
+ * - `primary` / `secondary` / `neutral` → `neutral`
+ */
+export const mapLegacyTagProps = (
+  colorPalette: TagColorPalette | string | undefined,
+  variant: TagVariant | string | undefined
+): { tone: TagTone; selected?: boolean } => {
+  if (variant === 'outline') return { tone: 'neutral' };
+  if (colorPalette === 'primary' && variant === 'solid') {
+    return { tone: 'neutral', selected: true };
+  }
+  if (
+    colorPalette === 'danger' ||
+    colorPalette === 'success' ||
+    colorPalette === 'warning'
+  ) {
+    return { tone: colorPalette };
+  }
+  return { tone: 'neutral' };
+};

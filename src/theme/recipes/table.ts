@@ -51,7 +51,7 @@ export const tableSlotRecipe = defineSlotRecipe({
       // static tables never pick up hover/cursor styling.
       '&[data-interactive]': {
         cursor: 'pointer',
-        _hover: { bg: 'bg.muted' },
+        _hover: { bg: 'primary.wash' },
         // Inset outline instead of the shared focusRing util (boxShadow
         // ring): rows are clipped by TableContainer's rounded overflow,
         // which would crop an outer ring.
@@ -63,7 +63,7 @@ export const tableSlotRecipe = defineSlotRecipe({
       },
       // Row-state tints: set via <Tr state="..."> (data-selected /
       // data-invalid / data-highlighted)
-      _selected: { bg: 'bg.selected' },
+      _selected: { bg: 'primary.selected' },
       _invalid: { bg: 'bg.invalid.subtle' },
       _highlighted: { bg: 'bg.highlighted' },
     },
