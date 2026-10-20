@@ -125,12 +125,7 @@ User Agent: ${errorInfo.userAgent}`;
             </Card>
 
             {/* Support Information */}
-            <Card
-              bg="secondary.surface"
-              borderColor="secondary.border"
-              p={6}
-              w="full"
-            >
+            <Card bg="bg.muted" borderColor="secondary.border" p={6} w="full">
               {/* `as="h2"`: `H4` is the type size wanted here, but this block
                   sits directly under the card's `<h1>` — an `<h4>` there skips
                   two levels and tells a screen-reader user there are sections

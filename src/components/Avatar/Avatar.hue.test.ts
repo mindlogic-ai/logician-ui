@@ -26,7 +26,7 @@ describe('hueForName', () => {
     // avatar, which reads as an error state.
     for (const name of [undefined, '']) {
       expect(avatarFallbackColors(name)).toEqual({
-        bg: 'secondary.surface',
+        bg: 'bg.muted',
         color: 'secondary.fgStrong',
       });
     }

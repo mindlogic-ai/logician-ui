@@ -29,8 +29,8 @@ export type AvatarProps = ChakraAvatarRootProps & {
    * hash of `name` picks one of the 12 `category.*` hues (see
    * {@link hueForName}), so the same person reads as the same colour
    * everywhere without a colour being stored anywhere. With no `name` and no
-   * `colorHue` the fallback is the neutral beige pair
-   * (`secondary.surface` / `secondary.fgStrong`), not a hue.
+   * `colorHue` the fallback is the neutral pair
+   * (`bg.muted` / `secondary.fgStrong`), not a hue.
    */
   colorHue?: SystemHue;
 };
@@ -62,14 +62,14 @@ export function hueForName(name: string | undefined): SystemHue | undefined {
 
 /**
  * Fallback (initials / icon) colours: the person's hue when there is one,
- * otherwise the neutral beige small-surface pair Badge `neutral` uses.
+ * otherwise the neutral pair Badge `neutral` uses.
  */
 export function avatarFallbackColors(
   name: string | undefined,
   colorHue?: SystemHue
 ): { bg: string; color: string } {
   const hue = colorHue ?? hueForName(name);
-  if (!hue) return { bg: 'secondary.surface', color: 'secondary.fgStrong' };
+  if (!hue) return { bg: 'bg.muted', color: 'secondary.fgStrong' };
   return { bg: `category.${hue}.surface`, color: `category.${hue}.fg` };
 }
 

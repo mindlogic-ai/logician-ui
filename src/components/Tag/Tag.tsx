@@ -28,7 +28,7 @@ type LegacyTagInput = {
  * Tag — a label for categorising, filtering and removable selections. Since
  * 5.0 it also replaces `Chip`.
  *
- * - `tone`: `neutral` (default, beige) · `success` · `warning` · `danger` · `info`
+ * - `tone`: `neutral` (default, grey wash) · `success` · `warning` · `danger` · `info`
  * - `selected`: filter-chip "on" (black fill)
  * - `category`: decorative hue (`blue`, `green`, …) with an optional `icon` mark
  *

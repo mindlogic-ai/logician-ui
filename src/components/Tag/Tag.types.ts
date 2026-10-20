@@ -9,7 +9,7 @@ import type { PolymorphicProps } from '../../types/polymorphic';
 /**
  * Tag tones (5.0).
  *
- * - `neutral` (default): beige `secondary.surface` with `fg.default` text.
+ * - `neutral` (default): neutral `bg.muted` with `fg.default` text (hover border `secondary.border`).
  * - `success` / `warning` / `danger` / `info`: status family `.bg` + `.fg`.
  *   Use them only when the tag reports a status.
  */

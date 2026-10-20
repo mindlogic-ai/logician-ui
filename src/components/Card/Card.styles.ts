@@ -19,13 +19,14 @@ export const clickableStyles = {
 };
 
 /**
- * The wash card: a secondary (beige-brown) surface, borderless. For a block
- * that summarises or concludes (an AI summary, a total after a purchase, the
- * invitation being accepted) — the tint alone separates it from the page, so
- * it does not need a hairline on top of it.
+ * The wash card: a neutral `bg.muted` ground, borderless. For a block that
+ * summarises or concludes (an AI summary, a total after a purchase, the
+ * invitation being accepted) — the wash alone separates it from the page, so
+ * it does not need a hairline on top of it. (Not the sand `secondary.surface`:
+ * that tint reads peach as a background and is accent-only.)
  */
 const washStyles = {
-  bg: 'secondary.surface',
+  bg: 'bg.muted',
   borderColor: 'transparent',
 };
 

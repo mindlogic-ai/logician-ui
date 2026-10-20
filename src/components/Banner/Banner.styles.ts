@@ -14,7 +14,8 @@ type VariantType = NonNullable<BannerProps['variant']>;
  * `{s}.fg`, with a `{s}.solid` left accent bar — `info` now reads its own
  * `info.*` family instead of borrowing `primary.*`. `neutral` is the brand
  * notice band: border `secondary.border`, bar `primary.main`, bg
- * `secondary.surface`, text `fg.default`.
+ * `bg.subtle` (neutral — the sand tint is not a background), text
+ * `fg.default`.
  */
 export const bannerStyles: Record<VariantType, BoxProps> = {
   info: {
@@ -38,7 +39,7 @@ export const bannerStyles: Record<VariantType, BoxProps> = {
     color: 'danger.fg',
   },
   neutral: {
-    bg: 'secondary.surface',
+    bg: 'bg.subtle',
     borderColor: 'secondary.border',
     color: 'fg.default',
   },

@@ -578,9 +578,9 @@ export const NoFullScreenOnMobile: Story = {
 };
 
 /**
- * `headerTone="brand"` bands the header in `secondary.surfaceStrong` for a
- * modal that wants brand presence up top. `ModalHeader`'s `subtitle` prop
- * renders a second line under the title in `secondary.fgStrong`.
+ * `headerTone="brand"` bands the header in `layer.3` with a
+ * `secondary.border` bottom rule for a modal that wants brand presence up
+ * top. `ModalHeader`'s `subtitle` prop renders a second line under the title.
  */
 export const BrandHeader: Story = {
   args: {

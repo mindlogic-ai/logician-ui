@@ -7,7 +7,7 @@ import type { PolymorphicProps } from '../../types/polymorphic';
 /**
  * Badge variants (5.0).
  *
- * - `neutral` (default): beige `secondary.surface` with `secondary.fgStrong`
+ * - `neutral` (default): neutral `bg.muted` with `secondary.fgStrong`
  *   text — the everyday label ("Pro", "Beta", "Draft").
  * - `success` / `warning` / `danger` / `info`: the status family's soft
  *   `{status}.bg` surface with `{status}.fg` text. Use these ONLY when the

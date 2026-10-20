@@ -17,7 +17,7 @@ export const tagToneStyles: Record<
   { bgColor: string; color: string; hoverBorder: string }
 > = {
   neutral: {
-    bgColor: 'secondary.surface',
+    bgColor: 'bg.muted',
     color: 'fg.default',
     hoverBorder: 'secondary.border',
   },

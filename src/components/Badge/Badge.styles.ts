@@ -16,8 +16,9 @@ export const baseStyles = {
 /**
  * Badge colours per variant (5.0 BAZE tokens).
  *
- * `neutral` is the beige small-surface pair (`secondary.surface` +
- * `secondary.fgStrong`); the status variants use their family's soft
+ * `neutral` is a neutral `bg.muted` fill with `secondary.fgStrong` text — the
+ * sand tint (`secondary.surface`) is not a component background, so the
+ * secondary identity rides on the text only. The status variants use their family's soft
  * `.bg` + `.fg`, which the contrast audit checks in both modes.
  */
 export const variantStyles: Record<
@@ -25,7 +26,7 @@ export const variantStyles: Record<
   { bgColor: string; color: string }
 > = {
   neutral: {
-    bgColor: 'secondary.surface',
+    bgColor: 'bg.muted',
     color: 'secondary.fgStrong',
   },
   success: {

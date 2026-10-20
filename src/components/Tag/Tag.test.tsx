@@ -16,7 +16,7 @@ afterEach(() => vi.restoreAllMocks());
 describe('Tag 5.0 API', () => {
   it('resolves tone / selected / category styles', () => {
     expect(getTagStyles()).toMatchObject({
-      bgColor: 'secondary.surface',
+      bgColor: 'bg.muted',
       color: 'fg.default',
     });
     expect(getTagStyles({ tone: 'danger' })).toMatchObject({

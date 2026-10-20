@@ -17,7 +17,7 @@ const meta = {
     tone: {
       control: 'select',
       options: tagTones,
-      description: 'Colour role; `neutral` (beige) is the default',
+      description: 'Colour role; `neutral` (grey wash) is the default',
     },
     selected: {
       control: 'boolean',

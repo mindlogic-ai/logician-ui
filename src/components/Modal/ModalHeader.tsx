@@ -6,8 +6,8 @@ import { useModalContext } from './ModalContext';
 
 export type ModalHeaderProps = Dialog.HeaderProps & {
   /**
-   * Optional line under the title, in `secondary.fgStrong` when
-   * `headerTone="brand"` (and `fg.muted` otherwise). Rendered as the dialog's
+   * Optional line under the title, in `fg.muted` (on the brand band too —
+   * `secondary.fgStrong` on `layer.3` misses 7:1 in high-contrast dark). Rendered as the dialog's
    * description, so the dialog gets `aria-describedby` pointing at it.
    */
   subtitle?: ReactNode;
@@ -56,7 +56,14 @@ export const ModalHeader = ({
       flexDirection="column"
       alignItems="flex-start"
       gap={0}
-      {...(isBrand && { bg: 'secondary.surfaceStrong' })}
+      // Brand band: a neutral `layer.3` ground (≥ 1.13:1 off the panel in every
+      // mode) with a `secondary.border` rule carrying the brand. Not the sand
+      // `secondary.surface*` tint — that is accent-only, never a background.
+      {...(isBrand && {
+        bg: 'layer.3',
+        borderBottomWidth: '1px',
+        borderBottomColor: 'secondary.border',
+      })}
       {...rest}
     >
       {isOwnMarkup ? (
@@ -68,11 +75,7 @@ export const ModalHeader = ({
       )}
       {subtitle && (
         <Dialog.Description asChild>
-          <Subtext
-            mt={1}
-            fontWeight="normal"
-            color={isBrand ? 'secondary.fgStrong' : 'fg.muted'}
-          >
+          <Subtext mt={1} fontWeight="normal" color="fg.muted">
             {subtitle}
           </Subtext>
         </Dialog.Description>

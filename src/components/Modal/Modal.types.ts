@@ -1,8 +1,8 @@
 import { Dialog, PortalProps } from '@chakra-ui/react';
 
 /**
- * `'brand'` paints the header a `secondary.surfaceStrong` band (with
- * `ModalHeader`'s optional subtitle in `secondary.fgStrong`) for a modal that
+ * `'brand'` paints the header a neutral `layer.3` band with a
+ * `secondary.border` bottom rule (the subtitle stays `fg.muted`) for a modal that
  * wants brand presence up top — an onboarding step, a celebratory confirm.
  * `'default'` (the default) leaves the header unstyled, matching the body.
  */

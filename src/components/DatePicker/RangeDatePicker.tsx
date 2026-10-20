@@ -131,7 +131,7 @@ export const RangeDatePicker = ({
           },
           isInRangeBtnProps: {
             color: 'fg.default',
-            background: 'secondary.surfaceStrong',
+            background: 'primary.selected',
             borderRadius: 'none',
             css: {
               // pressed="true" 직전의 pressed="false" 요소에 borderRight

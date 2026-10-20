@@ -14,7 +14,7 @@ const meta = {
       control: 'select',
       options: badgeVariants,
       description:
-        'Colour role. `neutral` (beige) is the default; the rest report a status.',
+        'Colour role. `neutral` (grey wash) is the default; the rest report a status.',
     },
     size: {
       control: 'select',
@@ -35,7 +35,7 @@ type Story = StoryObj<typeof meta>;
 export const Basic: Story = {};
 
 /**
- * The five 5.0 variants. `neutral` = `secondary.surface` + `secondary.fgStrong`;
+ * The five 5.0 variants. `neutral` = `bg.muted` + `secondary.fgStrong`;
  * status variants = `{status}.bg` + `{status}.fg`.
  */
 export const AllVariants: Story = {
