@@ -4,5 +4,7 @@
   "initialVersions": {
     "@mindlogic-ai/logician-ui": "4.0.0"
   },
-  "changesets": []
+  "changesets": [
+    "v5-baze-palette"
+  ]
 }
