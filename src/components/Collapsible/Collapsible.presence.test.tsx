@@ -57,13 +57,13 @@ describe('Collapsible presence timing', () => {
     );
   });
 
-  it('leaves in half that, on the neutral curve', () => {
+  it('leaves in half that, on the same ease-out', () => {
     const { container } = setup();
     const rules = rulesFor(container.querySelector('[data-part="content"]')!);
 
     expect(rules).toContain('animation-duration:var(--chakra-durations-fast)');
     expect(rules).toContain(
-      'animation-timing-function:var(--chakra-easings-standard)'
+      'animation-timing-function:var(--chakra-easings-emphasized)'
     );
   });
 

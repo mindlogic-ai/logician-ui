@@ -201,7 +201,8 @@ export function GraphErrorBanner({
         border="none"
         cursor="pointer"
         opacity={showValidating ? 0.6 : 1}
-        transition="opacity 0.15s"
+        animationStyle="feedback"
+        transitionProperty="opacity"
         onClick={() => setOpen((o) => !o)}
       >
         <Text fontSize="sm" fontWeight="semibold" color="slate.1300">
@@ -211,7 +212,8 @@ export function GraphErrorBanner({
           boxSize="xs"
           color="slate.900"
           transform={open ? 'rotate(180deg)' : 'none'}
-          transition="transform 0.15s"
+          animationStyle="feedback"
+          transitionProperty="transform"
         />
       </Box>
       {open ? (
@@ -221,7 +223,8 @@ export function GraphErrorBanner({
           maxH="80"
           overflowY="auto"
           opacity={showValidating ? 0.6 : 1}
-          transition="opacity 0.15s"
+          animationStyle="feedback"
+          transitionProperty="opacity"
           borderTopWidth="1px"
           borderColor="slate.200"
         >

@@ -18,7 +18,7 @@ import { CHECKMARK_DASH } from '@/theme/motion';
 export const checkmarkDraw: SystemStyleObject = {
   '& polyline, & path': {
     strokeDasharray: CHECKMARK_DASH,
-    animation: `checkmark-draw var(--chakra-durations-motion-base) var(--chakra-easings-emphasized) var(--chakra-durations-motion-beat) both`,
+    animation: `checkmark-draw var(--chakra-durations-moderate) var(--chakra-easings-emphasized) var(--chakra-durations-motion-beat) both`,
   },
   _motionReduce: {
     '& polyline, & path': { animation: 'none', strokeDasharray: 'none' },

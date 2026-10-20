@@ -9,6 +9,7 @@ import {
 import { colors, semanticTokens } from './colors';
 import { globalCss } from './global';
 import { animationStyles, durations, easings, keyframes } from './motion';
+import { accordionSlotRecipe } from './recipes/accordion';
 import { tableSlotRecipe } from './recipes/table';
 
 /**
@@ -333,6 +334,7 @@ const config = defineConfig({
       textarea: formControlLgOverride,
     },
     slotRecipes: {
+      accordion: accordionSlotRecipe,
       table: tableSlotRecipe,
       select: selectSlotRecipe,
     },
