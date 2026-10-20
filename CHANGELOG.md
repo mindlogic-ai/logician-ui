@@ -1,5 +1,1197 @@
 # Changelog
 
+## 4.0.0
+
+### Major Changes
+
+- b63e961: `ExpandableText` clips by lines and animates open.
+
+  **Breaking: `charLimit` is gone, replaced by `lineClamp` (default 3).** The old
+  prop counted characters, which meant the collapsed and expanded states were two
+  different node trees — the component swapped one for the other, and everything
+  below jumped in a single frame. This is text someone is part-way through
+  reading, so a jump costs them their place.
+
+  Both states now render the same children and only the clipping differs, which is
+  what makes the height animatable at all. Opening and closing run on `travel`.
+
+  ```tsx
+  -(<ExpandableText charLimit={100}>{text}</ExpandableText>) +
+  <ExpandableText lineClamp={3}>{text}</ExpandableText>;
+  ```
+
+  `charLimit` still type-checks and is ignored, so nothing breaks at build time —
+  but any call site passing it will show three lines rather than its old character
+  budget, and should be revisited.
+
+  Two details worth knowing if you touch this:
+
+  **Not `-webkit-line-clamp`.** It would put an ellipsis on the cut line, but under
+  a clamp `scrollHeight` collapses to the clipped height — which is the only way to
+  ask whether anything is hidden, so the link that opens the text could never
+  appear. A `max-height` of whole `lh` units cuts on the same line boundary, keeps
+  the measurement honest, and is the thing being animated anyway.
+
+  **The height settles back to `none`,** not to the measured pixel count, so a
+  later reflow (a resize, a font swap) is not trapped under a stale number. Closing
+  therefore pins the height it is leaving for one frame before releasing it, since
+  `none` cannot be interpolated from.
+
+- 178d448: Flip `Modal`'s `fullScreenOnMobile` default from `true` to `false`.
+
+  A full-screen takeover on a phone suits long or immersive content — a file
+  picker, a course switcher — but most modals are confirm dialogs and short
+  forms, and for those the takeover removes the "this is dismissible" cue and
+  reads as a navigation. The mobile-native shape for that content is a dialog
+  that keeps its edges, which is what `false` gives (horizontal `mx: 4`).
+
+  Breaking for consumers: every `<Modal>` that did not pass the prop was
+  full-screen on mobile and now is not. Pass `fullScreenOnMobile` explicitly
+  where the takeover is intentional. Call sites that already pass
+  `fullScreenOnMobile={false}` are unaffected and can drop the prop.
+
+- bae01bf: feat(PinInput)!: replace `react-pin-input` with Chakra UI v3's built-in `PinInput` compound, removing the legacy class-component dependency that crashed under React 19 (removed `findDOMNode` / legacy context APIs).
+
+  ## Breaking Changes
+
+  The component is rewritten on top of Chakra v3 (Ark UI / Zag) and the public prop surface is slimmed down. Props removed entirely:
+  - `initialValue` — use the controlled `value` prop instead
+  - `inputMode` — derived automatically from `type`
+  - `inputStyle`, `inputFocusStyle` — replaced by internal styling that matches the logician-ui `Input` component (gray.400 default, primary.lighter hover, primary.main focus, danger.main invalid)
+  - `secret`, `secretDelay` — masking is no longer exposed; consumers can opt back in via Chakra v3 primitives if needed
+  - `regexCriteria` — covered by the new `type: 'numeric' | 'alphanumeric' | 'alphabetic'`; for custom validation, filter inside `onChange`
+  - `validate`, `autoSelect`, `focus` — handled by Zag's default behavior in Chakra v3
+  - `ariaLabel` — labeling is delegated to the surrounding `Field.Root` / `Field.Label` composition, or via `inputProps={{ 'aria-label': ... }}` on the hidden form input
+
+  `onChange` signature changed:
+  - Before: `(value: string, index: number) => void`
+  - After: `(value: string) => void`
+
+  Default value changes (consumers must opt in explicitly):
+  - `autoFocus` now defaults to `false` (was `true`)
+  - `otp` is now an explicit prop and defaults to `false`
+
+  New props:
+  - `type: 'numeric' | 'alphanumeric' | 'alphabetic'` — replaces the `isNumberOnly` boolean; default `'numeric'`
+  - `onComplete: (value: string) => void` — fires when all pins are filled
+  - `invalid: boolean` — triggers danger.main border styling, matching the `Input` component
+  - `inputProps?: InputHTMLAttributes<HTMLInputElement>` — forwarded to the underlying hidden `<input>` (the form-submission element). Use this for `name`, `aria-label`, `data-testid`, and any other attribute that targets the PinInput as a single logical input.
+
+  The component now also forwards refs to the hidden `<input>` via `forwardRef`, so it works with `react-hook-form`, `Formik`, and any form library that registers refs against the value-bearing input.
+
+  `PinInputProps` now extends Chakra's `PinInput.RootProps` (with conflicting members omitted), so `mask`, `blurOnComplete`, `selectOnFocus`, `pattern`, `name`, `colorPalette`, `size`, and `variant` are available without us having to curate them. The previous explicit `style` prop has moved to the Chakra Root via this inheritance — if you were passing layout styles to the cell container, wrap the component in a `<Box display="flex" ... />` or use `<PinInput.Control>` directly.
+
+  ## Migration
+
+  ```tsx
+  // Before
+  <PinInput
+    length={6}
+    initialValue={code}
+    onChange={setCode}
+    isNumberOnly
+    inputStyle={{ borderRadius: 8 }}
+  />
+
+  // After
+  <Field.Root>
+    <Field.Label>{t('verification_code')}</Field.Label>
+    <PinInput length={6} value={code} onChange={setCode} otp autoFocus />
+  </Field.Root>
+  ```
+
+  The `react-pin-input` package is removed from dependencies.
+
+- fb431eb: Remove the `MDXEditor` component and drop the `@mdxeditor/editor` dependency.
+
+  The markdown editor is moving to a Lexical-based implementation that now lives in the consuming product repo, so the design system no longer ships an editor. This removes the `MDXEditor` export (along with its types and styles) from the package root.
+
+  **Migration:** Consumers using `MDXEditor` from `@mindlogic-ai/logician-ui` should import their editor from the product repo's Lexical implementation instead.
+
+  **Bundle/install impact:** `@mdxeditor/editor` (~590 KB unpacked, built on Lexical) and its dependency tree are gone — the lockfile drops 182 transitive packages (1480 → 1298). The component was externalized in the rollup build, so `dist/` size is unchanged, but the package's install footprint for consumers shrinks substantially.
+
+### Minor Changes
+
+- 634580c: Add `BottomSheet` — a sheet that rises from the bottom edge, rests on snap points and can be swiped away.
+
+  Built on Ark UI's `Drawer` (zag-js), not Chakra's `Drawer`: Chakra's wraps Ark's _Dialog_, so it has no swipe, snap points or grabber. Flat exports in the shape of `Modal`: `BottomSheet` (root + portal, overlay included unless `modal={false}`), `BottomSheetContent` (positioner + panel + grabber, `showGrabber` defaults to `true`), `BottomSheetHeader` (children become the title the panel's `aria-labelledby` points at), `BottomSheetBody` (the scroll container), `BottomSheetFooter`, `BottomSheetCloseButton`, `BottomSheetOverlay` and `useBottomSheetContext` (Ark's drawer API). `BottomSheetProps` is Ark's `Drawer.RootProps` plus `portalProps`, so `snapPoints`, `defaultSnapPoint`, `swipeDirection`, `closeThreshold`, `swipeVelocityThreshold`, `preventDragOnScroll`, `modal` and `closeOnInteractOutside` pass straight through.
+
+  Styled through a slot recipe (`bottomSheetSlotRecipe`, also exported) on semantic tokens: `bg.surface` panel, top radius only, `85dvh` cap, `env(safe-area-inset-bottom)` padding, open/close on the shared `presence` clock and a plain fade under reduced motion.
+
+  **`@ark-ui/react` is now a peer dependency (`^5.39.0`).** It used to arrive only transitively through Chakra; `Drawer` first ships in Ark 5.39, which is the version Chakra 3.37 pins. Apps on Chakra ≥ 3.37 already have it. On an older Chakra, add `@ark-ui/react@^5.39.0` and let the package manager dedupe it so Chakra and the sheet share one copy.
+
+- 8e051c2: Add `Caption` to the Typography scale.
+
+  A new semantic tier below `Subtext` for the smallest text in the body scale — de-emphasised metadata such as timestamps, counts, statuses, and helper microcopy. The scale is now `Text` (p, 14–16px) → `Subtext` (12.88–14px) → `Caption` (11–12px).
+
+  Backed by a new `textStyle="caption"` token (`0.688em`→`0.75em`, weight 500, `1.4` leading for compact single-line metadata). `Subtext`'s description is updated from "Small caption text" to "Supporting / secondary text" so a single token owns the "caption" name and the hierarchy stays unambiguous.
+
+  Authored to match the rest of the scale (`H1`–`H5`, `Text`, `Subtitle`, `Subtext`, `Overline`): renders a Chakra `Text` with `textStyle="caption"`, disables the textStyle when an explicit `fontSize` is passed, and exposes the full Chakra style-prop surface. Defaults to `color="fg.muted"` since captions are secondary by nature; a brand/status variant is a single override (e.g. `color="danger.main"`).
+
+- b888a42: Add `Overline` to the Typography scale.
+
+  A small, uppercase, letter-spaced label used as a section "eyebrow" or category heading (e.g. an `EXECUTION MODE` eyebrow above a panel heading, or a `RECENT` group label). It shares the `Subtext` size but bakes in the overline styling via a new `textStyle="overline"` token (uppercase, `0.05em` tracking, medium weight).
+
+  Authored to match the rest of the scale (`H1`–`H5`, `Text`, `Subtitle`, `Subtext`): renders a Chakra `Text` with `textStyle="overline"`, disables the textStyle when an explicit `fontSize` is passed, and exposes the full Chakra style-prop surface so brand/status variants are a single override (e.g. `color="primary.main"`, `fontWeight="extrabold"`).
+
+- 7aaf7a7: Add `Tree` compound component wrapping Chakra UI v3's `TreeView` (Ark UI tree-view).
+
+  Exposes the full part set so consumers can compose nested hierarchical UIs with built-in keyboard navigation (arrow keys, Home/End, type-ahead), `role="tree"`/`treeitem` semantics, and `aria-expanded`/`aria-selected` for free.
+
+  **Parts**
+
+  `Tree.Root`, `Tree.Tree`, `Tree.Branch`, `Tree.BranchControl`, `Tree.BranchTrigger`, `Tree.BranchIndicator`, `Tree.BranchText`, `Tree.BranchContent`, `Tree.BranchIndentGuide`, `Tree.Item`, `Tree.ItemText`, `Tree.ItemIndicator`, `Tree.NodeCheckbox`, `Tree.Label`.
+
+  Also re-exports `createTreeCollection` and the relevant change-detail types (`TreeExpandedChangeDetails`, `TreeSelectionChangeDetails`, etc.) so consumers don't need to import from `@chakra-ui/react`.
+
+  **Defaults**
+  - `BranchControl` / `Item` rows: padded clickable rows with `bg.subtle` hover, `primary.lightest` selected state, semantic-token text so light/dark both work.
+  - `BranchIndicator`: default chevron icon (`IoChevronForward`) that rotates 90° on open.
+  - `BranchIndentGuide`: subtle vertical line for depth visualization (matches the VSCode/GitHub tree feel).
+  - All interactive parts use the shared `focusRing` util.
+
+  Single- and multiple-selection both supported via the upstream `selectionMode` prop. Controlled or uncontrolled via `(default)expandedValue` and `(default)selectedValue`.
+
+- c32a2f7: Set the global base font size to 14px.
+
+  The type and spacing scales are em-relative, so the `html` font size in
+  `theme/global.ts` drives the whole app-wide baseline. Flip it from 16px back to
+  14px; surfaces that need a different base (e.g. a chat view at 16px) opt in
+  locally via `<ScaledContext>`. Consumers relying on the previous 16px default
+  will see text and em-based spacing render ~12.5% smaller.
+
+- 69ef51c: Heavier display headings and darker, bolder Tag text.
+
+  Heading weights now taper with size: `H1`/`H2` step up to `extrabold` and
+  `H3` to `bold` (via the `h1`/`h2`/`h3` `textStyle` tokens), while `H4`/`H5`
+  stay lighter — extrabold reads well only at large sizes with tight tracking,
+  so the smaller headings are intentionally left as-is.
+
+  Tag text is darker and a touch bolder across the board:
+  - `soft` text moves one step darker (`*.dark` → `*.darker`; neutral
+    `fg.muted` → `fg.default`).
+  - `outline` text moves one step darker (`*.main` → `*.dark`; neutral
+    `fg.subtle` → `fg.muted`). This also lifts the `warning` outline off the
+    palette's AA-risk step (gold.500 3.0:1 → gold.700 5.8:1).
+  - All variants gain `fontWeight="semibold"`.
+  - The `warning` `solid` fill deepens to `gold.700` with white text (was
+    `gold.500` with near-black text) so it clears AA (5.86:1) and matches the
+    other solid chips.
+
+  `Link` now inherits the surrounding font weight instead of pinning
+  `semibold`, so an inline link reads at its text's weight — `extrabold`
+  inside an `H1`, body weight inside a paragraph — with color + underline
+  carrying the affordance. Standalone links in body copy therefore render one
+  step lighter than before (medium instead of semibold); pass an explicit
+  `fontWeight` to opt out.
+
+  Consumers using `H1`–`H3`, `Tag`, or `Link` will see these changes
+  automatically.
+
+- 3be33d4: `Button` gains an opt-in `lift`.
+
+  ```tsx
+  <Button colorPalette="primary" variant="solid" lift>
+    시작하기
+  </Button>
+  ```
+
+  Raises the button 1px toward the pointer on hover with a shadow under it;
+  pressing sets it back down, underneath the existing `scale` press. Off by
+  default and deliberately not a house style — a lift is emphasis, and a row of
+  six buttons all lifting is noise. Reach for it where one button is the point of
+  the screen.
+
+  The shadow is a `filter: drop-shadow`, not a `box-shadow`. The keyboard focus
+  ring is a box-shadow, and Chakra emits `:hover` _after_ `:focus-visible`, so a
+  box-shadow here would have taken the ring off any button that was focused and
+  hovered at once — a real accessibility regression that looks like nothing in
+  review. A different property cannot collide with it, and it follows the border
+  radius for free. It deepens in dark mode, where a black shadow does nothing.
+
+  `translate` and `filter` joined the button's transition list unconditionally: a
+  property nobody changes costs nothing, and leaving them out would make the
+  opt-in jump rather than move.
+
+- b79705a: Add an `elevated` variant to `Card`.
+
+  The base `Card` is intentionally flat (`boxShadow: 'none'`, `border.default`).
+  `elevated` promotes the soft "raised object" resting treatment — `boxShadow:
+'sm'` plus the lighter `border.subtle` — into the design system, so standalone
+  content cards can share one baseline instead of re-deriving it inline. The
+  gentle shadow does the separating, which is why the border can soften; pair it
+  with `clickable` (or a consumer hover) to add a lift on interaction.
+
+- f0cdef3: Flatten `Card`'s clickable hover and replace the `gradient` variant with `wash`.
+
+  `clickable` used to answer hover with `boxShadow: 'lg'`, a lift that said the
+  card floats. The hover is now flat: the ground steps to `bg.subtle` and the
+  border darkens to `border.strong`. Both tokens invert, so the state reads in
+  dark mode, and nothing casts a shadow. A consumer that passes its own `_hover`
+  still merges over this baseline.
+
+  `variant="gradient"` painted a 180deg `bg.subtle` → `bg.surface` wash with a
+  `primary.light` border. It is now `variant="wash"`: a flat fill one tier off
+  the page (`bg.subtle` in light, `bg.muted` in dark, where `bg.subtle` is too
+  close to the card surface to read) with a `border.default` hairline, for a
+  block that summarises or concludes.
+  `gradient` remains as a deprecated alias that renders the same, so existing
+  call sites keep compiling and simply go flat; migrate them to `wash`.
+
+- 59335ac: Export the `colors` palette and `semanticTokens` map as runtime values from the package root.
+
+  Previously only the `SemanticColorToken` type was re-exported, so consumers had no way to read the actual color values (raw scale or semantic roles) at runtime — they had to hardcode hex values or reach into theme internals.
+
+  Now `import { colors, semanticTokens } from '@mindlogic-ai/logician-ui'` resolves to the same objects the theme is built from, letting downstream apps reference brand colors and semantic roles (e.g. `border.default`, `primary.main`) without duplicating them. The `SemanticColorToken` type export is unchanged.
+
+- 9a248cf: Expose the dark-mode neutrals as an overridable `colors.grayDark` primitive scale.
+
+  The desaturated dark neutrals were inlined as hex literals inside the semantic tokens (the internal `desaturatedGray` table, plus the three a11y-lifted text steps on `slate.600`/`slate.700`/`fg.subtle`). Because they were literals rather than token references, a consumer merging its own config into `LogicianProvider` could retint light mode through `gray.*` but had no way to reach dark mode — dark surfaces stayed cool slate under any brand palette.
+
+  Those values now live in `colors.grayDark` (steps `0`–`1500`, plus `fg600`/`fg700`/`fgSubtle`), and every dark-mode neutral in the semantic layer — `slate.*` and the `_dark` arm of `bg.*`/`fg.*`/`border.*` — references `{colors.grayDark.N}`. A consumer can now override the dark neutral ramp exactly the way it overrides `blue.*` for the primary ramp.
+
+  Default rendering is unchanged: all 154 resolved semantic color values are byte-identical before and after.
+
+- 681ff06: Ship the shared form-primitive family: `FieldRow`, `FieldLabel`, `FieldError`, `FieldHelp`, `FormSection`, `FormSectionHeader`, `FormScrollArea`, `FormFooter` and `FormModalFooter`.
+
+  These were hoisted out of FactChat's `@/components/form` so every product composes fields from one design-system family instead of hand-rolling label / error / section / footer chrome.
+
+  **Highlights**
+  - `FieldRow` — the composition keystone: wraps a control in `FormControl` and owns all label↔control / `aria-invalid` / `aria-describedby` wiring. Form-library agnostic (`error` is a plain prop, so it works with RHF and `useState` forms).
+  - `FormSection` — a titled group of fields; flat by default, `collapsible` delegates to `CollapsibleSection`.
+  - `FormFooter` / `FormScrollArea` — the sticky-footer + scroll-column shell for sidebar/left-panel forms.
+  - `FormModalFooter` — the action footer for form-in-a-modal surfaces (optional far-left delete + Cancel + primary submit with its own loading/disabled state). It is **copy-agnostic**: it owns no strings, so `cancelLabel` is **required** and `deleteLabel` is rendered verbatim — the consuming app supplies its own (translated) labels.
+
+  Each primitive ships with a Storybook story and a test.
+
+- bbce3c3: Add `2xs` (14px) to the `Icon` `boxSize` scale.
+
+  Extends the t-shirt size mapping in `createIcon` below `xs` (16px) with a new `2xs` token that resolves to `3.5` (14px). This gives a design-token home to the many small-glyph cases — badge icons, toolbar icon-buttons, dropdown chevrons, mini play/pause controls — that previously fell through the mapping as raw numeric/px values (`boxSize={3.5}`, `boxSize="14px"`). The full scale is now `2xs, xs, sm, md, lg, xl` (14px → 40px).
+
+- cdb4a91: Neutral `solid` buttons and selected tabs move to ink, fixing a contrast bug.
+
+  **`colorPalette="neutral" variant="solid"` failed AA in both modes.** A white
+  label on `gray.700` measures **4.12:1** in light, and because the semantic gray
+  scale inverts, the same token resolves to `grayDark.fg700` in dark and the label
+  lands at **3.15:1**. It was the only palette × variant combination in the system
+  below the 4.5:1 text gate, and the worse arm was the one nobody screenshots.
+
+  Darkening one step does not fix it — `gray.800` is 5.32:1 in light but **3.08:1**
+  in dark, because darkening the light arm lightens the dark one. A neutral fill
+  has to _invert_, not shift, so it now uses the existing `bg.inverse` /
+  `fg.inverse` pair: ink under a near-white label on a light page, brand paper
+  under an ink label on a dark one (**15.11:1** / **15.88:1**, with the fill itself
+  15.49:1 / 16.36:1 clear of its canvas). Hover and active move to `gray.1200` /
+  `gray.1100`, which step away from the resting fill in whichever mode is live.
+
+  Side effect worth knowing: this makes neutral `solid` the system's **ink
+  action** — the one high-emphasis fill with no hue — without opening a new
+  variant.
+
+  **Selected tabs now use `fg.emphasized` instead of `primary.main`.** A selected
+  tab is a place, not a value: it answers "where am I", so it is carried by ink and
+  weight rather than the brand hue, leaving colour to mean what a control _does_.
+  This also retires the defect the old ramp was written around — `primary.main` was
+  4.59:1 on the dark page but **4.19:1** on a raised surface, so a tab list passed
+  every full-page scan and failed the first time it rendered inside a modal. The
+  indicator moves with the label, and the vertical rail's selected fill moves from
+  `primary.extralight` to `bg.muted`.
+
+  Form controls are untouched: `Checkbox`, `Switch`, `Banner` and the rest keep the
+  brand hue, because a checkbox is a value rather than a place. `primary.main`
+  itself is not re-pegged.
+
+  Consumers using neutral `solid` buttons or `Tabs` will see these changes
+  automatically.
+
+- bef5a54: `InlineCode` renders one step below body text.
+
+  Changes `InlineCode`'s `textStyle` from `p` to `subtext` (`1em` → `0.875em` on desktop, em-relative). The chip (padding + border ring) plus the monospace face's larger x-height made a body-size chip read visibly bigger than the prose around it; stepping it down brings its footprint back in line with running text.
+
+  `subtext` is the same tier as `p` — identical `fontFamily`, `fontWeight`, and `line-height` — only one size smaller, so this changes size only. A caller's explicit `fontFamily="mono"` still wins (InlineCode has no monospace default), exactly as before. `subtext` lands the chip at ~87.5% of body on desktop, in line with GitHub (85%), Bootstrap and Tailwind Typography (0.875em).
+
+  The corner radius also tightens from `sm` (6px) to `xs` (4px): on the smaller chip a 6px radius reads a little bubbly, and the tighter corner is crisper inline.
+
+  Note: the size is em-relative, so inline code inside a heading renders proportionally smaller than the heading text. If you want it to match the heading instead, reset it per context at your prose layer (e.g. `:is(h1,h2,h3,h4,h5,h6) code { font-size: inherit }`).
+
+- 590944b: Fix the accessibility defects a KWCAG 2.1 audit found in `Subtitle`, `SelectField`, `ComboboxField`, `Slider`, `Radio`, `FileInput`, `ErrorFallback` and the workflow `NodePalette`.
+
+  Every one of these was invisible in review — the screen looked right, and only the accessibility tree or the serialized markup said otherwise. Each is now held by a test in `src/components/a11y.kwcag.test.tsx`, named by the 검사항목 an evaluator works from.
+
+  **`Subtitle` renders a paragraph, not `<h6>`** (KWCAG 5.2.4.2 제목 제공). It was `Text as="h6"`, so every call site put a level-6 heading into the document outline: a sentence of helper copy announced as a heading, and a jump from whatever level preceded it (axe `heading-order`). A component chosen for its type scale should not decide the outline. Call sites that genuinely are the next heading say so themselves — `<Subtitle as="h2">` — which is where that is known. This also fixes `Pagination`'s page counter and `ErrorFallback`'s subtitle, both of which were `<h6>` by inheritance.
+
+  **`SelectField` and `ComboboxField` take an `ariaLabel`** (KWCAG 5.3.4.1 레이블 제공). The trigger's `aria-labelledby` is emitted whether or not the label part is rendered, so a field composed without a visible `label` was not merely unlabelled — the reference dangled and the control resolved to **no accessible name at all**, announcing as a bare "button" however much text it showed (axe `button-name`). Both now render the label part whenever they have anything to put in it: visibly when there is a `label`, visually hidden when the name lives elsewhere on screen (`ariaLabel`, falling back to `placeholder`). A field composed with none of the three is still nameless — the type does not yet forbid it, so that case is a call-site review item rather than something this fixes. Rendered as a hidden label rather than an `aria-label` attribute so the name is in the server-rendered markup — an attribute applied after hydration leaves a window in which the control is nameless. `Pagination`'s rows-per-page select now passes its own name.
+
+  **`Slider` takes an `ariaLabel`** (KWCAG 5.3.4.1). Same shape of bug one layer down: Zag points each thumb's `aria-labelledby` at a label part, so a slider composed without one has unnamed thumbs (axe `aria-input-field-name`). Media controls — a seek bar beside a time display, a volume slider beside a mute button — are exactly the compositions that carry their label as an adjacent control.
+
+  **`Radio.Control` no longer emits a duplicate id** (KWCAG 5.4.1.1 마크업 오류 방지). Chakra derives the indicator's id from the same `ids.itemControl` as the control it sits inside, so every radio on a page shipped two elements with one id. Duplicate ids are still a live 검사항목 for Korean evaluators even though WCAG 2.2 dropped SC 4.1.1 — and `getElementById` returning whichever came first is its own bug. The indicator is the dot inside the control; nothing references it, so it takes a `useId()` value that stays stable across server and client render.
+
+  **`FileInput` drops two roles that were wrong** (KWCAG 5.4.2.1 웹 애플리케이션 접근성 준수). `role="button"` on the wrapper put the real `<input>` inside another interactive element (axe `nested-interactive`), and `role="group"` on a `<label>` is not an allowed pairing (`aria-allowed-role`). The label now carries `className="group"`, which is what Chakra's `_groupHover` actually compiles against (`.group:hover &`) — so the reveal-on-hover overlay, which had never fired, now works.
+
+  **`ErrorFallback` renders a landmark and an ordered outline** (KWCAG 5.2.4.1 반복 영역 건너뛰기 / 5.2.4.2). This card replaces whatever failed — often the whole page, taking the host's `<main>` with it — and left a screen-reader user with nothing to navigate by. It is now a `<section>` labelled by its own error title: a region landmark wherever it renders, which `<main>` would not be, since a segment-level boundary leaves the host's `<main>` in place and two of those is its own failure. The support-details block moves from `<h4>` to level 2, under the card's `<h1>`.
+
+  **The workflow `NodePalette` is a labelled region** rather than a level-6 heading. Its title is a `Subtitle`, so the tag fix above removed the `<h6>`; the panel now says what it is the way a panel should — `role="region"` named by that title.
+
+  **Markdown's `h6` keeps its tag.** `Subtitle`'s default moved to a paragraph, and the markdown component map routes `h6` through `Subtitle` — so inheriting that default would have demoted every author-written `###### 제목` out of the document outline, the same 5.2.4.2 defect pointed the other way. The map now says `as="h6"` explicitly. Downstream maps that route `h6` through `Subtitle` need the same, and FactChat's does.
+
+  **`Link`'s default colour is theme-aware, and it no longer discards a colour the call site gave it** (KWCAG 5.1.3.3 텍스트 콘텐츠의 명도 대비). `.main` is tuned against a white page: on the dark canvas (#181A20) `primary.main` measures 4.19:1 and `danger.main` 4.26:1, both under the 4.5:1 body text needs — and since this is the DEFAULT, every link in a consuming app inherited it. The `.dark` end of each ramp is the far side from the PAGE rather than a fixed lightness, so in dark mode it resolves lighter: 6.68:1 and 6.38:1.
+
+  The second half is what made the first unfixable downstream. `linkColor` was `(typeof color === 'string' ? color : undefined) || defaultColor`, so a call site passing a per-theme `{ base, _dark }` — the documented Chakra way to fix exactly this — got the default back, with no error in the types or at runtime. A prop the type accepts and the component throws away is worse than one it rejects: the fix looks applied, the rendered class is unchanged, and only measuring the pixels says otherwise. It is `color ?? defaultColor` now.
+
+  **Not fixed here, and still worked around downstream:** the icon set's `<defs>` ids are named after the source file (`chat.svg` → `chat_svg__a`), so the same icon twice on a page is a duplicate id. That is an SVGR build-time constant, and making it per-instance means generating the ids at runtime — a change to the icon pipeline rather than to a component, and worth doing deliberately.
+
+- 7f0eb3d: Add the motion layer: a timing scale, a seven-preset vocabulary, and eight
+  primitives.
+
+  There was no timing layer, so every animated surface invented its own numbers —
+  `Button` over `0.25s`, `ProgressBar` over `0.3s`, `Tree` over `0.15s`, with
+  nothing tying them together. Nothing here changes an API a consumer types
+  against except where noted, so the thing to check after upgrading is **feel**.
+  `Theme/Motion` in Storybook is the reference.
+
+  ## The scale
+
+  Durations are prefixed (`motion.instant` / `motion.press` / `motion.base` /
+  `motion.slow` / `motion.slower` / `motion.celebrate.*` / `motion.loop.*`) rather
+  than merged into Chakra's. Chakra already defines `fast` (150ms), `slow` (300ms)
+  and `slower` (400ms), and our `slow`/`slower` mean 500ms/700ms — redefining them
+  would silently retime every Chakra component that reads them (`dialog`, `drawer`
+  and `progress` all do), so a Modal backdrop would start fading over 500ms
+  because a reward flight wanted that duration. **A shared library must not change
+  the meaning of a token it did not define.** For 150ms and 200ms there are
+  deliberately no `motion.*` tokens: Chakra's `fast` and `moderate` already cover
+  them exactly, and two names for one number is worse than remembering which scale
+  to reach into.
+
+  Easings (`standard` / `emphasized` / `overshoot`) need no prefix — Chakra's are
+  `ease-in` / `ease-out` / `ease-in-out` / `ease-in-smooth`, so nothing collides.
+
+  Raw values are exported too (`MOTION_DURATION_MS`, `MOTION_DURATION_S`,
+  `MOTION_EASE`, `MOTION_EASE_CSS`) for animation tech that cannot read a CSS
+  variable, plus `cubicBezier(curve)` for motion JavaScript has to drive frame by
+  frame — without it a count-up beside a card reaches for an `easeOutCubic` off
+  the internet and lands on a different curve from the card.
+
+  ## The vocabulary — seven presets, and seven is the policy
+
+  Components pick a preset **by intent** and the timing comes with it. They live
+  in `theme.animationStyles`, the same composition slot `textStyles` uses, so they
+  apply like a text style and a consuming app can remap one from its own config:
+
+  ```tsx
+  <Switch.Thumb   animationStyle="spring" transitionProperty="translate" />
+  <Progress.Range animationStyle="travel" transitionProperty="width" />
+  ```
+
+  `press` (contact) · `feedback` (hover and state) · `travel` (moving to a new
+  position) · `spring` (a physical flip, or two things crossing) · `presence`
+  (a part with both an open and a closed state) · `stagger` (siblings arriving in
+  sequence) · `composite` (the escape hatch, for an element needing two clocks).
+
+  **That is the whole list, and the count is deliberate** — twenty presets is the
+  same as none. Six motions that had exactly one caller moved _out_ of the shared
+  layer and next to that caller instead: `spin` → `Spinner.styles.ts`,
+  `indeterminate` → `ProgressBar.styles.ts`, `checkmarkDraw` →
+  `Checkbox.styles.ts`, `dotPop` → `Radio.styles.ts`, the Ark indicator hatch →
+  `SegmentedControl.styles.ts`, and the Modal's two keyframes →
+  `Modal.styles.ts`. Rendered output is unchanged; every one was measured in a
+  browser before and after. The duration tokens they read stay global — that is
+  the scale, and only the _composition_ was local.
+
+  Two things are baked into the preset definitions rather than left to each
+  component:
+  - **`transitionProperty` defaults to `none`.** CSS defaults it to `all`, so a
+    preset without one would quietly animate every property on the element —
+    which is the bug `Button` had, moving a call site's width and padding on
+    hover. Forgetting the prop now means nothing moves, which is _visible_.
+  - **Reduced motion.** "Anything that animates must honour
+    `prefers-reduced-motion`" is a policy, not a per-component decision; written
+    by hand it was already spread across 13 places, and the 14th component is the
+    one that forgets. Loops are the exception and do not zero out — a frozen
+    spinner reads as a dead request, so it slows instead.
+
+  ## presence — leaving takes half as long as arriving
+
+  An enter has to be _read_. An exit has already been decided, so every
+  millisecond the leaving element still owns the screen is a millisecond of
+  waiting. **300ms in on `emphasized`, 150ms out on `standard`**, applied to
+  `Menu`, `Popover`, `Tooltip`, `Select`, `Combobox` and `Collapsible`, all of
+  which were on Chakra's defaults: near-symmetric (`Tooltip` 150/150) or so short
+  leaving that the surface reads as cut off rather than dismissed (`Select` 50ms,
+  `Combobox` `0s`). **Enters lengthen from 150ms to 300ms — the visible half of
+  this change, and the one worth judging in Storybook.** `Modal` already had the
+  ratio and now reads the preset rather than restating the numbers.
+
+  The preset declares only the clock, never `animation-name`. That is what lets
+  one preset sit on seven unrelated parts: the menu keeps sliding from its
+  trigger, the popover keeps scaling from its origin, the collapsible keeps
+  interpolating the height Ark measures. A test walks the vocabulary and asserts
+  that any preset declaring `_open` declares `_closed`, and that the closed
+  duration _resolves_ to strictly fewer milliseconds — the ratio is enforced, not
+  remembered.
+
+  Not applied to `Toast`: Chakra moves it with a `transition` shorthand rather
+  than a keyframe, so an `animation-*` clock lands on it and does nothing at all.
+  Shipping the prop would have looked applied and changed nothing.
+
+  ## stagger — CSS only, enter only
+
+  `staggerProps(index)` sets one inline custom property; the preset owns the
+  keyframe, duration, curve and cap. No JS timers, no wrapper component — a
+  wrapper needs a DOM node, and an extra element inside `Menu.Content` is not
+  free, since Ark walks those children for typeahead and roving focus.
+
+  **The cap is the point.** Uncapped, the delay is linear in the index, so the
+  fortieth row arrives 1.4s after the first — not staggered, late. Six steps of
+  35ms tops out at 210ms and everything past the sixth item arrives together,
+  which nobody notices.
+
+  It is an `animation-delay`, not a `transition-delay`, deliberately: a transition
+  delay applies to every _later_ property change on the element, so a hover would
+  wait its index out and a filter keystroke would re-deal the whole list.
+
+  Opt-in on `Menu.List`, `SelectField` and `FileList`. Deliberately not wired on
+  `ComboboxField` (options remount on every keystroke — the failure mode above),
+  `Toast` (they arrive one at a time), `Tree` (child composition belongs to the
+  call site, so the library cannot know the index), and `Masonry` / `Table` (long,
+  virtualizable, re-sorted on click).
+
+  ## What moves differently
+  - **Button** splits the press out of its blanket transition — `all` at a flat
+    `0.25s` put the press on the same clock as a colour change. The press is now
+    the individual `scale` property rather than `transform: scale()`, which used
+    to _replace_ a transform the call site had set for positioning.
+  - **SegmentedControl** runs on house timing rather than Ark's 150ms default.
+    Ark writes that part's `transition-*` **inline**, and an inline declaration
+    beats any class rule — which is why `transitionDuration` as a prop never
+    reached it. Retiming goes through the custom properties those inline `var()`s
+    read.
+  - **Switch** gives the thumb `overshoot`, the only curve that survives ~16px of
+    travel, because it reverses direction.
+  - **Checkbox** strokes its tick on rather than flashing it, 60ms after the box
+    fills, so the two read as "pressed" then "confirmed".
+  - **ColorModeToggle**'s icons rotate through each other instead of being swapped
+    by a ternary. The page-wide colour flip stays instant.
+  - **ProgressBar** drops `ease-in-out` for `emphasized` — easing in is a fiction
+    for a value that only moves one way — and gains `indeterminate`, for work with
+    no denominator.
+  - **Spinner**'s hardcoded `0.65s` is now `motion.loop.turn`, the same 650ms.
+
+  Folding onto the presets also normalised timings that had drifted: the same "a
+  colour changes on hover" was written with four different easings across four
+  files. `Card` hover now runs at 150ms rather than 300ms, `ColorModeToggle` at
+  300ms rather than 500ms, `FileInput` at 150ms rather than 200ms.
+
+  ## Eight primitives
+
+  FactChat had built its own motion layer — `src/components/motion/`, seven
+  components on a duplicated copy of these tokens, all of them on framer-motion.
+  Rebuilding them here answered a question the vocabulary alone could not: what
+  does the scale actually hold once real motion goes through it?
+
+  **`Pulse`** pops once when `trigger` changes. **`Shake`** is its counterpart and
+  refuses; keep them apart, because a shake used as emphasis reads as an error.
+  Both replay through a changed `key` — a new element runs its animation from the
+  top, the same trick `stagger` uses to replay on reopen.
+
+  **`Appear`** brings an element in on mount. It is the third of three entrances
+  and the one to reach for last: if the element can close, `presence`; if siblings
+  arrive with it, `stagger`; otherwise this. **`Reveal`** opens a block out of
+  nothing through `grid-template-rows: 0fr → 1fr` rather than measuring a height.
+  **`FlyTo`** arcs a ghost between two measured rects. **`Confetti`** bursts.
+  **`CountUp`** counts. **`SwapTransition`** slides one piece of content out and
+  the next in, and is the only one keeping React state — the outgoing subtree has
+  to stay on screen long enough to leave while React has already been told to
+  render the new one. Fifteen lines holding one child through one exit.
+
+  **No framer-motion.** It stays a devDependency.
+
+  Each primitive's TSDoc states what it adds to the DOM, since it varies: `Pulse`,
+  `Shake` and `Appear` wrap children in one `div`; `Reveal` and `SwapTransition`
+  in two; `FlyTo` portals and adds nothing in place; `Confetti` is an overlay and
+  `CountUp` is itself the `<span>`.
+
+  The scale gained `motion.celebrate` — `burst` (900ms) and `fall` (1800ms) —
+  split for the reason `loop` splits into `turn` and `sweep`: the period is set by
+  how far the thing travels. Everything below it answers "how long until the
+  interface responded", and its ceiling was `slower` (700ms) because past that a
+  response reads as a wait. A celebration inverts that; it exists to be watched.
+  Both codebases had already written the literal.
+
+  `Confetti`'s default colours are literal hex, the one place here deliberately
+  off the palette. Semantic tokens mean things, and raining the error red over
+  "payment complete" says something the screen does not. The palette is also built
+  for interface legibility — average lightness 47%, three of five in the blue
+  range — so fifty pieces of it read as a chart legend falling. The cost is stated
+  rather than hidden: these do not follow a re-theme and do not adapt to dark
+  mode. `colors` is a prop for apps that need their own.
+
+  ## Three lint rules, because types cannot do this
+
+  Chakra declares the prop as
+  `ConditionalValue<UtilityValues["animationStyle"] | CssVars | AnyString>`, so
+  `AnyString` accepts every typo and `ConditionalValue` accepts every array —
+  both compile, and both then do something other than what was written. A typo
+  does nothing at all; an array is read as **responsive breakpoints**, one motion
+  below `sm` and another above, which is the mistake that looks correct on the
+  machine that wrote it.
+
+  So `animationStyle` now rejects a name outside the vocabulary, rejects the array
+  and breakpoint-object forms, and rejects a transition preset with no
+  `transitionProperty` to scope it. All three were run across the library first to
+  confirm zero false positives, and `motionGuards.test.ts` lints the cases through
+  ESLint and asserts which report — so the rules cannot be deleted in an unrelated
+  cleanup without something failing.
+
+  ## Three transitions that were declared but never played
+
+  All for the same reason: invalid CSS is dropped silently, so the code read as if
+  it animated.
+  - `Card` set `transitionDuration="normal"`, a Chakra v2 token that no longer
+    exists in v3. It fell through as a literal, `transition-duration: normal` is
+    not valid CSS, and the declaration was discarded — the card's hover changed
+    instantly.
+  - `FileInput` set `transition="ease-in"` — a shorthand with a timing function
+    but no duration resolves to `0s`, so the `_groupHover` fade snapped in one
+    frame.
+  - `SectionLoader` set `transition="0.3 opacity ease"` — the missing `s` made the
+    value unparseable and the whole declaration was dropped. Its sibling
+    `PageLoader` has the same line written correctly.
+
+  `Card` and `FileInput` also gain `_motionReduce`, since both now actually
+  animate.
+
+  ## New exports
+
+  The eight primitives, `staggerProps`, `cubicBezier`, and from the theme:
+  `durations`, `easings`, `animationStyles`, `MOTION_DURATION_MS`,
+  `MOTION_DURATION_S`, `MOTION_EASE`, `MOTION_EASE_CSS`, `MOTION_STAGGER_MAX`,
+  and the `MotionDurationToken` / `MotionEaseToken` / `MotionStyleToken` types.
+
+  `keyframes` is deliberately **not** exported — it is registered with the theme
+  and referenced by name in CSS, so a consumer never needs the object, and
+  exporting it would invite redefining a keyframe under a name we do not own.
+
+- 2d6b472: Add `noZoomOnFocus` and apply it to `Input` and `Textarea`.
+
+  iOS Safari zooms the viewport when a focused editable host computes to a
+  font-size under 16px. The only ways to suppress that are `maximum-scale=1` and
+  `user-scalable=no`, which also remove pinch-zoom and fail KWCAG 2.2 8.2.1, so
+  the control has to meet the threshold instead.
+
+  Being under it was the default rather than the exception: `html` is 14px and
+  Chakra's input recipe maps `size="sm"`/`"md"` onto the `sm`/`md` textStyles,
+  which this theme defines as `{ base: '0.875em', md: '1em' }` — the `base` arm is
+  the phone, so a control rendered _smaller_ there than on desktop (12.25px
+  against the 14px root).
+
+  `Input` and `Textarea` now merge `noZoomOnFocus` first, so it is a default a
+  call site can still override; `PasswordInput` composes `Input` and inherits it.
+  Scoped with `@media (pointer: coarse)` rather than a width breakpoint — a width
+  rule misses touch devices above the breakpoint (iPad portrait is exactly 768px)
+  and catches devices that never zoom (a desktop user at 200% browser zoom has a
+  ~640px viewport, where enlarging form controls pushes wide tables off-screen).
+
+  `Select` and `PinInput` deliberately do not take it: `Select` is a listbox whose
+  visible trigger is a `<button>`, and `PinInput` wraps `react-pin-input`, which
+  takes an inline `style` object that cannot carry a media query.
+
+  Exported so consumers can apply the same rule to editable surfaces the design
+  system does not own — a Lexical `contenteditable`, a bare Chakra `Input`, or OTP
+  boxes built on `ChakraPinInput`.
+
+  **Consumer-visible change**: on coarse-pointer devices, `Input` and `Textarea`
+  text renders at 16px instead of the 12.25px the `base` textStyle arm produced.
+  Desktop rendering is unchanged.
+
+- ed54d79: Make `as` carry the rendered element's props — a reusable mechanism, applied to 19 components.
+
+  `as` has always swapped what renders; it did not swap what type-checks. Chakra v3's prop types are bound to one element (`ButtonProps extends HTMLChakraProps<"button">`) and v2's polymorphic `ComponentWithAs` is gone, so `<Button as="a" href="/docs">` rendered an anchor while TypeScript still saw a `<button>` — and `href` was an error. Consumers reached for `@ts-expect-error`: FactChat carries 60 of them, 45 of which this retires across 33 files.
+
+  `asChild` remains the right tool when you own the markup, because the child types itself. It is the wrong tool for the "link-shaped button" case, where the consumer wants the component plus one extra prop, not a restructured call site with a nested child.
+
+  Applied to the components where swapping the element is a normal, safe thing to do: `Button`, `IconButton`, `MenuItem`, `Card`, `Badge`, `Chip`, `Tag`, `Container`, `SeeMoreButton`, `Link`, and the whole typography scale (`Text`, `Subtitle`, `Subtext`, `Caption`, `Overline`, `H1`–`H5`).
+
+  ```tsx
+  <Button as="a" href="/docs" target="_blank" rel="noreferrer">문서</Button>
+  <MenuItem value="admin" as={NextLink} href="/admin">관리자</MenuItem>
+  <Card clickable as="button" type="button">눌러서 자세히 보기</Card>
+  <H3 as="h2">h3 크기, 문서 구조상 h2</H3>
+  <Text as="label" htmlFor="email">이메일</Text>
+  <Container as="main" id="content">…</Container>
+  ```
+
+  Deliberately **not** applied to components whose element is their semantics — form widgets (`Checkbox`, `Radio`, `Switch`, `Slider`, `Select`, `Input`, `Textarea`, `PinInput`) and structural parts (`Table`/`Th`/`Td`/`Tr`, `Tree*`, `Tabs`, `Accordion`, `Modal`, `Popover`). Typing `as` there would make it easier to reach for, and reaching for it breaks the role, the keyboard behaviour, or the table/tree semantics that KWCAG grades. Two more are skipped for mechanical reasons: `Avatar` attaches sub-components with `Object.assign`, which the helper's return type would drop, and `Breadcrumb`'s root _is_ the `<nav>` landmark (the `as` a breadcrumb wants belongs on the link item, which consumers pass in).
+
+  Several of these are accessibility fixes as much as typing ones, and that is the main reason to go past the components with suppressions against them. A card whose whole surface is one target should _be_ a `<button>` rather than a `<div>` with an `onClick` — that is what puts it in the tab order and makes Enter/Space work. A menu item that navigates should be a real link. The typography scale is a _type_ scale, not a document outline, so `as` is how a call site keeps the size while fixing the heading level that KWCAG 제목 제공 actually grades. And `<Text as="label" htmlFor="email">` did not compile at all before — `as="label"` was accepted, but `htmlFor` was not, so the label could not be pointed at a control.
+
+  **The mechanism, not just the five components.** `PolymorphicProps`, `PolymorphicRef` and `polymorphic()` are exported. Applying them to another component is one line, and a consumer can carry `as` through its own wrapper the same way:
+
+  ```ts
+  const CardImpl = forwardRef<HTMLDivElement, CardOwnProps>(…);
+  CardImpl.displayName = 'Card';
+  export const Card = polymorphic<CardOwnProps, 'div'>(CardImpl);
+  ```
+
+  `forwardRef` erases generics — its signature is fixed at the type it was instantiated with — so re-declaring the call signature is the standard way around that, and `polymorphic()` is that cast in one place instead of a dozen lines per component. `displayName` deliberately stays on the implementation, where `react/display-name` can still see it.
+
+  Type-level only: runtime components, behaviour, `displayName` and rendered markup are untouched. Every `as` keeps its previous default (`'button'`, `'div'`, `'span'`), so the bare prop types mean exactly what they meant before and every existing call site keeps its type. Own props are also split out (`ButtonOwnProps`, `MenuItemOwnProps`, `CardOwnProps`, …) for wrappers that need them.
+
+  Where an element's props collide with the component's, the component wins — `color` stays a Chakra style prop rather than `<a>`'s deprecated presentational attribute — so a component's contract is never silently widened by the element it happens to render.
+
+  One call-site shape stops compiling, by design: spreading a runtime-conditional `as` (`...(cond ? { as: Link, href } : {})`) asks TypeScript to infer one element type for two different elements. Render the two branches explicitly instead.
+
+- b79705a: Give the `soft` button variant a visible hairline border.
+
+  Previously `soft` set `borderColor: 'transparent'`, so a soft button read as an
+  untethered tinted fill with no edge against a white surface — the `1px` border
+  box was already reserved on every variant, only its color was hidden. Each
+  color palette now colors that border: the tinted palettes
+  (`primary`/`secondary`/`danger`/`success`/`warning`) use their own `.light`
+  token for a same-hue hairline that stays a clear step below `outline`'s `.main`
+  border, and `neutral` uses `border.default` so the edge survives dark mode
+  (where `border.subtle` would collapse into the fill). No layout shift — the
+  border width was already there. `solid`, `outline`, and `ghost` are unchanged.
+
+- aa1d6c3: Add a `./styles` entry point for pure style objects.
+
+  The root entry pulls in every component, and with them side-effect CSS imports
+  such as `katex/dist/katex.min.css`. A bundler handles that; a plain Node loader
+  does not. So a consumer's unit test that imported a style constant from the root
+  failed to load the module at all:
+
+  ```
+  TypeError: Unknown file extension ".css" for .../katex/dist/katex.min.css
+  ```
+
+  That is how `noZoomOnFocus` landed: it is a two-line style object, but reaching
+  it cost the whole design system, and four test files in the first consuming app
+  stopped loading. Importing a style object should not carry the component graph.
+
+  `@mindlogic-ai/logician-ui/styles` now exposes those objects on their own,
+  mirroring the existing `./icons` entry. Everything re-exported there stays free
+  of runtime imports — types only — so the entry brings in nothing but the objects.
+  The same names remain on the root entry, so existing imports keep working.
+
+- 0bceb74: `CopyableCode` confirms a copy without moving under the cursor.
+
+  A button whose label changes is a moving target. "복사" → "복사 완료" widened the
+  button by 28px, and because it sits against the right edge of the code block it
+  grew _leftwards_ over the code the instant it was clicked — under the cursor that
+  had just clicked it.
+
+  Both labels now render into the same grid cell, so the box is always as wide as
+  its widest state and the inactive one stays in the layout holding that width,
+  transparent and `aria-hidden`. Sizing this way rather than with a hand-tuned
+  `minW` matters for a translated product: the longest string is rarely the one you
+  measured, and `Copy completed` is nearly three times `복사`.
+
+  The swap runs on two clocks: opacity clears over `fast` so the outgoing label is
+  not read through the incoming one, while the 8px of travel takes `motion.base` so
+  it reads as one thing replacing another rather than a flicker. The idle label
+  leaves upward and the confirmation rises from below, which is what makes it one
+  movement rather than two.
+
+  This was briefly a `Swap` component. It is not exported: one call site is not a
+  component, and the general form of the same idea now ships as
+  `SwapTransition`, which swaps _content_ rather than holding a width.
+
+- 5661854: Family-agnostic, Tabler-first icon registry.
+
+  Icons now have canonical, shape-based names with an `Icon` suffix (e.g. `BugIcon`, `CloseIcon`, `SettingsIcon`) that are decoupled from the underlying react-icons family. This lets us swap the icon family behind a name in the future without touching a single usage site.
+
+  **What changed**
+  - Added a canonical `*Icon` registry backed by Tabler (`react-icons/tb`) wherever a suitable Tabler glyph exists, falling back to the previous family only where Tabler has no equivalent.
+  - Every previous export name (`FaBug`, `IoClose`, `MdSettings`, …) is preserved as a backward-compatible alias, so existing consumers keep working with no code changes.
+  - Added an ESLint `no-restricted-imports` guardrail banning direct `react-icons/*` imports outside the icon registry, so all icon usage flows through the canonical names.
+
+  **Migration (optional)**
+
+  New code should prefer the canonical `*Icon` names. Legacy family-prefixed names continue to resolve to the same glyphs via the alias shim.
+
+- bcd386b: Toast: add an `action` slot, and document how actions belong in feedback surfaces.
+
+  `useToast()` options and `<Toast>` take `action?: { label: ReactNode; onClick: () => void }`. It renders under the description through `Toast.ActionTrigger` as a text action in the toast's status color (`danger.dark` on error, `primary.dark` on info, …), bold, with no border or fill and the same hover tint as the close ×. A negative left margin equal to its padding lines the label up with the description. Clicking it calls `onClick` and dismisses the toast. New `actionStyles` (per status) is exported next to `closeButtonStyles`.
+
+  When an action is set and `duration` is not given, `useToast` now defaults the duration to **8000ms** (`TOAST_ACTION_DURATION`) instead of 5000ms (`TOAST_DEFAULT_DURATION`). An explicit `duration`, including `null`, still wins, and toasts without an action are unchanged.
+
+  Chakra's own `toaster.create({ action })` is rendered the same way. Its `onClick` is not called twice.
+
+  New Storybook page **Guidelines / Actions in feedback surfaces** (`src/guidelines/FeedbackActions.mdx`) sets out the rules: text actions in toasts and banners, buttons only in panes and dialogs; the action takes the container's status color; one action per toast with dismiss on ×; no copy that repeats the action, ≤ 2 lines; the fix is the ink primary in a pane; 8s for toasts with an action. Callers that put a `<Button>` inside `description` should move it to `action`.
+
+- e670b90: `Tree.BranchIndentGuide`: fix the `elbow` guide's last-row shape and make the guide color customizable.
+
+  **Fix — `└` on the last row of each group**
+
+  Chakra's indent-guide slot paints one continuous full-height vertical rail per branch content, so with `elbow` the rail always ran past the last row's foot and every row rendered as `├`. In `elbow` mode the slot rail is now hidden and the guide lines are drawn per row instead: middle rows get a full-height vertical segment (`├`), the last row's segment stops at its centre where the foot meets it (`└`), and a non-last expanded branch draws a pass-through rail over its whole subtree so the parent column stays continuous. An expanded last branch correctly hangs below its elbow with no rail running past it.
+
+  **New — `guideColor` prop**
+
+  Colors the rail, elbow foot and vertical segments with any Chakra color token. The default moves from `border.subtle` (gray.200 — barely visible against the background) to the darker `border.default` (gray.300). Both are mode-flipping semantic tokens, so the guide automatically lightens in dark mode.
+
+  ```tsx
+  <Tree.Node
+    indentGuide={<Tree.BranchIndentGuide elbow guideColor="border.strong" />}
+    render={...}
+  />
+  ```
+
+- e670b90: Add an `elbow` option to `Tree.BranchIndentGuide` for `├` / `└` guide-line trees.
+
+  The default indent guide draws plain vertical rails (one per depth). `elbow` adds a horizontal foot to the innermost rail so every row connects to its parent column like a classic file-tree / sidebar:
+
+  ```tsx
+  <Tree.Node
+    indentGuide={<Tree.BranchIndentGuide elbow />}
+    render={renderNode}
+  />
+  ```
+
+  - `elbow?: boolean` (default `false`) — opt-in, so existing trees are unchanged.
+  - `footLength?: string | number` (default `'var(--tree-indentation)'`) — tunes the length of the horizontal cross-stroke; the default reaches exactly from the rail to the row content.
+
+  Chakra renders one indent guide per branch (its first child, a single `height: 100%` rail), followed by that branch's rows as siblings — so the foot is drawn as a `::before` cross-stroke on the guide's sibling rows (`[data-part="item"]` and `[data-part="branch"] > [data-part="branch-control"]`), scoped to the elbow guide's own class. No extra DOM, no change to depth math; the foot is pinned to each row's vertical centre (`inset-block-start: 50%`) and starts at the parent rail column (`calc(var(--tree-offset) - var(--tree-indentation))`), so it stays aligned across all `size` variants. The foot uses `border.subtle` to match the rail colour. This replaces the need for the `∟`-glyph workaround shown in the `LeafIndicatorComparison` story.
+
+- 871b00b: Workflow: add nodes without drag-and-drop through `useWorkflowActions()`, and render content beside the selected node with `renderSelectedNodeToolbar`.
+
+  `useWorkflowActions()` (call it from a component rendered inside `<Workflow>`) returns `addNode(kind, target, options?)`, `getAddAfterSource(nodeId)` and `canAddAfter(nodeId)`. `addNode` builds the node with the same helper the palette drop now uses (`{kind}_{N}` id; `defaultConfig` → `localizeDefaults` → `hostDefaults`), places it per `target` — `{ after: nodeId }` to that node's right, wired from its first free exit (no edge into a Note, from a taken exit or when `canConnect` / the connection rules say no; a node with no free exit falls back to the centre), or `{ at: 'viewportCenter' }` unconnected — then selects the new node and pans to it. Node and edge land as one history step, so one undo reverts both. It returns `{ nodeId, edgeId | null }`, or `null` when read-only, the kind is unknown or its id is taken. `options.inspector` is `'follow'` (default), `'open'` or `'close'`.
+
+  `renderSelectedNodeToolbar?: (node: GraphNode) => ReactNode` on `<Workflow>` renders host content beside the selected node's exit side in screen space (React Flow's `NodeToolbar` underneath), so hosts no longer import `@xyflow/react` to place a "+" button.
+
+  **Behaviour change:** a node dropped from the palette now gets a sequential `{kind}_{N}` id (`agent_3`), the same scheme duplicate and paste already used, instead of `{kind}_<uuid>`. Existing ids are untouched. `nextNodeId` also escapes the kind now, so namespaced kinds (`math.add`) count only their own ids.
+
+- 31fa1eb: feat(workflow): add the generic Workflow editor framework
+
+  Moves FactChat's Workflow editor into the design system as a fully reusable,
+  host-configurable component so other apps can consume it. The core is
+  domain-free: hosts register node kinds via `nodeTypes` (`defineNodeType`),
+  pass an opaque `hostBridge` for app data, and inject a `translate` function so
+  the editor localizes with the host's catalog (and resolves host-registered
+  node `descriptionKey`s) — with bundled defaults when none is provided.
+
+  Exposes `Workflow`, `WorkflowProvider`/`useWorkflow`/`useWorkflowTranslate`,
+  the graph reducer + history, the node-type contract and canvas primitives
+  (`NodeShell`, `IconTile`, `FloatingCard`, `FieldWrapper`, `CollapsibleSection`),
+  and the supporting types. Adds `@xyflow/react` and `@dagrejs/dagre` as
+  dependencies (kept external in the bundle) and registers the chrome icons the
+  canvas uses (alert/grip/sticky-note/check/chevron/lock/arrows/etc.).
+
+### Patch Changes
+
+- 05c6b7f: Anchored popups (Menu, Select, Combobox, Popover, Tooltip) open faster: a new
+  `presence-anchored` preset retimes them to 200ms in / 100ms out (was 300 / 150).
+  Modal, BottomSheet and Collapsible keep `presence` at 300 / 150.
+- bf1d1b4: Fix the empty gap beneath `Banner` text at the `sm` and `lg` sizes.
+
+  The banner icon was hardcoded to `boxSize="md"` (24px) regardless of the
+  `size` prop, so the per-size icon sizes declared in `sizeStyles` (`sm → 20px`,
+  `lg → 32px`) were dead config. On a `sm` banner the 24px icon was taller than
+  a single line of `subtext` (14px × 1.4 ≈ 19.6px). Because the icon/text row
+  uses `align="stretch"`, the oversized icon set the row height and the shorter,
+  top-aligned text left ~4px of empty space below it — the visible "gap." It
+  never showed in Storybook because the string stories all render at the default
+  `md` size, where the icon and text heights happen to match exactly.
+
+  Drive the icon from `sizeStyles[size].icon.boxSize` so the icon matches the
+  text line-height at each size. This resolves the gap for every `size="sm"`
+  Banner (the API Gateway "models_gateway_notice" banner and ~20 other admin /
+  dashboard call sites) and correctly enlarges the icon at `size="lg"`; `md` is
+  unchanged.
+
+- 34747c4: A disabled `Button` or `MenuItem` no longer shows the pointer cursor.
+
+  Both set `cursor="pointer"` as a style prop. Chakra emits style props outside its
+  cascade layers and the recipe's disabled cursor inside `@layer recipes`, so the
+  pointer always won and a disabled control read as clickable. The disabled
+  cursor (`not-allowed`) now sits beside it. On `Button` it is merged with the
+  call site's `_disabled` the way `_hover`/`_active` already are, so a call site
+  that styles its disabled state does not lose the cursor.
+
+  A `loading` Button (which Chakra also disables) shows `progress` instead: it is
+  working, not forbidden.
+
+  `_hover`, `_active` and `_disabled` from the call site are now deep-merged with
+  the variant's own (`mergeCss`), so a nested condition such as `_dark` adds to
+  the variant's instead of replacing it — e.g. `lift`'s dark-mode hover shadow
+  survives a call site's `_hover={{ _dark: … }}`.
+
+- ec852da: A call site that presses too no longer erases the Button's own press.
+
+  `_hover` and `_active` arrived through the prop spread, and a spread replaces
+  the whole object — so a button that added one line (FactChat's quiz footer adds
+  a 2px press ledge) silently lost the variant's pressed colour _and_ the press
+  `scale` along with it, and stopped reading as pressed at all. Both are now
+  merged the way `lift` already merged them: the call site's own keys still win,
+  they just no longer erase the ones they did not mention.
+
+  `transform` also rejoins the Button's transition. Nothing in the component sets
+  it — the press deliberately uses `scale` so it cannot clobber a call site — but
+  call sites do set it, and naming the transition properties took away the cover
+  the old `transitionProperty: all` gave them. Their transforms were snapping.
+
+- f32bf54: fix(FileList): center the "see more" load-more button
+
+  The load-more button used `css={{ all: 'unset', display: 'flex' }}`, and
+  `all: unset` wiped the `w="100%"` prop while nothing set `justify-content`, so
+  the button shrank to its content and stuck to the left edge of the list instead
+  of reading as a centered full-width footer action. Restore `width: 100%` and add
+  `justifyContent: center` inside the css block.
+
+- b034ebd: Fix `Table` sticky columns detaching after a layout change.
+
+  The cumulative `left`/`right` offsets for sticky columns were measured once in a
+  mount-only effect and stored in a ref, so they were never recomputed when the
+  column widths changed afterwards — a web-font swap that reflows the text, a
+  window/sidebar resize, or the columns shrinking as the table went from fitting
+  its container to overflowing it. The stale offsets left the pinned columns in
+  the wrong place: an empty gap opened between them and neighbouring columns
+  collapsed or bled through.
+
+  Sticky column widths now live in state and each cell is tracked with a
+  `ResizeObserver`, so the offsets follow the real column widths through any later
+  layout change. Writes are rounded to whole pixels and skipped when unchanged to
+  avoid render loops. The `isSticky` / `stickyDirection` / `stickyIndex` API is
+  unchanged.
+
+- 5635d9b: Align form-control resting borders with the shared neutral border role.
+
+  `Input`, `Textarea`, and the `Select`/`Combobox` trigger drew their resting
+  border from the raw `{ base: 'gray.400', _dark: 'gray.1100' }` pair, while
+  `Card`, the `Select` dropdown panel, and the neutral `Button` use the
+  semantic `border.default` role (`gray.300` light). The mismatch meant an
+  input sitting next to a card rendered a visibly different shade of gray out
+  of the box.
+
+  Route all three controls onto `border.default` so neutral borders share one
+  source of truth across the form controls and the surfaces around them.
+  Hover/focus/invalid/disabled states are unchanged. `Checkbox` keeps its
+  `gray.500`/`gray.800` control border, which is intentionally darker to clear
+  the 3:1 contrast requirement on the canvas.
+
+- Input, Textarea and Select `size="lg"` (and Input/Textarea `xl`) now render at 16px on desktop (14px on phones) instead of the same 14px as `md`. Select `lg` drops to the same height as Input `lg`, and `lg` inline padding is 12px instead of 16px. `xs`/`sm`/`md` are unchanged, so call sites that do not pass `size` render exactly as before.
+- 967d97b: Darken headings to the intended `fg.emphasized` token.
+
+  `H1`–`H5` now render in `fg.emphasized` (gray.1300 `#1E2433`, the gray scale's
+  documented "headings" step) instead of the lighter body-text weight they had
+  drifted to. `H3` was explicitly pinned to `fg.default` (gray.1000 `#414A63` —
+  "body text"), and `H1`/`H2`/`H4`/`H5` set no color at all, so they inherited the
+  ambient text color; both read too light for headings once `fg.default` was
+  re-pegged from gray.1300 → gray.1000 for body copy. Pinning `fg.emphasized`
+  makes all five consistent and matches that token's stated purpose ("Strongest
+  text — headings, titles"). Callers can still override via the `color` prop.
+
+- 05c6b7f: Keyboard focus ring appears instantly (no 150ms fade), and focused Switch /
+  Checkbox fills keep their own transition. Moving between open tooltips
+  (`data-instant`) no longer replays the enter animation.
+- b749205: No more iOS zoom on focus: `Combobox.Input` takes `noZoomOnFocus` (16px on
+  touch).
+- 8817a6d: Fix `Link`'s hover contrast in dark mode (KWCAG 5.3.3 · WCAG 1.4.3).
+
+  The hover was `{ base: 'primary.dark', _dark: 'primary.main' }` — "one step
+  darker", which is correct against a white page and backwards against a dark one,
+  where darker means _toward_ the background. Hovering a link in dark mode dropped
+  it from 6.68:1 to **4.19:1**, under the same 4.5:1 the resting colour clears.
+  The error variant did the same thing (`danger.main`, 4.26:1).
+
+  Now `primary.darker` / `danger.darker` — the step past `.dark` at both ends of
+  the ramp, so one token is right in both modes with no special-casing. Light is
+  unchanged at 11.98:1 and 10.83:1; dark becomes 10.68:1 and 10.34:1.
+
+  No scanner would have caught this: axe measures the resting state only, and the
+  contrast bar applies to text in every state a user can put it in. The ramp is
+  now exported as `LINK_RAMP` so the regression test asserts the tokens the
+  component actually uses, not just that some correct-looking hex passes.
+
+- f3e7834: Use `lodash/merge` deep import instead of the full `lodash` package so consumers only bundle the merge function
+- 0bceb74: Modal enters from below and leaves in half the time.
+
+  Chakra's default `motionPreset: "scale"` already had the ratio right — 200ms in,
+  100ms out — but it scales from a flat `0.95` with no vertical travel and no
+  named curve, so the dialog appeared in place rather than arriving.
+
+  Content now enters over `motion.base` on `emphasized`, from `scale(0.94)` and
+  10px below, and leaves over `fast` by shrinking to `0.97` **without** the
+  travel: an exit only has to get out of the way, and moving away draws the eye to
+  something that is leaving. The backdrop was retimed to match — it exited over
+  200ms while the content now leaves in 150, so the scrim outlasted the dialog it
+  was dimming for. This had to be set in `Modal` itself as well as `ModalOverlay`,
+  because `Modal` renders `Dialog.Backdrop` directly and never uses the exported
+  overlay component.
+
+  Under `prefers-reduced-motion` this keeps a plain fade rather than dropping to
+  `0ms` like the transition presets do. A modal that appears with no transition at
+  all reads as a page swap; what has to go is the movement, not the fact that
+  something changed.
+
+- 05c6b7f: Motion cleanups: the checkbox tick draws in 200ms (was 300ms); Accordion
+  content opens/closes on the same 300 / 150 clock as Collapsible (was Chakra's
+  200 / 200); PageLoader, SectionLoader and GraphErrorBanner use the `feedback`
+  preset instead of literal timings, so they honour reduced motion; InfoSprinkle
+  drops its literal transition; PageLoader uses `100dvh` and ErrorFallback
+  `100svh` instead of `100vh`.
+- a17a6d0: Fix neutral semantic tokens that were shadowed by Chakra's defaults in light mode.
+
+  `border.subtle`, `fg.muted`, and `fg.subtle` were declared with `base` values,
+  but Chakra's own default theme already defines these tokens with a `_light`
+  condition (`border.subtle: { _light: gray.50 }`, `fg.muted: { _light: gray.600 }`,
+  `fg.subtle: { _light: gray.400 }`). A `_light` condition outranks `base` in light
+  mode, so after the theme merge Chakra's values won and ours never rendered:
+  - `border.subtle` → gray.50 (near-white) instead of our gray.200 — low-emphasis
+    dividers and artifact frames were effectively invisible on a light canvas.
+  - `fg.muted` → gray.600 instead of our gray.900 — secondary text shipped lighter
+    than intended.
+  - `fg.subtle` → gray.400 instead of our gray.700 — tertiary / placeholder / icon
+    text shipped much lighter than intended.
+
+  (The source comments for `fg.muted`/`fg.subtle` said "Light value … is unchanged",
+  which was true of the _intent_ but not of what actually rendered.) Dark mode was
+  always correct because those tokens set `_dark` explicitly, which does override
+  Chakra's `_dark`.
+
+  Pin `_light` (instead of `base`) on each so our values win deterministically —
+  the same pattern the `bg`/`fg`/`border` `DEFAULT` tokens already use, and the
+  same fix consumers had been applying downstream. `bg.subtle`/`bg.muted`/`bg.panel`
+  are also moved to `_light` for consistency; their values already matched
+  Chakra's, so those three are a no-op (defensive, so they don't silently break if
+  the value ever changes).
+
+  These six are the entire collision set: the only neutral tokens whose names
+  match a Chakra default that carries a `_light`. Every other `base` token in the
+  file is safe — the brand ramps (`primary`/`secondary`/`danger`/`success`/
+  `warning.*`) and the numeric `gray.0–1500` scale have no Chakra default, and the
+  fresh-named neutrals (`bg.canvas`/`surface`/`raised`/`sunken`/`track`/`inverse`,
+  `fg.emphasized`/`default`, `border.default`/`strong`, …) were named to sidestep
+  this exact shadowing (see the `bg.raised` comment). None of those are touched.
+
+- f5a6bb8: Export the pieces `4.0.0-alpha.25` documented but did not ship.
+
+  alpha.25 made 19 components polymorphic and told consumers they could carry `as` through their own wrappers. They could not: three things never reached the package root.
+  - **`polymorphic` and `PolymorphicComponent`** — `src/index.ts` re-exported the module with `export type`, which cannot carry a value, so the helper function was unreachable. A consumer got `has no exported member named 'polymorphic'`.
+  - **Every `*OwnProps`** — declared in each `*.types.ts` but absent from the component barrels, so `CardOwnProps`, `ButtonOwnProps`, `ChipOwnProps` and the rest were unreachable too. `Button`, `IconButton` and `SeeMoreButton` route through `index.tsx` barrels that still listed only the old prop type.
+  - **The typography prop types** — the root exported `Text`, `Subtitle`, `H1`–`H5` and friends but none of their prop types, so a wrapper over `H3` or `Text` could not be typed at all.
+
+  All three were found the same way: by writing a real consumer wrapper against alpha.25. FactChat's `ClickableCard` needs `CardOwnProps` and `polymorphic` to carry `as="button"` through, and failed to compile on all four counts.
+
+  Also corrects the guidance in `polymorphic.ts`. It previously steered consumer wrappers toward `as unknown as PolymorphicComponent<…>`, which was reached backwards from a test failure — FactChat's review conventions ban type escape hatches outright. The failure was one line: the suites mocking this package route through a single shared mock, which needs `polymorphic: <T,>(Impl: T) => Impl`. Since this function is a type-level identity, that is not a stub — it is the implementation. Both options stay documented, with the tradeoff stated instead of a recommendation dressed up as one.
+
+  No runtime or type behaviour changes for anything that already compiled; this only widens what the entry point re-exports.
+
+- 05c6b7f: Press and exit feel: Button/`press` scale and every `presence` exit now ease
+  out (`emphasized`) instead of `standard`; IconButton's press transitions like
+  Button's instead of snapping; the Radio dot grows from `scale 0.25` + fade
+  instead of from `scale 0`.
+- c363e5e: `Radio` springs its dot in instead of flashing it.
+
+  The checkbox half of this shipped already; the radio half did not, because the
+  obvious approach does not apply to it. Chakra's radio mark is not a stroked
+  path — it is a `.dot` element the recipe rests at `scale: 0.4` — so there is no
+  line to draw on. It is also only mounted once the item is checked, which rules
+  out a transition: nothing precedes it to interpolate from.
+
+  So the dot grows from nothing, as a keyframe, on `overshoot` — the one curve
+  that stays legible across 8px, because it reverses direction. The ring fills
+  first and the dot follows 60ms later, the same two beats the checkbox has:
+  pressed, then confirmed. Measured frame by frame, it peaks at `0.439` around
+  240ms and settles at exactly `0.4`, which is where the recipe rests it — landing
+  anywhere else would make the dot jump the moment the animation hands back.
+
+  Unlike the checkmark, the reduced-motion branch only switches the animation off:
+  the resting scale is already declared, so nothing needs undoing. The checkmark's
+  dash pattern is only correct _while_ its animation runs, which is why that one
+  has to clean up after itself.
+
+  The ring's own fill now eases too — it had no transition at all.
+
+- 675ff8e: Replace the react-spinners loaders with the Chakra-based `<Spinner>`.
+
+  `PageLoader` (`BounceLoader`) and `SectionLoader` (`DotLoader`) drew from
+  `react-spinners`, which injects its `@keyframes` at runtime via
+  `CSSStyleSheet.insertRule()`. Some browser CSSOM implementations (in-app
+  webviews and older browsers) reject that rule with
+  `Failed to execute 'insertRule' on 'CSSStyleSheet': Failed to parse the rule`,
+  crashing the loader inside its `ErrorBoundary`.
+
+  Both loaders now use the existing Chakra-based `<Spinner>` (CSS border
+  animation, no runtime `insertRule`) and the `react-spinners` dependency is
+  removed entirely. Public props are unchanged; only the spinner's visual style
+  changes (bounce/dot → ring).
+
+- 268fdcc: `Pulse` and `Shake` replay without throwing away what they wrap.
+
+  Both restarted their animation by changing the React `key`, which is the
+  cheapest way to replay a CSS animation and also the most destructive: a new key
+  is a new element, so the entire subtree is discarded and rebuilt. The cost was
+  never stated because it was never noticed — measured now, a replay moved
+  keyboard focus to `<body>`, reset uncontrolled inputs, and restarted any child
+  animation mid-flight.
+
+  `Shake` is the worst case and the reason this is a defect rather than a
+  documented trade-off: it fires on a refusal — a wrong answer, an invalid field —
+  which is exactly when someone is mid-interaction. It took the keyboard away from
+  the person it had just told no.
+
+  They now alternate between two byte-identical keyframes (`pulse-pop` /
+  `pulse-pop-alt`, `shake-x` / `shake-x-alt`). A CSS animation restarts when its
+  `animation-name` changes, so the replay is the same and the DOM is untouched.
+  The extra keyframe pair is the whole price.
+
+  No API change: `trigger` and the first-render latch behave exactly as before.
+
+- fccaf0b: Dark-mode row state tints (`bg.selected`, `bg.invalid.subtle`, `bg.highlighted`) are now lighter than the row surface instead of darker.
+
+  They mirrored `primary.lightest` / `danger.lightest` / `warning.lightest`, whose dark arm is the `900` step of each ramp. `blue.900` is darker than `bg.surface`, so a selected table row rendered as a navy block sunk below its neighbours. Each tint now mixes the family's `200` step 20% into `grayDark.1400`: one step lighter than the surface, `fg.default` stays above 8:1 on it, and a tenant that restages `blue` still gets its own hue. Light mode is unchanged.
+
+- a7140b7: Keep low-contrast component fills legible on `bg.sunken` pages.
+
+  In light mode the page wash `bg.sunken` resolves to `gray.50` — identical to
+  `bg.subtle` and only ~1.03:1 against `bg.muted` (`gray.100`). Components that
+  paint a resting surface with those tokens lost their bounds on a sunken
+  list/overview page and read as floating content.
+
+  The fix follows the element's own contrast story:
+  - **Structured controls get an outline.** They already carry their own affordance
+    (a raised, shadowed thumb and bold selected text), so they only need their
+    outer bounds drawn — and darkening their track would break the light-track /
+    raised-thumb relationship.
+    - `SegmentedControl` — `border.default` ring in light (mirrors the existing
+      dark-mode ring; `border.strong` read as a heavy box for a control that
+      normally has no outline).
+    - `InlineCode` — `border.default` ring (a chip is too small for a fill to
+      register).
+  - **Meter surfaces get a darker fill.** Their unfilled track _is_ the information
+    and a thin rail can't be read from an edge alone, so the fill must contrast.
+    Introduces a new semantic token **`bg.track`** (`gray.300` light /
+    `desaturatedGray[1200]` dark) for recessed control tracks that must read on any
+    page wash.
+    - `Switch` off-state track, `Slider` empty rail, `SegmentedProgressBar`
+      remainder — `bg.muted` → `bg.track`.
+    - `Spinner` — track color `bg.muted` → `bg.track` (no box to outline).
+
+  Adds a `Theme/Surfaces` Storybook story and a `SegmentedControl/OnPageBackgrounds`
+  story that render these components on all three page backgrounds for ongoing
+  cross-surface contrast validation.
+
+- 12ff48d: Soften the `soft` variant hairline from `.light` to `.lighter` on `Button` and `Tag`.
+
+  Both components drew their `soft` same-hue hairline one step too assertive. The
+  five tinted palettes (`primary`/`secondary`/`danger`/`success`/`warning`) now
+  use their `.lighter` token instead of `.light` for that border — on `Button`
+  (resting and hover) and on `Tag` — dropping the edge to the palest visible step
+  above the `.extralight` fill. This matches the treatment `Toast` and `Banner`
+  already use for the same fill-plus-hairline pairing, so all four now read
+  consistently: a quiet tinted fill with a whisper of a frame, still a clear step
+  below `outline`'s `.main` border. On `Button`, `.lighter` is also the
+  hover/active fill, so the border melts into the fill on interaction.
+
+  In light mode this is the intended softening (blue's hairline goes `#7DA0E8` →
+  `#B9CBF3` on the `#E8EEFB` fill). In dark mode `.lighter` sits one step off the
+  fill, so the hairline becomes very faint — an accepted trade for a consistent,
+  quieter resting treatment across both modes.
+
+  `neutral` is unchanged on both: it has no `.lighter` step and keeps
+  `border.default`, whose only paler neighbor (`border.subtle`) equals the fill in
+  dark mode and would erase the edge entirely. Other variants are unchanged.
+
+- 21b958f: Fix `SwapTransition` freezing its children, and swallowing the caller's layout.
+
+  Two defects from the component's first release, found by looking at a real
+  screen rather than by any check that passed on it. Both come from the same
+  mistake: a component that stands between a caller and its own subtree has to be
+  **transparent**, and this one was not — in either direction.
+
+  **It rendered a copy of `children`, not `children`.** The subtree was held in
+  state and refreshed from an effect keyed on `transitionKey`, so a re-render
+  carrying new children under the _same_ key never reached the screen. Any content
+  that updates without changing its key — which is most content — was frozen at
+  whatever it looked like when the key last changed. In the product this was a
+  quiz option that would not select: the state changed, the pixels did not, and
+  the screen read as dead.
+
+  **It put an extra element between the caller's props and the content.** The two
+  states were stacked in a grid cell, one level in from the box that receives
+  `{...rest}`. A caller filling a column — `display="flex" flex={1} minH={0}`, the
+  shape a full-height pane needs — had its sizing land on an ancestor of the
+  content, so the pane collapsed to content height and the action bar below it
+  rode up with dead space beneath. The cell bought nothing: the two states are
+  mutually exclusive and never on screen together.
+
+  Now one box, rendering `children` directly. The only thing still held is a
+  single snapshot of the outgoing subtree, for the length of the exit — that much
+  is unavoidable without an animation library, since React has already been told
+  to render the new content while the old still has to leave.
+
+  `animateInitial` was broken too and is fixed by the same change.
+
+  `SwapTransition.test.tsx` pins all three. Each fails against the previous
+  implementation, which is the property that makes them worth having.
+
+- ca533a3: Fix the selected horizontal `Tab` label failing AA contrast in dark mode.
+
+  `horizontalSelectedStyles` painted the selected label `primary.main`, which
+  resolves to `blue.300` (#4A79DC) in dark. That is 4.59:1 on the page background
+  (#0E1014) and only **4.19:1** on a raised surface (#181A20) — under the 4.5:1
+  that KWCAG 5.3.3 (텍스트 콘텐츠의 명도 대비) and WCAG AA ask of text.
+
+  The gap between those two numbers is why this went unnoticed for so long: the
+  selected tab cleared the bar on every full-page layout and failed it only when
+  a tab list rendered inside a modal or a popover. A consuming app's audit had
+  been green across 89 surfaces and turned red the first time a modal containing
+  tabs was added to the scan.
+
+  The label now uses the `.dark` end of the ramp in dark mode
+  (`{ base: 'primary.main', _dark: 'primary.dark' }` — `blue.200`, 6.68:1 on the
+  surface and 7.31:1 on the page), the same shape as the `Link` fix in
+  `4.0.0-alpha.22`. Light mode is untouched: `primary.main` is 6.62:1 on white.
+
+  The 2px underline deliberately keeps `primary.main`. It is a graphic, judged at
+  3:1, which 4.19:1 clears — moving it would be a visual change the standard does
+  not ask for.
+
+  `primary.main` itself is NOT re-pegged, and should not be: it is also a solid
+  fill under white labels (`Checkbox`, `Switch`, `Banner`), where white on
+  `blue.200` measures 2.60:1. This is the same reasoning that already produced
+  `secondary.main`'s dark step, which moved violet off `.300` at 4.29:1 for
+  exactly this reason. Blue never got the same treatment.
+
+  The steps are exported as `TAB_RAMP` so the contrast regression in
+  `a11y.kwcag.test.tsx` measures the tokens the component actually renders rather
+  than restating the arithmetic.
+
+  Also exports `LINK_RAMP` from `src/index.ts`. It was added to the Typography
+  barrel in `4.0.0-alpha.22` but never to the main one, which has left
+  `yarn lint` (`check-component-exports`) failing on `dev` since.
+
+- aa1b088: Stop a `Table` from re-rendering every cell on each render of its owner.
+
+  `TableContext.Provider` took an object literal as its value, so every render of
+  `TableProvider` produced a new context value. `Th`, `Td` and `Tr` all call
+  `useTableContext()`, so that re-rendered every cell in the table even when
+  neither the scroll state nor a sticky column width had changed. `React.memo` on
+  a row does not prevent it — React propagates a context change into subtrees it
+  has already bailed out of.
+
+  In a virtualised table this dominates scrolling. Measured on a consumer's
+  12,000-row admin table (production build), one scroll step that mounted a single
+  new row re-rendered `Td` **794 times**; it now re-renders 11.
+
+  Also in this release: a sticky column's width is measured once by its header
+  cell rather than once per body cell (68 → 6.7 `getBoundingClientRect` calls per
+  scroll step, 28 → 0 new `ResizeObserver`s).
+
+  No API change.
+
+- 6913f8e: The vertical tab's selected rail follows the label to ink.
+
+  Follow-up to the ink selection change in 4.0.0-alpha.28. That release moved the
+  selected tab's label and the horizontal underline to `fg.emphasized`, but the
+  VERTICAL rail draws its own 2px indicator in `verticalSelectedStyles._before`
+  rather than reading `TAB_RAMP.indicator` — so it stayed `primary.main`, leaving
+  an azure bar beside an ink label in both modes. That is precisely the
+  half-migrated look the change existed to remove.
+
+  It now reads through `TAB_RAMP.indicator`, so the two orientations cannot drift
+  apart again.
+
 ## 4.0.0-alpha.44
 
 ### Patch Changes
