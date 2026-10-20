@@ -74,6 +74,9 @@ export const Buttons = ({ kind, palette, rest, ok }: any) => (
     <Button colorPalette="primary" variant="link">
       unknown variant
     </Button>
+    <Button colorPalette="danger" variant="plain">
+      unknown variant, danger
+    </Button>
     {/* Dynamic → untouched + report */}
     <Button variant={kind}>dynamic variant</Button>
     <Button colorPalette={ok ? 'danger' : 'primary'} variant="solid">

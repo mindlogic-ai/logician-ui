@@ -21,6 +21,14 @@ const styles = {
     'linear-gradient(90deg, var(--chakra-colors-primary-wash), var(--chakra-colors-danger-solid))',
   gray: 'neutral.5',
   grayVar: 'var(--chakra-colors-neutral-9)',
+  // CSS variables are kebab-case (Chakra dash-cases camelCase segments)
+  pressedVar: 'var(--chakra-colors-primary-wash-active)',
+  fillStrongVar: 'var(--chakra-colors-primary-hover)',
+  // Chakra token references with the `colors.` prefix
+  pathy: 'colors.border.strong',
+  ref: '{colors.success.solid}',
+  mix: 'color-mix(in oklab, {colors.warning.solid} 70%, black)',
+  grayRef: '{colors.neutral.5}',
   // Longest token wins: primary.lighter (not primary.light + "er"), slate.1000 (not slate.100 + "0")
   lighterNotLight: 'primary.washActive',
   slate1000: 'neutral.10',
@@ -32,14 +40,20 @@ const styles = {
   dashPrefix: 'my-primary.light',
   varSuffix: 'var(--chakra-colors-slate-3000)',
   notAToken: 'fg.default',
-  pathy: 'colors.primary.light',
+  notColorsPrefix: 'foo.primary.light',
+  deepPath: 'theme.colors.primary.light',
   longer: 'slate.100x',
   // Raw primitives — reported, not renamed
   blue: 'blue.500',
   violet: 'violet.300',
   greenVar: 'var(--chakra-colors-green-600)',
   grayDark: 'grayDark.200',
+  grayDarkRef: '{colors.grayDark.200}',
+  grayDarkVar: 'var(--chakra-colors-gray-dark-200)',
 };
+
+const token = (path: string) => path;
+export const dangerRef = token('colors.danger.solid');
 
 const theme = { colors: { 'slate.800': '#616B85' } };
 

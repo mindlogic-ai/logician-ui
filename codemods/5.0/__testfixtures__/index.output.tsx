@@ -27,8 +27,12 @@ export const A = ({ kind, p }: any) => (
     <IconButton isDestructive aria-label="x" />
     <IconButton variant="secondary" aria-label="x" />
     <Badge>b</Badge>
-    <Tag tone="danger">c</Tag>
-    <Tag selected>c</Tag>
+    <Tag borderRadius="xl" px={3} py={2} fontWeight="medium" tone="danger">
+      c
+    </Tag>
+    <Tag borderRadius="xl" px={3} py={2} fontWeight="medium" selected>
+      c
+    </Tag>
     <Card
       /* TODO(logician-ui 5.0): Card variant="gradient" was removed; now the default card — choose wash/elevated or a bg */
       p={2}

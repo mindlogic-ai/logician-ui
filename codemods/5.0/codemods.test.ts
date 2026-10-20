@@ -15,9 +15,11 @@ import fs from 'fs';
 import { createRequire } from 'module';
 import os from 'os';
 import path from 'path';
-
 import prettier from 'prettier';
 import { describe, expect, it } from 'vitest';
+
+import { resolveLegacyButtonVariant } from '../../src/components/Button/Button.legacy';
+import { mapLegacyTagProps } from '../../src/components/Tag/Tag.styles';
 
 const require = createRequire(import.meta.url);
 const { applyTransform } = require('jscodeshift/dist/testUtils');
@@ -129,7 +131,7 @@ describe('reporting', () => {
       'button-variants',
       read('button-variants.input.tsx')
     );
-    expect(kinds(sites)).toEqual({ dynamic: 3, spread: 1, todo: 4 });
+    expect(kinds(sites)).toEqual({ dynamic: 3, spread: 1, todo: 5 });
     const dyn = sites.filter((s) => s.kind === 'dynamic');
     expect(dyn.map((s) => [s.component, s.prop, s.source])).toEqual([
       ['Button', 'variant', 'variant={kind}'],
@@ -141,7 +143,8 @@ describe('reporting', () => {
     expect(sites.filter((s) => s.kind === 'todo').map((s) => s.note)).toEqual([
       'colorPalette="secondary" variant="solid" → variant="primary"',
       'colorPalette="warning" variant="solid" → variant="primary"',
-      'colorPalette="primary" variant="link" → variant="primary"',
+      'colorPalette="primary" variant="link" → variant="subtle"',
+      'colorPalette="danger" variant="plain" → variant="subtle" isDestructive',
       'colorPalette="secondary" variant="solid" → variant="primary"',
     ]);
     // api.report gets one line per site, with the line number.
@@ -163,7 +166,11 @@ describe('reporting', () => {
       dynamic: 1,
       spread: 1,
       todo: 1,
+      selected: 3,
     });
+    expect(sites.find((s) => s.kind === 'todo')?.note).toBe(
+      'danger/outline has no outlined 5.0 Tag; now a plain Tag — tone="danger"?'
+    );
     expect(sites.find((s) => s.kind === 'dynamic')).toMatchObject({
       component: 'Tag (was Chip)',
       prop: 'colorScheme',
@@ -174,7 +181,10 @@ describe('reporting', () => {
       'styled(Chip)'
     );
     const merged = run('tag-chip', read('tag-chip-merge.input.tsx'));
-    expect(kinds(merged.sites)).toEqual({ todo: 2 });
+    expect(kinds(merged.sites)).toEqual({ todo: 5, selected: 5 });
+    // An explicit `selected` is also a toggle (Tag.tsx) — every one is reported.
+    for (const s of merged.sites.filter((x) => x.kind === 'selected'))
+      expect(s.note).toMatch(/interactive/);
   });
 
   it('card-gradient reports removed gradients and dynamic variants', () => {
@@ -184,7 +194,7 @@ describe('reporting', () => {
 
   it('token-renames reports raw primitives and token keys, not renames', () => {
     const { sites } = run('token-renames', read('token-renames.input.tsx'));
-    expect(kinds(sites)).toEqual({ primitive: 4, key: 2 });
+    expect(kinds(sites)).toEqual({ primitive: 6, key: 2 });
     expect(
       sites.filter((s) => s.kind === 'primitive').map((s) => s.prop)
     ).toEqual([
@@ -192,6 +202,8 @@ describe('reporting', () => {
       'violet.300',
       '--chakra-colors-green-600',
       'grayDark.200',
+      'colors.grayDark.200',
+      '--chakra-colors-gray-dark-200',
     ]);
   });
 
@@ -225,14 +237,74 @@ describe('reporting', () => {
 describe('token map', () => {
   const data = require('../../src/theme/deprecatedColorTokens.json');
   const { rewrite } = load('token-renames');
+  // Chakra's CSS variable name for a token path (dashCase): `fg.onPrimary` →
+  // `fg-on-primary`. Written out here, not imported, so a codemod bug cannot
+  // hide behind the same helper.
+  const kebab = (s: string) =>
+    s.replace(/\./g, '-').replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
+  const CAMEL_CASE_VAR = /--chakra-[a-z]+-[a-z0-9-]*[A-Z]/;
 
   it('renames every alias in both dotted and CSS-var form', () => {
     for (const [from, to] of Object.entries<string>(data.aliases)) {
       expect(rewrite(`'${from}'`).text).toBe(`'${to}'`);
-      const dash = (s: string) => s.replace(/\./g, '-');
-      expect(rewrite(`var(--chakra-colors-${dash(from)})`).text).toBe(
-        `var(--chakra-colors-${dash(to)})`
-      );
+      const out = rewrite(`var(--chakra-colors-${kebab(from)})`).text;
+      expect(out).toBe(`var(--chakra-colors-${kebab(to)})`);
+      expect(out).not.toMatch(CAMEL_CASE_VAR);
+    }
+  });
+
+  it('no rewritten fixture contains a camelCase --chakra- variable', () => {
+    for (const f of fs
+      .readdirSync(FIXTURES)
+      .filter((n) => n.endsWith('.output.tsx'))) {
+      expect([f, read(f).match(CAMEL_CASE_VAR)?.[0]]).toEqual([f, undefined]);
+    }
+  });
+
+  it('CSS variables are matched and written kebab-case', () => {
+    expect(rewrite('var(--chakra-colors-primary-lighter)').text).toBe(
+      'var(--chakra-colors-primary-wash-active)'
+    );
+    expect(rewrite('var(--chakra-colors-primary-fill-strong)').text).toBe(
+      'var(--chakra-colors-primary-hover)'
+    );
+    expect(rewrite('var(--chakra-colors-secondary-lighter)').text).toBe(
+      'var(--chakra-colors-secondary-surface-strong)'
+    );
+    // A camelCase var never existed in 4.x output; it is not ours to touch.
+    expect(rewrite('var(--chakra-colors-primary-fillStrong)').renamed).toEqual(
+      []
+    );
+    const r = rewrite('var(--chakra-colors-gray-dark-200)');
+    expect(r.primitives).toEqual(['--chakra-colors-gray-dark-200']);
+  });
+
+  it('matches Chakra token references with a colors. prefix and keeps it', () => {
+    expect(rewrite('{colors.success.main}').text).toBe(
+      '{colors.success.solid}'
+    );
+    expect(
+      rewrite('color-mix(in oklab, {colors.warning.fill} 70%, black)').text
+    ).toBe('color-mix(in oklab, {colors.warning.solid} 70%, black)');
+    expect(rewrite("token('colors.danger.main')").text).toBe(
+      "token('colors.danger.solid')"
+    );
+    expect(rewrite('"colors.primary.lighter"').text).toBe(
+      '"colors.primary.washActive"'
+    );
+    expect(rewrite('colors.slate.800').text).toBe('colors.neutral.9');
+    expect(rewrite('{colors.gray.300}').text).toBe('{colors.neutral.5}');
+    expect(rewrite('{colors.grayDark.200}').primitives).toEqual([
+      'colors.grayDark.200',
+    ]);
+    // Still a boundary: not a token reference, just a longer path.
+    for (const t of [
+      'foo.primary.light',
+      'theme.colors.primary.light',
+      'x colors.primary.light',
+      'mycolors.primary.light',
+    ]) {
+      expect(rewrite(t).text).toBe(t);
     }
   });
 
@@ -253,6 +325,97 @@ describe('token map', () => {
   });
 });
 
+// The codemod claims "the screen looks the same whether or not it ran": its
+// tables must be the runtime back-compat tables, cell for cell.
+describe('parity with the runtime legacy mappers', () => {
+  const PALETTES = [
+    undefined,
+    'primary',
+    'secondary',
+    'neutral',
+    'danger',
+    'success',
+    'warning',
+    'info',
+    'brand',
+  ];
+
+  it('button-variants resolve() = resolveLegacyButtonVariant (Button.legacy.ts)', () => {
+    const { resolve } = load('button-variants');
+    const VARIANTS = [
+      undefined,
+      'solid',
+      'outline',
+      'ghost',
+      'soft',
+      'link',
+      'plain',
+      'surface',
+      'primary',
+      'action',
+      'secondary',
+      'subtle',
+      'danger',
+    ];
+    for (const kind of ['button', 'icon'] as const)
+      for (const p of PALETTES)
+        for (const v of VARIANTS) {
+          const rt = resolveLegacyButtonVariant(kind, p, v);
+          const cm = resolve(kind, p ?? '', v ?? '');
+          const cell = `${kind} ${p ?? '—'}/${v ?? '—'}`;
+          expect([cell, cm.variant, cm.isDestructive]).toEqual([
+            cell,
+            rt.variant,
+            rt.isDestructive,
+          ]);
+          // Whatever the runtime warns about, the codemod hands to a human.
+          if (rt.needsHuman)
+            expect([cell, cm.confident]).toEqual([cell, false]);
+        }
+  });
+
+  it('tag-chip mapLegacy() = mapLegacyTagProps (Tag.styles.ts)', () => {
+    const { mapLegacy } = load('tag-chip');
+    for (const p of PALETTES)
+      for (const v of [undefined, 'soft', 'solid', 'outline', 'subtle']) {
+        const cell = `${p ?? '—'}/${v ?? '—'}`;
+        const rt = mapLegacyTagProps(p, v);
+        const cm = mapLegacy(p, v);
+        expect([cell, cm.tone, !!cm.selected, cm.needsHuman]).toEqual([
+          cell,
+          rt.tone,
+          !!rt.selected,
+          rt.needsHuman,
+        ]);
+      }
+  });
+
+  it("a converted Chip gets exactly Chip.tsx's pill shape", () => {
+    const chip = fs.readFileSync(
+      path.join(REPO, 'src/components/Chip/Chip.tsx'),
+      'utf8'
+    );
+    for (const prop of [
+      'borderRadius="32px"',
+      'px={3}',
+      'py={2}',
+      'fontWeight="medium"',
+    ])
+      expect(chip).toContain(prop);
+    // `xl` is the 32px radius token the codemod writes.
+    expect(
+      fs.readFileSync(path.join(REPO, 'src/theme/index.ts'), 'utf8')
+    ).toMatch(/xl: \{ value: '32px' \}/);
+    const { out } = run(
+      'tag-chip',
+      "import { Chip } from '@mindlogic-ai/logician-ui';\nexport const A = () => <Chip>x</Chip>;\n"
+    );
+    expect(out).toContain(
+      '<Tag borderRadius="xl" px={3} py={2} fontWeight="medium">'
+    );
+  });
+});
+
 describe('runner (node index.js)', () => {
   it('runs all transforms in --dry mode, prints the summary, exits 0', () => {
     const dir = fs.mkdtempSync(
@@ -267,7 +430,8 @@ describe('runner (node index.js)', () => {
       { cwd: REPO, encoding: 'utf8', env: { ...process.env } }
     );
     expect(stdout).toContain('logician-ui 5.0 codemod summary');
-    expect(stdout).toMatch(/Needs a human: 5 site\(s\)/);
+    expect(stdout).toMatch(/Needs a human: 6 site\(s\)/);
+    expect(stdout).toMatch(/tag-chip · selected\s+1/);
     expect(stdout).toMatch(/button-variants · dynamic\s+1/);
     expect(stdout).toMatch(/token-renames · primitive\s+1/);
     expect(fs.readFileSync(target, 'utf8')).toBe(before); // --dry wrote nothing

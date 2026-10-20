@@ -21,6 +21,19 @@ export const Mixed = () => (
     <Tag colorPalette="warning" variant="solid">
       warning/solid
     </Tag>
+    <Tag colorPalette="danger" variant="outline">
+      danger/outline
+    </Tag>
+    <Tag colorPalette="neutral" variant="solid">
+      neutral/solid
+    </Tag>
+    <Tag colorPalette="secondary" variant="solid">
+      secondary/solid
+    </Tag>
+    <Tag colorPalette="danger" variant="subtle">
+      unknown variant
+    </Tag>
+    <Tag colorScheme="danger">colorScheme on a Tag is not read</Tag>
     <StatusChip colorScheme="warning">aliased chip</StatusChip>
     <Chip colorScheme="primary" variant="solid">
       <TagLabel>second import</TagLabel>

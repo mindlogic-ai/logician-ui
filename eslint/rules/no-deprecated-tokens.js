@@ -21,19 +21,32 @@ const GRAY = data.removedPrimitives.gray;
 const FAMILIES = data.removedPrimitives.families;
 
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-const keys = Object.keys(ALIASES).sort((a, b) => b.length - a.length);
+// Token path → Chakra's CSS variable name: dots → dashes, camelCase →
+// kebab-case (`primary.fillStrong` → `primary-fill-strong`), as Chakra's
+// `dashCase` does. Used for the names we match and the names we suggest.
+const kebab = (s) =>
+  s.replace(/\./g, '-').replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
+const byLength = (a, b) => b.length - a.length;
+const keys = Object.keys(ALIASES).sort(byLength);
 const dotted = keys.map(esc).join('|');
-const dashed = keys.map((k) => esc(k.replace(/\./g, '-'))).join('|');
+const dashedToKey = new Map(keys.map((k) => [kebab(k), k]));
+const dashed = [...dashedToKey.keys()].sort(byLength).map(esc).join('|');
+const fam = FAMILIES.map(esc).join('|');
+const famDashedToName = new Map(FAMILIES.map((f) => [kebab(f), f]));
+const famDashed = [...famDashedToName.keys()].sort(byLength).map(esc).join('|');
 // A name must not be part of a longer path: `primary.light` ≠ `primary.lighter`,
-// `slate.100` ≠ `slate.1000`, `fg.default` is not touched.
+// `slate.100` ≠ `slate.1000`, `foo.primary.light` and `fg.default` are not
+// touched. Exception: Chakra token references carry a `colors.` prefix —
+// `{colors.success.main}`, `token('colors.success.main')`, a string that is
+// exactly `'colors.success.main'` — so `colors.` is accepted when it starts
+// the string or follows `{`, a quote or `token(`. Same as codemods/5.0/token-renames.js.
+const PREFIX = `(?:(?<=^|[{'"\`]|token\\()(colors\\.)|(?<![\\w.-]))`;
 const ALIAS_RE = new RegExp(
-  `(?<![\\w.-])(${dotted})(?![\\w-])|--chakra-colors-(${dashed})(?![\\w-])`,
+  `${PREFIX}(${dotted})(?![\\w-])|--chakra-colors-(${dashed})(?![\\w-])`,
   'g'
 );
 const PRIMITIVE_RE = new RegExp(
-  `(?<![\\w.-])(${FAMILIES.map(esc).join('|')})\\.(\\d+)(?![\\w.-])|--chakra-colors-(${FAMILIES.map(
-    esc
-  ).join('|')})-(\\d+)(?![\\w-])`,
+  `${PREFIX}(${fam})\\.(\\d+)(?![\\w.-])|--chakra-colors-(${famDashed})-(\\d+)(?![\\w-])`,
   'g'
 );
 
@@ -67,10 +80,10 @@ module.exports = {
     const check = (node, text) => {
       if (typeof text !== 'string' || text.length === 0) return;
       for (const m of text.matchAll(ALIAS_RE)) {
-        const key = m[1] || keys.find((k) => k.replace(/\./g, '-') === m[2]);
-        const replacement = m[1]
-          ? ALIASES[key]
-          : `var(--chakra-colors-${ALIASES[key].replace(/\./g, '-')})`;
+        const key = m[2] || dashedToKey.get(m[3]);
+        const replacement = m[2]
+          ? `${m[1] || ''}${ALIASES[key]}`
+          : `var(--chakra-colors-${kebab(ALIASES[key])})`;
         context.report({
           node,
           messageId: 'deprecated',
@@ -79,12 +92,18 @@ module.exports = {
       }
       if (!checkPrimitives) return;
       for (const m of text.matchAll(PRIMITIVE_RE)) {
-        const family = m[1] || m[3];
-        const step = m[2] || m[4];
-        const hint =
-          family === 'gray' && GRAY[step]
-            ? `Use '${GRAY[step]}'.`
-            : 'Use a semantic token (primary.*, neutral.N, a status family, category.*) — see MIGRATION-5.0.md.';
+        const family = m[2] || famDashedToName.get(m[4]);
+        const step = m[3] || m[5];
+        const to = GRAY[step];
+        const grayRepl =
+          family === 'gray' && to
+            ? m[2]
+              ? `${m[1] || ''}${to}`
+              : `var(--chakra-colors-${kebab(to)})`
+            : null;
+        const hint = grayRepl
+          ? `Use '${grayRepl}'.`
+          : 'Use a semantic token (primary.*, neutral.N, a status family, category.*) — see MIGRATION-5.0.md.';
         context.report({
           node,
           messageId: 'primitive',

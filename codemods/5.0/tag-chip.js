@@ -8,14 +8,22 @@
  *     kept). Aliases (`Chip as C`) and namespace use (`<L.Chip>`) are followed.
  *     If the file already binds `Tag` to something else, `Tag as LuiTag` is
  *     imported. Non-JSX references (`styled(Chip)`) are renamed and reported.
- *  2. On every logician-ui Tag (incl. converted Chips):
- *       colorPalette|colorScheme × variant
+ *     A converted Chip keeps Chip's pill shape — `borderRadius="xl"` (32px)
+ *     `px={3} py={2} fontWeight="medium"`, what Chip.tsx renders — unless
+ *     the call site already sets them.
+ *  2. On every logician-ui Tag (incl. converted Chips), the runtime table of
+ *     mapLegacyTagProps (src/components/Tag/Tag.styles.ts):
+ *       colorPalette (Chip: colorScheme ?? colorPalette) × variant
  *       primary|secondary|neutral|—  × soft|—|outline → plain <Tag> (neutral)
- *       danger|success|warning       × soft|—|outline → tone="danger" …
- *       primary                      × solid          → selected
- *       other × solid / unknown values                → TODO comment + report
+ *       primary|secondary|neutral|—  × solid          → selected (reported:
+ *                                      explicit `selected` is also a toggle)
+ *       danger|success|warning       × soft|—         → tone="danger" …
+ *       danger|success|warning       × solid          → tone (soft) + TODO
+ *       danger|success|warning       × outline        → plain <Tag> + TODO
+ *       unknown palette / variant                     → plain <Tag> + TODO
  *     colorPalette / colorScheme / variant are then removed. Defaults: Chip
- *     4.x was primary/soft, Tag 4.x neutral/soft.
+ *     4.x was primary/soft, Tag 4.x neutral/soft. A Tag's `colorScheme` was
+ *     never read (only Chip's), so it is removed with a TODO.
  *  Dynamic values are left alone and reported; so are Chip type imports
  *  (`ChipProps` …), which need a hand rename.
  */
@@ -25,6 +33,7 @@ const {
   luiImports,
   findElements,
   readAttr,
+  hasAttr,
   spreads,
   removeAttrs,
   insertAttr,
@@ -203,7 +212,7 @@ function renameChips(j, root, file, reporter) {
         component: 'Chip',
         prop: '(reference)',
         kind: 'reference',
-        note: `renamed to ${tagLocal}; props passed here are not migrated`,
+        note: `renamed to ${tagLocal}; props passed here are not migrated and Chip's pill shape (borderRadius="xl" px={3} py={2} fontWeight="medium") is not added`,
         source: textOf(j, file, p.parent.node),
       });
       const parent = p.parent.node;
@@ -221,18 +230,92 @@ function renameChips(j, root, file, reporter) {
   return chipOpenings;
 }
 
+/**
+ * Port of mapLegacyTagProps (src/components/Tag/Tag.styles.ts) — the runtime
+ * back-compat table, so a migrated call site renders as the unmigrated one
+ * did. `palette` is what the runtime receives: Tag's `colorPalette`, or for a
+ * Chip `colorScheme ?? colorPalette ?? 'primary'` (Chip.tsx); undefined means
+ * Tag's 4.x default, neutral.
+ * @returns {{ tone: string, selected?: boolean, needsHuman: boolean }}
+ */
+const mapLegacy = (palette, variant) => {
+  const color = palette == null ? 'neutral' : palette;
+  const v = variant == null ? 'soft' : variant;
+  const plain = PLAIN.has(color);
+  const status = TONES.has(color);
+  if (!plain && !status) return { tone: 'neutral', needsHuman: true };
+  switch (v) {
+    case 'soft':
+      return { tone: status ? color : 'neutral', needsHuman: false };
+    case 'solid':
+      return status
+        ? { tone: color, needsHuman: true }
+        : { tone: 'neutral', selected: true, needsHuman: false };
+    case 'outline':
+      return { tone: 'neutral', needsHuman: status };
+    default:
+      return { tone: 'neutral', needsHuman: true };
+  }
+};
+
+/** Why a needs-human pair is lossy — the TODO text. */
+const todoFor = (color, variant, r) => {
+  if (!PLAIN.has(color) && !TONES.has(color))
+    return `colorPalette="${color}" is not a 5.0 tone; now a plain Tag`;
+  if (variant === 'solid')
+    return `${color}/solid has no filled 5.0 Tag; now tone="${r.tone}" (soft)`;
+  if (variant === 'outline')
+    return `${color}/outline has no outlined 5.0 Tag; now a plain Tag — tone="${color}"?`;
+  return `variant="${variant}" is not a Tag variant; now a plain Tag`;
+};
+
+/**
+ * Chip.tsx renders its Tag with a pill shape so an unmigrated screen does not
+ * shift; a migrated <Chip> keeps it. `xl` is the 32px radius token. A prop the
+ * call site already sets (or a shorthand covering it) is left alone, and the
+ * shape goes first, before any spread, as in Chip.tsx.
+ */
+const CHIP_SHAPE = [
+  ['borderRadius', 'xl', ['borderRadius', 'rounded']],
+  ['px', 3, ['px', 'paddingX', 'paddingInline', 'p', 'padding']],
+  ['py', 2, ['py', 'paddingY', 'paddingBlock', 'p', 'padding']],
+  ['fontWeight', 'medium', ['fontWeight']],
+];
+
+const addChipShape = (j, opening) => {
+  const set = (opening.attributes || [])
+    .filter((a) => a.type === 'JSXAttribute')
+    .map((a) => a.name && a.name.name);
+  const add = [];
+  for (const [name, value, covers] of CHIP_SHAPE) {
+    if (covers.some((c) => set.includes(c))) continue;
+    add.push(
+      typeof value === 'number'
+        ? j.jsxAttribute(
+            j.jsxIdentifier(name),
+            j.jsxExpressionContainer(j.numericLiteral(value))
+          )
+        : stringAttr(j, name, value)
+    );
+  }
+  opening.attributes = [...add, ...(opening.attributes || [])];
+  return add.length > 0;
+};
+
 function migrateTag(j, file, reporter, opening, fromChip) {
   const label = fromChip
     ? `${componentLabel(opening)} (was Chip)`
     : componentLabel(opening);
+  const shaped = fromChip && addChipShape(j, opening);
   const cp = readAttr(opening, 'colorPalette');
   const cs = readAttr(opening, 'colorScheme');
   const v = readAttr(opening, 'variant');
+  const line = lineOf(opening);
 
   const sp = spreads(opening);
   if (sp.length) {
     reporter.site({
-      line: lineOf(opening),
+      line,
       component: label,
       prop: '{...spread}',
       kind: 'spread',
@@ -256,33 +339,24 @@ function migrateTag(j, file, reporter, opening, fromChip) {
         source: textOf(j, file, a.attr),
       });
     }
-    return false;
+    return shaped;
   }
   if (cp.kind === 'absent' && cs.kind === 'absent' && v.kind === 'absent')
-    return false;
+    return shaped;
 
-  const color =
-    (cp.kind === 'static' ? cp.value : cs.kind === 'static' ? cs.value : '') ||
-    (fromChip ? 'primary' : 'neutral');
-  const variant = (v.kind === 'static' ? v.value : '') || 'soft';
+  const stat = (a) => (a.kind === 'static' ? a.value : undefined);
+  // What the runtime reads: Chip → colorScheme ?? colorPalette ?? 'primary';
+  // Tag → colorPalette only (a colorScheme on a Tag never reached the mapping).
+  const palette = fromChip ? (stat(cs) ?? stat(cp) ?? 'primary') : stat(cp);
+  const variant = stat(v);
+  const r = mapLegacy(palette, variant);
+  const color = palette == null ? 'neutral' : palette;
+  const shownVariant = variant == null ? 'soft' : variant;
 
-  let tone = null;
-  let selected = false;
-  let todo = null;
-  if (variant === 'soft' || variant === 'outline') {
-    if (TONES.has(color)) tone = color;
-    else if (!PLAIN.has(color))
-      todo = `colorPalette="${color}" is not a 5.0 tone; now a plain Tag`;
-  } else if (variant === 'solid') {
-    if (color === 'primary') selected = true;
-    else if (TONES.has(color)) {
-      tone = color;
-      todo = `${color}/solid has no filled 5.0 Tag; now tone="${color}" (soft)`;
-    } else
-      todo = `${color}/solid has no 5.0 equivalent; now a plain Tag — use selected?`;
-  } else {
-    if (TONES.has(color)) tone = color;
-    todo = `variant="${variant}" is not a Tag variant; removed`;
+  let todo = r.needsHuman ? todoFor(color, shownVariant, r) : null;
+  if (!fromChip && cs.kind === 'static' && cp.kind === 'absent') {
+    const note = `colorScheme="${cs.value}" was ignored by Tag (it reads colorPalette); removed`;
+    todo = todo ? `${todo}; ${note}` : note;
   }
 
   const index = removeAttrs(opening, [
@@ -292,8 +366,24 @@ function migrateTag(j, file, reporter, opening, fromChip) {
   ]);
   const at = index < 0 ? 0 : index;
   let anchor = null;
-  if (tone) anchor = insertAttr(opening, stringAttr(j, 'tone', tone), at);
-  if (selected) anchor = insertAttr(opening, boolAttr(j, 'selected'), at);
+  // An explicit tone / selected wins over the mapping (Tag.tsx: `tone ??=`).
+  if (r.tone !== 'neutral' && !hasAttr(opening, 'tone'))
+    anchor = insertAttr(opening, stringAttr(j, 'tone', r.tone), at);
+  if (r.selected && !hasAttr(opening, 'selected')) {
+    anchor = insertAttr(opening, boolAttr(j, 'selected'), at);
+    // The runtime mapping gives the selected *look* only; an explicit
+    // `selected` prop also makes the tag a toggle (hover, pointer,
+    // aria-pressed on a button) — Tag.tsx. No public prop gives the look
+    // without that, so a human confirms it.
+    reporter.site({
+      line,
+      component: label,
+      prop: 'selected',
+      kind: 'selected',
+      note: `${color}/${shownVariant} → selected, which also makes the tag interactive (hover, pointer) — confirm it is a toggle`,
+      source: `<${label} ${color}/${shownVariant}>`,
+    });
+  }
   if (todo) {
     addTodo(
       j,
@@ -302,12 +392,12 @@ function migrateTag(j, file, reporter, opening, fromChip) {
       anchor || opening.attributes[at] || opening.attributes[0]
     );
     reporter.site({
-      line: lineOf(opening),
+      line,
       component: label,
       prop: 'colorPalette+variant',
       kind: 'todo',
       note: todo,
-      source: `<${label} ${color}/${variant}>`,
+      source: `<${label} ${color}/${shownVariant}>`,
     });
   }
   return true;
@@ -343,3 +433,4 @@ function transform(file, api, options) {
 
 module.exports = transform;
 module.exports.parser = 'tsx';
+module.exports.mapLegacy = mapLegacy;

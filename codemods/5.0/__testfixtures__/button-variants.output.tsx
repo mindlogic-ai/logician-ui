@@ -56,10 +56,16 @@ export const Buttons = ({ kind, palette, rest, ok }: any) => (
       warning/solid
     </Button>
     <Button
-      /* TODO(logician-ui 5.0): colorPalette="primary" variant="link" has no exact 5.0 role; set to variant="primary" — pick one */
-      variant="primary"
+      /* TODO(logician-ui 5.0): colorPalette="primary" variant="link" has no exact 5.0 role; set to variant="subtle" — pick one */
+      variant="subtle"
     >
       unknown variant
+    </Button>
+    <Button /* TODO(logician-ui 5.0): colorPalette="danger" variant="plain" has no exact 5.0 role; set to variant="subtle" isDestructive — pick one */
+      variant="subtle"
+      isDestructive
+    >
+      unknown variant, danger
     </Button>
     {/* Dynamic → untouched + report */}
     <Button variant={kind}>dynamic variant</Button>

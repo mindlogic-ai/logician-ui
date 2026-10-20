@@ -97,11 +97,11 @@ const resolve = (kind, palette, variant) => {
         confident,
       };
     default:
-      // Unknown variant (Chakra's `link`/`plain`/`surface`, a typo): keep it
-      // compiling with the loudest safe choice and leave it to a human.
+      // Unknown variant (Chakra's `link`/`plain`/`surface`, a typo): what the
+      // runtime renders — the component default — and leave it to a human.
       return {
-        variant: kind === 'icon' ? 'ghost' : 'primary',
-        isDestructive: isDanger && kind === 'icon',
+        variant: kind === 'icon' ? 'ghost' : 'subtle',
+        isDestructive: isDanger,
         confident: false,
       };
   }

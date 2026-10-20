@@ -39,6 +39,12 @@ module.exports = [logician.configs.recommended]; // logician/no-deprecated-token
 ESLint 8 `.eslintrc`: `eslint --rulesdir node_modules/@mindlogic-ai/logician-ui/eslint/rules …`
 with `rules: { 'no-deprecated-tokens': 'warn' }`. The rule names the replacement
 for each deprecated alias and flags removed raw primitives.
+Rule and codemod match the dotted name (`'primary.lighter'`), Chakra's token
+reference form with its `colors.` prefix (`'{colors.success.main}'`,
+`token('colors.success.main')`, kept in the output), and the CSS variable in
+the kebab-case form Chakra emits (`var(--chakra-colors-primary-fill-strong)` →
+`var(--chakra-colors-primary-hover)`; `primary.washActive` is
+`--chakra-colors-primary-wash-active`, never `…-washActive`).
 
 ### Mapping (deprecated alias → 5.0)
 
@@ -98,7 +104,7 @@ createSystem(defaultConfig, createLogicianTheme({ neutral: 'slate' }))
 | **Badge**                      | 6 variants, default `primary`                                                                           | `neutral` (default, beige) · `success` · `warning` · `danger` · `info`; `primary`/`secondary` removed                                                                                     |
 | **CountBadge**                 | — (app's UnreadCountBadge)                                                                              | new: `count`, `max` (99+), `dot`, `showZero`, `label`                                                                                                                                     |
 | **Tag**                        | `colorPalette` × `variant`                                                                              | `tone` (`neutral` default · `success` · `warning` · `danger` · `info`), `selected`, `category` (12 hues), `icon`                                                                          |
-| **Chip**                       | separate component                                                                                      | deprecated alias of Tag (removed in 6.0) — `<Chip>` → `<Tag>`                                                                                                                             |
+| **Chip**                       | separate component                                                                                      | deprecated alias of Tag (removed in 6.0) — `<Chip>` → `<Tag>`; the codemod keeps its pill shape (`borderRadius="xl" px={3} py={2} fontWeight="medium"`)                                   |
 | **Card**                       | `gradient` variant                                                                                      | removed; `wash` = `secondary.surface`                                                                                                                                                     |
 | **Modal**                      | —                                                                                                       | `headerTone="brand"` (beige header band), `ModalHeader subtitle`                                                                                                                          |
 | **Banner**                     | info/success/warning/danger                                                                             | + `neutral`; 1px border + 3px left bar; `info` uses `info.*` (was primary)                                                                                                                |

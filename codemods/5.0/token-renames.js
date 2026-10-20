@@ -38,19 +38,42 @@ const GRAY = data.removedPrimitives.gray;
 const FAMILIES = data.removedPrimitives.families;
 
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+/**
+ * Token path → the name Chakra gives its CSS variable: dots become dashes and
+ * camelCase segments are kebab-cased (`primary.fillStrong` → `primary-fill-strong`,
+ * `grayDark.200` → `gray-dark-200`), as Chakra's own `dashCase` does. Used for
+ * both the names we match and the names we write — see src/theme/cssVarNames.test.ts.
+ */
+const kebab = (s) =>
+  s.replace(/\./g, '-').replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
 const keys = Object.keys(ALIASES).sort((a, b) => b.length - a.length);
 const dotted = keys.map(esc).join('|');
-const dashed = keys.map((k) => esc(k.replace(/\./g, '-'))).join('|');
-const dashedToKey = new Map(keys.map((k) => [k.replace(/\./g, '-'), k]));
+const dashedToKey = new Map(keys.map((k) => [kebab(k), k]));
+const dashed = [...dashedToKey.keys()]
+  .sort((a, b) => b.length - a.length)
+  .map(esc)
+  .join('|');
 const fam = FAMILIES.map(esc).join('|');
+const famDashedToName = new Map(FAMILIES.map((f) => [kebab(f), f]));
+const famDashed = [...famDashedToName.keys()]
+  .sort((a, b) => b.length - a.length)
+  .map(esc)
+  .join('|');
 
-// Same boundaries as eslint/rules/no-deprecated-tokens.js.
+// Same boundaries as eslint/rules/no-deprecated-tokens.js. A dotted name must
+// not be part of a longer path (`foo.primary.light`, `primary.lighter`), with
+// one exception: Chakra's own token references spell the path with a
+// `colors.` prefix — `{colors.success.main}` in a value string,
+// `token('colors.success.main')`, or a string that is exactly
+// `'colors.success.main'`. So `colors.` is accepted (and kept) when it starts
+// the string or follows `{`, a quote or `token(`.
+const PREFIX = `(?:(?<=^|[{'"\`]|token\\()(colors\\.)|(?<![\\w.-]))`;
 const ALIAS_RE = new RegExp(
-  `(?<![\\w.-])(${dotted})(?![\\w-])|--chakra-colors-(${dashed})(?![\\w-])`,
+  `${PREFIX}(${dotted})(?![\\w-])|--chakra-colors-(${dashed})(?![\\w-])`,
   'g'
 );
 const PRIMITIVE_RE = new RegExp(
-  `(?<![\\w.-])(${fam})\\.(\\d+)(?![\\w.-])|--chakra-colors-(${fam})-(\\d+)(?![\\w-])`,
+  `${PREFIX}(${fam})\\.(\\d+)(?![\\w.-])|--chakra-colors-(${famDashed})-(\\d+)(?![\\w-])`,
   'g'
 );
 
@@ -63,20 +86,20 @@ const LINK_ELEMENTS = new Set(['Link', 'a']);
 const rewrite = (text, ctx = {}) => {
   const renamed = [];
   const primitives = [];
-  let out = text.replace(ALIAS_RE, (m, dot, dash) => {
+  let out = text.replace(ALIAS_RE, (m, prefix, dot, dash) => {
     const key = dot || dashedToKey.get(dash);
     let to = ALIASES[key];
     if (key === 'fg.accent' && ctx.linkColor) to = 'fg.link';
-    const repl = dot ? to : `--chakra-colors-${to.replace(/\./g, '-')}`;
+    const repl = dot ? `${prefix || ''}${to}` : `--chakra-colors-${kebab(to)}`;
     renamed.push([m, repl]);
     return repl;
   });
-  out = out.replace(PRIMITIVE_RE, (m, f1, s1, f2, s2) => {
-    const family = f1 || f2;
+  out = out.replace(PRIMITIVE_RE, (m, prefix, f1, s1, f2, s2) => {
+    const family = f1 || famDashedToName.get(f2);
     const step = s1 || s2;
     if (family === 'gray' && GRAY[step]) {
       const to = GRAY[step];
-      const repl = f1 ? to : `--chakra-colors-${to.replace(/\./g, '-')}`;
+      const repl = f1 ? `${prefix || ''}${to}` : `--chakra-colors-${kebab(to)}`;
       renamed.push([m, repl]);
       return repl;
     }
@@ -205,3 +228,4 @@ function transform(file, api, options) {
 module.exports = transform;
 module.exports.parser = 'tsx';
 module.exports.rewrite = rewrite;
+module.exports.kebab = kebab;

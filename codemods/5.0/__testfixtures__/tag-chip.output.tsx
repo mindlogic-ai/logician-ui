@@ -16,28 +16,84 @@ export const Chips = ({
 }) => (
   <Box>
     {/* Chip 4.x default = primary/soft */}
-    <Tag>—/—</Tag>
-    <Tag>primary/soft</Tag>
-    <Tag>secondary/—</Tag>
-    <Tag>neutral/soft</Tag>
-    <Tag tone="danger">danger/soft</Tag>
-    <Tag tone="success">success/—</Tag>
-    <Tag tone="warning" size="sm">
+    <Tag borderRadius="xl" px={3} py={2} fontWeight="medium">
+      —/—
+    </Tag>
+    <Tag borderRadius="xl" px={3} py={2} fontWeight="medium">
+      primary/soft
+    </Tag>
+    <Tag borderRadius="xl" px={3} py={2} fontWeight="medium">
+      secondary/—
+    </Tag>
+    <Tag borderRadius="xl" px={3} py={2} fontWeight="medium">
+      neutral/soft
+    </Tag>
+    <Tag borderRadius="xl" px={3} py={2} fontWeight="medium" tone="danger">
+      danger/soft
+    </Tag>
+    <Tag borderRadius="xl" px={3} py={2} fontWeight="medium" tone="success">
+      success/—
+    </Tag>
+    <Tag
+      borderRadius="xl"
+      px={3}
+      py={2}
+      fontWeight="medium"
+      tone="warning"
+      size="sm"
+    >
       warning/—
     </Tag>
-    <Tag selected>primary/solid</Tag>
-    <Tag selected>—/solid (primary default)</Tag>
-    <Tag>neutral/outline</Tag>
-    <Tag tone="danger">danger/outline</Tag>
-    <Tag /* TODO(logician-ui 5.0): secondary/solid has no 5.0 equivalent; now a plain Tag — use selected? */
+    <Tag borderRadius="xl" px={3} py={2} fontWeight="medium" selected>
+      primary/solid
+    </Tag>
+    <Tag borderRadius="xl" px={3} py={2} fontWeight="medium" selected>
+      —/solid (primary default)
+    </Tag>
+    <Tag borderRadius="xl" px={3} py={2} fontWeight="medium">
+      neutral/outline
+    </Tag>
+    <Tag
+      /* TODO(logician-ui 5.0): danger/outline has no outlined 5.0 Tag; now a plain Tag — tone="danger"? */
+      borderRadius="xl"
+      px={3}
+      py={2}
+      fontWeight="medium"
     >
+      danger/outline
+    </Tag>
+    <Tag borderRadius="xl" px={3} py={2} fontWeight="medium" selected>
       secondary/solid
     </Tag>
-    <Tag colorScheme={cs}>dynamic</Tag>
-    <Tag {...rest} tone="success">
+    <Tag borderRadius="xl" px={3} py={2} fontWeight="medium" colorScheme={cs}>
+      dynamic
+    </Tag>
+    <Tag
+      borderRadius="xl"
+      px={3}
+      py={2}
+      fontWeight="medium"
+      {...rest}
+      tone="success"
+    >
       spread
     </Tag>
-    <Tag tone="danger" />
+    <Tag borderRadius="xl" px={3} py={2} fontWeight="medium" tone="danger" />
+    {/* Runtime precedence: colorScheme ?? colorPalette */}
+    <Tag borderRadius="xl" px={3} py={2} fontWeight="medium" tone="danger">
+      colorScheme wins
+    </Tag>
+    <Tag borderRadius="xl" px={3} py={2} fontWeight="medium" tone="success">
+      colorPalette fallback
+    </Tag>
+    {/* Shape the call site already sets is kept */}
+    <Tag borderRadius="md" p={1} fontWeight="bold">
+      own shape
+    </Tag>
+    {/* An explicit selected wins over the mapping */}
+    <Tag borderRadius="xl" px={3} py={2} fontWeight="medium" selected={false}>
+      explicit selected
+    </Tag>
     <Fancy>styled</Fancy>
   </Box>
 );
