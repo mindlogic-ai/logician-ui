@@ -1,5 +1,26 @@
 # Changelog
 
+## 4.0.0-alpha.44
+
+### Patch Changes
+
+- 05c6b7f: Anchored popups (Menu, Select, Combobox, Popover, Tooltip) open faster: a new
+  `presence-anchored` preset retimes them to 200ms in / 100ms out (was 300 / 150).
+  Modal, BottomSheet and Collapsible keep `presence` at 300 / 150.
+- 05c6b7f: Keyboard focus ring appears instantly (no 150ms fade), and focused Switch /
+  Checkbox fills keep their own transition. Moving between open tooltips
+  (`data-instant`) no longer replays the enter animation.
+- 05c6b7f: Motion cleanups: the checkbox tick draws in 200ms (was 300ms); Accordion
+  content opens/closes on the same 300 / 150 clock as Collapsible (was Chakra's
+  200 / 200); PageLoader, SectionLoader and GraphErrorBanner use the `feedback`
+  preset instead of literal timings, so they honour reduced motion; InfoSprinkle
+  drops its literal transition; PageLoader uses `100dvh` and ErrorFallback
+  `100svh` instead of `100vh`.
+- 05c6b7f: Press and exit feel: Button/`press` scale and every `presence` exit now ease
+  out (`emphasized`) instead of `standard`; IconButton's press transitions like
+  Button's instead of snapping; the Radio dot grows from `scale 0.25` + fade
+  instead of from `scale 0`.
+
 ## 4.0.0-alpha.43
 
 ### Patch Changes
