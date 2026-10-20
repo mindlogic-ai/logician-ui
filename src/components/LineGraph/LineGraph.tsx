@@ -11,10 +11,9 @@ import {
 } from 'recharts';
 
 import { useColorMode } from '@/components/ColorMode';
-import { SYSTEM_HUE_NAMES } from '@/theme/colors';
-import { SYSTEM_HUES } from '@/theme/palette.generated';
 
 import { DatumBase, LineGraphProps } from './LineGraph.types';
+import { seriesColor } from './seriesColors';
 
 export const LineGraph = <T extends DatumBase>({
   data = [],
@@ -23,23 +22,11 @@ export const LineGraph = <T extends DatumBase>({
   ...rest
 }: LineGraphProps<T>) => {
   const primaryColor = useToken('colors', 'primary.main')[0];
-  // A single series reads as the brand line (`primary.main`, a real semantic
-  // token). Two or more need to be *distinguishable* from each other, which a
-  // single flat colour can't do — so they cycle the 12 system hues instead.
-  // `category.{hue}.surface/.fg` are the only hue roles exposed as CSS vars,
-  // and both are tuned for a soft badge fill or its on-fill text, not a
-  // chart stroke that has to read against a plain canvas. `base`/`baseDark`
-  // in the raw generated palette are the vivid mid-tones that job wants, so —
-  // per the chart-colour exception (no semantic role fits; see
-  // `useColorModeValue`'s own doc comment) — this reads them directly rather
-  // than inventing a `category.*.chart` role for one consumer.
+  // Series 1 is the neutral brand line; further series cycle hues with no
+  // status meaning (see seriesColors.ts). Strokes read the generated palette
+  // directly because no semantic role fits a chart line.
   const { colorMode } = useColorMode();
   const isDark = colorMode === 'dark';
-  const categorySeriesColor = (index: number) => {
-    const hue = SYSTEM_HUE_NAMES[index % SYSTEM_HUE_NAMES.length];
-    return isDark ? SYSTEM_HUES[hue].baseDark : SYSTEM_HUES[hue].base;
-  };
-  const isMultiSeries = dataKeys.length > 1;
   return (
     <Box h="400px" {...rest}>
       <ResponsiveContainer width="100%" height="100%">
@@ -113,10 +100,7 @@ export const LineGraph = <T extends DatumBase>({
               type="monotone"
               dataKey={key}
               name={label}
-              stroke={
-                color ??
-                (isMultiSeries ? categorySeriesColor(index) : primaryColor)
-              }
+              stroke={color ?? seriesColor(index, primaryColor, isDark)}
               dot={{ r: 0 }}
             />
           ))}
