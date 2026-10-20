@@ -47,7 +47,7 @@ export const canvasSelectionCss = {
   '& .react-flow__edge.selected .react-flow__edge-path': {
     stroke: 'var(--chakra-colors-primary-main)',
     strokeWidth: 2.5,
-    filter: 'drop-shadow(0 0 4px var(--chakra-colors-primary-washActive))',
+    filter: 'drop-shadow(0 0 4px var(--chakra-colors-primary-wash-active))',
   },
   '& .react-flow__edge.selected .react-flow__edge-interaction': {
     stroke: 'var(--chakra-colors-primary-main)',
