@@ -1,8 +1,10 @@
 import { type DefaultEdgeOptions, MarkerType } from '@xyflow/react';
 
+import { CANVAS_STROKE_TOKEN, colorVar } from '../colorVar';
+
 /**
- * Edge defaults. Stroke comes from a theme token (`border.strong`) via CSS
- * var since React Flow takes SVG-style props, not Chakra ones. The label
+ * Edge defaults. Stroke comes from a theme token (`CANVAS_STROKE_TOKEN`,
+ * `fg.icon` — a non-text mark, so ≥ 3:1 on the canvas) via CSS var since React Flow takes SVG-style props, not Chakra ones. The label
  * itself is rendered through the `labeled` custom edge so its
  * typography uses the design system's semantic `Subtext` primitive —
  * see `LabeledEdge.tsx`. The arrowhead makes each edge's direction
@@ -11,12 +13,12 @@ import { type DefaultEdgeOptions, MarkerType } from '@xyflow/react';
 export const defaultEdgeOptions: DefaultEdgeOptions = {
   type: 'labeled',
   style: {
-    stroke: 'var(--chakra-colors-border-strong)',
+    stroke: colorVar(CANVAS_STROKE_TOKEN),
     strokeWidth: 1.5,
   },
   markerEnd: {
     type: MarkerType.ArrowClosed,
-    color: 'var(--chakra-colors-border-strong)',
+    color: colorVar(CANVAS_STROKE_TOKEN),
     width: 18,
     height: 18,
   },

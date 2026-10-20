@@ -2,39 +2,9 @@ import { ForwardedRef, forwardRef, useMemo } from 'react';
 import { Box } from '@chakra-ui/react';
 
 import { MOTION_DURATION_MS } from '../../theme/motion';
-import { CORAL, RAMPS, SYSTEM_HUES } from '../../theme/palette.generated';
 import { confettiPiece } from './Confetti.styles';
 import { ConfettiProps } from './Confetti.types';
-
-/**
- * Literal hex, and the one place in this library that is deliberately off the
- * semantic layer.
- *
- * `canvas.getContext('2d')`-free here (these paint via a CSS `bg` prop, not a
- * canvas), but the reasoning is the same as any renderer that cannot resolve
- * `var(--chakra-colors-…)`: a confetti piece has to pick ONE colour per piece,
- * up front, in the `useMemo` below — there is no element whose computed style
- * a browser could resolve for us, so each piece gets the resolved hex rather
- * than a token string.
- *
- * The first version invented six bespoke hex values. This one is on-brand
- * instead: the house coral (`CORAL.base`, the same red `action.mark` reads),
- * the house beige (`RAMPS.sand.light['8']`, the raw step behind
- * `secondary.fg`), and the 12 system hue bases (`SYSTEM_HUES.*.base` — the
- * same colours `category.*` resolves to) — the full decorative set the
- * palette already ships, imported raw because this is a canvas-shaped
- * renderer, not a styled one.
- *
- * The cost, stated rather than hidden: these are the LIGHT-mode values and do
- * not flip for dark mode — a burst that lasts two seconds and carries no
- * information is an acceptable place to spend that. `colors` is a prop for an
- * app that needs its own.
- */
-const DEFAULT_COLORS = [
-  CORAL.base,
-  RAMPS.sand.light['8'],
-  ...Object.values(SYSTEM_HUES).map((hue) => hue.base),
-];
+import { DEFAULT_CONFETTI_COLORS } from './confettiColors';
 
 /**
  * A seeded generator, so one burst is stable across re-renders.
@@ -79,15 +49,12 @@ const scatter = (seed: number) => {
  * nothing, and doing it in CSS keeps the decision on the same media query as
  * every other preset instead of on a hook that has to guess before hydration.
  *
- * **The default colours are the house decorative set — coral, beige and the 12
- * system hues — imported as raw hex from `palette.generated`, not read as
- * tokens.** Status tokens (`danger.main` and friends) mean things, and raining
- * the error red over "payment complete" says something the screen does not —
- * confetti is the one element on a page with nothing to communicate. The
- * decorative set carries no such meaning and already spans the full wheel, so
- * a burst of it reads as a burst rather than a status message. The cost is
- * real and stated: these are light-mode values and do not flip for dark mode.
- * `colors` is a prop for an app that needs its own.
+ * **The default colours are decorative only** (`confettiColors.ts`): coral,
+ * beige and the system hues that mean nothing — red, yellow, green and blue are
+ * left out because they are the danger, warning, success and info colours, and
+ * raining error red over "payment complete" says something the screen does not.
+ * They are light-mode hex and do not flip for dark mode. `colors` is a prop for
+ * an app that needs its own.
  *
  * **Takes no children — it is an overlay, not a wrapper.** It renders absolutely
  * against the nearest positioned ancestor, which is therefore the stage: give
@@ -102,7 +69,7 @@ export const Confetti = forwardRef(
   (
     {
       pieceCount = 50,
-      colors = DEFAULT_COLORS,
+      colors = DEFAULT_CONFETTI_COLORS,
       seed = 1,
       ...rest
     }: ConfettiProps,

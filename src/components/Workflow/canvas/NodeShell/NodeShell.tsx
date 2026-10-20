@@ -64,16 +64,21 @@ function normalizeChip(spec: MetaChipSpec): {
  * states but still surface the primary ring when selected so the active
  * annotation is visible.
  *
- * Precedence: running > failed (run error or a validation issue) > completed
- * > selected > warning > default. Running and selected share the same 1px
- * `primary.main` ring — both mean "this is the node in focus" — while failed
- * and completed get the stronger treatment a ring can't give: the whole card
- * tints with the status colour (`danger.bg`/`success.bg`), so it still reads
- * at a glance once the selection highlight moves on. A node's own validation
- * issues (`hasError`) get the same failed treatment as a runtime error
- * (`runState === 'error'`) — both mean "something is wrong with this node"
- * and a reader does not need a third visual bucket to tell them apart.
- * The default-case border is `border.default`.
+ * Two independent layers:
+ *
+ * - Status chrome (border + body), by precedence running > failed (run error
+ *   or a validation issue) > completed > warning > default. Failed and
+ *   completed tint the whole card with the status colour
+ *   (`danger.bg`/`success.bg`) so the result still reads at a glance once the
+ *   selection moves on. A node's own validation issues (`hasError`) get the
+ *   same failed treatment as a runtime error (`runState === 'error'`) — both
+ *   mean "something is wrong with this node". The default border is
+ *   `border.default`.
+ * - Selection: a 1px `primary.main` outline, added on top of whatever status
+ *   chrome the node has. After a run every node is done or failed, so if
+ *   status replaced selection a clicked node would show no cue at all. Running
+ *   wears the same outline — both mean "this is the node in focus". On a
+ *   plain or warning node selection also takes the border, as before.
  */
 function getRingChrome(
   category: NodeCategory,
@@ -83,15 +88,11 @@ function getRingChrome(
   runState: RunState,
   noteBorder: string
 ): RingChrome {
+  const selectionRing = selected
+    ? { outline: '1px solid', outlineColor: 'primary.main' }
+    : {};
   if (category === 'note') {
-    if (selected) {
-      return {
-        borderColor: noteBorder,
-        outline: '1px solid',
-        outlineColor: 'primary.main',
-      };
-    }
-    return { borderColor: noteBorder };
+    return { borderColor: noteBorder, ...selectionRing };
   }
   if (runState === 'running') {
     return {
@@ -101,18 +102,16 @@ function getRingChrome(
     };
   }
   if (runState === 'error' || hasError) {
-    return { borderColor: 'danger.border', bg: 'danger.bg' };
+    return { borderColor: 'danger.border', bg: 'danger.bg', ...selectionRing };
   }
   if (runState === 'done') {
-    return { borderColor: 'success.border', bg: 'success.bg' };
-  }
-  if (selected) {
     return {
-      borderColor: 'primary.main',
-      outline: '1px solid',
-      outlineColor: 'primary.main',
+      borderColor: 'success.border',
+      bg: 'success.bg',
+      ...selectionRing,
     };
   }
+  if (selected) return { borderColor: 'primary.main', ...selectionRing };
   if (hasWarning) return { borderColor: 'warning.border' };
   return { borderColor: 'border.default' };
 }
