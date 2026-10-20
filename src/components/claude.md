@@ -144,7 +144,7 @@ const Component = () => {
 ```
 
 **Semantic tokens to use:**
-- `primary.main`, `primary.light` - Primary brand colors
+- `primary.main` / `primary.wash` / `primary.selected` - primary (BAZE black) fill, hover wash, selected row — see src/theme/SemanticTokens.mdx
 - `danger.main` - Error/danger states
 - `bg.*` / `fg.*` / `border.*` - Neutral surfaces, text, and borders that **flip with
   color mode**. Prefer these over raw `gray.*`/`white` so components work in dark mode

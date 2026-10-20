@@ -1,17 +1,20 @@
 # Theme System
 
-The Logician UI theme system extends Chakra UI's theming capabilities with the **Golden Ratio Color System** - a mathematically harmonious color palette designed using the golden ratio (φ ≈ 1.618) to create visually balanced color relationships.
+The Logician UI theme system extends Chakra UI's theming with the **BAZE color system** (5.0): warm black / beige-brown / coral brand scales, 12 system hues, role-named semantic tokens, and a contrast audit in CI.
 
 ## Theme Structure
 
 ```
 src/theme/
 ├── index.ts          # Main theme export (also defines textStyles)
-├── colors.ts         # Color palette & semantic tokens
+├── colors.ts         # Raw scales + semantic tokens (built from palette.generated.ts)
+├── palette.generated.ts  # Generator output — do not edit (scripts/palette/generate.mjs)
+├── contrast.test.ts  # Contrast audit, 4 modes
+├── deprecatedColorTokens.json  # 4.x → 5.0 names (aliases, lint, codemod)
 ├── motion.ts         # Duration/easing scales & the animationStyle presets
 ├── font.ts           # Font family definitions
 ├── global.ts         # Global CSS styles
-├── Palette.stories.tsx  # Visual color palette reference
+├── BazePalette.stories.tsx  # Every raw + role value, 4 modes
 └── Motion.stories.tsx   # Motion preset & scale reference
 ```
 
@@ -132,308 +135,56 @@ is worse than remembering which scale to reach into.
 
 `Theme/Motion` in Storybook is the live version of this page.
 
-## Golden Ratio Color System
+## Color System — BAZE (5.0)
 
-### Design Principles
+**Read `SemanticTokens.mdx` (Storybook: Setup/Theme/Using Semantic Tokens) for
+which token to use, and Setup/Theme/BAZE Palette for every value.** This section
+is the maintainer's view.
 
-1. **Accessibility First**: All semantic color combinations meet WCAG 2.1 AA standards (4.5:1 minimum contrast)
-2. **Cool Gray Foundation**: Slate-based grays with blue undertone for a modern, professional feel
-3. **Consistent Scale**: Each color has 50/100/200/300/500/600/700/800/900 steps
-4. **Light & Dark Mode**: Neutral semantic tokens (`bg.*`/`fg.*`/`border.*`) carry a `_dark`
-   variant and flip automatically by color mode. Use them instead of raw `gray.*`/`white`
-   primitives so components work in both modes (see [Neutral Semantic Tokens](#neutral-semantic-tokens-dark-mode)).
+### Layers and files
 
-### Primitive Color Palettes
+| Layer | Where | Rule |
+| --- | --- | --- |
+| Raw scales `ink`/`inkDark`, `sand`/`sandDark`, `slate`/`slateDark` (1–12), `coral`, 12 system hues `{base, baseDark, hc, hcDark, surface, ink, surfaceDark, inkDark}` | `palette.generated.ts` → `colors` in `colors.ts` | Components and recipes **never** read them |
+| Semantic steps `neutral.1–12`, `secondary.1–12` | `createSemanticColors()` | Filled by the theme option (`neutral: 'ink' \| 'slate'`, `secondary: 'sand'`) |
+| Roles (`bg.*`, `layer.*`, `fg.*`, `border.*`, `primary.*`, `secondary.*`, `action.*`, `send.*`, `count.*`, `disabled.*`, `focus.ring`, status, `tooltip.*`, `category.*`) | `ROLE_TOKEN_PATHS` + `createSemanticColors()` | The only colours a component reads |
 
-Located in `src/theme/colors.ts`
+- **Values come from the generator.** `scripts/palette/generate.mjs` ports the
+  designer prototype (OKLCH, contrast-targeted steps) and `--check`s it against
+  `scripts/palette/reference.json`. Change a value there, regenerate, commit
+  `palette.generated.ts`. Never hand-edit the generated file.
+- **High contrast** (`prefers-contrast: more`): a role whose HC value differs
+  reads an internal helper `scheme.light.*` / `scheme.dark.*` (`{ base,
+  _moreContrast }`) because Chakra cannot nest `_dark` inside `_moreContrast`
+  (it emits an invalid selector). Never reference `scheme.*`.
+- **Use `_light`/`_dark`, not `base`,** for any token Chakra also defines
+  (`bg.subtle`, `fg.muted`, `border.subtle`, `bg.panel` …): Chakra's `_light`
+  outranks a `base` override. `createSemanticColors` already does this.
+- **Semantic → semantic references work** in Chakra 3.30 (`{colors.fg.default}`
+  emits a `var()` chain); the deprecated aliases rely on it.
 
-#### Blue Palette (Primary)
-Primary brand color for interactive elements.
+### Adding or changing a token
 
-| Token | Hex | Usage |
-|-------|-----|-------|
-| `blue.25` | `#F4F7FD` | Lightest backgrounds |
-| `blue.50` | `#E8EEFB` | Extra-light backgrounds |
-| `blue.100` | `#B9CBF3` | Light backgrounds, subtle fills |
-| `blue.200` | `#7DA0E8` | Hover states, focus rings |
-| `blue.300` | `#4A79DC` | Medium accents, borders |
-| `blue.500` | `#1751D0` | **Primary main** - buttons, links |
-| `blue.600` | `#1241A6` | Hover on main |
-| `blue.700` | `#0D317D` | Text on light backgrounds |
-| `blue.800` | `#092053` | Dark emphasis |
-| `blue.900` | `#04102A` | Darkest, high contrast |
+1. Add it to the generator (`buildScheme`) and to `PATHS` in `colors.ts`.
+2. Register its contrast pair(s) in `contrast.test.ts` (`PAIRS`, `SEP`), or a
+   reason in `NO_PAIR`. The registry test fails until you do; the audit runs
+   light / dark / hcLight / hcDark for every neutral scheme.
+3. Add it to `SemanticColorToken` and to SemanticTokens.mdx.
 
-#### Rose Palette (Danger)
-Error and destructive action states.
+### Deprecated 4.x names
 
-| Token | Hex | Usage |
-|-------|-----|-------|
-| `rose.25` | `#FDF5F5` | Lightest backgrounds |
-| `rose.50` | `#FBE8E9` | Extra-light backgrounds |
-| `rose.100` | `#F3B9BD` | Light error fills |
-| `rose.200` | `#E87D84` | Error borders, icons |
-| `rose.300` | `#DC4A53` | Error accents |
-| `rose.500` | `#C1232C` | **Danger main** - error states |
-| `rose.600` | `#9C1C23` | Hover on main |
-| `rose.700` | `#7D0D14` | Error text |
-| `rose.800` | `#53090D` | Dark emphasis |
-| `rose.900` | `#2A0407` | Darkest, high contrast |
+`deprecatedColorTokens.json` maps every 4.x semantic name to its replacement.
+The same file drives the aliases (`colors.ts`), the `no-deprecated-tokens`
+lint rule (`eslint/rules/`, loaded with `--rulesdir` by `yarn lint`) and the
+`codemods/5.0` token renames. Removed in 6.0.
 
-#### Green Palette (Success)
-Success and confirmation states.
+### Shared style utils
 
-| Token | Hex | Usage |
-|-------|-----|-------|
-| `green.25` | `#F4FDF4` | Lightest backgrounds |
-| `green.50` | `#E9FBE8` | Extra-light backgrounds |
-| `green.100` | `#BDF3B9` | Light success fills |
-| `green.200` | `#84E87D` | Success borders, icons |
-| `green.300` | `#53DC4A` | Success accents |
-| `green.500` | `#21D017` | Bright (avoid for text) |
-| `green.600` | `#1AA612` | **Success main** - confirmations |
-| `green.700` | `#147D0D` | Success text |
-| `green.800` | `#0D5309` | Dark emphasis |
-| `green.900` | `#072A04` | Darkest, high contrast |
+- `focusRing` (`@/utils/focusRing`): inner 2px `bg.canvas` band + outer 2px
+  `focus.ring`. No transition.
+- `disabledControl` / `disabledText` (`@/utils/disabledControl`): fixed
+  `disabled.*` colours, never opacity.
 
-#### Violet Palette (Secondary)
-Secondary accent and highlight elements.
-
-| Token | Hex | Usage |
-|-------|-----|-------|
-| `violet.25` | `#FAF4FD` | Lightest backgrounds |
-| `violet.50` | `#F4E8FB` | Extra-light backgrounds |
-| `violet.100` | `#DEB9F3` | Light accent fills |
-| `violet.200` | `#C17DE8` | Accent borders |
-| `violet.300` | `#A84ADC` | Accent elements |
-| `violet.500` | `#9117D0` | **Secondary main** - accents |
-| `violet.600` | `#7412A6` | Hover on main |
-| `violet.700` | `#570D7D` | Accent text |
-| `violet.800` | `#3A0953` | Dark emphasis |
-| `violet.900` | `#1D042A` | Darkest, high contrast |
-
-#### Gold Palette (Warning)
-Warning and caution states.
-
-| Token | Hex | Usage |
-|-------|-----|-------|
-| `gold.25` | `#FDFBF4` | Lightest backgrounds |
-| `gold.50` | `#FBF6E8` | Extra-light backgrounds |
-| `gold.100` | `#F3E4B9` | Light warning fills |
-| `gold.200` | `#E8CD7D` | Warning borders, icons |
-| `gold.300` | `#DCB84A` | Warning accents |
-| `gold.500` | `#D0A117` | **Warning main** - caution |
-| `gold.600` | `#A68112` | Hover on main |
-| `gold.700` | `#7D610D` | Warning text |
-| `gold.800` | `#534109` | Dark emphasis |
-| `gold.900` | `#2A2004` | Darkest, high contrast |
-
-#### Gray Palette (Slate-based)
-Extended 16-shade scale with cool blue undertone.
-
-| Token | Hex | Usage |
-|-------|-----|-------|
-| `gray.0` | `#FDFDFF` | Pure background |
-| `gray.50` | `#F7F9FC` | Subtle background |
-| `gray.100` | `#F0F3F9` | Muted background |
-| `gray.200` | `#E2E6F0` | Light borders, dividers |
-| `gray.300` | `#CDD3E0` | Default borders |
-| `gray.400` | `#B0B8C9` | Disabled borders |
-| `gray.500` | `#9AA3B8` | Placeholder text, tertiary |
-| `gray.600` | `#8690A7` | Icons, secondary text |
-| `gray.700` | `#737D96` | Secondary text |
-| `gray.800` | `#616B85` | Body text (light) |
-| `gray.900` | `#505A74` | Body text (medium) |
-| `gray.1000` | `#414A63` | Body text (strong) |
-| `gray.1100` | `#343C52` | Headings (light) |
-| `gray.1200` | `#2A3142` | Headings (medium) |
-| `gray.1300` | `#1E2433` | **Primary text** - default body |
-| `gray.1400` | `#141924` | Dark backgrounds |
-| `gray.1500` | `#0B0E17` | Darkest background |
-
-### Semantic Tokens
-
-Semantic tokens provide meaning-based color references that should be used instead of primitive colors.
-
-```tsx
-semanticTokens: {
-  colors: {
-    primary: {
-      lightest: 'blue.25',     // #F4F7FD - Lightest backgrounds
-      extralight: 'blue.50',   // #E8EEFB - Extra-light backgrounds
-      lighter: 'blue.100',     // #B9CBF3 - Light backgrounds
-      light: 'blue.200',       // #7DA0E8 - Hover states
-      main: 'blue.500',        // #1751D0 - Primary actions
-      dark: 'blue.700',        // #0D317D - Text on light bg
-      darker: 'blue.900',      // #04102A - High contrast text
-    },
-    secondary: {
-      lightest: 'violet.25',   // #FAF4FD - Lightest backgrounds
-      extralight: 'violet.50', // #F4E8FB - Extra-light backgrounds
-      lighter: 'violet.100',   // #DEB9F3 - Light backgrounds
-      light: 'violet.200',     // #C17DE8 - Hover states
-      main: 'violet.500',      // #9117D0 - Accent actions
-      dark: 'violet.700',      // #570D7D - Text on light bg
-      darker: 'violet.900',    // #1D042A - High contrast text
-    },
-    danger: {
-      lightest: 'rose.25',     // #FDF5F5 - Lightest backgrounds
-      extralight: 'rose.50',   // #FBE8E9 - Extra-light backgrounds
-      lighter: 'rose.100',     // #F3B9BD - Light error fills
-      light: 'rose.200',       // #E87D84 - Error borders
-      main: 'rose.500',        // #C1232C - Error states
-      dark: 'rose.700',        // #7D0D14 - Error text on light bg
-      darker: 'rose.900',      // #2A0407 - High contrast error text
-    },
-    success: {
-      lightest: 'green.25',    // #F4FDF4 - Lightest backgrounds
-      extralight: 'green.50',  // #E9FBE8 - Extra-light backgrounds
-      lighter: 'green.100',    // #BDF3B9 - Light success fills
-      light: 'green.200',      // #84E87D - Success borders
-      main: 'green.600',       // #1AA612 - Success states
-      dark: 'green.700',       // #147D0D - Success text on light bg
-      darker: 'green.900',     // #072A04 - High contrast success text
-    },
-    warning: {
-      lightest: 'gold.25',     // #FDFBF4 - Lightest backgrounds
-      extralight: 'gold.50',   // #FBF6E8 - Extra-light backgrounds
-      lighter: 'gold.100',     // #F3E4B9 - Light warning fills
-      light: 'gold.200',       // #E8CD7D - Warning borders
-      main: 'gold.500',        // #D0A117 - Warning states
-      dark: 'gold.700',        // #7D610D - Warning text on light bg
-      darker: 'gold.900',      // #2A2004 - High contrast warning text
-    },
-  },
-}
-```
-
-### Neutral Semantic Tokens (Dark Mode)
-
-The brand semantics above carry `_dark` variants, but the **neutral** tokens below are
-the ones to reach for on surfaces, text, and borders. Each maps onto the `gray.0–1500`
-scale and resolves to a different step under `.dark` (Chakra v3's class strategy), so a
-component built with them flips for free — **no `_dark` overrides needed**.
-
-```tsx
-semanticTokens: {
-  colors: {
-    // Backgrounds                base (light) → _dark
-    bg: {
-      canvas:  'gray.0',    // app background        → gray.1500
-      surface: 'white',     // cards, menus, popovers → gray.1400
-      subtle:  'gray.50',   // secondary surface      → gray.1300
-      muted:   'gray.100',  // tertiary fill, hover   → gray.1200
-      inverse: 'gray.1300', // high-contrast surface  → gray.50
-    },
-    // Foreground (text / icons)
-    fg: {
-      default: 'gray.1300', // primary text → gray.200
-      muted:   'gray.900',  // secondary    → gray.300
-      subtle:  'gray.700',  // tertiary     → gray.600
-      inverse: 'gray.0',    // text on inverse → gray.1400
-    },
-    // Borders / dividers
-    border: {
-      default: 'gray.300',  // standard borders → gray.1100
-      subtle:  'gray.200',  // low-emphasis     → gray.1300
-      strong:  'gray.500',  // high-emphasis    → gray.900
-    },
-  },
-}
-```
-
-```tsx
-// ✅ Flips with color mode
-<Box bg="bg.surface" color="fg.default" borderColor="border.default" />
-
-// ❌ Stuck in light mode — a white panel / dark text that never flips
-<Box bg="white" color="gray.1300" borderColor="gray.300" />
-```
-
-**Exceptions (intentionally do not flip):**
-- Solid brand fills and their white labels (`bg="primary.main" color="white"`) are
-  mode-invariant by design — keep them as primitives.
-- White slider knobs and always-dark surfaces (Tooltip, CodeTabs) stay fixed.
-- **Third-party renderers that don't resolve Chakra tokens** (e.g. recharts in
-  `LineGraph`): feed the resolved CSS var instead — `var(--chakra-colors-fg-muted)`.
-- **Translucency**: when you need a semi-transparent surface that still flips, mix the
-  CSS var instead of hardcoding rgba — e.g.
-  `color-mix(in srgb, var(--chakra-colors-bg-surface) 85%, transparent)` (see `FileInput`).
-
-### WCAG Contrast Ratios
-
-All semantic color combinations meet WCAG 2.1 accessibility standards:
-
-| Combination | Ratio | Level |
-|-------------|-------|-------|
-| `primary.lightest` + `primary.dark` | 7.2:1 | AAA |
-| `primary.main` + white | 5.9:1 | AA |
-| `danger.lightest` + `danger.dark` | 7.4:1 | AAA |
-| `danger.main` + white | 5.9:1 | AA |
-| `success.lightest` + `success.dark` | 6.1:1 | AA |
-| `warning.lightest` + `warning.dark` | 5.8:1 | AA |
-| `gray.0` + `gray.1300` | 11.2:1 | AAA |
-| `gray.50` + `gray.900` | 6.2:1 | AA |
-
-## Using Colors in Components
-
-### Preferred: Semantic Tokens
-
-```tsx
-// ✅ Best - uses semantic meaning
-<Button bgColor="primary.main" color="white" />
-<Alert bgColor="danger.lightest" borderColor="danger.main" />
-<Badge bgColor="success.lightest" color="success.dark" />
-
-// Toast with proper contrast
-<Box bg="warning.lighter" color="warning.dark" />
-```
-
-### Neutral Surfaces / Text / Borders: use `bg.*` / `fg.*` / `border.*`
-
-These flip with color mode — prefer them over raw `gray.*`/`white` for anything neutral:
-
-```tsx
-// ✅ Best - flips between light and dark
-<Box bgColor="bg.surface" borderColor="border.default" />
-<Text color="fg.default">Primary text</Text>
-<Text color="fg.subtle">Secondary text</Text>
-```
-
-### Alternative: Primitive Colors
-
-```tsx
-// ⚠️ Only when the value must stay fixed across modes (rare for neutrals).
-// Raw gray.*/white do NOT flip, so a `white` surface or `gray.1300` text will be
-// stuck in light mode under .dark. Reach for bg.*/fg.*/border.* above instead.
-<Box bgColor="primary.main" color="white" /> // mode-invariant brand fill — OK
-```
-
-### Accessing Theme in Components
-
-```tsx
-import { useTheme, useToken } from '@chakra-ui/react';
-
-const Component = () => {
-  // Access entire theme object
-  const theme = useTheme();
-  const primaryColor = theme.semanticTokens.colors.primary.main;
-
-  // Get resolved color values
-  const [primary, danger] = useToken('colors', [
-    'primary.main',
-    'danger.main'
-  ]);
-
-  return (
-    <Box
-      borderColor="primary.main"
-      _focus={{
-        boxShadow: `rgb(255, 255, 255) 0px 0px 0px 2px, ${primary} 0px 0px 0px 4px`
-      }}
-    />
-  );
-};
-```
 
 ## Typography
 
@@ -501,96 +252,13 @@ global: {
 
 ## Best Practices
 
-### 1. Always Use Semantic Tokens
+1. Read only role tokens; reach for `neutral.N` only when no role names the job.
+2. Emphasis is weight, not colour — never `primary.*` for text.
+3. Status colours carry status meaning; decoration uses `category.*`.
+4. Beige (`secondary.surface*`) is for small surfaces (bubbles, soft
+   badges/tags, the modal header band), never rows or panels.
+5. Disabled = `disabled.*`, not opacity. Focus = `focusRing`.
 
-```tsx
-// ✅ Good
-<Button bgColor="primary.main" />
-<Alert bgColor="danger.lightest" color="danger.dark" />
-
-// ❌ Bad - hardcoded colors
-<Button bgColor="#1751D0" />
-<Alert bgColor="#ffcccc" />
-```
-
-### 2. Use Theme Hooks
-
-```tsx
-// ✅ Good - dynamic, respects theme
-import { useTheme } from '@chakra-ui/react';
-const theme = useTheme();
-const color = theme.semanticTokens.colors.primary.main;
-
-// ❌ Bad - static
-const color = '#1751D0';
-```
-
-### 3. Consistent Gray Usage — prefer flipping neutral tokens
-
-```tsx
-// ✅ Best - neutral semantic tokens flip with color mode
-<Text color="fg.default">Primary text</Text>
-<Text color="fg.subtle">Secondary text</Text>
-<Box bgColor="bg.surface" borderColor="border.default" />
-
-// ⚠️ Stuck in light mode - raw gray.*/white never flip under .dark
-<Text color="gray.1300" /> // use fg.default
-<Box bgColor="white" />    // use bg.surface
-
-// ❌ Bad - arbitrary values
-<Text color="#333" />
-```
-
-### 4. Accessible Color Combinations
-
-```tsx
-// ✅ Good - meets WCAG AA
-<Box bg="primary.lightest" color="primary.dark" />
-<Box bg="danger.main" color="white" />
-
-// ⚠️ Caution - check contrast
-<Box bg="warning.main" color="white" />  // May need darker text
-```
-
-## Color Usage Guidelines
-
-### Primary Colors (Blue)
-- **Buttons**: `primary.main` for primary actions
-- **Links**: `primary.main` for interactive text
-- **Focus rings**: `primary.main` with box shadow
-- **Backgrounds**: `primary.lightest` for subtle emphasis
-
-### Danger Colors (Rose)
-- **Error messages**: `danger.lighter` background with `danger.dark` text
-- **Delete buttons**: `danger.main` with white text
-- **Form validation**: `errorBorderColor="danger.main"`
-
-### Success Colors (Green)
-- **Success messages**: `success.lightest` background with `success.dark` text
-- **Confirmation buttons**: `success.main`
-- **Badges**: `success.lightest` with `success.dark` text
-
-### Warning Colors (Gold)
-- **Warning messages**: `warning.lightest` background with `warning.dark` text
-- **Caution icons**: `warning.main`
-- Note: Use `warning.dark` for text (better contrast)
-
-### Neutral Colors (Slate Gray)
-- **Backgrounds**: `gray.0` (main), `gray.50` (subtle), `gray.100` (muted)
-- **Borders**: `gray.300` (default), `gray.200` (subtle)
-- **Primary text**: `gray.1300`
-- **Secondary text**: `gray.700`
-- **Tertiary text**: `gray.500`
-
-## Legacy Color Aliases
-
-For backwards compatibility, the following aliases are available:
-
-- `purple.*` → maps to `violet.*`
-- `red.*` → maps to `rose.*`
-- `yellow.*` → maps to `gold.*`
-
-These are deprecated and will be removed in a future version.
 
 ## Extending the Theme
 
@@ -629,55 +297,3 @@ See `Palette.stories.tsx` in Storybook for interactive color palette exploration
 - **Primitive Colors**: Blue, rose, green, violet, gold
 - **Gray Scale**: Full 16-shade slate palette
 - **Contrast Reference**: WCAG compliance examples
-
-## Common Patterns
-
-### Focus Ring
-```tsx
-_focus={{
-  outline: 'none',
-  boxShadow: `rgb(255, 255, 255) 0px 0px 0px 2px, ${primaryColor} 0px 0px 0px 4px`,
-}}
-```
-
-### Hover States
-```tsx
-_hover={{
-  bgColor: 'blue.600',  // Darker shade of primary
-  borderColor: 'gray.400',
-}}
-```
-
-### Disabled States
-```tsx
-_disabled={{
-  opacity: 1,
-  bg: 'gray.100',
-  color: 'gray.500',
-  cursor: 'not-allowed',
-}}
-```
-
-### Error States
-```tsx
-<Input
-  isInvalid={hasError}
-  errorBorderColor="danger.main"
-  focusBorderColor="primary.main"
-/>
-```
-
-### Toast Notifications
-```tsx
-// Success toast
-<Box bg="success.lighter" color="success.dark" borderColor="success.light" />
-
-// Error toast
-<Box bg="danger.lighter" color="danger.dark" borderColor="danger.light" />
-
-// Warning toast
-<Box bg="warning.lighter" color="warning.dark" borderColor="warning.light" />
-
-// Info toast
-<Box bg="primary.light" color="primary.dark" borderColor="primary.lighter" />
-```
