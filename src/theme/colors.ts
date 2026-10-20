@@ -164,6 +164,11 @@ const PATHS: Record<FlatKey, string> = {
   'primary-wash': 'primary.wash',
   'primary-washActive': 'primary.washActive',
   'primary-selected': 'primary.selected',
+  // Sand tint (#FBEFE3 / #F4E7DA light — reads peach): tint/accent only — not
+  // a component background. Fill with bg.subtle / bg.muted / layer.* /
+  // primary.wash|selected instead; `noSandBackground.test.ts` enforces it in
+  // src/components. Kept because the 4.x aliases secondary.extralight /
+  // secondary.lighter point here.
   'secondary-surface': 'secondary.surface',
   'secondary-surfaceStrong': 'secondary.surfaceStrong',
   'secondary-border': 'secondary.border',
@@ -323,6 +328,30 @@ export function createSemanticColors({
     'fg.emphasized': 'fg.default',
     'bg.invalid.subtle': 'danger.bg',
     'bg.highlighted': 'warning.bg',
+    // Every other name Chakra's own recipes read (menu/combobox `_highlighted`
+    // is `bg.emphasized/60`, radiomark borders are `border.emphasized`, the
+    // field recipe reads `fg.error` …). 4.x got these for free because its
+    // raw `gray` shared Chakra's keys; 5.0 has no `gray`, so without this
+    // they fall through to Chakra's zinc/red palette (1.06:1 menu highlight
+    // in dark). `chakraTokens.test.ts` fails if Chakra adds one we miss.
+    'bg.emphasized': 'layer.1.active',
+    'bg.inverted': 'tooltip.bg',
+    'fg.inverted': 'tooltip.fg',
+    'border.emphasized': 'border.strong',
+    'border.muted': 'border.subtle',
+    'border.inverted': 'tooltip.bg',
+    'bg.error': 'danger.bg',
+    'bg.warning': 'warning.bg',
+    'bg.success': 'success.bg',
+    'bg.info': 'info.bg',
+    'fg.error': 'danger.fg',
+    'fg.warning': 'warning.fg',
+    'fg.success': 'success.fg',
+    'fg.info': 'info.fg',
+    'border.error': 'danger.border',
+    'border.warning': 'warning.border',
+    'border.success': 'success.border',
+    'border.info': 'info.border',
   };
   for (const [path, target] of Object.entries(sameAs))
     setPath(tree, path, { value: `{colors.${target}}` });

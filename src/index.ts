@@ -146,6 +146,7 @@ export {
   createLogicianTheme,
   logicianConfig,
   type LogicianThemeOptions,
+  normalizeSemanticOverrides,
   system,
   theme,
 } from './theme';

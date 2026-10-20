@@ -78,7 +78,7 @@ function Dashboard() {
           <GridItem>
             <Card>
               <Typography variant="h3">Total Users</Typography>
-              <Typography variant="h1" color="blue.500">
+              <Typography variant="h1" color="fg.link">
                 1,234
               </Typography>
               <Badge variant="success">+12%</Badge>

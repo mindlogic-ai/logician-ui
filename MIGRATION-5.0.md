@@ -48,19 +48,19 @@ the kebab-case form Chakra emits (`var(--chakra-colors-primary-fill-strong)` →
 
 ### Mapping (deprecated alias → 5.0)
 
-| 4.x                                                                                                                                | 5.0                                                                                                                             |
-| ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `primary.lightest`, `primary.extralight`                                                                                           | `primary.wash` — review: a tinted surface becomes neutral gray                                                                  |
-| `primary.lighter`                                                                                                                  | `primary.washActive`                                                                                                            |
-| `primary.light`                                                                                                                    | `border.strong`                                                                                                                 |
-| `primary.dark`, `primary.darker`                                                                                                   | `fg.default`                                                                                                                    |
-| `primary.fill`, `primary.fillStrong`                                                                                               | `primary.main`, `primary.hover` — review: blue bands become black; move announcement bands to `secondary.surfaceStrong` by hand |
-| `secondary.lightest` · `extralight` · `lighter` · `light` · `main` · `dark`/`darker`                                               | `secondary.1` · `secondary.surface` · `secondary.surfaceStrong` · `secondary.border` · `secondary.fg` · `secondary.fgStrong`    |
-| `{danger,success,warning}.lightest`/`extralight` · `lighter`/`light` · `main` · `dark`/`darker`                                    | `.bg` · `.border` · `.solid` · `.fg`                                                                                            |
-| `warning.fill`                                                                                                                     | `warning.solid`                                                                                                                 |
-| `bg.selected`                                                                                                                      | `primary.selected`                                                                                                              |
-| `fg.accent`                                                                                                                        | `primary.main` (links: `fg.link`)                                                                                               |
-| `slate.0`/`50` · `100` · `200` · `300` · `400` · `500`/`600` · `700` · `800`/`900` · `1000`/`1100` · `1200`/`1300` · `1400`/`1500` | `neutral.1` · `2` · `3` · `5` · `6` · `7` · `8` · `9` · `10` · `11` · `12`                                                      |
+| 4.x                                                                                                                                | 5.0                                                                                                                                                                                                                                                                          |
+| ---------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `primary.lightest`, `primary.extralight`                                                                                           | `primary.wash` — review: a tinted surface becomes neutral gray                                                                                                                                                                                                               |
+| `primary.lighter`                                                                                                                  | `primary.washActive`                                                                                                                                                                                                                                                         |
+| `primary.light`                                                                                                                    | `border.strong`                                                                                                                                                                                                                                                              |
+| `primary.dark`, `primary.darker`                                                                                                   | `fg.default`                                                                                                                                                                                                                                                                 |
+| `primary.fill`, `primary.fillStrong`                                                                                               | `primary.main`, `primary.hover` — review: blue bands become black; move announcement bands to `Modal headerTone="brand"` / `bg.muted` + `secondary.border` by hand                                                                                                           |
+| `secondary.lightest` · `extralight` · `lighter` · `light` · `main` · `dark`/`darker`                                               | `secondary.1` · `secondary.surface` · `secondary.surfaceStrong` · `secondary.border` · `secondary.fg` · `secondary.fgStrong` — review: `secondary.surface*` is tint-only, **not a background**; a `bg` of `extralight`/`lighter` → `bg.muted` (page-level band: `bg.subtle`) |
+| `{danger,success,warning}.lightest`/`extralight` · `lighter`/`light` · `main` · `dark`/`darker`                                    | `.bg` · `.border` · `.solid` · `.fg`                                                                                                                                                                                                                                         |
+| `warning.fill`                                                                                                                     | `warning.solid`                                                                                                                                                                                                                                                              |
+| `bg.selected`                                                                                                                      | `primary.selected`                                                                                                                                                                                                                                                           |
+| `fg.accent`                                                                                                                        | `primary.main` (links: `fg.link`)                                                                                                                                                                                                                                            |
+| `slate.0`/`50` · `100` · `200` · `300` · `400` · `500`/`600` · `700` · `800`/`900` · `1000`/`1100` · `1200`/`1300` · `1400`/`1500` | `neutral.1` · `2` · `3` · `5` · `6` · `7` · `8` · `9` · `10` · `11` · `12`                                                                                                                                                                                                   |
 
 Unchanged names with new values: `primary.main`, `bg.*` (`canvas`, `surface`,
 `subtle`, `muted`, `sunken`, `track`, `raised`, `inverse`, `panel`), `fg.default`
@@ -95,18 +95,31 @@ values apply under `prefers-contrast: more`.
 createSystem(defaultConfig, createLogicianTheme({ neutral: 'slate' }))
 ```
 
+### Overriding roles from your app
+
+Every Logician role is emitted as `{ _light, _dark }`, and Chakra's `_light`
+outranks `base`. A 4.x-style override `primary.main: { value: { base: X,
+_dark: Y } }` would therefore keep the library's light value. `LogicianProvider
+config={…}` fixes this for you (`normalizeSemanticOverrides`); if you call
+`createSystem` yourself, wrap your config: `createSystem(defaultConfig,
+createLogicianTheme(), normalizeSemanticOverrides(appConfig))`.
+
+`secondary.main` aliases `secondary.fg`, which clears 4.5:1 on `bg.canvas` but
+not on `layer.1` / `bg.muted` (≈4.2:1 in light). Text on those surfaces should
+use `secondary.fgStrong` or `fg.muted`.
+
 ## 3. Components
 
 | Component                      | 4.x                                                                                                     | 5.0                                                                                                                                                                                       |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Button**                     | `colorPalette` × `variant` (solid/outline/ghost/soft); default rendered `soft` while documented `solid` | `variant`: `primary` · `action` · `secondary` · `subtle` (default) · `ghost` · `danger`; `isDestructive` for danger text on secondary/subtle/ghost. `colorPalette` removed from the types |
 | **IconButton**                 | same grid, default neutral ghost                                                                        | `variant`: `ghost` (default) · `secondary` · `primary` · `danger` · `action` (coral send); `isDestructive`                                                                                |
-| **Badge**                      | 6 variants, default `primary`                                                                           | `neutral` (default, beige) · `success` · `warning` · `danger` · `info`; `primary`/`secondary` removed                                                                                     |
+| **Badge**                      | 6 variants, default `primary`                                                                           | `neutral` (default, `bg.muted` + `secondary.fgStrong`) · `success` · `warning` · `danger` · `info`; `primary`/`secondary` removed                                                         |
 | **CountBadge**                 | — (app's UnreadCountBadge)                                                                              | new: `count`, `max` (99+), `dot`, `showZero`, `label`                                                                                                                                     |
 | **Tag**                        | `colorPalette` × `variant`                                                                              | `tone` (`neutral` default · `success` · `warning` · `danger` · `info`), `selected`, `category` (12 hues), `icon`                                                                          |
 | **Chip**                       | separate component                                                                                      | deprecated alias of Tag (removed in 6.0) — `<Chip>` → `<Tag>`; the codemod keeps its pill shape (`borderRadius="xl" px={3} py={2} fontWeight="medium"`)                                   |
-| **Card**                       | `gradient` variant                                                                                      | removed; `wash` = `secondary.surface`                                                                                                                                                     |
-| **Modal**                      | —                                                                                                       | `headerTone="brand"` (beige header band), `ModalHeader subtitle`                                                                                                                          |
+| **Card**                       | `gradient` variant                                                                                      | removed; `wash` = `bg.muted` (neutral, borderless)                                                                                                                                        |
+| **Modal**                      | —                                                                                                       | `headerTone="brand"` (`layer.3` band + `secondary.border` rule), `ModalHeader subtitle`                                                                                                   |
 | **Banner**                     | info/success/warning/danger                                                                             | + `neutral`; 1px border + 3px left bar; `info` uses `info.*` (was primary)                                                                                                                |
 | **Toast**                      | default `success`                                                                                       | + `neutral` (now the default); `info` uses `info.*`                                                                                                                                       |
 | **PageLoader / SectionLoader** | —                                                                                                       | `variant="thinking"` (coral dots); both now `role="status"`                                                                                                                               |
@@ -128,13 +141,15 @@ Kept as `@deprecated` exports: `ButtonColorPalette`, `buttonColorPalettes`,
 `tagVariants`, Chip's `colorSchemes` / `colorSchemeStyles` / `getChipStyles` /
 `variants`. Changed signatures: `getButtonStyles(variant, isDestructive)`,
 `getIconButtonStyles(variant, isDestructive)`, `getTagStyles({ tone, selected,
-category, interactive })`, Workflow `severityColorToken(severity, 'fg' | 'solid')`.
+category, interactive })`. `LINK_RAMP` entries are plain token strings now.
 
 ## 4. After the codemod — what a human checks
 
 - Call sites the codemod reported (dynamic props, spreads, raw primitives).
 - `primary.lightest`/`extralight` used as a _coloured_ surface — now gray.
 - `primary.fill` bands (modal/notice headers) — now black; use
-  `Modal headerTone="brand"` or `secondary.surfaceStrong`.
+  `Modal headerTone="brand"`, or `bg.muted` with a `secondary.border` edge.
+  Not `secondary.surface`/`surfaceStrong` — the sand tint is accent-only and
+  reads peach as a background.
 - The app theme override (`src/theme/index.ts` in factchat-nextjs): delete
   overrides that duplicate the new defaults.

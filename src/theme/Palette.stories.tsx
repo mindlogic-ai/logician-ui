@@ -1,7 +1,7 @@
 import { Box, Separator, Flex, Grid, VStack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 import { readableColor } from 'polished';
-import { MouseEventHandler, useState } from 'react';
+import { Fragment, MouseEventHandler, useState } from 'react';
 
 import { Tooltip } from '../components/Tooltip';
 import {
@@ -14,59 +14,11 @@ import {
   Subtitle,
   Text,
 } from '../components/Typography';
-import { colors, semanticTokens } from './colors';
-
-/**
- * Helper function to resolve a semantic token reference to its actual hex value.
- * E.g., '{colors.ink.11}' -> '#252525'
- */
-const resolveTokenReference = (reference: string | undefined): string => {
-  if (!reference) return '';
-  // Scale reference, e.g. '{colors.blue.500}' or '{colors.gray.1500}'.
-  const scaleMatch = reference.match(/^\{colors\.(\w+)\.(\w+)\}$/);
-  if (scaleMatch) {
-    const [, colorName, shade] = scaleMatch;
-    const colorScale = (colors as any)[colorName];
-    if (colorScale && colorScale[shade]) {
-      return colorScale[shade].value;
-    }
-    return reference;
-  }
-  // Flat reference with no shade, e.g. '{colors.white}' / '{colors.black}'.
-  const flatMatch = reference.match(/^\{colors\.(\w+)\}$/);
-  if (flatMatch) {
-    const entry = (colors as any)[flatMatch[1]];
-    if (entry && typeof entry.value === 'string') {
-      return entry.value;
-    }
-  }
-  // Already a hex value or unknown format.
-  return reference;
-};
-
-/**
- * A semantic token `value` is either a plain reference string (legacy) or a
- * mode-conditional object with any of `base` / `_light` / `_dark`. Resolve it to
- * concrete light/dark hex codes so the palette can show both modes side by side.
- */
-type TokenValue = string | { base?: string; _light?: string; _dark?: string };
-
-const resolveTokenValue = (
-  value: TokenValue | undefined
-): { light: string; dark: string } => {
-  if (!value) return { light: '', dark: '' };
-  if (typeof value === 'string') {
-    const hex = resolveTokenReference(value);
-    return { light: hex, dark: hex };
-  }
-  // A `_light` / `_dark` condition wins over `base` in its mode; fall back to
-  // `base` (then the other mode) when a token omits one, so tokens declared with
-  // only `_light`/`_dark` (e.g. `*.DEFAULT`, `border.subtle`) resolve too.
-  return {
-    light: resolveTokenReference(value._light ?? value.base ?? value._dark),
-    dark: resolveTokenReference(value._dark ?? value.base ?? value._light),
-  };
-};
+import {
+  DEPRECATED_ALIASES,
+  getSwatchGroups,
+  type Swatch,
+} from './paletteSwatches';
 
 const meta = {
   title: 'Setup/Theme',
@@ -74,33 +26,15 @@ const meta = {
     docs: {
       description: {
         component: `
-## Golden Ratio Color System
+## BAZE colour system (5.0)
 
-A mathematically harmonious color palette designed using the golden ratio (φ ≈ 1.618)
-to create visually balanced color relationships.
+Three layers; components read only the last one.
 
-### Design Principles
+1. **Raw scales** — \`ink\` / \`inkDark\`, \`sand\` / \`sandDark\`, \`slate\` / \`slateDark\` (1–12), \`coral\`, and 12 system hues. Values come from \`scripts/palette/generate.mjs\`.
+2. **Semantic steps** — \`neutral.1–12\` and \`secondary.1–12\`, filled by the theme option: \`createLogicianTheme({ neutral: 'ink' | 'slate', secondary: 'sand' })\` (or \`<LogicianProvider theme={…}>\`).
+3. **Role tokens** — \`bg.*\`, \`layer.*\`, \`fg.*\`, \`border.*\`, \`primary.*\`, \`action.*\`, status \`{bg,border,fg,solid,onSolid}\`, \`category.*\` …
 
-1. **Accessibility First**: All semantic color combinations meet WCAG 2.1 AA standards
-2. **Cool Gray Foundation**: Slate-based grays with blue undertone for modern feel
-3. **Consistent Scale**: Each color has 50/100/200/300/500/600/700/800/900 steps
-
-### Semantic Tokens
-
-- **Primary** (Blue): Main brand interactions
-- **Secondary** (Violet): Supporting accent elements
-- **Success** (Green): Positive feedback
-- **Warning** (Gold): Cautionary feedback
-- **Danger** (Rose): Error/destructive feedback
-
-### Primitive Palettes
-
-- **Blue**: Primary brand color
-- **Rose**: Danger/error states
-- **Green**: Success states
-- **Violet**: Secondary/accent
-- **Gold**: Warning states
-- **Gray**: Neutral tones (slate-based with cool blue undertone)
+Every value below is shown in light and dark. Contrast is audited in CI (\`contrast.test.ts\`) in light, dark and both high-contrast modes. The 4.x names still resolve as aliases until 6.0 and are listed at the bottom, not in the grid. Setup/Theme/BAZE Palette shows the raw scales and every role in all four modes.
         `,
       },
     },
@@ -158,21 +92,12 @@ const SwatchHalf = ({ label, hex }: { label: string; hex: string }) => {
   );
 };
 
-const ColorCard = ({
-  color,
-  shade,
-  shadeValue,
-}: {
-  color: string;
-  shade: string;
-  shadeValue: TokenValue;
-}) => {
-  // Resolve to concrete light/dark hex so both modes are visible at once.
-  const { light, dark } = resolveTokenValue(shadeValue);
+const ColorCard = ({ swatch }: { swatch: Swatch }) => {
+  const { light, dark } = swatch;
   const hasDark = dark !== light;
 
   return (
-    <Flex flexDir="column" align="stretch" key={shade} p={2}>
+    <Flex flexDir="column" align="stretch" p={2}>
       <Flex
         borderRadius="md"
         overflow="hidden"
@@ -190,7 +115,7 @@ const ColorCard = ({
         textAlign="center"
         wordBreak="break-word"
       >
-        {color}.{shade}
+        {swatch.path}
       </Text>
     </Flex>
   );
@@ -227,7 +152,7 @@ const PrimitiveColorCard = ({
           borderRadius="md"
           boxShadow="sm"
           border="1px solid"
-          borderColor="gray.200"
+          borderColor="border.subtle"
           as="button"
           transition="transform 0.1s ease-in-out"
           // @ts-expect-error as prop
@@ -313,7 +238,7 @@ export const FontSizes: Story = {
       },
       {
         component: (
-          <Subtext color="gray.800">Subtext - Helper text, captions</Subtext>
+          <Subtext color="fg.muted">Subtext - Helper text, captions</Subtext>
         ),
         name: 'Subtext',
         token: 'subtext',
@@ -325,10 +250,10 @@ export const FontSizes: Story = {
     return (
       <VStack gap={6} align="flex-start" w="full">
         <Box>
-          <H4 color="gray.1300" mb={2}>
+          <H4 color="fg.default" mb={2}>
             Typography Components
           </H4>
-          <Subtext color="gray.700">
+          <Subtext color="fg.muted">
             Responsive typography using em units. Use the token with fontSize
             prop on any component.
           </Subtext>
@@ -339,17 +264,17 @@ export const FontSizes: Story = {
         {/* Header row */}
         <Flex w="full" px={4} gap={4} display={{ base: 'none', md: 'flex' }}>
           <Box flex="1" minW="300px">
-            <Subtext color="gray.600" fontWeight="semibold">
+            <Subtext color="fg.subtle" fontWeight="semibold">
               Component
             </Subtext>
           </Box>
           <Box w="80px" textAlign="center">
-            <Subtext color="gray.600" fontWeight="semibold">
+            <Subtext color="fg.subtle" fontWeight="semibold">
               Token
             </Subtext>
           </Box>
           <Box w="120px" textAlign="right">
-            <Subtext color="gray.600" fontWeight="semibold">
+            <Subtext color="fg.subtle" fontWeight="semibold">
               Size (mobile → desktop)
             </Subtext>
           </Box>
@@ -362,7 +287,7 @@ export const FontSizes: Story = {
               py={4}
               px={4}
               borderBottom="1px solid"
-              borderColor="gray.100"
+              borderColor="border.subtle"
               align="center"
               justify="space-between"
               wrap="wrap"
@@ -389,7 +314,7 @@ export const FontSizes: Story = {
                   w="120px"
                   fontFamily="mono"
                   textStyle="subtext"
-                  color="gray.600"
+                  color="fg.subtle"
                   textAlign="right"
                 >
                   {item.base} → {item.md}
@@ -399,8 +324,8 @@ export const FontSizes: Story = {
           ))}
         </VStack>
 
-        <Box mt={4} p={4} bg="gray.50" borderRadius="md" w="full">
-          <Subtitle color="gray.1100" mb={2} fontWeight="semibold">
+        <Box mt={4} p={4} bg="bg.subtle" borderRadius="md" w="full">
+          <Subtitle color="fg.default" mb={2} fontWeight="semibold">
             Usage
           </Subtitle>
           <Box
@@ -428,63 +353,54 @@ import { H1, Text, Subtext } from '@mindlogic-ai/logician-ui';
   },
 };
 
-// Keep the original Default story for backwards compatibility
+const AliasTable = () => (
+  <Box w="full" mt={6}>
+    <H4 color="fg.default" mb={2}>
+      4.x aliases (removed in 6.0)
+    </H4>
+    <Grid templateColumns="max-content max-content" columnGap={6} rowGap={1}>
+      {Object.entries(DEPRECATED_ALIASES).map(([alias, target]) => (
+        <Fragment key={alias}>
+          <Text fontFamily="mono" color="fg.muted">
+            {alias}
+          </Text>
+          <Text fontFamily="mono" color="fg.default">
+            → {target}
+          </Text>
+        </Fragment>
+      ))}
+    </Grid>
+  </Box>
+);
+
+/** Every 5.0 semantic colour, resolved to hex in light and dark. */
 export const Default: Story = {
-  render: () => {
-    return (
-      <VStack gap={4} align="flex-start" w="full">
-        {Object.entries(semanticTokens.colors)
-          .filter(([color]) => !color.startsWith('chakra'))
-          .map(([color, shades]) => (
-            <Flex key={color} gap={4} align="flex-start" w="full">
-              <H4
-                mt={2}
-                w="120px"
-                flexShrink={0}
-                textTransform="capitalize"
-                color="fg.default"
-              >
-                {color}
-              </H4>
-              <Grid
-                templateColumns="repeat(auto-fill, minmax(132px, 1fr))"
-                gap={2}
-                flex="1"
-                minW="0"
-              >
-                {Object.entries(shades).flatMap(([shade, shadeValue]) => {
-                  const node = shadeValue as any;
-                  // Leaf token: render its value directly.
-                  if (node && node.value !== undefined) {
-                    return [
-                      <ColorCard
-                        key={shade}
-                        color={color}
-                        shade={shade}
-                        shadeValue={node.value as TokenValue}
-                      />,
-                    ];
-                  }
-                  // Nested group (e.g. bg.invalid → bg.invalid.subtle): render
-                  // each leaf beneath it as `<shade>.<sub>`.
-                  if (node && typeof node === 'object') {
-                    return Object.entries(node)
-                      .filter(([, sub]) => (sub as any)?.value !== undefined)
-                      .map(([subShade, sub]) => (
-                        <ColorCard
-                          key={`${shade}.${subShade}`}
-                          color={color}
-                          shade={`${shade}.${subShade}`}
-                          shadeValue={(sub as any).value as TokenValue}
-                        />
-                      ));
-                  }
-                  return [];
-                })}
-              </Grid>
-            </Flex>
-          ))}
-      </VStack>
-    );
-  },
+  render: () => (
+    <VStack gap={4} align="flex-start" w="full">
+      {getSwatchGroups().map(([group, swatches]: [string, Swatch[]]) => (
+        <Flex key={group} gap={4} align="flex-start" w="full">
+          <H4
+            mt={2}
+            w="120px"
+            flexShrink={0}
+            textTransform="capitalize"
+            color="fg.default"
+          >
+            {group}
+          </H4>
+          <Grid
+            templateColumns="repeat(auto-fill, minmax(132px, 1fr))"
+            gap={2}
+            flex="1"
+            minW="0"
+          >
+            {swatches.map((s) => (
+              <ColorCard key={s.path} swatch={s} />
+            ))}
+          </Grid>
+        </Flex>
+      ))}
+      <AliasTable />
+    </VStack>
+  ),
 };

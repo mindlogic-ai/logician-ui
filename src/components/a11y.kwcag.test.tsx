@@ -385,10 +385,7 @@ describe('브랜드 색 대비 — Link · Tab 램프', () => {
     // The invariant the 4.x defect broke: hovering must make the link stand out
     // MORE. "One step darker" is correct on a white page and backwards on a
     // dark one, where darker means toward the background.
-    const resting = contrast(
-      resolve(LINK_RAMP.default, 'base'),
-      LIGHT_CANVAS
-    );
+    const resting = contrast(resolve(LINK_RAMP.default, 'base'), LIGHT_CANVAS);
     const hover = contrast(
       resolve(LINK_RAMP.defaultHover, 'base'),
       LIGHT_CANVAS

@@ -4,6 +4,7 @@ import {
   defineConfig,
   defineSlotRecipe,
   defineTextStyles,
+  type SystemConfig,
 } from '@chakra-ui/react';
 
 import {
@@ -253,6 +254,56 @@ const selectSlotRecipe = defineSlotRecipe({
     },
   },
 });
+
+type TokenNode = { value?: unknown; [key: string]: unknown };
+
+const normalizeNode = (node: TokenNode): TokenNode => {
+  const out: TokenNode = {};
+  for (const [key, child] of Object.entries(node)) {
+    if (key === 'value') {
+      const v = child as Record<string, unknown> | string | undefined;
+      out.value =
+        v && typeof v === 'object' && !Array.isArray(v) && 'base' in v
+          ? { _light: v.base, ...v }
+          : v;
+    } else if (child && typeof child === 'object' && !Array.isArray(child)) {
+      out[key] = normalizeNode(child as TokenNode);
+    } else {
+      out[key] = child;
+    }
+  }
+  return out;
+};
+
+/**
+ * Make an app's semantic colour overrides win over the Logician roles.
+ *
+ * Every Logician role is emitted as `{ _light, _dark }` (Chakra's `_light`
+ * outranks `base`, and Chakra's own `bg.subtle`/`fg.muted`… use `_light`). Chakra
+ * deep-merges configs, so a 4.x-style override `{ base: X, _dark: Y }` keeps the
+ * library's `_light` and silently renders the library colour in light mode.
+ * This copies `base` into `_light`, which restores the 4.x result (a `base`
+ * override replaced the light value; dark kept the library's unless the override
+ * set `_dark`). `LogicianProvider` applies it to its
+ * `config` prop; call it yourself when you `createSystem(defaultConfig,
+ * createLogicianTheme(), yourConfig)` directly.
+ */
+export function normalizeSemanticOverrides<T extends SystemConfig>(
+  config: T
+): T {
+  const colorsNode = config.theme?.semanticTokens?.colors;
+  if (!colorsNode) return config;
+  return {
+    ...config,
+    theme: {
+      ...config.theme,
+      semanticTokens: {
+        ...config.theme?.semanticTokens,
+        colors: normalizeNode(colorsNode as TokenNode),
+      },
+    },
+  } as T;
+}
 
 /** Options for {@link createLogicianTheme}. */
 export type LogicianThemeOptions = LogicianColorOptions;

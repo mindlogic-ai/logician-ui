@@ -12,6 +12,7 @@ import {
   createLogicianTheme,
   logicianConfig,
   type LogicianThemeOptions,
+  normalizeSemanticOverrides,
   system as defaultSystem,
 } from '../../theme';
 
@@ -175,9 +176,11 @@ export const LogicianProvider: React.FC<LogicianProviderProps> = ({
     const base = isDefaultPalette
       ? logicianConfig
       : createLogicianTheme({ neutral, secondary });
-    // Merge defaultConfig, the Logician palette config, and user config
+    // Merge defaultConfig, the Logician palette config, and user config. The
+    // user's `{ base }` colour overrides are copied to `_light` so they still
+    // win over the library's `_light` roles (see normalizeSemanticOverrides).
     return config
-      ? createSystem(defaultConfig, base, config)
+      ? createSystem(defaultConfig, base, normalizeSemanticOverrides(config))
       : createSystem(defaultConfig, base);
   }, [config, neutral, secondary]);
 

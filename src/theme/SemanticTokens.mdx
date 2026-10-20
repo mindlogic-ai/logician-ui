@@ -36,7 +36,9 @@ createLogicianTheme({ neutral: 'slate' }) // cool gray — app code unchanged
 | Divider · card border · input/checkbox border | `border.subtle` · `border.default` · `border.control` |
 | Primary (black) fill · text on it | `primary.main` / `.hover` / `.active` · `fg.onPrimary` |
 | Hover / press wash, selected row | `primary.wash` / `primary.washActive` · `primary.selected` |
-| Beige: bubbles, soft badge/tag, modal header band (small surfaces only) | `secondary.surface` / `.surfaceStrong` / `.fg` / `.fgStrong` |
+| Soft badge/tag fill, avatar fallback, wash card, info box · notice band · brand modal header | `bg.muted` · `bg.subtle` · `layer.3` (neutral grounds) |
+| Beige accent: text, icons, borders on those (`secondary` identity) | `secondary.fg` / `.fgStrong` / `.border` |
+| Beige tint (tint/accent only — **not a component background**: reads peach as a fill) | `secondary.surface` / `.surfaceStrong` |
 | Run button (black + coral icon) · small coral marks | `action.bg` / `.fg` / `.iconOnSolid` · `action.mark` |
 | Send button | `send.bg` / `.bgHover` / `.bgActive` / `.fg` |
 | Unread count | `count.bg` / `count.fg` |
@@ -66,7 +68,7 @@ see `MIGRATION-5.0.md` and `codemods/5.0/README.md`.
 | `primary.lightest` / `extralight` · `lighter` · `light` · `dark` / `darker` | `primary.wash` · `primary.washActive` · `border.strong` · `fg.default` |
 | `primary.fill` · `fillStrong` | `primary.main` · `primary.hover` |
 | `{danger,success,warning}.lightest/extralight` · `lighter/light` · `main` · `dark/darker` | `.bg` · `.border` · `.solid` · `.fg` |
-| `secondary.extralight` · `lighter` · `light` · `main` · `dark` | `secondary.surface` · `.surfaceStrong` · `.border` · `.fg` · `.fgStrong` |
+| `secondary.extralight` · `lighter` · `light` · `main` · `dark` | `secondary.surface` · `.surfaceStrong` · `.border` · `.fg` · `.fgStrong` — the first two are tint-only, not a background: a 4.x `bg="secondary.extralight"/"lighter"` becomes `bg.muted` (or `bg.subtle` for a page-level band) |
 | `bg.selected` · `fg.accent` | `primary.selected` · `primary.main` (links → `fg.link`) |
 | `slate.0/50 · 100 · 200 · 300 · 400 · 500/600 · 700 · 800/900 · 1000/1100 · 1200/1300 · 1400/1500` | `neutral.1 · 2 · 3 · 5 · 6 · 7 · 8 · 9 · 10 · 11 · 12` |
 | raw `blue.N`, `gray.N`, `rose.N` … | removed — pick the role by use (`gray.N` follows the slate row) |

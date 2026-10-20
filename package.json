@@ -45,7 +45,7 @@
     "lint": "eslint --rulesdir eslint/rules src --ext .ts,.tsx && yarn run check-exports",
     "lint:fix": "eslint --rulesdir eslint/rules src --ext .ts,.tsx --fix",
     "type-check": "tsc --noEmit",
-    "test": "vitest run && vitest run --config codemods/vitest.config.ts",
+    "test": "vitest run && vitest run --config codemods/vitest.config.ts && node scripts/palette/generate.mjs --check",
     "test:codemods": "vitest run --config codemods/vitest.config.ts",
     "palette:check": "node scripts/palette/generate.mjs --check",
     "test:watch": "vitest",

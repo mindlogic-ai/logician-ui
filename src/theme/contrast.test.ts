@@ -52,6 +52,18 @@ const PAIRS: [string, string, Kind][] = [
   ['fg-default', 'primary-wash', 'text'],
   ['fg-default', 'primary-washActive', 'text'],
   ['fg-default', 'primary-selected', 'text'],
+  // Neutral grounds that replaced the sand tint as component backgrounds
+  // (Badge/Tag/Avatar fallback, Card wash, ErrorFallback support box →
+  // bg.muted; Banner neutral → bg.subtle; Modal brand header → layer.3 and
+  // RangeDatePicker range fill → primary.selected, both covered above).
+  // `secondary.surface*` is tint-only — never a component background.
+  ['fg-default', 'bg-muted', 'text'],
+  ['fg-muted', 'bg-muted', 'text'],
+  ['secondary-fgStrong', 'bg-muted', 'text'],
+  ['fg-default', 'bg-subtle', 'text'],
+  ['fg-muted', 'bg-subtle', 'text'],
+  ['fg-icon', 'bg-muted', 'nontext'],
+  ['fg-icon', 'bg-subtle', 'nontext'],
   ['fg-default', 'secondary-surface', 'text'],
   ['secondary-fgStrong', 'secondary-surface', 'text'],
   ['secondary-fgStrong', 'secondary-surfaceStrong', 'text'],
@@ -86,6 +98,10 @@ const SEP: [string, string][] = [
   ['layer-1', 'bg-canvas'],
   ['layer-2', 'layer-1'],
   ['layer-3', 'layer-2'],
+  // Card `wash` is borderless: its bg.muted ground alone separates it.
+  ['bg-muted', 'bg-canvas'],
+  // Modal `headerTone="brand"` band (layer.3) on the dialog panel (bg.surface).
+  ['layer-3', 'bg-surface'],
 ];
 
 /**
@@ -93,8 +109,6 @@ const SEP: [string, string][] = [
  * neither here nor in PAIRS/SEP fails the registry test.
  */
 const NO_PAIR: Record<string, string> = {
-  'bg-subtle': 'surface; the fg-* pairs on every layer cover text on it',
-  'bg-muted': 'surface (= layer-1 step); covered by the layer-1 pairs',
   'layer-1-hover':
     'hover state of layer-1; fg on it is covered by primary-wash pairs',
   'layer-1-active': 'pressed state; same step as primary-selected',
@@ -280,6 +294,11 @@ describe('contrast registry', () => {
       /^(bg|fg|border)$/,
       /^bg\.(panel|raised|inverse|sunken|highlighted|invalid\.subtle)$/,
       /^fg\.(inverse|emphasized)$/,
+      // Chakra's own names, each `{colors.<role>}` of an audited role
+      // (`sameAs` in colors.ts; chakraTokens.test.ts keeps the list complete)
+      /^bg\.(emphasized|inverted|error|warning|success|info)$/,
+      /^fg\.(inverted|error|warning|success|info)$/,
+      /^border\.(emphasized|muted|inverted|error|warning|success|info)$/,
     ];
     const leaves: string[] = [];
     const walk = (node: Node, path: string[]) => {

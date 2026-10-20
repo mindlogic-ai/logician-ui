@@ -28,12 +28,7 @@ import { ComponentNameProps } from './ComponentName.types';
 
 export const ComponentName = forwardRef(
   ({ variant = 'default', ...rest }: ComponentNameProps, ref) => {
-    return (
-      <ChakraComponentName
-        ref={ref}
-        {...rest}
-      />
-    );
+    return <ChakraComponentName ref={ref} {...rest} />;
   }
 );
 
@@ -55,6 +50,7 @@ export type ComponentNameProps = Omit<ChakraComponentNameProps, 'variant'> & {
 ```
 
 **Key patterns:**
+
 - Extend Chakra UI component props using `Omit<>` to override specific props
 - Define custom variant types when overriding Chakra's variant system
 - Export all types for external use
@@ -70,25 +66,22 @@ export const variantStyles: Record<
   Partial<ComponentNameProps>
 > = {
   primary: {
-    borderColor: 'primary.main',
-    bgColor: 'primary.main',
-    color: 'white',
-    _hover: {
-      bgColor: 'blue.800',
-    },
+    bg: 'primary.main',
+    color: 'fg.onPrimary',
+    _hover: { bg: 'primary.hover' },
+    _active: { bg: 'primary.active' },
   },
   secondary: {
-    borderColor: 'gray.400',
-    bgColor: 'white',
-    color: 'gray.1200',
-    _hover: {
-      bgColor: 'gray.50',
-    },
+    bg: 'bg.surface',
+    borderColor: 'border.default',
+    color: 'fg.default',
+    _hover: { bg: 'primary.wash' },
   },
 };
 ```
 
 **Best practices:**
+
 - Use theme tokens (semantic tokens preferred)
 - Define all interactive states (`_hover`, `_focus`, `_disabled`, `_active`)
 - Keep styles type-safe with `Partial<ComponentNameProps>`
@@ -103,6 +96,7 @@ export type { ComponentNameProps } from './ComponentName.types';
 ```
 
 Then add to `src/index.ts`:
+
 ```tsx
 export * from './components/ComponentName';
 ```
@@ -122,6 +116,7 @@ Component.displayName = 'Component';
 ```
 
 **Why:**
+
 - Enables ref forwarding for DOM manipulation
 - Required for Chakra UI integration
 - Supports form libraries (React Hook Form, Formik)
@@ -136,7 +131,10 @@ import { useTheme, useToken } from '@chakra-ui/react';
 
 const Component = () => {
   const theme = useTheme();
-  const primaryColor = useToken('colors', theme.semanticTokens.colors.primary.main);
+  const primaryColor = useToken(
+    'colors',
+    theme.semanticTokens.colors.primary.main
+  );
 
   // Use semantic tokens when available
   const borderColor = theme.semanticTokens.colors.primary.main;
@@ -144,49 +142,33 @@ const Component = () => {
 ```
 
 **Semantic tokens to use:**
+
 - `primary.main` / `primary.wash` / `primary.selected` - primary (BAZE black) fill, hover wash, selected row — see src/theme/SemanticTokens.mdx
-- `danger.main` - Error/danger states
+- `danger.{bg,border,fg,solid,onSolid}` (and success/warning/info) - status states. `danger.main` is a deprecated 4.x alias
 - `bg.*` / `fg.*` / `border.*` - Neutral surfaces, text, and borders that **flip with
-  color mode**. Prefer these over raw `gray.*`/`white` so components work in dark mode
-  (see `src/theme/claude.md` → Neutral Semantic Tokens). Raw `gray.*` is only for values
-  that must stay fixed across modes.
+  color mode**. Components never read raw scales (5.0 has no `gray` scale at all) — use these so components work in dark mode
+  (see `src/theme/claude.md` → Color System — BAZE).
 
 ### Common Style Patterns
 
 #### Focus States
+
 ```tsx
-_focus={{
-  outline: 'none',
-  boxShadow: `rgb(255, 255, 255) 0px 0px 0px 2px, ${primaryMainColor} 0px 0px 0px 4px`,
-}}
+import { focusRing } from '@/utils/focusRing';
+_focusVisible = { focusRing }; // inner bg.canvas band + outer focus.ring
 ```
 
-#### Disabled States
-```tsx
-_disabled={{
-  opacity: 1,
-  cursor: 'not-allowed',
-  bg: 'gray.50',
-  color: 'gray.1000',
-}}
-```
+#### Disabled / Read-Only States
 
-#### Read-Only States
 ```tsx
-_readOnly={{
-  opacity: 1,
-  cursor: 'not-allowed',
-  bg: 'gray.50',
-  color: 'gray.600',
-  borderColor: 'gray.200',
-}}
+import { disabledControl, disabledText } from '@/utils/disabledControl';
+_disabled = { disabledControl }; // fixed disabled.* colours — never opacity
 ```
 
 #### Hover States
+
 ```tsx
-_hover={{
-  borderColor: 'gray.600',
-}}
+_hover={{ borderColor: 'border.strong' }}
 ```
 
 ## Form Components
@@ -228,9 +210,7 @@ const Input = forwardRef((props, ref) => {
       onCompositionStart={handleCompositionStart}
       onCompositionEnd={handleCompositionEnd}
       onKeyDown={handleKeyDown}
-      borderColor="gray.400"
-      focusBorderColor="primary.main"
-      errorBorderColor="danger.main"
+      borderColor="border.control"
       {...props}
     />
   );
@@ -238,6 +218,7 @@ const Input = forwardRef((props, ref) => {
 ```
 
 **Key considerations:**
+
 - Handle IME composition for international input
 - Support controlled/uncontrolled modes
 - Include focus, error, and disabled states
@@ -273,6 +254,7 @@ const createSyntheticEvent = (
 ### Default Values
 
 Provide sensible defaults:
+
 ```tsx
 const Button = ({ variant = 'secondary', size = 'md', ...rest }) => {
   // secondary is safer default than primary
@@ -283,11 +265,12 @@ const Button = ({ variant = 'secondary', size = 'md', ...rest }) => {
 ### Prop Spreading
 
 Always spread props at the end:
+
 ```tsx
 <ChakraComponent
   // Your custom props first
   variant={variant}
-  borderColor="gray.400"
+  borderColor="border.control"
   // Then spread remaining props
   {...rest}
 />
@@ -296,6 +279,7 @@ Always spread props at the end:
 ### Custom Props vs Chakra Props
 
 Prefer Chakra's built-in props when available:
+
 - ✅ Use `isDisabled` instead of `disabled`
 - ✅ Use `isReadOnly` instead of `readonly`
 - ✅ Use `isInvalid` for error states
@@ -312,12 +296,9 @@ Prefer Chakra's built-in props when available:
 - Maintain proper focus management
 
 ### Example:
+
 ```tsx
-<Button
-  aria-label="Close dialog"
-  onClick={onClose}
-  tabIndex={0}
->
+<Button aria-label="Close dialog" onClick={onClose} tabIndex={0}>
   Close
 </Button>
 ```
@@ -337,6 +318,7 @@ import { formatNumber } from '../../utils/formatNumber';
 ```
 
 Available aliases:
+
 - `@/components/*`
 - `@/utils/*`
 - `@/hooks/*`
@@ -352,7 +334,7 @@ See `.storybook/claude.md` for Storybook-specific patterns.
 1. **Forgetting forwardRef**: Always use it for components wrapping DOM elements
 2. **Not setting displayName**: Required for React DevTools
 3. **Hardcoded / non-flipping colors**: Use theme tokens instead — and for neutrals use the
-   flipping `bg.*`/`fg.*`/`border.*` tokens, not raw `gray.*`/`white` (which stay stuck in
+   flipping `bg.*`/`fg.*`/`border.*` tokens, not raw scales or `white` (which stay stuck in
    light mode under `.dark`)
 4. **Missing focus states**: Required for accessibility
 5. **Props in wrong order**: Custom props before spread

@@ -41,25 +41,25 @@ A name carries duration, curve and reduced-motion together, the way
 
 ```tsx
 <Switch.Control
-  _checked={{ bg: 'primary.main' }}      // when it changes
-  animationStyle="feedback"              // how long, what curve
-  transitionProperty="background-color"  // what moves
+  _checked={{ bg: 'primary.main' }} // when it changes
+  animationStyle="feedback" // how long, what curve
+  transitionProperty="background-color" // what moves
 />
 ```
 
 Those three roles are separate and all three are required. A preset is a clock —
-it never knows *what* moves, so `transitionProperty` stays at the call site.
+it never knows _what_ moves, so `transitionProperty` stays at the call site.
 
-| Preset | For |
-|---|---|
-| `press` | Contact — a button going down under the pointer |
-| `feedback` | Hover and state colour |
-| `travel` | Something moving to a new position or size |
-| `spring` | A physical flip, or two things crossing |
-| `presence` | A part with **both** an open and a closed state |
+| Preset              | For                                                                                    |
+| ------------------- | -------------------------------------------------------------------------------------- |
+| `press`             | Contact — a button going down under the pointer                                        |
+| `feedback`          | Hover and state colour                                                                 |
+| `travel`            | Something moving to a new position or size                                             |
+| `spring`            | A physical flip, or two things crossing                                                |
+| `presence`          | A part with **both** an open and a closed state                                        |
 | `presence-anchored` | The same, for a popup anchored to a trigger (Menu, Select, Combobox, Popover, Tooltip) |
-| `stagger` | Siblings arriving in sequence (with `staggerProps(index)`) |
-| `composite` | Escape hatch — one element needing two different clocks |
+| `stagger`           | Siblings arriving in sequence (with `staggerProps(index)`)                             |
+| `composite`         | Escape hatch — one element needing two different clocks                                |
 
 **Eight is the whole list and that is policy.** A motion with one caller belongs
 next to that caller, not here (see `Spinner.styles.ts`, `Checkbox.styles.ts`).
@@ -95,16 +95,16 @@ CSS transitions need a before-value to interpolate from, so they cannot animate
 something that did not exist a moment ago, and cannot be replayed on demand.
 That is what these are for.
 
-| Component | For |
-|---|---|
-| `Pulse` | A value just landed — pop once |
-| `Shake` | Refusal. Never use it for emphasis |
-| `Appear` | One element entering on mount |
-| `Reveal` | A block opening underneath what is being read |
-| `FlyTo` | This went there — a ghost between two measured rects |
-| `Confetti` | One celebratory burst |
-| `CountUp` | A number rising |
-| `SwapTransition` | Content being replaced — steps, records |
+| Component        | For                                                  |
+| ---------------- | ---------------------------------------------------- |
+| `Pulse`          | A value just landed — pop once                       |
+| `Shake`          | Refusal. Never use it for emphasis                   |
+| `Appear`         | One element entering on mount                        |
+| `Reveal`         | A block opening underneath what is being read        |
+| `FlyTo`          | This went there — a ghost between two measured rects |
+| `Confetti`       | One celebratory burst                                |
+| `CountUp`        | A number rising                                      |
+| `SwapTransition` | Content being replaced — steps, records              |
 
 `Pulse` and `Shake` replay when `trigger` **changes**, and never on first render
 (a counter that mounts at 12 has not just become 12).
@@ -143,11 +143,11 @@ is the maintainer's view.
 
 ### Layers and files
 
-| Layer | Where | Rule |
-| --- | --- | --- |
-| Raw scales `ink`/`inkDark`, `sand`/`sandDark`, `slate`/`slateDark` (1–12), `coral`, 12 system hues `{base, baseDark, hc, hcDark, surface, ink, surfaceDark, inkDark}` | `palette.generated.ts` → `colors` in `colors.ts` | Components and recipes **never** read them |
-| Semantic steps `neutral.1–12`, `secondary.1–12` | `createSemanticColors()` | Filled by the theme option (`neutral: 'ink' \| 'slate'`, `secondary: 'sand'`) |
-| Roles (`bg.*`, `layer.*`, `fg.*`, `border.*`, `primary.*`, `secondary.*`, `action.*`, `send.*`, `count.*`, `disabled.*`, `focus.ring`, status, `tooltip.*`, `category.*`) | `ROLE_TOKEN_PATHS` + `createSemanticColors()` | The only colours a component reads |
+| Layer                                                                                                                                                                     | Where                                            | Rule                                                                          |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------- |
+| Raw scales `ink`/`inkDark`, `sand`/`sandDark`, `slate`/`slateDark` (1–12), `coral`, 12 system hues `{base, baseDark, hc, hcDark, surface, ink, surfaceDark, inkDark}`     | `palette.generated.ts` → `colors` in `colors.ts` | Components and recipes **never** read them                                    |
+| Semantic steps `neutral.1–12`, `secondary.1–12`                                                                                                                           | `createSemanticColors()`                         | Filled by the theme option (`neutral: 'ink' \| 'slate'`, `secondary: 'sand'`) |
+| Roles (`bg.*`, `layer.*`, `fg.*`, `border.*`, `primary.*`, `secondary.*`, `action.*`, `send.*`, `count.*`, `disabled.*`, `focus.ring`, status, `tooltip.*`, `category.*`) | `ROLE_TOKEN_PATHS` + `createSemanticColors()`    | The only colours a component reads                                            |
 
 - **Values come from the generator.** `scripts/palette/generate.mjs` ports the
   designer prototype (OKLCH, contrast-targeted steps) and `--check`s it against
@@ -155,7 +155,7 @@ is the maintainer's view.
   `palette.generated.ts`. Never hand-edit the generated file.
 - **High contrast** (`prefers-contrast: more`): a role whose HC value differs
   reads an internal helper `scheme.light.*` / `scheme.dark.*` (`{ base,
-  _moreContrast }`) because Chakra cannot nest `_dark` inside `_moreContrast`
+_moreContrast }`) because Chakra cannot nest `_dark` inside `_moreContrast`
   (it emits an invalid selector). Never reference `scheme.*`.
 - **Use `_light`/`_dark`, not `base`,** for any token Chakra also defines
   (`bg.subtle`, `fg.muted`, `border.subtle`, `bg.panel` …): Chakra's `_light`
@@ -185,7 +185,6 @@ lint rule (`eslint/rules/`, loaded with `--rulesdir` by `yarn lint`) and the
 - `disabledControl` / `disabledText` (`@/utils/disabledControl`): fixed
   `disabled.*` colours, never opacity.
 
-
 ## Typography
 
 ### Font Families
@@ -198,6 +197,7 @@ fonts: {
 ```
 
 **Font priority:**
+
 1. **Pretendard Variable** - Korean characters
 2. **Inter** - Latin characters
 3. **Noto Sans** - Fallback
@@ -236,19 +236,10 @@ radii: {
 
 ## Global Styles
 
-Global styles apply the Golden Ratio color system:
-
-```tsx
-global: {
-  ':root': {
-    '--chakra-colors-chakra-body-text': '#1E2433',  // gray.1300
-    '--chakra-colors-chakra-body-bg': '#FDFDFF',    // gray.0
-  },
-  'html, body': {
-    color: 'gray.1300',  // Primary text color
-  },
-}
-```
+`global.ts` reads role tokens only: `html, body` use `fg.default`, and Chakra's
+legacy body vars (`--chakra-colors-chakra-body-text/-bg`) point at
+`var(--chakra-colors-fg-default)` / `var(--chakra-colors-bg-canvas)` so they
+follow the scheme and high contrast. Base font size is 14px.
 
 ## Best Practices
 
@@ -259,41 +250,43 @@ global: {
    badges/tags, the modal header band), never rows or panels.
 5. Disabled = `disabled.*`, not opacity. Focus = `focusRing`.
 
-
 ## Extending the Theme
 
-Consumers can extend the theme:
-
 ```tsx
-import { extendTheme } from '@chakra-ui/react';
-import logicianTheme from '@mindlogic-ai/logician-ui/theme';
+import { createSystem, defaultConfig, defineConfig } from '@chakra-ui/react';
+import {
+  createLogicianTheme,
+  LogicianProvider,
+  normalizeSemanticOverrides,
+} from '@mindlogic-ai/logician-ui';
 
-const customTheme = extendTheme({
-  ...logicianTheme,
-  colors: {
-    ...logicianTheme.colors,
-    // Add custom colors
-    brand: {
-      500: '#custom-color',
-    },
-  },
-  semanticTokens: {
-    colors: {
-      ...logicianTheme.semanticTokens.colors,
-      primary: {
-        ...logicianTheme.semanticTokens.colors.primary,
-        main: 'brand.500',
-      },
-    },
-  },
-});
+// 1. Pick the neutral scheme — every role follows.
+<LogicianProvider theme={{ neutral: 'slate' }}>…</LogicianProvider>
+
+// 2. Override roles: pass a config; it is merged over the Logician theme.
+<LogicianProvider
+  config={defineConfig({
+    theme: { semanticTokens: { colors: { primary: { main: { value: { base: '#1A56DB', _dark: '#7EA6F8' } } } } } },
+  })}
+/>
+
+// 3. Building the system yourself: normalise your overrides first.
+createSystem(defaultConfig, createLogicianTheme(), normalizeSemanticOverrides(appConfig));
 ```
+
+Logician roles are emitted as `{ _light, _dark }`, and Chakra's `_light`
+outranks `base`. A `{ base, _dark }` override would therefore keep the
+library's light value. `LogicianProvider` runs `normalizeSemanticOverrides` on
+its `config` (copies `base` into `_light`); call it yourself when you call
+`createSystem` directly.
+
+Chakra's own names (`bg.emphasized`, `border.muted`, `fg.error`, `*.inverted` …)
+are mapped onto BAZE roles in `createSemanticColors` (`sameAs`);
+`chakraTokens.test.ts` fails if Chakra adds one that is not mapped.
 
 ## Visual Reference
 
-See `Palette.stories.tsx` in Storybook for interactive color palette exploration:
-
-- **Semantic Tokens**: Primary, secondary, danger, success, warning
-- **Primitive Colors**: Blue, rose, green, violet, gold
-- **Gray Scale**: Full 16-shade slate palette
-- **Contrast Reference**: WCAG compliance examples
+- Setup/Theme → Default: every 5.0 semantic colour in light and dark, plus the
+  4.x alias table (`paletteSwatches.ts`, tested).
+- Setup/Theme/BAZE Palette: raw scales and every role in all four modes.
+- Setup/Theme/Using Semantic Tokens (`SemanticTokens.mdx`): which token to use.
