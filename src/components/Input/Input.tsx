@@ -1,5 +1,4 @@
 import {
-  CompositionEvent,
   ForwardedRef,
   forwardRef,
   KeyboardEvent,
@@ -9,6 +8,10 @@ import {
 } from 'react';
 import { Input as ChakraInput, InputGroup } from '@chakra-ui/react';
 
+import {
+  CompositionFieldValue,
+  useCompositionSafeValue,
+} from '@/hooks/useCompositionSafeValue';
 import { noZoomOnFocus } from '@/theme/formControls';
 import { formatNumber } from '@/utils/formatNumber';
 import { mergeCss } from '@/utils/mergeCss';
@@ -59,6 +62,7 @@ export const Input = forwardRef(
       leftIcon,
       rightIcon,
       onKeyDown,
+      onBlur,
       onCompositionEnd,
       onCompositionStart,
       maxLength,
@@ -83,7 +87,6 @@ export const Input = forwardRef(
   ) => {
     const rightElementRef = useRef<HTMLDivElement>(null);
     const [rightElementWidth, setRightElementWidth] = useState(0);
-    const isComposing = useRef(false);
     const cursorPosition = useRef<number | null>(null);
     const [shouldRestoreCursor, setShouldRestoreCursor] = useState(false);
 
@@ -113,15 +116,11 @@ export const Input = forwardRef(
       }
     }, [shouldRestoreCursor, maskNumber, type, ref]);
 
+    const isMaskedNumber = maskNumber && type === 'number';
+
     // Format the value if maskNumber is true and type is number
-    const getFormattedValue = (val: typeof propValue) => {
-      if (
-        maskNumber &&
-        type === 'number' &&
-        val !== undefined &&
-        val !== null &&
-        val !== ''
-      ) {
+    const getFormattedValue = (val: CompositionFieldValue) => {
+      if (isMaskedNumber && val !== undefined && val !== null && val !== '') {
         const numVal = typeof val === 'string' ? parseFloat(val) : val;
         if (!isNaN(numVal as number)) {
           return formatNumber(numVal as number);
@@ -130,46 +129,30 @@ export const Input = forwardRef(
       return val;
     };
 
-    const [currentValue, setCurrentValue] = useState<
-      string | number | readonly string[] | undefined
-    >(getFormattedValue(propValue));
+    // The value handed to the consumer for a given node text.
+    const normalize = (raw: string) => {
+      let processedValue = raw;
 
-    useEffect(() => {
-      setCurrentValue(getFormattedValue(propValue));
-    }, [propValue]);
-
-    // 한글 타이핑 관련 버그 해결을 위해 composition event handler들을 사용합니다
-    const handleCompositionStart = (e: CompositionEvent<HTMLInputElement>) => {
-      isComposing.current = true;
-      if (onCompositionStart) onCompositionStart(e);
-    };
-
-    const handleCompositionEnd = (e: any) => {
-      isComposing.current = false;
-      if (onCompositionEnd) onCompositionEnd(e);
-    };
-
-    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === 'Enter') {
-        if (isComposing.current) {
-          e.preventDefault();
-          e.stopPropagation();
-          return;
-        }
-
-        if (onKeyDown) onKeyDown(e);
+      // Handle trimWhiteSpace: prevent initial spaces and trim pasted content
+      if (trimWhiteSpace) {
+        // If input becomes entirely whitespace, clear it
+        if (processedValue.trim() === '') return '';
+        // Trim leading and trailing spaces from non-empty content
+        processedValue = processedValue.trim();
       }
 
-      // trimWhiteSpace prop이 존재하고, 입력된 값이 아예 없는 경우만 스페이스바를 통한 공백 입력 금지
-      // noSpaces prop이 존재하고, 스페이스바를 통한 공백 일체 입력 금지
-      if (
-        (noSpaces || (trimWhiteSpace && currentValue === '')) &&
-        e.key.match(/\s/)
-      ) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
+      // Handle noSpaces: remove all spaces
+      // prevent whitespace insertion on copy paste bug
+      if (noSpaces) {
+        processedValue = processedValue.replace(/\s/g, '');
       }
+
+      // Pass the raw numeric value (commas removed) to onChange
+      if (isMaskedNumber) {
+        processedValue = unformatNumber(processedValue);
+      }
+
+      return processedValue;
     };
 
     // Helper function to create synthetic event with filtered value
@@ -196,101 +179,94 @@ export const Input = forwardRef(
       return syntheticEvent;
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      let processedValue = e.target.value;
+    // 한글·일본어·중국어 IME 조합 중에는 밖에서 들어오는 value 를 노드에 쓰지 않고
+    // (쓰면 조합이 끊겨 `학사ㅈ지원` 이 된다), onChange 는 키 입력마다 그대로
+    // 내보낸다. trimWhiteSpace·noSpaces·maskNumber 는 조합 중에는 내보내는 값에만
+    // 적용하고 화면(노드)에는 compositionend 에서 적용한다. 자세한 규칙은
+    // useCompositionSafeValue 의 docstring.
+    const field = useCompositionSafeValue<HTMLInputElement>({
+      value: propValue,
+      normalize,
+      toDisplay: getFormattedValue,
+      emit: (e, next) => onChange?.(createSyntheticEvent(e, next)),
+      onCompositionStart,
+      onCompositionEnd,
+    });
+    const currentValue = field.value;
 
-      // Handle trimWhiteSpace: prevent initial spaces and trim pasted content
-      if (trimWhiteSpace) {
-        // If input becomes entirely whitespace, clear it
-        if (processedValue.trim() === '') {
-          setCurrentValue('');
-          if (onChange) {
-            onChange(createSyntheticEvent(e, ''));
-          }
+    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        // Enter during a composition means "commit this syllable", never
+        // "submit". `nativeEvent.isComposing` / keyCode 229 also cover
+        // WebKit, which fires `compositionend` *before* this keydown.
+        if (
+          field.isComposing() ||
+          e.nativeEvent.isComposing ||
+          e.keyCode === 229
+        ) {
+          e.preventDefault();
+          e.stopPropagation();
           return;
         }
-        // Trim leading and trailing spaces from non-empty content
-        processedValue = processedValue.trim();
+
+        if (onKeyDown) onKeyDown(e);
       }
 
-      // Handle noSpaces: remove all spaces
-      // prevent whitespace insertion on copy paste bug
-      if (noSpaces) {
-        processedValue = processedValue.replace(/\s/g, '');
-      }
-
-      if (maskNumber && type === 'number') {
-        const oldValue = String(currentValue || '');
-        const oldCursorPos = e.target.selectionStart || 0;
-
-        // Remove commas for processing
-        const unformatted = unformatNumber(processedValue);
-
-        // Update display value with formatting
-        if (unformatted === '') {
-          setCurrentValue('');
-          cursorPosition.current = 0;
-          setShouldRestoreCursor(true);
-        } else {
-          const num = parseFloat(unformatted);
-          if (!isNaN(num)) {
-            const newFormattedValue = formatNumber(num);
-            setCurrentValue(newFormattedValue);
-
-            // Calculate and store new cursor position
-            cursorPosition.current = calculateCursorPosition(
-              oldValue,
-              newFormattedValue,
-              oldCursorPos
-            );
-            setShouldRestoreCursor(true);
-          } else {
-            setCurrentValue(unformatted);
-            cursorPosition.current = oldCursorPos;
-            setShouldRestoreCursor(true);
-          }
-        }
-
-        // Pass the raw numeric value to onChange
-        if (onChange) {
-          onChange(createSyntheticEvent(e, unformatted));
-        }
-      } else {
-        setCurrentValue(processedValue);
-        if (onChange) {
-          onChange(createSyntheticEvent(e, processedValue));
-        }
+      // trimWhiteSpace prop이 존재하고, 입력된 값이 아예 없는 경우만 스페이스바를 통한 공백 입력 금지
+      // noSpaces prop이 존재하고, 스페이스바를 통한 공백 일체 입력 금지
+      if (
+        (noSpaces || (trimWhiteSpace && currentValue === '')) &&
+        e.key.match(/\s/)
+      ) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
       }
     };
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      // Caret restore for the comma formatting. Skipped while composing: the
+      // display is not reformatted then, so there is nothing to restore.
+      if (isMaskedNumber && !field.isComposing()) {
+        const oldValue = String(currentValue || '');
+        const oldCursorPos = e.target.selectionStart || 0;
+        const unformatted = normalize(e.target.value);
+
+        if (unformatted === '') {
+          cursorPosition.current = 0;
+        } else if (!isNaN(parseFloat(unformatted))) {
+          cursorPosition.current = calculateCursorPosition(
+            oldValue,
+            formatNumber(parseFloat(unformatted)),
+            oldCursorPos
+          );
+        } else {
+          cursorPosition.current = oldCursorPos;
+        }
+        setShouldRestoreCursor(true);
+      }
+
+      field.onChange(e);
+    };
+
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-      if (maskNumber && type === 'number' && e.target.value) {
+      // A keyboard that never sent `compositionend` (seen on Android) must not
+      // leave the field ignoring outside values after it loses focus.
+      field.finishOnBlur(e);
+
+      // Kept exactly as it behaved before this handler was reachable with a
+      // consumer `onBlur` (it used to be overridden by `{...rest}`): the
+      // consumer gets the original event, and the blur-time comma reformat
+      // only happens when there is no consumer handler.
+      if (onBlur) {
+        onBlur(e);
+        return;
+      }
+      if (isMaskedNumber && e.target.value) {
         const numericValue = parseFloat(unformatNumber(e.target.value));
         if (!isNaN(numericValue)) {
-          setCurrentValue(formatNumber(numericValue));
-
-          if (rest.onBlur) {
-            // Create a new native event to ensure Formik properly updates
-            const nativeEvent = Object.create(e.nativeEvent);
-            const newTarget = {
-              ...e.target,
-              value: numericValue.toString(),
-              name: e.target.name,
-            };
-
-            // Create a new synthetic event that Formik will recognize
-            const syntheticEvent = {
-              ...e,
-              nativeEvent,
-              target: newTarget,
-              currentTarget: newTarget,
-            };
-
-            rest.onBlur(syntheticEvent as React.FocusEvent<HTMLInputElement>);
-          }
+          field.setValue(formatNumber(numericValue));
         }
-      } else if (rest.onBlur) {
-        rest.onBlur(e);
       }
     };
 
@@ -313,8 +289,8 @@ export const Input = forwardRef(
           value={currentValue}
           onChange={handleChange}
           onBlur={handleBlur}
-          onCompositionStart={handleCompositionStart}
-          onCompositionEnd={handleCompositionEnd}
+          onCompositionStart={field.onCompositionStart}
+          onCompositionEnd={field.onCompositionEnd}
           onKeyDown={handleKeyDown}
           type={inputType}
           disabled={disabled}

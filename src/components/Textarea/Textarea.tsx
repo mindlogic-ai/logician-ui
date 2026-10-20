@@ -1,6 +1,7 @@
-import { ChangeEvent, forwardRef, useEffect, useState } from 'react';
+import { FocusEvent, forwardRef } from 'react';
 import { Textarea as ChakraTextarea } from '@chakra-ui/react';
 
+import { useCompositionSafeValue } from '@/hooks/useCompositionSafeValue';
 import { noZoomOnFocus } from '@/theme/formControls';
 import { mergeCss } from '@/utils/mergeCss';
 
@@ -11,6 +12,9 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     {
       placeholder,
       onChange,
+      onBlur,
+      onCompositionStart,
+      onCompositionEnd,
       value: propValue,
       _focusVisible,
       _hover,
@@ -24,28 +28,34 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     },
     ref
   ) => {
-    const [currentValue, setCurrentValue] = useState<
-      string | number | readonly string[] | undefined
-    >(propValue);
+    // 한글·일본어·중국어 IME 조합 중에는 밖에서 들어오는 value 를 노드에 쓰지 않고
+    // (쓰면 조합이 끊겨 `학사ㅈ지원` 이 된다), onChange 는 키 입력마다 그대로
+    // 내보낸다. 규칙은 useCompositionSafeValue 의 docstring.
+    const field = useCompositionSafeValue<HTMLTextAreaElement>({
+      value: propValue,
+      // No transform here, so the event's own target already carries the
+      // emitted text — hand the consumer the original event, as before.
+      emit: (e) => onChange?.(e),
+      onCompositionStart,
+      onCompositionEnd,
+    });
 
-    useEffect(() => {
-      setCurrentValue(propValue);
-    }, [propValue]);
-
-    const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-      setCurrentValue(e.target.value);
-
-      if (onChange) {
-        onChange(e);
-      }
+    const handleBlur = (e: FocusEvent<HTMLTextAreaElement>) => {
+      // A keyboard that never sent `compositionend` (seen on Android) must not
+      // leave the field ignoring outside values after it loses focus.
+      field.finishOnBlur(e);
+      onBlur?.(e);
     };
 
     return (
       <ChakraTextarea
         ref={ref}
         placeholder={placeholder}
-        value={currentValue}
-        onChange={handleChange}
+        value={field.value}
+        onChange={field.onChange}
+        onBlur={handleBlur}
+        onCompositionStart={field.onCompositionStart}
+        onCompositionEnd={field.onCompositionEnd}
         disabled={disabled}
         readOnly={readOnly}
         data-invalid={invalid || undefined}
