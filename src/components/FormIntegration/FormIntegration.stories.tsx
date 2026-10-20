@@ -317,7 +317,7 @@ export const FormikFormExample: StoryObj = {
                     이미지 또는 PDF 파일만 업로드 가능합니다
                   </Field.HelperText>
                   {values.files && values.files.length > 0 && (
-                    <Text fontSize="sm" color="gray.600" mt={2}>
+                    <Text fontSize="sm" color="fg.muted" mt={2}>
                       {values.files.length}개 파일 선택됨
                     </Text>
                   )}
@@ -331,7 +331,7 @@ export const FormikFormExample: StoryObj = {
                 {/* Submit Button */}
                 <Button
                   type="submit"
-                  variant="solid"
+                  variant="primary"
                   w="100%"
                   mt={4}
                   disabled={isSubmitting}
@@ -641,7 +641,7 @@ export const RegularFormExample: StoryObj = {
                 이미지 또는 PDF 파일만 업로드 가능합니다
               </Field.HelperText>
               {formData.files && formData.files.length > 0 && (
-                <Text fontSize="sm" color="gray.600" mt={2}>
+                <Text fontSize="sm" color="fg.muted" mt={2}>
                   {formData.files.length}개 파일 선택됨
                 </Text>
               )}
@@ -651,7 +651,7 @@ export const RegularFormExample: StoryObj = {
             {/* Submit Button */}
             <Button
               type="submit"
-              variant="solid"
+              variant="primary"
               w="100%"
               mt={4}
               disabled={isSubmitting}

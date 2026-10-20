@@ -1,18 +1,13 @@
 import type { ElementType } from 'react';
-import { BadgeProps as ChakraBadgeProps } from '@chakra-ui/react';
 
 // Relative, NOT `@/types/*` — see `src/types/polymorphic.ts`.
 import type { PolymorphicProps } from '../../types/polymorphic';
+import type { TagOwnProps } from '../Tag/Tag.types';
 
 /**
- * Chip color schemes - determines the semantic color of the chip.
- *
- * This prop overrides Chakra UI's native `colorScheme` prop to provide
- * a controlled set of color options that align with our design system.
- *
- * @example
- * <Chip colorScheme="primary" variant="solid">Primary</Chip>
- * <Chip colorScheme="danger" variant="soft">Error</Chip>
+ * 4.x Chip colour schemes, mapped onto Tag at runtime.
+ * @deprecated `Chip` is now an alias of `Tag` — use `tone` / `selected` /
+ * `category` on `Tag`. Removed in 6.0.
  */
 export type ChipColorScheme =
   | 'primary'
@@ -23,34 +18,51 @@ export type ChipColorScheme =
   | 'neutral';
 
 /**
- * Chip variants - determines the visual style of the chip.
- *
- * - solid: Filled background with contrasting text
- * - soft: Light background tint with darker text
- * - outline: Transparent background with colored border
+ * 4.x Chip variants, mapped onto Tag at runtime.
+ * @deprecated Use `Tag`. Removed in 6.0.
  */
 export type ChipVariant = 'solid' | 'soft' | 'outline';
 
 /**
- * ChipProps uses a two-dimensional variant system:
- * - `colorScheme`: What semantic color (primary, secondary, danger, etc.)
- * - `variant`: How it looks visually (solid, soft, outline)
+ * @deprecated `Chip` is an alias of `Tag` since 5.0 — use `TagOwnProps`.
+ * Removed in 6.0.
  *
- * This matches the Button component's architecture for consistency.
+ * `colorScheme` / `variant` / `colorPalette` are still in the type ONLY so
+ * unmigrated 4.x call sites keep compiling; they are deprecated aliases,
+ * mapped at runtime by `mapLegacyTagProps` (with a once-per-combination dev
+ * warning) and removed with Chip in 6.0:
+ *
+ * - `primary` / `secondary` / `neutral` × `soft` (default) or `outline` → neutral
+ * - `primary` / `secondary` / `neutral` × `solid` → `selected` (look only — not
+ *   a toggle unless `selected` is passed explicitly)
+ * - `danger` / `success` / `warning` × `soft` → that `tone`
+ * - `danger` / `success` / `warning` × `solid` → that `tone` (no solid fill
+ *   in 5.0 — warns "choose by hand")
+ * - `danger` / `success` / `warning` × `outline` → neutral (warns "choose by hand")
+ *
+ * New Tag props (`tone`, `selected`, `category`) win when given.
  */
-export type ChipOwnProps = Omit<
-  ChakraBadgeProps,
-  'colorScheme' | 'variant' | 'as'
-> & {
+export type ChipOwnProps = TagOwnProps & {
+  /**
+   * @deprecated 4.x alias, mapped at runtime — use Tag's `tone` / `selected`.
+   * Defaults to `primary` (the 4.x Chip default).
+   */
   colorScheme?: ChipColorScheme;
+  /**
+   * @deprecated 4.x alias, mapped at runtime — use Tag's `selected` (for
+   * `solid`) or nothing. Defaults to `soft`.
+   */
   variant?: ChipVariant;
+  /**
+   * @deprecated 4.x alias of `colorScheme` (Chakra's palette prop), mapped
+   * at runtime. `colorScheme` wins when both are given.
+   */
+  colorPalette?: ChipColorScheme;
 };
 
 /**
- * Props for `Chip`, typed for whatever element `as` renders. Defaults to
- * `'span'`, so the bare type is unchanged. A filter chip that navigates is the
- * case that needs this — as a real link it keeps middle-click and
- * open-in-new-tab.
+ * @deprecated `Chip` is an alias of `Tag` since 5.0 — use `TagProps`.
+ * Removed in 6.0.
  */
 export type ChipProps<TElement extends ElementType = 'span'> = PolymorphicProps<
   TElement,

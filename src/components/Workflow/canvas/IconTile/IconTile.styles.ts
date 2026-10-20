@@ -3,29 +3,45 @@ import type { CategoryTokenMap, CategoryTokens } from './IconTile.types';
 
 /**
  * Default mapping from the six categories to logician-ui semantic color
- * tokens. "fg" tints the icon, "bg" fills the tile background. Output and
- * Note don't map cleanly to a `colorPalette` so they're spelled out with
- * raw token pairs.
+ * tokens. "fg" tints the icon, "bg" fills the tile background.
+ *
+ * 5.0: category tiles are decorative, not status — so five of the six pick a
+ * `category.*` hue (purely for visual grouping, swap-able via `categoryTokens`
+ * without implying anything is wrong/warning/safe) instead of borrowing
+ * `success`/`danger`/`secondary`, which are status/brand families with their
+ * own meaning elsewhere in the same canvas. `output` has no obvious hue, so
+ * it gets the documented neutral pair (`primary.wash` + `fg.default`) instead
+ * of inventing a 13th hue. `note` keeps a real `warning.*` triple — unlike the
+ * others it already reads as "a note needs your attention", which IS a status
+ * meaning, so it stays on the status family rather than moving to a hue.
  *
  * Host apps that want to retheme can override the map via the
  * `categoryTokens` prop on `<Workflow>` — see WorkflowContext.
  */
 export const DEFAULT_CATEGORY_TOKENS: CategoryTokenMap = {
   trigger: {
-    bg: 'success.lightest',
-    fg: 'success.main',
-    border: 'slate.300',
+    bg: 'category.green.surface',
+    fg: 'category.green.fg',
+    border: 'border.default',
   },
-  ai: { bg: 'primary.lightest', fg: 'primary.main', border: 'slate.300' },
+  ai: {
+    bg: 'category.purple.surface',
+    fg: 'category.purple.fg',
+    border: 'border.default',
+  },
   logic: {
-    bg: 'secondary.lightest',
-    fg: 'secondary.main',
-    border: 'slate.300',
+    bg: 'category.brown.surface',
+    fg: 'category.brown.fg',
+    border: 'border.default',
   },
-  safety: { bg: 'danger.lightest', fg: 'danger.main', border: 'slate.300' },
-  output: { bg: 'slate.50', fg: 'slate.1200', border: 'slate.300' },
+  safety: {
+    bg: 'category.red.surface',
+    fg: 'category.red.fg',
+    border: 'border.default',
+  },
+  output: { bg: 'primary.wash', fg: 'fg.default', border: 'border.default' },
   // Note's `border` doubles as the body border so it reads as warm, not gray.
-  note: { bg: 'warning.lightest', fg: 'warning.dark', border: 'warning.light' },
+  note: { bg: 'warning.bg', fg: 'warning.fg', border: 'warning.border' },
 };
 
 /**

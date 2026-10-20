@@ -19,12 +19,7 @@ const CardImpl = forwardRef<HTMLDivElement, CardOwnProps>(
         color="fg.default"
         boxShadow="none"
         border="1px solid"
-        // border.default (gray.300 / gray.1100 _dark) instead of border.subtle:
-        // subtle's _dark (gray.1300 #1E2433) is ~invisible on bg.surface in dark,
-        // so cards blended into the canvas. default gives the card a discernible
-        // edge in both modes. The `wash` variant softens it back to
-        // border.subtle because its `bg.subtle` fill already separates it.
-        borderColor="border.default"
+        borderColor="border.subtle"
         borderRadius="lg"
         // Was `transitionDuration="normal"` — a Chakra v2 token absent from v3.
         // It fell through as a literal, `transition-duration: normal` is invalid

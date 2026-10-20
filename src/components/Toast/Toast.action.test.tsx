@@ -102,6 +102,19 @@ describe('Toast action', () => {
     await screen.findByText('Saved.');
     expect(screen.getAllByRole('button')).toHaveLength(1); // close × only
   });
+
+  it("fires 'neutral' (the default status) without throwing, and renders as neutral — not Zag's own required 'info' type", async () => {
+    renderToaster();
+    fire({ description: 'No status given.' });
+
+    const description = await screen.findByText('No status given.');
+    const root = description.closest('[data-scope="toast"][data-part="root"]');
+    // Zag requires SOME `type` internally (fed `'info'` so the machine
+    // doesn't throw — see `useToast.tsx`), but `neutral` must still be what
+    // actually renders: no status icon, so only the close ×'s svg is
+    // present — an `info` toast would carry a second one.
+    expect(root?.querySelectorAll('svg')).toHaveLength(1);
+  });
 });
 
 describe('useToast duration', () => {

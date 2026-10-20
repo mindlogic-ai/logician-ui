@@ -70,7 +70,7 @@ export const Seeded: Story = {
       <Stack gap={4} align="flex-start">
         <Button
           size="sm"
-          variant="outline"
+          variant="secondary"
           onClick={() => setSeed((s) => s + 1)}
         >
           다시 뿌리기 (seed {seed})

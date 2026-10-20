@@ -67,11 +67,11 @@ export function CollapsibleSection({
         bg="transparent"
         border="none"
         textAlign="left"
-        _hover={{ bg: 'slate.50' }}
+        _hover={{ bg: 'primary.wash' }}
       >
         <Subtext
           fontWeight="bold"
-          color="slate.900"
+          color="fg.muted"
           textTransform="uppercase"
           letterSpacing="wider"
         >
@@ -79,9 +79,9 @@ export function CollapsibleSection({
         </Subtext>
         <HStack gap={1.5} onClick={(e) => e.stopPropagation()}>
           {headerAction}
-          <Box color="slate.900" display="flex" alignItems="center">
+          <Box color="fg.muted" display="flex" alignItems="center">
             {showErrorGlyph ? (
-              <AlertCircleIcon boxSize="xs" color="danger.main" />
+              <AlertCircleIcon boxSize="xs" color="danger.fg" />
             ) : expanded ? (
               <ChevronUpIcon boxSize="xs" />
             ) : (

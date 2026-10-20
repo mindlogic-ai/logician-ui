@@ -1,6 +1,6 @@
+import { useState } from 'react';
 import { Flex, Stack, Text } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
-import { useState } from 'react';
 
 import { Button } from '../Button';
 import { Toast } from './Toast';
@@ -67,6 +67,16 @@ export const BasicStatuses: Story = {
             }
           >
             Show Error Toast
+          </Button>
+          <Button
+            onClick={() =>
+              showToast({
+                description: 'This is a neutral message with no status.',
+                status: 'neutral',
+              })
+            }
+          >
+            Show Neutral Toast
           </Button>
         </Flex>
       </>
@@ -250,7 +260,7 @@ export const MaxToastLimit: Story = {
       <>
         <Toaster />
         <Stack gap={3}>
-          <Text fontSize="sm" color="gray.600">
+          <Text fontSize="sm" color="fg.muted">
             Maximum 3 toasts are shown at once. Older toasts are automatically
             dismissed.
           </Text>
@@ -354,11 +364,11 @@ export const CustomStyles: Story = {
             onClick={() =>
               showToast({
                 title: 'Custom Background',
-                description: 'This toast has a purple background',
+                description: 'This toast has a category background',
                 status: 'info',
                 styles: {
-                  bg: 'purple.500',
-                  color: 'white',
+                  bg: 'category.purple.surface',
+                  color: 'category.purple.fg',
                 },
               })
             }
@@ -373,7 +383,7 @@ export const CustomStyles: Story = {
                 status: 'success',
                 styles: {
                   borderWidth: '4px',
-                  borderColor: 'green.500',
+                  borderColor: 'success.solid',
                 },
               })
             }
@@ -459,7 +469,7 @@ export const RapidFire: Story = {
       <>
         <Toaster />
         <Stack gap={3}>
-          <Text fontSize="sm" color="gray.600">
+          <Text fontSize="sm" color="fg.muted">
             Test rapid toast creation and the 3-toast limit
           </Text>
           <Button

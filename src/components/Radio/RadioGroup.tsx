@@ -12,7 +12,7 @@ export const RadioGroup = ({ css, ...rest }: RadioGroupRootProps) => {
           '--chakra-colors-color-palette-solid':
             'var(--chakra-colors-primary-main)',
           '--chakra-colors-color-palette-contrast':
-            'var(--chakra-colors-white)',
+            'var(--chakra-colors-fg-on-primary)',
         },
         css
       )}

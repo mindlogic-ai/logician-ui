@@ -27,7 +27,7 @@ interface DrawerIssuesProps {
  * then the messages as a bulleted list beneath. Severities never mix in a box
  * so the icon, heading and tint stay meaningful.
  *
- * Markers use the severity's `dark` tone via `SeverityDot` — the CSS list
+ * Markers use the severity's `fg` tone via `SeverityDot` — the CSS list
  * `::marker` defaults to a muted grey that reads as an odd low-contrast dot on
  * the tinted background.
  */
@@ -63,7 +63,7 @@ function IssueCallout({
         <VStack align="stretch" gap={0.5} ps={1}>
           {issues.map((issue, i) => (
             <HStack key={`${issue.code}_${i}`} gap={2} align="flex-start">
-              <SeverityDot severity={severity} tone="dark" mt={1.5} />
+              <SeverityDot severity={severity} tone="fg" mt={1.5} />
               <Subtext color={color}>{resolveMessage(issue)}</Subtext>
             </HStack>
           ))}

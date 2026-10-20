@@ -17,7 +17,7 @@ export type TableRowState = 'selected' | 'invalid' | 'highlighted';
 export interface TableRowProps extends Table.RowProps {
   /**
    * Row background tint, driven by the table recipe's semantic tokens
-   * (`bg.selected` / `bg.invalid.subtle` / `bg.highlighted`) so it renders
+   * (`primary.selected` / `bg.invalid.subtle` / `bg.highlighted`) so it renders
    * correctly in both light and dark mode.
    */
   state?: TableRowState;

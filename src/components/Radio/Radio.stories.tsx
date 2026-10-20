@@ -248,7 +248,7 @@ export const FormExample: RadioGroupStory = {
           </RadioGroup>
         </Box>
 
-        <Box p={4} bg="gray.50" borderRadius="md" w="100%">
+        <Box p={4} bg="bg.subtle" borderRadius="md" w="100%">
           <Box fontWeight="semibold" mb={2}>
             Current Settings:
           </Box>

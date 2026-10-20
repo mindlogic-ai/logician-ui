@@ -10,7 +10,10 @@ import {
   YAxis,
 } from 'recharts';
 
+import { useColorMode } from '@/components/ColorMode';
+
 import { DatumBase, LineGraphProps } from './LineGraph.types';
+import { seriesColor } from './seriesColors';
 
 export const LineGraph = <T extends DatumBase>({
   data = [],
@@ -19,6 +22,11 @@ export const LineGraph = <T extends DatumBase>({
   ...rest
 }: LineGraphProps<T>) => {
   const primaryColor = useToken('colors', 'primary.main')[0];
+  // Series 1 is the neutral brand line; further series cycle hues with no
+  // status meaning (see seriesColors.ts). Strokes read the generated palette
+  // directly because no semantic role fits a chart line.
+  const { colorMode } = useColorMode();
+  const isDark = colorMode === 'dark';
   return (
     <Box h="400px" {...rest}>
       <ResponsiveContainer width="100%" height="100%">
@@ -44,7 +52,7 @@ export const LineGraph = <T extends DatumBase>({
             // Color of line
             stroke="transparent"
             // Props of text. CSS var (not a Chakra token) so the axis labels
-            // flip with the mode — recharts won't resolve 'gray.1200' itself.
+            // flip with the mode — recharts won't resolve 'fg.muted' itself.
             tick={{
               fill: 'var(--chakra-colors-fg-muted)',
               fontSize: `${useToken('fontSizes', 'sm')}`,
@@ -62,11 +70,21 @@ export const LineGraph = <T extends DatumBase>({
             tickMargin={0}
           />
           <Tooltip
-            // The tooltip surface stays light in both modes, so the label keeps
-            // a fixed near-black. Must be a CSS var, not 'gray.1500' — recharts
+            // recharts' default tooltip box is an unstyled white div, which is
+            // why the label used to need a raw fixed-dark colour regardless of
+            // mode. Themeing the box itself with CSS vars (so it flips too)
+            // removes that special case — label and surface move together,
+            // same as every other themed surface. CSS vars because recharts
             // won't resolve Chakra tokens (see XAxis/YAxis above).
+            contentStyle={{
+              backgroundColor: 'var(--chakra-colors-bg-surface)',
+              borderColor: 'var(--chakra-colors-border-default)',
+            }}
             labelStyle={{
-              color: 'var(--chakra-colors-gray-1500)',
+              color: 'var(--chakra-colors-fg-default)',
+            }}
+            itemStyle={{
+              color: 'var(--chakra-colors-fg-default)',
             }}
           />
           {displayLegend && (
@@ -76,13 +94,13 @@ export const LineGraph = <T extends DatumBase>({
               }}
             />
           )}
-          {dataKeys.map(({ key, label, color }) => (
+          {dataKeys.map(({ key, label, color }, index) => (
             <Line
               key={`line-${key}`}
               type="monotone"
               dataKey={key}
               name={label}
-              stroke={color ?? primaryColor}
+              stroke={color ?? seriesColor(index, primaryColor, isDark)}
               dot={{ r: 0 }}
             />
           ))}

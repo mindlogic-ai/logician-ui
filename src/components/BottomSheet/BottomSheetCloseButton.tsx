@@ -28,7 +28,6 @@ export const BottomSheetCloseButton = forwardRef<
         aria-label={translate('close') as string}
         size="sm"
         variant="ghost"
-        colorPalette="neutral"
         {...rest}
       >
         {children ?? <CloseIcon boxSize="xs" aria-hidden />}

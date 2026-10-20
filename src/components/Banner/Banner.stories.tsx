@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from '@storybook/react';
 import { VStack } from '@chakra-ui/react';
+import type { Meta, StoryObj } from '@storybook/react';
 
+import { H5, Subtext } from '../Typography';
 import { Banner } from './Banner';
-import { Subtext, H5 } from '../Typography';
 
 const meta = {
   title: 'Components/Banner',
@@ -43,6 +43,13 @@ export const Danger: Story = {
   },
 };
 
+export const Neutral: Story = {
+  args: {
+    variant: 'neutral',
+    children: 'This is a brand notice banner.',
+  },
+};
+
 export const AllSizes: Story = {
   render: () => (
     <VStack gap={4} align="stretch">
@@ -59,7 +66,7 @@ export const AllSizes: Story = {
   ),
 };
 
-const variants = ['info', 'success', 'warning', 'danger'] as const;
+const variants = ['info', 'success', 'warning', 'danger', 'neutral'] as const;
 
 export const AllVariants: Story = {
   render: () => (

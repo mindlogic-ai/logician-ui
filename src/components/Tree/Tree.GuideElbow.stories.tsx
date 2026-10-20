@@ -1,8 +1,8 @@
 import { Box, HStack, Stack, Text } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import { Tree } from './Tree';
 import { createTreeCollection } from './index';
+import { Tree } from './Tree';
 
 /**
  * Stories for the `elbow` option on `Tree.BranchIndentGuide`.
@@ -155,7 +155,7 @@ export const GuideColor: Story = {
         [
           ['border.default (기본)', undefined],
           ['border.strong', 'border.strong'],
-          ['primary.light', 'primary.light'],
+          ['primary.main', 'primary.main'],
         ] as const
       ).map(([label, guideColor]) => (
         <Stack key={label} gap={2} width="280px">

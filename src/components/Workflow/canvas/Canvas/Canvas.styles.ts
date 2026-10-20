@@ -1,8 +1,10 @@
 import { type DefaultEdgeOptions, MarkerType } from '@xyflow/react';
 
+import { CANVAS_STROKE_TOKEN, colorVar } from '../colorVar';
+
 /**
- * Edge defaults. Stroke comes from a theme token (slate.700) via CSS var
- * since React Flow takes SVG-style props, not Chakra ones. The label
+ * Edge defaults. Stroke comes from a theme token (`CANVAS_STROKE_TOKEN`,
+ * `fg.icon` — a non-text mark, so ≥ 3:1 on the canvas) via CSS var since React Flow takes SVG-style props, not Chakra ones. The label
  * itself is rendered through the `labeled` custom edge so its
  * typography uses the design system's semantic `Subtext` primitive —
  * see `LabeledEdge.tsx`. The arrowhead makes each edge's direction
@@ -11,12 +13,12 @@ import { type DefaultEdgeOptions, MarkerType } from '@xyflow/react';
 export const defaultEdgeOptions: DefaultEdgeOptions = {
   type: 'labeled',
   style: {
-    stroke: 'var(--chakra-colors-slate-700)',
+    stroke: colorVar(CANVAS_STROKE_TOKEN),
     strokeWidth: 1.5,
   },
   markerEnd: {
     type: MarkerType.ArrowClosed,
-    color: 'var(--chakra-colors-slate-700)',
+    color: colorVar(CANVAS_STROKE_TOKEN),
     width: 18,
     height: 18,
   },
@@ -41,13 +43,13 @@ export const canvasSelectionCss = {
   // before it's selected. Listed before the `.selected` rule (equal
   // specificity) so selection styling wins when an edge is both.
   '& .react-flow__edge:hover .react-flow__edge-path': {
-    stroke: 'var(--chakra-colors-slate-900)',
+    stroke: 'var(--chakra-colors-fg-default)',
     strokeWidth: 2,
   },
   '& .react-flow__edge.selected .react-flow__edge-path': {
     stroke: 'var(--chakra-colors-primary-main)',
     strokeWidth: 2.5,
-    filter: 'drop-shadow(0 0 4px var(--chakra-colors-primary-lighter))',
+    filter: 'drop-shadow(0 0 4px var(--chakra-colors-primary-wash-active))',
   },
   '& .react-flow__edge.selected .react-flow__edge-interaction': {
     stroke: 'var(--chakra-colors-primary-main)',
@@ -57,20 +59,20 @@ export const canvasSelectionCss = {
   // the stock look). A solid surface (rather than transparent buttons) keeps the
   // icons legible as the canvas pans content beneath the cluster, and matches the
   // minimap panel in the opposite corner. Frame it like the node cards — md
-  // radius + slate.200 border + shadow — so it reads as a deliberate floating
+  // radius + border.default border + shadow — so it reads as a deliberate floating
   // toolbar; the border carries the definition in dark mode where the stock
   // shadow is invisible on the dark canvas. `overflow: hidden` clips the stacked
   // buttons to the rounded corners (tooltips portal out, so they aren't clipped).
   '& .react-flow__controls': {
     '--xy-controls-button-background-color': 'var(--chakra-colors-bg-surface)',
     '--xy-controls-button-background-color-hover':
-      'var(--chakra-colors-slate-100)',
-    '--xy-controls-button-color': 'var(--chakra-colors-slate-1200)',
-    '--xy-controls-button-color-hover': 'var(--chakra-colors-slate-1500)',
-    '--xy-controls-button-border-color': 'var(--chakra-colors-slate-200)',
+      'var(--chakra-colors-neutral-2)',
+    '--xy-controls-button-color': 'var(--chakra-colors-fg-icon)',
+    '--xy-controls-button-color-hover': 'var(--chakra-colors-fg-default)',
+    '--xy-controls-button-border-color': 'var(--chakra-colors-border-default)',
     '--xy-controls-box-shadow': 'var(--chakra-shadows-sm)',
     borderRadius: 'var(--chakra-radii-md)',
-    border: '1px solid var(--chakra-colors-slate-200)',
+    border: '1px solid var(--chakra-colors-border-default)',
     overflow: 'hidden',
   },
   // Our control glyphs (lucide Plus/Minus + Tabler arrows/lock/maximize/sitemap)

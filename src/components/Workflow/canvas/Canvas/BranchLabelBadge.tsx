@@ -51,12 +51,13 @@ export function BranchLabelBadge({
       boxShadow="sm"
       _dark={{
         boxShadow: '0 0 0 1px {colors.border.strong}',
-        // slate.300, not the semantically-equivalent bg.emphasized: Chakra
-        // resolves `bg.*` tokens referenced inside a nested condition to their
-        // BASE value (rendering the light-gray light-mode fill in dark mode);
-        // the slate ramp resolves correctly here. No upstream issue filed —
-        // verified via rendered-DOM probe, 2026-06-12.
-        bgColor: badgeVariant === 'neutral' ? 'slate.300' : undefined,
+        // neutral.5 (the 5.0 step the 4.x slate.300 aliases to), not the
+        // semantically-equivalent bg.emphasized: Chakra resolves `bg.*`
+        // tokens referenced inside a nested condition to their BASE value
+        // (rendering the light-gray light-mode fill in dark mode); the step
+        // scale resolves correctly here. No upstream issue filed — verified
+        // via rendered-DOM probe, 2026-06-12.
+        bgColor: badgeVariant === 'neutral' ? 'neutral.5' : undefined,
       }}
       cursor={onClick ? 'pointer' : 'default'}
       onClick={onClick}

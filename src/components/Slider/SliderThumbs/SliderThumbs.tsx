@@ -24,7 +24,7 @@ export const SliderThumbs = forwardRef((props, _ref) => {
   return (
     <Slider.Thumbs
       boxSize={4}
-      bg="white"
+      bg="bg.canvas"
       borderColor="primary.main"
       borderWidth={3}
       borderStyle="solid"

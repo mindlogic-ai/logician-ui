@@ -47,13 +47,13 @@ const hoverRule = (el: Element) => rulesMatching(el, ':hover');
 
 describe('Button lift', () => {
   it('does nothing unless asked for', () => {
-    const { getByRole } = setup(<Button colorPalette="primary">A</Button>);
+    const { getByRole } = setup(<Button variant="primary">A</Button>);
     expect(hoverRule(getByRole('button'))).not.toContain('translate');
   });
 
   it('raises the button and shadows it on hover', () => {
     const { getByRole } = setup(
-      <Button colorPalette="primary" lift>
+      <Button variant="primary" lift>
         A
       </Button>
     );
@@ -64,7 +64,7 @@ describe('Button lift', () => {
 
   it('never puts a box-shadow on hover, which would outrank the focus ring', () => {
     const { getByRole } = setup(
-      <Button colorPalette="primary" lift>
+      <Button variant="primary" lift>
         A
       </Button>
     );
@@ -79,7 +79,7 @@ describe('Button lift', () => {
 
   it('keeps the variant colours it was merged into', () => {
     const { getByRole } = setup(
-      <Button colorPalette="primary" variant="solid" lift>
+      <Button variant="primary" lift>
         A
       </Button>
     );
@@ -108,11 +108,7 @@ describe('a call site that presses too', () => {
 
   it('keeps the variant press when the call site adds its own', () => {
     const { getByRole } = setup(
-      <Button
-        colorPalette="primary"
-        variant="solid"
-        _active={{ transform: 'translateY(2px)' }}
-      >
+      <Button variant="primary" _active={{ transform: 'translateY(2px)' }}>
         제출
       </Button>
     );
@@ -124,11 +120,7 @@ describe('a call site that presses too', () => {
 
   it('does the same for hover', () => {
     const { getByRole } = setup(
-      <Button
-        colorPalette="primary"
-        variant="solid"
-        _hover={{ outline: '1px' }}
-      >
+      <Button variant="primary" _hover={{ outline: '1px' }}>
         A
       </Button>
     );

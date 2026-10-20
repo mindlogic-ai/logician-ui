@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
 
+import { Button } from '../Button/Button';
 import { IoChevronDownOutline, SlSettings } from '../Icon';
 import { IconButton } from '../IconButton';
-import { Button } from '../Button/Button';
 import { Menu } from './Menu';
 import { MenuItemProps } from './MenuItem.types';
 
@@ -44,7 +44,7 @@ export default meta;
 type Story = StoryObj<MenuStoryProps>;
 
 const renderItems = (items: StoryMenuItemData[]) =>
-  items.map(item => (
+  items.map((item) => (
     <Menu.Item
       key={item.label}
       value={item.label}
@@ -61,7 +61,7 @@ export const Default: Story = {
   render: ({ label, baseFontSize, menuItems }) => (
     <Menu baseFontSize={baseFontSize}>
       <Menu.Trigger asChild>
-        <Button variant="outline">
+        <Button variant="secondary">
           {label} <IoChevronDownOutline />
         </Button>
       </Menu.Trigger>
@@ -73,14 +73,22 @@ export const Default: Story = {
 export const WithIcons: Story = {
   args: {
     menuItems: [
-      { label: 'Profile', onClick: () => alert('Profile clicked'), itemIcon: <SlSettings /> },
-      { label: 'Settings', onClick: () => alert('Settings clicked'), itemIcon: <SlSettings /> },
+      {
+        label: 'Profile',
+        onClick: () => alert('Profile clicked'),
+        itemIcon: <SlSettings />,
+      },
+      {
+        label: 'Settings',
+        onClick: () => alert('Settings clicked'),
+        itemIcon: <SlSettings />,
+      },
     ],
   },
   render: ({ label, baseFontSize, menuItems }) => (
     <Menu baseFontSize={baseFontSize}>
       <Menu.Trigger asChild>
-        <Button variant="outline">
+        <Button variant="secondary">
           {label} <IoChevronDownOutline />
         </Button>
       </Menu.Trigger>
@@ -92,14 +100,22 @@ export const WithIcons: Story = {
 export const WithRightIcons: Story = {
   args: {
     menuItems: [
-      { label: 'Profile', onClick: () => alert('Profile clicked'), rightItemIcon: <SlSettings /> },
-      { label: 'Settings', onClick: () => alert('Settings clicked'), rightItemIcon: <SlSettings /> },
+      {
+        label: 'Profile',
+        onClick: () => alert('Profile clicked'),
+        rightItemIcon: <SlSettings />,
+      },
+      {
+        label: 'Settings',
+        onClick: () => alert('Settings clicked'),
+        rightItemIcon: <SlSettings />,
+      },
     ],
   },
   render: ({ label, baseFontSize, menuItems }) => (
     <Menu baseFontSize={baseFontSize}>
       <Menu.Trigger asChild>
-        <Button variant="outline">
+        <Button variant="secondary">
           {label} <IoChevronDownOutline />
         </Button>
       </Menu.Trigger>
@@ -111,14 +127,24 @@ export const WithRightIcons: Story = {
 export const WithBothIcons: Story = {
   args: {
     menuItems: [
-      { label: 'Profile', itemIcon: <SlSettings />, rightItemIcon: <IoChevronDownOutline />, onClick: () => alert('Profile clicked') },
-      { label: 'Settings', itemIcon: <SlSettings />, rightItemIcon: <IoChevronDownOutline />, onClick: () => alert('Settings clicked') },
+      {
+        label: 'Profile',
+        itemIcon: <SlSettings />,
+        rightItemIcon: <IoChevronDownOutline />,
+        onClick: () => alert('Profile clicked'),
+      },
+      {
+        label: 'Settings',
+        itemIcon: <SlSettings />,
+        rightItemIcon: <IoChevronDownOutline />,
+        onClick: () => alert('Settings clicked'),
+      },
     ],
   },
   render: ({ label, baseFontSize, menuItems }) => (
     <Menu baseFontSize={baseFontSize}>
       <Menu.Trigger asChild>
-        <Button variant="outline">
+        <Button variant="secondary">
           {label} <IoChevronDownOutline />
         </Button>
       </Menu.Trigger>
@@ -131,13 +157,18 @@ export const WithDangerItem: Story = {
   args: {
     menuItems: [
       { label: 'Profile', onClick: () => alert('Profile clicked') },
-      { label: 'Delete', onClick: () => alert('Delete clicked'), itemIcon: <SlSettings />, variant: 'danger' },
+      {
+        label: 'Delete',
+        onClick: () => alert('Delete clicked'),
+        itemIcon: <SlSettings />,
+        variant: 'danger',
+      },
     ],
   },
   render: ({ label, baseFontSize, menuItems }) => (
     <Menu baseFontSize={baseFontSize}>
       <Menu.Trigger asChild>
-        <Button variant="outline">
+        <Button variant="secondary">
           {label} <IoChevronDownOutline />
         </Button>
       </Menu.Trigger>
@@ -151,7 +182,9 @@ export const IconButtonTrigger: Story = {
   render: ({ baseFontSize, menuItems }) => (
     <Menu baseFontSize={baseFontSize}>
       <Menu.Trigger asChild>
-        <IconButton aria-label="Open menu"><IoChevronDownOutline /></IconButton>
+        <IconButton aria-label="Open menu">
+          <IoChevronDownOutline />
+        </IconButton>
       </Menu.Trigger>
       <Menu.List>{renderItems(menuItems)}</Menu.List>
     </Menu>
@@ -160,21 +193,26 @@ export const IconButtonTrigger: Story = {
 
 export const SelectiveIcon: Story = {
   render: function SelectiveIconRender({ label, baseFontSize, menuItems }) {
-    const [selectedLabel, setSelectedLabel] = useState<string | null>(menuItems[0].label);
+    const [selectedLabel, setSelectedLabel] = useState<string | null>(
+      menuItems[0].label
+    );
 
     return (
       <Menu baseFontSize={baseFontSize}>
         <Menu.Trigger asChild>
-          <Button variant="outline">
+          <Button variant="secondary">
             {label} <IoChevronDownOutline />
           </Button>
         </Menu.Trigger>
         <Menu.List>
-          {menuItems.map(item => (
+          {menuItems.map((item) => (
             <Menu.Item
               key={item.label}
               value={item.label}
-              onClick={() => { setSelectedLabel(item.label); item.onClick?.(); }}
+              onClick={() => {
+                setSelectedLabel(item.label);
+                item.onClick?.();
+              }}
               icon={selectedLabel === item.label ? <SlSettings /> : undefined}
             >
               {item.label}

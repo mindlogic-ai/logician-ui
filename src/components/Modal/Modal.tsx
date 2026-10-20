@@ -10,9 +10,13 @@ export const Modal = ({
   onOpenChange,
   portalProps,
   fullScreenOnMobile = false,
+  headerTone = 'default',
   ...rest
 }: ModalProps) => {
-  const ctx = useMemo(() => ({ fullScreenOnMobile }), [fullScreenOnMobile]);
+  const ctx = useMemo(
+    () => ({ fullScreenOnMobile, headerTone }),
+    [fullScreenOnMobile, headerTone]
+  );
 
   return (
     <Dialog.Root

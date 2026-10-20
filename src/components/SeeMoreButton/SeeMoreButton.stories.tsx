@@ -47,3 +47,11 @@ export const Default: Story = {
     );
   },
 };
+
+/**
+ * Renders the ghost Button recipe — same hover wash, press and disabled
+ * colours. Disabled once everything is shown.
+ */
+export const AllShown: Story = {
+  args: { currentCount: 10, maxCount: 10, disabled: true },
+};

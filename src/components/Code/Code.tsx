@@ -97,7 +97,7 @@ export const Code = ({
       cursor="pointer"
     >
       <ChakraCodeBlock.CopyIndicator
-        copied={<FaCheck color="success.main" boxSize="xs" />}
+        copied={<FaCheck color="success.fg" boxSize="xs" />}
       />
     </ChakraCodeBlock.CopyTrigger>
   ) : null;
@@ -157,13 +157,12 @@ export const Code = ({
                   : String(translate('copy'))
               }
               size="sm"
-              colorPalette="neutral"
               variant="ghost"
               color="fg.muted"
               onClick={handleOverlayCopy}
             >
               {isCopied ? (
-                <FaCheck color="success.main" boxSize="xs" />
+                <FaCheck color="success.fg" boxSize="xs" />
               ) : (
                 <FaRegCopy boxSize="xs" />
               )}

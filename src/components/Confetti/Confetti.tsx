@@ -4,39 +4,7 @@ import { Box } from '@chakra-ui/react';
 import { MOTION_DURATION_MS } from '../../theme/motion';
 import { confettiPiece } from './Confetti.styles';
 import { ConfettiProps } from './Confetti.types';
-
-/**
- * Literal hex, and the one place in this library that is deliberately off the
- * palette.
- *
- * The first version reached for `primary.main` / `success.main` /
- * `warning.main` / `danger.main`, which was wrong twice over. **Semantically**,
- * those colours mean things: raining the error red and the warning amber over
- * "payment complete" says something the screen does not. Confetti is the one
- * element on a page with nothing to communicate, so a colour that communicates
- * is the wrong kind of colour.
- *
- * **And optically**, the palette is built for interface legibility — text and
- * controls on a light surface — so it sits dark and desaturated: average
- * lightness 47%, nothing above 80% saturation, and three of the five in the
- * blue range. Fifty pieces of that read as a chart legend falling. These six
- * average 56% lightness, four of them are fully saturated, and they span the
- * whole wheel (9°–330°), which is what makes a burst read as a burst.
- *
- * The cost, stated rather than hidden: these do not follow a re-theme, and they
- * do not adapt to dark mode — a bright hex on a dark surface is brighter still.
- * That is acceptable for a burst that lasts two seconds and carries no
- * information, and it is why `colors` is a prop: an app that needs its own
- * festival palette passes one.
- */
-const DEFAULT_COLORS = [
-  '#FFD700', // gold
-  '#FF69B4', // hot pink
-  '#00CED1', // turquoise
-  '#FF6347', // tomato
-  '#9370DB', // medium purple
-  '#32CD32', // lime
-];
+import { DEFAULT_CONFETTI_COLORS } from './confettiColors';
 
 /**
  * A seeded generator, so one burst is stable across re-renders.
@@ -81,15 +49,12 @@ const scatter = (seed: number) => {
  * nothing, and doing it in CSS keeps the decision on the same media query as
  * every other preset instead of on a hook that has to guess before hydration.
  *
- * **The default colours are literal hex, and this is the one place in the
- * library deliberately off the palette.** Semantic tokens mean things, and
- * raining `danger.main` over "payment complete" says something the screen does
- * not — confetti is the one element on a page with nothing to communicate. The
- * palette is also built for interface legibility on a light surface, so it runs
- * dark and narrow (average lightness 47%, three of five in the blue range) and
- * fifty pieces of it read as a chart legend falling. The cost is real and
- * stated: these do not follow a re-theme and do not adapt to dark mode. `colors`
- * is a prop for an app that needs its own.
+ * **The default colours are decorative only** (`confettiColors.ts`): coral,
+ * beige and the system hues that mean nothing — red, yellow, green and blue are
+ * left out because they are the danger, warning, success and info colours, and
+ * raining error red over "payment complete" says something the screen does not.
+ * They are light-mode hex and do not flip for dark mode. `colors` is a prop for
+ * an app that needs its own.
  *
  * **Takes no children — it is an overlay, not a wrapper.** It renders absolutely
  * against the nearest positioned ancestor, which is therefore the stage: give
@@ -104,7 +69,7 @@ export const Confetti = forwardRef(
   (
     {
       pieceCount = 50,
-      colors = DEFAULT_COLORS,
+      colors = DEFAULT_CONFETTI_COLORS,
       seed = 1,
       ...rest
     }: ConfettiProps,

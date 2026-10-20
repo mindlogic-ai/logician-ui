@@ -48,7 +48,8 @@ const generateItems = (count: number) => {
   return Array.from({ length: count }).map((_, index) => ({
     id: index,
     height: 100 + Math.floor(Math.random() * 200), // Random heights between 100-300px
-    color: index % 2 === 0 ? 'blue.50' : 'purple.50',
+    color:
+      index % 2 === 0 ? 'category.blue.surface' : 'category.purple.surface',
     title: `Item ${index + 1}`,
   }));
 };
@@ -81,7 +82,7 @@ export const Basic: Story = {
 // Example with realistic content
 export const WithRealContent: Story = {
   render: (args) => {
-    const bgColor = 'gray.50'; // Light mode only
+    const bgColor = 'bg.subtle';
     const categories = [
       {
         name: 'Social Media',
@@ -118,21 +119,32 @@ export const WithRealContent: Story = {
             shadow="sm"
             mb={4}
           >
-            <Text fontWeight="bold" textStyle="h5" mb={2} color="blue.500">
+            <Text
+              fontWeight="bold"
+              textStyle="h5"
+              mb={2}
+              color="category.blue.fg"
+            >
               {category.name}
             </Text>
             {category.items.map((item) => (
               <Box
                 key={item}
                 p={2}
-                _hover={{ bg: 'gray.100' }}
+                _hover={{ bg: 'primary.wash' }}
                 borderRadius="md"
                 transition="background 0.2s"
                 cursor="pointer"
                 display="flex"
                 alignItems="center"
               >
-                <Box w="24px" h="24px" bg="blue.100" borderRadius="full" mr={2} />
+                <Box
+                  w="24px"
+                  h="24px"
+                  bg="category.blue.surface"
+                  borderRadius="full"
+                  mr={2}
+                />
                 <Text>{item}</Text>
               </Box>
             ))}

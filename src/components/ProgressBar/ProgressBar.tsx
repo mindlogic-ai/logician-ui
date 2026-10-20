@@ -18,7 +18,7 @@ export const ProgressBar = ({
     // boolean keeps that spelling out of every call site.
     <ChakraProgress.Root value={indeterminate ? null : value} {...rest}>
       <ChakraProgress.Track
-        bgColor="bg.muted"
+        bgColor="bg.track"
         height={styles.height}
         borderRadius={styles.borderRadius}
         overflow="hidden"

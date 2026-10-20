@@ -30,7 +30,7 @@ export const FileItem = ({
   ...rest
 }: FileItemProps) => {
   const translate = useTranslate();
-  const errorColor = 'danger.main';
+  const errorColor = 'danger.fg';
 
   const isUploadingFile =
     !error && typeof progress === 'number' && progress >= 0 && progress < 100;
@@ -86,7 +86,6 @@ export const FileItem = ({
                   onClick={onFileDelete}
                   size="2xs"
                   disabled={isDeleting}
-                  colorPalette="neutral"
                   variant="ghost"
                 >
                   <CloseIcon color="fg.subtle" boxSize="md" />
@@ -110,7 +109,6 @@ export const FileItem = ({
                       aria-label={translate('download') as string}
                       onClick={onFileDownload}
                       size="2xs"
-                      colorPalette="neutral"
                       variant="ghost"
                     >
                       <DownloadIcon color="fg.muted" />
@@ -131,7 +129,6 @@ export const FileItem = ({
                       aria-label={translate('delete') as string}
                       onClick={onFileDelete}
                       size="2xs"
-                      colorPalette="neutral"
                       variant="ghost"
                     >
                       <TrashIcon boxSize="sm" color="fg.muted" />

@@ -7,10 +7,9 @@
  * emulation) to try the gestures; with a mouse the same drags work by
  * pointer.
  */
+import { useState } from 'react';
 import { Box, HStack, Stack } from '@chakra-ui/react';
 import type { Meta, StoryObj } from '@storybook/react';
-
-import { useState } from 'react';
 
 import { Button } from '../Button';
 import {
@@ -134,7 +133,7 @@ export const NonModalSnapPoints: Story = {
           <Button onClick={() => setOpen((o) => !o)}>
             {open ? '시트 닫기' : '시트 열기'}
           </Button>
-          <Button variant="outline" onClick={() => setClicks((c) => c + 1)}>
+          <Button variant="secondary" onClick={() => setClicks((c) => c + 1)}>
             뒤의 페이지 버튼 ({clicks})
           </Button>
         </HStack>
@@ -193,7 +192,7 @@ export const LongScrollingList: Story = {
               <Button variant="ghost" onClick={() => setOpen(false)}>
                 취소
               </Button>
-              <Button variant="solid" onClick={() => setOpen(false)}>
+              <Button variant="primary" onClick={() => setOpen(false)}>
                 확인
               </Button>
             </BottomSheetFooter>

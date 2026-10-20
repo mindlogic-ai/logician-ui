@@ -1,3 +1,4 @@
+import { CANVAS_STROKE_TOKEN, colorVar } from '../colorVar';
 import type { PortStyle } from './NodeShell.types';
 
 export const CARD_WIDTH = '174px';
@@ -44,17 +45,14 @@ export const MAX_META_CHIPS = 4;
 
 /**
  * React Flow `<Handle>` takes inline SVG-style props rather than Chakra
- * tokens, so port colors are spelled as CSS vars from the theme.
+ * tokens, so port colors are spelled as CSS vars from the theme (`colorVar`).
+ * The ring uses the same stroke token as the edges it terminates.
  */
-function colorVar(token: string): string {
-  return `var(--chakra-colors-${token.replace(/\./g, '-')})`;
-}
-
 export const PORT_STYLE: PortStyle = {
   width: 8,
   height: 8,
   background: colorVar('bg.surface'),
-  border: `1.5px solid ${colorVar('slate.700')}`,
+  border: `1.5px solid ${colorVar(CANVAS_STROKE_TOKEN)}`,
 };
 
 /**
@@ -79,6 +77,6 @@ export const metaChipStyles = {
  */
 export const metaChipToneStyles = {
   default: {},
-  danger: { bg: 'danger.lightest', color: 'danger.dark' },
-  warning: { bg: 'warning.lightest', color: 'warning.dark' },
+  danger: { bg: 'danger.bg', color: 'danger.fg' },
+  warning: { bg: 'warning.bg', color: 'warning.fg' },
 } as const;

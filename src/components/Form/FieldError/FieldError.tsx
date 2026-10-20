@@ -11,10 +11,10 @@ export interface FieldErrorProps {
  * shows only when the enclosing `FormControl`/`Field.Root` is `invalid`, and is
  * wired to the control via `aria-describedby` + `aria-invalid` automatically.
  * Use it inside a `FieldRow` (which flips the field to invalid when an `error`
- * is set) — it replaces the hand-rolled `<Subtext color="danger.main">` error
+ * is set) — it replaces the hand-rolled `<Subtext color="danger.fg">` error
  * rows scattered across the app.
  */
 export const FieldError = ({ children }: FieldErrorProps) => {
   if (children == null || children === false || children === '') return null;
-  return <Field.ErrorText color="danger.main">{children}</Field.ErrorText>;
+  return <Field.ErrorText color="danger.fg">{children}</Field.ErrorText>;
 };

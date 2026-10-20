@@ -1,31 +1,22 @@
-import {
-  Box,
-  Flex,
-  VStack,
-  HStack,
-  Text,
-  Grid,
-  GridItem,
-} from '@chakra-ui/react';
+import { Box, Flex, Grid, HStack, Text, VStack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import { Sparkles } from '../Icon';
-import { Button, buttonColorPalettes, buttonVariants } from '.';
-import { ButtonColorPalette, ButtonVariant } from './Button.types';
+import { Sparkles, TrashIcon } from '../Icon';
+import { Button, buttonVariants } from '.';
+import { ButtonVariant } from './Button.types';
 
 const meta = {
   title: 'Components/Button',
   component: Button,
   argTypes: {
-    colorPalette: {
-      control: 'select',
-      options: buttonColorPalettes,
-      description: 'Semantic color family (Chakra v3 colorPalette)',
-    },
     variant: {
       control: 'select',
       options: buttonVariants,
-      description: 'Visual appearance (overrides Chakra variant)',
+      description: 'Role (fill, border and text together). Default `subtle`.',
+    },
+    isDestructive: {
+      control: 'boolean',
+      description: 'Danger text on secondary / ghost / subtle',
     },
   },
 } satisfies Meta<typeof Button>;
@@ -37,24 +28,114 @@ type Story = StoryObj<typeof Button>;
 export const Basic: Story = {
   args: {
     children: 'Button',
-    colorPalette: 'primary',
-    variant: 'solid',
+    variant: 'primary',
   },
+};
+
+const VARIANT_NOTES: Record<ButtonVariant, string> = {
+  primary: '화면의 주 행동 — BAZE 블랙',
+  action: '실행 버튼 — 블랙 면 + 코랄 아이콘',
+  secondary: '보조 행동 — 테두리 + 표면',
+  subtle: '낮은 강조 — 웜 워시 (기본값)',
+  ghost: '툴바·인라인 — 면/테두리 없음',
+  danger: '확정된 파괴 동작 — 빨간 면',
+};
+
+/**
+ * Every role, enabled and disabled. Disabled is a fixed colour pair
+ * (`disabled.bg` / `disabled.fg`, ghost: text only) — never opacity — and does
+ * not react to hover or press.
+ */
+export const Variants: Story = {
+  render: () => (
+    <Grid templateColumns="max-content repeat(2, max-content) 1fr" gap={4}>
+      {buttonVariants.map((variant) => (
+        <Box key={variant} display="contents">
+          <Text fontSize="sm" fontWeight="semibold" color="fg.default">
+            {variant}
+          </Text>
+          <Button variant={variant}>
+            {variant === 'action' && <Sparkles />}
+            저장
+          </Button>
+          <Button variant={variant} disabled>
+            {variant === 'action' && <Sparkles />}
+            저장
+          </Button>
+          <Text fontSize="sm" color="fg.muted">
+            {VARIANT_NOTES[variant]}
+          </Text>
+        </Box>
+      ))}
+    </Grid>
+  ),
+};
+
+/**
+ * `isDestructive` turns the label `danger.fg` on the three quiet roles; the
+ * border and fill stay the variant's. For a filled destructive button use
+ * `variant="danger"`.
+ */
+export const Destructive: Story = {
+  render: () => (
+    <VStack align="flex-start" gap={4}>
+      {(['secondary', 'subtle', 'ghost'] as const).map((variant) => (
+        <HStack key={variant} gap={4}>
+          <Text w="20" fontSize="sm" color="fg.muted">
+            {variant}
+          </Text>
+          <Button variant={variant} isDestructive>
+            <TrashIcon />
+            삭제
+          </Button>
+          <Button variant={variant} isDestructive disabled>
+            <TrashIcon />
+            삭제
+          </Button>
+        </HStack>
+      ))}
+      <HStack gap={4}>
+        <Text w="20" fontSize="sm" color="fg.muted">
+          danger
+        </Text>
+        <Button variant="danger">영구 삭제</Button>
+        <Button variant="danger" disabled>
+          영구 삭제
+        </Button>
+      </HStack>
+    </VStack>
+  ),
+};
+
+/**
+ * `action`: the black run button. A direct-child icon is coloured
+ * `action.iconOnSolid` (coral) by a `& > svg` rule; the label stays
+ * `action.fg`. Disabled greys the icon with the label.
+ */
+export const Action: Story = {
+  render: () => (
+    <HStack gap={4}>
+      <Button variant="action">
+        <Sparkles />
+        실행
+      </Button>
+      <Button variant="action" size="sm">
+        <Sparkles />
+        실행
+      </Button>
+      <Button variant="action" disabled>
+        <Sparkles />
+        실행
+      </Button>
+    </HStack>
+  ),
 };
 
 /**
  * All available button sizes.
  *
- * ## Sizes:
- * - `2xs`: Extra extra small (h: 24px)
- * - `xs`: Extra small (h: 32px) - fontSize bumped to 'sm' (14px) for readability
- * - `sm`: Small (h: 36px)
- * - `md`: Medium (h: 40px) - Default
- * - `lg`: Large (h: 44px)
- * - `xl`: Extra large (h: 48px)
- * - `2xl`: Extra extra large (h: 64px)
- *
- * Note: xs size has a smaller height but uses the same fontSize as sm for better readability.
+ * Note: xs size has a smaller height but uses the same fontSize as sm for
+ * better readability.
  */
 export const Sizes: Story = {
   render: () => {
@@ -62,335 +143,28 @@ export const Sizes: Story = {
 
     return (
       <VStack gap={8} align="stretch">
-        {/* Solid variant sizes */}
-        <Box>
-          <Text fontSize="lg" fontWeight="bold" mb={4} color="gray.700">
-            Solid Variant
-          </Text>
-          <Flex gap={4} wrap="wrap" align="center">
-            {sizes.map((size) => (
-              <VStack key={size} gap={2} align="center">
-                <Text fontSize="sm" color="gray.600" fontWeight="medium">
-                  {size}
-                </Text>
-                <Button colorPalette="primary" variant="solid" size={size}>
-                  Button
-                </Button>
-              </VStack>
-            ))}
-          </Flex>
-        </Box>
-
-        {/* Outline variant sizes */}
-        <Box>
-          <Text fontSize="lg" fontWeight="bold" mb={4} color="gray.700">
-            Outline Variant
-          </Text>
-          <Flex gap={4} wrap="wrap" align="center">
-            {sizes.map((size) => (
-              <VStack key={size} gap={2} align="center">
-                <Text fontSize="sm" color="gray.600" fontWeight="medium">
-                  {size}
-                </Text>
-                <Button colorPalette="primary" variant="outline" size={size}>
-                  Button
-                </Button>
-              </VStack>
-            ))}
-          </Flex>
-        </Box>
-
-        {/* With icons */}
-        <Box>
-          <Text fontSize="lg" fontWeight="bold" mb={4} color="gray.700">
-            With Icons
-          </Text>
-          <Flex gap={4} wrap="wrap" align="center">
-            {sizes.map((size) => (
-              <VStack key={size} gap={2} align="center">
-                <Text fontSize="sm" color="gray.600" fontWeight="medium">
-                  {size}
-                </Text>
-                <Button colorPalette="primary" variant="soft" size={size}>
-                  <Sparkles /> Button
-                </Button>
-              </VStack>
-            ))}
-          </Flex>
-        </Box>
+        {(['primary', 'secondary', 'subtle'] as const).map((variant) => (
+          <Box key={variant}>
+            <Text fontSize="lg" fontWeight="bold" mb={4} color="fg.default">
+              {variant}
+            </Text>
+            <Flex gap={4} wrap="wrap" align="center">
+              {sizes.map((size) => (
+                <VStack key={size} gap={2} align="center">
+                  <Text fontSize="sm" color="fg.muted" fontWeight="medium">
+                    {size}
+                  </Text>
+                  <Button variant={variant} size={size}>
+                    Button
+                  </Button>
+                </VStack>
+              ))}
+            </Flex>
+          </Box>
+        ))}
       </VStack>
     );
   },
-};
-
-/**
- * Complete button matrix showing all colorPalette × variant combinations.
- *
- * ## Color Palettes (rows):
- * - `primary`: Blue - main brand actions
- * - `secondary`: Violet - accent actions
- * - `danger`: Rose - destructive actions
- * - `success`: Green - positive actions
- * - `warning`: Gold - caution actions
- * - `neutral`: Gray - low-emphasis actions
- *
- * ## Variants (columns):
- * - `solid`: Filled background (most prominent)
- * - `soft`: Light tinted background (subtle)
- * - `outline`: Border only (medium emphasis)
- * - `ghost`: No background or border (lowest emphasis)
- */
-export const AllCombinations: Story = {
-  render: () => (
-    <VStack gap={6} align="stretch">
-      {/* Header row */}
-      <HStack gap={4}>
-        <Box w="100px" />
-        {buttonVariants.map((variant) => (
-          <Box key={variant} w="120px" textAlign="center">
-            <Text fontWeight="bold" color="gray.600">
-              {variant}
-            </Text>
-          </Box>
-        ))}
-      </HStack>
-
-      {/* Color palette rows */}
-      {buttonColorPalettes.map((colorPalette) => (
-        <HStack key={colorPalette} gap={4}>
-          <Box w="100px">
-            <Text fontWeight="bold" color="gray.600">
-              {colorPalette}
-            </Text>
-          </Box>
-          {buttonVariants.map((variant) => (
-            <Box key={`${colorPalette}-${variant}`} w="120px">
-              <Button colorPalette={colorPalette} variant={variant}>
-                Button
-              </Button>
-            </Box>
-          ))}
-        </HStack>
-      ))}
-    </VStack>
-  ),
-};
-
-/**
- * All buttons with icons showing the complete matrix.
- */
-export const AllWithIcons: Story = {
-  render: () => (
-    <VStack gap={6} align="stretch">
-      <HStack gap={4}>
-        <Box w="100px" />
-        {buttonVariants.map((variant) => (
-          <Box key={variant} w="140px" textAlign="center">
-            <Text fontWeight="bold" color="gray.600">
-              {variant}
-            </Text>
-          </Box>
-        ))}
-      </HStack>
-
-      {buttonColorPalettes.map((colorPalette) => (
-        <HStack key={colorPalette} gap={4}>
-          <Box w="100px">
-            <Text fontWeight="bold" color="gray.600">
-              {colorPalette}
-            </Text>
-          </Box>
-          {buttonVariants.map((variant) => (
-            <Box key={`${colorPalette}-${variant}`} w="140px">
-              <Button colorPalette={colorPalette} variant={variant}>
-                <Sparkles /> Button
-              </Button>
-            </Box>
-          ))}
-        </HStack>
-      ))}
-    </VStack>
-  ),
-};
-
-/**
- * Primary color scheme in all variants.
- */
-export const Primary: Story = {
-  render: () => (
-    <Flex gap={4} wrap="wrap">
-      {buttonVariants.map((variant) => (
-        <VStack key={variant} gap={1}>
-          <Text color="gray.600">{variant}</Text>
-          <Button colorPalette="primary" variant={variant}>
-            Primary
-          </Button>
-        </VStack>
-      ))}
-    </Flex>
-  ),
-};
-
-/**
- * Secondary color scheme in all variants.
- */
-export const Secondary: Story = {
-  render: () => (
-    <Flex gap={4} wrap="wrap">
-      {buttonVariants.map((variant) => (
-        <VStack key={variant} gap={1}>
-          <Text color="gray.600">{variant}</Text>
-          <Button colorPalette="secondary" variant={variant}>
-            Secondary
-          </Button>
-        </VStack>
-      ))}
-    </Flex>
-  ),
-};
-
-/**
- * Danger color scheme in all variants.
- */
-export const Danger: Story = {
-  render: () => (
-    <Flex gap={4} wrap="wrap">
-      {buttonVariants.map((variant) => (
-        <VStack key={variant} gap={1}>
-          <Text color="gray.600">{variant}</Text>
-          <Button colorPalette="danger" variant={variant}>
-            Danger
-          </Button>
-        </VStack>
-      ))}
-    </Flex>
-  ),
-};
-
-/**
- * Success color scheme in all variants.
- */
-export const Success: Story = {
-  render: () => (
-    <Flex gap={4} wrap="wrap">
-      {buttonVariants.map((variant) => (
-        <VStack key={variant} gap={1}>
-          <Text color="gray.600">{variant}</Text>
-          <Button colorPalette="success" variant={variant}>
-            Success
-          </Button>
-        </VStack>
-      ))}
-    </Flex>
-  ),
-};
-
-/**
- * Warning color scheme in all variants.
- */
-export const Warning: Story = {
-  render: () => (
-    <Flex gap={4} wrap="wrap">
-      {buttonVariants.map((variant) => (
-        <VStack key={variant} gap={1}>
-          <Text color="gray.600">{variant}</Text>
-          <Button colorPalette="warning" variant={variant}>
-            Warning
-          </Button>
-        </VStack>
-      ))}
-    </Flex>
-  ),
-};
-
-/**
- * Neutral color scheme in all variants.
- */
-export const Neutral: Story = {
-  render: () => (
-    <Flex gap={4} wrap="wrap">
-      {buttonVariants.map((variant) => (
-        <VStack key={variant} gap={1}>
-          <Text color="gray.600">{variant}</Text>
-          <Button colorPalette="neutral" variant={variant}>
-            Neutral
-          </Button>
-        </VStack>
-      ))}
-    </Flex>
-  ),
-};
-
-/**
- * Solid variant across all color schemes.
- */
-export const SolidVariant: Story = {
-  render: () => (
-    <Flex gap={4} wrap="wrap">
-      {buttonColorPalettes.map((colorPalette) => (
-        <VStack key={colorPalette} gap={1}>
-          <Text color="gray.600">{colorPalette}</Text>
-          <Button colorPalette={colorPalette} variant="solid">
-            Solid
-          </Button>
-        </VStack>
-      ))}
-    </Flex>
-  ),
-};
-
-/**
- * Soft variant across all color schemes.
- */
-export const SoftVariant: Story = {
-  render: () => (
-    <Flex gap={4} wrap="wrap">
-      {buttonColorPalettes.map((colorPalette) => (
-        <VStack key={colorPalette} gap={1}>
-          <Text color="gray.600">{colorPalette}</Text>
-          <Button colorPalette={colorPalette} variant="soft">
-            Soft
-          </Button>
-        </VStack>
-      ))}
-    </Flex>
-  ),
-};
-
-/**
- * Outline variant across all color schemes.
- */
-export const OutlineVariant: Story = {
-  render: () => (
-    <Flex gap={4} wrap="wrap">
-      {buttonColorPalettes.map((colorPalette) => (
-        <VStack key={colorPalette} gap={1}>
-          <Text color="gray.600">{colorPalette}</Text>
-          <Button colorPalette={colorPalette} variant="outline">
-            Outline
-          </Button>
-        </VStack>
-      ))}
-    </Flex>
-  ),
-};
-
-/**
- * Ghost variant across all color schemes.
- */
-export const GhostVariant: Story = {
-  render: () => (
-    <Flex gap={4} wrap="wrap">
-      {buttonColorPalettes.map((colorPalette) => (
-        <VStack key={colorPalette} gap={1}>
-          <Text color="gray.600">{colorPalette}</Text>
-          <Button colorPalette={colorPalette} variant="ghost">
-            Ghost
-          </Button>
-        </VStack>
-      ))}
-    </Flex>
-  ),
 };
 
 /**
@@ -409,21 +183,19 @@ export const Lift: Story = {
   render: () => (
     <VStack align="flex-start" gap={6} p={4}>
       <HStack gap={4}>
-        <Button colorPalette="primary" variant="solid" lift>
+        <Button variant="primary" lift>
           시작하기
         </Button>
-        <Button colorPalette="primary" variant="solid">
-          기본 (lift 없음)
-        </Button>
+        <Button variant="primary">기본 (lift 없음)</Button>
       </HStack>
       <HStack gap={4}>
-        <Button colorPalette="neutral" variant="outline" lift>
-          Outline
+        <Button variant="secondary" lift>
+          Secondary
         </Button>
-        <Button colorPalette="primary" variant="soft" lift>
-          Soft
+        <Button variant="subtle" lift>
+          Subtle
         </Button>
-        <Button colorPalette="primary" variant="solid" lift disabled>
+        <Button variant="primary" lift disabled>
           Disabled
         </Button>
       </HStack>
@@ -446,7 +218,7 @@ export const Lift: Story = {
 export const AsLink: Story = {
   render: () => (
     <Flex gap={4} wrap="wrap" align="center">
-      <Button as="a" href="#" colorPalette="primary" variant="solid">
+      <Button as="a" href="#" variant="primary">
         같은 탭에서 열기
       </Button>
       <Button
@@ -454,12 +226,10 @@ export const AsLink: Story = {
         href="https://example.com"
         target="_blank"
         rel="noreferrer"
-        colorPalette="secondary"
-        variant="outline"
+        variant="secondary"
       >
         새 탭에서 열기
       </Button>
     </Flex>
-
   ),
 };

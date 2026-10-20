@@ -60,24 +60,24 @@ const iconList = {
 import { FaBuildingUser, MyNewIcon } from '@mindlogic-ai/logician-ui';
 
 <FaBuildingUser boxSize="lg" />
-<MyNewIcon boxSize="md" color="blue.500" />
+<MyNewIcon boxSize="md" color="fg.icon" />
 ```
 
 ## Defaults
 
 All icons created via `createIcon` share these defaults (set in `_utils/createIcon.tsx`):
 
-| Prop      | Default   |
-|-----------|-----------|
-| `boxSize` | `'md'` (24px) |
-| `color`   | `'gray.600'` |
+| Prop      | Default                                                |
+| --------- | ------------------------------------------------------ |
+| `boxSize` | `'md'` (24px)                                          |
+| `color`   | `'currentColor'` (inherits the surrounding text color) |
 
 Override per usage: `<MyIcon color="primary.main" />`.
 
 ## Size Reference
 
-| boxSize | px  |
-|---------|-----|
+| boxSize | px   |
+| ------- | ---- |
 | `2xs`   | 14px |
 | `xs`    | 16px |
 | `sm`    | 20px |

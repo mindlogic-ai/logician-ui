@@ -93,7 +93,7 @@ export function FieldWrapper({
   return (
     <Stack ref={containerRef} gap={1.5}>
       <HStack justify="space-between" align="center" gap={2}>
-        <Subtext fontWeight="semibold" color="slate.1300">
+        <Subtext fontWeight="semibold" color="fg.default">
           {label}
         </Subtext>
         {labelAction ?? null}
@@ -111,7 +111,7 @@ export function FieldWrapper({
           <Subtext color={toneColor}>{resolveIssueMessage(issue)}</Subtext>
         </HStack>
       ) : helperText ? (
-        <Subtext color="slate.900">{helperText}</Subtext>
+        <Subtext color="fg.muted">{helperText}</Subtext>
       ) : null}
     </Stack>
   );

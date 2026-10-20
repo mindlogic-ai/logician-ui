@@ -20,11 +20,16 @@
       "types": "./dist/styles.d.ts",
       "import": "./dist/styles.mjs",
       "require": "./dist/styles.js"
-    }
+    },
+    "./eslint": "./eslint/index.js",
+    "./codemods/5.0/*": "./codemods/5.0/*"
   },
   "files": [
     "dist",
     "src",
+    "eslint",
+    "codemods",
+    "MIGRATION-5.0.md",
     "README.md",
     "USAGE.md"
   ],
@@ -37,10 +42,12 @@
     "build": "rollup -c rollup.config.mjs",
     "build:watch": "rollup -c rollup.config.mjs --watch",
     "prepublishOnly": "yarn build",
-    "lint": "eslint src --ext .ts,.tsx && yarn run check-exports",
-    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "lint": "eslint --rulesdir eslint/rules src --ext .ts,.tsx && yarn run check-exports",
+    "lint:fix": "eslint --rulesdir eslint/rules src --ext .ts,.tsx --fix",
     "type-check": "tsc --noEmit",
-    "test": "vitest run",
+    "test": "vitest run && vitest run --config codemods/vitest.config.ts && node scripts/palette/generate.mjs --check",
+    "test:codemods": "vitest run --config codemods/vitest.config.ts",
+    "palette:check": "node scripts/palette/generate.mjs --check",
     "test:watch": "vitest",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
@@ -104,6 +111,7 @@
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
+    "@types/jscodeshift": "^17.3.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "@types/svgo": "^3.0.0",
@@ -122,6 +130,8 @@
     "eslint-plugin-unused-imports": "^4.2.0",
     "formik": "^2.4.9",
     "framer-motion": "^10.0.0",
+    "jscodeshift": "^17.3.0",
+    "jsdom": "^25.0.0",
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
     "react": "^18.0.0",
@@ -134,10 +144,9 @@
     "svgo": "^4.0.0",
     "tsc-alias": "^1.8.0",
     "typescript": "^5.2.0",
-    "jsdom": "^25.0.0",
     "vite": "^5.0.0",
-    "vitest": "^3.2.4",
     "vite-plugin-svgr": "^4.3.0",
+    "vitest": "^3.2.4",
     "yup": "^1.7.1"
   },
   "keywords": [

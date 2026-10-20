@@ -120,7 +120,12 @@ export const Lift: Story = {
       <Stack gap={6}>
         <HStack gap={2}>
           {[0, 46, 120].map((v) => (
-            <Button key={v} size="xs" variant="outline" onClick={() => send(v)}>
+            <Button
+              key={v}
+              size="xs"
+              variant="secondary"
+              onClick={() => send(v)}
+            >
               lift {v}
             </Button>
           ))}

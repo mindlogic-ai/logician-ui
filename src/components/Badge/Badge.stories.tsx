@@ -1,8 +1,7 @@
-import { Flex, Box } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
-import { Badge, badgeVariantStyles } from '.';
-import { BadgeVariant } from './Badge.types';
+import { Badge, badgeVariants } from '.';
 
 const meta = {
   title: 'Components/Badge',
@@ -13,8 +12,9 @@ const meta = {
   argTypes: {
     variant: {
       control: 'select',
-      options: Object.keys(badgeVariantStyles),
-      description: 'Color variant of the badge',
+      options: badgeVariants,
+      description:
+        'Colour role. `neutral` (grey wash) is the default; the rest report a status.',
     },
     size: {
       control: 'select',
@@ -27,6 +27,7 @@ const meta = {
     },
   },
 } satisfies Meta<typeof Badge>;
+
 export default meta;
 
 type Story = StoryObj<typeof meta>;
@@ -34,66 +35,39 @@ type Story = StoryObj<typeof meta>;
 export const Basic: Story = {};
 
 /**
- * All badge color variants using the Golden Ratio color system.
- * Each variant uses `lightest` background with `dark` text for WCAG AA compliance.
+ * The five 5.0 variants. `neutral` = `bg.muted` + `secondary.fgStrong`;
+ * status variants = `{status}.bg` + `{status}.fg`.
  */
 export const AllVariants: Story = {
-  render: () => {
-    const variants = Object.keys(badgeVariantStyles) as BadgeVariant[];
-    return (
-      <Flex gap={4} wrap="wrap">
-        {variants.map((variant) => (
-          <Box key={variant} textAlign="center">
-            <Badge variant={variant}>
-              {variant.charAt(0).toUpperCase() + variant.slice(1)}
-            </Badge>
-          </Box>
-        ))}
-      </Flex>
-    );
-  },
-};
-
-export const Primary: Story = {
-  args: {
-    variant: 'primary',
-    children: 'Default',
-  },
-};
-
-export const Secondary: Story = {
-  args: {
-    variant: 'secondary',
-    children: 'Featured',
-  },
-};
-
-export const Success: Story = {
-  args: {
-    variant: 'success',
-    children: 'Completed',
-  },
-};
-
-export const Warning: Story = {
-  args: {
-    variant: 'warning',
-    children: 'Pending',
-  },
-};
-
-export const Danger: Story = {
-  args: {
-    variant: 'danger',
-    children: 'Error',
-  },
+  render: () => (
+    <Flex gap={4} wrap="wrap">
+      {badgeVariants.map((variant) => (
+        <Badge key={variant} variant={variant}>
+          {variant.charAt(0).toUpperCase() + variant.slice(1)}
+        </Badge>
+      ))}
+    </Flex>
+  ),
 };
 
 export const Neutral: Story = {
-  args: {
-    variant: 'neutral',
-    children: 'Draft',
-  },
+  args: { variant: 'neutral', children: 'Draft' },
+};
+
+export const Success: Story = {
+  args: { variant: 'success', children: 'Completed' },
+};
+
+export const Warning: Story = {
+  args: { variant: 'warning', children: 'Pending' },
+};
+
+export const Danger: Story = {
+  args: { variant: 'danger', children: 'Error' },
+};
+
+export const Info: Story = {
+  args: { variant: 'info', children: 'New' },
 };
 
 export const Sizes: Story = {

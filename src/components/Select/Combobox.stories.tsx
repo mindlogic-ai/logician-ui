@@ -156,7 +156,7 @@ export const CustomItems = () => {
                 <Combobox.Item item={item} key={item.value}>
                   <Stack gap={0}>
                     <Combobox.ItemText>{item.label}</Combobox.ItemText>
-                    <Span fontSize="xs" color="gray.600">
+                    <Span fontSize="xs" color="fg.muted">
                       {item.role}
                     </Span>
                   </Stack>

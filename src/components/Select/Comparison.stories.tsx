@@ -27,7 +27,7 @@ const categoryOptions = [
 
 const Row = ({ label, children }: { label: string; children: ReactNode }) => (
   <Stack gap={2}>
-    <Text fontWeight="semibold" fontSize="sm" color="gray.1000">
+    <Text fontWeight="semibold" fontSize="sm" color="fg.default">
       {label}
     </Text>
     {children}

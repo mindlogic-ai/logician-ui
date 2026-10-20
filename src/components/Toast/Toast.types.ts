@@ -10,7 +10,7 @@ import {
  * Toast status type - common toast statuses used in Logician UI
  * Subset of Zag.js Type, excluding 'loading' for UI consistency
  */
-export type ToastStatus = 'info' | 'warning' | 'success' | 'error';
+export type ToastStatus = 'info' | 'warning' | 'success' | 'error' | 'neutral';
 
 /**
  * The single action a toast can carry.
@@ -60,6 +60,14 @@ export interface UseToastOptions extends Omit<ToastOptions, 'action'> {
   /** Custom styles to apply to the toast */
   styles?: BoxProps;
 }
+
+/**
+ * Options for `useToast().update(id, options)`. Every field is optional;
+ * `status` (or Chakra's `type`) re-colours the toast.
+ */
+export type UseToastUpdateOptions = Partial<UseToastOptions> & {
+  meta?: ToasterCreateOptions['meta'];
+};
 
 /**
  * Extended toast options for toaster.create()

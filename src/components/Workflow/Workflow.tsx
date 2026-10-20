@@ -177,7 +177,7 @@ export function Workflow({
         {footer ? (
           <Box
             borderTop="1px solid"
-            borderColor="slate.200"
+            borderColor="border.default"
             bg="bg.surface"
             px={4}
             py={2}

@@ -1,9 +1,8 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
 import { Box, VStack } from '@chakra-ui/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { Pagination } from './Pagination';
-import { PaginationProps } from './Pagination.types';
-import { useState } from 'react';
 
 const meta = {
   title: 'Components/Pagination',
@@ -75,7 +74,7 @@ export const AtPageTop: Story = {
             onItemsPerPageOptionChange={setItemsPerPage}
           />
         </Box>
-        <Box flex={1} bg="gray.50" p={4}>
+        <Box flex={1} bg="bg.subtle" p={4}>
           페이지 상단에 위치한 Pagination입니다. Select 드롭다운이 아래로
           열립니다.
         </Box>
@@ -91,7 +90,7 @@ export const AtPageBottom: Story = {
 
     return (
       <VStack align="stretch" gap={4} h="100vh">
-        <Box flex={1} bg="gray.50" p={4}>
+        <Box flex={1} bg="bg.subtle" p={4}>
           페이지 하단에 위치한 Pagination입니다. Select 드롭다운이 위로
           열립니다.
         </Box>
@@ -129,7 +128,7 @@ export const InScrollableContainer: Story = {
     );
 
     return (
-      <Box h="100vh" overflow="auto" bg="gray.50">
+      <Box h="100vh" overflow="auto" bg="bg.subtle">
         <VStack align="stretch" gap={8} p={4}>
           <Box bg="white" p={4} borderRadius="md" shadow="sm">
             <Pagination

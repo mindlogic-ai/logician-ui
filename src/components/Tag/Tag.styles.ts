@@ -1,160 +1,211 @@
 import { TagRootProps } from '@chakra-ui/react';
 
-import { TagColorPalette, TagVariant } from './Tag.types';
+import type { SystemHue } from '@/theme/colors';
+import { disabledControl } from '@/utils/disabledControl';
+import { isDev } from '@/utils/isDev';
+
+import { TagColorPalette, TagTone, TagVariant } from './Tag.types';
+
+type StyleProps = Partial<TagRootProps>;
 
 /**
- * Tag styles using a two-dimensional variant system.
- *
- * Structure: tagColorPaletteStyles[colorPalette][variant]
- *
- * Uses semantic color tokens from the Golden Ratio color system.
+ * Colour per tone (5.0 BAZE tokens). `hoverBorder` is applied only when the
+ * tag is interactive (clickable / toggle).
  */
-export const tagColorPaletteStyles: Record<
-  TagColorPalette,
-  Record<TagVariant, Partial<TagRootProps>>
+export const tagToneStyles: Record<
+  TagTone,
+  { bgColor: string; color: string; hoverBorder: string }
 > = {
-  primary: {
-    soft: {
-      bgColor: 'primary.extralight',
-      borderColor: 'primary.lighter',
-      color: 'primary.darker',
-    },
-    solid: {
-      bgColor: 'blue.500',
-      borderColor: 'blue.500',
-      color: 'white',
-    },
-    outline: {
-      bgColor: 'transparent',
-      borderColor: 'primary.main',
-      color: 'primary.dark',
-    },
-  },
-  secondary: {
-    soft: {
-      bgColor: 'secondary.extralight',
-      borderColor: 'secondary.lighter',
-      color: 'secondary.darker',
-    },
-    solid: {
-      bgColor: 'violet.500',
-      borderColor: 'violet.500',
-      color: 'white',
-    },
-    outline: {
-      bgColor: 'transparent',
-      borderColor: 'secondary.main',
-      color: 'secondary.dark',
-    },
-  },
-  danger: {
-    soft: {
-      bgColor: 'danger.extralight',
-      borderColor: 'danger.lighter',
-      color: 'danger.darker',
-    },
-    solid: {
-      bgColor: 'rose.500',
-      borderColor: 'rose.500',
-      color: 'white',
-    },
-    outline: {
-      bgColor: 'transparent',
-      borderColor: 'danger.main',
-      color: 'danger.dark',
-    },
+  neutral: {
+    bgColor: 'bg.muted',
+    color: 'fg.default',
+    hoverBorder: 'secondary.border',
   },
   success: {
-    soft: {
-      bgColor: 'success.extralight',
-      borderColor: 'success.lighter',
-      color: 'success.darker',
-    },
-    solid: {
-      bgColor: 'green.600',
-      borderColor: 'green.600',
-      color: 'white',
-    },
-    outline: {
-      bgColor: 'transparent',
-      borderColor: 'success.main',
-      color: 'success.dark',
-    },
+    bgColor: 'success.bg',
+    color: 'success.fg',
+    hoverBorder: 'success.border',
   },
   warning: {
-    soft: {
-      bgColor: 'warning.extralight',
-      borderColor: 'warning.lighter',
-      color: 'warning.darker',
-    },
-    solid: {
-      // Deepened from gold.500 so white text clears AA and the chip matches the
-      // other solids (white on a saturated fill). White/gold.500 was only
-      // 2.39:1; white/gold.700 = 5.86:1 ✓ AA. Bright gold + near-black text read
-      // harsh on the dark canvas.
-      bgColor: 'gold.700',
-      borderColor: 'gold.700',
-      color: 'white',
-    },
-    outline: {
-      bgColor: 'transparent',
-      borderColor: 'warning.main',
-      // warning.dark (gold.700, 5.8:1 AA) over warning.main (gold.500, 3.0:1) —
-      // darker text also lifts this off the palette's AA-risk step.
-      color: 'warning.dark',
-    },
+    bgColor: 'warning.bg',
+    color: 'warning.fg',
+    hoverBorder: 'warning.border',
   },
-  neutral: {
-    soft: {
-      // Flip surface + border with the mode so the fg.default text stays legible
-      // in dark. Light values preserved (bg.muted → gray.100, border.default →
-      // gray.300).
-      bgColor: 'bg.muted',
-      borderColor: 'border.default',
-      color: 'fg.default',
-    },
-    solid: {
-      bgColor: 'gray.800',
-      borderColor: 'gray.800',
-      color: 'white',
-    },
-    outline: {
-      bgColor: 'transparent',
-      borderColor: 'border.strong', // gray.500 / gray.900 (_dark)
-      color: 'fg.muted',
-    },
+  danger: {
+    bgColor: 'danger.bg',
+    color: 'danger.fg',
+    hoverBorder: 'danger.border',
+  },
+  info: {
+    bgColor: 'info.bg',
+    color: 'info.fg',
+    hoverBorder: 'info.border',
   },
 };
 
-/**
- * Helper function to get tag styles for a given colorPalette and variant.
- */
-export const getTagStyles = (
-  colorPalette: TagColorPalette = 'neutral',
-  variant: TagVariant = 'soft'
-): Partial<TagRootProps> => {
-  return tagColorPaletteStyles[colorPalette][variant];
-};
-
-/** All available color palettes */
-export const tagColorPalettes: TagColorPalette[] = [
-  'primary',
-  'secondary',
-  'danger',
+/** Every 5.0 tone, in display order. */
+export const tagTones: TagTone[] = [
+  'neutral',
   'success',
   'warning',
-  'neutral',
+  'danger',
+  'info',
 ];
 
-/**
- * @deprecated Use tagColorPalettes instead. Will be removed in next major version.
- */
-export const tagColorSchemes = tagColorPalettes;
+/** Colour transition only — a focus ring or press must not lag. */
+const TAG_TRANSITION: StyleProps = {
+  transitionProperty: 'background-color, border-color, color',
+  transitionDuration: 'fast',
+  transitionTimingFunction: 'standard',
+};
+
+export interface TagStyleOptions {
+  tone?: TagTone;
+  selected?: boolean;
+  category?: SystemHue;
+  interactive?: boolean;
+}
 
 /**
- * @deprecated Use tagColorPaletteStyles instead. Will be removed in next major version.
+ * Resolve the colour styles for a tag. Precedence: `selected` > `category` >
+ * `tone`.
  */
-export const tagColorSchemeStyles = tagColorPaletteStyles;
+export const getTagStyles = ({
+  tone = 'neutral',
+  selected = false,
+  category,
+  interactive = false,
+}: TagStyleOptions = {}): StyleProps => {
+  let colors: StyleProps;
+  if (selected) {
+    colors = {
+      bgColor: 'primary.main',
+      color: 'fg.onPrimary',
+      ...(interactive && {
+        _hover: { bgColor: 'primary.hover' },
+        _active: { bgColor: 'primary.active' },
+      }),
+    };
+  } else if (category) {
+    colors = {
+      bgColor: `category.${category}.surface`,
+      color: 'fg.default',
+      ...(interactive && { _hover: { borderColor: 'secondary.border' } }),
+    };
+  } else {
+    const { bgColor, color, hoverBorder } =
+      tagToneStyles[tone] ?? tagToneStyles.neutral;
+    colors = {
+      bgColor,
+      color,
+      ...(interactive && { _hover: { borderColor: hoverBorder } }),
+    };
+  }
 
-/** All available variants */
-export const tagVariants: TagVariant[] = ['soft', 'solid', 'outline'];
+  return {
+    borderColor: 'transparent',
+    ...colors,
+    ...TAG_TRANSITION,
+    cursor: interactive ? 'pointer' : undefined,
+    _disabled: { ...disabledControl, cursor: 'not-allowed' },
+  };
+};
+
+/**
+ * Result of mapping a 4.x `colorPalette × variant` pair onto 5.0 Tag props.
+ * `needsHuman` marks a pair 5.0 cannot render faithfully (a status `solid`
+ * fill, a status `outline`, an unknown value): it still renders, but the
+ * dev warning asks for a hand decision instead of saying "replace with X".
+ */
+export type LegacyTagResolution = {
+  tone: TagTone;
+  selected?: boolean;
+  needsHuman: boolean;
+};
+
+const PLAIN_PALETTES = new Set(['primary', 'secondary', 'neutral']);
+const STATUS_PALETTES = new Set(['danger', 'success', 'warning']);
+
+/**
+ * Map 4.x `colorPalette` × `variant` (or Chip's `colorScheme` × `variant`) to
+ * 5.0 Tag props. A missing palette / variant takes the 4.x default of the
+ * component it came from — Tag was `neutral` / `soft`, Chip `primary` / `soft`
+ * (Chip passes its own default in).
+ *
+ * | palette \ variant           | soft (or —)    | solid                  | outline                 |
+ * |-----------------------------|----------------|------------------------|-------------------------|
+ * | primary · secondary · neutral | neutral        | selected               | neutral                 |
+ * | danger · success · warning  | that tone      | that tone (needsHuman) | neutral (needsHuman)    |
+ * | anything else               | neutral (needsHuman, as does any unknown variant)                  |
+ *
+ * `neutral`/`secondary` × `solid` → `selected`, same as `primary`: 4.x
+ * call sites toggled `colorScheme={on ? 'primary' : 'neutral'}` or
+ * `variant={on ? 'solid' : 'soft'}`, and both arms must stay distinct.
+ * Selected here is the *look* only — it does not make the tag a toggle
+ * (no hover, no `aria-pressed`); only an explicit `selected` prop does.
+ */
+export const mapLegacyTagProps = (
+  colorPalette: TagColorPalette | string | undefined,
+  variant: TagVariant | string | undefined
+): LegacyTagResolution => {
+  const palette = colorPalette ?? 'neutral';
+  const v = variant ?? 'soft';
+  const plain = PLAIN_PALETTES.has(palette);
+  const status = STATUS_PALETTES.has(palette);
+
+  if (!plain && !status) return { tone: 'neutral', needsHuman: true };
+  switch (v) {
+    case 'soft':
+      return status
+        ? { tone: palette as TagTone, needsHuman: false }
+        : { tone: 'neutral', needsHuman: false };
+    case 'solid':
+      return status
+        ? { tone: palette as TagTone, needsHuman: true }
+        : { tone: 'neutral', selected: true, needsHuman: false };
+    case 'outline':
+      return { tone: 'neutral', needsHuman: status };
+    default:
+      return { tone: 'neutral', needsHuman: true };
+  }
+};
+
+const warned = new Set<string>();
+
+/**
+ * Warn once per (component, palette, variant) in development, naming the
+ * combination and what it now renders as. Exported for tests.
+ */
+export const warnLegacyTagProps = (
+  component: 'Tag' | 'Chip',
+  colorPalette: unknown,
+  variant: unknown,
+  resolved: LegacyTagResolution
+): void => {
+  if (!isDev()) return;
+  const key = `${component}|${String(colorPalette)}|${String(variant)}`;
+  if (warned.has(key)) return;
+  warned.add(key);
+  const paletteProp = component === 'Chip' ? 'colorScheme' : 'colorPalette';
+  const to = resolved.selected
+    ? '<Tag selected>'
+    : resolved.tone === 'neutral'
+      ? '<Tag>'
+      : `<Tag tone="${resolved.tone}">`;
+  const lead =
+    component === 'Chip'
+      ? '<Chip> is deprecated since 5.0 and will be removed in 6.0. '
+      : '';
+  console.warn(
+    `[logician-ui] ${lead}<${component} ${paletteProp}="${String(
+      colorPalette
+    )}" variant="${String(variant)}"> uses the 4.x API, which 5.0 removed. ` +
+      `Rendering as ${to}.` +
+      (resolved.needsHuman
+        ? ' This combination has no exact 5.0 equivalent — please choose tone / selected / category by hand.'
+        : ' Replace the props with that.')
+  );
+};
+
+/** Test-only: forget which combinations have warned. */
+export const __resetLegacyTagWarnings = (): void => warned.clear();

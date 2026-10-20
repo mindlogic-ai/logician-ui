@@ -43,7 +43,7 @@ export const ButtonVsSegmentedControlVsInput: Story = {
           <Text w="8" fontSize="sm" color="gray.500" fontFamily="mono">
             {size}
           </Text>
-          <Button size={size} colorPalette="neutral" variant="outline" w="32">
+          <Button size={size} variant="secondary" w="32">
             Button
           </Button>
           <SegmentedControl

@@ -7,5 +7,5 @@
  */
 export const workflowLabelProps = {
   fontWeight: 'semibold',
-  color: 'slate.1300',
+  color: 'fg.default',
 } as const;

@@ -40,7 +40,7 @@ export const Default: Story = {
         <HStack gap={2}>
           <Button
             size="xs"
-            variant="outline"
+            variant="secondary"
             disabled={step === 0}
             onClick={() => setStep((s) => s - 1)}
           >
@@ -91,7 +91,7 @@ export const Direction: Story = {
         <HStack gap={2}>
           <Button
             size="xs"
-            variant="outline"
+            variant="secondary"
             onClick={() => {
               setBack(true);
               setStep((s) => (s + STEPS.length - 1) % STEPS.length);
@@ -177,8 +177,7 @@ export const CallSiteShapes: Story = {
                   <Button
                     key={o}
                     size="sm"
-                    variant={picked === o ? 'solid' : 'outline'}
-                    colorPalette={picked === o ? 'primary' : 'neutral'}
+                    variant={picked === o ? 'primary' : 'secondary'}
                     onClick={() => setPicked(o)}
                   >
                     {o}

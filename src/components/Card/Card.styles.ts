@@ -19,27 +19,20 @@ export const clickableStyles = {
 };
 
 /**
- * The wash card: one tier off the page with a hairline. For a block that
+ * The wash card: a neutral `bg.muted` ground, borderless. For a block that
  * summarises or concludes (an AI summary, a total after a purchase, the
- * invitation being accepted). It is what `gradient` used to paint with a
- * 180deg wash and a brand-tinted border; the gradient read as decoration and
- * the tinted border claimed brand for a surface that is not an action.
- *
- * The tier is `bg.subtle` in light but `bg.muted` in dark: `bg.subtle` sits
- * one grayDark step above `bg.surface` there, too close to read as a different
- * surface, and `border.subtle` resolves to the same step, so the hairline would
- * vanish. `border.default` keeps the edge in both modes.
+ * invitation being accepted) — the wash alone separates it from the page, so
+ * it does not need a hairline on top of it. (Not the sand `secondary.surface`:
+ * that tint reads peach as a background and is accent-only.)
  */
 const washStyles = {
-  bg: { base: 'bg.subtle', _dark: 'bg.muted' },
-  borderColor: 'border.default',
+  bg: 'bg.muted',
+  borderColor: 'transparent',
 };
 
 export const variantStyles = {
   default: {},
   wash: washStyles,
-  /** @deprecated Renders as `wash`; use `variant="wash"`. */
-  gradient: washStyles,
   // Soft resting elevation — a gentle shadow does the separating, so the border
   // can soften to `border.subtle` (which alone would be too faint, especially in
   // dark mode). Use for standalone content cards that should read as raised

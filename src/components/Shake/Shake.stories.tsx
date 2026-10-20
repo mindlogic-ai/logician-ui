@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
 import { Button } from '../Button';
-import { Chip } from '../Chip';
+import { Tag } from '../Tag';
 import { Input } from '../Input';
 import { Subtext } from '../Typography';
 import { Shake } from '.';
@@ -30,15 +30,13 @@ export const Default: Story = {
       <Stack gap={4} align="flex-start">
         <Button
           size="sm"
-          variant="outline"
+          variant="secondary"
           onClick={() => setAttempts((a) => a + 1)}
         >
           틀린 답 제출
         </Button>
         <Shake trigger={attempts}>
-          <Chip colorScheme="danger" variant="soft">
-            ✕ 다시 시도해 주세요
-          </Chip>
+          <Tag tone="danger">✕ 다시 시도해 주세요</Tag>
         </Shake>
         <Subtext color="fg.muted" mb={0}>
           같은 답을 두 번 내도 두 번 흔들립니다 — 값이 아니라 사건을 셉니다.
@@ -106,17 +104,17 @@ export const ReducedMotion: Story = {
           aria-invalid={signalled || undefined}
           placeholder="답을 입력하세요"
         />
-        {signalled && (
-          <Chip colorScheme="danger" variant="soft">
-            ✕ 다시 시도해 주세요
-          </Chip>
-        )}
+        {signalled && <Tag tone="danger">✕ 다시 시도해 주세요</Tag>}
       </Stack>
     );
 
     return (
       <Stack gap={5} align="flex-start" maxW="620px">
-        <Button size="sm" variant="outline" onClick={() => setN((a) => a + 1)}>
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={() => setN((a) => a + 1)}
+        >
           틀린 답 제출
         </Button>
 
@@ -128,7 +126,7 @@ export const ReducedMotion: Story = {
             <Stack key={col.label} gap={2}>
               <Subtext
                 fontSize="2xs"
-                color={col.reduced ? 'warning.main' : 'fg.muted'}
+                color={col.reduced ? 'warning.fg' : 'fg.muted'}
                 mb={0}
               >
                 {col.label}

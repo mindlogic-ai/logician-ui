@@ -7,7 +7,7 @@ const meta = {
   component: Container,
   args: {
     children: 'Container',
-    bg: 'primary.lighter',
+    bg: 'primary.washActive',
     p: 32,
     textAlign: 'center',
   },

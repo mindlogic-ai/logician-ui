@@ -1,6 +1,7 @@
 import { forwardRef } from 'react';
 import { Switch as ChakraSwitch, SwitchControlProps } from '@chakra-ui/react';
 
+import { disabledControl } from '@/utils/disabledControl';
 import { focusRing } from '@/utils/focusRing';
 
 export const SwitchControl = forwardRef<HTMLSpanElement, SwitchControlProps>(
@@ -16,6 +17,7 @@ export const SwitchControl = forwardRef<HTMLSpanElement, SwitchControlProps>(
       _checked={{ bg: 'primary.main' }}
       animationStyle="feedback"
       transitionProperty="background-color"
+      _disabled={{ ...disabledControl, cursor: 'not-allowed' }}
       {...focusRing}
       {...props}
     >
@@ -27,6 +29,12 @@ export const SwitchControl = forwardRef<HTMLSpanElement, SwitchControlProps>(
         // reverses direction — `standard` vs `emphasized` would not.
         animationStyle="spring"
         transitionProperty="translate"
+        // Chakra's default is a raw `white` thumb that stays `white` when
+        // checked via an undefined `colorPalette.contrast`. bg.surface reads
+        // as the same near-white in light and flips correctly in dark; the
+        // checked thumb is fg.onPrimary (cream) to match Checkbox/Radio.
+        bg="bg.surface"
+        _checked={{ bg: 'fg.onPrimary' }}
       />
     </ChakraSwitch.Control>
   )

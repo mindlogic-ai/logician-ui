@@ -8,7 +8,7 @@ domain by registering node types, and you wire up the surrounding chrome
 (persistence, validation, an inspector) however your app wants.
 
 > Mental model: this is to a workflow editor what React Flow is to a canvas —
-> batteries for the editor, but *you bring the nodes* (and decide what clicking
+> batteries for the editor, but _you bring the nodes_ (and decide what clicking
 > one does).
 
 - [Quick start](#quick-start)
@@ -52,7 +52,7 @@ const messageNode = defineNodeType<MessageConfig>({
   icon: Sparkles,
   defaultConfig: () => ({ text: '' }),
   handles: () => ({ inputs: [{ id: 'in' }], outputs: [{ id: 'out' }] }),
-  getMetaChips: config => (config.text ? [config.text] : []),
+  getMetaChips: (config) => (config.text ? [config.text] : []),
   // Optional: the body shown in the inspector drawer when this node is selected.
   renderDrawer: ({ config, onChange, readOnly }) => (
     <FormControl>
@@ -60,7 +60,7 @@ const messageNode = defineNodeType<MessageConfig>({
       <Input
         value={config.text}
         disabled={readOnly}
-        onChange={e => onChange({ ...config, text: e.target.value })}
+        onChange={(e) => onChange({ ...config, text: e.target.value })}
       />
     </FormControl>
   ),
@@ -92,24 +92,24 @@ A node type is a plain object created with `defineNodeType<TConfig>(...)`, where
 `TConfig` is the shape of that node's `config`. The framework knows nothing about
 your kinds — it just renders what the registry describes.
 
-| Field | Required | Purpose |
-| --- | --- | --- |
-| `kind` | ✓ | Stable id for the type (e.g. `'message'`). Used in `node.kind` and id generation. Keep it English/snake-ish. |
-| `label` | ✓ | Short operational noun shown on the card and in the palette. Intentionally **not** translated (matches n8n/Make/Dify). |
-| `category` | ✓ | One of `trigger` · `ai` · `logic` · `safety` · `output` · `note`. Drives the icon-tile color. Color attaches to **category**, not kind. |
-| `icon` | ✓ | A `CreatedIcon` (wrap any icon with `createIcon` from this package, or use one of the exported icons). |
-| `defaultConfig` | ✓ | Value or factory `() => TConfig` for a freshly-dropped node. Prefer the factory for nested/mutable defaults. |
-| `handles` | ✓ | `(config) => ({ inputs, outputs })`. Can depend on config (e.g. a classifier emitting one output per category). |
-| `renderDrawer` | – | The inspector body for this kind. Omit and clicking the node is a no-op for editing. |
-| `renderNode` | – | Escape hatch to fully replace the card body (e.g. a sticky Note). Most types use `getInstanceTitle` + `getMetaChips` instead. |
-| `getInstanceTitle` | – | `(config) => string` for the snake_case identifier line. Defaults to the node id. |
-| `getMetaChips` | – | `(config) => (string \| { text, tone })[]` — small chips under the title. `tone: 'danger' \| 'warning'` tints a value. |
-| `descriptionKey` / `description` | – | Palette description. Prefer `descriptionKey` (resolved through your `translate`). |
-| `placement` | – | Declarative constraints read by the palette/canvas: `minCount`, `maxCount`, `pinned` (can't delete), `role: 'start' \| 'end'`, `mustFollow(Directly)`. |
-| `canConnect` | – | `(ctx) => boolean \| string` to reject a connection (return a reason string to explain). |
-| `outputSchema` | – | `(config) => JSONSchema \| undefined` for variable-resolution features. |
-| `getGraphIssues` | – | FE, graph-aware advisories merged into the node's canvas chrome (e.g. an unconnected required exit). Pure + cheap; runs every render. |
-| `localizeDefaults` / `hostDefaults` | – | Overlay defaults at creation time using the translator / the `hostBridge` (e.g. seed a node's model from the tenant's live list). |
+| Field                               | Required | Purpose                                                                                                                                                |
+| ----------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `kind`                              | ✓        | Stable id for the type (e.g. `'message'`). Used in `node.kind` and id generation. Keep it English/snake-ish.                                           |
+| `label`                             | ✓        | Short operational noun shown on the card and in the palette. Intentionally **not** translated (matches n8n/Make/Dify).                                 |
+| `category`                          | ✓        | One of `trigger` · `ai` · `logic` · `safety` · `output` · `note`. Drives the icon-tile color. Color attaches to **category**, not kind.                |
+| `icon`                              | ✓        | A `CreatedIcon` (wrap any icon with `createIcon` from this package, or use one of the exported icons).                                                 |
+| `defaultConfig`                     | ✓        | Value or factory `() => TConfig` for a freshly-dropped node. Prefer the factory for nested/mutable defaults.                                           |
+| `handles`                           | ✓        | `(config) => ({ inputs, outputs })`. Can depend on config (e.g. a classifier emitting one output per category).                                        |
+| `renderDrawer`                      | –        | The inspector body for this kind. Omit and clicking the node is a no-op for editing.                                                                   |
+| `renderNode`                        | –        | Escape hatch to fully replace the card body (e.g. a sticky Note). Most types use `getInstanceTitle` + `getMetaChips` instead.                          |
+| `getInstanceTitle`                  | –        | `(config) => string` for the snake_case identifier line. Defaults to the node id.                                                                      |
+| `getMetaChips`                      | –        | `(config) => (string \| { text, tone })[]` — small chips under the title. `tone: 'danger' \| 'warning'` tints a value.                                 |
+| `descriptionKey` / `description`    | –        | Palette description. Prefer `descriptionKey` (resolved through your `translate`).                                                                      |
+| `placement`                         | –        | Declarative constraints read by the palette/canvas: `minCount`, `maxCount`, `pinned` (can't delete), `role: 'start' \| 'end'`, `mustFollow(Directly)`. |
+| `canConnect`                        | –        | `(ctx) => boolean \| string` to reject a connection (return a reason string to explain).                                                               |
+| `outputSchema`                      | –        | `(config) => JSONSchema \| undefined` for variable-resolution features.                                                                                |
+| `getGraphIssues`                    | –        | FE, graph-aware advisories merged into the node's canvas chrome (e.g. an unconnected required exit). Pure + cheap; runs every render.                  |
+| `localizeDefaults` / `hostDefaults` | –        | Overlay defaults at creation time using the translator / the `hostBridge` (e.g. seed a node's model from the tenant's live list).                      |
 
 `resolveDefaultConfig(def)` is exported if you need to materialize a default
 config yourself.
@@ -138,7 +138,7 @@ each node type's `renderDrawer` — that's where domain-specific UI lives (model
 pickers, validators, even modals). The framework never sees it.
 
 **3. Fully custom — drive your own UI.** Omit `<NodeInspector>` entirely and render
-your own panel *anywhere in your app* from the selection signal. See below.
+your own panel _anywhere in your app_ from the selection signal. See below.
 
 ---
 
@@ -248,7 +248,7 @@ function AddAgentButton() {
 ## Controlled vs uncontrolled graph
 
 - **Controlled:** pass `graph` and `onGraphChange`. You own the source of truth.
-  Pass a *stable* reference and update it from `onGraphChange`.
+  Pass a _stable_ reference and update it from `onGraphChange`.
 - **Uncontrolled:** pass `defaultGraph` (or nothing) and read changes via
   `onGraphChange` if you like. The component keeps its own state.
 
@@ -283,7 +283,7 @@ reload.
 
 ## Validation & issues
 
-Validation is **not** built in — the editor *renders* issues you supply, it does
+Validation is **not** built in — the editor _renders_ issues you supply, it does
 not compute them. This keeps the source of truth wherever it belongs (usually
 your backend).
 
@@ -291,7 +291,7 @@ your backend).
 <Workflow
   nodeTypes={NODE_TYPES}
   graph={graph}
-  issues={issues}            // Issue[] you own — render-only
+  issues={issues} // Issue[] you own — render-only
   validating={isRevalidating} // show a "rechecking" affordance, keep prior issues
 />
 ```
@@ -300,10 +300,10 @@ your backend).
 type Issue = {
   severity: 'error' | 'warning';
   code: string;
-  message: string;              // English fallback
-  nodeId?: string;             // attaches to a node
-  edgeId?: string;             // attaches to an edge
-  fieldKey?: string;           // renders inline under a specific field
+  message: string; // English fallback
+  nodeId?: string; // attaches to a node
+  edgeId?: string; // attaches to an edge
+  fieldKey?: string; // renders inline under a specific field
   messageVars?: Record<string, string | number>;
 };
 ```
@@ -371,7 +371,13 @@ depends on it.
 
 ```tsx
 // Static, read-only thumbnail.
-<Workflow nodeTypes={NODE_TYPES} graph={graph} readOnly showPalette={false} minHeight={0} />
+<Workflow
+  nodeTypes={NODE_TYPES}
+  graph={graph}
+  readOnly
+  showPalette={false}
+  minHeight={0}
+/>
 ```
 
 Advanced: `useWorkflow()` (inside the tree) exposes the graph, `dispatch`,
@@ -382,28 +388,28 @@ surfaces.
 
 ## Props reference
 
-| Prop | Type | Notes |
-| --- | --- | --- |
-| `nodeTypes` | `NodeTypeDef[]` | **Required.** Your registered kinds. |
-| `graph` | `Graph` | Controlled graph (pair with `onGraphChange`). |
-| `onGraphChange` | `(g: Graph) => void` | Fired on every edit. |
-| `defaultGraph` | `Graph` | Uncontrolled initial graph. |
-| `translate` | `(key, vars?) => ReactNode` | Chrome + `descriptionKey` translator. |
-| `issues` | `Issue[]` | Render-only validation (pass a stable ref). |
-| `validating` | `boolean` | Show "rechecking" while issues are stale/in-flight. |
-| `readOnly` | `boolean` | Disable editing; palette hidden. |
-| `showPalette` | `boolean` | Default `true`. |
-| `onSelectionChange` | `(sel \| null) => void` | Selection changed (node/edge/deselect). |
-| `onNodeClick` / `onEdgeClick` | `(node) / (edge) => void` | Raw click convenience. |
-| `onArrange` | `(g: Graph) => void` | After one-click auto-arrange. |
-| `onHistoryNavigate` | `(g: Graph) => void` | After undo/redo. |
-| `children` | `ReactNode` | Canvas overlay slot (mount `<NodeInspector>` here). |
-| `renderSelectedNodeToolbar` | `(node) => ReactNode` | Content beside the selected node (e.g. a "+"). |
-| `footer` | `ReactNode` | Slot below the canvas. |
-| `categoryTokens` | `CategoryTokenMap` | Override category → color tokens. |
-| `hostBridge` | `unknown` | Opaque host data for inspectors. |
-| `minHeight` | `string \| number` | Default `'500px'`. |
-| `onIssuesChange` | `(issues) => void` | Notified when the issues ref changes. |
+| Prop                          | Type                        | Notes                                               |
+| ----------------------------- | --------------------------- | --------------------------------------------------- |
+| `nodeTypes`                   | `NodeTypeDef[]`             | **Required.** Your registered kinds.                |
+| `graph`                       | `Graph`                     | Controlled graph (pair with `onGraphChange`).       |
+| `onGraphChange`               | `(g: Graph) => void`        | Fired on every edit.                                |
+| `defaultGraph`                | `Graph`                     | Uncontrolled initial graph.                         |
+| `translate`                   | `(key, vars?) => ReactNode` | Chrome + `descriptionKey` translator.               |
+| `issues`                      | `Issue[]`                   | Render-only validation (pass a stable ref).         |
+| `validating`                  | `boolean`                   | Show "rechecking" while issues are stale/in-flight. |
+| `readOnly`                    | `boolean`                   | Disable editing; palette hidden.                    |
+| `showPalette`                 | `boolean`                   | Default `true`.                                     |
+| `onSelectionChange`           | `(sel \| null) => void`     | Selection changed (node/edge/deselect).             |
+| `onNodeClick` / `onEdgeClick` | `(node) / (edge) => void`   | Raw click convenience.                              |
+| `onArrange`                   | `(g: Graph) => void`        | After one-click auto-arrange.                       |
+| `onHistoryNavigate`           | `(g: Graph) => void`        | After undo/redo.                                    |
+| `children`                    | `ReactNode`                 | Canvas overlay slot (mount `<NodeInspector>` here). |
+| `renderSelectedNodeToolbar`   | `(node) => ReactNode`       | Content beside the selected node (e.g. a "+").      |
+| `footer`                      | `ReactNode`                 | Slot below the canvas.                              |
+| `categoryTokens`              | `CategoryTokenMap`          | Override category → color tokens.                   |
+| `hostBridge`                  | `unknown`                   | Opaque host data for inspectors.                    |
+| `minHeight`                   | `string \| number`          | Default `'500px'`.                                  |
+| `onIssuesChange`              | `(issues) => void`          | Notified when the issues ref changes.               |
 
 `<NodeInspector>`: `dock?: 'left' | 'right'`, `renderEdgeDrawer?: ComponentType<EdgeDrawerRenderProps>`.
 

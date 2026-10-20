@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { Flex } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
-import { useState } from 'react';
 
+import { Button } from '../Button';
+import { IoChevronDownOutline } from '../Icon';
+import { IconButton } from '../IconButton';
 import {
   ExpandingTr,
   Table,
@@ -12,9 +15,6 @@ import {
   Thead,
   Tr,
 } from '.';
-import { Button } from '../Button';
-import { IoChevronDownOutline } from '../Icon';
-import { IconButton } from '../IconButton';
 
 const meta = {
   title: 'Components/Table',
@@ -161,7 +161,7 @@ export const InteractiveRows: Story = {
 
 /**
  * Per-row state tints via `<Tr state="...">`, backed by the mode-aware
- * semantic tokens `bg.selected`, `bg.invalid.subtle` and `bg.highlighted`.
+ * semantic tokens `primary.selected`, `bg.invalid.subtle` and `bg.highlighted`.
  */
 export const RowStates: Story = {
   render: (args) => (
@@ -213,9 +213,7 @@ export const StickyHeader: Story = {
           {Array.from({ length: 12 }, (_, i) => (
             <Tr key={i}>
               {columns.map((column) => (
-                <Td key={column.key}>
-                  {data[i % data.length][column.key]}
-                </Td>
+                <Td key={column.key}>{data[i % data.length][column.key]}</Td>
               ))}
             </Tr>
           ))}
@@ -257,9 +255,8 @@ export const ExpandedContent: Story = {
                 <Td w={2}>
                   <IconButton
                     aria-label="Expand"
-                    {...({icon: <IoChevronDownOutline />} as any)}
+                    {...({ icon: <IoChevronDownOutline /> } as any)}
                     onClick={() => setIsExpanded((e) => !e)}
-                    colorScheme="neutral"
                     variant="ghost"
                   />
                 </Td>
@@ -570,8 +567,12 @@ export const StickyOffsetsTrackWidthChanges: Story = {
                   {adminColumns.map((column, index) => (
                     <Td
                       key={column.key}
-                      isSticky={LEFT_STICKY.has(index) || index === RIGHT_STICKY}
-                      stickyDirection={index === RIGHT_STICKY ? 'right' : 'left'}
+                      isSticky={
+                        LEFT_STICKY.has(index) || index === RIGHT_STICKY
+                      }
+                      stickyDirection={
+                        index === RIGHT_STICKY ? 'right' : 'left'
+                      }
                       stickyIndex={index === RIGHT_STICKY ? 0 : index}
                     >
                       {item[column.key]}
@@ -598,9 +599,18 @@ const PAGES: { name: string; status: string }[][] = [
     { name: '박지훈', status: '거절됨' },
   ],
   [
-    { name: '남궁민수 — 아주 아주 길어서 컬럼을 넓히는 이름', status: '승인됨' },
-    { name: '황보지훈 — 아주 아주 길어서 컬럼을 넓히는 이름', status: '승인됨' },
-    { name: '독고영희 — 아주 아주 길어서 컬럼을 넓히는 이름', status: '검토중' },
+    {
+      name: '남궁민수 — 아주 아주 길어서 컬럼을 넓히는 이름',
+      status: '승인됨',
+    },
+    {
+      name: '황보지훈 — 아주 아주 길어서 컬럼을 넓히는 이름',
+      status: '승인됨',
+    },
+    {
+      name: '독고영희 — 아주 아주 길어서 컬럼을 넓히는 이름',
+      status: '검토중',
+    },
   ],
   [
     { name: '최민', status: '거절됨' },
@@ -628,15 +638,17 @@ export const StickyOffsetsSurvivePagination: Story = {
       <Flex direction="column" gap={3} align="start">
         <Flex gap={2} align="center">
           <Button
-            variant="outline"
+            variant="secondary"
             disabled={page === 0}
             onClick={() => setPage((p) => Math.max(0, p - 1))}
           >
             이전
           </Button>
-          <span>{page + 1} / {PAGES.length} 페이지</span>
+          <span>
+            {page + 1} / {PAGES.length} 페이지
+          </span>
           <Button
-            variant="outline"
+            variant="secondary"
             disabled={page === PAGES.length - 1}
             onClick={() => setPage((p) => Math.min(PAGES.length - 1, p + 1))}
           >
@@ -665,8 +677,12 @@ export const StickyOffsetsSurvivePagination: Story = {
                   {adminColumns.map((column, index) => (
                     <Td
                       key={column.key}
-                      isSticky={LEFT_STICKY.has(index) || index === RIGHT_STICKY}
-                      stickyDirection={index === RIGHT_STICKY ? 'right' : 'left'}
+                      isSticky={
+                        LEFT_STICKY.has(index) || index === RIGHT_STICKY
+                      }
+                      stickyDirection={
+                        index === RIGHT_STICKY ? 'right' : 'left'
+                      }
                       stickyIndex={index === RIGHT_STICKY ? 0 : index}
                     >
                       {item[column.key]}

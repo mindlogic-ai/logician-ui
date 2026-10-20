@@ -33,8 +33,8 @@ const sizeMapping: Record<string, string> = {
  * const BuildIcon = createIcon(FaBuildingUser, 'BuildIcon');
  *
  * // Usage
- * <CustomIcon boxSize="lg" color="blue.500" />
- * <BuildIcon boxSize="md" color="red.500" />
+ * <CustomIcon boxSize="lg" color="fg.icon" />
+ * <BuildIcon boxSize="md" color="danger.fg" />
  * ```
  */
 export const createIcon = (

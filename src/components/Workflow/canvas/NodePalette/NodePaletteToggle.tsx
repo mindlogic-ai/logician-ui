@@ -25,8 +25,7 @@ export function NodePaletteToggle({ onOpen }: { onOpen: () => void }) {
         <IconButton
           aria-label={label}
           size="md"
-          variant="outline"
-          colorPalette="neutral"
+          variant="secondary"
           bg="bg.surface"
           boxShadow="md"
           onClick={onOpen}

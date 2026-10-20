@@ -40,6 +40,8 @@ export type RingChrome = {
   borderColor: string;
   outline?: string;
   outlineColor?: string;
+  /** Card background override for a status fill (failed/completed). */
+  bg?: string;
 };
 
 export type PortStyle = CSSProperties;

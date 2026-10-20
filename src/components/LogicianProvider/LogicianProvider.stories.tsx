@@ -29,10 +29,10 @@ export const Default: Story = {
         {/* Font showcase */}
         <Box
           p={4}
-          bg="gray.50"
+          bg="bg.subtle"
           borderRadius="md"
           borderWidth="1px"
-          borderColor="gray.200"
+          borderColor="border.subtle"
           w="100%"
         >
           <VStack align="start" gap={2}>
@@ -51,23 +51,13 @@ export const Default: Story = {
 
         {/* Border radius showcase */}
         <Box>
-          <Button
-            colorPalette="primary"
-            variant="soft"
-            mr={4}
-            borderRadius="md"
-          >
+          <Button variant="subtle" mr={4} borderRadius="md">
             Medium Radius (8px)
           </Button>
-          <Button
-            colorPalette="secondary"
-            variant="soft"
-            mr={4}
-            borderRadius="lg"
-          >
+          <Button variant="subtle" mr={4} borderRadius="lg">
             Large Radius (12px)
           </Button>
-          <Button colorPalette="primary" variant="outline" borderRadius="xl">
+          <Button variant="secondary" borderRadius="xl">
             XL Radius (32px)
           </Button>
         </Box>
@@ -80,7 +70,7 @@ export const Default: Story = {
               Container xs (480px max)
             </Text>
           </Container>
-          <Container maxW="sm" bg="secondary.extralight" p={4} borderRadius="md">
+          <Container maxW="sm" bg="bg.muted" p={4} borderRadius="md">
             <Text fontSize="sm" color="secondary.dark">
               Container sm (640px max)
             </Text>
@@ -120,7 +110,7 @@ export const Default: Story = {
               sm: 'warning.extralight',
               md: 'success.extralight',
               lg: 'primary.extralight',
-              xl: 'secondary.extralight',
+              xl: 'bg.muted',
             }}
             borderColor={{
               base: 'danger.main',
@@ -202,10 +192,10 @@ export const WithCustomConfig: Story = {
           {/* Info box */}
           <Box
             p={4}
-            bg="gray.50"
+            bg="bg.subtle"
             borderRadius="md"
             borderWidth="1px"
-            borderColor="gray.200"
+            borderColor="border.subtle"
             w="100%"
           >
             <VStack align="start" gap={2}>
@@ -225,23 +215,13 @@ export const WithCustomConfig: Story = {
 
           {/* Border radius showcase */}
           <Box>
-            <Button
-              colorPalette="primary"
-              variant="soft"
-              mr={4}
-              borderRadius="md"
-            >
+            <Button variant="subtle" mr={4} borderRadius="md">
               Medium Radius (4px)
             </Button>
-            <Button
-              colorPalette="secondary"
-              variant="soft"
-              mr={4}
-              borderRadius="lg"
-            >
+            <Button variant="subtle" mr={4} borderRadius="lg">
               Large Radius (20px)
             </Button>
-            <Button colorPalette="primary" variant="outline" borderRadius="xl">
+            <Button variant="secondary" borderRadius="xl">
               XL Radius (50px)
             </Button>
           </Box>
@@ -249,22 +229,27 @@ export const WithCustomConfig: Story = {
           {/* Container showcase */}
           <VStack gap={4} w="100%" align="start">
             <Text fontWeight="bold">Container Sizes (Custom):</Text>
-            <Container maxW="xs" bg="primary.extralight" p={4} borderRadius="md">
+            <Container
+              maxW="xs"
+              bg="primary.extralight"
+              p={4}
+              borderRadius="md"
+            >
               <Text fontSize="sm" color="primary.dark">
                 Container xs (300px max) - Much smaller!
               </Text>
             </Container>
-            <Container
-              maxW="sm"
-              bg="secondary.extralight"
-              p={4}
-              borderRadius="md"
-            >
+            <Container maxW="sm" bg="bg.muted" p={4} borderRadius="md">
               <Text fontSize="sm" color="secondary.dark">
                 Container sm (500px max) - Smaller
               </Text>
             </Container>
-            <Container maxW="md" bg="success.extralight" p={4} borderRadius="md">
+            <Container
+              maxW="md"
+              bg="success.extralight"
+              p={4}
+              borderRadius="md"
+            >
               <Text fontSize="sm" color="success.dark">
                 Container md (900px max) - Larger!
               </Text>
@@ -302,7 +287,7 @@ export const WithCustomConfig: Story = {
                 sm: 'warning.extralight',
                 md: 'success.extralight',
                 lg: 'primary.extralight',
-                xl: 'secondary.extralight',
+                xl: 'bg.muted',
               }}
               borderColor={{
                 base: 'danger.main',
@@ -331,14 +316,14 @@ export const WithCustomConfig: Story = {
                 🖥️ xl (1600px+) ⚠️ CUSTOM - Purple
               </Text>
             </Box>
-            <Text fontSize="sm" color="gray.700">
+            <Text fontSize="sm" color="fg.muted">
               💡 Tip: Resize your browser window between 320px-375px to see the
               difference! Default switches to yellow at 320px, but this custom
               config switches at 375px.
             </Text>
           </VStack>
 
-          <Text color="gray.1200" fontSize="sm">
+          <Text color="fg.default" fontSize="sm">
             ✅ All Logician colors, semantic tokens, and component styles are
             preserved while FactChat-specific configurations (fonts, radii,
             containers, breakpoints) are overridden.

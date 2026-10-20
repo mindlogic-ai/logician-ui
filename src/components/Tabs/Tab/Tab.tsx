@@ -26,6 +26,7 @@ export const Tab = forwardRef<HTMLButtonElement, TabProps>(
           color="fg.muted"
           py={3}
           border="none"
+          _hover={{ bg: 'primary.wash', color: 'fg.default' }}
           _selected={horizontalSelectedStyles}
           {...props}
           css={mergeCss(

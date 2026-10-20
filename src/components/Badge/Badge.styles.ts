@@ -1,9 +1,9 @@
+import { isDev } from '@/utils/isDev';
+
 import { BadgeVariant } from './Badge.types';
 
 /**
- * Badge base styles using the Golden Ratio color system.
- *
- * These styles are shared across all badge variants.
+ * Badge base styles, shared by every variant.
  */
 export const baseStyles = {
   borderRadius: '2xl',
@@ -13,63 +13,69 @@ export const baseStyles = {
   justifyContent: 'center',
 };
 
+/**
+ * Badge colours per variant (5.0 BAZE tokens).
+ *
+ * `neutral` is a neutral `bg.muted` fill with `secondary.fgStrong` text — the
+ * sand tint (`secondary.surface`) is not a component background, so the
+ * secondary identity rides on the text only. The status variants use their family's soft
+ * `.bg` + `.fg`, which the contrast audit checks in both modes.
+ */
 export const variantStyles: Record<
   BadgeVariant,
   { bgColor: string; color: string }
 > = {
-  /**
-   * Primary badge - Default, general purpose
-   * Blue extralight background with dark blue text
-   */
-  primary: {
-    bgColor: 'primary.extralight', // #E8EEFB
-    color: 'primary.dark', // #0D317D
-  },
-
-  /**
-   * Secondary badge - Accent, highlight
-   * Violet extralight background with dark violet text
-   */
-  secondary: {
-    bgColor: 'secondary.extralight', // #F4E8FB
-    color: 'secondary.dark', // #570D7D
-  },
-
-  /**
-   * Success badge - Positive states
-   * Green extralight background with dark green text
-   */
-  success: {
-    bgColor: 'success.extralight', // #E9FBE8
-    color: 'success.dark', // #147D0D
-  },
-
-  /**
-   * Warning badge - Caution states
-   * Gold extralight background with dark gold text
-   */
-  warning: {
-    bgColor: 'warning.extralight', // #FBF6E8
-    color: 'warning.dark', // #7D610D
-  },
-
-  /**
-   * Danger badge - Error/negative states
-   * Rose extralight background with dark rose text
-   */
-  danger: {
-    bgColor: 'danger.extralight', // #FBE8E9
-    color: 'danger.dark', // #7D0D14
-  },
-
-  /**
-   * Neutral badge - Neutral information
-   * Muted neutral surface with default foreground; both flip in dark mode.
-   * Light values are unchanged (bg.muted → gray.100; fg.default → gray.1300,
-   * one imperceptible step from the previous gray.1200).
-   */
   neutral: {
-    bgColor: 'bg.muted', // gray.100 / gray.1200 (_dark)
-    color: 'fg.default', // gray.1300 / gray.50 (_dark)
+    bgColor: 'bg.muted',
+    color: 'secondary.fgStrong',
   },
+  success: {
+    bgColor: 'success.bg',
+    color: 'success.fg',
+  },
+  warning: {
+    bgColor: 'warning.bg',
+    color: 'warning.fg',
+  },
+  danger: {
+    bgColor: 'danger.bg',
+    color: 'danger.fg',
+  },
+  info: {
+    bgColor: 'info.bg',
+    color: 'info.fg',
+  },
+};
+
+/** Every 5.0 badge variant, in display order. */
+export const badgeVariants: BadgeVariant[] = [
+  'neutral',
+  'success',
+  'warning',
+  'danger',
+  'info',
+];
+
+const warned = new Set<string>();
+
+/**
+ * Resolve a (possibly 4.x) variant to a 5.0 one. `primary` / `secondary` and
+ * anything unknown fall back to `neutral`, warning once per value in
+ * development so a consumer's untyped call site still renders.
+ */
+export const resolveBadgeVariant = (variant: unknown): BadgeVariant => {
+  if (
+    typeof variant === 'string' &&
+    Object.prototype.hasOwnProperty.call(variantStyles, variant)
+  ) {
+    return variant as BadgeVariant;
+  }
+  if (variant !== undefined && isDev() && !warned.has(String(variant))) {
+    warned.add(String(variant));
+    console.warn(
+      `[logician-ui] <Badge variant="${String(variant)}"> was removed in 5.0 and now renders as "neutral". ` +
+        'Use variant="neutral" (or a status variant: success | warning | danger | info).'
+    );
+  }
+  return 'neutral';
 };

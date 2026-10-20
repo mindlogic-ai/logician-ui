@@ -167,7 +167,7 @@ export function GraphErrorBanner({
       maxW="md"
       bg="bg.surface"
       borderWidth="1px"
-      borderColor={errorCount > 0 ? 'danger.main' : 'warning.main'}
+      borderColor={errorCount > 0 ? 'danger.border' : 'warning.border'}
       borderRadius="md"
       boxShadow="sm"
       overflow="hidden"
@@ -178,12 +178,12 @@ export function GraphErrorBanner({
           gap={2}
           px={3}
           py={2}
-          bg="slate.50"
+          bg="bg.subtle"
           borderBottomWidth="1px"
-          borderColor="slate.200"
+          borderColor="border.default"
         >
           <Spinner size="xs" />
-          <Subtext fontWeight="semibold" color="slate.1100">
+          <Subtext fontWeight="semibold" color="fg.default">
             {translate('workflow_issues_validating') as string}
           </Subtext>
         </Flex>
@@ -205,12 +205,12 @@ export function GraphErrorBanner({
         transitionProperty="opacity"
         onClick={() => setOpen((o) => !o)}
       >
-        <Text fontSize="sm" fontWeight="semibold" color="slate.1300">
+        <Text fontSize="sm" fontWeight="semibold" color="fg.default">
           {summarize(errorCount, warningCount)}
         </Text>
         <ChevronDownIcon
           boxSize="xs"
-          color="slate.900"
+          color="fg.icon"
           transform={open ? 'rotate(180deg)' : 'none'}
           animationStyle="feedback"
           transitionProperty="transform"
@@ -226,27 +226,27 @@ export function GraphErrorBanner({
           animationStyle="feedback"
           transitionProperty="opacity"
           borderTopWidth="1px"
-          borderColor="slate.200"
+          borderColor="border.default"
         >
           {groups.map((group, gi) => (
             <Box
               key={group.key}
               borderTopWidth={gi === 0 ? 0 : '1px'}
-              borderColor="slate.200"
+              borderColor="border.default"
             >
               <Flex
                 align="center"
                 gap={2}
                 px={3}
                 py={1.5}
-                bg="slate.50"
+                bg="bg.subtle"
                 cursor={group.node ? 'pointer' : 'default'}
-                _hover={group.node ? { bg: 'slate.100' } : undefined}
+                _hover={group.node ? { bg: 'primary.wash' } : undefined}
                 onClick={group.node ? () => jumpToNode(group.key) : undefined}
               >
                 {group.def?.icon ? (
                   <Box
-                    color="slate.1100"
+                    color="fg.default"
                     display="flex"
                     alignItems="center"
                     flexShrink={0}
@@ -254,7 +254,7 @@ export function GraphErrorBanner({
                     <group.def.icon boxSize="xs" />
                   </Box>
                 ) : null}
-                <Subtext fontWeight="semibold" color="slate.1300" truncate>
+                <Subtext fontWeight="semibold" color="fg.default" truncate>
                   {group.node
                     ? getNodeTitle(group.node, group.def)
                     : translate('workflow_drawer_graph_group_title')}

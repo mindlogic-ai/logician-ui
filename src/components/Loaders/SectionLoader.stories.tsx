@@ -11,15 +11,22 @@ const meta = {
   },
   render: (args) => {
     return (
-      <Box p="128px" bg="primary.lighter">
+      <Box p="128px" bg="primary.washActive">
         <SectionLoader {...args} />
       </Box>
     );
-  }
+  },
 } satisfies Meta<typeof SectionLoader>;
 
 export default meta;
 
 type Story = StoryObj<typeof SectionLoader>;
 
-export const Basic: Story = {}
+export const Basic: Story = {};
+
+export const Thinking: Story = {
+  args: {
+    isLoading: true,
+    variant: 'thinking',
+  },
+};

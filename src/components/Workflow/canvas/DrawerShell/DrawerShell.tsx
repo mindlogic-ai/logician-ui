@@ -244,7 +244,7 @@ function NodeDrawer({
   const header = (
     <DrawerHeader
       icon={
-        <Box color="slate.1200" display="flex" alignItems="center">
+        <Box color="fg.icon" display="flex" alignItems="center">
           <Icon boxSize="xs" />
         </Box>
       }
@@ -269,7 +269,7 @@ function NodeDrawer({
             </Menu.Item>
             <Menu.Item
               value="delete"
-              color="danger.main"
+              color="danger.fg"
               onClick={() => {
                 dispatch({ type: 'deleteNode', id: node.id });
                 setDrawerTarget(null);
@@ -298,7 +298,7 @@ function NodeDrawer({
             onChange={applyConfig}
           />
         ) : (
-          <Text color="slate.600" fontSize="sm" px={4} py={4}>
+          <Text color="fg.muted" fontSize="sm" px={4} py={4}>
             {translate('workflow_drawer_empty_settings')}
           </Text>
         )}
@@ -390,11 +390,11 @@ function EdgeDrawer({
       {/* Explicit delete affordance for the edge — outside the read-only
           fieldset, and hidden entirely in the version-history preview. */}
       {readOnly ? null : (
-        <Box borderTopWidth="1px" borderColor="slate.200" px={4} py={3}>
+        <Box borderTopWidth="1px" borderColor="border.default" px={4} py={3}>
           <Button
             size="sm"
-            variant="outline"
-            colorPalette="danger"
+            variant="secondary"
+            isDestructive
             width="100%"
             onClick={onDelete}
           >

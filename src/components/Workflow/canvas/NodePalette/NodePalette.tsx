@@ -70,16 +70,16 @@ function PaletteItem({ def }: { def: NodeTypeDef }) {
           tokens={categoryTokens}
         />
         <Stack gap={0} flex={1} minWidth={0}>
-          <Subtext fontWeight="semibold" color="slate.1200" lineClamp={1}>
+          <Subtext fontWeight="semibold" color="fg.default" lineClamp={1}>
             {def.label}
           </Subtext>
           {description ? (
-            <Subtext color="slate.900" lineClamp={1}>
+            <Subtext color="fg.muted" lineClamp={1}>
               {description}
             </Subtext>
           ) : null}
         </Stack>
-        <Box color="slate.700" display="flex" alignItems="center">
+        <Box color="fg.icon" display="flex" alignItems="center">
           <GripVerticalIcon boxSize="xs" />
         </Box>
       </HStack>
@@ -148,16 +148,15 @@ export function NodePalette({ onClose }: { onClose: () => void }) {
         px={4}
         py={3}
         borderBottom="1px solid"
-        borderColor="slate.200"
+        borderColor="border.default"
       >
-        <Subtitle id={titleId} color="slate.1300">
+        <Subtitle id={titleId} color="fg.default">
           {translate('workflow_palette_title')}
         </Subtitle>
         <IconButton
           aria-label={translate('workflow_palette_close') as string}
           size="xs"
           variant="ghost"
-          colorPalette="neutral"
           onClick={onClose}
         >
           <CloseIcon boxSize="xs" aria-hidden />
@@ -169,7 +168,7 @@ export function NodePalette({ onClose }: { onClose: () => void }) {
             <Stack key={category} gap={2}>
               <Subtext
                 fontWeight="bold"
-                color="slate.900"
+                color="fg.muted"
                 textTransform="uppercase"
                 letterSpacing="wider"
                 pl={1}

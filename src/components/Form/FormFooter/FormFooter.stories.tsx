@@ -35,13 +35,13 @@ type Story = StoryObj<typeof FormFooter>;
 export const WithStartMetaAndAction: Story = {
   args: {
     start: (
-      <Button size="sm" variant="ghost" colorPalette="danger">
+      <Button size="sm" variant="ghost" isDestructive>
         Delete
       </Button>
     ),
     meta: <Subtitle>Updated 2 minutes ago</Subtitle>,
     action: (
-      <Button size="sm" variant="solid">
+      <Button size="sm" variant="primary">
         Save
       </Button>
     ),
@@ -52,7 +52,7 @@ export const WithStartMetaAndAction: Story = {
 export const FullWidthAction: Story = {
   args: {
     action: (
-      <Button variant="solid" size="lg" w="100%">
+      <Button variant="primary" size="lg" w="100%">
         Generate image · 12
       </Button>
     ),
@@ -62,7 +62,7 @@ export const FullWidthAction: Story = {
 export const ActionOnly: Story = {
   args: {
     action: (
-      <Button size="sm" variant="solid">
+      <Button size="sm" variant="primary">
         Save
       </Button>
     ),

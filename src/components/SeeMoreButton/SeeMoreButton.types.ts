@@ -1,10 +1,17 @@
 import type { ElementType } from 'react';
-import { ButtonProps as ChakraButtonProps } from '@chakra-ui/react';
 
 // Relative, NOT `@/types/*` — see `src/types/polymorphic.ts`.
 import type { PolymorphicProps } from '../../types/polymorphic';
+import type { ButtonOwnProps } from '../Button/Button.types';
 
-export type SeeMoreButtonOwnProps = Omit<ChakraButtonProps, 'as'> & {
+/**
+ * SeeMoreButton always renders the ghost Button recipe, so it takes Button's
+ * props minus the role (`variant` / `isDestructive`).
+ */
+export type SeeMoreButtonOwnProps = Omit<
+  ButtonOwnProps,
+  'variant' | 'isDestructive'
+> & {
   currentCount: number;
   maxCount: number;
 };

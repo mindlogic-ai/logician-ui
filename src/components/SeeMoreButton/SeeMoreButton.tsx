@@ -1,8 +1,9 @@
 import React from 'react';
-import { Button } from '@chakra-ui/react';
 
+import { Button } from '@/components/Button';
 import { ChevronDownIcon } from '@/components/Icon';
 import { useTranslate } from '@/hooks/useTranslate';
+import { mergeCss } from '@/utils/mergeCss';
 
 import { polymorphic } from '../../types/polymorphic';
 import { seeMoreButtonStyles } from './SeeMoreButton.styles';
@@ -11,6 +12,7 @@ import { SeeMoreButtonOwnProps } from './SeeMoreButton.types';
 /**
  * A button component that allows users to load or see more items.
  * It displays the current count and the maximum count of items.
+ * Rendered with the ghost Button recipe (5.0): same colours and states.
  *
  * @param {object} props - Props for the SeeMoreButton component.
  * @param {number} props.currentCount - The current number of items shown.
@@ -19,12 +21,19 @@ import { SeeMoreButtonOwnProps } from './SeeMoreButton.types';
 const SeeMoreButtonImpl = ({
   currentCount,
   maxCount,
+  _disabled: disabledProp,
   ...rest
 }: SeeMoreButtonOwnProps) => {
   const translate = useTranslate();
 
   return (
-    <Button {...seeMoreButtonStyles} {...rest}>
+    <Button
+      variant="ghost"
+      {...seeMoreButtonStyles}
+      // Merged so a call site's `_disabled` cannot drop the hairline.
+      _disabled={mergeCss(seeMoreButtonStyles._disabled, disabledProp)}
+      {...rest}
+    >
       {translate('see_more')} ({currentCount}/{maxCount}){' '}
       <ChevronDownIcon color="inherit" />
     </Button>

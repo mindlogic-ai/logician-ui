@@ -29,14 +29,16 @@ export const pickPrimaryIssue = (issues: Issue[]): Issue | null => {
 
 /**
  * Semantic color token for an issue severity — shared across issue list UIs.
- * `tone` selects the shade: the default `'main'` for text/icons, or `'dark'`
- * where `.main` is too light to read (e.g. the small list-bullet markers in
- * drawer issue callouts, which need extra contrast against the tinted bg).
+ * `role` selects which half of the status family: the default `'fg'` for
+ * text, icons and borders (it's tuned to read on both `bg.*` and the plain
+ * canvas, which is the 4.x two-tone `main`/`dark` split collapsed into one
+ * token), or `'solid'` for an actually-filled shape (a dot, a bar) that
+ * needs the stronger fill colour `.onSolid` text is designed to sit on.
  */
 export const severityColorToken = (
   severity: IssueSeverity,
-  tone: 'main' | 'dark' = 'main'
-): string => (severity === 'error' ? `danger.${tone}` : `warning.${tone}`);
+  role: 'fg' | 'solid' = 'fg'
+): string => (severity === 'error' ? `danger.${role}` : `warning.${role}`);
 
 /**
  * Tinted callout styling (bg / border / text) for an issue severity. Reuses the

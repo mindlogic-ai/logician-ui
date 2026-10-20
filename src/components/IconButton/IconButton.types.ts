@@ -7,8 +7,9 @@ import type { PolymorphicProps } from '../../types/polymorphic';
 export type { ButtonVariant } from '../Button/Button.types';
 
 /**
- * IconButton color scheme - reuses Button color schemes.
- * @see ButtonColorScheme
+ * @deprecated 5.0 removed the colour axis — `colorPalette` is no longer an
+ * IconButton prop. Use a `variant` role (and `isDestructive`). Kept only so
+ * existing type imports get a deprecation instead of a hard error.
  */
 export type IconButtonColorPalette =
   | 'primary'
@@ -19,23 +20,32 @@ export type IconButtonColorPalette =
   | 'neutral';
 
 /**
- * IconButton variant - reuses Button variants.
- * @see ButtonVariant
+ * IconButton variant (5.0 BAZE palette).
+ *
+ * - `ghost` (default): icon in `fg.icon`, warm wash on hover
+ * - `secondary`: same, with a `border.default` outline
+ * - `primary`: BAZE black fill
+ * - `danger`: red fill
+ * - `action`: the coral SEND button (`send.*`) — chat composers
  */
-export type IconButtonVariant = 'solid' | 'soft' | 'outline' | 'ghost';
+export type IconButtonVariant =
+  | 'ghost'
+  | 'secondary'
+  | 'primary'
+  | 'danger'
+  | 'action';
 
 /**
- * IconButton props with two-dimensional variant system.
+ * IconButton props.
  *
- * Uses the same `colorPalette` and `variant` system as Button
- * for consistent styling across the design system.
- *
- * @note Overrides Chakra UI's `variant` and `colorPalette` props.
+ * @note Overrides Chakra UI's `variant`; Chakra's `colorPalette` /
+ *       `colorScheme` are not accepted.
  *
  * @example
  * ```tsx
- * <IconButton colorPalette="primary" variant="solid"><Icon /></IconButton>
- * <IconButton colorPalette="danger" variant="soft"><Icon /></IconButton>
+ * <IconButton aria-label="닫기"><XIcon /></IconButton>
+ * <IconButton aria-label="삭제" isDestructive><TrashIcon /></IconButton>
+ * <IconButton aria-label="보내기" variant="action"><ArrowUpIcon /></IconButton>
  * ```
  */
 export type IconButtonOwnProps = Omit<
@@ -43,17 +53,17 @@ export type IconButtonOwnProps = Omit<
   'variant' | 'colorPalette' | 'colorScheme' | 'icon' | 'as'
 > & {
   /**
-   * The color scheme of the icon button (semantic color family).
-   * Overrides Chakra UI's colorPalette prop.
-   * @default 'primary'
-   */
-  colorPalette?: IconButtonColorPalette;
-  /**
-   * The visual variant of the icon button (fill style).
+   * The role of the icon button.
    * Overrides Chakra UI's variant prop.
-   * @default 'solid'
+   * @default 'ghost'
    */
   variant?: IconButtonVariant;
+  /**
+   * Danger-coloured icon (`danger.fg`) for `ghost` / `secondary` — a delete
+   * icon in a row. Ignored on filled variants.
+   * @default false
+   */
+  isDestructive?: boolean;
 };
 
 /**

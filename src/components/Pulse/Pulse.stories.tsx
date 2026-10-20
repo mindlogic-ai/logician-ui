@@ -34,7 +34,7 @@ export const Default: Story = {
           +50 크레딧
         </Button>
         <Pulse trigger={balance}>
-          <Tag colorPalette="primary" variant="soft">
+          <Tag>
             {balance.toLocaleString()} 크레딧
           </Tag>
         </Pulse>

@@ -1,11 +1,18 @@
-import { Flex, FlexProps } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 
 import { Spinner } from '@/components/Spinner';
 
+import { useLoaderStatus } from './LoaderStatus';
+import type { LoaderProps } from './PageLoader';
+import { ThinkingDots } from './ThinkingDots';
+
 export const SectionLoader = ({
   isLoading,
+  variant = 'default',
+  label,
   ...rest
-}: FlexProps & { isLoading: boolean }) => {
+}: LoaderProps) => {
+  const { statusProps, statusText } = useLoaderStatus(isLoading, label);
   if (!isLoading) return;
   return (
     <Flex
@@ -20,9 +27,15 @@ export const SectionLoader = ({
       animationStyle="feedback"
       transitionProperty="opacity"
       zIndex={9999}
+      {...statusProps}
       {...rest}
     >
-      <Spinner boxSize="60px" borderWidth="6px" />
+      {statusText}
+      {variant === 'thinking' ? (
+        <ThinkingDots />
+      ) : (
+        <Spinner boxSize="60px" borderWidth="6px" />
+      )}
     </Flex>
   );
 };

@@ -657,14 +657,14 @@ function CanvasInner({
       // Tint the whole canvas region — not just the React Flow column — so the
       // floating palette (left) and inspector (right) read as cards over a tinted
       // surface instead of white sidebars. Read-only (version preview) drops to a
-      // neutral gray so the mode reads as "not your live workspace".
-      // Dark mode uses bg.canvas for both: primary.lightest's _dark is blue.900
-      // (#04102A), a saturated navy that overpowers the desaturated dark palette
-      // as a full-canvas fill, and slate.100's _dark sits ABOVE bg.surface, which
-      // would invert the node cards' lift. bg.canvas keeps the cards lifted in
-      // both modes; read-only is still cued by the absent editor chrome.
+      // neutral gray (`bg.subtle`) so the mode reads as "not your live workspace".
+      // Dark mode uses bg.canvas for both: a saturated full-canvas tint would
+      // overpower the desaturated dark palette, and a light neutral wash would
+      // sit ABOVE bg.surface, which would invert the node cards' lift. bg.canvas
+      // keeps the cards lifted in both modes; read-only is still cued by the
+      // absent editor chrome.
       bgColor={{
-        base: readOnly ? 'slate.100' : 'primary.lightest',
+        base: readOnly ? 'bg.subtle' : 'primary.wash',
         _dark: 'bg.canvas',
       }}
     >
@@ -749,8 +749,8 @@ function CanvasInner({
             pannable
             zoomable
             bgColor="var(--chakra-colors-bg-surface)"
-            nodeColor="var(--chakra-colors-slate-200)"
-            maskColor="color-mix(in srgb, var(--chakra-colors-slate-100) 60%, transparent)"
+            nodeColor="var(--chakra-colors-border-default)"
+            maskColor="color-mix(in srgb, var(--chakra-colors-bg-subtle) 60%, transparent)"
           />
         </ReactFlow>
         {showPalette && !isPaletteOpen ? (

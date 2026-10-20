@@ -90,7 +90,7 @@ export const ExpandableText = ({
         <Link
           as="button"
           textDecor="none"
-          _hover={{ color: 'primary.dark' }}
+          _hover={{ color: 'fg.default' }}
           onClick={handleToggle}
           aria-expanded={isExpanded}
         >

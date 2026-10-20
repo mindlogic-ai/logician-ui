@@ -4,9 +4,14 @@ import {
   defineConfig,
   defineSlotRecipe,
   defineTextStyles,
+  type SystemConfig,
 } from '@chakra-ui/react';
 
-import { colors, semanticTokens } from './colors';
+import {
+  colors,
+  createSemanticColors,
+  type LogicianColorOptions,
+} from './colors';
 import { globalCss } from './global';
 import { animationStyles, durations, easings, keyframes } from './motion';
 import { accordionSlotRecipe } from './recipes/accordion';
@@ -250,96 +255,163 @@ const selectSlotRecipe = defineSlotRecipe({
   },
 });
 
+type TokenNode = { value?: unknown; [key: string]: unknown };
+
+const normalizeNode = (node: TokenNode): TokenNode => {
+  const out: TokenNode = {};
+  for (const [key, child] of Object.entries(node)) {
+    if (key === 'value') {
+      const v = child as Record<string, unknown> | string | undefined;
+      out.value =
+        v && typeof v === 'object' && !Array.isArray(v) && 'base' in v
+          ? { _light: v.base, ...v }
+          : v;
+    } else if (child && typeof child === 'object' && !Array.isArray(child)) {
+      out[key] = normalizeNode(child as TokenNode);
+    } else {
+      out[key] = child;
+    }
+  }
+  return out;
+};
+
 /**
- * Chakra UI v3 theme configuration for Logician UI
+ * Make an app's semantic colour overrides win over the Logician roles.
  *
- * Uses the Golden Ratio color system with cool slate-based grays.
+ * Every Logician role is emitted as `{ _light, _dark }` (Chakra's `_light`
+ * outranks `base`, and Chakra's own `bg.subtle`/`fg.muted`… use `_light`). Chakra
+ * deep-merges configs, so a 4.x-style override `{ base: X, _dark: Y }` keeps the
+ * library's `_light` and silently renders the library colour in light mode.
+ * This copies `base` into `_light`, which restores the 4.x result (a `base`
+ * override replaced the light value; dark kept the library's unless the override
+ * set `_dark`). `LogicianProvider` applies it to its
+ * `config` prop; call it yourself when you `createSystem(defaultConfig,
+ * createLogicianTheme(), yourConfig)` directly.
  */
-const config = defineConfig({
-  globalCss,
-  theme: {
-    // The motion vocabulary, consumed as `animationStyle="feedback"` — the same
-    // composition slot `textStyles` uses, so a consuming app can remap a preset
-    // from its own config.
-    animationStyles,
-    keyframes,
-    tokens: {
-      colors,
-      // Merged with Chakra's own scales, not replacing them — see ./motion for
-      // why the durations carry a `motion.` prefix and the easings don't.
-      durations,
-      easings,
-      fonts: {
-        body: {
-          value: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif',
+export function normalizeSemanticOverrides<T extends SystemConfig>(
+  config: T
+): T {
+  const colorsNode = config.theme?.semanticTokens?.colors;
+  if (!colorsNode) return config;
+  return {
+    ...config,
+    theme: {
+      ...config.theme,
+      semanticTokens: {
+        ...config.theme?.semanticTokens,
+        colors: normalizeNode(colorsNode as TokenNode),
+      },
+    },
+  } as T;
+}
+
+/** Options for {@link createLogicianTheme}. */
+export type LogicianThemeOptions = LogicianColorOptions;
+
+/**
+ * Build the Logician UI Chakra config.
+ *
+ * ```ts
+ * createLogicianTheme()                                   // BAZE: { neutral: 'ink', secondary: 'sand' }
+ * createLogicianTheme({ neutral: 'slate' })               // cool gray products/tenants
+ * createSystem(defaultConfig, createLogicianTheme(opts))  // → a Chakra system
+ * ```
+ *
+ * The option only decides which raw scale fills the semantic steps
+ * (`neutral.1–12`, `secondary.1–12`) and the roles built on them — every
+ * component reads role tokens, so switching the neutral needs no app change.
+ * `LogicianProvider` accepts the same options as its `theme` prop.
+ */
+export function createLogicianTheme(options: LogicianThemeOptions = {}) {
+  return defineConfig({
+    globalCss,
+    theme: {
+      // The motion vocabulary, consumed as `animationStyle="feedback"` — the same
+      // composition slot `textStyles` uses, so a consuming app can remap a preset
+      // from its own config.
+      animationStyles,
+      keyframes,
+      tokens: {
+        colors,
+        // Merged with Chakra's own scales, not replacing them — see ./motion for
+        // why the durations carry a `motion.` prefix and the easings don't.
+        durations,
+        easings,
+        fonts: {
+          body: {
+            value: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif',
+          },
+          heading: {
+            value: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif',
+          },
         },
-        heading: {
-          value: '"Pretendard Variable", "Inter", "Noto Sans", sans-serif',
+        radii: {
+          none: { value: '0' },
+          xs: { value: '4px' },
+          sm: { value: '6px' },
+          md: { value: '8px' },
+          lg: { value: '12px' },
+          xl: { value: '32px' },
+          full: { value: '9999px' },
+        },
+        // Spacing scale using em units so numeric tokens (p: 4, gap: 2, etc.)
+        // cascade from the nearest ancestor font-size rather than the html root.
+        spacing: {
+          px: { value: '1px' },
+          '0.5': { value: '0.125em' },
+          '1': { value: '0.25em' },
+          '1.5': { value: '0.375em' },
+          '2': { value: '0.5em' },
+          '2.5': { value: '0.625em' },
+          '3': { value: '0.75em' },
+          '3.5': { value: '0.875em' },
+          '4': { value: '1em' },
+          '5': { value: '1.25em' },
+          '6': { value: '1.5em' },
+          '7': { value: '1.75em' },
+          '8': { value: '2em' },
+          '9': { value: '2.25em' },
+          '10': { value: '2.5em' },
+          '11': { value: '2.75em' },
+          '12': { value: '3em' },
+          '14': { value: '3.5em' },
+          '16': { value: '4em' },
+          '20': { value: '5em' },
+          '24': { value: '6em' },
+          '28': { value: '7em' },
+          '32': { value: '8em' },
+          '36': { value: '9em' },
+          '40': { value: '10em' },
+          '44': { value: '11em' },
+          '48': { value: '12em' },
+          '52': { value: '13em' },
+          '56': { value: '14em' },
+          '60': { value: '15em' },
+          '64': { value: '16em' },
+          '72': { value: '18em' },
+          '80': { value: '20em' },
+          '96': { value: '24em' },
         },
       },
-      radii: {
-        none: { value: '0' },
-        xs: { value: '4px' },
-        sm: { value: '6px' },
-        md: { value: '8px' },
-        lg: { value: '12px' },
-        xl: { value: '32px' },
-        full: { value: '9999px' },
+      semanticTokens: {
+        colors: createSemanticColors(options),
       },
-      // Spacing scale using em units so numeric tokens (p: 4, gap: 2, etc.)
-      // cascade from the nearest ancestor font-size rather than the html root.
-      spacing: {
-        px: { value: '1px' },
-        '0.5': { value: '0.125em' },
-        '1': { value: '0.25em' },
-        '1.5': { value: '0.375em' },
-        '2': { value: '0.5em' },
-        '2.5': { value: '0.625em' },
-        '3': { value: '0.75em' },
-        '3.5': { value: '0.875em' },
-        '4': { value: '1em' },
-        '5': { value: '1.25em' },
-        '6': { value: '1.5em' },
-        '7': { value: '1.75em' },
-        '8': { value: '2em' },
-        '9': { value: '2.25em' },
-        '10': { value: '2.5em' },
-        '11': { value: '2.75em' },
-        '12': { value: '3em' },
-        '14': { value: '3.5em' },
-        '16': { value: '4em' },
-        '20': { value: '5em' },
-        '24': { value: '6em' },
-        '28': { value: '7em' },
-        '32': { value: '8em' },
-        '36': { value: '9em' },
-        '40': { value: '10em' },
-        '44': { value: '11em' },
-        '48': { value: '12em' },
-        '52': { value: '13em' },
-        '56': { value: '14em' },
-        '60': { value: '15em' },
-        '64': { value: '16em' },
-        '72': { value: '18em' },
-        '80': { value: '20em' },
-        '96': { value: '24em' },
+      textStyles,
+      recipes: {
+        input: formControlLgOverride,
+        textarea: formControlLgOverride,
+      },
+      slotRecipes: {
+        accordion: accordionSlotRecipe,
+        table: tableSlotRecipe,
+        select: selectSlotRecipe,
       },
     },
-    semanticTokens: {
-      colors: semanticTokens.colors,
-    },
-    textStyles,
-    recipes: {
-      input: formControlLgOverride,
-      textarea: formControlLgOverride,
-    },
-    slotRecipes: {
-      accordion: accordionSlotRecipe,
-      table: tableSlotRecipe,
-      select: selectSlotRecipe,
-    },
-  },
-});
+  });
+}
+
+/** BAZE default config (ink + sand). */
+const config = createLogicianTheme();
 
 export const system = createSystem(defaultConfig, config);
 // Re-export for backwards compatibility

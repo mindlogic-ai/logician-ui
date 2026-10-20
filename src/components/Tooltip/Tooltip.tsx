@@ -43,7 +43,7 @@ export const Tooltip = forwardRef(
           <ChakraTooltip.Positioner>
             <ChakraTooltip.Content
               ref={ref}
-              color="white"
+              color="tooltip.fg"
               fontSize="sm"
               px={2}
               py={1}
@@ -57,7 +57,7 @@ export const Tooltip = forwardRef(
               {...contentProps}
               css={mergeCss(
                 {
-                  '--tooltip-bg': 'var(--chakra-colors-gray-1200)',
+                  '--tooltip-bg': 'var(--chakra-colors-tooltip-bg)',
                   // zag sets `data-instant` when the pointer moves from one
                   // open tooltip to the next. It already skips the delay
                   // there; skip the enter/exit too, so sweeping a toolbar
