@@ -107,6 +107,9 @@ module.exports = {
           'This preset sets the clock, not the scope — say what moves. Add `transitionProperty="..."` (or a transition/css/style that names it), otherwise the preset resolves to `transition-property: none` and nothing animates.',
       },
     ],
+    // 4.x colour names kept as 5.0 aliases / removed primitives
+    // (eslint/rules/no-deprecated-tokens.js, loaded via --rulesdir in `yarn lint`).
+    'no-deprecated-tokens': 'warn',
     '@typescript-eslint/no-empty-object-type': 'off',
     '@next/next/no-img-element': 'off', // Allow img elements in UI library
     'unused-imports/no-unused-vars': [

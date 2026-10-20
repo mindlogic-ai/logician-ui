@@ -8,7 +8,12 @@ import { ColorModeProvider } from '@/components/ColorMode';
 import type { SupportedLanguage } from '@/components/MonthPicker/constants';
 import { LanguageContext } from '@/hooks/useLanguage';
 
-import { logicianConfig, system as defaultSystem } from '../../theme';
+import {
+  createLogicianTheme,
+  logicianConfig,
+  type LogicianThemeOptions,
+  system as defaultSystem,
+} from '../../theme';
 
 const FONT_STYLESHEETS = [
   // Pretendard Variable — covers Korean + Latin with dynamic subsetting
@@ -66,6 +71,18 @@ export interface LogicianProviderProps {
    * ```
    */
   config?: SystemConfig;
+
+  /**
+   * Palette options for the built-in theme — which raw scale fills the
+   * neutral/secondary semantic steps. Omit for BAZE (`{ neutral: 'ink',
+   * secondary: 'sand' }`).
+   *
+   * @example
+   * ```tsx
+   * <LogicianProvider theme={{ neutral: 'slate' }}>…</LogicianProvider>
+   * ```
+   */
+  theme?: LogicianThemeOptions;
 
   /**
    * Language code for internationalization.
@@ -133,6 +150,7 @@ export interface LogicianProviderProps {
  */
 export const LogicianProvider: React.FC<LogicianProviderProps> = ({
   config,
+  theme,
   language = 'en',
   loadFonts = true,
   defaultColorMode = 'system',
@@ -146,13 +164,22 @@ export const LogicianProvider: React.FC<LogicianProviderProps> = ({
     }
   }, [loadFonts]);
 
+  const neutral = theme?.neutral;
+  const secondary = theme?.secondary;
   const system = useMemo(() => {
-    if (!config) {
+    const isDefaultPalette =
+      (neutral ?? 'ink') === 'ink' && (secondary ?? 'sand') === 'sand';
+    if (!config && isDefaultPalette) {
       return defaultSystem;
     }
-    // Merge defaultConfig, logicianConfig, and user config
-    return createSystem(defaultConfig, logicianConfig, config);
-  }, [config]);
+    const base = isDefaultPalette
+      ? logicianConfig
+      : createLogicianTheme({ neutral, secondary });
+    // Merge defaultConfig, the Logician palette config, and user config
+    return config
+      ? createSystem(defaultConfig, base, config)
+      : createSystem(defaultConfig, base);
+  }, [config, neutral, secondary]);
 
   const languageValue = useMemo(() => ({ language }), [language]);
 

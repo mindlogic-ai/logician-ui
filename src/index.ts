@@ -141,11 +141,24 @@ export type { LanguageContextValue } from './hooks/useLanguage';
 export { LanguageContext, useLanguage } from './hooks/useLanguage';
 
 // Theme exports
-export { logicianConfig, system, theme } from './theme';
+export {
+  createLogicianTheme,
+  logicianConfig,
+  type LogicianThemeOptions,
+  system,
+  theme,
+} from './theme';
 export {
   colors,
+  createSemanticColors,
+  DEPRECATED_COLOR_TOKENS,
+  type DeprecatedSemanticColorToken,
+  type NeutralScale,
+  type SecondaryScale,
   type SemanticColorToken,
   semanticTokens,
+  SYSTEM_HUE_NAMES,
+  type SystemHue,
 } from './theme/colors';
 export { noZoomOnFocus } from './theme/formControls';
 export {
@@ -162,6 +175,8 @@ export {
   type MotionStyleToken,
 } from './theme/motion';
 export { cubicBezier } from './utils/cubicBezier';
+export { disabledControl, disabledText } from './utils/disabledControl';
+export { FOCUS_RING_SHADOW, focusRing } from './utils/focusRing';
 export {
   staggerDelayMs,
   type StaggerProps,
