@@ -7075,7 +7075,7 @@ js-yaml@^4.1.0, js-yaml@^4.1.1:
   dependencies:
     argparse "^2.0.1"
 
-jscodeshift@^17:
+jscodeshift@^17.3.0:
   version "17.4.0"
   resolved "https://registry.yarnpkg.com/jscodeshift/-/jscodeshift-17.4.0.tgz#efa0619ddb1d994e85982ec37a7afe8e618ae324"
   integrity sha512-i3ESKiiTsGynxzTg5BhsZViD0ai72/6SsI1efDZxG6/5KCoElsmquxtyhXK5lpEgoO7MTNpYkjFEdEL97SkBNg==
