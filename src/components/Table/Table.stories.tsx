@@ -12,6 +12,7 @@ import {
   Thead,
   Tr,
 } from '.';
+import { Button } from '../Button';
 import { IoChevronDownOutline } from '../Icon';
 import { IconButton } from '../IconButton';
 
@@ -428,5 +429,257 @@ export const WithTwoLeftStickyColumns: Story = {
     </TableContainer>
   ),
   args: { width: '180%' },
+  argTypes: {},
+};
+
+// Three consecutive left-pinned columns + one right-pinned column — the shape of
+// the admin 챗봇 공개 관리 / 전체 멤버 tables (checkbox · name · status pinned
+// left, an action column pinned right, many trailing columns scrolling between).
+const adminColumns: { key: string; label: string }[] = [
+  { key: 'check', label: '' },
+  { key: 'name', label: '이름' },
+  { key: 'status', label: '상태' },
+  { key: 'email', label: '이메일' },
+  { key: 'phone', label: '전화번호' },
+  { key: 'address', label: '주소' },
+  { key: 'company', label: '회사' },
+  { key: 'department', label: '부서' },
+  { key: 'action', label: '' },
+];
+
+const LEFT_STICKY = new Set([0, 1, 2]);
+const RIGHT_STICKY = adminColumns.length - 1;
+
+const adminRow = (
+  i: number,
+  name: string,
+  status: string
+): Record<string, string> => ({
+  check: `${i + 1}`,
+  name,
+  status,
+  email: `user${i + 1}@example.com`,
+  phone: '010-1234-5678',
+  address: '서울특별시 강남구 테헤란로 123',
+  company: '테크 주식회사',
+  department: '프론트엔드 팀',
+  action: '⋯',
+});
+
+/**
+ * Multiple left-pinned columns kept flush during horizontal scroll — the admin
+ * table layout that surfaced the offset bug. Scroll sideways: the three left
+ * columns and the right action column stay pinned and opaque, with the middle
+ * columns scrolling underneath.
+ */
+export const WithMultipleLeftStickyColumns: Story = {
+  render: (args) => {
+    const rows = [
+      adminRow(0, '김철수', '승인됨'),
+      adminRow(1, '이영희', '검토중'),
+      adminRow(2, '박지훈', '거절됨'),
+    ];
+    return (
+      <TableContainer>
+        <Table {...args}>
+          <Thead>
+            <Tr>
+              {adminColumns.map((column, index) => (
+                <Th
+                  key={column.key}
+                  isSticky={LEFT_STICKY.has(index) || index === RIGHT_STICKY}
+                  stickyDirection={index === RIGHT_STICKY ? 'right' : 'left'}
+                  stickyIndex={index === RIGHT_STICKY ? 0 : index}
+                >
+                  {column.label}
+                </Th>
+              ))}
+            </Tr>
+          </Thead>
+          <Tbody>
+            {rows.map((item, i) => (
+              <Tr key={i}>
+                {adminColumns.map((column, index) => (
+                  <Td
+                    key={column.key}
+                    isSticky={LEFT_STICKY.has(index) || index === RIGHT_STICKY}
+                    stickyDirection={index === RIGHT_STICKY ? 'right' : 'left'}
+                    stickyIndex={index === RIGHT_STICKY ? 0 : index}
+                  >
+                    {item[column.key]}
+                  </Td>
+                ))}
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </TableContainer>
+    );
+  },
+  args: { width: '220%' },
+  argTypes: {},
+};
+
+/**
+ * Regression coverage for the admin 챗봇 공개 관리 / 전체 멤버 breakage.
+ *
+ * The pinned columns' cumulative offsets used to be measured once at mount and
+ * then frozen, so when a column's width changed afterwards — a web-font swap, a
+ * resize, pagination swapping in wider content, or the columns reflowing as the
+ * table went from fitting to overflowing — the following pinned columns stayed
+ * at the stale offsets and visibly detached (an empty gap opened between them).
+ *
+ * Toggle the button: the second pinned column ("이름") grows/shrinks its
+ * content, so the third pinned column ("상태") must re-pin to the new edge. It
+ * has to stay flush — no empty gap, no overlap. Before the ResizeObserver fix a
+ * gap appeared here after toggling.
+ */
+export const StickyOffsetsTrackWidthChanges: Story = {
+  render: (args) => {
+    const [long, setLong] = useState(false);
+    const longName = '아주 아주 긴 이름 콘텐츠로 컬럼 폭을 넓힙니다';
+    const rows = [
+      adminRow(0, long ? `김철수 — ${longName}` : '김철수', '승인됨'),
+      adminRow(1, long ? `이영희 — ${longName}` : '이영희', '검토중'),
+      adminRow(2, long ? `박지훈 — ${longName}` : '박지훈', '거절됨'),
+    ];
+    return (
+      <Flex direction="column" gap={3} align="start">
+        <Button onClick={() => setLong((v) => !v)}>
+          {long ? '이름 컬럼 짧게' : '이름 컬럼 길게 (폭 변경)'}
+        </Button>
+        <TableContainer>
+          <Table {...args}>
+            <Thead>
+              <Tr>
+                {adminColumns.map((column, index) => (
+                  <Th
+                    key={column.key}
+                    isSticky={LEFT_STICKY.has(index) || index === RIGHT_STICKY}
+                    stickyDirection={index === RIGHT_STICKY ? 'right' : 'left'}
+                    stickyIndex={index === RIGHT_STICKY ? 0 : index}
+                  >
+                    {column.label}
+                  </Th>
+                ))}
+              </Tr>
+            </Thead>
+            <Tbody>
+              {rows.map((item, i) => (
+                <Tr key={i}>
+                  {adminColumns.map((column, index) => (
+                    <Td
+                      key={column.key}
+                      isSticky={LEFT_STICKY.has(index) || index === RIGHT_STICKY}
+                      stickyDirection={index === RIGHT_STICKY ? 'right' : 'left'}
+                      stickyIndex={index === RIGHT_STICKY ? 0 : index}
+                    >
+                      {item[column.key]}
+                    </Td>
+                  ))}
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </TableContainer>
+      </Flex>
+    );
+  },
+  args: { width: '220%' },
+  argTypes: {},
+};
+
+// Pages whose pinned "이름" column has a different natural width each page — the
+// real admin case, where paging swaps in rows of different content lengths.
+const PAGES: { name: string; status: string }[][] = [
+  [
+    { name: '김철수', status: '승인됨' },
+    { name: '이영희', status: '검토중' },
+    { name: '박지훈', status: '거절됨' },
+  ],
+  [
+    { name: '남궁민수 — 아주 아주 길어서 컬럼을 넓히는 이름', status: '승인됨' },
+    { name: '황보지훈 — 아주 아주 길어서 컬럼을 넓히는 이름', status: '승인됨' },
+    { name: '독고영희 — 아주 아주 길어서 컬럼을 넓히는 이름', status: '검토중' },
+  ],
+  [
+    { name: '최민', status: '거절됨' },
+    { name: '한수', status: '승인됨' },
+    { name: '오지', status: '검토중' },
+  ],
+];
+
+/**
+ * Regression coverage for the exact admin-page symptom: **pagination didn't
+ * re-pin the sticky columns.**
+ *
+ * Paging swaps only the `<tbody>` rows while the `<thead>` (and its Th cells)
+ * stay mounted. Each page here has a different-width pinned "이름" column. The
+ * old engine measured the pinned widths once and only recalculated on a
+ * scroll/resize event — which paging doesn't fire — so pages 2/3 rendered
+ * pinned to page 1's widths and the following columns overlapped. Step through
+ * the pages: the "상태" column must stay flush against "이름" on every page.
+ */
+export const StickyOffsetsSurvivePagination: Story = {
+  render: (args) => {
+    const [page, setPage] = useState(0);
+    const rows = PAGES[page].map((r, i) => adminRow(i, r.name, r.status));
+    return (
+      <Flex direction="column" gap={3} align="start">
+        <Flex gap={2} align="center">
+          <Button
+            variant="outline"
+            disabled={page === 0}
+            onClick={() => setPage((p) => Math.max(0, p - 1))}
+          >
+            이전
+          </Button>
+          <span>{page + 1} / {PAGES.length} 페이지</span>
+          <Button
+            variant="outline"
+            disabled={page === PAGES.length - 1}
+            onClick={() => setPage((p) => Math.min(PAGES.length - 1, p + 1))}
+          >
+            다음
+          </Button>
+        </Flex>
+        <TableContainer>
+          <Table {...args}>
+            <Thead>
+              <Tr>
+                {adminColumns.map((column, index) => (
+                  <Th
+                    key={column.key}
+                    isSticky={LEFT_STICKY.has(index) || index === RIGHT_STICKY}
+                    stickyDirection={index === RIGHT_STICKY ? 'right' : 'left'}
+                    stickyIndex={index === RIGHT_STICKY ? 0 : index}
+                  >
+                    {column.label}
+                  </Th>
+                ))}
+              </Tr>
+            </Thead>
+            <Tbody>
+              {rows.map((item, i) => (
+                <Tr key={i}>
+                  {adminColumns.map((column, index) => (
+                    <Td
+                      key={column.key}
+                      isSticky={LEFT_STICKY.has(index) || index === RIGHT_STICKY}
+                      stickyDirection={index === RIGHT_STICKY ? 'right' : 'left'}
+                      stickyIndex={index === RIGHT_STICKY ? 0 : index}
+                    >
+                      {item[column.key]}
+                    </Td>
+                  ))}
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </TableContainer>
+      </Flex>
+    );
+  },
+  args: { width: '220%' },
   argTypes: {},
 };

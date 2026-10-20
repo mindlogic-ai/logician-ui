@@ -78,6 +78,7 @@ Override per usage: `<MyIcon color="primary.main" />`.
 
 | boxSize | px  |
 |---------|-----|
+| `2xs`   | 14px |
 | `xs`    | 16px |
 | `sm`    | 20px |
 | `md`    | 24px |

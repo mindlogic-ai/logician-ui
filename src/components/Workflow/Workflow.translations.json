@@ -1,0 +1,112 @@
+{
+  "workflow_drawer_empty_settings": {
+    "ko": "이 노드는 편집할 수 있는 설정이 없습니다.",
+    "en": "This node has no editable settings.",
+    "ja": "このノードには編集できる設定がありません。"
+  },
+  "workflow_drawer_graph_group_title": {
+    "ko": "그래프",
+    "en": "Graph",
+    "ja": "グラフ"
+  },
+  "workflow_drawer_issues_error_title": {
+    "ko": "수정이 필요해요",
+    "en": "Fixes needed",
+    "ja": "修正が必要です"
+  },
+  "workflow_drawer_issues_warning_title": {
+    "ko": "확인해 주세요",
+    "en": "Worth checking",
+    "ja": "確認してください"
+  },
+  "workflow_edge_connection": {
+    "ko": "{source} → {target}",
+    "en": "{source} → {target}",
+    "ja": "{source} → {target}"
+  },
+  "workflow_edge_delete": {
+    "ko": "연결 삭제",
+    "en": "Delete connection",
+    "ja": "接続を削除"
+  },
+  "workflow_edge_endpoints_heading": {
+    "ko": "연결 지점",
+    "en": "Endpoints",
+    "ja": "接続ポイント"
+  },
+  "workflow_edge_label_label": {
+    "ko": "라벨",
+    "en": "Label",
+    "ja": "ラベル"
+  },
+  "workflow_edge_label_placeholder": {
+    "ko": "연결 라벨 (선택)",
+    "en": "Connection label (optional)",
+    "ja": "接続ラベル（任意）"
+  },
+  "workflow_edge_source_label": {
+    "ko": "출발",
+    "en": "Source",
+    "ja": "送信元"
+  },
+  "workflow_edge_target_label": {
+    "ko": "도착",
+    "en": "Target",
+    "ja": "送信先"
+  },
+  "workflow_issues_errors_label": {
+    "ko": "오류",
+    "en": "Errors",
+    "ja": "エラー"
+  },
+  "workflow_issues_summary_errors": {
+    "ko": "오류 {count}개",
+    "en": "{count} error(s)",
+    "ja": "エラー {count}件"
+  },
+  "workflow_issues_summary_warnings": {
+    "ko": "경고 {count}개",
+    "en": "{count} warning(s)",
+    "ja": "警告 {count}件"
+  },
+  "workflow_issues_validating": {
+    "ko": "변경 사항 검증 중…",
+    "en": "Validating changes…",
+    "ja": "変更内容を検証中…"
+  },
+  "workflow_issues_warnings_label": {
+    "ko": "경고",
+    "en": "Warnings",
+    "ja": "警告"
+  },
+  "workflow_node_close": {
+    "ko": "노드 설정 닫기",
+    "en": "Close node settings",
+    "ja": "ノード設定を閉じる"
+  },
+  "workflow_node_delete": {
+    "ko": "노드 삭제",
+    "en": "Delete node",
+    "ja": "ノードを削除"
+  },
+  "workflow_node_duplicate": {
+    "ko": "노드 복제",
+    "en": "Duplicate node",
+    "ja": "ノードを複製"
+  },
+  "workflow_node_overflow_label": {
+    "ko": "더보기",
+    "en": "More actions",
+    "ja": "その他の操作"
+  },
+  "workflow_palette_close": {
+    "ko": "노드 추가 닫기",
+    "en": "Close node panel",
+    "ja": "ノードパネルを閉じる"
+  },
+  "workflow_palette_title": {
+    "ko": "노드 추가",
+    "en": "Create node",
+    "ja": "ノードを追加"
+  }
+}

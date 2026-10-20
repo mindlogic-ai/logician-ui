@@ -1,7 +1,10 @@
 import React, { forwardRef } from 'react';
-import { Text as ChakraText, TextProps } from '@chakra-ui/react';
+import { Text as ChakraText } from '@chakra-ui/react';
 
-export const Text = forwardRef<HTMLParagraphElement, TextProps>(
+import { polymorphic } from '../../types/polymorphic';
+import { TypographyOwnProps } from './Typography.types';
+
+const TextImpl = forwardRef<HTMLParagraphElement, TypographyOwnProps>(
   (props, ref) => {
     // Extract fontSize and textStyle to handle them conditionally
     const { fontSize, ...rest } = props;
@@ -21,4 +24,7 @@ export const Text = forwardRef<HTMLParagraphElement, TextProps>(
   }
 );
 
-Text.displayName = 'Text';
+TextImpl.displayName = 'Text';
+
+/** Type-level polymorphism over the same runtime — see `polymorphic`. */
+export const Text = polymorphic<TypographyOwnProps, 'p'>(TextImpl);

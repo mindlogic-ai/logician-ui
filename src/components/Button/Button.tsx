@@ -2,9 +2,11 @@ import { forwardRef } from 'react';
 import { Button as ChakraButton } from '@chakra-ui/react';
 
 import { focusRing } from '@/utils/focusRing';
+import { mergeCss } from '@/utils/mergeCss';
 
-import { getButtonStyles } from './Button.styles';
-import { ButtonProps } from './Button.types';
+import { polymorphic } from '../../types/polymorphic';
+import { buttonTransition, getButtonStyles } from './Button.styles';
+import { ButtonOwnProps, ButtonProps } from './Button.types';
 
 /**
  * Button component with two-dimensional variant system.
@@ -18,13 +20,55 @@ import { ButtonProps } from './Button.types';
  * <Button colorPalette="danger" variant="solid">Delete</Button>
  * <Button colorPalette="secondary" variant="outline">Cancel</Button>
  * <Button colorPalette="neutral" variant="ghost">Close</Button>
+ * <Button colorPalette="primary" variant="solid" lift>Get started</Button>
+ *
+ * // `as` carries the element's own props (see Button.types.ts):
+ * <Button as="a" href="/docs" target="_blank">문서</Button>
  * ```
  */
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ colorPalette, variant = 'soft', size, children, ...rest }, ref) => {
+const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      colorPalette,
+      variant = 'soft',
+      size,
+      lift,
+      children,
+      _hover: hoverProp,
+      _active: activeProp,
+      _disabled: disabledProp,
+      ...rest
+    },
+    ref
+  ) => {
     const palette = colorPalette ?? 'primary';
 
-    const styles = getButtonStyles(palette, variant);
+    const base = getButtonStyles(palette, variant);
+
+    // Merged rather than spread after: each variant already owns `_hover` and
+    // `_active` for its colours, and replacing either would drop them.
+    const styles = lift
+      ? {
+          ...base,
+          _hover: {
+            ...base._hover,
+            translate: '0 -1px',
+            // `drop-shadow`, not `box-shadow`. The keyboard focus ring is a
+            // box-shadow, and Chakra emits `:hover` after `:focus-visible`, so
+            // a focused button being hovered would lose its ring to this. A
+            // different property cannot collide with it at all — and unlike a
+            // box-shadow it follows the border radius for free.
+            filter: 'drop-shadow(0 3px 6px rgba(0, 0, 0, 0.18))',
+            // A black shadow does nothing on a dark canvas; deepen it there.
+            _dark: { filter: 'drop-shadow(0 3px 8px rgba(0, 0, 0, 0.55))' },
+          },
+          // Pressing puts it back on the surface, under the `scale`.
+          _active: { ...base._active, translate: '0 0', filter: 'none' },
+          // `:hover` still matches a disabled button, so the lift has to be
+          // switched off here rather than left to pointer-events.
+          _disabled: { translate: '0 0', filter: 'none' },
+        }
+      : base;
 
     /**
      * Chakra Button automatically maps size prop to textStyle:
@@ -44,11 +88,37 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         size={size}
         borderRadius="md"
         {...styles}
+        // Merged, not left to `{...rest}`. A prop spread later replaces the
+        // whole object, so a call site adding one line — the 2px press ledge
+        // FactChat puts on its quiz buttons — used to silently drop the
+        // variant's pressed colour *and* the scale with it, and the button
+        // stopped reading as pressed at all. Its own keys still win; it just
+        // no longer erases the ones it did not mention. Deep, so a nested
+        // condition (lift's `_hover._dark`) survives a call site's own `_dark`.
+        _hover={mergeCss(styles._hover, hoverProp)}
+        _active={mergeCss(styles._active, activeProp)}
+        // `cursor` is a style prop, so it lands outside Chakra's
+        // `@layer recipes` and beat the recipe's disabled cursor — every
+        // disabled Button showed a pointer and read as clickable. The
+        // disabled cursor has to sit at this level, merged like the two above
+        // so a call site's `_disabled` cannot drop it.
+        _disabled={mergeCss(
+          '_disabled' in styles ? styles._disabled : undefined,
+          // Chakra disables a `loading` button too; it is working, not
+          // forbidden, so it gets `progress`.
+          { cursor: rest.loading ? 'progress' : 'not-allowed' },
+          disabledProp
+        )}
         {...focusRing}
         cursor="pointer"
-        transitionProperty="all"
-        transitionDuration="0.25s"
-        transitionTimingFunction="ease-in-out"
+        // Explicit identity so the press transitions from a definite value
+        // rather than relying on `scale: none` being read as 1.
+        scale="1"
+        // Two clocks on one element — the press is faster than the colour
+        // change — so the shorthand is written out and only the reduced-motion
+        // guard comes from the vocabulary.
+        transition={buttonTransition}
+        animationStyle="composite"
         ref={ref}
         {...rest}
       >
@@ -58,4 +128,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   }
 );
 
-Button.displayName = 'Button';
+/**
+ * Type-level polymorphism over the same runtime — see `polymorphic` in
+ * `src/types/polymorphic.ts` for what the cast does and why it is needed.
+ *
+ * `as` defaults to `'button'`, so nothing that already compiles stops
+ * compiling.
+ */
+ButtonImpl.displayName = 'Button';
+
+export const Button = polymorphic<ButtonOwnProps>(ButtonImpl);

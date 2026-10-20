@@ -17,7 +17,7 @@ const fieldBase = {
   ...focusVars,
   bg: 'bg.surface',
   color: 'fg.default',
-  borderColor: { base: 'gray.400', _dark: 'gray.1100' },
+  borderColor: 'border.default',
   _hover: { borderColor: 'primary.lighter' },
   _focus: { borderColor: 'primary.main' },
   _invalid: {

@@ -9,6 +9,7 @@ import postcss from 'rollup-plugin-postcss';
 const input = {
   index: 'src/index.ts',
   icons: 'src/icons.ts',
+  styles: 'src/styles.ts',
 };
 
 // External dependencies - don't bundle these
@@ -19,16 +20,24 @@ const external = [
   'react/jsx-runtime',
   // Chakra UI ecosystem
   '@chakra-ui/react',
+  // Ark is Chakra's own headless layer. It must stay external so the app's
+  // single copy (the one Chakra itself imports) owns every part's context —
+  // `BottomSheet` imports `@ark-ui/react/drawer` directly.
+  '@ark-ui/react',
   '@emotion/react',
   '@emotion/styled',
   'framer-motion',
   // Color-mode runtime (app singleton; must not be bundled)
   'next-themes',
   // Heavy dependencies
-  '@mdxeditor/editor',
   /^react-syntax-highlighter/,
   /^react-icons/,
   /^recharts/,
+  // Workflow editor graph deps (kept external; pulled in via dependencies).
+  // Matching @xyflow/* also externalizes its side-effect CSS import so the
+  // consumer's bundler owns it rather than rollup-postcss.
+  /^@xyflow\//,
+  /^@dagrejs\//,
   'react-markdown',
   'katex',
   'lodash',
@@ -98,7 +107,7 @@ export default {
       declaration: true,
       declarationDir: 'dist',
       rootDir: 'src',
-      exclude: ['**/*.stories.tsx', '**/*.test.tsx'],
+      exclude: ['**/*.stories.tsx', '**/*.test.tsx', '**/*.test.ts'],
     }),
   ],
   onwarn(warning, warn) {

@@ -1,5 +1,6 @@
-import DotLoader from 'react-spinners/DotLoader';
 import { Flex, FlexProps } from '@chakra-ui/react';
+
+import { Spinner } from '@/components/Spinner';
 
 export const SectionLoader = ({
   isLoading,
@@ -16,11 +17,12 @@ export const SectionLoader = ({
       align="center"
       justify="center"
       bg="bg.canvas"
-      transition="0.3 opacity ease"
+      animationStyle="feedback"
+      transitionProperty="opacity"
       zIndex={9999}
       {...rest}
     >
-      <DotLoader color="var(--chakra-colors-primary-main)" />
+      <Spinner boxSize="60px" borderWidth="6px" />
     </Flex>
   );
 };

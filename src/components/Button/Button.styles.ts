@@ -5,6 +5,60 @@ import { ButtonColorPalette, ButtonVariant } from './Button.types';
 type StyleProps = Partial<ChakraButtonProps>;
 
 /**
+ * The press is timed apart from everything else.
+ *
+ * This used to be `transitionProperty="all"` at a flat `0.25s`, which put the
+ * press on the same 250ms clock as a colour change. A press has to read as
+ * *contact* — the finger is already gone by 250ms and the button is still
+ * sinking — so it takes `motion.press` (120ms) while colour, border and shadow
+ * keep the slower step, since those are feedback rather than touch.
+ *
+ * ## Why the press uses `scale`, not `transform: scale()`
+ *
+ * `transform` is a single property, so a `_active` of `transform: scale(0.97)`
+ * *replaced* whatever transform the call site had set — and call sites use it
+ * for layout. `CopyableCode` centres its button with `translateY(-50%)`, so
+ * pressing it dropped the button half its own height, and once `transform` was
+ * being transitioned that drop became a visible slide.
+ *
+ * The individual `scale` property composes with `transform` instead of
+ * overwriting it, so a consumer can position with `transform` and still get the
+ * press. Anything that presses should use `scale`, never `transform: scale()`.
+ *
+ * Naming the properties also stops `all` from animating things nobody asked it
+ * to (width, padding) when a consumer changes them on hover.
+ */
+const PRESS = 'var(--chakra-durations-motion-press)';
+const FEEDBACK = 'var(--chakra-durations-fast)';
+const STANDARD = 'var(--chakra-easings-standard)';
+// The press is contact, so it eases out: `standard` starts slowly and the
+// first frames lag behind the finger.
+const EMPHASIZED = 'var(--chakra-easings-emphasized)';
+
+export const buttonTransition = [
+  `scale ${PRESS} ${EMPHASIZED}`,
+  ...[
+    'background-color',
+    'border-color',
+    'color',
+    // No `box-shadow`: no variant sets one, so the only box-shadow that ever
+    // changes here is the keyboard focus ring, and that should appear at once.
+    'opacity',
+    // Both moved by `lift`, listed unconditionally because a property nobody
+    // changes costs nothing, and leaving them out would make the opt-in jump.
+    'translate',
+    // Nothing here sets `transform` — the press deliberately uses `scale` so it
+    // cannot clobber a call site. But call sites do set it (a 2px press ledge,
+    // an icon nudge), and under the old `transitionProperty: all` those moved
+    // smoothly. Naming the properties took that away and left them snapping,
+    // which is a regression the call site cannot see in this file. Listing it
+    // costs nothing while we set it nowhere.
+    'transform',
+    'filter',
+  ].map((property) => `${property} ${FEEDBACK} ${STANDARD}`),
+].join(', ');
+
+/**
  * Two-dimensional Button styles using the Golden Ratio color system.
  *
  * Combines `colorPalette` (semantic color) with `variant` (visual appearance)
@@ -42,20 +96,24 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'blue.700',
-        transform: 'scale(0.97)',
+        scale: '0.97',
       },
     },
     soft: {
-      borderColor: 'transparent',
+      // Same-hue hairline so soft reads as a defined control on white, not a
+      // floating fill. `lighter` sits well below `outline`'s `.main` border, so
+      // soft stays the quieter of the two bordered variants; it also equals the
+      // hover/active fill, so the border melts into the fill on interaction.
+      borderColor: 'primary.lighter',
       bgColor: 'primary.extralight', // #E8EEFB
       color: 'primary.dark', // #0D317D
       _hover: {
-        borderColor: 'transparent',
+        borderColor: 'primary.lighter',
         bgColor: 'primary.lighter', // #B9CBF3
       },
       _active: {
         bgColor: 'primary.lighter', // #B9CBF3 — same as hover, scale provides pressed feedback
-        transform: 'scale(0.97)',
+        scale: '0.97',
       },
     },
     outline: {
@@ -67,7 +125,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'primary.lighter', // #B9CBF3
-        transform: 'scale(0.97)',
+        scale: '0.97',
       },
     },
     ghost: {
@@ -79,7 +137,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'primary.lighter', // #B9CBF3
-        transform: 'scale(0.97)',
+        scale: '0.97',
       },
     },
   },
@@ -98,20 +156,20 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'violet.700',
-        transform: 'scale(0.97)',
+        scale: '0.97',
       },
     },
     soft: {
-      borderColor: 'transparent',
+      borderColor: 'secondary.lighter',
       bgColor: 'secondary.extralight', // #F4E8FB
       color: 'secondary.dark', // #570D7D
       _hover: {
-        borderColor: 'transparent',
+        borderColor: 'secondary.lighter',
         bgColor: 'secondary.lighter', // #DEB9F3
       },
       _active: {
         bgColor: 'secondary.lighter', // #DEB9F3 — same as hover, scale provides pressed feedback
-        transform: 'scale(0.97)',
+        scale: '0.97',
       },
     },
     outline: {
@@ -123,7 +181,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'secondary.lighter', // #DEB9F3
-        transform: 'scale(0.97)',
+        scale: '0.97',
       },
     },
     ghost: {
@@ -135,7 +193,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'secondary.lighter', // #DEB9F3
-        transform: 'scale(0.97)',
+        scale: '0.97',
       },
     },
   },
@@ -154,20 +212,20 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'rose.700',
-        transform: 'scale(0.97)',
+        scale: '0.97',
       },
     },
     soft: {
-      borderColor: 'transparent',
+      borderColor: 'danger.lighter',
       bgColor: 'danger.extralight', // #FBE8E9
       color: 'danger.dark', // #7D0D14
       _hover: {
-        borderColor: 'transparent',
+        borderColor: 'danger.lighter',
         bgColor: 'danger.lighter', // #F3B9BD
       },
       _active: {
         bgColor: 'danger.lighter', // #F3B9BD — same as hover, scale provides pressed feedback
-        transform: 'scale(0.97)',
+        scale: '0.97',
       },
     },
     outline: {
@@ -179,7 +237,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'danger.lighter', // #F3B9BD
-        transform: 'scale(0.97)',
+        scale: '0.97',
       },
     },
     ghost: {
@@ -191,7 +249,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'danger.lighter', // #F3B9BD
-        transform: 'scale(0.97)',
+        scale: '0.97',
       },
     },
   },
@@ -210,20 +268,20 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'green.800',
-        transform: 'scale(0.97)',
+        scale: '0.97',
       },
     },
     soft: {
-      borderColor: 'transparent',
+      borderColor: 'success.lighter',
       bgColor: 'success.extralight', // #E9FBE8
       color: 'success.dark', // #147D0D
       _hover: {
-        borderColor: 'transparent',
+        borderColor: 'success.lighter',
         bgColor: 'success.lighter', // #BDF3B9
       },
       _active: {
         bgColor: 'success.lighter', // #BDF3B9 — same as hover, scale provides pressed feedback
-        transform: 'scale(0.97)',
+        scale: '0.97',
       },
     },
     outline: {
@@ -235,7 +293,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'success.lighter', // #BDF3B9
-        transform: 'scale(0.97)',
+        scale: '0.97',
       },
     },
     ghost: {
@@ -247,7 +305,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'success.lighter', // #BDF3B9
-        transform: 'scale(0.97)',
+        scale: '0.97',
       },
     },
   },
@@ -269,20 +327,20 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'gold.600',
-        transform: 'scale(0.97)',
+        scale: '0.97',
       },
     },
     soft: {
-      borderColor: 'transparent',
+      borderColor: 'warning.lighter',
       bgColor: 'warning.extralight', // #FBF6E8
       color: 'warning.dark', // #7D610D
       _hover: {
-        borderColor: 'transparent',
+        borderColor: 'warning.lighter',
         bgColor: 'warning.lighter', // #F3E4B9
       },
       _active: {
         bgColor: 'warning.lighter', // #F3E4B9 — same as hover, scale provides pressed feedback
-        transform: 'scale(0.97)',
+        scale: '0.97',
       },
     },
     outline: {
@@ -294,7 +352,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'warning.lighter', // #F3E4B9
-        transform: 'scale(0.97)',
+        scale: '0.97',
       },
     },
     ghost: {
@@ -306,7 +364,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'warning.lighter', // #F3E4B9
-        transform: 'scale(0.97)',
+        scale: '0.97',
       },
     },
   },
@@ -315,33 +373,57 @@ export const buttonColorPaletteStyles: Record<
    * Neutral (Gray) color scheme
    */
   neutral: {
+    /**
+     * The INK action — the one high-emphasis fill in the system with no hue.
+     *
+     * Was `gray.700` under a white label, which failed AA in **both** modes and
+     * failed worse in the one nobody screenshots: white on `#737D96` measures
+     * **4.12:1** in light, and the semantic gray scale inverts, so in dark the
+     * same token resolves to `grayDark.fg700` `#8D919D` and the label lands at
+     * **3.15:1**. This was the only palette x variant combination in the system
+     * below the 4.5:1 text gate.
+     *
+     * "One step darker" does not fix it — `gray.800` is 5.32:1 light but
+     * **3.08:1** dark, i.e. worse, because darkening the light arm lightens the
+     * dark one. A neutral fill has to INVERT, not shift, which is exactly what
+     * `bg.inverse` / `fg.inverse` already do: ink under a near-white label on a
+     * light page, brand paper under an ink label on a dark one. Measured
+     * **15.11:1** and **15.88:1**, with the fill itself 15.49:1 / 16.36:1 clear
+     * of its canvas so it still reads as a control.
+     *
+     * `gray.1200` / `gray.1100` for hover and active for the same reason: both
+     * step AWAY from the resting fill toward the page in whichever mode is
+     * live, because they invert too. Labels stay 10.8:1 or better throughout.
+     */
     solid: {
-      borderColor: 'gray.700',
-      bgColor: 'gray.700', // #737D96
-      color: 'white',
+      borderColor: 'bg.inverse',
+      bgColor: 'bg.inverse',
+      color: 'fg.inverse',
       _hover: {
-        borderColor: 'gray.800',
-        bgColor: 'gray.800', // #616B85
+        borderColor: 'gray.1200',
+        bgColor: 'gray.1200',
       },
       _active: {
-        bgColor: 'gray.900', // #505A74
-        transform: 'scale(0.97)',
+        bgColor: 'gray.1100',
+        scale: '0.97',
       },
     },
     soft: {
-      borderColor: 'transparent',
+      // `border.default` (not a gray tint) so the neutral hairline stays visible
+      // in dark mode, where `border.subtle` collapses into the fill.
+      borderColor: 'border.default', // gray.300 / gray.1100 (_dark)
       // Neutral fills flip with the mode (light values preserved: bg.subtle →
       // gray.50, bg.muted → gray.100). Without this the surface stayed light in
       // dark mode while the fg.default text flipped to light = invisible.
       bgColor: 'bg.subtle', // gray.50 / gray.1300 (_dark)
       color: 'fg.default',
       _hover: {
-        borderColor: 'transparent',
+        borderColor: 'border.default',
         bgColor: 'bg.muted', // gray.100 / gray.1200 (_dark)
       },
       _active: {
         bgColor: 'bg.muted', // matches hover; scale provides pressed feedback
-        transform: 'scale(0.97)',
+        scale: '0.97',
       },
     },
     outline: {
@@ -353,7 +435,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'bg.muted', // gray.100 / gray.1200 (_dark)
-        transform: 'scale(0.97)',
+        scale: '0.97',
       },
     },
     ghost: {
@@ -365,7 +447,7 @@ export const buttonColorPaletteStyles: Record<
       },
       _active: {
         bgColor: 'bg.muted', // gray.100 / gray.1200 (_dark)
-        transform: 'scale(0.97)',
+        scale: '0.97',
       },
     },
   },

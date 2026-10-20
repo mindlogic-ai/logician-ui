@@ -6,6 +6,8 @@ import {
 
 import { focusRing } from '@/utils/focusRing';
 
+import { checkmarkDraw } from './Checkbox.styles';
+
 export const CheckboxControl = forwardRef<HTMLDivElement, CheckboxControlProps>(
   (props, ref) => (
     <ChakraCheckbox.Control
@@ -26,10 +28,17 @@ export const CheckboxControl = forwardRef<HTMLDivElement, CheckboxControlProps>(
         bgColor: { base: 'gray.300', _dark: 'gray.1200' },
         borderColor: 'border.subtle',
       }}
+      // The box fills first, then the tick is stroked on 60ms later. Firing them
+      // together reads as one indistinct flash; the gap makes it two beats —
+      // "pressed", then "confirmed".
+      animationStyle="feedback"
+      transitionProperty="background-color, border-color"
       {...focusRing}
       {...props}
     >
-      <ChakraCheckbox.Indicator />
+      {/* The polyline only mounts once checked, so the draw runs on mount —
+          exactly when we want it. */}
+      <ChakraCheckbox.Indicator css={checkmarkDraw} />
     </ChakraCheckbox.Control>
   )
 );

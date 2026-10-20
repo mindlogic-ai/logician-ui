@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Flex } from '@chakra-ui/react';
 
-import { IoChevronForward, IoIosArrowBack } from '@/components/Icon';
+import { ChevronLeftIcon, ChevronRightIcon } from '@/components/Icon';
 import { IconButton } from '@/components/IconButton';
 import { Subtext, Subtitle } from '@/components/Typography';
 import { useTranslate } from '@/hooks/useTranslate';
@@ -81,6 +81,11 @@ export const Pagination = ({
             <SelectField<number>
               size="sm"
               width="5.5rem"
+              // The visible label for this control is the "개씩 보기" text beside
+              // it, which the select itself cannot claim — so it carries the
+              // same words as its own hidden label rather than shipping
+              // nameless (KWCAG 5.3.4.1 레이블 제공).
+              ariaLabel={translate('pagination_items_per_page') as string}
               options={itemsPerPageOptions.map((option) => ({
                 label: option.toString(),
                 value: option,
@@ -108,7 +113,7 @@ export const Pagination = ({
               disabled={currentPage <= 1}
               color={currentPage === 1 ? 'fg.subtle' : 'fg.muted'}
             >
-              <IoIosArrowBack boxSize="sm" />
+              <ChevronLeftIcon boxSize="sm" />
             </IconButton>
             <IconButton
               colorPalette="neutral"
@@ -118,7 +123,7 @@ export const Pagination = ({
               disabled={currentPage >= maxPage}
               color={currentPage === maxPage ? 'fg.subtle' : 'fg.muted'}
             >
-              <IoChevronForward boxSize="sm" />
+              <ChevronRightIcon boxSize="sm" />
             </IconButton>
           </Flex>
         )}

@@ -26,7 +26,8 @@ import { colors, semanticTokens } from './colors';
  * Helper function to resolve a semantic token reference to its actual hex value.
  * E.g., '{colors.blue.500}' -> '#1751D0'
  */
-const resolveTokenReference = (reference: string): string => {
+const resolveTokenReference = (reference: string | undefined): string => {
+  if (!reference) return '';
   // Scale reference, e.g. '{colors.blue.500}' or '{colors.gray.1500}'.
   const scaleMatch = reference.match(/^\{colors\.(\w+)\.(\w+)\}$/);
   if (scaleMatch) {
@@ -51,21 +52,27 @@ const resolveTokenReference = (reference: string): string => {
 
 /**
  * A semantic token `value` is either a plain reference string (legacy) or a
- * mode-conditional object `{ base, _dark }`. Resolve it to concrete light/dark
- * hex codes so the palette can show both modes side by side.
+ * mode-conditional object with any of `base` / `_light` / `_dark`. Resolve it to
+ * concrete light/dark hex codes so the palette can show both modes side by side.
  */
-type TokenValue = string | { base: string; _dark?: string };
+type TokenValue =
+  | string
+  | { base?: string; _light?: string; _dark?: string };
 
 const resolveTokenValue = (
-  value: TokenValue
+  value: TokenValue | undefined
 ): { light: string; dark: string } => {
+  if (!value) return { light: '', dark: '' };
   if (typeof value === 'string') {
     const hex = resolveTokenReference(value);
     return { light: hex, dark: hex };
   }
+  // A `_light` / `_dark` condition wins over `base` in its mode; fall back to
+  // `base` (then the other mode) when a token omits one, so tokens declared with
+  // only `_light`/`_dark` (e.g. `*.DEFAULT`, `border.subtle`) resolve too.
   return {
-    light: resolveTokenReference(value.base),
-    dark: resolveTokenReference(value._dark ?? value.base),
+    light: resolveTokenReference(value._light ?? value.base ?? value._dark),
+    dark: resolveTokenReference(value._dark ?? value.base ?? value._light),
   };
 };
 
@@ -296,14 +303,35 @@ export const SemanticTokens: Story = {
                 {color}
               </H4>
               <Grid templateColumns="repeat(auto-fill, minmax(132px, 1fr))" gap={2} flex="1" minW="0">
-                {Object.entries(shades).map(([shade, shadeValue]) => (
-                  <ColorCard
-                    key={shade}
-                    color={color}
-                    shade={shade}
-                    shadeValue={(shadeValue as any).value as TokenValue}
-                  />
-                ))}
+                {Object.entries(shades).flatMap(([shade, shadeValue]) => {
+                  const node = shadeValue as any;
+                  // Leaf token: render its value directly.
+                  if (node && node.value !== undefined) {
+                    return [
+                      <ColorCard
+                        key={shade}
+                        color={color}
+                        shade={shade}
+                        shadeValue={node.value as TokenValue}
+                      />,
+                    ];
+                  }
+                  // Nested group (e.g. bg.invalid → bg.invalid.subtle): render
+                  // each leaf beneath it as `<shade>.<sub>`.
+                  if (node && typeof node === 'object') {
+                    return Object.entries(node)
+                      .filter(([, sub]) => (sub as any)?.value !== undefined)
+                      .map(([subShade, sub]) => (
+                        <ColorCard
+                          key={`${shade}.${subShade}`}
+                          color={color}
+                          shade={`${shade}.${subShade}`}
+                          shadeValue={(sub as any).value as TokenValue}
+                        />
+                      ));
+                  }
+                  return [];
+                })}
               </Grid>
             </Flex>
           ))}
@@ -754,14 +782,35 @@ export const Default: Story = {
                 {color}
               </H4>
               <Grid templateColumns="repeat(auto-fill, minmax(132px, 1fr))" gap={2} flex="1" minW="0">
-                {Object.entries(shades).map(([shade, shadeValue]) => (
-                  <ColorCard
-                    key={shade}
-                    color={color}
-                    shade={shade}
-                    shadeValue={(shadeValue as any).value as TokenValue}
-                  />
-                ))}
+                {Object.entries(shades).flatMap(([shade, shadeValue]) => {
+                  const node = shadeValue as any;
+                  // Leaf token: render its value directly.
+                  if (node && node.value !== undefined) {
+                    return [
+                      <ColorCard
+                        key={shade}
+                        color={color}
+                        shade={shade}
+                        shadeValue={node.value as TokenValue}
+                      />,
+                    ];
+                  }
+                  // Nested group (e.g. bg.invalid → bg.invalid.subtle): render
+                  // each leaf beneath it as `<shade>.<sub>`.
+                  if (node && typeof node === 'object') {
+                    return Object.entries(node)
+                      .filter(([, sub]) => (sub as any)?.value !== undefined)
+                      .map(([subShade, sub]) => (
+                        <ColorCard
+                          key={`${shade}.${subShade}`}
+                          color={color}
+                          shade={`${shade}.${subShade}`}
+                          shadeValue={(sub as any).value as TokenValue}
+                        />
+                      ));
+                  }
+                  return [];
+                })}
               </Grid>
             </Flex>
           ))}

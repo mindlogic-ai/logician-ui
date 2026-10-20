@@ -222,7 +222,7 @@ jobs:
           status: custom
           custom_payload: |
             {
-              "text": "${{ github.ref_name == 'dev' && '🚀' || '✅' }} logician-ui v${{ steps.get_version.outputs.version }} ${{ github.ref_name == 'dev' && 'pre-release deployed' || 'released' }}!",
+              "text": "${{ github.ref_name == 'dev' && '🚀' || '✅' }} logician-ui v${{ steps.get_version.outputs.version }} ${{ github.ref_name == 'dev' && 'pre-release deployed' || 'released' }}! <@U09JYQZUVT2> summarize this release — repo `mindlogic-ai/logician-ui`, tag `v${{ steps.get_version.outputs.version }}`",
               "attachments": [
                 {
                   "color": "${{ github.ref_name == 'dev' && 'warning' || 'good' }}",

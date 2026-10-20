@@ -7,6 +7,7 @@ export {
 } from './Button.styles';
 export type {
   ButtonColorPalette,
+  ButtonOwnProps,
   ButtonProps,
   ButtonVariant,
 } from './Button.types';

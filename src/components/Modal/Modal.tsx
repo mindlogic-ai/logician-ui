@@ -9,7 +9,7 @@ export const Modal = ({
   open,
   onOpenChange,
   portalProps,
-  fullScreenOnMobile = true,
+  fullScreenOnMobile = false,
   ...rest
 }: ModalProps) => {
   const ctx = useMemo(() => ({ fullScreenOnMobile }), [fullScreenOnMobile]);
@@ -23,7 +23,13 @@ export const Modal = ({
       {...rest}
     >
       <Portal {...portalProps}>
-        <Dialog.Backdrop />
+        {/* `ModalOverlay` is exported but `Modal` does not use it, so the
+            timing has to be set here as well or the default path keeps
+            Chakra's 200ms exit and the scrim outlasts the dialog. */}
+        <Dialog.Backdrop
+          _open={{ animationDuration: 'motion.base' }}
+          _closed={{ animationDuration: 'fast' }}
+        />
         <ModalContext.Provider value={ctx}>{children}</ModalContext.Provider>
       </Portal>
     </Dialog.Root>
