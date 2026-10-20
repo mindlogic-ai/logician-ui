@@ -74,8 +74,15 @@ export const Toaster = () => (
         // `useToast` carries the real status in `meta.status` because Zag's
         // own `type` is required and does not know `neutral` — see the note
         // in `useToast.tsx`. A plain `toaster.create({ type })` (no `meta`)
-        // still renders correctly off `toast.type`.
-        const status = toast.meta?.status ?? toast.type;
+        // still renders correctly off `toast.type`, and so does a raw
+        // `toaster.update(id, { type })` on a `useToast` toast: `type` no
+        // longer matches the `statusType` it was paired with, so it wins.
+        const meta = toast.meta;
+        const status =
+          meta?.status &&
+          (meta.statusType === undefined || meta.statusType === toast.type)
+            ? meta.status
+            : toast.type;
 
         return (
           <Toast

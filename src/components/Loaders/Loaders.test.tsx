@@ -27,7 +27,30 @@ describe('PageLoader', () => {
   });
 });
 
+describe('PageLoader status', () => {
+  it('an idle loader exposes no status', () => {
+    withTheme(<PageLoader isLoading={false} />);
+    expect(screen.queryByRole('status')).toBeNull();
+  });
+
+  it('while loading, the status carries its label as text content', () => {
+    withTheme(<PageLoader isLoading />);
+    // Live regions announce text, not aria-label.
+    expect(screen.getByRole('status').textContent).toBe('로딩 중');
+  });
+
+  it('label overrides the announced text', () => {
+    withTheme(<PageLoader isLoading label="Saving" />);
+    expect(screen.getByRole('status')).toHaveTextContent('Saving');
+  });
+});
+
 describe('SectionLoader', () => {
+  it('while loading, the status carries its label as text content', () => {
+    withTheme(<SectionLoader isLoading />);
+    expect(screen.getByRole('status').textContent).toBe('로딩 중');
+  });
+
   it('renders nothing when not loading', () => {
     const { container } = withTheme(<SectionLoader isLoading={false} />);
     expect(container).toBeEmptyDOMElement();

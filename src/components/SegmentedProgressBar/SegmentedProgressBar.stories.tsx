@@ -201,8 +201,8 @@ export const RealWorldExample: Story = {
           textStyle="subtext"
           color="fg.muted"
         >
-          <Text color="success.600">✓ 1,200 successful</Text>
-          <Text color="danger.600">✗ 150 failed</Text>
+          <Text color="success.fg">✓ 1,200 successful</Text>
+          <Text color="danger.fg">✗ 150 failed</Text>
           <Text>90% complete</Text>
         </Flex>
       </Box>

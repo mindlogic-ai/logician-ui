@@ -3,8 +3,32 @@ import { RadioGroup, RadioGroupItemControlProps } from '@chakra-ui/react';
 
 import { disabledControl } from '@/utils/disabledControl';
 import { focusRing } from '@/utils/focusRing';
+import { mergeCss } from '@/utils/mergeCss';
 
 import { dotPop } from './Radio.styles';
+
+/**
+ * Same treatment as Checkbox: `border.control` is the 3:1 non-text-contrast
+ * token for input/checkbox/radio borders, on the same raised surface as Input,
+ * replacing Chakra's `border.emphasized`. Disabled is the fixed `disabled.*`
+ * pair at full opacity, never the recipe's `opacity: 0.5`.
+ *
+ * Applied to both the outer control and the indicator that covers it.
+ */
+const markStyles = {
+  bg: 'bg.surface',
+  borderWidth: '1px',
+  borderColor: 'border.control',
+  _checked: {
+    bg: 'primary.main',
+    borderColor: 'primary.main',
+    // The dot is `currentColor`.
+    color: 'fg.onPrimary',
+  },
+  _disabled: { ...disabledControl, cursor: 'not-allowed' },
+} as const;
+
+const indicatorCss = mergeCss(markStyles, dotPop);
 
 export const RadioControl = forwardRef<
   HTMLDivElement,
@@ -25,24 +49,20 @@ export const RadioControl = forwardRef<
   return (
     <RadioGroup.ItemControl
       ref={ref}
-      // Same unchecked treatment as Checkbox: border.control is the 3:1
-      // non-text-contrast token for input/checkbox/radio borders, on the
-      // same raised surface as Input. Overrides Chakra's default
-      // `border.emphasized`, which isn't one of our tokens.
-      bg="bg.surface"
-      borderColor="border.control"
-      // The outer ring is fully covered by the indicator below, but it carries
-      // the same checked fill — left untimed it would snap behind the one that
-      // eases.
+      {...markStyles}
+      // Timed like the indicator so the two never drift apart mid-transition.
       animationStyle="feedback"
       transitionProperty="background-color, border-color"
-      _disabled={{ ...disabledControl, cursor: 'not-allowed' }}
       {...focusRing}
       {...props}
     >
-      {/* `ItemIndicator` is the mark that actually holds `.dot`; it renders its
-          own `ItemControl` internally, which is why this is nested. */}
-      <RadioGroup.ItemIndicator id={indicatorId} css={dotPop} />
+      {/* `ItemIndicator` is the part you actually see: it renders Chakra's
+          `Radiomark` as a second `ItemControl` with the recipe's `itemControl`
+          styles (`border.emphasized`, `_disabled: { opacity: 0.5 }`), sized to
+          cover this outer control completely. Styling only the outer part left
+          those recipe values on screen, so the mark styles go here too — `css`
+          is applied after the recipe styles, so it wins. */}
+      <RadioGroup.ItemIndicator id={indicatorId} css={indicatorCss} />
     </RadioGroup.ItemControl>
   );
 });

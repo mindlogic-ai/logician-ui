@@ -5,6 +5,7 @@ import { useTranslate } from '@/hooks/useTranslate';
 import { FaRegCopy } from '../Icon';
 import { IconButton } from '../IconButton';
 import { Tooltip } from '../Tooltip';
+import { CODE_CHROME } from './CodeTabs.styles';
 
 export interface CopyButtonProps {
   onCopy: (code: string) => void;
@@ -48,12 +49,14 @@ export const CopyButton = ({ onCopy, code }: CopyButtonProps) => {
         borderRadius="full"
         size="sm"
         variant="ghost"
-        color="fg.muted"
+        color={CODE_CHROME.fgMuted}
         _hover={{
-          bgColor: 'whiteAlpha.400',
+          bgColor: CODE_CHROME.bgHover,
+          color: CODE_CHROME.fg,
         }}
         _active={{
-          bgColor: 'whiteAlpha.400',
+          bgColor: CODE_CHROME.bgActive,
+          color: CODE_CHROME.fg,
         }}
         onClick={handleCopyClick}
       >

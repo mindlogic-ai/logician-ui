@@ -4,6 +4,7 @@ import { Box, Flex } from '@chakra-ui/react';
 import { Code } from '@/components/Code';
 import { Tab, TabList, Tabs } from '@/components/Tabs';
 
+import { CODE_CHROME } from './CodeTabs.styles';
 import { CodeTabsProps } from './CodeTabs.types';
 import { CopyButton } from './CopyButton';
 
@@ -19,18 +20,14 @@ export const CodeTabs = ({ code, onCopy, ...rest }: CodeTabsProps) => {
 
   return (
     <Tabs
-      // Fixed dark chrome to match the Shiki `github-dark` code theme below it
-      // (Code.tsx), which doesn't flip with the app's mode either. `bg.inverse`
-      // is the token built for exactly this — a surface that stays visually
-      // distinct from the page in both light and dark — rather than the
-      // removed `gray.1500` raw primitive.
-      bgColor="bg.inverse"
+      // Fixed dark chrome in both modes — see `CODE_CHROME`.
+      bgColor={CODE_CHROME.bg}
       borderRadius="md"
       value={selectedValue}
       onValueChange={(details) => setSelectedValue(details.value)}
       {...rest}
     >
-      <TabList px={2} alignItems="center">
+      <TabList px={2} alignItems="center" borderColor={CODE_CHROME.divider}>
         <Flex w="100%" flex={1}>
           {languages.map((language) => (
             <Tab
@@ -44,9 +41,11 @@ export const CodeTabs = ({ code, onCopy, ...rest }: CodeTabsProps) => {
               textTransform="uppercase"
               fontWeight="bold"
               textStyle="subtext"
-              _selected={{ color: 'fg.inverse' }}
+              color={CODE_CHROME.fgMuted}
+              _selected={{ color: CODE_CHROME.fg }}
               _hover={{
-                bgColor: 'whiteAlpha.500',
+                bgColor: CODE_CHROME.bgHover,
+                color: CODE_CHROME.fg,
               }}
             >
               {language}
@@ -65,6 +64,14 @@ export const CodeTabs = ({ code, onCopy, ...rest }: CodeTabsProps) => {
               hideHeader
               aria-hidden={!isSelected}
               containerProps={{
+                // The body sits on the same fixed-dark surface: Chakra's Shiki
+                // adapter strips the `<pre>` that carries github-dark's own
+                // background, so the block would otherwise paint `bg`
+                // (= `bg.canvas`, white in light mode) under light token colours.
+                bg: CODE_CHROME.bg,
+                // Before Shiki loads, the text is plain `color`.
+                color: CODE_CHROME.fg,
+                borderColor: CODE_CHROME.bg,
                 borderRadius: 'none',
                 borderBottomRadius: 'md',
                 gridArea: '1 / 1',

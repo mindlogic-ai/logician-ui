@@ -2,15 +2,28 @@ import { Box, Flex, FlexProps } from '@chakra-ui/react';
 
 import { Spinner } from '@/components/Spinner';
 
+import { useLoaderStatus } from './LoaderStatus';
 import { ThinkingDots } from './ThinkingDots';
 
 export type LoaderVariant = 'default' | 'thinking';
 
+export type LoaderProps = FlexProps & {
+  isLoading: boolean;
+  variant?: LoaderVariant;
+  /**
+   * What a screen reader announces while loading. Defaults to the translated
+   * "loading" string (`로딩 중`).
+   */
+  label?: string;
+};
+
 export const PageLoader = ({
   isLoading,
   variant = 'default',
+  label,
   ...rest
-}: FlexProps & { isLoading: boolean; variant?: LoaderVariant }) => {
+}: LoaderProps) => {
+  const { statusProps, statusText } = useLoaderStatus(isLoading, label);
   return (
     <Flex
       position="fixed"
@@ -27,11 +40,10 @@ export const PageLoader = ({
       transitionProperty="opacity"
       bg="bg.canvas"
       zIndex={9999}
-      role="status"
-      aria-live="polite"
-      aria-label="Loading"
+      {...statusProps}
       {...rest}
     >
+      {statusText}
       {variant === 'thinking' ? (
         <ThinkingDots />
       ) : (

@@ -27,7 +27,12 @@ const MenuItemImpl = ({
       cursor="pointer"
       // Same as `Button`: the style prop outranks the recipe's disabled cursor.
       _disabled={{ cursor: 'not-allowed' }}
-      _hover={{
+      // `_highlighted`, not `_hover`: Zag keeps DOM focus on the menu content
+      // and marks the active row with `data-highlighted` (aria-activedescendant),
+      // setting it on pointer move as well as on arrow keys. A `_hover`-only
+      // block left keyboard navigation on Chakra's recipe `bg.emphasized/60`,
+      // and the danger row never showed `danger.bg`.
+      _highlighted={{
         color: isDangerVariant ? 'danger.fg' : 'fg.default',
         backgroundColor: isDangerVariant ? 'danger.bg' : 'primary.wash',
       }}

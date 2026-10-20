@@ -62,6 +62,14 @@ export interface UseToastOptions extends Omit<ToastOptions, 'action'> {
 }
 
 /**
+ * Options for `useToast().update(id, options)`. Every field is optional;
+ * `status` (or Chakra's `type`) re-colours the toast.
+ */
+export type UseToastUpdateOptions = Partial<UseToastOptions> & {
+  meta?: ToasterCreateOptions['meta'];
+};
+
+/**
  * Extended toast options for toaster.create()
  * Extends Chakra's ToastOptions with custom metadata
  */
