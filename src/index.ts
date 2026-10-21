@@ -88,6 +88,7 @@ export * from './components/Select';
 export * from './components/Shake';
 export * from './components/Slider';
 export * from './components/Spinner';
+export * from './components/SuccessCheck';
 export * from './components/SwapTransition';
 export * from './components/Switch';
 
