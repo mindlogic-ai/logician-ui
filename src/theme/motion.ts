@@ -442,6 +442,31 @@ export const keyframes = {
     from: { strokeDashoffset: String(-TICK_DASH) },
     to: { strokeDashoffset: '0' },
   },
+  'shine-sweep': {
+    // A pass, then a rest. `indeterminate` crosses and immediately crosses
+    // again, which is right for "work is happening" and wrong for an ambient
+    // highlight: a band that never stops reads as a loading bar stuck on a
+    // button. The gap is what keeps it a highlight.
+    '0%': { translate: '-120% 0' },
+    '45%, 100%': { translate: '220% 0' },
+  },
+  'nudge-wiggle': {
+    // Rotation, not translation. `shake-x` is the refusal and travels sideways;
+    // this leans and comes back, which reads as a tap on the shoulder rather
+    // than a no. Decays like `shake-x` so it settles rather than stopping dead.
+    '0%, 100%': { rotate: '0deg', scale: '1' },
+    '20%': { rotate: 'calc(var(--nudge-tilt, 2.5deg) * -1)', scale: '1.04' },
+    '40%': { rotate: 'var(--nudge-tilt, 2.5deg)', scale: '1.04' },
+    '60%': { rotate: 'calc(var(--nudge-tilt, 2.5deg) * -0.6)', scale: '1.02' },
+    '80%': { rotate: 'calc(var(--nudge-tilt, 2.5deg) * 0.6)', scale: '1.01' },
+  },
+  'nudge-wiggle-alt': {
+    '0%, 100%': { rotate: '0deg', scale: '1' },
+    '20%': { rotate: 'calc(var(--nudge-tilt, 2.5deg) * -1)', scale: '1.04' },
+    '40%': { rotate: 'var(--nudge-tilt, 2.5deg)', scale: '1.04' },
+    '60%': { rotate: 'calc(var(--nudge-tilt, 2.5deg) * -0.6)', scale: '1.02' },
+    '80%': { rotate: 'calc(var(--nudge-tilt, 2.5deg) * 0.6)', scale: '1.01' },
+  },
   'ring-draw': {
     // Positive, unlike `checkmark-draw`. A tick is *written*, so which end it
     // grows from is the difference between reading as a tick and reading as a

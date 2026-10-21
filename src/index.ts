@@ -4,6 +4,7 @@ export * from './components/Appear';
 export * from './components/Avatar';
 export * from './components/Badge';
 export * from './components/Banner';
+export * from './components/Boop';
 export * from './components/BottomSheet';
 export * from './components/Breadcrumb';
 export * from './components/Button';
@@ -63,6 +64,7 @@ export * from './components/MaxLengthIndicator';
 export * from './components/Menu';
 export * from './components/Modal';
 export * from './components/MonthPicker';
+export * from './components/Nudge';
 export * from './components/Popover';
 
 // Navigation Components
@@ -86,6 +88,7 @@ export * from './components/SegmentedControl';
 export * from './components/SegmentedProgressBar';
 export * from './components/Select';
 export * from './components/Shake';
+export * from './components/Shine';
 export * from './components/Slider';
 export * from './components/Spinner';
 export * from './components/SuccessCheck';
