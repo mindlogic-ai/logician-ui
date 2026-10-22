@@ -1,0 +1,177 @@
+import { Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as RangeStories from './RangeDatePicker.stories';
+
+<Meta title="Components/DatePicker/Usage" />
+
+<LangToggle />
+
+<En>
+
+# SingleDatePicker, RangeDatePicker
+
+A button that opens a calendar for picking one date, or a start and end date.
+
+## When to use
+
+- `RangeDatePicker`: a period to filter by: audit logs, API key usage, group
+  usage.
+- `SingleDatePicker`: one day, such as an expiry date or a scheduled send.
+
+## When not to use
+
+- A whole month or a range of months → `MonthPicker`.
+- A date the user knows by heart and types faster than they click, such as a
+  date of birth → `Input` with a clear format.
+- A handful of preset periods (last 7 days, last 30 days) → `SegmentedControl`
+  or `SelectField`, optionally next to a range picker for "custom".
+
+## Props
+
+Both wrap `chakra-dayzed-datepicker`; its props pass through.
+`SingleDatePicker` takes `date` and `onDateChange(date)`; `RangeDatePicker`
+takes `selectedDates` and `onDateChange(dates)`. Month and weekday names and
+the default `configs.dateFormat` follow the provider language. The trigger is
+a secondary `Button` with a calendar icon; style it with
+`propsConfigs.triggerBtnProps`. The calendar is portalled (`usePortal`
+defaults to `true`).
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+# SingleDatePicker, RangeDatePicker
+
+버튼을 누르면 달력이 열리고, 날짜 하나나 시작일과 종료일을 고릅니다.
+
+## 언제 쓰나요
+
+- `RangeDatePicker`: 감사 로그, API 키 사용량, 그룹 사용량처럼 기간으로 거를 때.
+- `SingleDatePicker`: 만료일이나 예약 발송일처럼 하루를 고를 때.
+
+## 언제 쓰지 않나요
+
+- 한 달이나 여러 달의 범위는 `MonthPicker`를 씁니다.
+- 생년월일처럼 외우고 있어서 누르는 것보다 입력이 빠른 날짜는 형식을 분명히 적은
+  `Input`을 씁니다.
+- 최근 7일, 최근 30일 같은 정해진 기간 몇 개는 `SegmentedControl`이나
+  `SelectField`를 쓰고, 필요하면 "직접 지정"용으로 기간 선택기를 옆에 둡니다.
+
+## 속성
+
+둘 다 `chakra-dayzed-datepicker`를 감싸며, 그 속성이 그대로 전달됩니다.
+`SingleDatePicker`는 `date`와 `onDateChange(date)`를, `RangeDatePicker`는
+`selectedDates`와 `onDateChange(dates)`를 받습니다. 월과 요일 이름, 기본
+`configs.dateFormat`은 프로바이더의 언어를 따릅니다. 트리거는 달력 아이콘이 있는
+secondary `Button`이고, 모양은 `propsConfigs.triggerBtnProps`로 바꿉니다. 달력은
+포털로 그려집니다(`usePortal` 기본값 `true`).
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={RangeStories.DoLabelledRange} />
+<Verdict
+  kind="do"
+  en="Label the filter and start from a sensible default range, so the page shows data before anyone touches the picker."
+  ko="필터에 라벨을 붙이고 알맞은 기본 기간으로 시작합니다. 그래야 선택기를 건드리기 전에도 화면에 데이터가 보입니다."
+/>
+
+<Canvas of={RangeStories.DontEmptyTrigger} />
+<Verdict
+  kind="dont"
+  en="Leave the trigger empty with no label. It shows only an icon, and a screen reader hears a button with no name."
+  ko="라벨 없이 빈 트리거를 두지 마세요. 아이콘만 보이고, 화면 낭독기에는 이름 없는 버튼으로 들립니다."
+/>
+
+<En>
+
+## Content
+
+- Label the period (조회 기간, 만료일), not the action (날짜 선택).
+- Leave the date format to the default for the language unless the screen
+  already uses another one.
+
+## Accessibility
+
+What the pickers do for you:
+
+- The trigger is a real `button`, reachable with Tab, and the selected date
+  is its text.
+- The calendar's day buttons and their keyboard behaviour come from
+  `chakra-dayzed-datepicker`. Check them with a keyboard on your screen before
+  relying on them (WCAG 2.1.1).
+
+What you still have to do:
+
+- **Name the trigger.** Its accessible name is the date text only, and it is
+  empty when nothing is picked. Put it in `FieldRow` with a label, and give
+  the button an `aria-label` through `propsConfigs.triggerBtnProps` when it
+  can be empty (WCAG 4.1.2; KWCAG 5.3.4.1 레이블 제공).
+- Keep an `Input` route for dates far from today; paging month by month to a
+  date years away is slow for everyone.
+
+## Tokens
+
+The trigger reads the secondary `Button` tokens. The calendar reads:
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 동작(날짜 선택)이 아니라 기간의 이름(조회 기간, 만료일)을 라벨로 씁니다.
+- 화면이 이미 다른 형식을 쓰고 있지 않다면 날짜 형식은 언어별 기본값을 그대로 씁니다.
+
+## 접근성
+
+선택기가 알아서 하는 일
+
+- 트리거는 실제 `button`이라 Tab으로 갈 수 있고, 고른 날짜가 버튼의 글자가 됩니다.
+- 달력의 날짜 버튼과 키보드 동작은 `chakra-dayzed-datepicker`가 제공합니다. 화면에
+  쓰기 전에 키보드로 직접 확인합니다(WCAG 2.1.1).
+
+직접 챙겨야 하는 일
+
+- **트리거에 이름을 붙입니다.** 접근 가능한 이름은 날짜 글자뿐이라 아무것도 고르지
+  않으면 비어 있습니다. 라벨이 있는 `FieldRow`에 넣고, 비어 있을 수 있다면
+  `propsConfigs.triggerBtnProps`로 버튼에 `aria-label`을 줍니다(WCAG 4.1.2, KWCAG
+  5.3.4.1 레이블 제공).
+- 오늘과 멀리 떨어진 날짜는 `Input`으로도 넣을 수 있게 합니다. 몇 년 떨어진 날짜까지 한
+  달씩 넘기는 것은 누구에게나 느립니다.
+
+## 토큰
+
+트리거는 secondary `Button`의 토큰을 씁니다. 달력은 아래 토큰을 씁니다.
+
+</Ko>
+
+<Canvas of={RangeStories.UsageTokens} sourceState="none" />
+
+<En>
+
+## Related
+
+- **MonthPicker**: months and month ranges.
+- **SegmentedControl** / **SelectField**: preset periods.
+- **FieldRow**: the label.
+- Live examples: <code>Components/DatePicker/SingleDatePicker</code> and
+  <code>RangeDatePicker</code>.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **MonthPicker**: 월과 월 범위.
+- **SegmentedControl** / **SelectField**: 정해진 기간.
+- **FieldRow**: 라벨.
+- 실제 예시: <code>Components/DatePicker/SingleDatePicker</code>와
+  <code>RangeDatePicker</code>.
+
+</Ko>

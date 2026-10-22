@@ -1,0 +1,179 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as SliderStories from './Slider.stories';
+
+<Meta of={SliderStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# Slider
+
+A thumb the user drags along a rail to set a value, or two thumbs for a range,
+when the position matters more than the exact number.
+
+## When to use
+
+- Seeking in audio or video, setting a volume.
+- A value the user tunes by feel and sees the effect of right away, with the
+  number shown beside it.
+
+## When not to use
+
+- An exact number (a credit limit, a count) → `Input` with `type="number"`.
+- A choice between a few named levels → `Radio` or `SegmentedControl`.
+- Showing progress the user cannot change → `ProgressBar`.
+
+## Props
+
+</En>
+
+<Ko>
+
+# Slider
+
+레일 위의 손잡이를 끌어 값을 정합니다. 손잡이 두 개로 범위도 정할 수 있습니다. 정확한
+숫자보다 위치가 중요할 때 씁니다.
+
+## 언제 쓰나요
+
+- 오디오나 영상의 재생 위치 이동, 음량 조절.
+- 감으로 맞추면서 결과를 바로 확인하는 값. 숫자는 옆에 함께 보여 줍니다.
+
+## 언제 쓰지 않나요
+
+- 크레딧 한도나 개수처럼 정확한 숫자는 `type="number"`인 `Input`을 씁니다.
+- 이름 붙은 몇 단계 중 하나를 고를 때는 `Radio`나 `SegmentedControl`을 씁니다.
+- 사용자가 바꿀 수 없는 진행 상황은 `ProgressBar`를 씁니다.
+
+## 속성
+
+</Ko>
+
+<ArgTypes
+  of={SliderStories}
+  include={['value', 'defaultValue', 'onValueChange', 'ariaLabel']}
+/>
+
+<En>
+
+Values are arrays: `[50]` for one thumb, `[20, 80]` for a range. Compose
+`SliderTrack` > `SliderFilledTrack` and one `SliderThumb` per value (with
+`index`), or `SliderThumbs` to render one per value automatically. Children
+are wrapped in `SliderControl` for you. `min`, `max`, `step`, `disabled` and
+`onValueChangeEnd` come from Chakra's `Slider.Root`.
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+값은 배열입니다. 손잡이 하나는 `[50]`, 범위는 `[20, 80]`입니다. `SliderTrack` 안에
+`SliderFilledTrack`을 두고, 값마다 `SliderThumb`를 하나씩(`index`와 함께) 두거나
+`SliderThumbs`로 값 개수만큼 자동으로 그립니다. 자식은 `SliderControl`로 알아서
+감쌉니다. `min`, `max`, `step`, `disabled`, `onValueChangeEnd`는 Chakra
+`Slider.Root`의 속성입니다.
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={SliderStories.DoValueBeside} />
+<Verdict
+  kind="do"
+  en="Show the name and the current value beside the slider, and pass the name as ariaLabel."
+  ko="슬라이더 옆에 이름과 현재 값을 보여 주고, 이름은 ariaLabel로도 넘깁니다."
+/>
+
+<Canvas of={SliderStories.DontExactNumber} />
+<Verdict
+  kind="dont"
+  en="Ask for an exact number with a slider. One pixel covers dozens of values, and the user cannot see what they chose."
+  ko="정확한 숫자를 슬라이더로 받지 마세요. 1픽셀에 수십 개의 값이 걸리고, 무엇을 골랐는지도 보이지 않습니다."
+/>
+
+<En>
+
+## Content
+
+- Show the value with its unit (70%, 1:24) next to the rail, and update it
+  while dragging.
+- Label the ends when the meaning is not obvious (느리게 / 빠르게).
+
+## Accessibility
+
+What Slider does for you:
+
+- Each thumb is a `slider` with its value exposed. Arrow keys step, Page Up /
+  Page Down jump, Home / End go to the ends (Chakra / Zag) (WCAG 2.1.1).
+- The thumb shows the keyboard focus ring (WCAG 2.4.7). The empty rail is the
+  filled `bg.track`, which stays visible on sunken surfaces (WCAG 1.4.11).
+- With `ariaLabel` it renders a visually hidden label part, so the name is in
+  the server markup.
+
+What you still have to do:
+
+- **Pass `ariaLabel`, or compose a visible `Slider.Label`.** Without either
+  the thumb has no name: it points at a label part that does not exist
+  (`ACCESSIBILITY.md` §1; KWCAG 5.3.4.1 레이블 제공).
+- Dragging is not the only way: keyboard works, but give an `Input` as well
+  when people need an exact value (WCAG 2.5.7).
+
+## Tokens
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 레일 옆에 단위와 함께 값을 보여 주고(70%, 1:24), 끄는 동안 바로 바꿉니다.
+- 양 끝의 뜻이 분명하지 않다면 끝에 라벨을 붙입니다(느리게 / 빠르게).
+
+## 접근성
+
+Slider가 알아서 하는 일
+
+- 손잡이마다 값을 드러내는 `slider`입니다. 방향키로 한 단계씩, Page Up·Page Down으로
+  크게, Home·End로 끝까지 옮깁니다(Chakra와 Zag가 제공, WCAG 2.1.1).
+- 손잡이에 키보드 초점 링이 보입니다(WCAG 2.4.7). 빈 레일은 채워진 `bg.track`이라
+  움푹한 면 위에서도 보입니다(WCAG 1.4.11).
+- `ariaLabel`을 주면 시각적으로 숨긴 라벨 부품을 그리므로 이름이 서버 마크업 안에
+  있습니다.
+
+직접 챙겨야 하는 일
+
+- **`ariaLabel`을 넘기거나 보이는 `Slider.Label`을 조합합니다.** 둘 다 없으면 손잡이가
+  있지도 않은 라벨 부품을 가리켜서 이름이 없습니다(`ACCESSIBILITY.md` 1절, KWCAG
+  5.3.4.1 레이블 제공).
+- 끄는 것이 유일한 방법이 되지 않게 합니다. 키보드로도 움직일 수 있지만, 정확한 값이
+  필요한 사람을 위해 `Input`도 함께 둡니다(WCAG 2.5.7).
+
+## 토큰
+
+</Ko>
+
+<Canvas of={SliderStories.UsageTokens} sourceState="none" />
+
+<En>
+
+## Related
+
+- **Input**: exact numbers.
+- **ProgressBar**: progress the user cannot change.
+- **SegmentedControl**: a few named levels.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **Input**: 정확한 숫자.
+- **ProgressBar**: 사용자가 바꿀 수 없는 진행 상황.
+- **SegmentedControl**: 이름 붙은 몇 단계.
+
+</Ko>

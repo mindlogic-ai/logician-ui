@@ -1,0 +1,214 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as CheckboxStories from './Checkbox.stories';
+
+<Meta of={CheckboxStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# Checkbox
+
+A box the user ticks to include an item or agree to something. Each checkbox
+is independent of the others.
+
+## When to use
+
+- Picking any number of items from a short list: notification channels,
+  table rows, members to invite.
+- A single yes/no that takes effect when the form is submitted: agreeing to
+  terms, "include subgroups".
+- A "select all" row over a list, with `indeterminate` when only some are
+  ticked.
+
+## When not to use
+
+- Exactly one option out of several → `Radio`, or `SelectField` for a long
+  list.
+- A setting that reads as on or off, such as a feature toggle in a settings
+  row → `Switch`.
+- An action that runs as soon as it is clicked → `Button`.
+
+## Props
+
+</En>
+
+<Ko>
+
+# Checkbox
+
+항목을 포함하거나 무언가에 동의할 때 표시하는 상자입니다. 체크박스는 서로 영향을
+주지 않습니다.
+
+## 언제 쓰나요
+
+- 짧은 목록에서 원하는 만큼 고를 때: 알림 받을 곳, 표의 행, 초대할 멤버.
+- 폼을 제출할 때 반영되는 예/아니요 하나: 약관 동의, "하위 그룹 포함".
+- 목록 위의 "전체 선택" 행. 일부만 선택됐다면 `indeterminate`를 씁니다.
+
+## 언제 쓰지 않나요
+
+- 여러 선택지 중 하나만 고른다면 `Radio`를, 목록이 길면 `SelectField`를 씁니다.
+- 설정 목록의 기능 켜기처럼 켜짐과 꺼짐으로 읽히는 설정은 `Switch`를 씁니다.
+- 누르자마자 실행되는 동작은 `Button`을 씁니다.
+
+## 속성
+
+</Ko>
+
+<ArgTypes
+  of={CheckboxStories}
+  include={[
+    'checked',
+    'defaultChecked',
+    'onCheckedChange',
+    'disabled',
+    'invalid',
+    'size',
+    'inputRef',
+  ]}
+/>
+
+<En>
+
+Compose it from parts: `<Checkbox>` (the root, rendered as a `<label>`),
+`<Checkbox.Control />` (the box) and `<Checkbox.Label>`. Clicking the label
+toggles the box. `checked` takes `true`, `false` or `'indeterminate'`; `size`
+defaults to `sm`. The tick is drawn on after the box fills, and both happen at
+once when the user prefers reduced motion.
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+부품을 조합해서 씁니다. `<Checkbox>`(루트, `<label>`로 그려짐), `<Checkbox.Control />`
+(상자), `<Checkbox.Label>`입니다. 라벨을 눌러도 상자가 바뀝니다. `checked`에는
+`true`, `false`, `'indeterminate'`를 넘기고, `size` 기본값은 `sm`입니다. 상자가 채워진
+뒤 체크 표시가 그려지며, 사용자가 동작 줄이기를 설정했다면 한 번에 나타납니다.
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={CheckboxStories.DoLabelledList} />
+<Verdict
+  kind="do"
+  en="Stack independent choices under a short heading, one per line, label to the right of the box."
+  ko="서로 상관없는 선택지는 짧은 제목 아래 한 줄에 하나씩, 상자 오른쪽에 라벨을 두고 쌓습니다."
+/>
+
+<Canvas of={CheckboxStories.DoSelectAll} />
+<Verdict
+  kind="do"
+  en="Use indeterminate on the parent when only some children are ticked. Clicking it ticks or clears them all."
+  ko="하위 항목이 일부만 선택됐다면 상위 상자를 indeterminate로 둡니다. 상위 상자를 누르면 전부 선택하거나 전부 해제합니다."
+/>
+
+<Canvas of={CheckboxStories.DontNegativeLabel} />
+<Verdict
+  kind="dont"
+  en="Write the label as a negative. Ticking 'Don't send' makes the reader undo a double negative to know what they chose."
+  ko="라벨을 부정문으로 쓰지 마세요. '받지 않기'에 표시하면 이중 부정을 풀어야 무엇을 골랐는지 압니다."
+/>
+
+<Canvas of={CheckboxStories.DoHiddenLabelInTable} />
+<Verdict
+  kind="do"
+  en="When the row already shows what the box selects, keep a Checkbox.Label with srOnly so the box still has a name."
+  ko="무엇을 고르는지 행에 이미 보인다면 Checkbox.Label에 srOnly를 주어, 보이지 않아도 상자에 이름이 남게 합니다."
+/>
+
+<En>
+
+## Content
+
+- Phrase the label so that ticking it means yes: 마케팅 메일 받기, not 마케팅
+  메일 받지 않기.
+- Keep labels short and parallel. If one needs explaining, put the
+  explanation in a second, muted line inside the label.
+- A heading over a group says what the choices are about (알림 받을 곳).
+
+## Accessibility
+
+What Checkbox does for you:
+
+- A native checkbox input sits inside the root, so Tab focuses it and Space
+  toggles it. The whole label is the click target.
+- The keyboard focus ring (`focus.ring` on a `bg.canvas` gap) shows on the box
+  (WCAG 2.4.7). The unchecked border uses `border.control`, built for 3:1
+  against the page (WCAG 1.4.11).
+- Checked and indeterminate are drawn with a mark as well as a fill, so the
+  state does not rely on colour alone (WCAG 1.4.1).
+
+What you still have to do:
+
+- **Always render `Checkbox.Label`**, with `srOnly` when it should not show.
+  Without it the box has no name (WCAG 4.1.2; KWCAG 5.3.4.1 레이블 제공).
+- Give a group of checkboxes a visible heading so it is clear what the choices
+  are about (WCAG 1.3.1).
+- If a choice is required (agreeing to terms), say so in the label or helper
+  text and show an error in words when it is missing (WCAG 3.3.1).
+
+## Tokens
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 표시하면 "예"가 되도록 씁니다. "마케팅 메일 받지 않기"가 아니라 "마케팅 메일
+  받기"입니다.
+- 라벨은 짧고 같은 형식으로 씁니다. 설명이 필요하면 라벨 안에 흐린 글자로 한 줄을 더
+  둡니다.
+- 묶음 위의 제목은 무엇에 관한 선택인지 알려 줍니다(알림 받을 곳).
+
+## 접근성
+
+Checkbox가 알아서 하는 일
+
+- 루트 안에 네이티브 체크박스가 있어서 Tab으로 초점을 옮기고 Space로 바꿀 수
+  있습니다. 라벨 전체를 눌러도 됩니다.
+- 키보드 초점 링(`bg.canvas` 간격 위의 `focus.ring`)이 상자에 보입니다(WCAG 2.4.7).
+  선택 전 테두리는 배경과 3:1이 되도록 만든 `border.control`을 씁니다(WCAG 1.4.11).
+- 선택과 일부 선택 상태는 채움과 함께 표시로도 그려지므로 색에만 기대지 않습니다
+  (WCAG 1.4.1).
+
+직접 챙겨야 하는 일
+
+- **`Checkbox.Label`을 항상 그립니다.** 보이지 않아야 한다면 `srOnly`를 줍니다.
+  라벨이 없으면 상자에 이름이 없습니다(WCAG 4.1.2, KWCAG 5.3.4.1 레이블 제공).
+- 체크박스 묶음에는 보이는 제목을 두어 무엇에 관한 선택인지 알 수 있게 합니다(WCAG
+  1.3.1).
+- 약관 동의처럼 꼭 선택해야 한다면 라벨이나 도움말에 그렇게 적고, 빠졌을 때는 문구로
+  오류를 알립니다(WCAG 3.3.1).
+
+## 토큰
+
+</Ko>
+
+<Canvas of={CheckboxStories.UsageTokens} sourceState="none" />
+
+<En>
+
+## Related
+
+- **Radio**: one option out of several.
+- **Switch**: a setting that is on or off.
+- **Table**: row selection.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **Radio**: 여러 선택지 중 하나.
+- **Switch**: 켜짐과 꺼짐으로 읽히는 설정.
+- **Table**: 행 선택.
+
+</Ko>

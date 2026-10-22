@@ -5,6 +5,7 @@ import { addMonths, subMonths } from 'date-fns';
 
 import { Text } from '@/components/Typography';
 
+import { FieldRow } from '../Form';
 import { MonthPicker } from './MonthPicker';
 import { MonthRange } from './MonthPicker.types';
 
@@ -166,4 +167,33 @@ export const CrossYearSelection: Story = {
       </Box>
     ),
   },
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `MonthPicker.usage.mdx` with <Canvas of={…} />. Hidden (`!dev`).
+
+export const DoLabelledWindow: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: a label and bounds',
+  render: (args) => (
+    <FieldRow label="집계 기간">
+      <MonthPicker
+        {...args}
+        minMonth={new Date(2025, 0, 1)}
+        maxMonth={new Date(2026, 9, 1)}
+      />
+    </FieldRow>
+  ),
+};
+
+export const DoSingleMonth: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: isRange={false} for one month',
+  render: (args) => (
+    <FieldRow label="정산 월">
+      <MonthPicker {...args} isRange={false} />
+    </FieldRow>
+  ),
 };

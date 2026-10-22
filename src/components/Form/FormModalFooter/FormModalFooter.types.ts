@@ -25,7 +25,10 @@ export interface FormModalFooterProps extends Omit<
   cancelLabel: ReactNode;
   /** Primary submit button label. */
   submitLabel: ReactNode;
-  /** Palette for the primary button. Defaults to `primary`. */
+  /**
+   * @deprecated 5.0 Button has no colour palette. Only `'danger'` changes
+   * anything (a danger submit button); every other value renders `primary`.
+   */
   submitColorPalette?: ButtonColorPalette;
   /**
    * In-flight state — shows the submit spinner and disables every button so the

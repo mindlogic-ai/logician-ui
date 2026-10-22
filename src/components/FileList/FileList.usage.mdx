@@ -1,0 +1,165 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as FileListStories from './FileList.stories';
+
+<Meta of={FileListStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# FileList
+
+A bordered list of `FileItem` rows that shows the first few files and reveals
+more on request.
+
+## When to use
+
+- The files attached to something: a chatbot's knowledge files, a project's
+  uploads, a policy's documents.
+
+## When not to use
+
+- One file → `FileItem`.
+- Hundreds of files the user searches, sorts or selects → `Table`.
+
+## Props
+
+</En>
+
+<Ko>
+
+# FileList
+
+`FileItem` 행을 테두리 안에 모아, 처음 몇 개만 보여 주고 요청하면 더 펼치는
+목록입니다.
+
+## 언제 쓰나요
+
+- 어떤 대상에 붙은 파일들: 챗봇의 지식 파일, 프로젝트에 올린 파일, 정책 문서.
+
+## 언제 쓰지 않나요
+
+- 파일이 하나라면 `FileItem`을 씁니다.
+- 검색, 정렬, 선택이 필요한 수백 개의 파일은 `Table`을 씁니다.
+
+## 속성
+
+</Ko>
+
+<ArgTypes
+  of={FileListStories}
+  include={[
+    'files',
+    'visibleCount',
+    'onFileDownload',
+    'onFileDelete',
+    'stagger',
+  ]}
+/>
+
+<En>
+
+- Shows `visibleCount` rows (default 3); the "see more" button adds three at
+  a time. With no files it renders nothing.
+- A row gets a download button only when the file has a `fileUrl` and you pass
+  `onFileDownload`.
+- `onFileDelete` may return a promise; the row shows a spinner until it
+  settles, and a second click on the same row is ignored meanwhile.
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+- `visibleCount`개 행(기본 3개)을 보여 주고, "더 보기" 버튼을 누를 때마다 세 개씩
+  늘립니다. 파일이 없으면 아무것도 그리지 않습니다.
+- 내려받기 버튼은 파일에 `fileUrl`이 있고 `onFileDownload`를 넘겼을 때만 생깁니다.
+- `onFileDelete`는 프로미스를 돌려줘도 됩니다. 끝날 때까지 그 행에 스피너가 보이고, 그
+  사이 같은 행을 다시 눌러도 무시합니다.
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={FileListStories.DoDownloadAndDelete} />
+<Verdict
+  kind="do"
+  en="Pass fileUrl for files that can be downloaded and let uploads in progress show their own bar."
+  ko="내려받을 수 있는 파일에는 fileUrl을 넘기고, 올리는 중인 파일은 진행 막대가 보이게 둡니다."
+/>
+
+<En>
+
+## Content
+
+- When the list is empty, say so outside it (no files yet, and how to add
+  one); FileList renders nothing.
+- Put a heading or label above it that says whose files these are.
+
+## Accessibility
+
+What FileList does for you:
+
+- Renders a real list (`<ul>` / `<li>`), so a screen reader announces the
+  number of files (WCAG 1.3.1).
+
+Known gaps, and what to do:
+
+- **The "see more" button has no focus ring.** Its styles are reset with
+  `all: unset`, which removes the outline (WCAG 2.4.7).
+- Its count shows the initial `visibleCount`, not the number of rows on
+  screen, after the first click.
+- Rows inherit the `FileItem` gaps (errors in tooltips, English cancel
+  label).
+
+## Tokens
+
+The frame and row dividers are `border.subtle`; the "see more" text and
+chevron are `fg.subtle`. Row colours are listed on the FileItem page.
+
+## Related
+
+- **FileItem**: one row.
+- **FileInput**: adding files.
+- **Table**: large file sets.
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 목록이 비면 FileList는 아무것도 그리지 않으므로, 목록 밖에서 아직 파일이 없다는 것과
+  추가하는 방법을 알려 줍니다.
+- 위에 누구의 파일인지 알려 주는 제목이나 라벨을 둡니다.
+
+## 접근성
+
+FileList가 알아서 하는 일
+
+- 실제 목록(`<ul>`·`<li>`)으로 그리므로 화면 낭독기가 파일 개수를 알려 줍니다(WCAG
+  1.3.1).
+
+알려진 한계와 대처
+
+- **"더 보기" 버튼에 초점 표시가 없습니다.** 스타일을 `all: unset`으로 지워서 윤곽선이
+  사라집니다(WCAG 2.4.7).
+- 한 번 누른 뒤에도 버튼의 숫자는 화면에 보이는 행 수가 아니라 처음 `visibleCount`를
+  보여 줍니다.
+- 각 행은 `FileItem`의 한계(툴팁 속 오류, 영어 취소 버튼 이름)를 그대로 가집니다.
+
+## 토큰
+
+테두리와 행 구분선은 `border.subtle`, "더 보기" 글자와 화살표는 `fg.subtle`입니다. 행의
+색은 FileItem 페이지에 있습니다.
+
+## 관련 컴포넌트
+
+- **FileItem**: 한 줄.
+- **FileInput**: 파일 추가.
+- **Table**: 많은 파일.
+
+</Ko>

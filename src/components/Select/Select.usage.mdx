@@ -1,0 +1,278 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as SelectStories from './Select.stories';
+import { SelectField } from './SelectField';
+
+<Meta of={SelectStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# Select, SelectField, Combobox, ComboboxField
+
+Pick one value from a list that is too long to show in full. `SelectField` and
+`ComboboxField` are ready-made fields; `Select` and `Combobox` are the styled
+parts for building your own.
+
+| Component       | Use it for                                                                           |
+| --------------- | ------------------------------------------------------------------------------------ |
+| `SelectField`   | One value from a short, fixed list. Pass `options`, `value`, `onChange`.             |
+| `ComboboxField` | One value from a long list the user would rather search than scroll.                 |
+| `Select.*`      | Multi-select, grouped options, options with icons or descriptions, a custom trigger. |
+| `Combobox.*`    | A searchable list with groups or custom rows.                                        |
+
+## When to use
+
+- Five or more options, or options that would crowd the page if shown at once:
+  a language, a model, a role.
+- A setting in a dense list where each row ends in a choice: `SelectField`
+  with `variant="ghost"`.
+- A list the user searches by name, such as groups or members:
+  `ComboboxField`.
+
+## When not to use
+
+- Two to four options that fit on screen → `Radio`, so the user sees every
+  option without opening anything. A single on/off → `Switch` or `Checkbox`.
+- Switching the view of the same content → `SegmentedControl` or `Tabs`.
+- Running an action (Rename, Delete) → `Menu`. A select holds a value; a menu
+  does something.
+- Free text with suggestions the user may ignore → `Input`.
+
+## Variants and props
+
+</En>
+
+<Ko>
+
+# Select, SelectField, Combobox, ComboboxField
+
+다 펼쳐 보이기에는 긴 목록에서 값 하나를 고르게 합니다. `SelectField`와
+`ComboboxField`는 바로 쓰는 필드이고, `Select`와 `Combobox`는 직접 조합할 때 쓰는
+스타일이 입혀진 부품입니다.
+
+| 컴포넌트        | 쓰는 곳                                                                  |
+| --------------- | ------------------------------------------------------------------------ |
+| `SelectField`   | 짧고 정해진 목록에서 값 하나. `options`, `value`, `onChange`를 넘깁니다. |
+| `ComboboxField` | 스크롤보다 검색이 편한 긴 목록에서 값 하나.                              |
+| `Select.*`      | 여러 개 선택, 묶은 항목, 아이콘이나 설명이 붙은 항목, 직접 만든 트리거.  |
+| `Combobox.*`    | 묶음이나 직접 만든 행이 있는 검색 목록.                                  |
+
+## 언제 쓰나요
+
+- 선택지가 다섯 개 이상이거나, 한꺼번에 보이면 화면이 복잡해질 때: 언어, 모델, 역할.
+- 행마다 끝에 선택이 하나씩 있는 촘촘한 설정 목록: `variant="ghost"`인 `SelectField`.
+- 이름으로 찾는 목록(그룹, 멤버): `ComboboxField`.
+
+## 언제 쓰지 않나요
+
+- 화면에 다 들어가는 두세 개의 선택지는 `Radio`를 씁니다. 아무것도 열지 않고 모든
+  선택지를 볼 수 있습니다. 켜고 끄는 값 하나는 `Switch`나 `Checkbox`를 씁니다.
+- 같은 내용의 보기 방식을 바꿀 때는 `SegmentedControl`이나 `Tabs`를 씁니다.
+- 이름 바꾸기, 삭제 같은 동작은 `Menu`를 씁니다. 셀렉트는 값을 담고, 메뉴는 일을
+  합니다.
+- 제안을 무시하고 자유롭게 써도 되는 텍스트는 `Input`을 씁니다.
+
+## 변형과 속성
+
+</Ko>
+
+<ArgTypes
+  of={SelectField}
+  include={['variant', 'label', 'ariaLabel', 'placeholder', 'stagger']}
+/>
+
+<En>
+
+| Variant             | Means                                                                                      | Use for                                                                                            |
+| ------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| `outline` (default) | A bordered field, the same as `Input`. Width defaults to `full`.                           | Forms, modals, filters                                                                             |
+| `ghost`             | No border until hover or focus; sized to its value. An invalid field keeps its red border. | The trailing choice in a settings row, where a column of bordered triggers would outweigh the card |
+
+Other props: `size` (`xs`–`lg`, default `md`), `invalid`, `disabled`,
+`readOnly`, `required`, `name`, `width`. `onChange` receives the value, or
+`null` when the selection is cleared. `ComboboxField` adds `emptyText`; it has
+no `variant` or `stagger`.
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+| 변형             | 뜻                                                                                                                            | 쓰는 곳                                                                              |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `outline` (기본) | `Input`과 같은 테두리가 있는 필드. 너비 기본값은 `full`입니다.                                                                | 폼, 모달, 필터                                                                       |
+| `ghost`          | 마우스를 올리거나 초점을 받기 전에는 테두리가 없고, 값 길이에 맞춰 너비가 정해집니다. 오류 상태에서는 빨간 테두리가 남습니다. | 설정 목록의 행 끝 선택. 테두리 있는 트리거가 줄지어 있으면 카드보다 무거워 보이는 곳 |
+
+그 밖의 속성: `size`(`xs`~`lg`, 기본 `md`), `invalid`, `disabled`, `readOnly`,
+`required`, `name`, `width`. `onChange`는 고른 값을 받고, 선택을 지우면 `null`을
+받습니다. `ComboboxField`에는 `emptyText`가 더 있고, `variant`와 `stagger`는
+없습니다.
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={SelectStories.DoLabelled} />
+<Verdict
+  kind="do"
+  en="Give the field a visible label with the label prop. It is rendered as the part the trigger is named by."
+  ko="label 속성으로 보이는 라벨을 붙입니다. 라벨은 트리거의 이름이 되는 부품으로 그려집니다."
+/>
+
+<Canvas of={SelectStories.DontNameless} />
+<Verdict
+  kind="dont"
+  en="Leave out label, ariaLabel and placeholder. The text next to it is not connected, so a screen reader announces a bare 'button', whatever the value says (KWCAG 5.3.4.1)."
+  ko="label, ariaLabel, placeholder를 모두 빼지 마세요. 옆에 있는 글자는 연결되지 않으므로, 화면 낭독기는 값이 무엇이든 그냥 '버튼'이라고만 읽습니다(KWCAG 5.3.4.1)."
+/>
+
+<Canvas of={SelectStories.Ghost} />
+<Verdict
+  kind="do"
+  en="In a settings list, use the ghost variant and pass the row title as ariaLabel."
+  ko="설정 목록에서는 ghost 변형을 쓰고, 행 제목을 ariaLabel로 넘깁니다."
+/>
+
+<Canvas of={SelectStories.DoComboboxForLongList} />
+<Verdict
+  kind="do"
+  en="Use ComboboxField when the user knows the name and the list is long. Translate emptyText; the default is English."
+  ko="사용자가 이름을 알고 목록이 길다면 ComboboxField를 씁니다. emptyText의 기본값은 영어이므로 번역해서 넘깁니다."
+/>
+
+<Canvas of={SelectStories.DontSelectForTwo} />
+<Verdict
+  kind="dont"
+  en="Hide two options behind a dropdown. The user has to open it to learn there is only one alternative."
+  ko="선택지 두 개를 드롭다운 안에 숨기지 마세요. 다른 선택지가 하나뿐이라는 것을 열어 봐야 압니다."
+/>
+
+<Canvas of={SelectStories.DoRadioForTwo} />
+<Verdict
+  kind="do"
+  en="Show a few options as Radio, so the choice is visible at a glance."
+  ko="선택지가 몇 개뿐이면 Radio로 펼쳐서 한눈에 보이게 합니다."
+/>
+
+<En>
+
+## Content
+
+- Label: a noun for what is chosen (답변 언어, 역할), not an instruction (언어를
+  선택하세요).
+- Placeholder: only when "nothing chosen yet" is a real state. It also becomes
+  the hidden name if there is no label, so make it meaningful, but prefer
+  `label` or `ariaLabel`.
+- Options: short, parallel, sentence case, sorted in a predictable order
+  (frequency, size, or alphabetical). Do not repeat the label in each option.
+- `emptyText` on `ComboboxField`: say what was not found (일치하는 그룹이
+  없습니다).
+
+## Accessibility
+
+What these components do for you:
+
+- **A name, if you give one.** `SelectField` and `ComboboxField` always render
+  the label part the trigger points at: visibly for `label`, visually hidden
+  for `ariaLabel` (or `placeholder` as a fallback). The name is in the server
+  markup, not added after hydration (KWCAG 5.3.4.1 레이블 제공).
+- **Keyboard.** The Chakra / Zag listbox handles it: Enter, Space or the arrow
+  keys open the list; arrows move; Enter selects; Escape closes and returns
+  focus to the trigger. In `ComboboxField` typing filters the list.
+- **Focus and states.** The trigger shows a `primary.main` border and ring on
+  focus and while open (WCAG 2.4.7). The selected option is bold on
+  `primary.selected` and carries a check mark, so it does not rely on colour
+  alone (WCAG 1.4.1).
+
+What you still have to do:
+
+- **Always pass `label` or `ariaLabel`.** Inside `FieldRow`, the row's label
+  does not reach the trigger: pass the same text as `ariaLabel`. The type does
+  not stop you from leaving all three out.
+- **Compose `Select.*` / `Combobox.*` with a `Label` part.** Leave it out and
+  the trigger has no name. When the label is elsewhere on screen, render
+  `<Select.Label srOnly>`.
+- Put errors in words (`FieldRow` `error`) as well as `invalid` (WCAG 3.3.1).
+
+## Tokens
+
+Generated from `Select.styles.ts`. Select and Combobox share these.
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 라벨: 고르는 대상을 명사로 씁니다(답변 언어, 역할). "언어를 선택하세요" 같은 지시문은
+  쓰지 않습니다.
+- 플레이스홀더: "아직 고르지 않음"이 실제로 있는 상태일 때만 씁니다. 라벨이 없으면
+  숨은 이름으로도 쓰이므로 뜻이 통하게 쓰되, 되도록 `label`이나 `ariaLabel`을 씁니다.
+- 선택지: 짧고 같은 형식으로 쓰며, 자주 쓰는 순, 크기순, 가나다순처럼 예측할 수 있는
+  순서로 둡니다. 선택지마다 라벨을 되풀이하지 않습니다.
+- `ComboboxField`의 `emptyText`: 무엇을 찾지 못했는지 씁니다(일치하는 그룹이
+  없습니다).
+
+## 접근성
+
+이 컴포넌트들이 알아서 하는 일
+
+- **이름을 주면 그대로 씁니다.** `SelectField`와 `ComboboxField`는 트리거가 가리키는
+  라벨 부품을 항상 그립니다. `label`이면 보이게, `ariaLabel`(없으면 `placeholder`)이면
+  시각적으로 숨겨서 그립니다. 이름은 하이드레이션 뒤에 붙는 것이 아니라 서버가 보낸
+  마크업 안에 있습니다(KWCAG 5.3.4.1 레이블 제공).
+- **키보드.** Chakra와 Zag의 목록 상자가 처리합니다. Enter, Space, 방향키로 목록을
+  열고, 방향키로 옮기고, Enter로 고르며, Escape로 닫으면 초점이 트리거로 돌아갑니다.
+  `ComboboxField`에서는 입력하면 목록이 걸러집니다.
+- **초점과 상태.** 트리거는 초점을 받거나 열려 있는 동안 `primary.main` 테두리와 링을
+  보여 줍니다(WCAG 2.4.7). 선택된 항목은 `primary.selected` 위에 굵은 글자와 체크
+  표시로 나타나므로 색에만 기대지 않습니다(WCAG 1.4.1).
+
+직접 챙겨야 하는 일
+
+- **`label`이나 `ariaLabel`을 반드시 넘깁니다.** `FieldRow` 안에서는 행의 라벨이
+  트리거까지 닿지 않으므로 같은 글자를 `ariaLabel`로 넘깁니다. 셋 다 빠뜨려도 타입
+  검사에서 걸리지 않습니다.
+- **`Select.*`나 `Combobox.*`로 조합할 때는 `Label` 부품을 넣습니다.** 빼면 트리거에
+  이름이 없습니다. 라벨이 화면의 다른 곳에 있다면 `<Select.Label srOnly>`를 씁니다.
+- 오류는 `invalid`와 함께 `FieldRow`의 `error`로 문구를 보여 줍니다(WCAG 3.3.1).
+
+## 토큰
+
+`Select.styles.ts`에서 자동으로 만듭니다. Select와 Combobox가 함께 씁니다.
+
+</Ko>
+
+<Canvas of={SelectStories.UsageTokens} sourceState="none" />
+
+<En>
+
+## Related
+
+- **Radio**: a few options, all visible.
+- **Switch** / **Checkbox**: on or off.
+- **SegmentedControl** / **Tabs**: switching views.
+- **Menu**: actions, not values.
+- **FieldRow**: label, helper and error around the field.
+- More compositions: the _Multi Select_, _Grouped Options_ and _Custom Items_
+  stories under Components/Select and Components/Combobox.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **Radio**: 몇 개 안 되는 선택지를 모두 보여 줄 때.
+- **Switch** / **Checkbox**: 켜고 끄는 값.
+- **SegmentedControl** / **Tabs**: 보기 전환.
+- **Menu**: 값이 아니라 동작.
+- **FieldRow**: 필드를 둘러싼 라벨, 도움말, 오류 문구.
+- 조합 예시: Components/Select와 Components/Combobox 아래의 _Multi Select_,
+  _Grouped Options_, _Custom Items_ 스토리.
+
+</Ko>
