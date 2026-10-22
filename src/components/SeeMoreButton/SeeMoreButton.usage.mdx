@@ -1,0 +1,213 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as SeeMoreButtonStories from './SeeMoreButton.stories';
+
+<Meta of={SeeMoreButtonStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# SeeMoreButton
+
+A full-width button at the end of a list that shows more of the same list in
+place, and says how many are shown out of how many.
+
+## When to use
+
+- A list that grows where it is when the reader asks: reviews, recommended
+  questions, search results in a dropdown. In FactChat the store's reviews,
+  recommended questions and chatbot search use it.
+- When you know the total, so the count `(3/10)` is true.
+
+## When not to use
+
+- Opening the full list on another page → a link-shaped `Button`
+  (`as="a"`, `ghost`) such as 전체 보기, usually next to the section heading.
+- Paging through a long, numbered result set → `Pagination`.
+- Expanding one block of text → `ExpandableText`, which has its own
+  더보기 / 접기.
+- Showing more attached files → `FileList` already renders its own control.
+- You do not know the total → a `subtle` or `ghost` `Button` with your own
+  label, because SeeMoreButton always prints a count.
+
+## Props
+
+SeeMoreButton has no `variant`. It always renders the `ghost` Button recipe
+with a top hairline, takes the full width of its container, and accepts
+Button's other props (`onClick`, `disabled`, `loading`, `size` …).
+
+</En>
+
+<Ko>
+
+# SeeMoreButton
+
+목록 끝에 놓는 전체 너비 버튼입니다. 같은 목록을 그 자리에서 더 보여 주고, 전체 중
+몇 개를 보여 주는지 알려 줍니다.
+
+## 언제 쓰나요
+
+- 읽는 사람이 원할 때 그 자리에서 늘어나는 목록: 리뷰, 추천 질문, 드롭다운 안의 검색
+  결과. FactChat에서는 스토어의 리뷰, 추천 질문, 챗봇 검색에 씁니다.
+- 전체 개수를 알고 있어서 `(3/10)` 같은 개수가 사실일 때.
+
+## 언제 쓰지 않나요
+
+- 다른 화면에서 전체 목록을 연다면 링크 모양의 `Button`(`as="a"`, `ghost`)을 씁니다.
+  "전체 보기"처럼 쓰고, 보통 섹션 제목 옆에 둡니다.
+- 번호가 매겨진 긴 결과를 넘겨 본다면 `Pagination`을 씁니다.
+- 글 한 덩어리를 펼친다면 더보기 / 접기가 들어 있는 `ExpandableText`를 씁니다.
+- 첨부 파일을 더 보여 준다면 `FileList`가 자체 컨트롤을 그립니다.
+- 전체 개수를 모른다면 라벨을 직접 쓰는 `subtle`이나 `ghost` `Button`을 씁니다.
+  SeeMoreButton은 언제나 개수를 함께 표시하기 때문입니다.
+
+## 속성
+
+SeeMoreButton에는 `variant`가 없습니다. 언제나 위쪽 구분선을 더한 `ghost` Button
+레시피로 그려지고, 담긴 영역의 너비를 다 차지하며, Button의 나머지 속성(`onClick`,
+`disabled`, `loading`, `size` 등)을 받습니다.
+
+</Ko>
+
+<ArgTypes of={SeeMoreButtonStories} include={['currentCount', 'maxCount']} />
+
+<En>
+
+The component does not disable or hide itself when `currentCount` reaches
+`maxCount`; that is up to you (see Do / Don't).
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+`currentCount`가 `maxCount`에 닿아도 컴포넌트가 스스로 비활성이 되거나 사라지지
+않습니다. 그 처리는 호출하는 쪽에서 합니다(아래 예시 참고).
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={SeeMoreButtonStories.DoGrowTheList} />
+<Verdict
+  kind="do"
+  en="Put it right under the list, let each click add items in place, and remove it once everything is shown. FactChat renders it only while there is a next page."
+  ko="목록 바로 아래에 두고, 누를 때마다 그 자리에 항목을 더하며, 모두 보여 준 뒤에는 버튼을 없앱니다. FactChat도 다음 페이지가 있을 때만 버튼을 그립니다."
+/>
+
+<Canvas of={SeeMoreButtonStories.DontNavigate} />
+<Verdict
+  kind="dont"
+  en="Use it to send the reader to a different page with all 128 reviews. It promises more of this list, here."
+  ko="리뷰 128개가 있는 다른 화면으로 보내는 데 쓰지 마세요. 이 버튼은 지금 이 목록을 이 자리에서 더 보여 주겠다는 뜻입니다."
+/>
+
+<Canvas of={SeeMoreButtonStories.DoLinkToFullPage} />
+<Verdict
+  kind="do"
+  en="To open the full list elsewhere, use a link-shaped ghost Button next to the heading."
+  ko="다른 화면에서 전체 목록을 연다면 제목 옆에 링크 모양의 ghost Button을 둡니다."
+/>
+
+<En>
+
+## Content
+
+- The label is fixed: `더보기 (currentCount/maxCount)` and a chevron.
+  Children are ignored. The text comes from the library's own `see_more`
+  string, which today always resolves to Korean, so an English screen still
+  shows 더보기.
+- Keep the numbers honest. `maxCount` is the real total; if the server only
+  tells you "there is more", use a `Button` instead.
+
+## Accessibility
+
+What SeeMoreButton does for you:
+
+- It is a Button: a native `<button>`, Tab and Enter / Space (WCAG 2.1.1), and
+  the keyboard focus ring (WCAG 2.4.7).
+- The count is part of the visible label, so the accessible name is
+  "더보기 (3/10)" and matches what is on screen (WCAG 2.5.3).
+
+What you still have to do:
+
+- **Keep the keyboard user's place.** When the last click removes the button,
+  focus would fall back to the page. Move focus to the first newly shown item
+  (WCAG 2.4.3).
+- **New items are not announced.** The component has no live region. If the
+  added items are not obvious from the focus move, announce the new count
+  yourself.
+- **Loading.** While the next page loads, pass `loading` with a
+  `loadingText` (불러오는 중) so the button cannot be pressed twice and still
+  has words. Without `loadingText` the label is hidden behind the spinner.
+
+## Tokens
+
+The table is generated from `SeeMoreButton.styles.ts` and the ghost Button
+recipe it renders.
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 라벨은 정해져 있습니다. `더보기 (currentCount/maxCount)`와 아래 화살표이며,
+  children은 무시됩니다. 문구는 라이브러리의 `see_more` 문자열에서 오는데 지금은
+  언제나 한국어로 풀리므로, 영어 화면에도 "더보기"가 나옵니다.
+- 숫자는 사실이어야 합니다. `maxCount`는 실제 전체 개수입니다. 서버가 "더 있다"는
+  것만 알려 준다면 `Button`을 씁니다.
+
+## 접근성
+
+SeeMoreButton이 알아서 하는 일
+
+- Button 그대로입니다. 기본 `<button>`이며 Tab, Enter와 Space로 다루고(WCAG 2.1.1),
+  키보드 초점 링을 그립니다(WCAG 2.4.7).
+- 개수가 보이는 라벨에 들어 있어서, 접근 가능한 이름이 화면에 보이는 그대로
+  "더보기 (3/10)"입니다(WCAG 2.5.3).
+
+직접 챙겨야 하는 일
+
+- **키보드 사용자의 위치를 지킵니다.** 마지막으로 눌렀을 때 버튼이 사라지면 초점이
+  페이지 처음으로 돌아갈 수 있습니다. 새로 나온 첫 항목으로 초점을 옮깁니다(WCAG
+  2.4.3).
+- **새 항목은 알려 주지 않습니다.** 컴포넌트에 라이브 영역이 없습니다. 초점을 옮기는
+  것만으로 새 항목이 분명하지 않다면 늘어난 개수를 직접 알립니다.
+- **불러오는 중.** 다음 페이지를 불러오는 동안 `loading`과 `loadingText`(불러오는 중)를
+  함께 주어 두 번 눌리지 않게 하고 글자도 남깁니다. `loadingText`가 없으면 라벨이
+  스피너 뒤로 숨습니다.
+
+## 토큰
+
+아래 표는 `SeeMoreButton.styles.ts`와 이 컴포넌트가 그리는 ghost Button 레시피에서
+자동으로 만듭니다.
+
+</Ko>
+
+<Canvas of={SeeMoreButtonStories.UsageTokens} sourceState="none" />
+
+<En>
+
+## Related
+
+- **Button**: a link-shaped `ghost` Button for 전체 보기, or your own label
+  when the total is unknown.
+- **Pagination**: numbered pages.
+- **ExpandableText**: 더보기 / 접기 for one block of text.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **Button**: 전체 보기에 쓰는 링크 모양의 `ghost` Button, 또는 전체 개수를 모를 때
+  라벨을 직접 쓰는 버튼.
+- **Pagination**: 번호가 있는 페이지.
+- **ExpandableText**: 글 한 덩어리의 더보기 / 접기.
+
+</Ko>
