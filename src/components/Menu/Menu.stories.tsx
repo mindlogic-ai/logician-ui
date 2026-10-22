@@ -253,7 +253,11 @@ const OpenMenu = ({
       positioning={{ placement: 'bottom-start', flip: false }}
     >
       <Menu.Trigger asChild>{trigger}</Menu.Trigger>
-      <Menu.List portalled={false}>{children}</Menu.List>
+      {/* The list caps itself at the viewport space left below the
+          trigger; a canvas near the fold would clip the last row. */}
+      <Menu.List portalled={false} maxH="none">
+        {children}
+      </Menu.List>
     </Menu>
   </Box>
 );
