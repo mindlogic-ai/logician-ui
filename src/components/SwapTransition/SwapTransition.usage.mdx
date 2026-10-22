@@ -1,0 +1,102 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle } from '../../guidelines/_components/Lang';
+import * as SwapTransitionStories from './SwapTransition.stories';
+
+<Meta of={SwapTransitionStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# SwapTransition
+
+Swaps one piece of content for another with a short directional slide, for
+moving between steps of a sequence or between records in the same frame.
+
+</En>
+
+<Ko>
+
+# SwapTransition
+
+한 내용을 다른 내용으로 바꿀 때 짧게 옆으로 밀어 넘깁니다. 순서가 있는 단계 사이를
+오가거나, 같은 틀 안에서 다른 항목으로 넘어갈 때 씁니다.
+
+</Ko>
+
+<Canvas of={SwapTransitionStories.Default} />
+
+<En>
+
+## When to use
+
+- Question 1 → question 2 in a quiz or a multi-step flow, keyed on the step
+  index.
+- Moving from an overview screen to the step runner, or between items under
+  review, keyed on the record id.
+- Going back: pass a negative `distance` so the content travels the other way.
+
+## When not to use
+
+- New content is added under existing content rather than replacing it →
+  `Reveal`, or `Appear` if nothing is pushed.
+- A value changes in place → `CountUp` or `Pulse`.
+- The key would change on unrelated re-renders → pick a key that identifies the
+  content (a step index, a record id), or the content swaps with itself.
+
+## Reduced motion and accessibility
+
+- With `prefers-reduced-motion: reduce` both halves take no time and nothing
+  slides. The outgoing content is hidden at once, and the new content appears
+  when the 150ms exit timer ends.
+- While the old content leaves it gets `aria-hidden` and ignores the pointer,
+  so it cannot be read or clicked on its way out.
+- SwapTransition does not move focus. After a step change, move focus to the
+  new step (its heading, or its first field) yourself, so keyboard and
+  screen reader users start in the right place (WCAG 2.4.3).
+- It renders one `div`, and every prop lands on that element, so a wrapper
+  told to fill (`display="flex" flex={1} minH={0}`) still fills.
+
+## Props
+
+</En>
+
+<Ko>
+
+## 언제 쓰나요
+
+- 퀴즈나 여러 단계로 된 흐름에서 1번 문항에서 2번 문항으로 넘어갈 때. 단계 번호를
+  key로 씁니다.
+- 개요 화면에서 단계 진행 화면으로, 또는 검토 중인 항목 사이를 오갈 때. 항목 id를
+  key로 씁니다.
+- 뒤로 갈 때는 `distance`에 음수를 넘겨 반대 방향으로 움직입니다.
+
+## 언제 쓰지 않나요
+
+- 새 내용이 기존 내용을 바꾸지 않고 그 아래에 더해진다면 `Reveal`을 씁니다. 아무것도
+  밀어내지 않는다면 `Appear`를 씁니다.
+- 값이 제자리에서 바뀐다면 `CountUp`이나 `Pulse`를 씁니다.
+- 상관없는 렌더에서도 key가 바뀐다면, 내용을 식별하는 값(단계 번호, 항목 id)으로 key를
+  바꿉니다. 그러지 않으면 같은 내용끼리 서로 바뀌는 애니메이션이 재생됩니다.
+
+## 동작 줄이기와 접근성
+
+- `prefers-reduced-motion: reduce`에서는 나가고 들어오는 동작 모두 시간이 0이라
+  밀리는 움직임이 없습니다. 나가는 내용은 바로 사라지고, 새 내용은 150ms의 퇴장
+  타이머가 끝나면 나타납니다.
+- 나가는 동안 이전 내용에는 `aria-hidden`이 붙고 포인터도 받지 않으므로, 사라지는 중에
+  읽히거나 눌리지 않습니다.
+- SwapTransition은 초점을 옮기지 않습니다. 단계가 바뀌면 새 단계(제목이나 첫 입력란)로
+  직접 초점을 옮겨, 키보드와 화면 낭독기 사용자가 제자리에서 시작하게 합니다(WCAG 2.4.3).
+- `div` 하나만 그리고 모든 속성이 그 요소에 적용됩니다. 그래서 채우도록 지정한 감싸는
+  요소(`display="flex" flex={1} minH={0}`)도 그대로 채웁니다.
+
+## 속성
+
+</Ko>
+
+<ArgTypes
+  of={SwapTransitionStories}
+  include={['transitionKey', 'distance', 'animateInitial']}
+/>

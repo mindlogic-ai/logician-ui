@@ -1,0 +1,99 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle } from '../../guidelines/_components/Lang';
+import * as ConfettiStories from './Confetti.stories';
+
+<Meta of={ConfettiStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# Confetti
+
+A one-shot celebratory burst over a container, for the rare moment a purchase
+completes or a reward lands.
+
+</En>
+
+<Ko>
+
+# Confetti
+
+컨테이너 위로 한 번 터지는 축하 효과입니다. 구매가 끝나거나 보상을 받는 드문 순간에 씁니다.
+
+</Ko>
+
+<Canvas of={ConfettiStories.Default} />
+
+<En>
+
+## When to use
+
+- A purchase confirmation, a completed course or a level-up: an outcome the
+  reader earned and does not see often.
+- At most once per moment. Mount it when the moment begins; pass a new `seed`
+  only to scatter a new burst.
+
+## When not to use
+
+- Routine success (saved, sent, copied) → `Toast`, or `Pulse` on the value
+  that changed.
+- Anything that went wrong or needs attention → never.
+- A small win inside a flow, such as one correct answer → an `Appear` stamp.
+
+## Reduced motion and accessibility
+
+- With `prefers-reduced-motion: reduce` the pieces mount but stay invisible.
+  The burst carries no information, so nothing is lost.
+- The overlay is `aria-hidden` and ignores the pointer, so it never covers a
+  button or reaches a screen reader. The success itself must be stated in text
+  on the screen.
+- Every piece finishes in under three seconds, so there is nothing to pause
+  (WCAG 2.2.2 covers motion longer than five seconds).
+
+## Props
+
+Confetti takes no children. It fills the nearest positioned ancestor, so give
+that element `position: relative`, or the burst covers the whole page. The
+default colours are decorative only: coral, beige and the system hues with no
+status meaning. Red, yellow, green and blue are left out because they mean
+danger, warning, success and info. They are light-mode values and do not
+change in dark mode; pass `colors` (tokens work) if that matters.
+
+</En>
+
+<Ko>
+
+## 언제 쓰나요
+
+- 구매 확인, 과정 완료, 레벨 업처럼 사용자가 직접 얻어 냈고 자주 보지 않는 결과.
+- 한 순간에 한 번만 씁니다. 그 순간이 시작될 때 마운트하고, 새로 터뜨릴 때만 `seed`를
+  바꿉니다.
+
+## 언제 쓰지 않나요
+
+- 저장, 전송, 복사처럼 흔한 성공에는 `Toast`를 쓰거나, 바뀐 값에 `Pulse`를 씁니다.
+- 잘못됐거나 확인이 필요한 일에는 절대 쓰지 않습니다.
+- 정답 하나처럼 흐름 속의 작은 성공에는 `Appear`로 표시를 찍습니다.
+
+## 동작 줄이기와 접근성
+
+- `prefers-reduced-motion: reduce`에서는 조각이 마운트되지만 보이지 않습니다. 이
+  효과에는 정보가 없으니 잃는 것도 없습니다.
+- 겹쳐진 층에는 `aria-hidden`이 붙고 포인터를 받지 않으므로, 버튼을 가리거나 화면
+  낭독기에 읽히지 않습니다. 성공했다는 사실은 화면의 문구로 따로 알려야 합니다.
+- 모든 조각이 3초 안에 끝나므로 멈춤 기능이 필요 없습니다(WCAG 2.2.2는 5초 넘게
+  움직이는 콘텐츠에 해당합니다).
+
+## 속성
+
+Confetti는 자식을 받지 않습니다. 가장 가까운 위치 지정 조상을 채우므로, 그 요소에
+`position: relative`를 줍니다. 그러지 않으면 페이지 전체를 덮습니다. 기본 색은 장식용으로,
+코랄, 베이지, 그리고 상태 뜻이 없는 시스템 색만 씁니다. 빨강, 노랑, 초록, 파랑은 각각
+위험, 경고, 성공, 정보를 뜻하므로 뺐습니다. 이 색들은 라이트 모드 값이라 다크 모드에서
+바뀌지 않습니다. 필요하면 `colors`를 넘깁니다(토큰도 됩니다).
+
+</Ko>
+
+<ArgTypes of={ConfettiStories} include={['pieceCount', 'colors', 'seed']} />

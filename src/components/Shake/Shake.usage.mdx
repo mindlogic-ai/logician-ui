@@ -1,0 +1,107 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle } from '../../guidelines/_components/Lang';
+import * as ShakeStories from './Shake.stories';
+
+<Meta of={ShakeStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# Shake
+
+Shakes its content once each time `trigger` changes: the "no, not that"
+gesture for a rejected answer, an invalid field or a refused action.
+
+</En>
+
+<Ko>
+
+# Shake
+
+`trigger`가 바뀔 때마다 내용을 한 번 좌우로 흔듭니다. 틀린 답, 잘못 입력한 칸, 거절된
+동작에 "그건 아니에요"라고 답하는 몸짓입니다.
+
+</Ko>
+
+<Canvas of={ShakeStories.Default} />
+
+<En>
+
+## When to use
+
+- A wrong answer in a quiz or a choice list, with the option row itself
+  shaking (`display="block"` and `w="100%"` keep a full-width row full width).
+- A submit that was refused because a field is invalid, shaking that field.
+
+## When not to use
+
+- The change is good news or plain emphasis → `Pulse`. A shake used as
+  emphasis reads as an error the reader then goes looking for.
+- As the only error signal → never. Pair it with colour, an icon and words.
+- On the first render → it never shakes then; show the error state instead.
+
+## Reduced motion and accessibility
+
+- With `prefers-reduced-motion: reduce` the shake is removed entirely, so for
+  some readers nothing moves at all. The refusal must be readable without it:
+  describe the error in text (WCAG 3.3.1) and do not rely on colour alone
+  (WCAG 1.4.1). The **동작 줄이기에서 남는 것** story shows both columns.
+- Replaying does not remount the children, so the keyboard focus of the person
+  who was just told no stays where it was.
+- Shake adds one `div` (`display: inline-flex`) around `children`. Inside a
+  `<button>` pass `as="span"` (ACCESSIBILITY.md §5).
+
+</En>
+
+<Ko>
+
+## 언제 쓰나요
+
+- 퀴즈나 선택지 목록에서 틀린 답을 골랐을 때 그 선택지 행을 흔듭니다. 가로로 꽉 찬
+  행이라면 `display="block"`과 `w="100%"`를 넘겨 너비를 유지합니다.
+- 입력란이 잘못되어 제출이 거절됐을 때 그 입력란을 흔듭니다.
+
+## 언제 쓰지 않나요
+
+- 좋은 소식이거나 단순한 강조라면 `Pulse`를 씁니다. 강조하려고 흔들면 사용자는
+  오류로 읽고 무엇이 잘못됐는지 찾아 나섭니다.
+- 오류를 알리는 유일한 신호로는 쓰지 않습니다. 색, 아이콘, 문구와 함께 씁니다.
+- 첫 렌더에서는 흔들리지 않습니다. 처음부터 오류 상태라면 그 상태를 그대로 보여 줍니다.
+
+## 동작 줄이기와 접근성
+
+- `prefers-reduced-motion: reduce`에서는 흔들림을 아예 빼므로, 어떤 사용자에게는 아무것도
+  움직이지 않습니다. 흔들림 없이도 거절이 읽혀야 합니다. 오류를 문구로 설명하고
+  (WCAG 3.3.1) 색에만 기대지 않습니다(WCAG 1.4.1). **동작 줄이기에서 남는 것**
+  스토리에서 두 경우를 나란히 볼 수 있습니다.
+- 다시 재생할 때 자식을 새로 마운트하지 않으므로, 방금 거절당한 사람의 키보드 초점이
+  제자리에 남습니다.
+- Shake는 `children` 바깥에 `div`(`display: inline-flex`)를 하나 더합니다. `<button>`
+  안에서는 `as="span"`을 넘깁니다(ACCESSIBILITY.md 5절).
+
+</Ko>
+
+<Canvas of={ShakeStories.ReducedMotion} />
+
+<En>
+
+## Props
+
+Any changing value works as `trigger`: an attempt counter, a verdict, a
+timestamp. Two rejections of the same answer are two shakes if the counter
+moves.
+
+</En>
+
+<Ko>
+
+## 속성
+
+`trigger`에는 바뀌는 값이면 무엇이든 넣을 수 있습니다. 시도 횟수, 판정 결과,
+타임스탬프 모두 됩니다. 같은 답을 두 번 틀려도 카운터가 올라가면 두 번 흔들립니다.
+
+</Ko>
+
+<ArgTypes of={ShakeStories} include={['trigger', 'distance']} />

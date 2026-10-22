@@ -1,0 +1,107 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle } from '../../guidelines/_components/Lang';
+import * as CountUpStories from './CountUp.stories';
+
+<Meta of={CountUpStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# CountUp
+
+Counts a number up (or down) to `to`, for a balance that just grew, a total
+that just settled, or a KPI that just loaded.
+
+</En>
+
+<Ko>
+
+# CountUp
+
+숫자를 `to`까지 세어 올리거나 내립니다. 방금 늘어난 잔액, 방금 확정된 합계, 방금 불러온
+지표에 씁니다.
+
+</Ko>
+
+<Canvas of={CountUpStories.Default} />
+
+<En>
+
+## When to use
+
+- Credits added after a purchase, counting from the old balance to the new one.
+- The headline number on a stat card when the dashboard first loads
+  (`from={0}`).
+- A score on a result screen, with `delayMs` so it starts after the screen has
+  arrived.
+
+## When not to use
+
+- Numbers in tables, lists or running text that did not just change → plain
+  text. A count is a flourish on a number that is already known.
+- Values that update all the time (live usage, a timer) → plain text. Every
+  update would start a new count.
+- Only emphasis is needed, not the change itself → `Pulse`.
+
+## Reduced motion and accessibility
+
+- With `prefers-reduced-motion: reduce` the final value renders immediately,
+  and `onEnd` still fires.
+- The text changes on every frame while counting. Do not put CountUp inside an
+  `aria-live` region, or a screen reader may read intermediate values. If the
+  new value must be announced, announce the final number separately
+  (WCAG 4.1.3).
+- It renders a single `<span>` with tabular figures and wraps nothing, so it
+  is safe inside a heading, a button or running text.
+- The default `durationMs` is `motion.slower` (700ms). Longer counts make
+  people wait for a number the screen already knows.
+
+## Props
+
+`format` receives every intermediate value; the default rounds and groups
+digits with commas. Later changes to `to` count on from wherever the last count
+landed.
+
+</En>
+
+<Ko>
+
+## 언제 쓰나요
+
+- 구매 뒤 추가된 크레딧을, 이전 잔액에서 새 잔액까지 세어 올릴 때.
+- 대시보드를 처음 열 때 통계 카드의 큰 숫자(`from={0}`).
+- 결과 화면의 점수. 화면이 다 들어온 뒤에 세도록 `delayMs`를 줍니다.
+
+## 언제 쓰지 않나요
+
+- 방금 바뀌지 않은 표, 목록, 본문 속 숫자는 그냥 글자로 씁니다. 세어 올리는 효과는 이미
+  알려진 숫자에 더하는 장식입니다.
+- 실시간 사용량이나 타이머처럼 계속 바뀌는 값도 그냥 글자로 씁니다. 바뀔 때마다 새로
+  세기 시작합니다.
+- 바뀌는 과정이 아니라 강조만 필요하다면 `Pulse`를 씁니다.
+
+## 동작 줄이기와 접근성
+
+- `prefers-reduced-motion: reduce`에서는 최종 값이 바로 나타나고, `onEnd`도 그대로
+  호출됩니다.
+- 세는 동안 글자가 매 프레임 바뀝니다. CountUp을 `aria-live` 영역 안에 두지 마세요.
+  화면 낭독기가 중간 값을 읽을 수 있습니다. 새 값을 알려야 한다면 최종 숫자를 따로
+  알립니다(WCAG 4.1.3).
+- 고정 폭 숫자로 된 `<span>` 하나만 그리고 아무것도 감싸지 않으므로, 제목, 버튼, 본문
+  안에 넣어도 됩니다.
+- `durationMs` 기본값은 `motion.slower`(700ms)입니다. 이보다 길면 화면이 이미 아는
+  숫자를 사용자가 기다리게 됩니다.
+
+## 속성
+
+`format`은 중간 값마다 호출되며, 기본값은 반올림한 뒤 쉼표로 자릿수를 묶습니다. 나중에
+`to`가 바뀌면 마지막으로 멈춘 값에서 이어서 셉니다.
+
+</Ko>
+
+<ArgTypes
+  of={CountUpStories}
+  include={['to', 'from', 'durationMs', 'delayMs', 'format', 'onEnd']}
+/>

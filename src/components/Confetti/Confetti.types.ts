@@ -3,7 +3,11 @@ import type { BoxProps } from '@chakra-ui/react';
 export interface ConfettiProps extends BoxProps {
   /** How many pieces. Defaults to 50. */
   pieceCount?: number;
-  /** Colour token names to pick from. Defaults to the palette's five accents. */
+  /**
+   * Colours to pick from: any CSS colour string or colour token. Defaults to ten
+   * decorative colours — coral, beige and the eight system hues with no status
+   * meaning — as light-mode hex, so they do not follow dark mode.
+   */
   colors?: string[];
   /**
    * Changes the scatter. The generator is seeded rather than `Math.random()` so

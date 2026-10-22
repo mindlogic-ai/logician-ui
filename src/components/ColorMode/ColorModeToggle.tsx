@@ -17,8 +17,13 @@ export interface ColorModeToggleProps extends Omit<
  * A ready-made light/dark toggle button. Shared across products so each app
  * doesn't reinvent the control.
  *
- * Renders nothing until mounted on the client to avoid an SSR/CSR icon
- * mismatch (the resolved mode is only known after hydration).
+ * Shows the light-mode state (moon) until mounted on the client, to avoid an
+ * SSR/CSR icon mismatch (the resolved mode is only known after hydration).
+ * Toggles between `light` and `dark` only; to offer `system` as well, build a
+ * picker on `useColorMode().setColorMode`.
+ *
+ * The icon wrappers render as `<span>`: only phrasing content may sit inside
+ * a `<button>` (see ACCESSIBILITY.md §5).
  *
  * @example
  * ```tsx
@@ -45,8 +50,9 @@ export const ColorModeToggle: React.FC<ColorModeToggleProps> = ({
           page-wide colour flip stays instant on purpose — `ColorModeProvider`
           sets `disableTransitionOnChange` so the whole UI doesn't wash through
           an intermediate state — this animates the control only. */}
-      <Box display="grid" placeItems="center">
+      <Box as="span" display="grid" placeItems="center">
         <Box
+          as="span"
           gridArea="1 / 1"
           display="grid"
           placeItems="center"
@@ -58,6 +64,7 @@ export const ColorModeToggle: React.FC<ColorModeToggleProps> = ({
           <SunIcon />
         </Box>
         <Box
+          as="span"
           gridArea="1 / 1"
           display="grid"
           placeItems="center"
