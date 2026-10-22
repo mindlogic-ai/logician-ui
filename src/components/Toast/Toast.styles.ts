@@ -7,8 +7,12 @@ import type { ToastStatus } from './Toast.types';
  *
  * Each status is bg `{s}.bg` + text `{s}.fg` + a 1px `{s}.border` outline —
  * `info` reads its own `info.*` family instead of borrowing `primary.*`.
- * `neutral` carries no status (it is the default when none is given):
- * `border.default` / `bg.surface` / `fg.default`.
+ * `neutral` carries no status (it is the default when none is given) and is
+ * inverted: the tooltip pair `tooltip.bg` / `tooltip.fg`. A `bg.surface` toast
+ * was white on a white canvas in light mode, set apart only by a 1px border
+ * and the shadow — a "링크를 복사했어요" confirmation was easy to miss. The
+ * tooltip pair already flips per mode (ink in light, cream in dark), so the
+ * toast stays the highest-contrast thing on the page in both.
  */
 export const toastStyles: Record<ToastStatus, BoxProps> = {
   info: {
@@ -32,9 +36,9 @@ export const toastStyles: Record<ToastStatus, BoxProps> = {
     borderColor: 'danger.border',
   },
   neutral: {
-    bg: 'bg.surface',
-    color: 'fg.default',
-    borderColor: 'border.default',
+    bg: 'tooltip.bg',
+    color: 'tooltip.fg',
+    borderColor: 'tooltip.bg',
   },
 };
 
@@ -69,9 +73,11 @@ export const closeButtonStyles: Record<ToastStatus, BoxProps> = {
     },
   },
   neutral: {
-    color: 'fg.default',
+    color: 'tooltip.fg',
     _hover: {
-      bg: 'bg.muted',
+      // A tint of the toast's own text colour: no surface token sits on the
+      // inverted ground in both modes.
+      bg: 'color-mix(in srgb, var(--chakra-colors-tooltip-fg) 16%, transparent)',
     },
   },
 };
@@ -127,9 +133,11 @@ export const actionStyles: Record<ToastStatus, BoxProps> = {
   },
   neutral: {
     ...actionBase,
-    color: 'fg.default',
-    _hover: { bg: 'bg.muted' },
-    _focusVisible: { outline: '2px solid', outlineColor: 'fg.default' },
+    color: 'tooltip.fg',
+    _hover: {
+      bg: 'color-mix(in srgb, var(--chakra-colors-tooltip-fg) 16%, transparent)',
+    },
+    _focusVisible: { outline: '2px solid', outlineColor: 'tooltip.fg' },
   },
 };
 
