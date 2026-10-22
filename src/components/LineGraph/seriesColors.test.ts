@@ -30,12 +30,12 @@ describe('chart series colours', () => {
 
   it('every default stroke clears 3:1 against the page in both modes', () => {
     [undefined, ...CHART_SERIES_HUES].forEach((_, i) => {
-      expect(
-        contrast(seriesColor(i, false), '#FFFFFF')
-      ).toBeGreaterThanOrEqual(3);
-      expect(
-        contrast(seriesColor(i, true), '#1F1E1D')
-      ).toBeGreaterThanOrEqual(3);
+      expect(contrast(seriesColor(i, false), '#FFFFFF')).toBeGreaterThanOrEqual(
+        3
+      );
+      expect(contrast(seriesColor(i, true), '#1F1E1D')).toBeGreaterThanOrEqual(
+        3
+      );
     });
   });
 });
