@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react';
-import { Box, Flex, Stack } from '@chakra-ui/react';
+import { Flex, Stack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
 import { T } from '../../guidelines/_components/Lang';
 import { TokenTable } from '../../guidelines/_components/TokenTable';
+import { Card } from '../Card';
 import { ClockIcon, MdError } from '../Icon';
 import { Tag } from '../Tag';
 import { Subtext, Text } from '../Typography';
@@ -93,8 +94,6 @@ export const Sizes: Story = {
 // they type-check with the rest of the code. `tags` must be written out on
 // each story: the indexer reads CSF statically and does not follow a spread.
 
-const guideline = { parameters: { layout: 'padded' } };
-
 /** A settings card like FactChat's group credit limit. */
 const LimitCard = ({
   title,
@@ -107,14 +106,7 @@ const LimitCard = ({
   badge?: ReactNode;
   bg?: string;
 }) => (
-  <Box
-    bg={bg}
-    borderWidth="1px"
-    borderColor="border.subtle"
-    borderRadius="lg"
-    p={4}
-    minW="180px"
-  >
+  <Card bg={bg} p={4} minW="180px">
     <Flex gap={2} align="center" mb={1}>
       <Subtext>{title}</Subtext>
       {badge}
@@ -122,12 +114,18 @@ const LimitCard = ({
     <Text fontWeight="bold" fontSize="lg">
       {value}
     </Text>
-  </Box>
+  </Card>
 );
 
+const CREDIT_CARDS = [
+  { title: '남은 크레딧', value: '0' },
+  { title: '이번 달 사용', value: '8,489' },
+  { title: '개인 한도', value: '2,000' },
+];
+
 export const DoScopeLabel: Story = {
-  ...guideline,
   tags: ['!dev'],
+  parameters: { layout: 'padded' },
   name: 'Usage / Do: info for a scope',
   render: () => (
     <LimitCard
@@ -139,8 +137,8 @@ export const DoScopeLabel: Story = {
 };
 
 export const DontStatusForTeams: Story = {
-  ...guideline,
   tags: ['!dev'],
+  parameters: { layout: 'padded' },
   name: "Usage / Don't: status colours to tell teams apart",
   render: () => (
     <Flex gap={2}>
@@ -152,8 +150,8 @@ export const DontStatusForTeams: Story = {
 };
 
 export const DoCategoryTags: Story = {
-  ...guideline,
   tags: ['!dev'],
+  parameters: { layout: 'padded' },
   name: 'Usage / Do: Tag category for groups',
   render: () => (
     <Flex gap={2}>
@@ -165,8 +163,8 @@ export const DoCategoryTags: Story = {
 };
 
 export const DontNeutralOnLayer: Story = {
-  ...guideline,
   tags: ['!dev'],
+  parameters: { layout: 'padded' },
   name: "Usage / Don't: neutral on layer.1",
   render: () => (
     <LimitCard
@@ -179,16 +177,15 @@ export const DontNeutralOnLayer: Story = {
 };
 
 export const DontRepeatOnEveryCard: Story = {
-  ...guideline,
   tags: ['!dev'],
+  parameters: { layout: 'padded' },
   name: "Usage / Don't: the same badge on every card",
   render: () => (
     <Flex gap={3} wrap="wrap">
-      {['0', '8,489', '2,000'].map((value, i) => (
+      {CREDIT_CARDS.map((card) => (
         <LimitCard
-          key={value}
-          title={['남은 크레딧', '이번 달 사용', '개인 한도'][i]}
-          value={value}
+          key={card.title}
+          {...card}
           badge={<Badge variant="info">이 그룹만</Badge>}
         />
       ))}
@@ -197,8 +194,8 @@ export const DontRepeatOnEveryCard: Story = {
 };
 
 export const DoOnceOnHeading: Story = {
-  ...guideline,
   tags: ['!dev'],
+  parameters: { layout: 'padded' },
   name: 'Usage / Do: once, on the section heading',
   render: () => (
     <Stack gap={3}>
@@ -209,12 +206,8 @@ export const DoOnceOnHeading: Story = {
         <Badge variant="info">이 그룹만</Badge>
       </Flex>
       <Flex gap={3} wrap="wrap">
-        {['0', '8,489', '2,000'].map((value, i) => (
-          <LimitCard
-            key={value}
-            title={['남은 크레딧', '이번 달 사용', '개인 한도'][i]}
-            value={value}
-          />
+        {CREDIT_CARDS.map((card) => (
+          <LimitCard key={card.title} {...card} />
         ))}
       </Flex>
     </Stack>
@@ -222,8 +215,8 @@ export const DoOnceOnHeading: Story = {
 };
 
 export const DoTextCarriesMeaning: Story = {
-  ...guideline,
   tags: ['!dev'],
+  parameters: { layout: 'padded' },
   name: 'Usage / Do: the words carry the meaning',
   render: () => (
     <Flex gap={2}>
@@ -240,8 +233,8 @@ export const DoTextCarriesMeaning: Story = {
 };
 
 export const DontColourOnly: Story = {
-  ...guideline,
   tags: ['!dev'],
+  parameters: { layout: 'padded' },
   name: "Usage / Don't: colour with no words",
   render: () => (
     <Flex gap={3} align="center">
@@ -259,8 +252,8 @@ export const DontColourOnly: Story = {
 
 /** Tokens each variant reads, resolved from `Badge.styles.ts` and the theme. */
 export const UsageTokens: Story = {
-  ...guideline,
   tags: ['!dev'],
+  parameters: { layout: 'padded' },
   name: 'Usage / Tokens',
   render: () => (
     <TokenTable

@@ -26,19 +26,19 @@ Every component usage page follows the same eight sections, in this order.
 
 ## How to write one
 
-- Create `src/components/<Name>/<Name>.usage.mdx` and attach it to the stories
-  with `<Meta of={Stories} name="Usage" />`.
-- Put `<LangToggle />` at the top. Write every block twice, in `<En>` and
-  `<Ko>`, in the same file. Leave a blank line inside each tag so Markdown
-  parses. For short captions use `<T en="…" ko="…" />`.
-- Add each Do/Don't specimen to `<Name>.stories.tsx` with
-  `tags: ['!dev']` (hidden from the sidebar) and a name starting with
-  `Usage /`. **Never paste JSX into the MDX**: a story type-checks, a code
-  block does not.
-- Use tokens, not hex, in prose. Swatches come from `TokenTable`, which reads
-  the shipped theme.
-- Korean copy is written, not translated: complete sentences in 합니다체, no
-  한자, no translationese.
+1. Create `src/components/<Name>/<Name>.usage.mdx` and attach it to the stories
+   with `<Meta of={Stories} name="Usage" />`.
+2. Put `<LangToggle />` at the top. Write every block twice, in `<En>` and
+   `<Ko>`, in the same file. Leave a blank line inside each tag so Markdown
+   parses. For short captions use `<T en="…" ko="…" />`.
+3. Add each Do/Don't specimen to `<Name>.stories.tsx` with
+   `tags: ['!dev']` (hidden from the sidebar) and a name starting with
+   `Usage /`. **Never paste JSX into the MDX**: a story type-checks, a code
+   block does not.
+4. Use tokens, not hex, in prose. Swatches come from `TokenTable`, which reads
+   the shipped theme.
+5. Korean copy is written, not translated: complete sentences in 합니다체, no
+   한자, no translationese.
 
 The doc helpers (`src/guidelines/_components/`) are not exported from the
 library and are excluded from the rollup build.
@@ -65,18 +65,18 @@ library and are excluded from the rollup build.
 
 ## 작성 순서
 
-- `src/components/<Name>/<Name>.usage.mdx`를 만들고
-  `<Meta of={Stories} name="Usage" />`로 스토리에 붙입니다.
-- 맨 위에 `<LangToggle />`을 둡니다. 모든 블록을 한 파일 안에서 `<En>`과 `<Ko>`로 두
-  번 씁니다. 마크다운이 해석되도록 태그 안쪽에 빈 줄을 둡니다. 짧은 설명은
-  `<T en="…" ko="…" />`를 씁니다.
-- 이렇게 하세요/하지 마세요 예시는 `<Name>.stories.tsx`에 `tags: ['!dev']`(사이드바에서
-  숨김)를 달고 이름을 `Usage /`로 시작해 추가합니다. **MDX에 JSX를 붙여 넣지 않습니다.**
-  스토리는 타입 검사를 받지만 코드 블록은 받지 않습니다.
-- 본문에는 16진수 값이 아니라 토큰 이름을 씁니다. 색 견본은 실제 테마를 읽는
-  `TokenTable`로 그립니다.
-- 한국어는 번역하지 말고 처음부터 씁니다. 합니다체의 완전한 문장으로 쓰고, 한자와
-  번역투를 쓰지 않습니다.
+1. `src/components/<Name>/<Name>.usage.mdx`를 만들고
+   `<Meta of={Stories} name="Usage" />`로 스토리에 붙입니다.
+2. 맨 위에 `<LangToggle />`을 둡니다. 모든 블록을 한 파일 안에서 `<En>`과 `<Ko>`로 두
+   번 씁니다. 마크다운이 해석되도록 태그 안쪽에 빈 줄을 둡니다. 짧은 설명은
+   `<T en="…" ko="…" />`를 씁니다.
+3. 이렇게 하세요/하지 마세요 예시는 `<Name>.stories.tsx`에 `tags: ['!dev']`(사이드바에서
+   숨김)를 달고 이름을 `Usage /`로 시작해 추가합니다. **MDX에 JSX를 붙여 넣지 않습니다.**
+   스토리는 타입 검사를 받지만 코드 블록은 받지 않습니다.
+4. 본문에는 16진수 값이 아니라 토큰 이름을 씁니다. 색 견본은 실제 테마를 읽는
+   `TokenTable`로 그립니다.
+5. 한국어는 번역하지 말고 처음부터 씁니다. 합니다체의 완전한 문장으로 쓰고, 한자와
+   번역투를 쓰지 않습니다.
 
 문서용 도구(`src/guidelines/_components/`)는 라이브러리에서 내보내지 않으며 rollup
 빌드에서도 빠집니다.

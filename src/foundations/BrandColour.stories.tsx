@@ -1,8 +1,9 @@
-import { Box, Flex, Stack } from '@chakra-ui/react';
+import { Flex, Stack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
 import { Badge } from '../components/Badge';
 import { Button } from '../components/Button';
+import { Card } from '../components/Card';
 import { CountBadge } from '../components/CountBadge';
 import { SendIcon, Sparkles } from '../components/Icon';
 import { IconButton } from '../components/IconButton';
@@ -154,17 +155,11 @@ export const Distinction: Story = {
     <Stack gap={5}>
       <Flex gap={3} wrap="wrap" align="center">
         <Badge>Pro</Badge>
-        <Box
-          borderWidth="1px"
-          borderColor="secondary.border"
-          borderRadius="md"
-          px={3}
-          py={2}
-        >
+        <Card px={3} py={2} borderColor="secondary.border">
           <Text color="secondary.fgStrong" fontWeight="bold">
             +4,500
           </Text>
-        </Box>
+        </Card>
       </Flex>
       <TokenTable
         rows={[
@@ -256,27 +251,25 @@ export const Coral: Story = {
   ),
 };
 
-const STATUS = ['danger', 'warning', 'success', 'info'] as const;
+const STATUS = [
+  { s: 'danger', en: 'Failed', ko: '실패' },
+  { s: 'warning', en: 'Pending', ko: '대기 중' },
+  { s: 'success', en: 'Done', ko: '완료' },
+  { s: 'info', en: 'This group only', ko: '이 그룹만' },
+] as const;
 
 export const Status: Story = {
   render: () => (
     <Stack gap={5}>
       <Flex gap={2} wrap="wrap">
-        <Badge variant="danger">
-          <T en="Failed" ko="실패" />
-        </Badge>
-        <Badge variant="warning">
-          <T en="Pending" ko="대기 중" />
-        </Badge>
-        <Badge variant="success">
-          <T en="Done" ko="완료" />
-        </Badge>
-        <Badge variant="info">
-          <T en="This group only" ko="이 그룹만" />
-        </Badge>
+        {STATUS.map(({ s, en, ko }) => (
+          <Badge key={s} variant={s}>
+            <T en={en} ko={ko} />
+          </Badge>
+        ))}
       </Flex>
       <TokenTable
-        rows={STATUS.flatMap((s) => [
+        rows={STATUS.flatMap(({ s }) => [
           {
             token: `${s}.bg`,
             use: <T en={`${s} · surface`} ko={`${s} · 면`} />,

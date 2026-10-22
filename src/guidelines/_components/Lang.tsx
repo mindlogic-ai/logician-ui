@@ -12,7 +12,7 @@
  */
 import { ReactNode, useSyncExternalStore } from 'react';
 
-export type DocLang = 'en' | 'ko';
+type DocLang = 'en' | 'ko';
 
 const STORAGE_KEY = 'logician-ui:docs-lang';
 const listeners = new Set<() => void>();
@@ -38,24 +38,27 @@ const write = (lang: DocLang) => {
 
 const snapshot = (): DocLang => (current ??= read());
 
+// Another tab changed it: one listener for the whole page, not one per block.
+const onStorage = (event: StorageEvent) => {
+  if (event.key !== STORAGE_KEY) return;
+  current = read();
+  listeners.forEach((notify) => notify());
+};
+
 const subscribe = (notify: () => void) => {
+  if (listeners.size === 0) window.addEventListener('storage', onStorage);
   listeners.add(notify);
-  // Another tab (or the manager frame) changed it.
-  const onStorage = (event: StorageEvent) => {
-    if (event.key !== STORAGE_KEY) return;
-    current = read();
-    notify();
-  };
-  window.addEventListener('storage', onStorage);
   return () => {
     listeners.delete(notify);
-    window.removeEventListener('storage', onStorage);
+    if (listeners.size === 0) window.removeEventListener('storage', onStorage);
   };
 };
 
 /** The language the reader picked; `'en'` until they pick one. */
-export const useDocLang = (): DocLang =>
+const useDocLang = (): DocLang =>
   useSyncExternalStore(subscribe, snapshot, () => 'en');
+
+const pick = <V,>(lang: DocLang, en: V, ko: V) => (lang === 'ko' ? ko : en);
 
 const Block = ({ lang, children }: { lang: DocLang; children: ReactNode }) =>
   useDocLang() === lang ? <div lang={lang}>{children}</div> : null;
@@ -73,7 +76,7 @@ export const Ko = ({ children }: { children: ReactNode }) => (
 /** Inline text in the reader's language, for captions and table cells. */
 export const T = ({ en, ko }: { en: ReactNode; ko: ReactNode }) => {
   const lang = useDocLang();
-  return <span lang={lang}>{lang === 'ko' ? ko : en}</span>;
+  return <span lang={lang}>{pick(lang, en, ko)}</span>;
 };
 
 const OPTIONS: { value: DocLang; label: string }[] = [
@@ -123,6 +126,23 @@ export const LangToggle = () => {
   );
 };
 
+const VERDICT = {
+  do: {
+    mark: '✓',
+    en: 'Do',
+    ko: '이렇게 하세요',
+    rule: '#5E7A37',
+    ink: '#425C17',
+  },
+  dont: {
+    mark: '×',
+    en: "Don't",
+    ko: '이렇게 하지 마세요',
+    rule: '#A02525',
+    ink: '#A02525',
+  },
+};
+
 /** Do / Don't caption under a `<Canvas>` specimen. */
 export const Verdict = ({
   kind,
@@ -134,29 +154,22 @@ export const Verdict = ({
   ko: ReactNode;
 }) => {
   const lang = useDocLang();
-  const isDo = kind === 'do';
-  const label = isDo
-    ? lang === 'ko'
-      ? '이렇게 하세요'
-      : 'Do'
-    : lang === 'ko'
-      ? '이렇게 하지 마세요'
-      : "Don't";
+  const v = VERDICT[kind];
   return (
     <p
       lang={lang}
       style={{
         margin: '-12px 0 28px',
         paddingLeft: 12,
-        borderLeft: `3px solid ${isDo ? '#5E7A37' : '#A02525'}`,
+        borderLeft: `3px solid ${v.rule}`,
         fontSize: 14,
         lineHeight: 1.6,
       }}
     >
-      <strong style={{ color: isDo ? '#425C17' : '#A02525' }}>
-        {isDo ? '✓' : '×'} {label}.
+      <strong style={{ color: v.ink }}>
+        {v.mark} {pick(lang, v.en, v.ko)}.
       </strong>{' '}
-      {lang === 'ko' ? ko : en}
+      {pick(lang, en, ko)}
     </p>
   );
 };

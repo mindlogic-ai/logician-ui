@@ -9,6 +9,7 @@
  */
 import type { ReactNode } from 'react';
 import { Box, Grid } from '@chakra-ui/react';
+import { readableColor } from 'polished';
 
 import { getSwatchGroups, Swatch } from '../../theme/paletteSwatches';
 import { T } from './Lang';
@@ -20,22 +21,15 @@ const SWATCHES: ReadonlyMap<string, Swatch> = new Map(
 );
 
 /** Light and dark hex of a public semantic token. Throws on an unknown name. */
-export const resolveToken = (path: string): Swatch => {
+const resolveToken = (path: string): Swatch => {
   const swatch = SWATCHES.get(path);
   if (!swatch) throw new Error(`Unknown semantic colour token: ${path}`);
   return swatch;
 };
 
-const luminance = (hex: string) => {
-  const channel = [1, 3, 5]
-    .map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
-    .map((x) => (x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4));
-  return 0.2126 * channel[0] + 0.7152 * channel[1] + 0.0722 * channel[2];
-};
-
-/** Label colour for a chip: white on dark values, brand black on light ones. */
+/** Label colour for a chip: brand black or white, whichever reads on it. */
 const labelOn = (hex: string) =>
-  /^#[0-9a-f]{6}$/i.test(hex) && luminance(hex) < 0.18 ? '#FFFFFF' : '#252525';
+  readableColor(hex, '#252525', '#FFFFFF', false);
 
 const Chip = ({ hex }: { hex: string }) => {
   const transparent = !/^#/.test(hex);
@@ -62,7 +56,7 @@ const Chip = ({ hex }: { hex: string }) => {
   );
 };
 
-export type TokenRow = {
+type TokenRow = {
   /** Semantic token path, e.g. `primary.main`. */
   token: string;
   /** What the token is for, in the reader's language. */
