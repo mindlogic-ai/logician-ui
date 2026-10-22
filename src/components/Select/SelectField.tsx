@@ -52,9 +52,6 @@ export function SelectField<T = string>({
       collection={collection}
       size={size}
       width={width}
-      // A content-sized ghost field sits beside text in a row; without this the
-      // row squeezes it and the value truncates to "앱 …".
-      flexShrink={variant === 'ghost' ? 0 : undefined}
       invalid={invalid}
       disabled={disabled}
       readOnly={readOnly}
