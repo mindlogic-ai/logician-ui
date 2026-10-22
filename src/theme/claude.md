@@ -250,8 +250,9 @@ follow the scheme and high contrast. Base font size is 14px.
    badges/tags, the modal header band), never rows or panels.
 5. Disabled = `disabled.*`, not opacity. Focus = `focusRing`.
 6. Blue means data and links: links are `fg.link`; data visualisation
-   (usage bars, single-measure charts, maps) is a blue monochrome ramp, never a
-   rainbow or grey ramp. Values: SemanticTokens.mdx → "Blue means data and links".
+   (usage bars, single-measure bar charts, maps) is a blue monochrome ramp, never a
+   rainbow or grey ramp; line strokes (single-measure, and series 1) use `blue.base`.
+   Values: SemanticTokens.mdx → "Blue means data and links".
 
 ## Extending the Theme
 
