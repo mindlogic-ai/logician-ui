@@ -52,7 +52,7 @@ const preview: Preview = {
     options: {
       storySort: {
         method: 'alphabetical',
-        order: ['Setup', 'Theme', 'Components', 'Chat', '*'],
+        order: ['Setup', 'Foundations', 'Theme', 'Components', 'Chat', '*'],
         locales: 'en-US',
         includeName: true,
       },
