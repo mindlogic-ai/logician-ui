@@ -35,6 +35,7 @@ export const Basic: Story = {
 const VARIANT_NOTES: Record<ButtonVariant, string> = {
   primary: '화면의 주 행동 — BAZE 블랙',
   action: '실행 버튼 — 블랙 면 + 코랄 아이콘',
+  accent: '색 있는 CTA — 코랄 면 + 검정 글씨, 화면당 하나',
   secondary: '보조 행동 — 테두리 + 표면',
   subtle: '낮은 강조 — 웜 워시 (기본값)',
   ghost: '툴바·인라인 — 면/테두리 없음',
@@ -126,6 +127,29 @@ export const Action: Story = {
       <Button variant="action" disabled>
         <Sparkles />
         실행
+      </Button>
+    </HStack>
+  ),
+};
+
+/**
+ * `accent`: the coloured call to action — coral fill (`send.bg`), dark label
+ * (`send.fg`, 6.5:1). One per view: a hero or a marketing section's main CTA.
+ * Keep `primary` (black) for product screens, where coral is reserved for
+ * run/send signals.
+ */
+export const Accent: Story = {
+  render: () => (
+    <HStack gap={4}>
+      <Button variant="accent" size="lg">
+        입장하기
+      </Button>
+      <Button variant="accent">시작하기</Button>
+      <Button variant="accent" size="sm">
+        시작하기
+      </Button>
+      <Button variant="accent" disabled>
+        시작하기
       </Button>
     </HStack>
   ),

@@ -116,6 +116,23 @@ export const buttonVariantStyles: Record<ButtonVariant, StyleProps> = {
       },
     },
   },
+  /**
+   * Coral fill, dark label — the coloured CTA. Reuses the `send.*` tokens of
+   * the IconButton send button so the brand has one coral surface, and the
+   * contrast audit checks `send.fg` on all three fills as *text* (4.5:1).
+   */
+  accent: {
+    borderColor: 'send.bg',
+    bgColor: 'send.bg',
+    color: 'send.fg',
+    _hover: { borderColor: 'send.bgHover', bgColor: 'send.bgHover' },
+    _active: {
+      borderColor: 'send.bgActive',
+      bgColor: 'send.bgActive',
+      scale: PRESSED,
+    },
+    _disabled: { ...disabledControl },
+  },
   secondary: {
     borderColor: 'border.default',
     bgColor: 'bg.surface',
@@ -189,6 +206,7 @@ export const getButtonStyles = (
 export const buttonVariants: ButtonVariant[] = [
   'primary',
   'action',
+  'accent',
   'secondary',
   'subtle',
   'ghost',

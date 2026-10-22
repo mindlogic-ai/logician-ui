@@ -77,9 +77,10 @@ const PAIRS: [string, string, Kind][] = [
   ['action-iconOnSolid', 'action-bgHover', 'nontext'],
   ['action-fg', 'action-bgActive', 'text'],
   ['action-iconOnSolid', 'action-bgActive', 'nontext'],
-  ['send-fg', 'send-bg', 'nontext'],
-  ['send-fg', 'send-bgHover', 'nontext'],
-  ['send-fg', 'send-bgActive', 'nontext'],
+  // `text`, not `nontext`: Button `accent` puts a label on these fills.
+  ['send-fg', 'send-bg', 'text'],
+  ['send-fg', 'send-bgHover', 'text'],
+  ['send-fg', 'send-bgActive', 'text'],
   ['danger-fg', 'danger-bg', 'text'],
   ['danger-onSolid', 'danger-solid', 'text'],
   ['success-fg', 'success-bg', 'text'],
