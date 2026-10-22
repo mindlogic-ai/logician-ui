@@ -1,0 +1,199 @@
+import { Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as WorkflowStories from './stories/Workflow.stories';
+
+<Meta of={WorkflowStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# Workflow
+
+A node-based workflow editor on React Flow: a drag-and-drop palette, a
+canvas with undo/redo, auto-arrange and selection, and an optional inspector
+drawer. It ships **no node types**: you register yours with
+`defineNodeType`, and you own persistence and validation. FactChat's studio
+behaviour editor is built on it. Full API: `Workflow/README.md`.
+
+## When to use
+
+- Users build or read a graph of steps with branches: triggers, AI steps,
+  conditions, outputs.
+- A read-only picture of a saved flow (`readOnly`, `showPalette={false}`,
+  `minHeight={0}`).
+
+## When not to use
+
+- A fixed, linear sequence of steps → a numbered list or a stepper.
+- A hierarchy → `Tree`.
+- A settings form that happens to have sections → `Accordion` or `Card`s.
+
+## Options that change behaviour
+
+| Prop / part | Means |
+| --- | --- |
+| `nodeTypes` | Required. Your node kinds; `category` (`trigger`, `ai`, `logic`, `safety`, `output`, `note`) drives the tile colour |
+| `graph` + `onGraphChange`, or `defaultGraph` | Controlled or uncontrolled graph |
+| `<NodeInspector />` child | Built-in drawer on selection (`dock="left" \| "right"`); omit it and use `onSelectionChange` to drive your own panel |
+| `issues` / `validating` | Render-only validation you supply; the editor does not validate |
+| `readOnly` | No palette, no connecting, dragging or deleting; the inspector becomes a read-only view |
+| `translate` | Chrome copy. Without it the bundled strings resolve to Korean |
+| `useWorkflowActions().addNode` | Add nodes without dragging (a "+" toolbar, a tap-to-add list) |
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+# Workflow
+
+React Flow 위에 만든 노드 기반 워크플로 편집기입니다. 끌어다 놓는 팔레트, 실행 취소·
+다시 실행, 자동 정렬, 선택이 되는 캔버스, 그리고 선택해서 켜는 속성 서랍이 있습니다.
+**노드 종류는 하나도 들어 있지 않습니다.** `defineNodeType`으로 직접 등록하고, 저장과
+검증도 앱이 맡습니다. FactChat 스튜디오의 동작 편집기가 이것으로 만들어졌습니다. 전체
+API는 `Workflow/README.md`에 있습니다.
+
+## 언제 쓰나요
+
+- 사용자가 갈래가 있는 단계 그래프(트리거, AI 단계, 조건, 출력)를 만들거나 읽을 때.
+- 저장된 흐름을 읽기 전용 그림으로 보여 줄 때(`readOnly`, `showPalette={false}`,
+  `minHeight={0}`).
+
+## 언제 쓰지 않나요
+
+- 갈래 없이 정해진 순서의 단계라면 번호 목록이나 단계 표시를 씁니다.
+- 계층이라면 `Tree`를 씁니다.
+- 섹션이 있는 설정 폼이라면 `Accordion`이나 `Card`를 씁니다.
+
+## 동작을 바꾸는 옵션
+
+| 속성 / 파트 | 뜻 |
+| --- | --- |
+| `nodeTypes` | 필수. 노드 종류. `category`(`trigger`, `ai`, `logic`, `safety`, `output`, `note`)가 타일 색을 정합니다 |
+| `graph` + `onGraphChange`, 또는 `defaultGraph` | 제어 그래프 또는 비제어 그래프 |
+| 자식 `<NodeInspector />` | 선택하면 열리는 기본 서랍(`dock="left" \| "right"`). 빼고 `onSelectionChange`로 직접 만든 패널을 움직일 수도 있습니다 |
+| `issues` / `validating` | 앱이 넘기는 검증 결과를 그리기만 합니다. 편집기가 검증하지 않습니다 |
+| `readOnly` | 팔레트를 숨기고 연결·이동·삭제를 막습니다. 서랍은 읽기 전용 보기가 됩니다 |
+| `translate` | 화면 문구 번역 함수. 넘기지 않으면 내장 문구가 한국어로 나옵니다 |
+| `useWorkflowActions().addNode` | 끌지 않고 노드를 추가합니다("+" 도구 모음, 눌러서 추가하는 목록) |
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={WorkflowStories.AddNodeWithoutDrag} />
+<Verdict
+  kind="do"
+  en="Offer a way to add nodes without dragging: a + beside the selected node or a list of node types, built on useWorkflowActions().addNode."
+  ko="끌지 않고도 노드를 추가할 방법을 줍니다. useWorkflowActions().addNode로 선택한 노드 옆의 +나 노드 종류 목록을 만듭니다."
+/>
+
+<Canvas of={WorkflowStories.ReadOnly} />
+<Verdict
+  kind="do"
+  en="Use readOnly for a saved flow the user can look at but not change."
+  ko="사용자가 보기만 하고 바꾸지 않는 저장된 흐름에는 readOnly를 씁니다."
+/>
+
+<Verdict
+  kind="dont"
+  en="Validate inside the editor or rely on canvas colour alone for errors. Pass issues with a message; they appear on the node and in the drawer as text."
+  ko="편집기 안에서 검증하거나 캔버스 색만으로 오류를 알리지 마세요. 메시지가 있는 issues를 넘기면 노드와 서랍에 글로 나타납니다."
+/>
+
+<En>
+
+## Content
+
+- Node `label`s are short operational nouns (Message, Condition). The README
+  keeps them untranslated on purpose.
+- `getMetaChips` shows a few words of config on the card; keep chips short.
+- Issue `message`s say what to fix: "연결되지 않은 출구가 있습니다", not "오류".
+
+## Accessibility
+
+What Workflow does for you:
+
+- Canvas controls (zoom, fit, undo, redo, lock, auto-arrange) are buttons
+  with translated names; the palette is a labelled region with a named close
+  button (WCAG 4.1.2).
+- Keyboard shortcuts: ⌘/Ctrl+Z and +Y (undo, redo), +C/+V (copy, paste),
+  +D (duplicate), Delete/Backspace (remove the selected node or edge), Escape
+  (close the inspector). They stay out of the way while typing in a field.
+
+What you still have to do:
+
+- **Give a non-drag way to add nodes** (WCAG 2.5.7): the palette is
+  drag-and-drop. Use `useWorkflowActions().addNode`, as in the Do example.
+- **Pass `translate`** for any non-Korean app, or the chrome is announced in
+  Korean.
+- Moving nodes and drawing connections are pointer gestures in React Flow;
+  the graph is hard to edit by keyboard alone. Keep the inspector the place
+  where every setting can be changed by keyboard (WCAG 2.1.1).
+
+## Tokens
+
+Node tiles take their colour from `category`; override the mapping with
+`categoryTokens`. See `Workflow/README.md`, "Theming, layout & read-only".
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 노드 `label`은 짧은 동작 명사(Message, Condition)로 씁니다. README는 일부러 번역하지
+  않습니다.
+- `getMetaChips`는 카드에 설정값 몇 단어를 보여 줍니다. 칩은 짧게 씁니다.
+- issue의 `message`에는 고칠 내용을 씁니다. '오류'가 아니라 '연결되지 않은 출구가
+  있습니다'처럼 씁니다.
+
+## 접근성
+
+Workflow가 알아서 하는 일
+
+- 캔버스 컨트롤(확대, 축소, 화면 맞춤, 실행 취소, 다시 실행, 잠금, 자동 정렬)은 번역된
+  이름이 있는 버튼이고, 팔레트는 이름이 있는 영역이며 닫기 버튼에도 이름이 있습니다
+  (WCAG 4.1.2).
+- 단축키: ⌘/Ctrl+Z와 +Y(실행 취소, 다시 실행), +C/+V(복사, 붙여넣기), +D(복제),
+  Delete/Backspace(선택한 노드나 연결 삭제), Escape(서랍 닫기). 입력 칸에 글을 쓰는
+  동안에는 동작하지 않습니다.
+
+직접 챙겨야 하는 일
+
+- **끌지 않고 노드를 추가하는 방법을 줍니다**(WCAG 2.5.7). 팔레트는 끌어다 놓는
+  방식입니다. 이렇게 하세요 예시처럼 `useWorkflowActions().addNode`를 씁니다.
+- 한국어가 아닌 앱이라면 **`translate`를 넘깁니다.** 넘기지 않으면 화면 문구가 한국어로
+  읽힙니다.
+- 노드 이동과 연결 그리기는 React Flow의 포인터 동작이라 키보드만으로 그래프를 고치기
+  어렵습니다. 모든 설정은 서랍에서 키보드로 바꿀 수 있게 합니다(WCAG 2.1.1).
+
+## 토큰
+
+노드 타일 색은 `category`에서 오며, `categoryTokens`로 바꿀 수 있습니다.
+`Workflow/README.md`의 "Theming, layout & read-only"를 봅니다.
+
+</Ko>
+
+<En>
+
+## Related
+
+- **Tree**: a hierarchy rather than a graph.
+- **Banner**: graph-wide issues above the canvas.
+- `Workflow/README.md`: node types, the inspector, selection, `hostBridge`.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **Tree**: 그래프가 아니라 계층일 때.
+- **Banner**: 캔버스 위의 그래프 전체 문제.
+- `Workflow/README.md`: 노드 종류, 서랍, 선택, `hostBridge`.
+
+</Ko>

@@ -1,0 +1,200 @@
+import { Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as AccordionStories from './Accordion.stories';
+
+<Meta of={AccordionStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# Accordion
+
+A stack of sections, each with a heading button that opens and closes its
+content. `Accordion` › `AccordionItem` (`value`) › `AccordionButton` +
+`AccordionPanel`.
+
+Defaults that differ from Chakra: `multiple` is `true` (several sections can
+be open at once) and `variant` is `enclosed`. Content opens on the house
+presence clock (300 ms in, 150 ms out).
+
+## When to use
+
+- A list of questions or topics the reader scans, opening only the ones they
+  need: an FAQ, a landing page's feature list.
+- Long optional content grouped into several named sections.
+
+## When not to use
+
+- One section → `Collapsible`.
+- Content everyone needs, or steps that must be completed in order → show it
+  on the page, or use a stepper. Do not hide required input.
+- Switching between views of the same thing → `Tabs`.
+- A hierarchy the user selects from → `Tree`.
+
+## Options
+
+| Prop | Means |
+| --- | --- |
+| `variant` | `enclosed` (default), `outline`, `subtle`, `plain`: Chakra's accordion recipe styles |
+| `multiple` | Default `true`. Set `false` to keep one open at a time |
+| `collapsible` | With `multiple={false}`, lets the open item be closed again |
+| `defaultValue` / `value` | Item values open at start, or controlled |
+| `lazyMount` / `unmountOnExit` | Mount heavy content only when opened |
+| `AccordionButton customIcon` | Replace the chevron indicator |
+
+`AccordionPanel` is marked deprecated in favour of `Accordion.ItemContent` +
+`Accordion.ItemBody` from Chakra; it still works and renders exactly that.
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+# Accordion
+
+섹션을 쌓아 두고, 섹션마다 제목 버튼으로 내용을 여닫는 컴포넌트입니다. 구조는
+`Accordion` › `AccordionItem`(`value`) › `AccordionButton` + `AccordionPanel`입니다.
+
+Chakra와 다른 기본값이 있습니다. `multiple`이 `true`라 여러 섹션을 함께 열 수 있고,
+`variant`는 `enclosed`입니다. 내용은 공통 등장 시간(열 때 300ms, 닫을 때 150ms)으로
+열립니다.
+
+## 언제 쓰나요
+
+- 읽는 사람이 훑어보다가 필요한 것만 여는 질문이나 주제 목록: 자주 묻는 질문, 랜딩
+  페이지의 기능 목록.
+- 길지만 선택적인 내용을 이름 붙은 여러 섹션으로 나눌 때.
+
+## 언제 쓰지 않나요
+
+- 섹션이 하나라면 `Collapsible`을 씁니다.
+- 모두가 봐야 하는 내용이나 순서대로 마쳐야 하는 단계는 페이지에 그대로 보여 주거나
+  단계 표시를 씁니다. 필수 입력을 숨기지 않습니다.
+- 같은 대상의 보기를 바꾼다면 `Tabs`를 씁니다.
+- 고르는 계층이라면 `Tree`를 씁니다.
+
+## 옵션
+
+| 속성 | 뜻 |
+| --- | --- |
+| `variant` | `enclosed`(기본값), `outline`, `subtle`, `plain`. Chakra 아코디언 레시피의 모양 |
+| `multiple` | 기본값 `true`. `false`로 두면 한 번에 하나만 열림 |
+| `collapsible` | `multiple={false}`일 때 열린 항목을 다시 닫을 수 있게 함 |
+| `defaultValue` / `value` | 처음 열어 둘 항목, 또는 제어 값 |
+| `lazyMount` / `unmountOnExit` | 무거운 내용을 열 때만 그림 |
+| `AccordionButton`의 `customIcon` | 화살표 표시를 바꿈 |
+
+`AccordionPanel`은 Chakra의 `Accordion.ItemContent` + `Accordion.ItemBody`를 쓰라는
+뜻으로 deprecated 표시가 되어 있습니다. 지금도 동작하며 그 구조를 그대로 그립니다.
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={AccordionStories.DoFaq} />
+<Verdict
+  kind="do"
+  en="Use it for questions the reader scans. Each heading is a full question, so the closed list already says what is inside."
+  ko="훑어보는 질문 목록에 씁니다. 제목마다 완전한 질문이라 닫힌 상태에서도 안에 무엇이 있는지 알 수 있습니다."
+/>
+
+<Canvas of={AccordionStories.DontHideRequired} />
+<Verdict
+  kind="dont"
+  en="Hide a required step behind a closed section. People submit without opening it. Show required input on the page."
+  ko="필수 단계를 닫힌 섹션 뒤에 숨기지 마세요. 사람들은 열어 보지 않고 제출합니다. 필수 입력은 페이지에 보여 줍니다."
+/>
+
+<En>
+
+## Content
+
+- Headings say what is inside: a question, or a noun phrase. Not 더 보기.
+- Keep headings to one line on mobile.
+- Do not put another Accordion inside a panel.
+
+## Accessibility
+
+What Accordion does for you:
+
+- Each `AccordionButton` is a `<button>` with `aria-expanded` and
+  `aria-controls`, and the content region is labelled by it (WCAG 4.1.2).
+- Enter and Space toggle; arrow keys, Home and End move between headings
+  (WCAG 2.1.1). The button shows the shared focus ring (WCAG 2.4.7).
+
+What you still have to do:
+
+- **Put the button inside a heading when the sections are part of the page
+  structure**, so heading navigation finds them (WCAG 1.3.1): wrap the
+  `AccordionButton` in a heading of the level your page needs.
+- Keep the trigger to phrasing content: text, icons, `Badge`. No `<div>` or
+  `<p>` inside the button (`ACCESSIBILITY.md` §5).
+- A custom icon is decorative; give it `aria-hidden`.
+
+## Tokens
+
+The variant colours come from Chakra's accordion recipe. The library adds
+only the focus ring and the presence timing (`theme/recipes/accordion.ts`).
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 제목에는 안에 무엇이 있는지 씁니다. 질문이나 명사구로 쓰고, '더 보기'처럼 쓰지
+  않습니다.
+- 제목은 모바일에서 한 줄에 들어가게 씁니다.
+- 패널 안에 다시 Accordion을 넣지 않습니다.
+
+## 접근성
+
+Accordion이 알아서 하는 일
+
+- `AccordionButton`은 `aria-expanded`와 `aria-controls`가 있는 `<button>`이고, 내용
+  영역은 그 버튼을 이름으로 씁니다(WCAG 4.1.2).
+- Enter와 Space로 여닫고, 화살표 키와 Home/End로 제목 사이를 오갑니다(WCAG 2.1.1).
+  버튼에는 공통 초점 링이 나타납니다(WCAG 2.4.7).
+
+직접 챙겨야 하는 일
+
+- **섹션이 페이지 구조의 일부라면 버튼을 제목 요소 안에 둡니다.** 그래야 제목으로
+  이동할 때 찾을 수 있습니다(WCAG 1.3.1). `AccordionButton`을 페이지에 맞는 수준의
+  제목으로 감쌉니다.
+- 트리거 안에는 글자, 아이콘, `Badge` 같은 phrasing content만 넣습니다. 버튼 안에
+  `<div>`나 `<p>`를 넣지 않습니다(`ACCESSIBILITY.md` 5절).
+- 직접 넣은 아이콘은 장식이므로 `aria-hidden`을 붙입니다.
+
+## 토큰
+
+변형의 색은 Chakra 아코디언 레시피에서 옵니다. 이 라이브러리는 초점 링과 등장
+시간(`theme/recipes/accordion.ts`)만 더합니다.
+
+</Ko>
+
+<Canvas of={AccordionStories.UsageTokens} sourceState="none" />
+
+<En>
+
+## Related
+
+- **Collapsible**: a single section that opens.
+- **Tabs**: switch between views.
+- **ExpandableText**: clip one block of text.
+- **Tree**: a hierarchy to select from.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **Collapsible**: 여닫는 섹션 하나.
+- **Tabs**: 보기 전환.
+- **ExpandableText**: 글 한 덩어리를 접어 둘 때.
+- **Tree**: 고르는 계층.
+
+</Ko>

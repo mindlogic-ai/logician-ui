@@ -1,5 +1,8 @@
 import { Meta, StoryObj } from '@storybook/react';
 
+import { T } from '../../guidelines/_components/Lang';
+import { TokenTable } from '../../guidelines/_components/TokenTable';
+import { Text } from '../Typography';
 import { Code } from './Code';
 import { BUNDLED_LANGUAGES } from './shikiAdapter';
 
@@ -210,4 +213,61 @@ export const CustomContainer: Story = {
   boxShadow: 'lg',
 };`,
   },
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `Code.usage.mdx` with <Canvas of={…} />. Hidden from the
+// sidebar (`!dev`); `tags` is written out on each story because the indexer
+// reads CSF statically.
+
+export const DoLanguageAndCopy: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: a language and a copy button for a snippet',
+  args: {
+    language: 'bash',
+    onCopy: () => {},
+    children: `curl https://api.example.com/v1/chat/completions \\
+  -H "Authorization: Bearer $API_KEY" \\
+  -d '{"model": "gpt-4o", "messages": [{"role": "user", "content": "안녕"}]}'`,
+  },
+};
+
+export const DontBlockForIdentifier: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: a block for one word in a sentence",
+  render: () => (
+    <>
+      <Text mb={2}>요청 본문의 모델 이름 칸에는</Text>
+      <Code>model</Code>
+      <Text mt={2}>을 넣습니다.</Text>
+    </>
+  ),
+};
+
+export const UsageTokens: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Tokens',
+  render: () => (
+    <TokenTable
+      rows={[
+        { token: 'border.default', use: <T en="Border" ko="테두리" /> },
+        {
+          token: 'bg.surface',
+          use: <T en="Header background" ko="머리 영역 배경" />,
+        },
+        {
+          token: 'fg.default',
+          use: <T en="Language title" ko="언어 이름" />,
+        },
+        { token: 'fg.muted', use: <T en="Copy icon" ko="복사 아이콘" /> },
+        {
+          token: 'success.fg',
+          use: <T en="Copied check" ko="복사 완료 표시" />,
+        },
+      ]}
+    />
+  ),
 };

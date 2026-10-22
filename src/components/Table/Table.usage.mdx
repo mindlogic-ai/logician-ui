@@ -1,0 +1,235 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as TableStories from './Table.stories';
+import { Tr } from './Tr';
+
+<Meta of={TableStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# Table
+
+Rows of records that share the same columns, for reading and comparing
+values: members, usage, invoices, API keys.
+
+`TableContainer` › `Table` › `Thead` / `Tbody` › `Tr` › `Th` / `Td`. The
+container draws the rounded border, scrolls horizontally, and tracks scroll
+position for sticky columns.
+
+## When to use
+
+- A list where each item has the same attributes and the reader compares
+  across rows: a member list, usage by model, call history.
+- When the reader scans a column (a date, an amount, a status).
+
+## When not to use
+
+- Items that are read one at a time and have different shapes → `Card` in a
+  list or grid.
+- Two to five label–value pairs about one thing → a plain stack of `Text`.
+- A hierarchy (groups inside groups) → `Tree`.
+- Page layout. A table is for data only.
+
+## Row states and options
+
+</En>
+
+<Ko>
+
+# Table
+
+같은 열을 가진 기록을 행으로 늘어놓고 값을 읽고 비교하게 하는 컴포넌트입니다.
+멤버, 사용량, 청구서, API 키 목록에 씁니다.
+
+구조는 `TableContainer` › `Table` › `Thead` / `Tbody` › `Tr` › `Th` / `Td`입니다.
+컨테이너가 둥근 테두리를 그리고, 가로 스크롤을 맡고, 고정 열을 위해 스크롤 위치를
+추적합니다.
+
+## 언제 쓰나요
+
+- 항목마다 같은 속성이 있고 행끼리 비교해 읽는 목록: 멤버 목록, 모델별 사용량, 호출
+  기록.
+- 읽는 사람이 한 열(날짜, 금액, 상태)을 훑어볼 때.
+
+## 언제 쓰지 않나요
+
+- 하나씩 읽는 항목이고 모양이 서로 다르다면 목록이나 격자 안의 `Card`를 씁니다.
+- 한 대상의 라벨과 값 두세 쌍이라면 `Text`를 쌓아서 보여 줍니다.
+- 그룹 안의 그룹 같은 계층은 `Tree`를 씁니다.
+- 페이지 레이아웃에는 쓰지 않습니다. 표는 데이터에만 씁니다.
+
+## 행 상태와 옵션
+
+</Ko>
+
+<ArgTypes of={Tr} include={['state']} />
+
+<En>
+
+| Option | Means | Use for |
+| --- | --- | --- |
+| `<Tr state="selected">` | The row is part of the current selection (`primary.selected`) | Rows ticked for a bulk action |
+| `<Tr state="invalid">` | Something in the row is wrong (`bg.invalid.subtle`) | A failed import row |
+| `<Tr state="highlighted">` | Draw the eye to one row (`bg.highlighted`) | The row just added or edited |
+| `onClick` / `tabIndex` / `role="button"` on `Tr` | The row is clickable; it gets the pointer, `primary.wash` hover and a focus outline | Opening a detail drawer |
+| `<Thead sticky>` | The header stays at the top of the scroll area | Long lists in a fixed-height container |
+| `isSticky` + `stickyDirection` + `stickyIndex` on `Th`/`Td` | The column stays put while the table scrolls sideways | A name column on a wide table |
+| `Td wrap` | Long text wraps instead of being cut off | Addresses, descriptions |
+| `ExpandingTr` | A row with a detail row under it, opened by `isExpanded` | Error details for one row |
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+| 옵션 | 뜻 | 쓰는 곳 |
+| --- | --- | --- |
+| `<Tr state="selected">` | 현재 선택에 포함된 행(`primary.selected`) | 일괄 작업을 위해 체크한 행 |
+| `<Tr state="invalid">` | 행 안의 무언가가 잘못됨(`bg.invalid.subtle`) | 가져오기에 실패한 행 |
+| `<Tr state="highlighted">` | 한 행으로 눈길을 끎(`bg.highlighted`) | 방금 추가하거나 고친 행 |
+| `Tr`의 `onClick` / `tabIndex` / `role="button"` | 누를 수 있는 행. 포인터, `primary.wash` 호버, 초점 테두리가 생김 | 상세 서랍 열기 |
+| `<Thead sticky>` | 스크롤해도 머리글이 위에 남음 | 높이가 정해진 영역 안의 긴 목록 |
+| `Th`/`Td`의 `isSticky` + `stickyDirection` + `stickyIndex` | 표를 옆으로 스크롤해도 그 열은 그대로 있음 | 넓은 표의 이름 열 |
+| `Td wrap` | 긴 글을 자르지 않고 줄바꿈함 | 주소, 설명 |
+| `ExpandingTr` | 아래에 상세 행이 붙은 행. `isExpanded`로 엶 | 한 행의 오류 상세 |
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={TableStories.DoNumbersAligned} />
+<Verdict
+  kind="do"
+  en="Put a real link in the name cell, and align numbers to the end with tabular figures so they line up."
+  ko="이름 칸에는 실제 링크를 두고, 숫자는 끝에 맞추고 고정폭 숫자를 써서 자릿수가 맞게 합니다."
+/>
+
+<Canvas of={TableStories.DoStateWithWords} />
+<Verdict
+  kind="do"
+  en="Back a row state with words in a cell. The tint draws the eye; the Badge says what is wrong."
+  ko="행 상태는 칸 안의 문구로 함께 알립니다. 배경색은 눈길을 끌고, Badge가 무엇이 잘못됐는지 말합니다."
+/>
+
+<Canvas of={TableStories.DontStateColourOnly} />
+<Verdict
+  kind="dont"
+  en="Rely on the row tint alone. A screen reader does not announce it, and in some modes it is hard to see at all."
+  ko="행 배경색만으로 알리지 마세요. 화면 낭독기는 배경색을 읽지 않고, 모드에 따라 거의 보이지 않기도 합니다."
+/>
+
+<En>
+
+## Content
+
+- Column headers are short nouns: 이름, 그룹, 사용 크레딧. Put the unit in
+  the header, not in every cell.
+- Numbers and amounts align to the end (`textAlign="end"`); text aligns to the
+  start.
+- An empty value is "—", not a blank cell, so the reader knows nothing is
+  missing from the page.
+- Keep a status in its own column with a `Badge`, rather than colouring a
+  whole row.
+
+## Accessibility
+
+What Table does for you:
+
+- It renders native table elements (`<table>`, `<th>`, `<td>`), so screen
+  readers announce row and column positions.
+- A clickable `Tr` gets a pointer, a hover tint and a 2px inset focus
+  outline when focused from the keyboard. Static rows never highlight.
+- Sticky header and sticky columns get an opaque background, so text never
+  shows through.
+
+What you still have to do:
+
+- **A clickable row is not a button by itself.** `Tr` only styles it. Give
+  it `tabIndex={0}` and handle Enter in `onKeyDown` (WCAG 2.1.1), or better,
+  put a real link or button in the row and let that be the target (WCAG
+  4.1.2). Never put a button inside a row that is also `role="button"`
+  (nested interactive controls, see `ACCESSIBILITY.md` §3).
+- **Row states need words** (WCAG 1.4.1). `state` only tints the row.
+- **Name icon-only buttons in cells**: `aria-label` on the `IconButton`
+  (WCAG 4.1.2). For an `ExpandingTr` toggle, also pass `aria-expanded`.
+- Give the table a caption or a heading next to it so it has a name
+  (WCAG 1.3.1).
+- A cell cut off with an ellipsis hides content. Use `wrap`, or make the full
+  value available another way (WCAG 1.4.10).
+
+## Tokens
+
+Read from the table slot recipe (`theme/recipes/table.ts`) and the sticky
+styles in `Table.styles.ts`.
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 열 머리글은 짧은 명사로 씁니다: 이름, 그룹, 사용 크레딧. 단위는 칸마다 쓰지 않고
+  머리글에 씁니다.
+- 숫자와 금액은 끝에 맞추고(`textAlign="end"`), 글은 앞에 맞춥니다.
+- 값이 없으면 빈칸 대신 "—"를 써서, 화면에서 빠진 것이 없다는 것을 알립니다.
+- 상태는 행 전체에 색을 칠하지 않고 `Badge`로 따로 열을 둡니다.
+
+## 접근성
+
+Table이 알아서 하는 일
+
+- 기본 표 요소(`<table>`, `<th>`, `<td>`)로 그리므로 화면 낭독기가 행과 열의 위치를
+  읽어 줍니다.
+- 누를 수 있는 `Tr`에는 포인터, 호버 배경, 키보드 초점 시 안쪽 2px 테두리가 생깁니다.
+  누를 수 없는 행은 강조되지 않습니다.
+- 고정 머리글과 고정 열은 불투명한 배경을 가지므로 뒤의 글자가 비치지 않습니다.
+
+직접 챙겨야 하는 일
+
+- **누를 수 있는 행이 저절로 버튼이 되지는 않습니다.** `Tr`은 모양만 바꿉니다.
+  `tabIndex={0}`를 주고 `onKeyDown`에서 Enter를 처리하거나(WCAG 2.1.1), 행 안에 실제
+  링크나 버튼을 두고 그것을 누르게 하는 편이 낫습니다(WCAG 4.1.2). `role="button"`인
+  행 안에 다시 버튼을 넣지 않습니다(상호작용 요소 중첩, `ACCESSIBILITY.md` 3절).
+- **행 상태는 문구로도 알립니다**(WCAG 1.4.1). `state`는 배경색만 바꿉니다.
+- **칸 안의 아이콘 버튼에는 이름을 붙입니다.** `IconButton`에 `aria-label`을 줍니다
+  (WCAG 4.1.2). `ExpandingTr`을 여닫는 버튼에는 `aria-expanded`도 줍니다.
+- 표에 캡션을 달거나 옆에 제목을 두어 이름을 붙입니다(WCAG 1.3.1).
+- 말줄임표로 잘린 칸은 내용을 숨깁니다. `wrap`을 쓰거나 전체 값을 다른 방법으로
+  볼 수 있게 합니다(WCAG 1.4.10).
+
+## 토큰
+
+표 슬롯 레시피(`theme/recipes/table.ts`)와 `Table.styles.ts`의 고정 열 스타일에서
+읽습니다.
+
+</Ko>
+
+<Canvas of={TableStories.UsageTokens} sourceState="none" />
+
+<En>
+
+## Related
+
+- **Badge**: a status in its own column.
+- **Pagination**: long lists split into pages.
+- **Checkbox**: row selection for bulk actions, with `state="selected"`.
+- **Tree**: hierarchical data.
+- **Card**: items with different shapes.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **Badge**: 따로 둔 열의 상태 표시.
+- **Pagination**: 긴 목록을 쪽으로 나눕니다.
+- **Checkbox**: 일괄 작업을 위한 행 선택. `state="selected"`와 함께 씁니다.
+- **Tree**: 계층이 있는 데이터.
+- **Card**: 모양이 서로 다른 항목.
+
+</Ko>

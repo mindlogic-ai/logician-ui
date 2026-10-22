@@ -2,9 +2,13 @@ import { useState } from 'react';
 import { Flex } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
+import { TokenTable } from '../../guidelines/_components/TokenTable';
+import { tableSlotRecipe } from '../../theme/recipes/table';
+import { Badge } from '../Badge';
 import { Button } from '../Button';
 import { IoChevronDownOutline } from '../Icon';
 import { IconButton } from '../IconButton';
+import { Link } from '../Typography';
 import {
   ExpandingTr,
   Table,
@@ -126,7 +130,7 @@ export const Default: Story = {
 /**
  * Rows that receive `onClick` (or `role="button"` / `tabIndex`) automatically
  * get the interactive treatment from the table recipe: pointer cursor,
- * `bg.muted` hover, and a focus-visible outline. Static rows never highlight.
+ * `primary.wash` hover, and a focus-visible outline. Static rows never highlight.
  */
 export const InteractiveRows: Story = {
   render: (args) => (
@@ -698,4 +702,158 @@ export const StickyOffsetsSurvivePagination: Story = {
   },
   args: { width: '220%' },
   argTypes: {},
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `Table.usage.mdx` with <Canvas of={…} />. Hidden from the
+// sidebar (`!dev`); `tags` is written out on each story because the indexer
+// reads CSF statically.
+
+const USAGE_ROWS = [
+  { name: '김지민', group: '마케팅', credits: 12480, status: 'ok' },
+  { name: '이서준', group: '영업', credits: 830, status: 'ok' },
+  { name: '박하은', group: '개발', credits: 0, status: 'invalid' },
+] as const;
+
+export const DoNumbersAligned: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: a link in the name cell, numbers aligned to the end',
+  render: () => (
+    <TableContainer maxW="520px">
+      <Table>
+        <Thead>
+          <Tr>
+            <Th>이름</Th>
+            <Th>그룹</Th>
+            <Th textAlign="end">사용 크레딧</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {USAGE_ROWS.map((row) => (
+            <Tr key={row.name}>
+              <Td>
+                <Link href={`#member-${row.name}`}>{row.name}</Link>
+              </Td>
+              <Td>{row.group}</Td>
+              <Td textAlign="end" fontVariantNumeric="tabular-nums">
+                {row.credits.toLocaleString('ko-KR')}
+              </Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    </TableContainer>
+  ),
+};
+
+export const DoStateWithWords: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: a row state backed by words',
+  render: () => (
+    <TableContainer maxW="520px">
+      <Table>
+        <Thead>
+          <Tr>
+            <Th>이름</Th>
+            <Th>상태</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {USAGE_ROWS.map((row) => (
+            <Tr
+              key={row.name}
+              state={row.status === 'invalid' ? 'invalid' : undefined}
+            >
+              <Td>{row.name}</Td>
+              <Td>
+                {row.status === 'invalid' ? (
+                  <Badge variant="danger">이메일 오류</Badge>
+                ) : (
+                  <Badge variant="success">정상</Badge>
+                )}
+              </Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    </TableContainer>
+  ),
+};
+
+export const DontStateColourOnly: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: a tinted row with no words",
+  render: () => (
+    <TableContainer maxW="520px">
+      <Table>
+        <Thead>
+          <Tr>
+            <Th>이름</Th>
+            <Th>그룹</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {USAGE_ROWS.map((row) => (
+            <Tr
+              key={row.name}
+              state={row.status === 'invalid' ? 'invalid' : undefined}
+            >
+              <Td>{row.name}</Td>
+              <Td>{row.group}</Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    </TableContainer>
+  ),
+};
+
+/**
+ * Every colour token in the table slot recipe (`theme/recipes/table.ts`),
+ * collected by walking the recipe, so a recipe change shows up here.
+ */
+const recipeTokens = (
+  node: unknown,
+  path: string[] = []
+): { token: string; use: string }[] => {
+  if (typeof node === 'string') {
+    return /^[a-z]+(\.[a-zA-Z0-9]+)+$/.test(node)
+      ? [{ token: node, use: path.join(' › ') }]
+      : [];
+  }
+  if (node && typeof node === 'object') {
+    return Object.entries(node).flatMap(([key, value]) =>
+      recipeTokens(value, [...path, key])
+    );
+  }
+  return [];
+};
+
+/** One row per token; the places it is read from are listed together. */
+const mergeByToken = (rows: { token: string; use: string }[]) =>
+  [...new Set(rows.map((row) => row.token))].map((token) => ({
+    token,
+    use: rows
+      .filter((row) => row.token === token)
+      .map((row) => row.use)
+      .join(', '),
+  }));
+
+export const UsageTokens: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Tokens',
+  render: () => (
+    <TokenTable
+      rows={mergeByToken([
+        ...recipeTokens(tableSlotRecipe.base),
+        { token: 'border.subtle', use: 'TableContainer › border' },
+        { token: 'bg.subtle', use: 'Th isSticky › background' },
+        { token: 'bg.surface', use: 'Td isSticky › background' },
+      ])}
+    />
+  ),
 };

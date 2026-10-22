@@ -1,0 +1,176 @@
+import { Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as ExpandableTextStories from './ExpandableText.stories';
+
+<Meta of={ExpandableTextStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# ExpandableText
+
+Text clipped to a number of lines, with a 더보기 / 접기 link that opens it.
+Opening animates the height, so the content below slides down rather than
+jumping. The link appears only when the text actually overflows.
+
+## When to use
+
+- A long secondary description in a card or a header: a chatbot's
+  description, an announcement preview, an image prompt in a history list.
+
+## When not to use
+
+- The main content the reader came for → show it in full.
+- Warnings, prices, terms, or anything the reader must not miss → show it in
+  full.
+- A section with a heading and structure → `Collapsible`.
+
+## Props
+
+| Prop | Means |
+| --- | --- |
+| `lineClamp` | Lines shown while closed. Default `3`. |
+| `component` | The typography tier that wraps it: `Text` (default), `Subtitle`, `Subtext`, `H1`–`H5`. Other props go to that component. |
+| `charLimit` | Deprecated and ignored. Truncation is by line. |
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+# ExpandableText
+
+정해진 줄 수만큼만 보여 주고, '더보기' / '접기' 링크로 펼치는 글입니다. 펼칠 때 높이가
+움직이므로 아래 내용이 갑자기 튀지 않고 밀려 내려갑니다. 링크는 글이 실제로 넘칠 때만
+나타납니다.
+
+## 언제 쓰나요
+
+- 카드나 머리 영역의 긴 보조 설명: 챗봇 설명, 공지 미리보기, 이미지 기록 목록의
+  프롬프트.
+
+## 언제 쓰지 않나요
+
+- 읽는 사람이 보러 온 본 내용은 전부 보여 줍니다.
+- 경고, 가격, 약관처럼 놓치면 안 되는 내용은 전부 보여 줍니다.
+- 제목과 구조가 있는 섹션은 `Collapsible`을 씁니다.
+
+## 속성
+
+| 속성 | 뜻 |
+| --- | --- |
+| `lineClamp` | 접혀 있을 때 보여 줄 줄 수. 기본값 `3`. |
+| `component` | 감싸는 글자 단계: `Text`(기본값), `Subtitle`, `Subtext`, `H1`–`H5`. 나머지 속성은 이 컴포넌트로 넘어갑니다. |
+| `charLimit` | deprecated이며 무시됩니다. 글은 줄 단위로 자릅니다. |
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={ExpandableTextStories.DoSecondaryDescription} />
+<Verdict
+  kind="do"
+  en="Clip a long secondary description so the cards in a row stay the same height."
+  ko="긴 보조 설명을 접어서, 한 줄에 놓인 카드들의 높이를 맞춥니다."
+/>
+
+<Canvas of={ExpandableTextStories.DontClipTheMessage} />
+<Verdict
+  kind="dont"
+  en="Clip a warning. The consequence sits behind 더보기, where most people never look."
+  ko="경고를 접지 마세요. 결과가 '더보기' 뒤에 숨어 대부분의 사람이 보지 못합니다."
+/>
+
+<En>
+
+## Content
+
+- Put the most important sentence first, so the clipped lines still say what
+  the text is about.
+- Keep `lineClamp` the same for every item in a list.
+
+## Accessibility
+
+What ExpandableText does for you:
+
+- The toggle is a `<button>` styled as a link, with `aria-expanded`, and a
+  translated label (더보기 / 접기) (WCAG 2.1.1, 4.1.2).
+- The full text is in the DOM while closed; only its height is clipped, so
+  find-in-page and text selection reach it.
+
+What you still have to do:
+
+- While closed, the hidden lines are still read by a screen reader (they are
+  only clipped visually). Do not rely on the clamp to shorten what is
+  announced.
+- Do not use a heading tier (`H1`–`H5`) for a long paragraph only to get its
+  size; the whole paragraph becomes a heading (`ACCESSIBILITY.md` §2).
+- Known markup issue: the clipping box is a `<div>` inside the `<p>` (or
+  heading) that `component` renders, which a markup validator reports as a
+  nesting error (KWCAG 5.4.1.1). Tracked in the PR that added this page.
+
+## Tokens
+
+The toggle is a `Link`; on hover it turns `fg.default` instead of
+`fg.linkHover`, and it has no underline.
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 가장 중요한 문장을 앞에 둡니다. 그래야 접힌 상태에서도 무엇에 관한 글인지 알 수
+  있습니다.
+- 한 목록 안의 항목은 모두 같은 `lineClamp`를 씁니다.
+
+## 접근성
+
+ExpandableText가 알아서 하는 일
+
+- 펼침 버튼은 링크 모양의 `<button>`이고, `aria-expanded`와 번역된 이름('더보기' /
+  '접기')이 있습니다(WCAG 2.1.1, 4.1.2).
+- 접혀 있어도 전체 글이 DOM에 있고 높이만 잘립니다. 그래서 페이지 내 검색과 글 선택이
+  닿습니다.
+
+직접 챙겨야 하는 일
+
+- 접혀 있어도 화면 낭독기는 숨은 줄까지 읽습니다(화면에서만 잘립니다). 읽히는 양을
+  줄이는 용도로 쓰지 않습니다.
+- 크기만 보고 긴 문단에 제목 단계(`H1`–`H5`)를 쓰지 않습니다. 문단 전체가 제목이
+  됩니다(`ACCESSIBILITY.md` 2절).
+- 알려진 마크업 문제: 자르는 상자가 `component`가 그리는 `<p>`(또는 제목) 안의
+  `<div>`라서, 마크업 검사기가 중첩 오류로 봅니다(KWCAG 5.4.1.1). 이 페이지를 추가한
+  PR에 기록해 두었습니다.
+
+## 토큰
+
+펼침 버튼은 `Link`입니다. 호버하면 `fg.linkHover`가 아니라 `fg.default`로 바뀌고,
+밑줄이 없습니다.
+
+</Ko>
+
+<Canvas of={ExpandableTextStories.UsageTokens} sourceState="none" />
+
+<En>
+
+## Related
+
+- **Collapsible**: a section with a trigger.
+- **Typography**: the tiers `component` can use.
+- **Markdown**: formatted long text.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **Collapsible**: 트리거가 있는 섹션.
+- **Typography**: `component`로 고를 수 있는 글자 단계.
+- **Markdown**: 서식 있는 긴 글.
+
+</Ko>

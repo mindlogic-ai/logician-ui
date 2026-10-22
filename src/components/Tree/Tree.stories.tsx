@@ -3,6 +3,8 @@ import { Box, HStack, Stack, Text } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 import { IoFolder, IoFolderOpen } from 'react-icons/io5';
 
+import { T } from '../../guidelines/_components/Lang';
+import { TokenTable } from '../../guidelines/_components/TokenTable';
 import { Tree } from './Tree';
 import {
   createTreeCollection,
@@ -560,5 +562,92 @@ export const MultipleSelection: Story = {
         </Tree.Tree>
       </Tree.Root>
     </Box>
+  ),
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `Tree.usage.mdx` with <Canvas of={…} />. Hidden from the
+// sidebar (`!dev`); `tags` is written out on each story because the indexer
+// reads CSF statically.
+
+export const DoNamedWithElbows: Story = {
+  tags: ['!dev'],
+  name: 'Usage / Do: a named tree, elbow guides for depth',
+  args: {
+    collection: orgCollection,
+    defaultExpandedValue: ['hq', 'hq-dev', 'hq-dev-backend'],
+    defaultSelectedValue: ['hq-dev-backend-api'],
+  },
+  render: (args) => (
+    <Box maxWidth="360px">
+      <Tree.Root {...args}>
+        <Tree.Label>조직</Tree.Label>
+        <Tree.Tree>
+          <Tree.Node
+            indentGuide={<Tree.BranchIndentGuide elbow />}
+            render={renderNode}
+          />
+        </Tree.Tree>
+      </Tree.Root>
+    </Box>
+  ),
+};
+
+const flatCollection = createTreeCollection<Node>({
+  rootNode: {
+    id: 'root',
+    name: '',
+    children: [
+      { id: 'a', name: '마케팅' },
+      { id: 'b', name: '영업' },
+      { id: 'c', name: '개발' },
+    ],
+  },
+  nodeToValue: (node) => node.id,
+  nodeToString: (node) => node.name,
+});
+
+export const DontFlatList: Story = {
+  tags: ['!dev'],
+  name: "Usage / Don't: a tree for a flat list",
+  args: { collection: flatCollection, 'aria-label': '팀' },
+  render: (args) => (
+    <Box maxWidth="360px">
+      <Tree.Root {...args}>
+        <Tree.Tree>
+          <Tree.Node render={renderNode} />
+        </Tree.Tree>
+      </Tree.Root>
+    </Box>
+  ),
+};
+
+/** Tokens the Tree parts set (TreeItem / TreeBranchControl / TreeLabel / guide). */
+export const UsageTokens: Story = {
+  tags: ['!dev'],
+  name: 'Usage / Tokens',
+  args: { collection: orgCollection },
+  render: () => (
+    <TokenTable
+      rows={[
+        { token: 'fg.default', use: <T en="Row text" ko="행 글자" /> },
+        { token: 'bg.subtle', use: <T en="Row hover" ko="행 호버" /> },
+        {
+          token: 'primary.selected',
+          use: <T en="Selected row" ko="선택된 행" />,
+        },
+        { token: 'fg.muted', use: <T en="Tree.Label" ko="Tree.Label" /> },
+        {
+          token: 'border.default',
+          use: (
+            <T
+              en="BranchIndentGuide · guideColor default"
+              ko="BranchIndentGuide · guideColor 기본값"
+            />
+          ),
+        },
+        { token: 'focus.ring', use: <T en="Focus ring" ko="초점 링" /> },
+      ]}
+    />
   ),
 };

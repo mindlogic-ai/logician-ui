@@ -1,0 +1,251 @@
+import { Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as TypographyStories from './Typography.stories';
+
+<Meta of={TypographyStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# Typography
+
+The type scale: headings (`H1`–`H5`), body text (`Text`), supporting text
+(`Subtitle`, `Subtext`, `Caption`, `Overline`) and inline links (`Link`).
+Each tier sets a size, a colour and Korean word breaking (`keep-all`).
+
+## When to use
+
+- `H1`–`H5` for headings that belong in the page outline: a page title, a
+  section, a card or modal title.
+- `Text` for body copy. `Subtext` for the secondary line under a title or
+  value. `Caption` for metadata (time, count, length). `Overline` for a short
+  uppercase eyebrow above a heading.
+- `Link` for navigation inside a sentence.
+
+## When not to use
+
+- An action that changes something (save, delete, open a modal) → `Button`
+  (`variant="ghost"` if it has to look light). A link goes somewhere.
+- A status label next to a title → `Badge`.
+- Code inside a sentence → `InlineCode`. Formatted content from a model or an
+  author → `Markdown`, which maps to these same components.
+
+## The scale and what each tier means
+
+| Component | Renders | Default colour | Use for |
+| --- | --- | --- | --- |
+| `H1`–`H5` | `<h1>`–`<h5>` | `fg.emphasized` | Headings in the outline |
+| `Text` | `<p>` | `fg.default` | Body copy |
+| `Subtitle` | `<p>` | `fg.muted` | Helper copy under a heading |
+| `Subtext` | `<p>` | `fg.default` | A step smaller than body: secondary lines, dense lists |
+| `Caption` | `<p>` | `fg.subtle` | Timestamps, counts, file sizes |
+| `Overline` | `<p>` | `fg.muted` | Uppercase eyebrow above a heading |
+| `Link` | `<a>` | `fg.link` (`variant="error"`: `danger.fg`) | Inline navigation |
+
+**Size and level are separate choices.** Every component takes `as`, and the
+props of that element come with it. Pick the size for the layout, then set
+the level the outline needs: `<H3 as="h2">`. `Subtitle` used to render
+`<h6>`; it is a paragraph now, and says `as="h2"` only where it really is the
+next heading. Passing `fontSize` turns off the tier's `textStyle`, so an
+explicit size wins.
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+# Typography
+
+글자 체계입니다. 제목(`H1`–`H5`), 본문(`Text`), 보조 문구(`Subtitle`, `Subtext`,
+`Caption`, `Overline`), 문장 안 링크(`Link`)로 나뉩니다. 각 단계는 크기와 색을
+정하고, 한국어가 단어 중간에서 끊기지 않도록 `keep-all`을 겁니다.
+
+## 언제 쓰나요
+
+- 페이지 구조에 들어가는 제목에는 `H1`–`H5`를 씁니다. 페이지 제목, 섹션, 카드나
+  모달의 제목이 여기에 해당합니다.
+- 본문은 `Text`, 제목이나 값 아래의 보조 줄은 `Subtext`, 시간·개수·길이 같은
+  메타데이터는 `Caption`, 제목 위의 짧은 대문자 머리말은 `Overline`을 씁니다.
+- 문장 안에서 다른 곳으로 이동할 때는 `Link`를 씁니다.
+
+## 언제 쓰지 않나요
+
+- 무언가를 바꾸는 동작(저장, 삭제, 모달 열기)에는 `Button`을 씁니다. 가벼워 보여야
+  한다면 `variant="ghost"`를 씁니다. 링크는 어딘가로 이동할 때만 씁니다.
+- 제목 옆의 상태 라벨은 `Badge`를 씁니다.
+- 문장 안의 코드는 `InlineCode`를 씁니다. 모델이나 작성자가 쓴 서식 있는 글은
+  `Markdown`을 쓰면 같은 컴포넌트로 그려집니다.
+
+## 단계와 뜻
+
+| 컴포넌트 | 그리는 요소 | 기본 색 | 쓰는 곳 |
+| --- | --- | --- | --- |
+| `H1`–`H5` | `<h1>`–`<h5>` | `fg.emphasized` | 문서 구조 안의 제목 |
+| `Text` | `<p>` | `fg.default` | 본문 |
+| `Subtitle` | `<p>` | `fg.muted` | 제목 아래의 도움말 |
+| `Subtext` | `<p>` | `fg.default` | 본문보다 한 단계 작은 글: 보조 줄, 촘촘한 목록 |
+| `Caption` | `<p>` | `fg.subtle` | 시각, 개수, 파일 크기 |
+| `Overline` | `<p>` | `fg.muted` | 제목 위의 대문자 머리말 |
+| `Link` | `<a>` | `fg.link` (`variant="error"`이면 `danger.fg`) | 문장 안의 이동 |
+
+**크기와 제목 수준은 따로 고릅니다.** 모든 컴포넌트가 `as`를 받고, 그 요소의
+속성도 함께 받습니다. 크기는 레이아웃에 맞춰 고르고, 수준은 문서 구조에 맞춰
+`<H3 as="h2">`처럼 정합니다. `Subtitle`은 예전에 `<h6>`로 그려졌지만 지금은
+문단이며, 정말 다음 수준의 제목일 때만 `as="h2"`를 붙입니다. `fontSize`를 넘기면
+그 단계의 `textStyle`이 꺼지고 지정한 크기가 적용됩니다.
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={TypographyStories.DoLevelFromOutline} />
+<Verdict
+  kind="do"
+  en="Choose H3 for its size and render it as h2 because it is the first heading under the page title."
+  ko="크기 때문에 H3를 고르고, 페이지 제목 바로 아래의 첫 제목이므로 h2로 그립니다."
+/>
+
+<Canvas of={TypographyStories.DontSubtitleAsHeading} />
+<Verdict
+  kind="dont"
+  en="Give helper copy a heading tag. A screen reader lists it as a heading, and the outline jumps from h2 to h6."
+  ko="도움말 문구에 제목 태그를 주지 마세요. 화면 낭독기가 제목 목록에 넣고, 문서 구조가 h2에서 h6로 건너뜁니다."
+/>
+
+<Canvas of={TypographyStories.DoLinkSaysWhere} />
+<Verdict
+  kind="do"
+  en="Write link text that names where it goes, so it makes sense when read on its own."
+  ko="링크 문구에는 이동할 곳을 적어서, 링크만 따로 읽어도 뜻이 통하게 합니다."
+/>
+
+<Canvas of={TypographyStories.DontLinkHere} />
+<Verdict
+  kind="dont"
+  en="Use “여기” as the link text, or remove the underline. A link list full of “여기” tells nobody anything, and without the underline only colour marks the link."
+  ko="'여기'를 링크 문구로 쓰거나 밑줄을 없애지 마세요. '여기'만 늘어선 링크 목록은 아무것도 알려 주지 못하고, 밑줄이 없으면 색만으로 링크를 구분해야 합니다."
+/>
+
+<Canvas of={TypographyStories.DoCaptionForMetadata} />
+<Verdict
+  kind="do"
+  en="Keep Caption for metadata the reader can skip."
+  ko="Caption은 읽지 않고 넘어가도 되는 메타데이터에만 씁니다."
+/>
+
+<Canvas of={TypographyStories.DontCaptionForErrors} />
+<Verdict
+  kind="dont"
+  en="Put something the user must act on in Caption. It is the faintest tier; use Text, or a Banner for a real error."
+  ko="사용자가 조치해야 하는 내용을 Caption에 넣지 마세요. 가장 흐린 단계이므로 Text를 쓰고, 실제 오류라면 Banner를 씁니다."
+/>
+
+<En>
+
+## Content
+
+- Headings in sentence case, no full stop. Keep them short enough for one
+  line on mobile.
+- Do not set long body copy in `Subtext` or `Caption` to make it fit. Cut
+  the copy instead.
+- Link text is the destination or the thing you get: 요금제 비교 보기, not
+  여기 or 자세히.
+
+## Accessibility
+
+What the components do for you:
+
+- `H1`–`H5` render real heading elements, and the body tiers render
+  paragraphs, so the outline only contains what you mark as a heading.
+- `Link` is underlined (1px, 2px on hover) and medium weight, so it does not
+  rely on colour alone (WCAG 1.4.1). `fg.link` and `fg.linkHover` are tuned
+  against the canvas in both modes (WCAG 1.4.3).
+- The markdown `h6` keeps `as="h6"`, because a heading the author wrote must
+  stay in the outline.
+
+What you still have to do:
+
+- **Keep the heading levels in order** (WCAG 1.3.1, 2.4.6; KWCAG 5.2.4.2 제목
+  제공). Use `as` to fix the level, never a smaller component to fix the size.
+- **Do not remove the link underline** in running text (WCAG 1.4.1).
+- **Name the destination** in the link text (WCAG 2.4.4). If a link opens a
+  new tab, say so in the text or with a visually hidden note.
+- The error link keeps `danger.fg` on hover; only the underline thickens.
+- An action is a `<button>`, not a link with an `onClick` (WCAG 4.1.2).
+  `<Link as="button">` is fine when it must look like a link.
+
+## Tokens
+
+Default colour of each tier, and the link states from `LINK_RAMP` in
+`Link.tsx`.
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 제목은 문장형 대소문자로 쓰고 마침표를 찍지 않습니다. 모바일에서 한 줄에 들어갈
+  만큼 짧게 씁니다.
+- 긴 본문을 화면에 맞추려고 `Subtext`나 `Caption`으로 줄이지 않습니다. 문구를
+  줄입니다.
+- 링크 문구에는 이동할 곳이나 얻을 것을 씁니다. '여기', '자세히'가 아니라 '요금제
+  비교 보기'처럼 씁니다.
+
+## 접근성
+
+컴포넌트가 알아서 하는 일
+
+- `H1`–`H5`는 실제 제목 요소로, 본문 단계는 문단으로 그려집니다. 그래서 제목으로
+  지정한 것만 문서 구조에 들어갑니다.
+- `Link`는 밑줄(평소 1px, 마우스를 올리면 2px)과 중간 굵기를 가지므로 색에만
+  기대지 않습니다(WCAG 1.4.1). `fg.link`와 `fg.linkHover`는 두 모드 모두에서 바탕과
+  대비가 맞도록 정해져 있습니다(WCAG 1.4.3).
+- 마크다운의 `h6`는 `as="h6"`를 유지합니다. 작성자가 쓴 제목은 문서 구조에 남아야
+  하기 때문입니다.
+
+직접 챙겨야 하는 일
+
+- **제목 수준을 차례대로 씁니다**(WCAG 1.3.1, 2.4.6, KWCAG 5.2.4.2 제목 제공).
+  수준은 `as`로 맞추고, 크기를 맞추려고 더 작은 컴포넌트를 고르지 않습니다.
+- 본문 안 링크의 **밑줄을 없애지 않습니다**(WCAG 1.4.1).
+- 링크 문구에 **이동할 곳을 적습니다**(WCAG 2.4.4). 새 탭에서 열린다면 문구나
+  시각적으로 숨긴 안내로 알립니다.
+- 오류 링크는 마우스를 올려도 `danger.fg`를 유지하고 밑줄만 굵어집니다.
+- 동작은 `onClick`을 단 링크가 아니라 `<button>`으로 만듭니다(WCAG 4.1.2). 링크처럼
+  보여야 한다면 `<Link as="button">`을 씁니다.
+
+## 토큰
+
+각 단계의 기본 색과 `Link.tsx`의 `LINK_RAMP`에 있는 링크 상태입니다.
+
+</Ko>
+
+<Canvas of={TypographyStories.UsageTokens} sourceState="none" />
+
+<En>
+
+## Related
+
+- **Markdown**: renders authored or generated text with these components.
+- **InlineCode**: code inside a sentence.
+- **ExpandableText**: body text clipped to a few lines.
+- **Badge**: a status label next to a heading.
+- **Foundations/Brand & colour usage**: which `fg.*` role to use where.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **Markdown**: 작성하거나 생성한 글을 이 컴포넌트들로 그립니다.
+- **InlineCode**: 문장 안의 코드.
+- **ExpandableText**: 몇 줄만 보여 주고 접어 두는 본문.
+- **Badge**: 제목 옆의 상태 라벨.
+- **Foundations/Brand & colour usage**: 어느 자리에 어떤 `fg.*` 역할을 쓰는지.
+
+</Ko>

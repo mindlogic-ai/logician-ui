@@ -1,0 +1,216 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as CardStories from './Card.stories';
+
+<Meta of={CardStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# Card
+
+A bordered surface that groups content about one thing: a course, a meeting,
+a plan, a setting. Default padding is `8`; most call sites set their own.
+
+## When to use
+
+- To group the content and actions of one item, especially in a list or grid
+  of similar items.
+- To set a summary or result apart from the page (`variant="wash"`).
+- As a single click target for the whole item (`clickable` with `as`).
+
+## When not to use
+
+- Records with the same columns → `Table`.
+- A message about the page or a task → `Banner`.
+- Sections that open and close → `Accordion` or `Collapsible`.
+- Just to add space or a border around a form. Use layout (`Stack`, padding).
+
+## Variants and what they mean
+
+</En>
+
+<Ko>
+
+# Card
+
+한 대상(강좌, 회의, 요금제, 설정)에 관한 내용을 테두리 있는 면으로 묶는 컴포넌트입니다.
+기본 안쪽 여백은 `8`이며, 대부분의 호출부에서 직접 정합니다.
+
+## 언제 쓰나요
+
+- 한 항목의 내용과 동작을 묶을 때. 특히 비슷한 항목이 목록이나 격자로 늘어설 때.
+- 요약이나 결과를 페이지와 구분할 때(`variant="wash"`).
+- 항목 전체를 한 번에 누르는 대상으로 만들 때(`clickable`과 `as`).
+
+## 언제 쓰지 않나요
+
+- 같은 열을 가진 기록은 `Table`을 씁니다.
+- 페이지나 작업에 관한 안내는 `Banner`를 씁니다.
+- 여닫는 섹션은 `Accordion`이나 `Collapsible`을 씁니다.
+- 폼 둘레에 여백이나 테두리를 두려는 목적만으로 쓰지 않습니다. 레이아웃(`Stack`, 여백)을
+  씁니다.
+
+## 변형과 뜻
+
+</Ko>
+
+<ArgTypes of={CardStories} include={['variant', 'clickable']} />
+
+<En>
+
+| Variant | Means | Use for |
+| --- | --- | --- |
+| `default` | A framed item on the page: `bg.surface` and a `border.subtle` hairline | List items, settings groups |
+| `wash` | A block that summarises or concludes: `bg.muted`, no border | An AI summary, a purchase total, an accepted invitation |
+| `elevated` | A standalone object that sits above the page: soft `sm` shadow | A recording or processing panel |
+| `clickable` | The whole card is one target: hover steps to `bg.subtle` and `border.strong`, nothing lifts | Course cards, chatbot cards |
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+| 변형 | 뜻 | 쓰는 곳 |
+| --- | --- | --- |
+| `default` | 페이지 위의 테두리 있는 항목. `bg.surface`와 `border.subtle` 선 | 목록 항목, 설정 묶음 |
+| `wash` | 요약하거나 마무리하는 블록. `bg.muted`, 테두리 없음 | AI 요약, 결제 합계, 수락한 초대 |
+| `elevated` | 페이지 위에 떠 있는 독립된 대상. 부드러운 `sm` 그림자 | 녹음 패널, 처리 중 패널 |
+| `clickable` | 카드 전체가 누르는 대상. 호버하면 `bg.subtle`과 `border.strong`으로 바뀌고 떠오르지 않음 | 강좌 카드, 챗봇 카드 |
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={CardStories.DoClickableIsTheLink} />
+<Verdict
+  kind="do"
+  en="Make a clickable card the link itself (as='a' or as={NextLink}), so it is focusable and announced as a link."
+  ko="누를 수 있는 카드는 카드 자체를 링크로 만듭니다(as='a' 또는 as={NextLink}). 그래야 초점을 받고 링크로 읽힙니다."
+/>
+
+<Canvas of={CardStories.DontButtonInClickable} />
+<Verdict
+  kind="dont"
+  en="Put a second control inside a clickable card. A click on 삭제 also opens the card, and as a link or button the card cannot contain another control. Move the action out, or make only the title the link."
+  ko="누를 수 있는 카드 안에 다른 컨트롤을 넣지 마세요. '삭제'를 눌러도 카드가 열리고, 카드가 링크나 버튼이면 안에 다른 컨트롤을 둘 수 없습니다. 동작을 밖으로 빼거나 제목만 링크로 만듭니다."
+/>
+
+<Canvas of={CardStories.DoWashForSummary} />
+<Verdict
+  kind="do"
+  en="Use wash for a summary or a result. The fill sets it apart, so it needs no border."
+  ko="요약이나 결과에는 wash를 씁니다. 배경색이 구분해 주므로 테두리가 필요 없습니다."
+/>
+
+<Canvas of={CardStories.DontNestedCards} />
+<Verdict
+  kind="dont"
+  en="Nest cards. Borders inside borders add weight without adding structure; use dividers or a Stack inside one card."
+  ko="카드 안에 카드를 넣지 마세요. 테두리 안의 테두리는 구조 없이 무게만 더합니다. 한 카드 안에서 구분선이나 Stack을 씁니다."
+/>
+
+<En>
+
+## Content
+
+- Lead with what identifies the item (its name), then the details.
+- Keep actions for the item at the bottom or top-right, in the same place on
+  every card in a list.
+
+## Accessibility
+
+What Card does for you:
+
+- `as` changes the element and its props, so a clickable card can be a real
+  `<a>` or `<button>` and get focus, Enter (and Space for a button) and the
+  right role without extra code.
+- The hover state uses a border and a tier step, not a shadow, so it also
+  reads in dark mode.
+
+What you still have to do:
+
+- **A clickable card must be a control** (WCAG 2.1.1, 4.1.2). `clickable` is
+  styling only. A `<div>` with `onClick` is not focusable. With
+  `as="button"`, also pass `type="button"`.
+- **Nothing interactive inside a clickable card** (nested interactive
+  controls, `ACCESSIBILITY.md` §3). If a card needs its own actions, make only
+  the title the link.
+- **Inside a `<button>`, only phrasing content.** A card rendered as a button
+  must not contain `<div>` or `<p>` children (`ACCESSIBILITY.md` §5, KWCAG
+  5.4.1.1). Use `as="span"` with `display="block"` on the text inside, or use
+  a link.
+- Card has no visible focus style of its own. Check the focus indicator of a
+  clickable card in your app (WCAG 2.4.7).
+
+## Tokens
+
+Read from `Card.tsx` and `clickableStyles` / `variantStyles` in
+`Card.styles.ts`.
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 항목을 알아볼 수 있는 것(이름)을 먼저 쓰고, 세부 내용을 뒤에 씁니다.
+- 항목의 동작은 목록 안의 모든 카드에서 같은 자리(아래쪽이나 오른쪽 위)에 둡니다.
+
+## 접근성
+
+Card가 알아서 하는 일
+
+- `as`가 요소와 그 속성을 함께 바꾸므로, 누를 수 있는 카드를 실제 `<a>`나
+  `<button>`으로 만들 수 있습니다. 그러면 따로 코드를 쓰지 않아도 초점, Enter(버튼이면
+  Space도), 알맞은 역할이 생깁니다.
+- 호버 상태는 그림자가 아니라 테두리와 바탕 단계로 표현하므로 다크 모드에서도
+  보입니다.
+
+직접 챙겨야 하는 일
+
+- **누를 수 있는 카드는 컨트롤이어야 합니다**(WCAG 2.1.1, 4.1.2). `clickable`은
+  모양만 바꿉니다. `onClick`만 단 `<div>`는 초점을 받지 못합니다. `as="button"`을 쓸
+  때는 `type="button"`도 넘깁니다.
+- **누를 수 있는 카드 안에는 상호작용 요소를 넣지 않습니다**(상호작용 요소 중첩,
+  `ACCESSIBILITY.md` 3절). 카드에 따로 동작이 필요하다면 제목만 링크로 만듭니다.
+- **`<button>` 안에는 phrasing content만 넣습니다.** 버튼으로 그린 카드에는 `<div>`나
+  `<p>` 자식을 넣지 않습니다(`ACCESSIBILITY.md` 5절, KWCAG 5.4.1.1). 안의 글자에는
+  `as="span"`과 `display="block"`을 쓰거나 링크를 씁니다.
+- Card에는 자체 초점 스타일이 없습니다. 앱에서 누를 수 있는 카드의 초점 표시를
+  확인합니다(WCAG 2.4.7).
+
+## 토큰
+
+`Card.tsx`와 `Card.styles.ts`의 `clickableStyles` / `variantStyles`에서 읽습니다.
+
+</Ko>
+
+<Canvas of={CardStories.UsageTokens} sourceState="none" />
+
+<En>
+
+## Related
+
+- **Table**: records with the same columns.
+- **Banner**: a message about the page.
+- **Accordion** / **Collapsible**: sections that open.
+- **Masonry**: a grid of cards with different heights.
+- **Foundations/Brand & colour usage**: surfaces and layers.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **Table**: 같은 열을 가진 기록.
+- **Banner**: 페이지에 관한 안내.
+- **Accordion** / **Collapsible**: 여닫는 섹션.
+- **Masonry**: 높이가 서로 다른 카드의 격자.
+- **Foundations/Brand & colour usage**: 면과 레이어.
+
+</Ko>

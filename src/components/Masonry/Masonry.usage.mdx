@@ -1,0 +1,142 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as MasonryStories from './Masonry.stories';
+
+<Meta of={MasonryStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# Masonry
+
+Equal-width columns that pack items of different heights without gaps,
+re-measuring as items resize. FactChat uses it for the model and voice menus.
+
+## When to use
+
+- Unordered groups or cards whose heights differ a lot, where a grid would
+  leave holes.
+
+## When not to use
+
+- Items with similar heights → `SimpleGrid` / `Grid`, which keeps row order.
+- Anything with an order (steps, a ranking, a timeline, search results) →
+  a list or a grid. Masonry's reading order is column by column.
+- A data list → `Table`.
+
+## Props
+
+</En>
+
+<Ko>
+
+# Masonry
+
+너비가 같은 열에 높이가 다른 항목을 빈틈없이 채우고, 항목 크기가 바뀌면 다시 재는
+레이아웃입니다. FactChat은 모델 메뉴와 음성 메뉴에 씁니다.
+
+## 언제 쓰나요
+
+- 순서가 없고 높이 차이가 커서 격자로 놓으면 빈칸이 생기는 묶음이나 카드.
+
+## 언제 쓰지 않나요
+
+- 높이가 비슷한 항목은 행 순서를 지키는 `SimpleGrid` / `Grid`를 씁니다.
+- 순서가 있는 것(단계, 순위, 타임라인, 검색 결과)은 목록이나 격자를 씁니다.
+  Masonry의 읽기 순서는 열 단위입니다.
+- 데이터 목록은 `Table`을 씁니다.
+
+## 속성
+
+</Ko>
+
+<ArgTypes of={MasonryStories} include={['numCols', 'gap', 'horizontalArrangement']} />
+
+<En>
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={MasonryStories.DoUnorderedGroups} />
+<Verdict
+  kind="do"
+  en="Pack unordered groups of different heights. Nothing depends on which comes first."
+  ko="높이가 다르고 순서가 없는 묶음을 빈틈없이 채웁니다. 어느 것이 먼저 오든 상관없습니다."
+/>
+
+<Canvas of={MasonryStories.DontOrderedContent} />
+<Verdict
+  kind="dont"
+  en="Lay out steps in it. Placement follows height, so the visual order scrambles, and keyboard and screen-reader order runs down each column."
+  ko="단계를 Masonry로 늘어놓지 마세요. 높이에 따라 자리가 정해져 눈에 보이는 순서가 뒤섞이고, 키보드와 화면 낭독기는 열마다 위에서 아래로 읽습니다."
+/>
+
+<En>
+
+## Accessibility
+
+What Masonry does for you:
+
+- Nothing beyond layout. It renders plain boxes, one column after another.
+
+What you still have to do:
+
+- **Keep the content order-free** (WCAG 1.3.2, 2.4.3). The DOM order is
+  column 1 top to bottom, then column 2, so Tab and a screen reader follow
+  columns, not the rows a sighted reader sees.
+- **Set `numCols` for the viewport** with `useBreakpointValue`; at 320px wide
+  one column avoids sideways scrolling (WCAG 1.4.10).
+
+## Tokens
+
+Masonry sets no colour tokens.
+
+</En>
+
+<Ko>
+
+## 접근성
+
+Masonry가 알아서 하는 일
+
+- 레이아웃 말고는 없습니다. 열을 하나씩 차례로 그리는 일반 상자입니다.
+
+직접 챙겨야 하는 일
+
+- **순서가 없는 내용에만 씁니다**(WCAG 1.3.2, 2.4.3). DOM 순서가 1열 위에서 아래, 그다음
+  2열이라, Tab과 화면 낭독기는 눈에 보이는 행이 아니라 열을 따라갑니다.
+- **화면 너비에 맞게 `numCols`를 정합니다.** `useBreakpointValue`를 쓰고, 폭 320px에서는
+  한 열로 두어 가로 스크롤을 막습니다(WCAG 1.4.10).
+
+## 토큰
+
+Masonry는 색 토큰을 쓰지 않습니다.
+
+</Ko>
+
+<En>
+
+## Related
+
+- **Card**: what usually goes in each cell.
+- **Container**: page width.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **Card**: 칸마다 주로 들어가는 것.
+- **Container**: 페이지 너비.
+
+</Ko>

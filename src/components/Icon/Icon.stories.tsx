@@ -13,9 +13,18 @@ import { useMemo } from 'react';
 import { FaBuildingUser } from 'react-icons/fa6';
 import { MdDashboard } from 'react-icons/md';
 
+import { TokenTable } from '../../guidelines/_components/TokenTable';
+import { Button } from '../Button';
+import { IconButton } from '../IconButton';
 import { Icons } from './_constants/iconList';
 import { createIcon } from './_utils/createIcon';
-import { Analytics } from './index';
+import {
+  Analytics,
+  CheckIcon,
+  CloseIcon,
+  DownloadIcon,
+  TrashIcon,
+} from './index';
 
 const meta = {
   title: 'Components/Icon',
@@ -421,5 +430,56 @@ const MyCustomIcon = createIcon(
         </VStack>
       </Box>
     </VStack>
+  ),
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `Icon.usage.mdx` with <Canvas of={…} />. Hidden from the
+// sidebar (`!dev`); `tags` is written out on each story because the indexer
+// reads CSF statically.
+
+export const DoIconWithLabel: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: decorative next to a label, named when alone',
+  render: () => (
+    <HStack gap={3}>
+      <Button variant="secondary">
+        <DownloadIcon boxSize="xs" aria-hidden />
+        내려받기
+      </Button>
+      <IconButton aria-label="삭제" variant="ghost">
+        <TrashIcon boxSize="xs" aria-hidden />
+      </IconButton>
+    </HStack>
+  ),
+};
+
+export const DontIconAsStatus: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: a coloured icon as the only status",
+  render: () => (
+    <HStack gap={4}>
+      <Text>결제 1</Text>
+      <CheckIcon boxSize="xs" color="success.fg" />
+      <Text>결제 2</Text>
+      <CloseIcon boxSize="xs" color="danger.fg" />
+    </HStack>
+  ),
+};
+
+export const UsageTokens: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Tokens',
+  render: () => (
+    <TokenTable
+      rows={[
+        { token: 'fg.icon', use: 'icons on their own (stories default)' },
+        { token: 'fg.default', use: 'icon in running text' },
+        { token: 'fg.muted', use: 'secondary icon' },
+      ]}
+    />
   ),
 };

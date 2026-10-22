@@ -1,0 +1,166 @@
+import { Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as AvatarStories from './Avatar.stories';
+
+<Meta of={AvatarStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# Avatar
+
+A person's photo, or their initials when there is no photo. The initials are
+tinted with one of the twelve category hues, picked from a stable hash of
+`name`, so the same person has the same colour everywhere without storing
+one.
+
+## When to use
+
+- Next to a person's name in a member list, a table row, a comment, or the
+  account menu.
+- A stack of people (`Avatar.Group`) where the count matters more than each
+  name.
+
+## When not to use
+
+- A chatbot, tenant or product logo → an `<img>` with alt text, or the app's
+  logo component. An avatar implies a person.
+- A status (online, blocked) → `Badge` next to the name. Avatar has no status
+  colours.
+
+## Options
+
+| Prop | Means |
+| --- | --- |
+| `src` | Photo URL. While it loads, or if it fails, the fallback shows. |
+| `name` | Used for the initials and the hue. With no name, the fallback is the neutral pair (`bg.muted` / `secondary.fgStrong`), never red. |
+| `colorHue` | Overrides the hashed hue. Identity only, never status. |
+| `size` | Chakra sizes, `2xs` to `2xl` and `full`. |
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+# Avatar
+
+사람의 사진, 사진이 없으면 이름 머리글자를 보여 주는 컴포넌트입니다. 머리글자는 열두
+가지 category 색 가운데 하나로 칠해지는데, `name`의 고정 해시로 고르므로 색을 따로
+저장하지 않아도 같은 사람은 어디서나 같은 색입니다.
+
+## 언제 쓰나요
+
+- 멤버 목록, 표의 행, 댓글, 계정 메뉴에서 사람 이름 옆에.
+- 이름 하나하나보다 사람 수가 중요한 묶음(`Avatar.Group`).
+
+## 언제 쓰지 않나요
+
+- 챗봇, 기관, 제품 로고에는 대체 글이 있는 `<img>`나 앱의 로고 컴포넌트를 씁니다.
+  Avatar는 사람을 뜻합니다.
+- 상태(접속 중, 차단됨)는 이름 옆의 `Badge`로 알립니다. Avatar에는 상태색이 없습니다.
+
+## 옵션
+
+| 속성 | 뜻 |
+| --- | --- |
+| `src` | 사진 URL. 불러오는 동안이나 실패하면 대체 표시가 나옵니다. |
+| `name` | 머리글자와 색을 정합니다. 이름이 없으면 중립 색(`bg.muted` / `secondary.fgStrong`)을 쓰고, 빨강은 쓰지 않습니다. |
+| `colorHue` | 해시로 고른 색을 바꿉니다. 사람을 구분할 때만 쓰고 상태에는 쓰지 않습니다. |
+| `size` | Chakra 크기. `2xs`부터 `2xl`, `full`. |
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={AvatarStories.DoNameNextToIt} />
+<Verdict
+  kind="do"
+  en="Show the name as text next to the avatar, and hide the avatar from assistive technology so the name is read once."
+  ko="아바타 옆에 이름을 글자로 보여 주고, 아바타는 보조 기술에서 숨겨 이름이 한 번만 읽히게 합니다."
+/>
+
+<Canvas of={AvatarStories.DontHueAsStatus} />
+<Verdict
+  kind="dont"
+  en="Pick green, red or yellow to mean active, blocked or pending. The hue only tells people apart; readers will not know it changed meaning."
+  ko="활성, 차단, 대기를 나타내려고 초록, 빨강, 노랑을 고르지 마세요. 색은 사람을 구분할 뿐이라, 뜻이 바뀌었다는 것을 읽는 사람은 알 수 없습니다."
+/>
+
+<En>
+
+## Content
+
+- Pass the display name the user knows (김지민), not an email, so the
+  initials make sense.
+
+## Accessibility
+
+What Avatar does for you:
+
+- With no photo, the initials are real text, so they are read.
+
+What you still have to do:
+
+- **The photo has no alt text.** `Avatar` does not pass one to the image, so
+  a loaded photo is an `<img>` without `alt` (WCAG 1.1.1). Show the name as
+  text next to it and put `aria-hidden` on the Avatar, as in the Do example.
+  An avatar on its own (a toolbar account button) gets its name from the
+  button's `aria-label`.
+- Do not use the hue to carry meaning (WCAG 1.4.1).
+
+## Tokens
+
+Generated with `avatarFallbackColors`, the function the component uses.
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 이메일이 아니라 사용자가 아는 표시 이름(김지민)을 넘겨야 머리글자가 뜻이 통합니다.
+
+## 접근성
+
+Avatar가 알아서 하는 일
+
+- 사진이 없으면 머리글자가 실제 글자라서 읽힙니다.
+
+직접 챙겨야 하는 일
+
+- **사진에 대체 글이 없습니다.** `Avatar`가 이미지에 alt를 넘기지 않아서, 사진을
+  불러오면 `alt` 없는 `<img>`가 됩니다(WCAG 1.1.1). 이름을 옆에 글자로 보여 주고
+  Avatar에는 `aria-hidden`을 붙입니다(이렇게 하세요 예시처럼). 아바타만 있는 경우(도구
+  모음의 계정 버튼)에는 버튼의 `aria-label`로 이름을 붙입니다.
+- 색에 뜻을 담지 않습니다(WCAG 1.4.1).
+
+## 토큰
+
+컴포넌트가 쓰는 함수인 `avatarFallbackColors`로 만듭니다.
+
+</Ko>
+
+<Canvas of={AvatarStories.UsageTokens} sourceState="none" />
+
+<En>
+
+## Related
+
+- **Badge**: a person's status next to their name.
+- **Table**: member lists.
+- **Foundations/Brand & colour usage**: category hues carry no meaning.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **Badge**: 이름 옆의 상태.
+- **Table**: 멤버 목록.
+- **Foundations/Brand & colour usage**: category 색에는 뜻이 없습니다.
+
+</Ko>
