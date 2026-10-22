@@ -1,0 +1,181 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as BreadcrumbStories from './Breadcrumb.stories';
+
+<Meta of={BreadcrumbStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# Breadcrumb
+
+A trail of links that shows where the current page sits in a hierarchy and
+lets the user go back up it.
+
+## When to use
+
+- In a hierarchy more than two levels deep: a group inside a group inside the
+  organisation, a folder in a file picker.
+- At the top of a course or a detail view, to lead back to the level above.
+
+## When not to use
+
+- For a flat app section with one level → the page title is enough.
+- For the user's history ("where I was before") → the browser's back button.
+  A breadcrumb shows the hierarchy, not the path taken.
+- To switch between siblings of the same level → `Tabs` or a navigation list.
+- For the steps of a flow → a stepper.
+
+## Variants and what they mean
+
+Breadcrumb has no visual variants. `separator` (default `›`) and
+`separatorGap` (default `2`) set the mark between items and the space around
+it.
+
+</En>
+
+<Ko>
+
+# Breadcrumb
+
+지금 페이지가 계층의 어디에 있는지 보이고, 위 단계로 돌아갈 수 있게 하는 링크
+경로입니다.
+
+## 언제 쓰나요
+
+- 두 단계보다 깊은 계층에서: 조직 안의 그룹 안의 그룹, 파일 선택기의 폴더.
+- 강의나 상세 화면 맨 위에서 한 단계 위로 돌아가는 길을 보일 때.
+
+## 언제 쓰지 않나요
+
+- 한 단계뿐인 평평한 화면에서는 페이지 제목으로 충분합니다.
+- 사용자가 지나온 기록("방금 있던 곳")은 브라우저의 뒤로 가기가 맡습니다. Breadcrumb는
+  거쳐 온 길이 아니라 계층을 보입니다.
+- 같은 단계의 형제 사이를 오가는 것은 `Tabs`나 내비게이션 목록을 씁니다.
+- 흐름의 단계는 단계 표시를 씁니다.
+
+## 변형과 뜻
+
+Breadcrumb에는 모양 변형이 없습니다. `separator`(기본 `›`)와 `separatorGap`(기본
+`2`)으로 항목 사이의 표시와 간격을 정합니다.
+
+</Ko>
+
+<ArgTypes of={BreadcrumbStories} include={['separator', 'separatorGap']} />
+
+<En>
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={BreadcrumbStories.DoCurrentPageIsText} />
+<Verdict
+  kind="do"
+  en="Link the ancestors and render the current page as text with aria-current='page'. Name the trail in the user's language."
+  ko="위 단계는 링크로, 지금 페이지는 aria-current='page'를 단 글자로 둡니다. 경로의 이름은 사용자의 언어로 붙입니다."
+/>
+
+<Canvas of={BreadcrumbStories.DontEveryCrumbALink} />
+<Verdict
+  kind="dont"
+  en="Make the current page a link to itself. It looks clickable, does nothing, and a screen reader cannot tell which crumb is the current page."
+  ko="지금 페이지를 자기 자신으로 가는 링크로 만들지 마세요. 누를 수 있어 보이지만 아무 일도 하지 않고, 화면 낭독기는 어느 항목이 지금 페이지인지 알 수 없습니다."
+/>
+
+<En>
+
+## Content
+
+- Each crumb is the title of that level, exactly as the page itself shows it.
+- Leave out the app's home if every page starts there.
+- In a very deep tree, keep the root and the last two or three levels and
+  collapse the middle.
+
+## Accessibility
+
+What Breadcrumb does for you:
+
+- Renders a `<nav>` with an ordered list, so the trail is a landmark and its
+  length is announced.
+- Separators are `aria-hidden`; a screen reader reads only the crumbs.
+- `BreadcrumbLink` shows the focus ring (WCAG 2.4.7). It renders through
+  `next/link` when Next.js is installed.
+
+What you still have to do:
+
+- **Name the landmark in the user's language.** Chakra's default `aria-label`
+  is the English "breadcrumb". Pass `aria-label="현재 위치"` or a translation
+  (WCAG 2.4.6).
+- **Mark the current page.** Render it as text with `aria-current="page"`, not
+  as a `BreadcrumbLink`.
+- Truncated crumbs need their full text available, for example as the link's
+  visible text with CSS truncation and a `Tooltip`.
+
+## Tokens
+
+The table lists the tokens set in `BreadcrumbLink.tsx`. The separator colour
+comes from Chakra's Breadcrumb recipe.
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 각 항목은 그 단계의 페이지 제목을 화면에 보이는 그대로 씁니다.
+- 모든 페이지가 같은 홈에서 시작한다면 홈은 뺍니다.
+- 아주 깊은 트리에서는 맨 위와 마지막 두세 단계만 두고 가운데는 접습니다.
+
+## 접근성
+
+Breadcrumb가 알아서 하는 일
+
+- `<nav>`와 순서 있는 목록으로 그려지므로 경로가 랜드마크가 되고 항목 수가 읽힙니다.
+- 구분 표시는 `aria-hidden`이라 화면 낭독기는 항목만 읽습니다.
+- `BreadcrumbLink`에는 초점 테두리가 보입니다(WCAG 2.4.7). Next.js가 설치되어 있으면
+  `next/link`로 그립니다.
+
+직접 챙겨야 하는 일
+
+- **랜드마크 이름을 사용자의 언어로 붙입니다.** Chakra의 기본 `aria-label`은 영어
+  "breadcrumb"입니다. `aria-label="현재 위치"`나 번역 문자열을 넘깁니다(WCAG 2.4.6).
+- **지금 페이지를 표시합니다.** `BreadcrumbLink`가 아니라 `aria-current="page"`를 단
+  글자로 그립니다.
+- 잘린 항목은 전체 문구를 볼 방법이 있어야 합니다. 예를 들어 링크 글자는 CSS로 자르고
+  `Tooltip`으로 전체를 보입니다.
+
+## 토큰
+
+아래 표는 `BreadcrumbLink.tsx`에서 정한 토큰입니다. 구분 표시의 색은 Chakra Breadcrumb
+레시피에서 옵니다.
+
+</Ko>
+
+<Canvas of={BreadcrumbStories.UsageTokens} sourceState="none" />
+
+<En>
+
+## Related
+
+- **Tabs**: siblings of the same level.
+- **Menu**: the collapsed middle of a long trail.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **Tabs**: 같은 단계의 형제 사이 이동.
+- **Menu**: 긴 경로의 접힌 가운데 부분.
+
+</Ko>

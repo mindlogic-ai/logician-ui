@@ -1,0 +1,219 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as TabsStories from './Tabs.stories';
+
+<Meta of={TabsStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# Tabs
+
+A row (or column) of labels that switches between sections of the same place.
+One section shows at a time.
+
+## When to use
+
+- To split one object's settings or data into sections: a group's 크레딧,
+  보안 and 공지; a chatbot's 설정 and 분석.
+- To switch between dashboards of the same scope, such as usage by model and
+  usage by user.
+- For a long settings page in a side panel, with `orientation="vertical"`.
+
+## When not to use
+
+- To change how the same content is shown, or to filter it (일/주/월, 목록/카드)
+  → `SegmentedControl`. Tabs change *what* you are looking at, not how.
+- For the steps of a flow the user must complete in order → a stepper or a
+  sequence of pages. Tabs let the user jump ahead.
+- To move to another page of the app → navigation links or `Breadcrumb`.
+- For two or three short panels the user needs side by side → show them on
+  the page.
+
+## Variants and what they mean
+
+Tabs has one look. A selected tab is a *place*, not a value, so it is marked
+with ink and weight, not with a brand or status colour. `orientation` decides
+the layout:
+
+</En>
+
+<Ko>
+
+# Tabs
+
+같은 곳의 여러 구역을 오가게 하는 라벨 한 줄(또는 한 열)입니다. 한 번에 한 구역만
+보입니다.
+
+## 언제 쓰나요
+
+- 한 대상의 설정이나 데이터를 구역으로 나눌 때: 그룹의 크레딧·보안·공지, 챗봇의 설정·분석.
+- 같은 범위의 대시보드 여러 개를 오갈 때: 모델별 사용량, 사용자별 사용량.
+- 사이드 패널의 긴 설정 화면을 나눌 때는 `orientation="vertical"`을 씁니다.
+
+## 언제 쓰지 않나요
+
+- 같은 내용을 보는 방식을 바꾸거나 거를 때(일/주/월, 목록/카드)는 `SegmentedControl`을
+  씁니다. 탭은 무엇을 보는지를 바꾸고, 어떻게 보는지를 바꾸지 않습니다.
+- 차례대로 끝내야 하는 흐름의 단계에는 단계 표시나 이어지는 페이지를 씁니다. 탭은 사용자가
+  단계를 건너뛰게 둡니다.
+- 앱의 다른 페이지로 옮겨 가는 것은 내비게이션 링크나 `Breadcrumb`가 맡습니다.
+- 나란히 봐야 하는 짧은 패널 두세 개는 탭에 숨기지 말고 페이지에 그대로 보입니다.
+
+## 변형과 뜻
+
+Tabs의 모양은 하나입니다. 선택된 탭은 값이 아니라 지금 있는 곳이므로, 브랜드색이나
+상태색이 아니라 진한 글자와 굵기로 표시합니다. 배치는 `orientation`이 정합니다.
+
+</Ko>
+
+<ArgTypes of={TabsStories} include={['orientation', 'defaultValue', 'value', 'activationMode']} />
+
+<En>
+
+| `orientation` | Selected tab | Use for |
+| --- | --- | --- |
+| `horizontal` (default) | `fg.emphasized` label, semibold, with a 2px `primary.main` underline | Sections across the top of a page or panel |
+| `vertical` | `bg.muted` fill, bold, with a 2px `primary.main` bar on the leading edge | A long settings page in a narrow side column |
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+| `orientation` | 선택된 탭 | 쓰는 곳 |
+| --- | --- | --- |
+| `horizontal` (기본) | `fg.emphasized` 글자를 semibold로 쓰고 아래에 2px `primary.main` 밑줄 | 페이지나 패널 위쪽의 구역 |
+| `vertical` | `bg.muted` 배경에 bold, 앞쪽 가장자리에 2px `primary.main` 막대 | 좁은 옆 열에 둔 긴 설정 화면 |
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={TabsStories.DoSectionsOfOnePlace} />
+<Verdict
+  kind="do"
+  en="Use short nouns for sections of one place, and name the list with aria-label ('그룹 설정')."
+  ko="한 곳의 구역에는 짧은 명사를 쓰고, 탭 목록에 aria-label('그룹 설정')로 이름을 붙입니다."
+/>
+
+<Canvas of={TabsStories.DontTabsAsSteps} />
+<Verdict
+  kind="dont"
+  en="Number tabs as the steps of a flow. Nothing stops the user from opening step 3 first."
+  ko="탭에 번호를 붙여 흐름의 단계로 쓰지 마세요. 사용자가 3단계를 먼저 열어도 막을 방법이 없습니다."
+/>
+
+<En>
+
+## Content
+
+- One or two words, a noun: "크레딧", "보안", "사용자별". No full stop and no
+  icons alone.
+- Keep labels the same length class; one long label next to short ones reads as
+  a different kind of tab.
+- Stay under about six horizontal tabs. More than that, use `vertical` or split
+  the page.
+- Do not put a count in the label unless it changes what the user does next.
+
+## Accessibility
+
+What Tabs does for you:
+
+- `TabList` is `role="tablist"`, each `Tab` is `role="tab"` with
+  `aria-selected`, and each `TabPanel` is `role="tabpanel"` labelled by its tab
+  (WCAG 4.1.2).
+- Keyboard (WCAG 2.1.1): `Tab` lands on the selected tab and then moves on; the
+  arrow keys move between tabs and wrap at the ends, `Home` / `End` jump to the
+  first and last. With the default `activationMode="automatic"` the panel
+  changes as focus moves.
+- Each `Tab` is a `Button`, so it shows the focus ring (WCAG 2.4.7). The
+  selected label is `fg.emphasized`, at least 13:1 on every surface it can land
+  on (WCAG 1.4.3), and the underline is a second cue beside weight (WCAG
+  1.4.1).
+
+What you still have to do:
+
+- **Name the list.** Pass `aria-label` to `TabList` when there is no visible
+  heading right above it, or `aria-labelledby` pointing at the heading.
+- Give every `Tab` and `TabPanel` the same `value`. Both throw without one.
+- Put only phrasing content inside a `Tab`: it renders a `<button>`, so no
+  `<div>` or `<p>` inside (KWCAG 5.4.1.1, see `ACCESSIBILITY.md`).
+- If switching a panel is slow (it fetches data), use
+  `activationMode="manual"` so arrowing across the list does not fire a request
+  per tab.
+
+## Tokens
+
+The selected ramp is `TAB_RAMP` in `Tab.styles.ts`; the other tokens are set in
+`Tab.tsx` and `TabList.tsx`.
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 한두 단어의 명사로 씁니다. "크레딧", "보안", "사용자별". 마침표를 찍지 않고, 아이콘만
+  두지 않습니다.
+- 라벨 길이를 비슷하게 맞춥니다. 짧은 라벨 사이의 긴 라벨 하나는 다른 종류의 탭처럼
+  보입니다.
+- 가로 탭은 여섯 개 안쪽으로 둡니다. 더 많으면 `vertical`을 쓰거나 페이지를 나눕니다.
+- 다음 행동을 바꾸는 경우가 아니면 라벨에 개수를 넣지 않습니다.
+
+## 접근성
+
+Tabs가 알아서 하는 일
+
+- `TabList`는 `role="tablist"`, 각 `Tab`은 `aria-selected`가 붙은 `role="tab"`, 각
+  `TabPanel`은 자기 탭으로 이름이 붙는 `role="tabpanel"`입니다(WCAG 4.1.2).
+- 키보드(WCAG 2.1.1): `Tab`을 누르면 선택된 탭에 닿고, 한 번 더 누르면 목록을 벗어납니다. 방향키로 탭 사이를
+  옮기고 끝에서는 처음으로 돌아가며, `Home`/`End`로 처음과 끝으로 갑니다. 기본값인
+  `activationMode="automatic"`에서는 초점이 옮겨 가면 패널도 바뀝니다.
+- 각 `Tab`은 `Button`이라 초점 테두리가 보입니다(WCAG 2.4.7). 선택된 글자는
+  `fg.emphasized`로, 놓일 수 있는 어느 면에서도 13:1 이상입니다(WCAG 1.4.3). 굵기 말고도
+  밑줄이 한 번 더 알려 줍니다(WCAG 1.4.1).
+
+직접 챙겨야 하는 일
+
+- **탭 목록에 이름을 붙입니다.** 바로 위에 보이는 제목이 없다면 `TabList`에
+  `aria-label`을, 제목이 있다면 그 제목을 가리키는 `aria-labelledby`를 넘깁니다.
+- 모든 `Tab`과 `TabPanel`에 짝이 맞는 `value`를 줍니다. 없으면 둘 다 오류를 냅니다.
+- `Tab` 안에는 phrasing content만 넣습니다. `<button>`으로 그려지므로 안에 `<div>`나
+  `<p>`를 넣지 않습니다(KWCAG 5.4.1.1, `ACCESSIBILITY.md` 참고).
+- 패널을 바꿀 때 데이터를 불러와 느리다면 `activationMode="manual"`을 씁니다. 그래야
+  방향키로 탭을 훑을 때마다 요청이 나가지 않습니다.
+
+## 토큰
+
+선택 상태의 색은 `Tab.styles.ts`의 `TAB_RAMP`에서, 나머지 토큰은 `Tab.tsx`와
+`TabList.tsx`에서 정합니다.
+
+</Ko>
+
+<Canvas of={TabsStories.UsageTokens} sourceState="none" />
+
+<En>
+
+## Related
+
+- **SegmentedControl**: change how the same content is shown.
+- **Breadcrumb**: where this page sits in a hierarchy.
+- **Foundations/Brand & colour usage**: why a selected place is ink, not
+  colour.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **SegmentedControl**: 같은 내용을 보는 방식 바꾸기.
+- **Breadcrumb**: 이 페이지가 계층의 어디에 있는지.
+- **Foundations/Brand & colour usage**: 선택된 곳을 색이 아니라 진한 글자로 표시하는
+  이유.
+
+</Ko>

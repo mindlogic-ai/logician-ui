@@ -2,7 +2,10 @@ import { useState } from 'react';
 import { Button, CloseButton, Heading, Text } from '@chakra-ui/react';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { T } from '../../guidelines/_components/Lang';
+import { TokenTable } from '../../guidelines/_components/TokenTable';
 import { Tab } from '@/components/Tabs/Tab/Tab';
+import { TAB_RAMP } from '@/components/Tabs/Tab/Tab.styles';
 import { TabList } from '@/components/Tabs/TabList';
 import { TabPanel } from '@/components/Tabs/TabPanel';
 import { TabPanels } from '@/components/Tabs/TabPanels';
@@ -259,4 +262,87 @@ export const DynamicTabs: Story = {
       </Tabs>
     );
   },
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `Tabs.usage.mdx` with <Canvas of={…} />. Hidden from the
+// sidebar (`!dev`).
+
+export const DoSectionsOfOnePlace: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: sections of one place, with a named list',
+  render: () => (
+    <Tabs defaultValue="credit">
+      <TabList aria-label="그룹 설정">
+        <Tab value="credit">크레딧</Tab>
+        <Tab value="security">보안</Tab>
+        <Tab value="notice">공지</Tab>
+      </TabList>
+      <TabPanel value="credit" pt={4}>
+        <Text>이 그룹의 월간 크레딧 한도와 사용량입니다.</Text>
+      </TabPanel>
+      <TabPanel value="security" pt={4}>
+        <Text>로그인과 파일 업로드 정책입니다.</Text>
+      </TabPanel>
+      <TabPanel value="notice" pt={4}>
+        <Text>이 그룹에만 보이는 공지입니다.</Text>
+      </TabPanel>
+    </Tabs>
+  ),
+};
+
+export const DontTabsAsSteps: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: tabs as the steps of a flow",
+  render: () => (
+    <Tabs defaultValue="step1">
+      <TabList>
+        <Tab value="step1">1. 기본 정보</Tab>
+        <Tab value="step2">2. 모델 선택</Tab>
+        <Tab value="step3">3. 확인</Tab>
+      </TabList>
+      <TabPanel value="step1" pt={4}>
+        <Text>이름과 설명을 입력하세요.</Text>
+      </TabPanel>
+      <TabPanel value="step2" pt={4}>
+        <Text>모델을 고르세요.</Text>
+      </TabPanel>
+      <TabPanel value="step3" pt={4}>
+        <Text>입력한 내용을 확인하세요.</Text>
+      </TabPanel>
+    </Tabs>
+  ),
+};
+
+/** Tokens a tab reads: the selected ramp from `TAB_RAMP` in `Tab.styles.ts`, the rest from `Tab.tsx` and `TabList.tsx`. */
+export const UsageTokens: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Tokens',
+  render: () => (
+    <TokenTable
+      rows={[
+        {
+          token: TAB_RAMP.label,
+          use: <T en="Selected tab · label" ko="선택된 탭 · 글자" />,
+        },
+        {
+          token: TAB_RAMP.indicator,
+          use: <T en="Selected tab · indicator" ko="선택된 탭 · 표시 막대" />,
+        },
+        {
+          token: 'fg.muted',
+          use: <T en="Other tabs · label" ko="다른 탭 · 글자" />,
+        },
+        { token: 'primary.wash', use: <T en="Hover" ko="마우스 올림" /> },
+        {
+          token: 'bg.muted',
+          use: <T en="Vertical · selected fill" ko="세로 탭 · 선택 배경" />,
+        },
+        { token: 'border.subtle', use: <T en="List rule" ko="목록 아래 선" /> },
+      ]}
+    />
+  ),
 };

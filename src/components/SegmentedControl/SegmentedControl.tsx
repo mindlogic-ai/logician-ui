@@ -67,18 +67,17 @@ export const SegmentedControl = forwardRef<
         }
       }}
       size={size}
-      // Track is bg.subtle (gray.50 light) and the selected indicator rides on
-      // `bg.raised` — a raised neutral surface that resolves white in light and
-      // the lightest neutral (gray.1100) in dark, so the thumb reads as lifted
-      // above the track in both modes (`bg.surface` could not: its dark value is
-      // darker than the track). The indicator also gains a shadow: an md drop
+      // Track is bg.subtle and the selected indicator rides on `bg.raised` — a
+      // raised neutral surface that resolves white in light and a lighter
+      // neutral than the track in dark, so the thumb reads as lifted
+      // above the track in both modes. The indicator also gains a shadow: an md drop
       // shadow in light, and in dark — where a drop shadow is invisible on a
       // dark canvas — a soft ambient shadow + a translucent-white hairline edge.
       //
       // The track itself only contrasts where the page wash is darker (light) or
       // lighter (dark) than the fill. It vanishes when the page matches the
-      // track: a `bg.sunken` list/overview page is gray.50 in light — identical
-      // to the bg.subtle track — and a `bg.surface` card is lighter than the
+      // track: a `bg.sunken` list/overview page has the same light value as
+      // the bg.subtle track — and a `bg.surface` card is lighter than the
       // track in dark. In either case the control would read as floating text,
       // so a hairline ring defines its bounds on *any* background: a neutral
       // `border.default` ring in light, a translucent-white ring in dark. (The

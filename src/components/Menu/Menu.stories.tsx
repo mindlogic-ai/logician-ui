@@ -1,8 +1,18 @@
-import { useState } from 'react';
+import { type ReactNode, useState } from 'react';
+import { Box } from '@chakra-ui/react';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { T } from '../../guidelines/_components/Lang';
+import { TokenTable } from '../../guidelines/_components/TokenTable';
 import { Button } from '../Button/Button';
-import { IoChevronDownOutline, SlSettings } from '../Icon';
+import {
+  CopyIcon,
+  EditIcon,
+  IoChevronDownOutline,
+  SlSettings,
+  TrashIcon,
+  VerticalEllipsisIcon,
+} from '../Icon';
 import { IconButton } from '../IconButton';
 import { Menu } from './Menu';
 import { MenuItemProps } from './MenuItem.types';
@@ -222,4 +232,134 @@ export const SelectiveIcon: Story = {
       </Menu>
     );
   },
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `Menu.usage.mdx` with <Canvas of={…} />. Hidden from the
+// sidebar (`!dev`). Each menu is held open and rendered in place
+// (`portalled={false}`) so it sits inside its canvas.
+
+const OpenMenu = ({
+  trigger,
+  children,
+}: {
+  trigger: ReactNode;
+  children: ReactNode;
+}) => (
+  <Box h="200px">
+    <Menu
+      open
+      closeOnSelect={false}
+      positioning={{ placement: 'bottom-start', flip: false }}
+    >
+      <Menu.Trigger asChild>{trigger}</Menu.Trigger>
+      <Menu.List portalled={false}>{children}</Menu.List>
+    </Menu>
+  </Box>
+);
+
+// An element, not a component: `Menu.Trigger asChild` passes its ref and
+// props to its direct child, which must be the button itself.
+const rowTrigger = (
+  <IconButton aria-label="김민지 님 작업 메뉴" variant="ghost">
+    <VerticalEllipsisIcon aria-hidden />
+  </IconButton>
+);
+
+export const DoRowActions: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: actions on one row, danger last',
+  render: () => (
+    <OpenMenu trigger={rowTrigger}>
+      <Menu.Item value="rename" icon={<EditIcon aria-hidden />}>
+        이름 변경
+      </Menu.Item>
+      <Menu.Item value="duplicate" icon={<CopyIcon aria-hidden />}>
+        복제
+      </Menu.Item>
+      <Menu.Separator />
+      <Menu.Item
+        value="delete"
+        variant="danger"
+        icon={<TrashIcon aria-hidden />}
+      >
+        삭제
+      </Menu.Item>
+    </OpenMenu>
+  ),
+};
+
+export const DontDangerEverywhere: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: danger on actions that are not destructive",
+  render: () => (
+    <OpenMenu trigger={rowTrigger}>
+      <Menu.Item value="rename" variant="danger">
+        이름 변경
+      </Menu.Item>
+      <Menu.Item value="archive" variant="danger">
+        보관
+      </Menu.Item>
+      <Menu.Item value="delete" variant="danger">
+        삭제
+      </Menu.Item>
+    </OpenMenu>
+  ),
+};
+
+export const DontUnnamedTrigger: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: the same unnamed trigger on every row",
+  render: () => (
+    <OpenMenu
+      trigger={
+        <IconButton aria-label="메뉴" variant="ghost">
+          <VerticalEllipsisIcon aria-hidden />
+        </IconButton>
+      }
+    >
+      <Menu.Item value="rename">이름 변경</Menu.Item>
+      <Menu.Item value="delete" variant="danger">
+        삭제
+      </Menu.Item>
+    </OpenMenu>
+  ),
+};
+
+/** Tokens a menu row reads, as set in `MenuItem.tsx` and `MenuList.tsx`. */
+export const UsageTokens: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Tokens',
+  render: () => (
+    <TokenTable
+      rows={[
+        { token: 'bg.panel', use: <T en="List" ko="목록" /> },
+        {
+          token: 'border.subtle',
+          use: <T en="List border" ko="목록 테두리" />,
+        },
+        { token: 'fg.muted', use: <T en="Row · text" ko="줄 · 글자" /> },
+        {
+          token: 'fg.default',
+          use: <T en="Row · highlighted text" ko="줄 · 강조된 글자" />,
+        },
+        {
+          token: 'primary.wash',
+          use: <T en="Row · highlighted" ko="줄 · 강조 배경" />,
+        },
+        {
+          token: 'danger.fg',
+          use: <T en="Danger row · text" ko="위험 줄 · 글자" />,
+        },
+        {
+          token: 'danger.bg',
+          use: <T en="Danger row · highlighted" ko="위험 줄 · 강조 배경" />,
+        },
+      ]}
+    />
+  ),
 };

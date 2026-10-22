@@ -1,6 +1,10 @@
 import { useState } from 'react';
-import { Box, VStack } from '@chakra-ui/react';
+import { Box, Stack, VStack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
+
+import { T } from '../../guidelines/_components/Lang';
+import { TokenTable } from '../../guidelines/_components/TokenTable';
+import { Text } from '../Typography';
 
 import { Pagination } from './Pagination';
 
@@ -187,4 +191,89 @@ export const InScrollableContainer: Story = {
       </Box>
     );
   },
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `Pagination.usage.mdx` with <Canvas of={…} />. Hidden from the
+// sidebar (`!dev`).
+
+const ROWS = ['김민지', '이서준', '박지우'];
+
+export const DoUnderTheList: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: under the list it pages, with a page-size choice',
+  render: () => {
+    const [page, setPage] = useState(2);
+    const [perPage, setPerPage] = useState(30);
+    const max = Math.ceil(124 / perPage);
+    return (
+      <Stack gap={3} maxW="560px">
+        {ROWS.map((name) => (
+          <Text
+            key={name}
+            borderBottomWidth="1px"
+            borderColor="border.subtle"
+            py={2}
+          >
+            {name}
+          </Text>
+        ))}
+        <Pagination
+          numTotalItems={124}
+          itemsPerPage={perPage}
+          itemsPerPageOptions={[10, 30, 50]}
+          currentPage={page}
+          onCurrentPageChange={setPage}
+          onItemsPerPageOptionChange={setPerPage}
+          onBack={() => setPage((p) => Math.max(p - 1, 1))}
+          onNext={() => setPage((p) => Math.min(p + 1, max))}
+        />
+      </Stack>
+    );
+  },
+};
+
+export const DontOnePage: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: a pagination row for a list that fits",
+  render: () => (
+    <Stack gap={3} maxW="560px">
+      {ROWS.map((name) => (
+        <Text
+          key={name}
+          borderBottomWidth="1px"
+          borderColor="border.subtle"
+          py={2}
+        >
+          {name}
+        </Text>
+      ))}
+      <Pagination numTotalItems={3} itemsPerPage={30} currentPage={1} />
+    </Stack>
+  ),
+};
+
+/** Tokens the page buttons read, as set in `Pagination.tsx`. */
+export const UsageTokens: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Tokens',
+  render: () => (
+    <TokenTable
+      rows={[
+        { token: 'fg.muted', use: <T en="Page button" ko="페이지 버튼" /> },
+        {
+          token: 'fg.subtle',
+          use: (
+            <T
+              en="Page button at the first or last page"
+              ko="첫·마지막 페이지의 버튼"
+            />
+          ),
+        },
+      ]}
+    />
+  ),
 };

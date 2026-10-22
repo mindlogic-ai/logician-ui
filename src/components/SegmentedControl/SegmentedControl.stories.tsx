@@ -3,6 +3,8 @@ import { Meta, StoryObj } from '@storybook/react';
 import React, { useState } from 'react';
 import { FiHome, FiSettings, FiUser } from 'react-icons/fi';
 
+import { T } from '../../guidelines/_components/Lang';
+import { TokenTable } from '../../guidelines/_components/TokenTable';
 import { SegmentedControl } from './SegmentedControl';
 
 const meta = {
@@ -201,4 +203,71 @@ export const WithCustomContent = {
       },
     ],
   },
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `SegmentedControl.usage.mdx` with <Canvas of={…} />. Hidden from
+// the sidebar (`!dev`).
+
+export const DoChangeTheView: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: change how the same data is shown',
+  render: () => (
+    <VStack align="start" gap={3}>
+      <Text fontWeight="600">크레딧 사용량</Text>
+      <SegmentedControl
+        aria-label="집계 단위"
+        size="sm"
+        defaultValue="week"
+        options={[
+          { label: '일', value: 'day' },
+          { label: '주', value: 'week' },
+          { label: '월', value: 'month' },
+        ]}
+      />
+    </VStack>
+  ),
+};
+
+export const DontSectionsAsSegments: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: switch between unrelated sections",
+  render: () => (
+    <SegmentedControl
+      defaultValue="credit"
+      options={[
+        { label: '크레딧', value: 'credit' },
+        { label: '보안', value: 'security' },
+        { label: '공지', value: 'notice' },
+        { label: '멤버', value: 'members' },
+        { label: '감사 로그', value: 'audit' },
+      ]}
+    />
+  ),
+};
+
+/** Tokens the track, thumb and labels read, as set in `SegmentedControl.tsx`. */
+export const UsageTokens: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Tokens',
+  render: () => (
+    <TokenTable
+      rows={[
+        { token: 'bg.subtle', use: <T en="Track" ko="트랙" /> },
+        {
+          token: 'border.default',
+          use: <T en="Track ring (light)" ko="트랙 테두리(라이트)" />,
+        },
+        { token: 'bg.raised', use: <T en="Selected thumb" ko="선택된 칸" /> },
+        { token: 'fg.muted', use: <T en="Label" ko="라벨" /> },
+        {
+          token: 'fg.default',
+          use: <T en="Selected label" ko="선택된 라벨" />,
+        },
+      ]}
+    />
+  ),
 };

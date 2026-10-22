@@ -10,8 +10,8 @@ import { IconButton } from '../IconButton';
  * asChild 패턴과 함께 CloseButton 컴포넌트를 내부에 포함해야 X 아이콘이 정상적으로 렌더링됩니다.
  *
  * @example
+ * // `Modal` renders its own backdrop — no `ModalOverlay` here.
  * <Modal open={isOpen} onOpenChange={(e) => setIsOpen(e.open)}>
- *   <ModalOverlay />
  *   <ModalContent>
  *     <ModalHeader>Title</ModalHeader>
  *     <ModalCloseButton />

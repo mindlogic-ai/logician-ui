@@ -7,10 +7,12 @@
  * emulation) to try the gestures; with a mouse the same drags work by
  * pointer.
  */
-import { useState } from 'react';
+import { type ReactNode, useState } from 'react';
 import { Box, HStack, Stack } from '@chakra-ui/react';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { T } from '../../guidelines/_components/Lang';
+import { TokenTable } from '../../guidelines/_components/TokenTable';
 import { Button } from '../Button';
 import {
   BoltIcon,
@@ -30,6 +32,8 @@ import {
   BottomSheetContent,
   BottomSheetFooter,
   BottomSheetHeader,
+  BottomSheetOverlay,
+  bottomSheetSlotRecipe,
 } from '.';
 
 const meta = {
@@ -201,4 +205,167 @@ export const LongScrollingList: Story = {
       </>
     );
   },
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `BottomSheet.usage.mdx` with <Canvas of={…} />. Hidden from the
+// sidebar (`!dev`). Each is a real, open sheet held inside a phone-sized frame
+// on the docs page: the portal is disabled, the frame's transform makes it the
+// containing block for the fixed positioner and scrim, and `modal={false}`
+// keeps the specimen from trapping focus or locking the page's scroll (the
+// scrim is drawn with `BottomSheetOverlay` so it still looks modal).
+
+const PhoneFrame = ({ children }: { children: ReactNode }) => (
+  <Box
+    position="relative"
+    w="360px"
+    maxW="100%"
+    h="420px"
+    mx="auto"
+    overflow="hidden"
+    borderRadius="l3"
+    borderWidth="1px"
+    borderColor="border.subtle"
+    bg="bg.canvas"
+    transform="translateZ(0)"
+    css={{
+      '& [data-scope=drawer][data-part=positioner], & [data-scope=drawer][data-part=backdrop]':
+        { width: '100%', height: '100%' },
+    }}
+  >
+    {children}
+  </Box>
+);
+
+const OpenSheet = ({ children }: { children: ReactNode }) => (
+  <PhoneFrame>
+    <BottomSheet
+      open
+      modal={false}
+      closeOnInteractOutside={false}
+      closeOnEscape={false}
+      portalProps={{ disabled: true }}
+    >
+      <BottomSheetOverlay />
+      <BottomSheetContent>{children}</BottomSheetContent>
+    </BottomSheet>
+  </PhoneFrame>
+);
+
+const SHORT_PALETTE = PALETTE.slice(0, 4);
+
+export const DoPickFromList: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: a titled list to pick from',
+  render: () => (
+    <OpenSheet>
+      <BottomSheetHeader>노드 추가</BottomSheetHeader>
+      <BottomSheetCloseButton />
+      <BottomSheetBody>
+        {/* Inline: the docs page's `.sbdocs-content ul` marker rule
+            outranks a style prop. */}
+        <Stack as="ul" gap="1" style={{ listStyle: 'none' }} m="0" p="0">
+          {SHORT_PALETTE.map(({ icon: Icon, label, hint }) => (
+            <Box as="li" key={label}>
+              <HStack
+                as="button"
+                w="full"
+                gap="3"
+                px="3"
+                py="2.5"
+                borderRadius="l2"
+                textAlign="start"
+              >
+                <Icon boxSize="sm" aria-hidden />
+                <Stack gap="0">
+                  <Text fontWeight="semibold">{label}</Text>
+                  <Subtext color="fg.muted">{hint}</Subtext>
+                </Stack>
+              </HStack>
+            </Box>
+          ))}
+        </Stack>
+      </BottomSheetBody>
+    </OpenSheet>
+  ),
+};
+
+export const DontNoHeader: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: a sheet with no header",
+  render: () => (
+    <OpenSheet>
+      <BottomSheetBody>
+        <Stack gap="2" pt="2">
+          {SHORT_PALETTE.map(({ label }) => (
+            <Text key={label}>{label}</Text>
+          ))}
+        </Stack>
+      </BottomSheetBody>
+    </OpenSheet>
+  ),
+};
+
+export const DoFooterToApply: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: a footer when choices apply together',
+  render: () => (
+    <OpenSheet>
+      <BottomSheetHeader>필터</BottomSheetHeader>
+      <BottomSheetCloseButton />
+      <BottomSheetBody>
+        <Stack gap="2">
+          <Text>모델: 전체</Text>
+          <Text>기간: 최근 7일</Text>
+          <Text>상태: 완료</Text>
+        </Stack>
+      </BottomSheetBody>
+      <BottomSheetFooter>
+        <Button variant="secondary">초기화</Button>
+        <Button variant="primary">적용</Button>
+      </BottomSheetFooter>
+    </OpenSheet>
+  ),
+};
+
+const sheet = bottomSheetSlotRecipe.base ?? {};
+
+/** Tokens each sheet part reads, from `bottomSheetSlotRecipe` in `BottomSheet.styles.ts`. */
+export const UsageTokens: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Tokens',
+  render: () => (
+    <TokenTable
+      rows={[
+        {
+          token: String(sheet.content?.bg),
+          use: <T en="Sheet · background" ko="시트 · 배경" />,
+        },
+        {
+          token: String(sheet.content?.color),
+          use: <T en="Sheet · text" ko="시트 · 글자" />,
+        },
+        {
+          token: String(sheet.content?.borderColor),
+          use: <T en="Sheet · top edge" ko="시트 · 위 테두리" />,
+        },
+        {
+          token: String(sheet.grabberIndicator?.bg),
+          use: <T en="Grabber" ko="손잡이" />,
+        },
+        {
+          token: String(sheet.description?.color),
+          use: <T en="Description" ko="설명" />,
+        },
+        {
+          token: String(sheet.footer?.borderColor),
+          use: <T en="Footer · top rule" ko="푸터 · 위 선" />,
+        },
+      ]}
+    />
+  ),
 };

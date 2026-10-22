@@ -15,8 +15,16 @@ export type ItemVariant = (typeof ItemVariant)[keyof typeof ItemVariant];
 
 export type MenuItemOwnProps = Omit<ChakraMenuItemProps, 'as'> & {
   value: string; // Required in Chakra v3 for menu item identification
+  /**
+   * `'danger'`: an action that deletes or removes something and cannot be
+   * undone (삭제, 연결 해제). Text is `danger.fg`; the highlighted row is
+   * `danger.bg`. Everything else is `'default'`.
+   * @default 'default'
+   */
   variant?: ItemVariant | null;
+  /** Leading icon. Decorative: give it `aria-hidden`. */
   icon?: React.ReactElement;
+  /** Trailing icon, pushed to the end of the row. Decorative: give it `aria-hidden`. */
   rightIcon?: React.ReactElement;
 };
 

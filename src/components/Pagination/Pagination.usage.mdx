@@ -1,0 +1,186 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as PaginationStories from './Pagination.stories';
+
+<Meta of={PaginationStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# Pagination
+
+Previous and next buttons with a "current / last" page counter, and an
+optional page-size select, for a list or table that is longer than one page.
+
+## When to use
+
+- Under a table or list that the server returns one page at a time: members,
+  audit logs, API call history, inquiries.
+- When the user needs to come back to a known position, such as page 3 of the
+  audit log.
+
+## When not to use
+
+- The list fits on one page → show it all, without a pagination row.
+- A feed the user scrolls through without looking for a position → load more
+  as they scroll.
+- To move between steps or sections → a stepper or `Tabs`.
+
+## Variants and what they mean
+
+Pagination has no visual variants. The props decide what it shows:
+
+</En>
+
+<Ko>
+
+# Pagination
+
+한 페이지보다 긴 목록이나 표에 쓰는 이전·다음 버튼과 "현재 / 마지막" 쪽 번호입니다.
+페이지당 항목 수를 고르는 선택 상자를 함께 둘 수 있습니다.
+
+## 언제 쓰나요
+
+- 서버가 한 페이지씩 돌려주는 표나 목록 아래: 멤버, 감사 로그, API 호출 기록, 문의.
+- 사용자가 감사 로그 3쪽처럼 알고 있는 위치로 돌아와야 할 때.
+
+## 언제 쓰지 않나요
+
+- 한 페이지에 다 들어가는 목록은 페이지 줄 없이 모두 보입니다.
+- 위치를 찾지 않고 계속 내려 보는 피드는 스크롤하면 더 불러옵니다.
+- 단계나 구역 사이를 오가는 것은 단계 표시나 `Tabs`가 맡습니다.
+
+## 변형과 뜻
+
+Pagination에는 모양 변형이 없습니다. 무엇을 보일지는 속성이 정합니다.
+
+</Ko>
+
+<ArgTypes of={PaginationStories} include={['numTotalItems', 'itemsPerPage', 'itemsPerPageOptions', 'currentPage']} />
+
+<En>
+
+| Prop | Effect |
+| --- | --- |
+| `numTotalItems` + `itemsPerPage` | The last page is `Math.ceil(numTotalItems / itemsPerPage)`. With one page the buttons are hidden and only "1 / 1" remains. |
+| `itemsPerPageOptions` | Adds the page-size select on the left. `itemsPerPage` is always yours to update, from `onItemsPerPageOptionChange`. |
+| `currentPage` | Controlled. Update it from `onBack` / `onNext`, and from `onCurrentPageChange`, which fires when a larger page size puts the current page past the end. Leave it out and the component keeps the page itself. |
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+| 속성 | 효과 |
+| --- | --- |
+| `numTotalItems` + `itemsPerPage` | 마지막 쪽은 `Math.ceil(numTotalItems / itemsPerPage)`입니다. 한 쪽뿐이면 버튼이 사라지고 "1 / 1"만 남습니다. |
+| `itemsPerPageOptions` | 왼쪽에 페이지당 항목 수 선택 상자를 더합니다. `itemsPerPage`는 언제나 호출부가 `onItemsPerPageOptionChange`에서 바꿔 줍니다. |
+| `currentPage` | 제어 모드입니다. `onBack`/`onNext`에서, 그리고 페이지 크기를 키워 현재 쪽이 범위를 벗어날 때 불리는 `onCurrentPageChange`에서 값을 바꿉니다. 넘기지 않으면 컴포넌트가 직접 쪽을 기억합니다. |
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={PaginationStories.DoUnderTheList} />
+<Verdict
+  kind="do"
+  en="Put it directly under the list it pages, full width, and keep the page when the data refetches so the row does not jump."
+  ko="넘기는 목록 바로 아래에 전체 너비로 둡니다. 데이터를 다시 불러오는 동안에도 쪽 번호를 유지해 줄이 들썩이지 않게 합니다."
+/>
+
+<Canvas of={PaginationStories.DontOnePage} />
+<Verdict
+  kind="dont"
+  en="Show a pagination row for a list that fits on one page. '1 / 1' tells the user nothing."
+  ko="한 페이지에 다 들어가는 목록에 페이지 줄을 두지 마세요. '1 / 1'은 아무것도 알려 주지 않습니다."
+/>
+
+<En>
+
+## Content
+
+- The counter and the button names come from the library's translations
+  (이전 / 다음, 항목 수). Do not add your own labels beside them.
+- If the total matters, say it above the list ("멤버 124명"), not in the
+  pagination row.
+
+## Accessibility
+
+What Pagination does for you:
+
+- The previous and next buttons are `IconButton`s with translated names (이전,
+  다음), and are disabled on the first and last page (WCAG 4.1.2).
+- The page-size select carries the same words as the visible text beside it
+  as its accessible name (WCAG 2.5.3; KWCAG 5.3.4.1).
+- The counter is a paragraph, not a heading, so it stays out of the page
+  outline.
+
+What you still have to do:
+
+- **Look after focus on page change.** The counter is not a live region, and
+  on the first or last page the button the user just pressed becomes disabled
+  and drops focus. Move focus to the other button or to the top of the list
+  when that happens (WCAG 2.4.3).
+- Keep `currentPage` at the page you requested while the data loads, so the
+  next button cannot request a page past the end.
+
+## Tokens
+
+The table lists the tokens set in `Pagination.tsx`.
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 쪽 번호와 버튼 이름은 라이브러리 번역(이전 / 다음, 항목 수)에서 옵니다. 옆에 따로 라벨을
+  붙이지 않습니다.
+- 전체 개수가 중요하다면 페이지 줄이 아니라 목록 위에 씁니다("멤버 124명").
+
+## 접근성
+
+Pagination이 알아서 하는 일
+
+- 이전·다음 버튼은 번역된 이름(이전, 다음)이 붙은 `IconButton`이며, 첫 쪽과 마지막
+  쪽에서는 비활성이 됩니다(WCAG 4.1.2).
+- 페이지당 항목 수 선택 상자는 옆에 보이는 문구와 같은 말을 접근 가능한 이름으로
+  갖습니다(WCAG 2.5.3, KWCAG 5.3.4.1).
+- 쪽 번호는 제목이 아니라 문단이라 문서 개요에 끼어들지 않습니다.
+
+직접 챙겨야 하는 일
+
+- **쪽을 넘길 때 초점을 챙깁니다.** 쪽 번호는 라이브 영역이 아니고, 첫 쪽이나 마지막 쪽에
+  닿으면 방금 누른 버튼이 비활성이 되면서 초점을 잃습니다. 그럴 때는 반대쪽 버튼이나 목록
+  맨 위로 초점을 옮깁니다(WCAG 2.4.3).
+- 데이터를 불러오는 동안 `currentPage`를 요청한 쪽으로 유지합니다. 그래야 다음 버튼이
+  범위 밖의 쪽을 요청하지 않습니다.
+
+## 토큰
+
+아래 표는 `Pagination.tsx`에서 정한 토큰입니다.
+
+</Ko>
+
+<Canvas of={PaginationStories.UsageTokens} sourceState="none" />
+
+<En>
+
+## Related
+
+- **Table**: the usual thing Pagination sits under.
+- **Select**: the page-size control inside it.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **Table**: Pagination이 보통 그 아래에 놓이는 표.
+- **Select**: 안에 들어 있는 페이지 크기 선택 상자.
+
+</Ko>

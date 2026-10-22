@@ -10,18 +10,19 @@ import { SelectField } from '../Select';
 import { PaginationProps } from './Pagination.types';
 
 /**
- * A pagination component that allows users to navigate through pages.
- * Displays the current page number and the maximum page count.
- * Supports both controlled and uncontrolled modes.
+ * Previous / next page buttons with a "current / last" counter, and an
+ * optional page-size select. The last page is derived:
+ * `Math.ceil(numTotalItems / itemsPerPage)`; the buttons are hidden when there
+ * is only one page.
  *
- * - **Controlled Mode**: Pass `currentPage` and `onBack`/`onNext` props to fully control the pagination behavior.
- * - **Uncontrolled Mode**: If `currentPage` is not provided, the component manages its own internal state for the current page.
+ * - **Controlled:** pass `currentPage` and update it from `onBack` / `onNext`
+ *   (and `onCurrentPageChange`, which fires when a larger page size puts the
+ *   current page past the new last page).
+ * - **Uncontrolled:** leave `currentPage` out and the component keeps the page
+ *   itself.
  *
- * @param {PaginationProps} props - Props for the Pagination component.
- * @param {number} [props.currentPage] - The current page number (controlled mode).
- * @param {number} props.maxPage - The maximum number of pages available.
- * @param {() => void} [props.onBack] - Callback triggered when the "Back" button is clicked.
- * @param {() => void} [props.onNext] - Callback triggered when the "Next" button is clicked.
+ * `itemsPerPage` is always controlled: update it from
+ * `onItemsPerPageOptionChange`.
  */
 export const Pagination = ({
   currentPage: controlledCurrentPage,
