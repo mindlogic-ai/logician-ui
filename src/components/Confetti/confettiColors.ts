@@ -2,11 +2,11 @@ import type { SystemHue } from '../../theme/colors';
 import { CORAL, RAMPS, SYSTEM_HUES } from '../../theme/palette.generated';
 
 /**
- * Hues that carry meaning elsewhere in the system and so never colour a piece
- * by default: red, yellow and green are the danger, warning and success
- * solids, and blue is info and links. The same rule as the chart series
- * defaults (`LineGraph/seriesColors.ts`) — a red piece in a "payment complete"
- * burst says something the screen does not.
+ * Hues left out of the *default* pieces: red, yellow and green are the
+ * danger, warning and success solids, and blue is info and links. This is a
+ * default, not a ban — a caller may pass them through `colors`, since a burst
+ * lasting under two seconds on a success moment cannot be read as a status
+ * (Confetti.usage.mdx).
  */
 export const CONFETTI_EXCLUDED_HUES = [
   'red',
