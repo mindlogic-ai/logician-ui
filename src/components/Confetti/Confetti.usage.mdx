@@ -34,13 +34,16 @@ completes or a reward lands.
   reader earned and does not see often.
 - At most once per moment. Mount it when the moment begins; pass a new `seed`
   only to scatter a new burst.
+- A small win inside a flow, such as one correct answer, may pair a small burst
+  with its `Appear` stamp. Keep that burst smaller (fewer pieces, or scaled
+  down) than the ones for a purchase or a level-up, so the rarer moments still
+  read bigger.
 
 ## When not to use
 
 - Routine success (saved, sent, copied) → `Toast`, or `Pulse` on the value
   that changed.
 - Anything that went wrong or needs attention → never.
-- A small win inside a flow, such as one correct answer → an `Appear` stamp.
 
 ## Reduced motion and accessibility
 
@@ -57,9 +60,13 @@ completes or a reward lands.
 Confetti takes no children. It fills the nearest positioned ancestor, so give
 that element `position: relative`, or the burst covers the whole page. The
 default colours are decorative only: coral, beige and the system hues with no
-status meaning. Red, yellow, green and blue are left out because they mean
-danger, warning, success and info. They are light-mode values and do not
-change in dark mode; pass `colors` (tokens work) if that matters.
+status meaning. Red, yellow, green and blue are left out of the defaults
+because they mean danger, warning, success and info. Passing them through
+`colors` is fine: a burst lasts under two seconds on a moment that is already
+a success, so no piece can be read as a status. The status-colour rule is for
+things that stay on screen, such as badges, chart lines and text. The defaults
+are light-mode values and do not change in dark mode; pass `colors` (tokens
+work) if that matters.
 
 </En>
 
@@ -70,12 +77,14 @@ change in dark mode; pass `colors` (tokens work) if that matters.
 - 구매 확인, 과정 완료, 레벨 업처럼 사용자가 직접 얻어 냈고 자주 보지 않는 결과.
 - 한 순간에 한 번만 씁니다. 그 순간이 시작될 때 마운트하고, 새로 터뜨릴 때만 `seed`를
   바꿉니다.
+- 정답 하나처럼 흐름 속의 작은 성공에는 `Appear` 표시와 함께 작은 폭죽을 터뜨려도
+  됩니다. 구매나 레벨 업 때보다 작게(조각을 줄이거나 크기를 줄여) 터뜨려야 드문 순간이
+  더 크게 느껴집니다.
 
 ## 언제 쓰지 않나요
 
 - 저장, 전송, 복사처럼 흔한 성공에는 `Toast`를 쓰거나, 바뀐 값에 `Pulse`를 씁니다.
 - 잘못됐거나 확인이 필요한 일에는 절대 쓰지 않습니다.
-- 정답 하나처럼 흐름 속의 작은 성공에는 `Appear`로 표시를 찍습니다.
 
 ## 동작 줄이기와 접근성
 
@@ -91,8 +100,11 @@ change in dark mode; pass `colors` (tokens work) if that matters.
 Confetti는 자식을 받지 않습니다. 가장 가까운 위치 지정 조상을 채우므로, 그 요소에
 `position: relative`를 줍니다. 그러지 않으면 페이지 전체를 덮습니다. 기본 색은 장식용으로,
 코랄, 베이지, 그리고 상태 뜻이 없는 시스템 색만 씁니다. 빨강, 노랑, 초록, 파랑은 각각
-위험, 경고, 성공, 정보를 뜻하므로 뺐습니다. 이 색들은 라이트 모드 값이라 다크 모드에서
-바뀌지 않습니다. 필요하면 `colors`를 넘깁니다(토큰도 됩니다).
+위험, 경고, 성공, 정보를 뜻하므로 기본값에서 뺐습니다. 그래도 `colors`로 넘기는 것은
+괜찮습니다. 폭죽은 이미 성공한 순간에 2초도 안 돼 사라지므로, 어떤 조각도 상태 표시로
+읽히지 않습니다. 상태 색 규칙은 배지, 차트 선, 글자처럼 화면에 남는 요소에 적용합니다.
+기본 색은 라이트 모드 값이라 다크 모드에서 바뀌지 않습니다. 필요하면 `colors`를
+넘깁니다(토큰도 됩니다).
 
 </Ko>
 
