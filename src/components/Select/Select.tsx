@@ -5,18 +5,28 @@ import { mergeCss } from '@/utils/mergeCss';
 
 import {
   contentStyles,
+  ghostTriggerStyles,
   indicatorStyles,
   itemStyles,
   triggerStyles,
 } from './Select.styles';
+import type { SelectVariant } from './Select.types';
 
-const Trigger = forwardRef<HTMLButtonElement, ChakraSelect.TriggerProps>(
-  function SelectTrigger({ css, ...props }, ref) {
+export interface SelectTriggerProps extends ChakraSelect.TriggerProps {
+  variant?: SelectVariant;
+}
+
+const Trigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
+  function SelectTrigger({ css, variant = 'outline', ...props }, ref) {
     return (
       <ChakraSelect.Trigger
         ref={ref}
         {...props}
-        css={mergeCss(triggerStyles, css)}
+        css={mergeCss(
+          triggerStyles,
+          variant === 'ghost' && ghostTriggerStyles,
+          css
+        )}
       />
     );
   }

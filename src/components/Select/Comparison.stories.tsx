@@ -54,6 +54,25 @@ export const SideBySide = () => (
       <SelectField options={categoryOptions} placeholder="Select" invalid />
       <Textarea placeholder="Textarea" invalid />
     </Row>
+    <Row label='Select variant="ghost" — default / invalid / disabled'>
+      <SelectField
+        variant="ghost"
+        options={categoryOptions}
+        placeholder="Select"
+      />
+      <SelectField
+        variant="ghost"
+        options={categoryOptions}
+        placeholder="Select"
+        invalid
+      />
+      <SelectField
+        variant="ghost"
+        options={categoryOptions}
+        placeholder="Select"
+        disabled
+      />
+    </Row>
     <Row label="Disabled">
       <Input placeholder="Input" disabled />
       <SelectField options={categoryOptions} placeholder="Select" disabled />
