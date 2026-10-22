@@ -1,0 +1,262 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as ModalStories from './Modal.stories';
+
+<Meta of={ModalStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# Modal
+
+A dialog that stops the page until the user finishes or dismisses one short
+task: a confirmation, a small form, a decision.
+
+## When to use
+
+- To confirm an action that cannot be undone: deleting a member, revoking a key.
+- For a short form that belongs to the current page: adding a domain, renaming
+  a group, setting a credit limit.
+- For a one-time message the user must read before going on, such as an
+  announcement or the first step of onboarding.
+
+## When not to use
+
+- To say that something worked → `Toast`. A modal that only says "저장되었습니다"
+  costs a click and teaches users to dismiss modals without reading.
+- For a status that should stay on the page → `Banner`.
+- For a few options next to the thing they act on → `Menu`, or `Popover` if the
+  panel holds controls.
+- On a phone, for a list the user picks from → `BottomSheet`.
+- For long or multi-step work, or anything the user needs to compare with the
+  page behind it → a page or a side panel, not a modal.
+
+## Variants and what they mean
+
+Modal has no colour variants. Two props change its shape:
+
+</En>
+
+<Ko>
+
+# Modal
+
+짧은 작업 하나(확인, 작은 양식, 결정)를 끝내거나 닫기 전까지 페이지를 멈춰 두는
+대화상자입니다.
+
+## 언제 쓰나요
+
+- 되돌릴 수 없는 동작을 확인받을 때: 멤버 삭제, API 키 폐기.
+- 지금 페이지에 딸린 짧은 양식을 받을 때: 도메인 추가, 그룹 이름 변경, 크레딧 한도 설정.
+- 공지나 온보딩 첫 단계처럼 사용자가 다음으로 넘어가기 전에 꼭 읽어야 하는 안내를 보일
+  때.
+
+## 언제 쓰지 않나요
+
+- 작업이 잘 끝났다는 소식만 전한다면 `Toast`를 씁니다. "저장되었습니다"만 담긴 모달은
+  클릭 한 번을 더 쓰게 하고, 모달을 읽지 않고 닫는 습관을 들입니다.
+- 페이지에 계속 남아 있어야 하는 상태는 `Banner`로 알립니다.
+- 대상 옆에 선택지 몇 개를 보이려면 `Menu`를, 그 안에 입력 컨트롤이 있다면
+  `Popover`를 씁니다.
+- 휴대폰에서 목록 중 하나를 고르게 할 때는 `BottomSheet`를 씁니다.
+- 길거나 여러 단계로 된 작업, 뒤의 페이지와 비교해야 하는 작업은 모달이 아니라 페이지나
+  사이드 패널에 둡니다.
+
+## 변형과 뜻
+
+Modal에는 색 변형이 없습니다. 모양을 바꾸는 속성은 두 가지입니다.
+
+</Ko>
+
+<ArgTypes of={ModalStories} include={['headerTone', 'fullScreenOnMobile']} />
+
+<En>
+
+| Prop | Value | Use for |
+| --- | --- | --- |
+| `headerTone` | `default` | Almost every modal. The header matches the body. |
+| `headerTone` | `brand` | A welcome step or a celebratory confirmation. The header gets a `layer.3` band and a `secondary.border` rule. Not for warnings: brand is not a status. |
+| `fullScreenOnMobile` | `false` (default) | Confirmations and short forms. On small screens the dialog keeps its shape with a side margin. |
+| `fullScreenOnMobile` | `true` | Long or immersive content on a phone, such as a file picker or a course switcher. |
+
+Size and placement come from Chakra's `Dialog` (`size`, `placement`); Modal
+centres the dialog by default.
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+| 속성 | 값 | 쓰는 곳 |
+| --- | --- | --- |
+| `headerTone` | `default` | 거의 모든 모달. 헤더가 본문과 같은 모양입니다. |
+| `headerTone` | `brand` | 환영 단계나 축하하는 확인 창. 헤더에 `layer.3` 띠와 `secondary.border` 선이 생깁니다. 경고에는 쓰지 않습니다. 브랜드 색은 상태가 아닙니다. |
+| `fullScreenOnMobile` | `false` (기본) | 확인 창과 짧은 양식. 작은 화면에서도 대화상자 모양을 유지하고 좌우 여백을 둡니다. |
+| `fullScreenOnMobile` | `true` | 파일 선택기나 강의 전환처럼 휴대폰에서 화면 전체가 필요한 긴 내용. |
+
+크기와 위치는 Chakra `Dialog`의 `size`, `placement`로 정합니다. Modal은 기본으로
+화면 가운데에 놓입니다.
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={ModalStories.DoConfirmNamesTheAction} />
+<Verdict
+  kind="do"
+  en="Ask the question in the title, say what will happen in the body, and label the button with the action itself."
+  ko="제목에서 묻고, 본문에서 결과를 알리고, 버튼에는 동작 이름을 그대로 씁니다."
+/>
+
+<Canvas of={ModalStories.DontVagueConfirm} />
+<Verdict
+  kind="dont"
+  en="Use a generic title and 예 / 아니요. The user has to read the whole body to learn what 예 does."
+  ko="막연한 제목과 '예/아니요'를 쓰지 마세요. '예'가 무슨 일을 하는지 알려면 본문을 다 읽어야 합니다."
+/>
+
+<Canvas of={ModalStories.DoShortForm} />
+<Verdict
+  kind="do"
+  en="Keep a form modal to one short task. Pass closeOnInteractOutside={false} so a stray click outside does not throw away what was typed."
+  ko="양식 모달에는 짧은 작업 하나만 담습니다. 바깥을 잘못 눌러 입력한 내용이 사라지지 않도록 closeOnInteractOutside={false}를 넘깁니다."
+/>
+
+<Canvas of={ModalStories.DontModalForDone} />
+<Verdict
+  kind="dont"
+  en="Open a modal just to say it worked. Use a Toast; it reports the result without stopping the user."
+  ko="잘 끝났다는 말만 하려고 모달을 열지 마세요. Toast는 사용자를 멈추지 않고 결과를 알립니다."
+/>
+
+<Canvas of={ModalStories.DoBrandHeaderOnboarding} />
+<Verdict
+  kind="do"
+  en="Save headerTone='brand' for welcome and celebration moments, and keep one primary button."
+  ko="headerTone='brand'는 환영하거나 축하하는 순간에만 쓰고, 주 버튼은 하나만 둡니다."
+/>
+
+<En>
+
+## Content
+
+- **Title:** a question or the name of the task, in sentence case, with no full
+  stop. "멤버를 삭제할까요?", "도메인 추가". Not "알림" or "확인".
+- **Body:** what will happen and what cannot be undone, in one or two
+  sentences. Name the object ("김민지 님").
+- **Buttons:** verbs that repeat the title's action ("삭제", "추가"). The
+  dismiss button is "취소". Destructive actions use `variant="danger"`.
+- **Subtitle** (`ModalHeader subtitle`): one line of context under the title,
+  not a second paragraph of body text.
+- Footer buttons share the row equally; keep them to two.
+
+## Accessibility
+
+What Modal does for you:
+
+- Renders `role="dialog"` with `aria-modal`. `ModalHeader`'s children become
+  the dialog's accessible name and `subtitle` its description (WCAG 4.1.2).
+  Plain text is rendered as an `<h2>`; your own element is wrapped in a
+  `<div>`, so it is never nested inside a heading.
+- Moves focus into the dialog when it opens, keeps it there, and returns it to
+  the trigger when it closes (WCAG 2.4.3). `Escape` closes it (WCAG 2.1.1);
+  so does a click on the backdrop unless you pass
+  `closeOnInteractOutside={false}`.
+- Locks the page's scroll while open.
+
+What you still have to do:
+
+- **Give every modal a `ModalHeader`.** Without one the dialog has no name and a
+  screen reader announces only "dialog". If the design has no visible title,
+  pass `aria-label` to `ModalContent`.
+- **Name the close button in the user's language.** `ModalCloseButton` uses
+  Chakra's `CloseButton`, whose default `aria-label` is the English "Close".
+  Pass `aria-label="닫기"` (or your translation) on Korean screens (WCAG
+  3.1.2).
+- Keep a way out from the keyboard: if you remove `ModalCloseButton`, the
+  footer needs a "취소" button.
+- For a destructive confirmation, Chakra's `role="alertdialog"` is available
+  on the root.
+
+## Tokens
+
+The panel colour comes from Chakra's Dialog recipe; the rest is set in
+`ModalHeader` and `ModalFooter`.
+
+</En>
+
+<Ko>
+
+## 문구
+
+- **제목:** 질문이나 작업 이름을 쓰고 마침표를 찍지 않습니다. "멤버를 삭제할까요?",
+  "도메인 추가"처럼 씁니다. "알림", "확인"은 쓰지 않습니다.
+- **본문:** 무슨 일이 일어나는지, 무엇을 되돌릴 수 없는지를 한두 문장으로 씁니다. 대상의
+  이름("김민지 님")을 밝힙니다.
+- **버튼:** 제목의 동작을 되풀이하는 동사("삭제", "추가")를 씁니다. 닫는 버튼은
+  "취소"입니다. 되돌릴 수 없는 동작에는 `variant="danger"`를 씁니다.
+- **부제목**(`ModalHeader`의 `subtitle`): 제목 아래 맥락 한 줄입니다. 본문을 한 문단 더
+  쓰는 자리가 아닙니다.
+- 푸터의 버튼은 같은 너비로 나뉩니다. 두 개까지만 둡니다.
+
+## 접근성
+
+Modal이 알아서 하는 일
+
+- `role="dialog"`와 `aria-modal`을 붙입니다. `ModalHeader`의 내용이 대화상자의 접근
+  가능한 이름이 되고, `subtitle`은 설명이 됩니다(WCAG 4.1.2). 글자만 넣으면 `<h2>`로,
+  직접 만든 요소를 넣으면 `<div>`로 감싸므로 제목 안에 제목이 들어가지 않습니다.
+- 열리면 초점을 대화상자 안으로 옮기고 그 안에 가두며, 닫히면 연 버튼으로 돌려놓습니다
+  (WCAG 2.4.3). `Escape`로 닫히고(WCAG 2.1.1), `closeOnInteractOutside={false}`를
+  넘기지 않으면 배경을 눌러도 닫힙니다.
+- 열려 있는 동안 페이지 스크롤을 막습니다.
+
+직접 챙겨야 하는 일
+
+- **모든 모달에 `ModalHeader`를 둡니다.** 헤더가 없으면 대화상자에 이름이 없어 화면
+  낭독기는 "대화상자"라고만 읽습니다. 보이는 제목이 없는 디자인이라면 `ModalContent`에
+  `aria-label`을 넘깁니다.
+- **닫기 버튼 이름을 사용자의 언어로 붙입니다.** `ModalCloseButton`은 Chakra의
+  `CloseButton`을 쓰는데, 기본 `aria-label`이 영어 "Close"입니다. 한국어 화면에서는
+  `aria-label="닫기"`(또는 번역 문자열)를 넘깁니다(WCAG 3.1.2).
+- 키보드로 빠져나갈 길을 남깁니다. `ModalCloseButton`을 빼면 푸터에 "취소" 버튼이
+  있어야 합니다.
+- 되돌릴 수 없는 동작의 확인 창에는 Chakra가 제공하는 `role="alertdialog"`를 루트에
+  줄 수 있습니다.
+
+## 토큰
+
+패널 색은 Chakra Dialog 레시피에서, 나머지는 `ModalHeader`와 `ModalFooter`에서
+정합니다.
+
+</Ko>
+
+<Canvas of={ModalStories.UsageTokens} sourceState="none" />
+
+<En>
+
+## Related
+
+- **BottomSheet**: the same job on a phone, rising from the bottom edge.
+- **Popover**: a small panel of controls that leaves the page usable.
+- **Menu**: a list of actions on one object.
+- **Toast** / **Banner**: results and statuses that do not need to stop the
+  user.
+- **Guidelines/Actions in feedback surfaces**: button order and wording.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **BottomSheet**: 휴대폰에서 같은 일을 하며 화면 아래에서 올라옵니다.
+- **Popover**: 페이지를 막지 않는 작은 컨트롤 패널.
+- **Menu**: 한 대상에 대한 동작 목록.
+- **Toast** / **Banner**: 사용자를 멈출 필요가 없는 결과와 상태.
+- **Guidelines/Actions in feedback surfaces**: 버튼 순서와 문구.
+
+</Ko>

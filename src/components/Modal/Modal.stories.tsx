@@ -17,11 +17,16 @@
  *
  * @see ModalCloseButton.tsx - 구현 세부사항 확인
  */
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
+import { Box, Stack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
+import { T } from '../../guidelines/_components/Lang';
+import { TokenTable } from '../../guidelines/_components/TokenTable';
 import { Button } from '../Button';
 import { ButtonVariant } from '../Button/Button.types';
+import { Input } from '../Input';
+import { Text } from '../Typography';
 import {
   Modal,
   ModalBody,
@@ -29,6 +34,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
+  type ModalProps,
 } from '.';
 
 interface ModalArgs {
@@ -619,4 +625,174 @@ export const BrandHeader: Story = {
       </>
     );
   },
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `Modal.usage.mdx` with <Canvas of={…} />. Hidden from the
+// sidebar (`!dev`). Each one is a real, open `Modal` held inside a framed box
+// on the docs page rather than over it: the portal is disabled, the frame's
+// transform makes it the containing block for the fixed positioner and
+// backdrop, and `modal={false}` keeps the specimen from trapping focus or
+// locking the page's scroll.
+
+const ModalFrame = ({ children }: { children: ReactNode }) => (
+  <Box
+    position="relative"
+    h="320px"
+    overflow="hidden"
+    borderRadius="l3"
+    borderWidth="1px"
+    borderColor="border.subtle"
+    bg="bg.canvas"
+    transform="translateZ(0)"
+    css={{
+      '& [data-scope=dialog][data-part=positioner], & [data-scope=dialog][data-part=backdrop]':
+        { width: '100%', height: '100%' },
+    }}
+  >
+    {children}
+  </Box>
+);
+
+/** An open, inert `Modal` for a docs specimen. */
+const OpenModal = ({
+  children,
+  ...props
+}: Omit<ModalProps, 'open' | 'children'> & { children: ReactNode }) => (
+  <ModalFrame>
+    <Modal
+      open
+      modal={false}
+      trapFocus={false}
+      preventScroll={false}
+      closeOnInteractOutside={false}
+      closeOnEscape={false}
+      portalProps={{ disabled: true }}
+      {...props}
+    >
+      <ModalContent maxW="400px">{children}</ModalContent>
+    </Modal>
+  </ModalFrame>
+);
+
+export const DoConfirmNamesTheAction: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: the title asks, the button answers',
+  render: () => (
+    <OpenModal>
+      <ModalHeader>멤버를 삭제할까요?</ModalHeader>
+      <ModalCloseButton />
+      <ModalBody>
+        김민지 님의 대화 기록과 크레딧 내역이 함께 삭제되며 되돌릴 수 없습니다.
+      </ModalBody>
+      <ModalFooter>
+        <Button variant="secondary">취소</Button>
+        <Button variant="danger">삭제</Button>
+      </ModalFooter>
+    </OpenModal>
+  ),
+};
+
+export const DontVagueConfirm: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: a title and buttons that say nothing",
+  render: () => (
+    <OpenModal>
+      <ModalHeader>알림</ModalHeader>
+      <ModalBody>정말 진행하시겠습니까?</ModalBody>
+      <ModalFooter>
+        <Button variant="secondary">아니요</Button>
+        <Button variant="primary">예</Button>
+      </ModalFooter>
+    </OpenModal>
+  ),
+};
+
+export const DoShortForm: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: one short task',
+  render: () => (
+    <OpenModal closeOnInteractOutside={false}>
+      <ModalHeader subtitle="허용 목록에 있는 도메인은 SSO 없이 가입할 수 있습니다.">
+        도메인 추가
+      </ModalHeader>
+      <ModalCloseButton />
+      <ModalBody>
+        <Input aria-label="도메인" placeholder="example.com" />
+      </ModalBody>
+      <ModalFooter>
+        <Button variant="secondary">취소</Button>
+        <Button variant="primary">추가</Button>
+      </ModalFooter>
+    </OpenModal>
+  ),
+};
+
+export const DontModalForDone: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: a modal to say it worked",
+  render: () => (
+    <OpenModal>
+      <ModalBody>
+        <Stack gap={2} py={4} align="center">
+          <Text fontWeight="bold">저장되었습니다.</Text>
+        </Stack>
+      </ModalBody>
+      <ModalFooter>
+        <Button variant="primary">확인</Button>
+      </ModalFooter>
+    </OpenModal>
+  ),
+};
+
+export const DoBrandHeaderOnboarding: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: brand header for a welcome step',
+  render: () => (
+    <OpenModal headerTone="brand">
+      <ModalHeader subtitle="세 단계만 거치면 첫 대화를 시작할 수 있습니다.">
+        워크스페이스를 준비할게요
+      </ModalHeader>
+      <ModalCloseButton />
+      <ModalBody>조직 이름과 기본 모델을 고르면 바로 시작합니다.</ModalBody>
+      <ModalFooter>
+        <Button variant="primary">시작하기</Button>
+      </ModalFooter>
+    </OpenModal>
+  ),
+};
+
+/** Tokens the modal parts read, as written in `ModalHeader` / `ModalFooter` and the Dialog recipe. */
+export const UsageTokens: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Tokens',
+  render: () => (
+    <TokenTable
+      rows={[
+        { token: 'bg.panel', use: <T en="Panel" ko="패널" /> },
+        {
+          token: 'fg.muted',
+          use: <T en="Header subtitle" ko="헤더 부제목" />,
+        },
+        {
+          token: 'layer.3',
+          use: <T en="Brand header · band" ko="브랜드 헤더 · 띠" />,
+        },
+        {
+          token: 'secondary.border',
+          use: <T en="Brand header · bottom rule" ko="브랜드 헤더 · 아래 선" />,
+        },
+        {
+          token: 'border.subtle',
+          use: <T en="Footer · top rule" ko="푸터 · 위 선" />,
+        },
+      ]}
+    />
+  ),
 };
