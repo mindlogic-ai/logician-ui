@@ -22,19 +22,20 @@ describe('chart series colours', () => {
     expect(CHART_SERIES_HUES.filter(({ hue }) => banned.has(hue))).toEqual([]);
   });
 
-  it('series 1 is the primary line, series 2 is brown', () => {
-    expect(seriesColor(0, '#252525', false)).toBe('#252525');
-    expect(seriesColor(1, '#252525', false)).toBe(SYSTEM_HUES.brown.base);
+  it('series 1 is the data blue, series 2 is teal', () => {
+    expect(seriesColor(0, false)).toBe(SYSTEM_HUES.blue.base);
+    expect(seriesColor(0, true)).toBe(SYSTEM_HUES.blue.baseDark);
+    expect(seriesColor(1, false)).toBe(SYSTEM_HUES.teal.base);
   });
 
   it('every default stroke clears 3:1 against the page in both modes', () => {
-    CHART_SERIES_HUES.forEach((_, i) => {
-      expect(
-        contrast(seriesColor(i + 1, '', false), '#FFFFFF')
-      ).toBeGreaterThanOrEqual(3);
-      expect(
-        contrast(seriesColor(i + 1, '', true), '#1F1E1D')
-      ).toBeGreaterThanOrEqual(3);
+    [undefined, ...CHART_SERIES_HUES].forEach((_, i) => {
+      expect(contrast(seriesColor(i, false), '#FFFFFF')).toBeGreaterThanOrEqual(
+        3
+      );
+      expect(contrast(seriesColor(i, true), '#1F1E1D')).toBeGreaterThanOrEqual(
+        3
+      );
     });
   });
 });

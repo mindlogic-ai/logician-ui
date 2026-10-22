@@ -57,10 +57,14 @@ Use it for both, and for nothing decorative.
 
 - **Links** — `fg.link` / `fg.linkHover` (blue ink, #48607A / #AFC7E1), in chat
   messages, markdown and app copy alike. Never ink-black or coral for a link.
-- **Data visualisation** — usage/share bars, single-measure bar and line charts,
-  maps, heatmaps, progress-by-share: a **blue monochrome ramp**, never a
-  rainbow and never a grey ramp. Steps differ in lightness only (the saturated
-  `blue.base` is left out); the largest value gets the strongest step.
+- **Data visualisation** — usage/share bars, single-measure bar charts, maps,
+  heatmaps, progress-by-share: a **blue monochrome ramp**, never a rainbow and
+  never a grey ramp. Steps differ in lightness only (the saturated `blue.base`
+  is left out); the largest value gets the strongest step.
+- **Lines** — a single-measure line chart, and series 1 of a multi-series one,
+  stroke in `blue.base` (`#4674A4` / `#6892BD`, ≥ 4.5:1). A 2px line is not a
+  filled area: the ramp's darkest step `blue.ink` reads as slate grey at that
+  width, so lines take the saturated blue the ramp leaves out.
 
 | Step | Light | Dark |
 | --- | --- | --- |
@@ -70,9 +74,10 @@ Use it for both, and for nothing decorative.
 | 4 | `#DFEBF9` (`blue.surface`) · ink label | `#232F3D` (`blue.surfaceDark`) · white label |
 
 Pick each label by measured contrast (≥ 4.5:1), not by step number.
-A chart that must tell several *categories* apart (multi-series lines) keeps
-`CHART_SERIES_HUES` in `LineGraph/seriesColors.ts`, which leaves blue out so
-no series reads as a link or an info state.
+A chart that must tell several *categories* apart (multi-series lines) starts
+with the same data blue (`blue.base`) and then cycles `CHART_SERIES_HUES` in
+`LineGraph/seriesColors.ts` (teal, pink, indigo, purple, brown, …), which
+leaves red, yellow and green out so no series reads as a status.
 `info` is also blue; status always comes with an icon and words, so a blue
 chart is never mistaken for an info notice.
 
