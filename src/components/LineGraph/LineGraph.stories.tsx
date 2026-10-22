@@ -200,7 +200,7 @@ export const UsageSeriesOrder: Story = {
             {i + 2}. {hue}
           </Box>
           {[false, true].map((dark) => {
-            const stroke = seriesColor(i + 1, '', dark);
+            const stroke = seriesColor(i + 1, dark);
             return (
               <Box
                 key={String(dark)}
