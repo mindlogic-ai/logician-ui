@@ -1,0 +1,299 @@
+import { Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle } from '../guidelines/_components/Lang';
+import * as BrandColour from './BrandColour.stories';
+
+<Meta of={BrandColour} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# Brand & colour usage
+
+BAZE is warm neutral: cream and ivory grounds, black text, and colour only
+where it carries a meaning. This page is the rule set behind the 5.0 palette.
+Every swatch below is read from the shipped theme, so the Light and Dark
+columns are the values your app gets.
+
+Values and contrast in all four modes: **Setup/Theme/BAZE Palette**. Which
+token for which surface: **Setup/Theme/Using Semantic Tokens**.
+
+## Principles
+
+- **Warm neutrals carry the screen.** Most of a screen is `bg.canvas`,
+  `layer.*` and `bg.muted` with `fg.default` text. Add colour only when it
+  means something.
+- **No teal or mint in product UI.** The brand book's mint and azure stay on
+  landing pages and illustrations. In the app, `teal` and `mint` exist only as
+  two of the twelve category hues.
+- **Black does button states.** Default, hover, pressed and selected are steps
+  of the warm black (`primary.*`), not a brand hue.
+- **Beige-brown does distinction.** Where 4.x used mint to set something
+  apart, 5.0 uses `secondary.fg` / `.fgStrong` / `.border`.
+- **Coral comes in two steps and only as points.** `send.*` / `action.iconOnSolid`
+  for run and send, `action.mark` for the AI-working mark, the logo and large
+  type. Coral never fills a wide surface.
+- **Status colours mean status.** `danger`, `warning`, `success` and `info`
+  are never decoration or a way to tell groups apart.
+- **The twelve system hues are for categories only.** `category.{hue}.*`
+  carries no status meaning.
+- **Blue means data and links.** `fg.link` for links; a blue monochrome ramp
+  for single-measure charts (see Using Semantic Tokens).
+- **No gradients.** A brand band is one solid colour.
+
+## Neutrals
+
+<Canvas of={BrandColour.Neutrals} sourceState="none" />
+
+Headings use `fg.default` and weight for emphasis, never a brand colour. The
+sand tint (`secondary.surface`) is not a component background; a soft fill is
+`bg.muted`, a page-level band is `bg.subtle`.
+
+## Button states: black, not a hue
+
+<Canvas of={BrandColour.ButtonStates} sourceState="none" />
+
+- **Hover** moves one step lighter (`primary.hover`); **pressed** uses
+  `primary.active` and a small scale-down.
+- Outline and ghost buttons hover to `primary.wash` and press to
+  `primary.washActive`. A selected row or menu item is `primary.selected`.
+- The **focus ring** is `focus.ring`: black in light mode, light beige in dark
+  mode. It is never coral, because a coral ring reads as an error border.
+- **Disabled** is a fixed grey (`disabled.bg` / `disabled.fg`) with no opacity
+  and no hover change. Beige is already the hover and pressed colour, so a
+  beige disabled button would look like one being pressed.
+- Sign-up, payment and upgrade buttons are `Button variant="primary"` (black),
+  not coral.
+
+## Distinction: beige-brown
+
+<Canvas of={BrandColour.Distinction} sourceState="none" />
+
+Use the beige-brown steps for icons, accent numbers (earned credits, a total),
+the neutral Badge text and borders that set something apart without implying a
+state. Separate items by lightness within the same beige family, not by
+borrowing a hue.
+
+## Coral
+
+<Canvas of={BrandColour.Coral} sourceState="none" />
+
+| Coral goes on | Coral never goes on |
+| --- | --- |
+| The send button and `Button variant="accent"` (`send.*`) | Sign-up, payment and upgrade buttons (`primary`) |
+| The coral icon on the black run button (`action.iconOnSolid`) | Wide surfaces, light backgrounds, card fills |
+| The AI-working mark, the logo mark, large type (`action.mark`) | Promotion badges |
+| The unread count badge (`count.*`, a deeper coral red) | Warning and error text or borders; switches and checkboxes when on; links |
+
+- **Points, not surfaces.** Nothing coral is larger than a button, badge or
+  icon. Coral and the error red are only a few degrees apart in hue; at light
+  tints they become the same colour, so a coral wash reads as an error.
+- **One run signal per screen.** In chat the send button disappears while the
+  answer is loading and the loading mark takes its place. A count badge and the
+  Super Agent diamond are status and identity marks, so they may appear next to
+  a run signal.
+
+## Status
+
+<Canvas of={BrandColour.Status} sourceState="none" />
+
+Status colours report a status or a well-defined system fact (see
+**Components/Badge/Usage** for where `info` stops). Never colour alone: every
+status carries an icon and words (WCAG 1.4.1). Toast and Banner already pair
+each status with its icon.
+
+## Categories: the twelve system hues
+
+<Canvas of={BrandColour.Categories} sourceState="none" />
+
+Tiles, tags, avatars and multi-series charts that need several colours take
+`category.{hue}.surface` with `category.{hue}.fg` for the icon or accent
+text. Body text on a category surface stays `fg.default`. All twelve share one
+lightness and chroma, so no hue looks more important than another. In code,
+`<Tag category="…">` is the ready-made form.
+
+## Links
+
+<Canvas of={BrandColour.Links} sourceState="none" />
+
+Links are blue ink with an underline (`fg.link`, hover `fg.linkHover`), in
+chat, Markdown and app copy alike.
+
+## Dark mode
+
+Every token flips with the colour mode; the Dark column above is the value.
+What changes meaning, not just value:
+
+- `primary.main` becomes light beige with black text on it (`fg.onPrimary`),
+  and the focus ring is beige.
+- The run button (`action.bg`) sits close to the dark canvas, so it gets a
+  1px `action.border`.
+- Coral stays the brand coral; `send.bg` is one step deeper so the dark arrow
+  keeps its contrast.
+- Disabled is a dark grey, again with no opacity.
+
+## Open
+
+These are not decided yet. Don't build new patterns on them; ask the
+logician-ui maintainers first.
+
+- **Category icon tiles** (for example the "More" menu): beige-brown tiles or
+  the category hues.
+- **Toast shape:** today `Toast` ships a 1px `{status}.border` outline and
+  `Banner` ships a left bar. Whether toasts move to the left bar is open.
+- **Warning toast colour:** the guide showed a beige-brown alternative next to
+  the yellow `warning.*` that ships today.
+- **Unread notification dot and row:** a coral dot conflicts with "one coral
+  signal per screen".
+
+## Related
+
+**Setup/Theme/BAZE Palette** (every value and its contrast) ·
+**Setup/Theme/Using Semantic Tokens** (token per surface) ·
+**Components/Badge/Usage** (status vs category in practice).
+
+</En>
+
+<Ko>
+
+# 브랜드와 색 사용
+
+BAZE의 화면은 따뜻한 무채색입니다. 크림·아이보리 바탕에 블랙 글자를 쓰고, 색은
+의미가 있을 때만 씁니다. 이 페이지는 5.0 팔레트의 사용 규칙입니다. 아래 색 견본은
+모두 실제 테마에서 읽어 오므로, 라이트·다크 칸의 값이 곧 앱에 적용되는 값입니다.
+
+네 가지 모드의 값과 대비는 **Setup/Theme/BAZE Palette**에, 어떤 면에 어떤 토큰을
+쓰는지는 **Setup/Theme/Using Semantic Tokens**에 있습니다.
+
+## 원칙
+
+- **화면은 따뜻한 무채색으로 채웁니다.** 대부분은 `bg.canvas`, `layer.*`,
+  `bg.muted` 바탕에 `fg.default` 글자입니다. 색은 뜻이 있을 때만 더합니다.
+- **앱 화면에는 청록과 민트를 쓰지 않습니다.** 가이드북의 민트와 애저는 랜딩
+  페이지와 일러스트에만 남깁니다. 앱에서 `teal`·`mint`는 열두 가지 카테고리 색 가운데
+  두 가지로만 존재합니다.
+- **버튼 상태는 블랙 단계로 나타냅니다.** 기본·호버·누름·선택은 브랜드 색이 아니라
+  따뜻한 블랙의 단계(`primary.*`)입니다.
+- **구분은 베이지-브라운이 맡습니다.** 4.x에서 민트로 구분하던 자리는 5.0에서
+  `secondary.fg` / `.fgStrong` / `.border`를 씁니다.
+- **코랄은 두 단계만, 점으로만 씁니다.** 실행과 보내기에는 `send.*`와
+  `action.iconOnSolid`를, AI 작업 중 표시·로고·큰 글씨에는 `action.mark`를 씁니다.
+  넓은 면은 코랄로 칠하지 않습니다.
+- **상태색은 상태를 뜻할 때만 씁니다.** `danger`, `warning`, `success`, `info`를
+  장식이나 그룹 구분에 빌려 쓰지 않습니다.
+- **열두 가지 시스템 색은 카테고리 구분에만 씁니다.** `category.{hue}.*`에는 상태의
+  뜻이 없습니다.
+- **파란색은 데이터와 링크를 뜻합니다.** 링크는 `fg.link`, 하나의 값을 보여 주는
+  차트는 파란색 단색 단계를 씁니다(Using Semantic Tokens 참고).
+- **그라데이션은 쓰지 않습니다.** 브랜드 띠는 단색 하나로 칠합니다.
+
+## 무채색
+
+<Canvas of={BrandColour.Neutrals} sourceState="none" />
+
+제목도 `fg.default`를 쓰고, 강조는 색이 아니라 굵기로 합니다. 샌드 틴트
+(`secondary.surface`)는 컴포넌트 바탕으로 쓰지 않습니다. 옅은 면은 `bg.muted`,
+페이지 단위의 띠는 `bg.subtle`입니다.
+
+## 버튼 상태: 색이 아니라 블랙 단계
+
+<Canvas of={BrandColour.ButtonStates} sourceState="none" />
+
+- **호버**는 한 단계 밝아지고(`primary.hover`), **누름**은 `primary.active`와 살짝
+  줄어드는 효과로 나타냅니다.
+- 테두리·고스트 버튼은 호버에 `primary.wash`, 누름에 `primary.washActive`를 씁니다.
+  선택된 목록 행이나 메뉴는 `primary.selected`입니다.
+- **포커스 링**은 `focus.ring`으로, 라이트에서는 블랙, 다크에서는 밝은 베이지입니다.
+  코랄 링은 오류 테두리처럼 보이므로 쓰지 않습니다.
+- **비활성**은 고정된 회색(`disabled.bg` / `disabled.fg`)이며 투명도를 쓰지 않고
+  호버해도 바뀌지 않습니다. 베이지는 이미 호버와 누름의 색이라, 비활성까지 베이지면
+  누르는 중인 버튼과 구분되지 않습니다.
+- 가입·결제·업그레이드 버튼은 코랄이 아니라 `Button variant="primary"`(블랙)입니다.
+
+## 구분: 베이지-브라운
+
+<Canvas of={BrandColour.Distinction} sourceState="none" />
+
+상태를 뜻하지 않으면서 무언가를 돋보이게 할 때 베이지-브라운 단계를 씁니다.
+아이콘, 강조 숫자(받은 크레딧, 합계), 중립 배지의 글자, 테두리가 여기에 해당합니다.
+항목끼리 구분할 때도 다른 색을 빌리지 말고 같은 베이지 계열 안에서 밝기로
+나눕니다.
+
+## 코랄
+
+<Canvas of={BrandColour.Coral} sourceState="none" />
+
+| 코랄을 쓰는 곳 | 코랄을 쓰지 않는 곳 |
+| --- | --- |
+| 보내기 버튼과 `Button variant="accent"` (`send.*`) | 가입·결제·업그레이드 버튼 (`primary`) |
+| 블랙 실행 버튼 위의 코랄 아이콘 (`action.iconOnSolid`) | 넓은 면, 옅은 배경, 카드 바탕 |
+| AI 작업 중 표시, 로고 마크, 큰 글씨 (`action.mark`) | 프로모션 배지 |
+| 읽지 않은 숫자 배지 (`count.*`, 조금 더 진한 코랄 레드) | 경고·오류 문구와 테두리, 켜진 스위치·체크박스, 링크 |
+
+- **면이 아니라 점으로 씁니다.** 버튼·배지·아이콘보다 큰 면을 코랄로 칠하지 않습니다.
+  코랄과 오류 빨강은 색상 차이가 몇 도밖에 나지 않아 옅게 쓰면 같은 색이 됩니다.
+  그래서 코랄 바탕은 오류처럼 읽힙니다.
+- **실행 신호는 한 화면에 하나만 둡니다.** 채팅에서는 답변을 기다리는 동안 보내기
+  버튼이 사라지고 그 자리에 로딩 표시가 나타납니다. 숫자 배지와 Super Agent 마름모는
+  상태와 정체성을 나타내는 표시라 실행 신호와 함께 보여도 됩니다.
+
+## 상태
+
+<Canvas of={BrandColour.Status} sourceState="none" />
+
+상태색은 상태나 명확하게 정의된 시스템 사실을 알릴 때만 씁니다(`info`를 어디까지
+쓰는지는 **Components/Badge/Usage** 참고). 색만으로 알리지 않고 항상 아이콘과 문구를
+함께 씁니다(WCAG 1.4.1). Toast와 Banner는 상태마다 아이콘을 이미 붙여 줍니다.
+
+## 카테고리: 열두 가지 시스템 색
+
+<Canvas of={BrandColour.Categories} sourceState="none" />
+
+여러 색으로 나눠야 하는 타일, 태그, 아바타, 여러 계열 차트에는
+`category.{hue}.surface`를 바탕으로, `category.{hue}.fg`를 아이콘이나 강조 글자로
+씁니다. 그 위의 본문 글자는 `fg.default` 그대로 둡니다. 열두 색은 밝기와 채도가 같아서
+어느 색도 더 중요해 보이지 않습니다. 코드에서는 `<Tag category="…">`를 바로 쓰면
+됩니다.
+
+## 링크
+
+<Canvas of={BrandColour.Links} sourceState="none" />
+
+링크는 채팅, 마크다운, 앱 문구 어디에서나 밑줄과 함께 파란색 글자(`fg.link`, 호버
+`fg.linkHover`)로 씁니다.
+
+## 다크 모드
+
+모든 토큰은 색 모드에 따라 바뀌며, 위 표의 다크 칸이 그 값입니다. 값만이 아니라
+쓰임이 달라지는 곳은 아래와 같습니다.
+
+- `primary.main`은 밝은 베이지가 되고 그 위 글자(`fg.onPrimary`)는 블랙이 됩니다.
+  포커스 링도 베이지입니다.
+- 실행 버튼 바탕(`action.bg`)은 다크 바탕과 거의 같아 1px `action.border` 테두리를
+  둡니다.
+- 코랄은 같은 브랜드 코랄을 쓰되, 어두운 화살표의 대비를 지키려고 `send.bg`를 한 단계
+  진하게 씁니다.
+- 비활성은 짙은 회색이고, 여기서도 투명도를 쓰지 않습니다.
+
+## 아직 정하지 않은 것
+
+아래는 아직 결정되지 않았습니다. 이 위에 새 패턴을 만들지 말고 먼저
+logician-ui 담당자에게 물어 주세요.
+
+- **카테고리 아이콘 타일**(예: 더보기 메뉴): 베이지-브라운 타일로 갈지, 카테고리
+  색으로 갈지 정하지 않았습니다.
+- **토스트 모양:** 지금 `Toast`는 1px `{status}.border` 테두리, `Banner`는 왼쪽 바로
+  나옵니다. 토스트도 왼쪽 바로 바꿀지는 정하지 않았습니다.
+- **경고 토스트 색:** 가이드에는 지금 쓰는 노란색 `warning.*` 옆에 베이지-브라운
+  안도 함께 실려 있습니다.
+- **읽지 않은 알림 점과 행:** 코랄 점은 "실행 신호는 한 화면에 하나" 규칙과
+  부딪힙니다.
+
+## 관련 문서
+
+**Setup/Theme/BAZE Palette**(모든 값과 대비) ·
+**Setup/Theme/Using Semantic Tokens**(면별 토큰) ·
+**Components/Badge/Usage**(상태와 카테고리를 실제로 나누는 법).
+
+</Ko>

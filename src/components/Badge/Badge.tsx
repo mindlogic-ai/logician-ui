@@ -8,9 +8,11 @@ import { BadgeOwnProps } from './Badge.types';
 /**
  * Badge — a small, non-interactive label.
  *
- * `neutral` (default) is the grey-wash everyday badge; `success` / `warning` /
- * `danger` / `info` report a status. For an unread/notification number use
- * `CountBadge`; for a removable or selectable label use `Tag`.
+ * `neutral` (default) is the everyday badge; `success` / `warning` /
+ * `danger` / `info` carry a well-defined meaning (a status, or for `info` a
+ * system fact such as scope or permission). For an unread/notification number
+ * use `CountBadge`; for a removable, selectable or category-only label use
+ * `Tag`.
  *
  * @example
  * ```tsx

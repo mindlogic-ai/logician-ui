@@ -128,7 +128,7 @@ Questions to ask:
 Always suggest using tokens instead of hardcoded values:
 - **Spacing**: `p={4}` (16px), `m={6}` (24px), `gap={3}` (12px)
 - **Typography**: `fontSize="sm"`, `fontSize="md"`, `fontSize="lg"`
-- **Colors**: `color="gray.600"`, `bg="blue.50"`, `borderColor="red.500"`
+- **Colors**: role tokens only — `color="fg.muted"`, `bg="info.bg"`, `borderColor="danger.border"`. 5.0 removed the raw numbered palettes, and a raw step falls through to Chakra's default palette without an error; see `src/theme/SemanticTokens.mdx`
 
 ## Example Consultation Flow
 

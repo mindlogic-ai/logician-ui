@@ -107,7 +107,15 @@ export default {
       declaration: true,
       declarationDir: 'dist',
       rootDir: 'src',
-      exclude: ['**/*.stories.tsx', '**/*.test.tsx', '**/*.test.ts'],
+      // Storybook-only docs (guideline pages, foundations specimens and their
+      // doc helpers) never ship in dist.
+      exclude: [
+        '**/*.stories.tsx',
+        '**/*.test.tsx',
+        '**/*.test.ts',
+        '**/src/guidelines/**',
+        '**/src/foundations/**',
+      ],
     }),
   ],
   onwarn(warning, warn) {

@@ -7,11 +7,13 @@ import type { PolymorphicProps } from '../../types/polymorphic';
 /**
  * Badge variants (5.0).
  *
- * - `neutral` (default): neutral `bg.muted` with `secondary.fgStrong`
- *   text — the everyday label ("Pro", "Beta", "Draft").
- * - `success` / `warning` / `danger` / `info`: the status family's soft
- *   `{status}.bg` surface with `{status}.fg` text. Use these ONLY when the
- *   badge reports a status — never as decoration.
+ * - `neutral` (default): `bg.muted` + `secondary.fgStrong` — an attribute
+ *   with no state ("Pro", "Beta", "Draft").
+ * - `success` / `warning` / `danger` / `info`: `{status}.bg` + `{status}.fg`,
+ *   for a meaning every user shares and that is well defined. `info` is a
+ *   non-error system fact: scope ("이 그룹만"), permission, read-only, "New".
+ *   A label that only classifies or groups is a `Tag` with `category`, never
+ *   a status colour. The same label gets the same variant on every screen.
  *
  * **Breaking in 5.0:** `primary` and `secondary` were removed. At runtime they
  * still render (as `neutral`) and warn once in development.

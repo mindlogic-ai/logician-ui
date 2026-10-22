@@ -1,0 +1,265 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as BadgeStories from './Badge.stories';
+
+<Meta of={BadgeStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# Badge
+
+A short, non-interactive label that states an attribute of the thing next to
+it: a status, a plan, or a scope.
+
+## When to use
+
+- To state a fixed attribute next to a title or value: "Pro", "Beta".
+- To report a status the user should read: 완료, 대기 중, 실패.
+- To give a well-defined system fact such as scope, permission, read-only or
+  "New": 이 그룹만.
+
+## When not to use
+
+- The label only classifies or groups and has no fixed meaning → `Tag` with
+  `category`.
+- The user can click, select or remove it → `Tag` (`selected`, close button).
+- An unread count → `CountBadge`. An explanation → `Tooltip` or `InfoSprinkle`.
+- A sentence-length status → `Banner` or `Toast`.
+
+## Variants and what they mean
+
+</En>
+
+<Ko>
+
+# Badge
+
+옆에 있는 대상의 속성(상태, 요금제, 적용 범위)을 짧게 알려 주는 라벨입니다. 누르거나
+선택할 수 없습니다.
+
+## 언제 쓰나요
+
+- 제목이나 값 옆에 고정된 속성을 표시할 때: "Pro", "Beta".
+- 사용자가 읽어야 할 상태를 알릴 때: 완료, 대기 중, 실패.
+- 적용 범위, 권한, 읽기 전용, "New"처럼 뜻이 명확한 시스템 사실을 알릴 때: 이 그룹만.
+
+## 언제 쓰지 않나요
+
+- 뜻은 없고 분류나 묶음만 나타낸다면 `Tag`의 `category`를 씁니다.
+- 사용자가 누르거나 고르거나 지울 수 있다면 `Tag`(`selected`, 닫기 버튼)를 씁니다.
+- 읽지 않은 개수는 `CountBadge`, 설명은 `Tooltip`이나 `InfoSprinkle`을 씁니다.
+- 한 문장 길이의 상태 안내는 `Banner`나 `Toast`를 씁니다.
+
+## 변형과 뜻
+
+</Ko>
+
+<ArgTypes of={BadgeStories} include={['variant']} />
+
+<En>
+
+| Variant | Means | Use for |
+| --- | --- | --- |
+| `neutral` (default) | An attribute with no state | Plan, version, "Draft" |
+| `info` | A well-defined system fact; nothing is wrong | Scope (이 그룹만), "New", read-only, permission |
+| `success` | Finished or healthy | 완료, 연결됨 |
+| `warning` | Needs attention, still works | 대기 중, 만료 임박 |
+| `danger` | Failed or blocked | 실패, 차단됨 |
+
+### Choosing a colour
+
+- **Does the colour carry a meaning every user shares** (a status, a scope, a
+  risk)? → Badge with a status variant. The same label always gets the same
+  variant, on every screen.
+- **Does it only tell items apart?** → `Tag` with `category` (twelve hues, no
+  meaning). Never borrow a status colour for this.
+- **Neither?** → `neutral`.
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+| 변형 | 뜻 | 예 |
+| --- | --- | --- |
+| `neutral` (기본) | 상태가 없는 속성 | 요금제, 버전, "Draft" |
+| `info` | 뜻이 명확한 시스템 사실이며, 문제가 있다는 뜻은 아님 | 적용 범위(이 그룹만), "New", 읽기 전용, 권한 |
+| `success` | 끝났거나 정상 | 완료, 연결됨 |
+| `warning` | 확인이 필요하지만 동작은 함 | 대기 중, 만료 임박 |
+| `danger` | 실패했거나 막힘 | 실패, 차단됨 |
+
+### 색 고르기
+
+- **모든 사용자가 같은 뜻으로 읽는 색인가요?**(상태, 적용 범위, 위험) 그렇다면 상태
+  변형의 Badge를 씁니다. 같은 라벨은 어느 화면에서나 같은 변형을 씁니다.
+- **항목을 나누기만 하나요?** 그렇다면 `Tag`의 `category`(뜻이 없는 열두 가지 색)를
+  씁니다. 이때 상태색을 빌려 쓰지 않습니다.
+- **둘 다 아니라면** `neutral`을 씁니다.
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={BadgeStories.DoScopeLabel} />
+<Verdict
+  kind="do"
+  en="Use info for a scope label. Scope is a fixed system meaning, and the colour lifts it off the card."
+  ko="적용 범위 라벨에는 info를 씁니다. 적용 범위는 뜻이 정해진 시스템 사실이고, 색이 있어 카드 위에서 잘 보입니다."
+/>
+
+<Canvas of={BadgeStories.DontStatusForTeams} />
+<Verdict
+  kind="dont"
+  en="Borrow status colours to tell teams apart. Readers will take 영업 to mean an error."
+  ko="팀을 나누려고 상태색을 빌려 쓰지 마세요. 읽는 사람은 '영업'을 오류로 받아들입니다."
+/>
+
+<Canvas of={BadgeStories.DoCategoryTags} />
+<Verdict
+  kind="do"
+  en="Use Tag category hues for labels that only classify."
+  ko="분류만 하는 라벨에는 Tag의 category 색을 씁니다."
+/>
+
+<Canvas of={BadgeStories.DontNeutralOnLayer} />
+<Verdict
+  kind="dont"
+  en="Put a neutral badge on a layer.1 surface. In light mode layer.1 and bg.muted are the same value, so the badge disappears. On layered grounds use a status variant, or no badge."
+  ko="layer.1 면 위에 neutral 배지를 두지 마세요. 라이트 모드에서 layer.1과 bg.muted는 같은 값이라 배지가 보이지 않습니다. 겹친 면 위에서는 상태 변형을 쓰거나 배지를 빼세요."
+/>
+
+<Canvas of={BadgeStories.DontRepeatOnEveryCard} />
+<Verdict
+  kind="dont"
+  en="Repeat the same badge on every card in a row. If all three say the same thing, the badge stops telling the reader anything."
+  ko="한 줄의 카드마다 같은 배지를 반복하지 마세요. 세 개가 모두 같은 말을 하면 배지는 아무것도 알려 주지 못합니다."
+/>
+
+<Canvas of={BadgeStories.DoOnceOnHeading} />
+<Verdict
+  kind="do"
+  en="Say it once, on the section heading, when it applies to the whole section."
+  ko="섹션 전체에 해당한다면 섹션 제목 옆에 한 번만 붙입니다."
+/>
+
+<Canvas of={BadgeStories.DoTextCarriesMeaning} />
+<Verdict
+  kind="do"
+  en="Let the words carry the meaning. Colour and icon back it up but never replace it (WCAG 1.4.1)."
+  ko="뜻은 문구가 전합니다. 색과 아이콘은 문구를 거들 뿐, 대신하지 않습니다(WCAG 1.4.1)."
+/>
+
+<Canvas of={BadgeStories.DontColourOnly} />
+<Verdict
+  kind="dont"
+  en="Use a coloured badge with no words. Someone who cannot tell green from red, or who uses a screen reader, gets nothing."
+  ko="문구 없이 색만 있는 배지를 쓰지 마세요. 초록과 빨강을 구분하기 어려운 사람이나 화면 낭독기 사용자에게는 아무 정보도 전달되지 않습니다."
+/>
+
+<En>
+
+## Content
+
+- One to three words. No full stop.
+- Sentence case in English ("This group only", not "This Group Only"). No
+  「」, quotation marks or brackets around Korean labels.
+- Describe a state, not an action: 하위 그룹 포함, not "Include subgroups",
+  which reads as an option that is still off.
+- Use the same words for the same state everywhere. If one screen says 대기 중,
+  another should not say 보류.
+
+## Accessibility
+
+What Badge does for you:
+
+- It renders as plain text (`<span>`), so the label is read as part of the
+  content around it. It is not focusable and has no role, which is right for a
+  label that does nothing.
+
+What you still have to do:
+
+- **Words, not colour alone** (WCAG 1.4.1). Every badge has a visible text
+  label; an icon inside it is decorative and gets `aria-hidden`.
+- **Mind the accessible name it joins.** A badge inside a button or link
+  becomes part of that control's name (WCAG 4.1.2). Keep the visible label and
+  the spoken name the same (WCAG 2.5.3), and put the badge outside when it
+  would make the name long or misleading, for example a whole-row link.
+- Place it next to a heading, not inside the `<h2>`, so heading navigation
+  reads the heading alone.
+- For a clickable badge (a citation link, `as="a"`), the badge becomes the
+  control: give it a name that makes sense on its own.
+
+## Tokens
+
+The table is generated from `Badge.styles.ts` and the theme.
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 한 단어에서 세 단어까지 씁니다. 마침표를 찍지 않습니다.
+- 영어는 문장형 대소문자를 씁니다("This group only", "This Group Only"가 아님).
+  한국어 라벨에는 「」, 따옴표, 괄호를 두르지 않습니다.
+- 동작이 아니라 상태를 적습니다. "하위 그룹 포함"이라고 쓰고 "하위 그룹 포함하기"처럼
+  아직 꺼져 있는 선택지로 읽히는 문구는 피합니다.
+- 같은 상태에는 어디서나 같은 말을 씁니다. 한 화면에서 "대기 중"이라고 썼다면 다른
+  화면에서 "보류"라고 쓰지 않습니다.
+
+## 접근성
+
+Badge가 알아서 하는 일
+
+- 일반 텍스트(`<span>`)로 그려지므로 주변 내용과 함께 읽힙니다. 아무 동작이 없는
+  라벨이라 초점을 받지 않고 역할(role)도 없습니다.
+
+직접 챙겨야 하는 일
+
+- **색만으로 알리지 않습니다**(WCAG 1.4.1). 모든 배지에는 눈에 보이는 문구가 있어야
+  하며, 안에 넣은 아이콘은 장식이므로 `aria-hidden`을 붙입니다.
+- **배지가 들어가는 접근 가능한 이름을 확인합니다.** 버튼이나 링크 안의 배지는 그
+  컨트롤 이름의 일부가 됩니다(WCAG 4.1.2). 눈에 보이는 문구와 읽히는 이름이 같아야
+  하고(WCAG 2.5.3), 행 전체를 감싼 링크처럼 이름이 길어지거나 뜻이 흐려지면 배지를
+  컨트롤 밖에 둡니다.
+- 제목 옆에 두고 `<h2>` 안에는 넣지 않습니다. 그래야 제목으로 이동할 때 제목만
+  읽힙니다.
+- 누를 수 있는 배지(인용 링크, `as="a"`)는 그 자체가 컨트롤이 됩니다. 배지만 읽어도
+  뜻이 통하는 이름을 붙입니다.
+
+## 토큰
+
+아래 표는 `Badge.styles.ts`와 테마에서 자동으로 만듭니다.
+
+</Ko>
+
+<Canvas of={BadgeStories.UsageTokens} sourceState="none" />
+
+<En>
+
+## Related
+
+- **Tag**: classify (`category`), select (`selected`) or dismiss.
+- **CountBadge**: numbers, such as unread counts.
+- **Banner** / **Toast**: a sentence-length status.
+- **InfoSprinkle** / **Tooltip**: an explanation.
+- **Foundations/Brand & colour usage**: why status colours are never
+  decoration.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **Tag**: 분류(`category`), 선택(`selected`), 삭제.
+- **CountBadge**: 읽지 않은 개수 같은 숫자.
+- **Banner** / **Toast**: 한 문장 길이의 상태 안내.
+- **InfoSprinkle** / **Tooltip**: 설명.
+- **Foundations/Brand & colour usage**: 상태색을 장식으로 쓰지 않는 이유.
+
+</Ko>

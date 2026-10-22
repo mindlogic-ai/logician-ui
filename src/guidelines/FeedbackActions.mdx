@@ -1,6 +1,12 @@
 import { Meta } from '@storybook/blocks';
 
+import { En, Ko, LangToggle } from './_components/Lang';
+
 <Meta title="Guidelines/Actions in feedback surfaces" />
+
+<LangToggle />
+
+<En>
 
 # Actions in feedback surfaces
 
@@ -20,13 +26,13 @@ container it sits in?**
 ## Why this exists
 
 Until `Toast` had an `action` prop, callers who wanted a button in a toast put
-a `<Button>` inside `description` and styled it themselves. On the credit-402
-toast in FactChat that produced a neutral outline button (`#494949` text, ink
-hairline) on a rose toast (`#FFE6E8` background, `#69000A` text). It carried
-none of the toast's colors, so it read as a separate card dropped on top.
+a `<Button>` inside `description` and styled it themselves. On FactChat's
+credit-402 toast (4.x) that produced a neutral outline button on a rose
+toast. It carried none of the toast's colours, so it read as a separate card
+dropped on top.
 
 The fix is one recipe for every toast: the action uses the toast's own text
-color, the same treatment as the close ×.
+colour, the same treatment as the close ×.
 
 ---
 
@@ -37,11 +43,11 @@ color, the same treatment as the close ×.
 Toasts and inline banners carry **text actions**. Buttons belong to surfaces
 that own the space: a pane, a dialog, an empty state.
 
-### 2. The action takes the status color
+### 2. The action takes the status colour
 
-Inside a tinted container the action uses **that container's text color**
-(`danger.dark` on an error toast, `primary.dark` on an info toast). Never a
-neutral control.
+Inside a tinted container the action uses **that container's text colour**:
+`danger.fg` on an error toast, `info.fg` on an info toast (`{status}.fg` in
+general). Never a neutral control.
 
 ### 3. One action per toast; dismiss is ×
 
@@ -55,9 +61,9 @@ credits to continue". Toast copy stays **within 2 lines**.
 
 ### 5. In a pane, the fix is the primary
 
-In a pane or empty state, the action that fixes the problem is the primary
-(ink solid, `colorPalette="neutral" variant="solid"`). Dismiss is outline
-neutral (`colorPalette="neutral" variant="outline"`).
+In a pane or empty state, the action that fixes the problem is the primary:
+`<Button variant="primary">` (black fill). Dismiss is
+`<Button variant="secondary">` (outlined).
 
 ### 6. Toasts with an action stay longer
 
@@ -69,12 +75,12 @@ action defaults to **8s** instead of 5s. `useToast` does this for you when
 
 ## Which control goes where
 
-| Surface            | Primary action                                     | Secondary / dismiss              | Max actions | Copy                                       |
-| ------------------ | -------------------------------------------------- | -------------------------------- | ----------- | ------------------------------------------ |
-| Toast              | Text action in status color, via the `action` prop | × only                           | 1           | ≤ 2 lines, no hint that repeats the action |
-| Inline banner      | Trailing text action in status color               | × if dismissible                 | 1           | 1 line, wraps on mobile                    |
-| Pane / empty state | Ink solid (`neutral` `solid`)                      | Outline neutral                  | 2           | Title + reason + optional hint             |
-| Dialog             | Ink solid, right                                   | Outline neutral, left of primary | 2           | Title + body                               |
+| Surface | Primary action | Secondary / dismiss | Max actions | Copy |
+| --- | --- | --- | --- | --- |
+| Toast | Text action in `{status}.fg`, via the `action` prop | × only | 1 | ≤ 2 lines, no hint that repeats the action |
+| Inline banner | Trailing text action in `{status}.fg`, passed as children (Banner has no `action` prop) | × if dismissible | 1 | 1 line, wraps on mobile |
+| Pane / empty state | `Button variant="primary"` | `Button variant="secondary"` | 2 | Title + reason + optional hint |
+| Dialog | `Button variant="primary"`, right | `Button variant="secondary"`, left of primary | 2 | Title + body |
 
 ---
 
@@ -97,7 +103,7 @@ showToast({
 ```
 
 - The action renders under the description, aligned with the text column, in
-  the toast's status color with the same hover tint as the ×.
+  the toast's `{status}.fg` with the same hover tint as the × (`{status}.border`).
 - Clicking it calls `onClick` and dismisses the toast.
 - `label` accepts any `ReactNode`, but keep it a short verb phrase.
 - An explicit `duration` (including `null` for a persistent toast) always wins.
@@ -108,21 +114,21 @@ showToast({
 ### Don't: a button inside `description`
 
 ```tsx
-// ✗ A neutral control dropped onto a tinted toast; it carries none of the
-//   toast's colors, adds a third line, and dismissal is left to the caller.
+// ✗ A separate control dropped onto a tinted toast; it carries none of the
+//   toast's colours, adds a third line, and dismissal is left to the caller.
 showToast({
   status: 'error',
   description: (
     <>
       크레딧이 부족합니다. 크레딧을 구매하면 계속 사용할 수 있습니다.
-      <Button colorPalette="neutral" variant="outline" onClick={buy}>
+      <Button variant="secondary" onClick={buy}>
         크레딧 구매
       </Button>
     </>
   ),
 });
 
-// ✓ One action, in the toast's color, and the copy doesn't repeat it.
+// ✓ One action, in the toast's colour, and the copy doesn't repeat it.
 showToast({
   status: 'error',
   description: '크레딧이 부족합니다.',
@@ -131,3 +137,136 @@ showToast({
 ```
 
 See **Components/Toast → Action / …** for each status and a short-message case.
+
+</En>
+
+<Ko>
+
+# 피드백 영역 안의 동작
+
+토스트, 인라인 배너, 패널, 대화상자에는 "크레딧 구매", "되돌리기", "파일 열기" 같은
+컨트롤이 자주 필요합니다. 이 페이지는 어떤 컨트롤을 어디에 두고 어떤 모양으로 그리는지
+정리합니다.
+
+모든 경우에 묻는 질문은 하나입니다. **그 컨트롤이 놓인 영역의 일부처럼 보이나요?**
+
+> 전후 비교와 직접 해 볼 수 있는 시안:
+> [feedback-actions-proto.apps.mindlogic.tools](https://feedback-actions-proto.apps.mindlogic.tools/)
+> (사내 로그인 필요)
+
+---
+
+## 왜 필요한가요
+
+`Toast`에 `action` 속성이 생기기 전에는 토스트에 버튼을 넣으려면 `description` 안에
+`<Button>`을 넣고 직접 꾸며야 했습니다. FactChat의 크레딧 부족(402) 토스트(4.x)에서는
+그 결과 분홍 토스트 위에 중립 테두리 버튼이 올라갔습니다. 토스트의 색을 하나도 따르지
+않아서 다른 카드를 얹어 놓은 것처럼 보였습니다.
+
+그래서 모든 토스트에 같은 방식을 씁니다. 동작은 닫기 ×와 똑같이 토스트 자신의 글자
+색을 씁니다.
+
+---
+
+## 규칙
+
+### 1. 영역의 무게에 맞춥니다
+
+토스트와 인라인 배너에는 **텍스트 동작**을 둡니다. 버튼은 패널, 대화상자, 빈 화면처럼
+공간을 차지하는 영역에 둡니다.
+
+### 2. 동작은 상태색을 따릅니다
+
+색이 있는 영역 안의 동작은 **그 영역의 글자 색**을 씁니다. 오류 토스트에서는
+`danger.fg`, 정보 토스트에서는 `info.fg`, 일반적으로는 `{status}.fg`입니다. 중립
+컨트롤을 두지 않습니다.
+
+### 3. 토스트에는 동작을 하나만 두고, 닫기는 ×로 합니다
+
+토스트에 「닫기」나 「취소」 버튼을 두지 않습니다. ×가 이미 그 일을 합니다. 동작이 두
+개 필요한 메시지라면 토스트가 아니라 대화상자나 패널을 씁니다.
+
+### 4. 동작을 문구에서 되풀이하지 않습니다
+
+동작이 「크레딧 구매」라면 메시지에 "계속하려면 크레딧을 구매하세요"를 다시 쓰지
+않습니다. 토스트 문구는 **2줄 이내**로 씁니다.
+
+### 5. 패널에서는 문제를 푸는 동작이 주요 버튼입니다
+
+패널이나 빈 화면에서는 문제를 해결하는 동작을 `<Button variant="primary">`(블랙
+채움)로 둡니다. 닫기는 `<Button variant="secondary">`(테두리)입니다.
+
+### 6. 동작이 있는 토스트는 더 오래 보입니다
+
+읽는 사람은 메시지를 읽고 나서 누를지 정해야 합니다. 동작이 있는 토스트는 기본
+표시 시간이 5초가 아니라 **8초**입니다. `duration`을 주지 않으면 `useToast`가 알아서
+맞춥니다.
+
+---
+
+## 어떤 컨트롤을 어디에
+
+| 영역 | 주요 동작 | 보조 동작 / 닫기 | 최대 개수 | 문구 |
+| --- | --- | --- | --- | --- |
+| 토스트 | `action` 속성으로 넣은 `{status}.fg` 텍스트 동작 | ×만 | 1 | 2줄 이내, 동작을 되풀이하는 안내 없음 |
+| 인라인 배너 | 끝에 붙인 `{status}.fg` 텍스트 동작, children으로 전달(Banner에는 `action` 속성이 없음) | 닫을 수 있으면 × | 1 | 1줄, 모바일에서는 줄바꿈 |
+| 패널 / 빈 화면 | `Button variant="primary"` | `Button variant="secondary"` | 2 | 제목 + 이유 + 필요하면 안내 |
+| 대화상자 | `Button variant="primary"`, 오른쪽 | `Button variant="secondary"`, 주요 버튼 왼쪽 | 2 | 제목 + 본문 |
+
+---
+
+## 사용법
+
+```tsx
+import { useToast } from '@mindlogic-ai/logician-ui';
+
+const showToast = useToast();
+
+showToast({
+  status: 'error',
+  description: '크레딧이 부족해 응답을 생성하지 못했습니다.',
+  action: {
+    label: '크레딧 구매',
+    onClick: openCreditPurchaseModal,
+  },
+  // action이 있으므로 duration 기본값은 8000입니다
+});
+```
+
+- 동작은 설명 아래, 글자 열에 맞춰 토스트의 `{status}.fg` 색으로 그려지며 호버하면 ×와
+  같은 틴트(`{status}.border`)가 깔립니다.
+- 누르면 `onClick`을 부르고 토스트를 닫습니다.
+- `label`에는 어떤 `ReactNode`든 넣을 수 있지만 짧은 동사구로 씁니다.
+- `duration`을 직접 주면(계속 떠 있는 토스트의 `null` 포함) 항상 그 값을 따릅니다.
+- Chakra의 `toaster.create({ action: { label, onClick } })`도 같은 모양으로 그려집니다.
+  다만 이 경우 label은 문자열이어야 하고, 표시 시간 기본값은 8초가 아니라 Chakra의
+  기본값입니다.
+
+### 이렇게 하지 마세요: `description` 안의 버튼
+
+```tsx
+// ✗ 색이 있는 토스트 위에 별개의 컨트롤을 얹었습니다. 토스트의 색을 따르지 않고,
+//   줄이 하나 늘고, 닫는 처리도 호출하는 쪽에 떠넘깁니다.
+showToast({
+  status: 'error',
+  description: (
+    <>
+      크레딧이 부족합니다. 크레딧을 구매하면 계속 사용할 수 있습니다.
+      <Button variant="secondary" onClick={buy}>
+        크레딧 구매
+      </Button>
+    </>
+  ),
+});
+
+// ✓ 동작은 하나, 토스트의 색을 따르고, 문구에서 되풀이하지 않습니다.
+showToast({
+  status: 'error',
+  description: '크레딧이 부족합니다.',
+  action: { label: '크레딧 구매', onClick: buy },
+});
+```
+
+상태별 예시와 짧은 메시지 예시는 **Components/Toast → Action / …** 에 있습니다.
+
+</Ko>

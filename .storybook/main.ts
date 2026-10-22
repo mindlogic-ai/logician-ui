@@ -1,5 +1,6 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 import path from 'path';
+import remarkGfm from 'remark-gfm';
 
 const config: StorybookConfig = {
   stories: [
@@ -8,7 +9,17 @@ const config: StorybookConfig = {
     '../src/**/*.mdx',
     '../src/**/*.stories.@(js|jsx|ts|tsx)',
   ],
-  addons: ['@storybook/addon-essentials', '@storybook/addon-docs'],
+  addons: [
+    '@storybook/addon-essentials',
+    {
+      // GitHub-flavoured Markdown, so tables in the MDX guideline pages render
+      // as tables (MDX 3 leaves them as plain text without it).
+      name: '@storybook/addon-docs',
+      options: {
+        mdxPluginOptions: { mdxCompileOptions: { remarkPlugins: [remarkGfm] } },
+      },
+    },
+  ],
   staticDirs: ['../public'],
   refs: () => ({}),
   framework: {
