@@ -1,0 +1,194 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as PinInputStories from './PinInput.stories';
+
+<Meta of={PinInputStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# PinInput
+
+A row of single-character boxes for a short code: a sign-in code sent by
+email, a two-factor code from an authenticator app.
+
+## When to use
+
+- A code of fixed, known length (4 to 8 characters) that the user copies from
+  somewhere else.
+
+## When not to use
+
+- A password → `PasswordInput`.
+- A code of unknown or variable length, or one usually pasted from a
+  clipboard as a whole (a licence key, an invite token) → `Input`.
+
+## Props
+
+</En>
+
+<Ko>
+
+# PinInput
+
+짧은 코드를 한 칸에 한 글자씩 받는 입력란입니다. 메일로 받은 로그인 코드나 인증 앱의
+2단계 인증 코드에 씁니다.
+
+## 언제 쓰나요
+
+- 다른 곳에서 보고 옮겨 적는, 길이가 정해진 코드(4~8자).
+
+## 언제 쓰지 않나요
+
+- 비밀번호는 `PasswordInput`을 씁니다.
+- 길이가 정해지지 않았거나, 대개 통째로 붙여 넣는 값(라이선스 키, 초대 토큰)은
+  `Input`을 씁니다.
+
+## 속성
+
+</Ko>
+
+<ArgTypes
+  of={PinInputStories}
+  include={['length', 'value', 'onChange', 'onComplete', 'inputProps']}
+/>
+
+<En>
+
+- `value` is one string, and `onChange` / `onComplete` receive one string.
+  `onComplete` fires when every box is filled; submit from there.
+- `type` (`numeric`, `alphanumeric`, `alphabetic`), `otp`, `mask`, `invalid`
+  and `disabled` come from Chakra's `PinInput.Root`. `otp` sets
+  `autocomplete="one-time-code"`, which lets phones offer the code from SMS.
+- `inputProps` go to the hidden input that carries the whole value, for
+  `name` in a native form.
+- Boxes are empty by default (`placeholder=""`).
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+- `value`는 문자열 하나이고, `onChange`와 `onComplete`도 문자열 하나를 받습니다.
+  `onComplete`는 모든 칸이 채워지면 호출되므로 여기서 제출합니다.
+- `type`(`numeric`, `alphanumeric`, `alphabetic`), `otp`, `mask`, `invalid`,
+  `disabled`는 Chakra `PinInput.Root`의 속성입니다. `otp`를 주면
+  `autocomplete="one-time-code"`가 붙어 휴대폰이 문자로 받은 코드를 제안합니다.
+- `inputProps`는 전체 값을 담는 숨은 입력란에 전달됩니다. 네이티브 폼에서 `name`을 줄
+  때 씁니다.
+- 칸은 기본으로 비어 있습니다(`placeholder=""`).
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={PinInputStories.DoSayWhereTheCodeWent} />
+<Verdict
+  kind="do"
+  en="Say above the boxes how long the code is and where it was sent."
+  ko="칸 위에 코드가 몇 자리인지, 어디로 보냈는지 적습니다."
+/>
+
+<Canvas of={PinInputStories.DontCodeWithoutContext} />
+<Verdict
+  kind="dont"
+  en="Show the boxes with nothing around them. The user does not know which code to look for, and a screen reader has nothing to read before the first box."
+  ko="아무 설명 없이 칸만 두지 마세요. 어떤 코드를 찾아야 하는지 알 수 없고, 화면 낭독기도 첫 칸 앞에서 읽을 것이 없습니다."
+/>
+
+<Canvas of={PinInputStories.DoErrorBelow} />
+<Verdict
+  kind="do"
+  en="Mark a wrong code with invalid and a message that says what to do next."
+  ko="틀린 코드는 invalid로 표시하고, 다음에 무엇을 할지 알려 주는 문구를 함께 둡니다."
+/>
+
+<En>
+
+## Content
+
+- The sentence above the boxes: the length and the destination, for example
+  "Enter the 6-digit code we sent to name@company.com".
+- Offer a way out next to it: resend the code, or use another method.
+- Error: what happened and what to do (코드가 맞지 않습니다. 메일을 다시 확인해
+  주세요.).
+
+## Accessibility
+
+What PinInput does for you:
+
+- Each box is a native input. Typing moves focus to the next box and
+  Backspace moves back; this behaviour comes from Chakra.
+- Focus shows a `primary.main` border and ring (WCAG 2.4.7). On touch devices
+  the text is raised to 16px so iOS Safari does not zoom.
+
+What you still have to do:
+
+- **Put the instruction in text right before the boxes**, so the first thing a
+  screen reader reaches is what the code is for (WCAG 3.3.2).
+- Chakra names each box in English ("pin code 1 of 6"). Pass Chakra's
+  `translations` when the screen is Korean.
+- Put errors in words, not only in the red border (WCAG 1.4.1, 3.3.1).
+- Do not auto-submit on a time limit without saying how long the code is
+  valid.
+
+## Tokens
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 칸 위 문장에는 자릿수와 보낸 곳을 씁니다. 예: name@company.com 으로 보낸 6자리
+  코드를 입력하세요.
+- 바로 옆에 다른 길을 둡니다. 코드 다시 보내기나 다른 인증 방법입니다.
+- 오류 문구는 무슨 일이 있었고 무엇을 하면 되는지 씁니다. 예: 코드가 맞지 않습니다.
+  메일을 다시 확인해 주세요.
+
+## 접근성
+
+PinInput이 알아서 하는 일
+
+- 칸마다 네이티브 입력란입니다. 입력하면 다음 칸으로, Backspace를 누르면 앞 칸으로
+  초점이 옮겨 갑니다. Chakra가 제공하는 동작입니다.
+- 초점을 받으면 `primary.main` 테두리와 링이 보입니다(WCAG 2.4.7). 터치 기기에서는
+  글자를 16px로 키워 iOS Safari가 화면을 확대하지 않게 합니다.
+
+직접 챙겨야 하는 일
+
+- **안내 문장을 칸 바로 앞에 둡니다.** 그래야 화면 낭독기가 칸보다 코드의 용도를 먼저
+  읽습니다(WCAG 3.3.2).
+- Chakra는 칸마다 영어 이름("pin code 1 of 6")을 붙입니다. 한국어 화면에서는 Chakra의
+  `translations`를 넘깁니다.
+- 오류는 빨간 테두리만이 아니라 문구로 알립니다(WCAG 1.4.1, 3.3.1).
+- 코드의 유효 시간을 알리지 않은 채 시간이 지나면 자동으로 넘어가게 하지 않습니다.
+
+## 토큰
+
+</Ko>
+
+<Canvas of={PinInputStories.UsageTokens} sourceState="none" />
+
+<En>
+
+## Related
+
+- **PasswordInput**: a secret the user chooses.
+- **Input**: codes of variable length.
+- **FieldRow**: the error under the boxes.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **PasswordInput**: 사용자가 정하는 비밀 값.
+- **Input**: 길이가 정해지지 않은 코드.
+- **FieldRow**: 칸 아래 오류 문구.
+
+</Ko>

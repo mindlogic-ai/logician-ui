@@ -1,0 +1,128 @@
+import { Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as FormControlStories from './FormControl.stories';
+
+<Meta of={FormControlStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# FormControl
+
+Chakra's `Field.Root` under the design-system name: the wrapper that shares one
+field's id and state with its label, control, helper and error.
+
+## When to use
+
+- A field layout `FieldRow` does not cover, built from `FormLabel`, a control,
+  `FieldHelp` and `FieldError`.
+- Wrapping a control so a parent can set `required`, `invalid`, `disabled` or
+  `readOnly` once.
+
+## When not to use
+
+- A standard field → `FieldRow`, which is `FormControl` with the label, helper
+  and error already laid out.
+
+## Props
+
+`required`, `invalid`, `disabled` and `readOnly` (plus every `Field.Root`
+prop). The state reaches `Input`, `Textarea` and `PasswordInput` through
+Chakra's field context, together with the id the label points at and the
+`aria-describedby` for helper and error text. Composed controls (`SelectField`,
+`ComboboxField`, `Slider`) take their name from their own label part, so give
+them `label` or `ariaLabel` and pass `invalid` / `disabled` to them directly.
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+# FormControl
+
+Chakra `Field.Root`를 디자인 시스템 이름으로 내보낸 것입니다. 필드 하나의 id와 상태를
+라벨, 컨트롤, 도움말, 오류 문구에 나눠 주는 래퍼입니다.
+
+## 언제 쓰나요
+
+- `FieldRow`로 안 되는 필드 배치를 `FormLabel`, 컨트롤, `FieldHelp`, `FieldError`로
+  직접 짤 때.
+- 상위에서 `required`, `invalid`, `disabled`, `readOnly`를 한 번에 정하려고 컨트롤을
+  감쌀 때.
+
+## 언제 쓰지 않나요
+
+- 일반적인 필드는 `FieldRow`를 씁니다. 라벨, 도움말, 오류 문구가 이미 배치된
+  `FormControl`입니다.
+
+## 속성
+
+`required`, `invalid`, `disabled`, `readOnly`(그리고 `Field.Root`의 모든 속성)를
+받습니다. 이 상태는 Chakra의 필드 컨텍스트를 타고 `Input`, `Textarea`,
+`PasswordInput`에 전달되며, 라벨이 가리키는 id와 도움말·오류 문구용
+`aria-describedby`도 함께 전달됩니다. 부품을 조합한 컨트롤(`SelectField`,
+`ComboboxField`, `Slider`)은 자기 라벨 부품에서 이름을 가져오므로 `label`이나
+`ariaLabel`을 주고, `invalid`·`disabled`도 컨트롤에 직접 넘깁니다.
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={FormControlStories.DoFieldRowFirst} />
+<Verdict
+  kind="do"
+  en="Reach for FieldRow first. It is FormControl with the label, help and error placed for you."
+  ko="먼저 FieldRow를 씁니다. 라벨, 도움말, 오류 문구를 알아서 배치한 FormControl입니다."
+/>
+
+<Canvas of={FormControlStories.DoInvalidOnTheField} />
+<Verdict
+  kind="do"
+  en="When you compose by hand, set invalid on FormControl, not on the Input, and add a FieldError with the reason."
+  ko="직접 조합할 때는 invalid를 Input이 아니라 FormControl에 주고, 이유를 적은 FieldError를 함께 둡니다."
+/>
+
+<En>
+
+## Accessibility
+
+- `invalid` on `FormControl` sets `aria-invalid` on the input; `invalid` on
+  `Input` only paints the border (WCAG 3.3.1, 4.1.2).
+- `required` marks the input required and shows the asterisk in `FormLabel`.
+  Say "required" in words somewhere on the form too; an asterisk alone is a
+  symbol not everyone knows (WCAG 3.3.2).
+
+## Tokens
+
+None. FormControl draws nothing; the label colours are on the FormLabel page.
+
+## Related
+
+- **FieldRow**: the laid-out field.
+- **FormLabel**, **FieldHelp**, **FieldError**: the parts.
+
+</En>
+
+<Ko>
+
+## 접근성
+
+- `FormControl`의 `invalid`는 입력란에 `aria-invalid`를 붙이고, `Input`의 `invalid`는
+  테두리만 칠합니다(WCAG 3.3.1, 4.1.2).
+- `required`는 입력란을 필수로 표시하고 `FormLabel`에 별표를 보여 줍니다. 별표는 모두가
+  아는 기호가 아니므로 폼 어딘가에 "필수"라고 글자로도 적습니다(WCAG 3.3.2).
+
+## 토큰
+
+없습니다. FormControl은 아무것도 그리지 않습니다. 라벨 색은 FormLabel 페이지에
+있습니다.
+
+## 관련 컴포넌트
+
+- **FieldRow**: 배치까지 된 필드.
+- **FormLabel**, **FieldHelp**, **FieldError**: 부품.
+
+</Ko>

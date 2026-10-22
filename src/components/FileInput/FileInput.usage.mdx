@@ -1,0 +1,178 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as FileInputStories from './FileInput.stories';
+
+<Meta of={FileInputStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# FileInput
+
+A dashed area that opens the system file picker when clicked, with an
+optional image preview behind it.
+
+## When to use
+
+- Uploading a file into a form: a member list CSV, a policy document,
+  reference images, a project file.
+- Replacing an image, with the current one shown through `bgImage`.
+
+## When not to use
+
+- Attaching files to a chat message → the chat composer's attach button.
+- Showing files already uploaded → `FileList` or `FileItem` (put them under
+  the FileInput).
+
+## Props
+
+</En>
+
+<Ko>
+
+# FileInput
+
+누르면 시스템 파일 선택 창이 열리는 점선 영역입니다. 뒤에 이미지 미리보기를 깔 수
+있습니다.
+
+## 언제 쓰나요
+
+- 폼에 파일을 올릴 때: 멤버 목록 CSV, 정책 문서, 참고 이미지, 프로젝트 파일.
+- 이미지를 바꿀 때. 지금 이미지는 `bgImage`로 보여 줍니다.
+
+## 언제 쓰지 않나요
+
+- 채팅 메시지에 파일을 붙일 때는 채팅 입력창의 첨부 버튼을 씁니다.
+- 이미 올린 파일을 보여 줄 때는 `FileList`나 `FileItem`을 씁니다(FileInput 아래에
+  둡니다).
+
+## 속성
+
+</Ko>
+
+<ArgTypes
+  of={FileInputStories}
+  include={[
+    'onChange',
+    'fileInputLabel',
+    'bgImage',
+    'isLoading',
+    'containerStyle',
+  ]}
+/>
+
+<En>
+
+`onChange` receives the browser's `FileList` (or `null`). Native input props
+such as `accept`, `multiple` and `name` pass through to the hidden
+`<input type="file">`, and the forwarded ref points at it. `isLoading`
+replaces the prompt with a spinner. The default prompt is translated
+(`upload_your_file`). The area does not handle drag and drop.
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+`onChange`는 브라우저의 `FileList`(또는 `null`)를 받습니다. `accept`, `multiple`,
+`name` 같은 네이티브 속성은 숨은 `<input type="file">`에 그대로 전달되고, 넘긴 ref도 이
+입력을 가리킵니다. `isLoading`이면 안내 문구 대신 스피너를 보여 줍니다. 기본 안내
+문구는 번역됩니다(`upload_your_file`). 끌어다 놓기는 처리하지 않습니다.
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={FileInputStories.DoSayWhatFits} />
+<Verdict
+  kind="do"
+  en="Label it, set accept, and say the allowed types, size limit and expected layout in helper text."
+  ko="라벨을 붙이고 accept를 지정하며, 받는 형식, 최대 크기, 내용 형식을 도움말로 알려 줍니다."
+/>
+
+<Canvas of={FileInputStories.DontUnexplained} />
+<Verdict
+  kind="dont"
+  en="Show the drop area with only the default prompt. The user finds out the rules by failing."
+  ko="기본 안내 문구만 있는 영역을 두지 마세요. 사용자는 실패하고 나서야 조건을 압니다."
+/>
+
+<En>
+
+## Content
+
+- The prompt says what to do with the pointer (파일을 눌러서 고르기). Do not
+  promise dragging; it is not supported.
+- Types and size limit go in `FieldRow` `helperText`, the same words the
+  error will use.
+
+## Accessibility
+
+What FileInput does for you:
+
+- The prompt sits inside a `<label>` around the file input, so clicking
+  anywhere in it opens the picker. There is no extra role on the wrapper
+  (`ACCESSIBILITY.md` §3).
+
+Known gap, and what to do:
+
+- **It cannot be reached by keyboard.** The file input is `hidden`, so it is
+  out of the tab order and the label is not focusable (WCAG 2.1.1). Until the
+  component is fixed, add a visible `Button` next to it that calls
+  `ref.current?.click()`.
+- Wrap it in `FieldRow` with a label so the purpose is in text (WCAG 3.3.2),
+  and report rejected files in words, not only with the red row in
+  `FileItem` (WCAG 3.3.1).
+
+## Tokens
+
+The dashed border is `border.default`; the prompt and icon are `fg.subtle` on
+a `bg.muted` tile, over an 85% `bg.surface` wash. With `bgImage` the prompt
+turns `fg.default` and appears on hover.
+
+## Related
+
+- **FileList** / **FileItem**: what was uploaded.
+- **FieldRow**: label, rules and error.
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 안내 문구에는 포인터로 할 일을 씁니다(파일을 눌러서 고르기). 끌어다 놓기는 지원하지
+  않으므로 약속하지 않습니다.
+- 형식과 최대 크기는 `FieldRow`의 `helperText`에 쓰고, 오류 문구에서도 같은 표현을
+  씁니다.
+
+## 접근성
+
+FileInput이 알아서 하는 일
+
+- 안내 문구가 파일 입력을 감싼 `<label>` 안에 있어서 영역 어디를 눌러도 선택 창이
+  열립니다. 감싸는 요소에 불필요한 역할을 주지 않습니다(`ACCESSIBILITY.md` 3절).
+
+알려진 한계와 대처
+
+- **키보드로 닿을 수 없습니다.** 파일 입력이 `hidden`이라 Tab 순서에서 빠지고, 라벨도
+  초점을 받지 않습니다(WCAG 2.1.1). 고쳐지기 전까지는 옆에 `ref.current?.click()`을
+  호출하는 보이는 `Button`을 둡니다.
+- 라벨이 있는 `FieldRow`로 감싸 용도를 글자로 알리고(WCAG 3.3.2), 받지 못한 파일은
+  `FileItem`의 빨간 행만이 아니라 문구로 알립니다(WCAG 3.3.1).
+
+## 토큰
+
+점선 테두리는 `border.default`, 안내 문구와 아이콘은 `bg.muted` 타일 위의
+`fg.subtle`이며, 바탕은 85% `bg.surface`입니다. `bgImage`가 있으면 안내 문구가
+`fg.default`로 바뀌고 마우스를 올렸을 때 나타납니다.
+
+## 관련 컴포넌트
+
+- **FileList** / **FileItem**: 올린 파일.
+- **FieldRow**: 라벨, 조건, 오류 문구.
+
+</Ko>

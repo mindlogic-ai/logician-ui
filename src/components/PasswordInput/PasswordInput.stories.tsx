@@ -2,6 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { Stack, Text } from '@chakra-ui/react';
 
+import { FieldRow } from '../Form';
 import { PasswordInput } from './PasswordInput';
 
 const meta = {
@@ -53,4 +54,54 @@ export const Disabled: Story = {
     disabled: true,
     defaultValue: 'password123',
   },
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `PasswordInput.usage.mdx` with <Canvas of={…} />. Hidden (`!dev`).
+
+export const DoSignInPassword: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: labelled, with autocomplete',
+  render: () => (
+    <Stack maxW="360px">
+      <FieldRow label="비밀번호" required>
+        <PasswordInput autoComplete="current-password" />
+      </FieldRow>
+    </Stack>
+  ),
+};
+
+export const DoRulesBeforeTyping: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: state the rule before the user types',
+  render: () => (
+    <Stack maxW="360px">
+      <FieldRow
+        label="새 비밀번호"
+        helperText="영문, 숫자, 특수문자를 섞어 8자 이상 입력합니다."
+        required
+      >
+        <PasswordInput autoComplete="new-password" />
+      </FieldRow>
+    </Stack>
+  ),
+};
+
+export const DontRuleOnlyInError: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: reveal the rule only as an error",
+  render: () => (
+    <Stack maxW="360px">
+      <FieldRow
+        label="새 비밀번호"
+        error="비밀번호가 올바르지 않습니다."
+        required
+      >
+        <PasswordInput autoComplete="new-password" defaultValue="abcd" />
+      </FieldRow>
+    </Stack>
+  ),
 };

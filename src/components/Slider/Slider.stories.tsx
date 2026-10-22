@@ -9,6 +9,11 @@ import {
   SliderThumbs,
   SliderTrack,
 } from '@/components/Slider';
+import { Flex } from '@chakra-ui/react';
+
+import { T } from '../../guidelines/_components/Lang';
+import { TokenTable } from '../../guidelines/_components/TokenTable';
+import { Text } from '../Typography';
 
 const meta = {
   title: 'Components/Slider',
@@ -276,4 +281,115 @@ export const Sizes: Story = {
       </div>
     );
   },
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `Slider.usage.mdx` with <Canvas of={…} />. Hidden (`!dev`).
+
+export const DoValueBeside: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: a name and the value beside it',
+  render: () => {
+    const [value, setValue] = useState([70]);
+    return (
+      <Flex align="center" gap={4} maxW="420px">
+        <Text id="usage-volume" fontWeight="semibold" minW="48px">
+          음량
+        </Text>
+        <Slider
+          flex={1}
+          ariaLabel="음량"
+          value={value}
+          min={0}
+          max={100}
+          onValueChange={(d) => setValue(d.value)}
+        >
+          <SliderTrack>
+            <SliderFilledTrack />
+          </SliderTrack>
+          <SliderThumb />
+        </Slider>
+        <Text minW="40px" textAlign="end">
+          {value[0]}%
+        </Text>
+      </Flex>
+    );
+  },
+};
+
+export const DontExactNumber: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: a slider for an exact number",
+  render: () => {
+    const [value, setValue] = useState([1250]);
+    return (
+      <Flex align="center" gap={4} maxW="420px">
+        <Text fontWeight="semibold">월 한도</Text>
+        <Slider
+          flex={1}
+          ariaLabel="월 한도"
+          value={value}
+          min={0}
+          max={100000}
+          onValueChange={(d) => setValue(d.value)}
+        >
+          <SliderTrack>
+            <SliderFilledTrack />
+          </SliderTrack>
+          <SliderThumb />
+        </Slider>
+      </Flex>
+    );
+  },
+};
+
+/** Tokens the slider parts read, as written in their `.tsx` files. */
+export const UsageTokens: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Tokens',
+  render: () => (
+    <TokenTable
+      rows={[
+        {
+          token: 'bg.track',
+          use: <T en="Empty rail (SliderTrack)" ko="빈 레일(SliderTrack)" />,
+        },
+        {
+          token: 'primary.main',
+          use: (
+            <T
+              en="Filled rail and thumb border"
+              ko="채운 레일과 손잡이 테두리"
+            />
+          ),
+        },
+        { token: 'bg.canvas', use: <T en="Thumb centre" ko="손잡이 가운데" /> },
+        {
+          token: 'bg.muted',
+          use: (
+            <T
+              en="Disabled thumb and filled rail"
+              ko="비활성 손잡이와 채운 레일"
+            />
+          ),
+        },
+        {
+          token: 'border.default',
+          use: <T en="Disabled thumb border" ko="비활성 손잡이 테두리" />,
+        },
+        {
+          token: 'focus.ring',
+          use: (
+            <T
+              en="Keyboard focus ring on the thumb"
+              ko="손잡이의 키보드 초점 링"
+            />
+          ),
+        },
+      ]}
+    />
+  ),
 };

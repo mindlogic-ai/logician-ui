@@ -2,6 +2,9 @@ import { Box, HStack, Stack, VStack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
+import { T } from '../../guidelines/_components/Lang';
+import { TokenTable } from '../../guidelines/_components/TokenTable';
+import { Text } from '../Typography';
 import { Radio } from './Radio';
 import { RadioGroup } from './RadioGroup';
 
@@ -260,4 +263,120 @@ export const FormExample: RadioGroupStory = {
       </VStack>
     );
   },
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `Radio.usage.mdx` with <Canvas of={…} />. Hidden (`!dev`); `tags`
+// is written out on each story because the indexer reads CSF statically.
+
+const PLANS = [
+  {
+    value: 'member',
+    label: '멤버별 한도',
+    hint: '멤버마다 같은 크레딧을 나눠 줍니다.',
+  },
+  {
+    value: 'group',
+    label: '그룹 공용',
+    hint: '그룹 안에서 크레딧을 함께 씁니다.',
+  },
+  { value: 'none', label: '제한 없음', hint: '조직 전체 한도만 적용합니다.' },
+];
+
+export const DoNamedGroup: StoryObj = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: a named group with a default',
+  render: () => (
+    <Stack gap={3} maxW="420px">
+      <Text id="usage-credit-mode" fontWeight="semibold">
+        크레딧 배분 방식
+      </Text>
+      <RadioGroup defaultValue="member" aria-labelledby="usage-credit-mode">
+        <Stack gap={3}>
+          {PLANS.map((plan) => (
+            <Radio key={plan.value} value={plan.value} alignItems="flex-start">
+              <Radio.Control />
+              <Radio.Text>
+                {plan.label}
+                <Text as="span" display="block" color="fg.muted" fontSize="sm">
+                  {plan.hint}
+                </Text>
+              </Radio.Text>
+            </Radio>
+          ))}
+        </Stack>
+      </RadioGroup>
+    </Stack>
+  ),
+};
+
+export const DontRadioForMany: StoryObj = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: a long list of radios",
+  render: () => (
+    <RadioGroup defaultValue="1" aria-label="시간대">
+      <Stack gap={2}>
+        {[
+          '서울',
+          '도쿄',
+          '싱가포르',
+          '시드니',
+          '런던',
+          '파리',
+          '뉴욕',
+          '로스앤젤레스',
+        ].map((city, i) => (
+          <Radio key={city} value={String(i)}>
+            <Radio.Control />
+            <Radio.Text>{city}</Radio.Text>
+          </Radio>
+        ))}
+      </Stack>
+    </RadioGroup>
+  ),
+};
+
+export const DontSingleRadio: StoryObj = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: one radio on its own",
+  render: () => (
+    <RadioGroup aria-label="약관">
+      <Radio value="agree">
+        <Radio.Control />
+        <Radio.Text>이용약관에 동의합니다</Radio.Text>
+      </Radio>
+    </RadioGroup>
+  ),
+};
+
+/** Tokens `RadioControl` reads, as written in `RadioControl.tsx`. */
+export const UsageTokens: StoryObj = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Tokens',
+  render: () => (
+    <TokenTable
+      rows={[
+        {
+          token: 'bg.surface',
+          use: <T en="Unselected ring fill" ko="선택 전 원 안쪽" />,
+        },
+        {
+          token: 'border.control',
+          use: <T en="Unselected ring (3:1)" ko="선택 전 테두리(3:1)" />,
+        },
+        { token: 'primary.main', use: <T en="Selected fill" ko="선택 채움" /> },
+        { token: 'fg.onPrimary', use: <T en="Selected dot" ko="선택 점" /> },
+        { token: 'disabled.bg', use: <T en="Disabled ring" ko="비활성 원" /> },
+        { token: 'disabled.fg', use: <T en="Disabled dot" ko="비활성 점" /> },
+        {
+          token: 'focus.ring',
+          use: <T en="Keyboard focus ring" ko="키보드 초점 링" />,
+        },
+      ]}
+    />
+  ),
 };

@@ -1,0 +1,125 @@
+import { Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as FormLabelStories from './FormLabel.stories';
+
+<Meta of={FormLabelStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# FormLabel
+
+The visible label of a field. Inside `FormControl` it is associated with the
+control and shows the required asterisk on its own.
+
+## When to use
+
+- Inside `FormControl`, when you compose a field by hand. `FieldRow` (through
+  `FieldLabel`) already renders one.
+
+## When not to use
+
+- A section title → `FormSection` `title`.
+- A label for a checkbox, radio or switch option → `Checkbox.Label`,
+  `Radio.Text`, `Switch.Label`.
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+# FormLabel
+
+필드의 보이는 라벨입니다. `FormControl` 안에서는 컨트롤과 연결되고 필수 별표도 알아서
+보여 줍니다.
+
+## 언제 쓰나요
+
+- 필드를 직접 조합할 때 `FormControl` 안에서 씁니다. `FieldRow`는 `FieldLabel`을 통해
+  이미 FormLabel을 그립니다.
+
+## 언제 쓰지 않나요
+
+- 섹션 제목은 `FormSection`의 `title`을 씁니다.
+- 체크박스, 라디오, 스위치 선택지의 라벨은 `Checkbox.Label`, `Radio.Text`,
+  `Switch.Label`을 씁니다.
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={FormLabelStories.DoNounLabels} />
+<Verdict
+  kind="do"
+  en="Write short nouns and let FormControl required add the asterisk."
+  ko="짧은 명사로 쓰고, 별표는 FormControl의 required가 붙이게 둡니다."
+/>
+
+<Canvas of={FormLabelStories.DontSentenceLabels} />
+<Verdict
+  kind="dont"
+  en="Write an instruction with a colon and type '(필수)' by hand. The asterisk already says it, so the label says it twice."
+  ko="쌍점을 붙인 지시문으로 쓰거나 '(필수)'를 직접 적지 마세요. 별표가 이미 알려 주므로 두 번 말하게 됩니다."
+/>
+
+<En>
+
+## Content
+
+- A noun phrase in sentence case, no colon, no "(required)".
+- Keep it under about four words; anything longer goes in `FieldRow`
+  `description` or helper text.
+
+## Accessibility
+
+- It renders Chakra's `Field.Label`, a `<label>` whose `for` is the field's
+  control id, so clicking it focuses the control and screen readers read it as
+  the control's name (WCAG 1.3.1, 4.1.2; KWCAG 5.3.4.1 레이블 제공).
+- Outside `FormControl` there is no id to point at: pass `htmlFor` yourself.
+- Composed controls (`SelectField`, `ComboboxField`, `Slider`) are not named
+  by it; give them `label` or `ariaLabel`.
+
+## Tokens
+
+The label text is `fg.muted` from its wrapper (`FieldLabel` overrides it to
+`fg.default`, semibold). The asterisk is `danger.fg`.
+
+## Related
+
+- **FormControl**: the field it labels.
+- **FieldRow** / **FieldLabel**: the laid-out label with description and an
+  end slot.
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 문장형 대소문자의 명사구로 쓰고, 쌍점이나 "(필수)"를 붙이지 않습니다.
+- 네 단어 안팎으로 씁니다. 더 긴 설명은 `FieldRow`의 `description`이나 도움말에
+  넣습니다.
+
+## 접근성
+
+- Chakra `Field.Label`을 그립니다. `for`가 필드 컨트롤의 id인 `<label>`이라, 누르면
+  컨트롤로 초점이 가고 화면 낭독기는 이를 컨트롤의 이름으로 읽습니다(WCAG 1.3.1, 4.1.2,
+  KWCAG 5.3.4.1 레이블 제공).
+- `FormControl` 밖에서는 가리킬 id가 없으므로 `htmlFor`를 직접 넘깁니다.
+- 부품을 조합한 컨트롤(`SelectField`, `ComboboxField`, `Slider`)에는 이 라벨이 이름으로
+  닿지 않습니다. `label`이나 `ariaLabel`을 줍니다.
+
+## 토큰
+
+라벨 글자는 감싸는 요소의 `fg.muted`를 씁니다(`FieldLabel`은 `fg.default` 굵은
+글자로 바꿉니다). 별표는 `danger.fg`입니다.
+
+## 관련 컴포넌트
+
+- **FormControl**: 라벨이 붙는 필드.
+- **FieldRow** / **FieldLabel**: 설명과 끝 자리가 있는 배치된 라벨.
+
+</Ko>

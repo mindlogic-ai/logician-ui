@@ -9,11 +9,21 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import { Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
+import { T } from '../../guidelines/_components/Lang';
+import { TokenTable } from '../../guidelines/_components/TokenTable';
 import { Badge } from '../Badge';
+import { Radio, RadioGroup } from '../Radio';
 import { IoCall, IoChatbubbleEllipses, IoIosMail } from '../Icon';
+import { ComboboxField } from './ComboboxField';
 import { Select } from './Select';
+import {
+  contentStyles,
+  indicatorStyles,
+  itemStyles,
+  triggerStyles,
+} from './Select.styles';
 import { SelectField } from './SelectField';
 
 const meta = {
@@ -770,4 +780,202 @@ export const WithOpenChange = () => {
       )}
     </HStack>
   );
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `Select.usage.mdx` with <Canvas of={…} />. Hidden from the
+// sidebar (`!dev`); `tags` is written out on each story because the indexer
+// reads CSF statically.
+
+type UsageStory = StoryObj;
+
+const LANGUAGES = [
+  { label: '한국어', value: 'ko' },
+  { label: 'English', value: 'en' },
+  { label: '日本語', value: 'ja' },
+];
+
+const GROUPS = [
+  '경영지원팀',
+  '고객성공팀',
+  '데이터팀',
+  '디자인팀',
+  '마케팅팀',
+  '백엔드팀',
+  '법무팀',
+  '보안팀',
+  '사업개발팀',
+  '세일즈팀',
+  '인사팀',
+  '재무팀',
+  '프론트엔드팀',
+].map((name) => ({ label: name, value: name }));
+
+export const DoLabelled: UsageStory = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: a visible label',
+  render: () => (
+    <Box maxW="320px">
+      <SelectField label="답변 언어" options={LANGUAGES} defaultValue="ko" />
+    </Box>
+  ),
+};
+
+export const DontNameless: UsageStory = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: no label, ariaLabel or placeholder",
+  render: () => (
+    <Flex maxW="480px" align="center" justify="space-between" gap={4}>
+      <Text fontWeight="semibold">답변 언어</Text>
+      <Box w="180px">
+        <SelectField options={LANGUAGES} defaultValue="ko" />
+      </Box>
+    </Flex>
+  ),
+};
+
+export const DoComboboxForLongList: UsageStory = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: ComboboxField for a long list',
+  render: () => (
+    <Box maxW="320px">
+      <ComboboxField
+        label="그룹"
+        placeholder="그룹 이름으로 찾기"
+        options={GROUPS}
+        emptyText="일치하는 그룹이 없습니다"
+      />
+    </Box>
+  ),
+};
+
+export const DontSelectForTwo: UsageStory = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: a dropdown for two options",
+  render: () => (
+    <Box maxW="320px">
+      <SelectField
+        label="공개 범위"
+        options={[
+          { label: '전체 공개', value: 'public' },
+          { label: '그룹만', value: 'group' },
+        ]}
+        defaultValue="public"
+      />
+    </Box>
+  ),
+};
+
+export const DoRadioForTwo: UsageStory = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: Radio for two visible options',
+  render: () => (
+    <Stack gap={2} maxW="320px">
+      <Text id="usage-visibility" fontWeight="semibold">
+        공개 범위
+      </Text>
+      <RadioGroup
+        defaultValue="public"
+        aria-labelledby="usage-visibility"
+        display="flex"
+        gap={4}
+      >
+        <Radio value="public">
+          <Radio.Control />
+          <Radio.Text>전체 공개</Radio.Text>
+        </Radio>
+        <Radio value="group">
+          <Radio.Control />
+          <Radio.Text>그룹만</Radio.Text>
+        </Radio>
+      </RadioGroup>
+    </Stack>
+  ),
+};
+
+/**
+ * Tokens the trigger, list and options read, taken from the style objects in
+ * `Select.styles.ts` (shared by Select and Combobox).
+ */
+export const UsageTokens: UsageStory = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Tokens',
+  render: () => (
+    <TokenTable
+      rows={[
+        {
+          token: triggerStyles.bg,
+          use: <T en="Trigger background" ko="트리거 배경" />,
+        },
+        {
+          token: triggerStyles.color,
+          use: <T en="Selected value" ko="선택한 값" />,
+        },
+        {
+          token: triggerStyles.borderColor,
+          use: <T en="Trigger border at rest" ko="트리거 평소 테두리" />,
+        },
+        {
+          token: triggerStyles._hover.borderColor,
+          use: <T en="Border on hover" ko="마우스를 올렸을 때 테두리" />,
+        },
+        {
+          token: triggerStyles._focus.borderColor,
+          use: (
+            <T
+              en="Border and ring on focus or open"
+              ko="초점을 받거나 열렸을 때 테두리와 링"
+            />
+          ),
+        },
+        {
+          token: triggerStyles._invalid.borderColor,
+          use: <T en="Border when invalid" ko="오류 상태 테두리" />,
+        },
+        {
+          token: triggerStyles._disabled.bg,
+          use: <T en="Disabled background" ko="비활성 배경" />,
+        },
+        {
+          token: triggerStyles._disabled.color,
+          use: <T en="Disabled text" ko="비활성 글자" />,
+        },
+        {
+          token: indicatorStyles.color,
+          use: <T en="Chevron" ko="펼침 화살표" />,
+        },
+        {
+          token: contentStyles.bg,
+          use: <T en="List background" ko="목록 배경" />,
+        },
+        {
+          token: contentStyles.borderColor,
+          use: <T en="List border" ko="목록 테두리" />,
+        },
+        {
+          token: itemStyles._highlighted.bg,
+          use: (
+            <T
+              en="Option under the pointer or keyboard"
+              ko="포인터나 키보드가 가리키는 항목"
+            />
+          ),
+        },
+        {
+          token: itemStyles._checked.bg,
+          use: <T en="Selected option" ko="선택된 항목" />,
+        },
+        {
+          token: itemStyles._disabled.color,
+          use: <T en="Disabled option" ko="선택할 수 없는 항목" />,
+        },
+      ]}
+    />
+  ),
 };

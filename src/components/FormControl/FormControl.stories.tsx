@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Stack } from '@chakra-ui/react';
 
+import { FieldError, FieldRow } from '../Form';
 import { FormLabel } from '../FormLabel';
 import { Input } from '../Input';
 import { FormControl } from './FormControl';
@@ -73,6 +74,40 @@ export const ReadOnly: Story = {
     <FormControl readOnly>
       <FormLabel>이름</FormLabel>
       <Input value="읽기 전용 값" />
+    </FormControl>
+  ),
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `FormControl.usage.mdx` with <Canvas of={…} />. Hidden (`!dev`).
+
+export const DoFieldRowFirst: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: FieldRow for the common field',
+  render: () => (
+    <Stack w="320px">
+      <FieldRow
+        label="표시 이름"
+        helperText="다른 멤버에게 보이는 이름입니다."
+        error="이름을 입력해 주세요."
+        required
+      >
+        <Input />
+      </FieldRow>
+    </Stack>
+  ),
+};
+
+export const DoInvalidOnTheField: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: invalid on FormControl',
+  render: () => (
+    <FormControl invalid required w="320px">
+      <FormLabel>업무용 이메일</FormLabel>
+      <Input type="email" value="name@company" onChange={() => {}} />
+      <FieldError>이메일 주소 형식이 아닙니다.</FieldError>
     </FormControl>
   ),
 };
