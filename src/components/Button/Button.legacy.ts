@@ -33,6 +33,7 @@ export type LegacyResolution = {
 const BUTTON_VARIANT_KEYS: Record<ButtonVariant, true> = {
   primary: true,
   action: true,
+  accent: true,
   secondary: true,
   subtle: true,
   ghost: true,

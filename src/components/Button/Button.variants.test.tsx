@@ -47,6 +47,15 @@ describe('Button variants (5.0)', () => {
     expect(getButtonStyles('danger', true).color).toBe('danger.onSolid');
   });
 
+  it('accent is the coral fill with a dark label (send.* tokens)', () => {
+    const accent = getButtonStyles('accent');
+    expect(accent.bgColor).toBe('send.bg');
+    expect(accent.color).toBe('send.fg');
+    expect(accent._hover).toMatchObject({ bgColor: 'send.bgHover' });
+    expect(accent._active).toMatchObject({ bgColor: 'send.bgActive' });
+    expect(getButtonStyles('accent', true).color).toBe('send.fg');
+  });
+
   it('disabled is a fixed colour pair, not opacity', () => {
     expect(buttonVariantStyles.primary._disabled).toMatchObject({
       bg: 'disabled.bg',

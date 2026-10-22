@@ -38,6 +38,7 @@ const NAME = 'button-variants';
 const NEW_BUTTON = new Set([
   'primary',
   'action',
+  'accent',
   'secondary',
   'subtle',
   'ghost',

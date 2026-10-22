@@ -16,6 +16,8 @@ import type { PolymorphicProps } from '../../types/polymorphic';
  *
  * - `primary`: BAZE black fill — the one main action of a screen
  * - `action`: black "run" button whose icon is coral (`action.iconOnSolid`)
+ * - `accent`: coral fill with dark text (`send.*`) — the one coloured call to
+ *   action of a marketing surface or a hero; at most one per view
  * - `secondary`: outlined surface button — cancel, alternative actions
  * - `subtle`: quiet warm-wash fill — low-emphasis actions (the default)
  * - `ghost`: no fill, no border — toolbars, inline actions
@@ -27,6 +29,7 @@ import type { PolymorphicProps } from '../../types/polymorphic';
 export type ButtonVariant =
   | 'primary'
   | 'action'
+  | 'accent'
   | 'secondary'
   | 'subtle'
   | 'ghost'
@@ -83,8 +86,8 @@ export type ButtonOwnProps = Omit<
   /**
    * Danger-coloured text (`danger.fg`) for a destructive action that does not
    * deserve a red fill. Applies to `secondary`, `ghost` and `subtle`; the
-   * border and fill stay the variant's own. Ignored on `primary`, `action` and
-   * `danger` (use `variant="danger"` for a filled destructive button).
+   * border and fill stay the variant's own. Ignored on `primary`, `action`,
+   * `accent` and `danger` (use `variant="danger"` for a filled destructive button).
    * @default false
    */
   isDestructive?: boolean;

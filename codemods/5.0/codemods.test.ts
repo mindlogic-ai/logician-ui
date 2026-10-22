@@ -353,6 +353,7 @@ describe('parity with the runtime legacy mappers', () => {
       'surface',
       'primary',
       'action',
+      'accent',
       'secondary',
       'subtle',
       'danger',
