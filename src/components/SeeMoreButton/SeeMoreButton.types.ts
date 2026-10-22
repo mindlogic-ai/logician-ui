@@ -12,7 +12,15 @@ export type SeeMoreButtonOwnProps = Omit<
   ButtonOwnProps,
   'variant' | 'isDestructive'
 > & {
+  /**
+   * How many items the list shows now. Printed as the first number of
+   * `더보기 (currentCount/maxCount)`.
+   */
   currentCount: number;
+  /**
+   * How many items there are in total. The button does not disable or hide
+   * itself when `currentCount` reaches this; the caller does.
+   */
   maxCount: number;
 };
 
