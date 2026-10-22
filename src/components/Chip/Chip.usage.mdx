@@ -1,0 +1,78 @@
+import { Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle } from '../../guidelines/_components/Lang';
+import * as ChipStories from './Chip.stories';
+
+<Meta of={ChipStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# Chip (deprecated)
+
+**Use `Tag`.** Since 5.0 `Chip` is a thin alias of `Tag` and it is removed in
+6.0. It still renders so that unmigrated screens do not break, keeps the 4.x
+pill shape so they do not shift, and warns once per `colorScheme` × `variant`
+pair in development.
+
+Everything about when and how to use it is on **Components/Tag/Usage**.
+
+## Migrating
+
+| 4.x `colorScheme` | 4.x `variant` | Renders as | Write instead |
+| --- | --- | --- | --- |
+| `primary` (default), `secondary`, `neutral` | `soft` (default) or `outline` | neutral | `<Tag>` |
+| `primary`, `secondary`, `neutral` | `solid` | the selected look | `<Tag as="button" selected={…}>` for a filter chip |
+| `danger`, `success`, `warning` | `soft` | that tone | `<Tag tone="…">`, or `Badge` if it is a status |
+| `danger`, `success`, `warning` | `solid` | that tone (5.0 has no solid status fill) | Choose by hand |
+| `danger`, `success`, `warning` | `outline` | neutral | Choose by hand |
+
+"Choose by hand" pairs say so in the dev warning. A `solid` Chip gets the
+selected *look* only: it does not become a toggle and has no `aria-pressed`
+unless you pass `selected` yourself.
+
+Two things change when you swap `Chip` for `Tag`:
+
+- **Shape.** Tag uses the `md` radius and tighter padding. Chip's 32px pill
+  exists only for unmigrated screens.
+- **Interactivity.** If the chip was clickable, render the Tag `as="button"`
+  so it is keyboard-operable (WCAG 2.1.1).
+
+</En>
+
+<Ko>
+
+# Chip (지원 중단)
+
+**`Tag`를 씁니다.** 5.0부터 `Chip`은 `Tag`의 얇은 별칭이며 6.0에서 사라집니다.
+아직 옮기지 않은 화면이 깨지지 않도록 계속 그려지고, 화면이 밀리지 않도록 4.x의
+알약 모양을 유지하며, 개발 환경에서 `colorScheme` × `variant` 조합마다 한 번씩 경고를
+냅니다.
+
+언제, 어떻게 쓰는지는 모두 **Components/Tag/Usage**에 있습니다.
+
+## 옮기는 방법
+
+| 4.x `colorScheme` | 4.x `variant` | 지금 그려지는 모양 | 바꿔 쓸 코드 |
+| --- | --- | --- | --- |
+| `primary`(기본), `secondary`, `neutral` | `soft`(기본) 또는 `outline` | neutral | `<Tag>` |
+| `primary`, `secondary`, `neutral` | `solid` | 선택된 모양 | 필터 칩이라면 `<Tag as="button" selected={…}>` |
+| `danger`, `success`, `warning` | `soft` | 해당 tone | `<Tag tone="…">`, 상태라면 `Badge` |
+| `danger`, `success`, `warning` | `solid` | 해당 tone(5.0에는 진한 상태 바탕이 없음) | 직접 고릅니다 |
+| `danger`, `success`, `warning` | `outline` | neutral | 직접 고릅니다 |
+
+"직접 고릅니다"에 해당하는 조합은 개발 경고에도 그렇게 나옵니다. `solid` Chip은
+선택된 *모양*만 얻습니다. `selected`를 직접 넘기지 않는 한 토글이 되지 않고
+`aria-pressed`도 붙지 않습니다.
+
+`Chip`을 `Tag`로 바꾸면 두 가지가 달라집니다.
+
+- **모양.** Tag는 `md` 모서리와 더 좁은 여백을 씁니다. Chip의 32px 알약 모양은 아직
+  옮기지 않은 화면을 위해서만 남아 있습니다.
+- **누를 수 있는지.** 누를 수 있던 칩이라면 Tag를 `as="button"`으로 그려야 키보드로도
+  쓸 수 있습니다(WCAG 2.1.1).
+
+</Ko>
+
+<Canvas of={ChipStories.LegacyMapping} />

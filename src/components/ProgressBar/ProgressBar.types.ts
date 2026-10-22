@@ -3,7 +3,16 @@ import { ProgressRootProps as ChakraProgressRootProps } from '@chakra-ui/react';
 export type ProgressBarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 export interface ProgressBarProps extends ChakraProgressRootProps {
+  /**
+   * Fill colour token. `danger.solid` only when the value means a problem
+   * (over a limit); otherwise leave the default.
+   * @default 'primary.main'
+   */
   filledTrackColor?: string;
+  /**
+   * Track height: `xs` 4px · `sm` 8px · `md` 16px · `lg` 24px · `xl` 32px.
+   * @default 'md'
+   */
   size?: ProgressBarSize;
   /**
    * Work whose length is not known yet: the bar slides across the track instead

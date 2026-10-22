@@ -3,8 +3,11 @@ import { Box, Flex, Text, VStack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
 import { SYSTEM_HUE_NAMES } from '@/theme/colors';
+import { disabledControl } from '@/utils/disabledControl';
 
-import { Tag, tagTones } from '.';
+import { T } from '../../guidelines/_components/Lang';
+import { TokenTable } from '../../guidelines/_components/TokenTable';
+import { getTagStyles, Tag, tagTones, tagToneStyles } from '.';
 import { TagCloseButton } from './TagCloseButton';
 
 const meta = {
@@ -17,16 +20,19 @@ const meta = {
     tone: {
       control: 'select',
       options: tagTones,
-      description: 'Colour role; `neutral` (grey wash) is the default',
+      description:
+        '`neutral` (default): a plain label. `success` / `warning` / `danger` / `info`: only when the tag reports a status every reader shares. Ignored while `selected` or `category` is set.',
     },
     selected: {
       control: 'boolean',
-      description: 'Filter-chip "on" state (black fill)',
+      description:
+        'Filter-chip "on" state (black fill). Passing it, true or false, makes the tag a toggle; with `as="button"` it sets `aria-pressed`.',
     },
     category: {
       control: 'select',
       options: [undefined, ...SYSTEM_HUE_NAMES],
-      description: 'Decorative category hue (no status meaning)',
+      description:
+        'One of twelve category hues. Classifies only: no status meaning. Wins over `tone`.',
     },
     disabled: { control: 'boolean' },
   },
@@ -179,4 +185,175 @@ export const UseCases: Story = {
       </Box>
     </VStack>
   ),
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `Tag.usage.mdx` with <Canvas of={…} />. Hidden from the sidebar
+// (`!dev`); `tags` is written on each story because the indexer reads CSF
+// statically.
+
+const TOPICS = [
+  { label: '연구', hue: 'blue' },
+  { label: '수업', hue: 'purple' },
+  { label: '행정', hue: 'brown' },
+] as const;
+
+export const DoCategoryForTopics: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: category hues for topics',
+  render: () => (
+    <Flex gap={2} wrap="wrap">
+      {TOPICS.map(({ label, hue }) => (
+        <Tag key={label} category={hue} icon="#">
+          {label}
+        </Tag>
+      ))}
+    </Flex>
+  ),
+};
+
+export const DontToneForTopics: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: status tones for topics",
+  render: () => (
+    <Flex gap={2} wrap="wrap">
+      <Tag tone="success">연구</Tag>
+      <Tag tone="danger">수업</Tag>
+      <Tag tone="warning">행정</Tag>
+    </Flex>
+  ),
+};
+
+export const DoFilterToggle: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: filter chips as buttons with `selected`',
+  render: function DoFilterToggleStory() {
+    const [on, setOn] = useState('전체');
+    return (
+      <Flex gap={2} wrap="wrap" role="group" aria-label="파일 종류">
+        {['전체', '이미지', '문서', '코드'].map((name) => (
+          <Tag
+            key={name}
+            as="button"
+            selected={on === name}
+            onClick={() => setOn(name)}
+          >
+            {name}
+          </Tag>
+        ))}
+      </Flex>
+    );
+  },
+};
+
+export const DoRemovableWithName: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: a remove button with its own name',
+  render: function DoRemovableStory() {
+    const [items, setItems] = useState(['마케팅팀', '영업팀', '개발팀']);
+    return (
+      <Flex gap={2} wrap="wrap">
+        {items.map((item) => (
+          <Tag key={item}>
+            {item}
+            <TagCloseButton
+              type="button"
+              aria-label={`${item} 삭제`}
+              onClick={() => setItems((prev) => prev.filter((i) => i !== item))}
+            />
+          </Tag>
+        ))}
+      </Flex>
+    );
+  },
+};
+
+export const DontSelectedForStatus: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: `selected` to mark a status",
+  render: () => (
+    <Flex gap={2} wrap="wrap" align="center">
+      <Text fontSize="sm">보고서 초안</Text>
+      <Tag selected>게시됨</Tag>
+    </Flex>
+  ),
+};
+
+/** Tokens each tone and state reads, from `Tag.styles.ts` and the theme. */
+export const UsageTokens: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Tokens',
+  render: () => {
+    const selected = getTagStyles({ selected: true });
+    const category = getTagStyles({ category: 'blue' });
+    return (
+      <TokenTable
+        rows={[
+          ...tagTones.flatMap((tone) => [
+            {
+              token: tagToneStyles[tone].bgColor,
+              use: <T en={`${tone} · background`} ko={`${tone} · 배경`} />,
+            },
+            {
+              token: tagToneStyles[tone].color,
+              use: <T en={`${tone} · text`} ko={`${tone} · 글자`} />,
+            },
+            {
+              token: tagToneStyles[tone].hoverBorder,
+              use: (
+                <T
+                  en={`${tone} · hover border (interactive)`}
+                  ko={`${tone} · 호버 테두리(누를 수 있을 때)`}
+                />
+              ),
+            },
+          ]),
+          {
+            token: selected.bgColor as string,
+            use: <T en="selected · background" ko="selected · 배경" />,
+          },
+          {
+            token: selected.color as string,
+            use: <T en="selected · text" ko="selected · 글자" />,
+          },
+          {
+            token: category.bgColor as string,
+            use: (
+              <T
+                en="category (blue shown) · background"
+                ko="category(예: blue) · 배경"
+              />
+            ),
+          },
+          {
+            token: 'category.blue.fg',
+            use: (
+              <T
+                en="category (blue shown) · icon mark"
+                ko="category(예: blue) · 앞쪽 표시"
+              />
+            ),
+          },
+          {
+            token: category.color as string,
+            use: <T en="category · text" ko="category · 글자" />,
+          },
+          {
+            token: disabledControl.bg,
+            use: <T en="disabled · background" ko="disabled · 배경" />,
+          },
+          {
+            token: disabledControl.color,
+            use: <T en="disabled · text" ko="disabled · 글자" />,
+          },
+        ]}
+      />
+    );
+  },
 };

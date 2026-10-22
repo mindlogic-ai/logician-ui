@@ -1,9 +1,12 @@
 import { Flex, HStack, Text } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
+import { T } from '../../guidelines/_components/Lang';
+import { TokenTable } from '../../guidelines/_components/TokenTable';
 import { BellIcon } from '../Icon';
 import { IconButton } from '../IconButton';
 import { CountBadge } from '.';
+import { countBadgeBaseStyles } from './CountBadge.styles';
 
 const meta = {
   title: 'Components/CountBadge',
@@ -106,4 +109,70 @@ export const OnIconButton: Story = {
       </IconButton>
     );
   },
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `CountBadge.usage.mdx` with <Canvas of={…} />. Hidden from the
+// sidebar (`!dev`); `tags` is written on each story because the indexer reads
+// CSF statically.
+
+const FOLDERS = [
+  { name: '연구 자료', files: 128 },
+  { name: '수업 자료', files: 42 },
+  { name: '행정 문서', files: 7 },
+];
+
+export const DontCountForTotals: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: a count badge for a total",
+  render: () => (
+    <Flex direction="column" gap={2} w="240px">
+      {FOLDERS.map((folder) => (
+        <HStack key={folder.name} justify="space-between">
+          <Text>{folder.name}</Text>
+          <CountBadge count={folder.files} />
+        </HStack>
+      ))}
+    </Flex>
+  ),
+};
+
+export const DoTotalsAsText: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: totals as plain text',
+  render: () => (
+    <Flex direction="column" gap={2} w="240px">
+      {FOLDERS.map((folder) => (
+        <HStack key={folder.name} justify="space-between">
+          <Text>{folder.name}</Text>
+          <Text textStyle="subtext" color="fg.muted">
+            파일 {folder.files}개
+          </Text>
+        </HStack>
+      ))}
+    </Flex>
+  ),
+};
+
+/** Tokens the badge reads, from `CountBadge.styles.ts` and the theme. */
+export const UsageTokens: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Tokens',
+  render: () => (
+    <TokenTable
+      rows={[
+        {
+          token: countBadgeBaseStyles.bgColor as string,
+          use: <T en="fill (number and dot)" ko="바탕(숫자, 점)" />,
+        },
+        {
+          token: countBadgeBaseStyles.color as string,
+          use: <T en="number" ko="숫자" />,
+        },
+      ]}
+    />
+  ),
 };
