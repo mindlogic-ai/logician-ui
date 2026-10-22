@@ -8,6 +8,8 @@ import { SYSTEM_HUES } from '@/theme/palette.generated';
  * that carry no meaning in the system. Red, yellow and green are the danger,
  * warning and success colours, and blue is info and links, so none of them
  * may colour a series by default — a red "UV" line reads as an error.
+ * (Blue is reserved for data as a whole: a single-measure chart is a blue
+ * monochrome ramp — SemanticTokens.mdx, "Blue means data and links".)
  *
  * Every stroke clears 3:1 against the page in both modes. Cyan, mint and
  * orange are too light at their base value in light mode (≈1.9:1), so they

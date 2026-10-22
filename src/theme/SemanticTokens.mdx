@@ -50,6 +50,32 @@ Emphasis is weight, not colour: headings use `fg.default`, never `primary.*`.
 Status colours mean status — don't borrow `success`/`warning` for decoration;
 that is what `category.*` is for.
 
+## Blue means data and links
+
+Blue is the one hue BAZE gives a meaning outside status: **data and links**.
+Use it for both, and for nothing decorative.
+
+- **Links** — `fg.link` / `fg.linkHover` (blue ink, #48607A / #AFC7E1), in chat
+  messages, markdown and app copy alike. Never ink-black or coral for a link.
+- **Data visualisation** — usage/share bars, single-measure bar and line charts,
+  maps, heatmaps, progress-by-share: a **blue monochrome ramp**, never a
+  rainbow and never a grey ramp. Steps differ in lightness only (the saturated
+  `blue.base` is left out); the largest value gets the strongest step.
+
+| Step | Light | Dark |
+| --- | --- | --- |
+| 1 (largest) | `#48607A` (`blue.ink`) · white label | `#AFC7E1` (`blue.inkDark`) · ink label |
+| 2 | `#7492B3` · ink label | `#7492B3` · ink label |
+| 3 | `#AFC7E1` · ink label | `#48607A` · white label |
+| 4 | `#DFEBF9` (`blue.surface`) · ink label | `#232F3D` (`blue.surfaceDark`) · white label |
+
+Pick each label by measured contrast (≥ 4.5:1), not by step number.
+A chart that must tell several *categories* apart (multi-series lines) keeps
+`CHART_SERIES_HUES` in `LineGraph/seriesColors.ts`, which leaves blue out so
+no series reads as a link or an info state.
+`info` is also blue; status always comes with an icon and words, so a blue
+chart is never mistaken for an info notice.
+
 ## Modes
 
 Every role flips with the colour mode (`_light` / `_dark`) and has a
