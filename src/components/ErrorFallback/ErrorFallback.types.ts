@@ -1,5 +1,5 @@
 export interface ErrorFallbackProps {
-  /** The caught error. Its `message` is shown to the reader as is. */
+  /** The caught error. Its `message` is shown as is; a translated default when empty. */
   error: Error | null;
   /** ID shown for support; generated (`ERR-…`) when missing. */
   errorId?: string;
