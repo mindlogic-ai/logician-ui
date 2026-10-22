@@ -70,9 +70,10 @@ Use it for both, and for nothing decorative.
 | 4 | `#DFEBF9` (`blue.surface`) · ink label | `#232F3D` (`blue.surfaceDark`) · white label |
 
 Pick each label by measured contrast (≥ 4.5:1), not by step number.
-A chart that must tell several *categories* apart (multi-series lines) keeps
-`CHART_SERIES_HUES` in `LineGraph/seriesColors.ts`, which leaves blue out so
-no series reads as a link or an info state.
+A chart that must tell several *categories* apart (multi-series lines) starts
+with the same data blue (`blue.base`) and then cycles `CHART_SERIES_HUES` in
+`LineGraph/seriesColors.ts` (teal, pink, indigo, purple, brown, …), which
+leaves red, yellow and green out so no series reads as a status.
 `info` is also blue; status always comes with an icon and words, so a blue
 chart is never mistaken for an info notice.
 

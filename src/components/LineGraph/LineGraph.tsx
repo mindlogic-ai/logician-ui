@@ -21,10 +21,9 @@ export const LineGraph = <T extends DatumBase>({
   displayLegend = true,
   ...rest
 }: LineGraphProps<T>) => {
-  const primaryColor = useToken('colors', 'primary.main')[0];
-  // Series 1 is the neutral brand line; further series cycle hues with no
-  // status meaning (see seriesColors.ts). Strokes read the generated palette
-  // directly because no semantic role fits a chart line.
+  // Series 1 is the data blue; further series cycle hues with no status
+  // meaning (see seriesColors.ts). Strokes read the generated palette directly
+  // because no semantic role fits a chart line.
   const { colorMode } = useColorMode();
   const isDark = colorMode === 'dark';
   return (
@@ -100,7 +99,7 @@ export const LineGraph = <T extends DatumBase>({
               type="monotone"
               dataKey={key}
               name={label}
-              stroke={color ?? seriesColor(index, primaryColor, isDark)}
+              stroke={color ?? seriesColor(index, isDark)}
               dot={{ r: 0 }}
             />
           ))}
