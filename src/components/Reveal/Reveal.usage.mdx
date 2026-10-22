@@ -1,0 +1,105 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle } from '../../guidelines/_components/Lang';
+import * as RevealStories from './Reveal.stories';
+
+<Meta of={RevealStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# Reveal
+
+Opens a small block out of zero height, so content that arrives underneath
+something the reader is looking at slides the page down instead of making it
+jump.
+
+</En>
+
+<Ko>
+
+# Reveal
+
+작은 블록을 높이 0에서 펼쳐 엽니다. 사용자가 보고 있는 요소 아래에 내용이 새로 생길 때
+페이지가 한 번에 튀지 않고 부드럽게 밀려 내려갑니다.
+
+</Ko>
+
+<Canvas of={RevealStories.Default} />
+
+<En>
+
+## When to use
+
+- A rationale that opens under an answer once it is checked.
+- A reason field or note that opens under a choice, such as the comment box
+  under "Reject" in a review dialog. Give each branch its own `key` so
+  switching branches opens the new block again.
+- A validation message under a field.
+
+## When not to use
+
+- The block opens and closes again → `Collapsible` (or `Accordion`), which
+  keeps the node mounted and animates both ways. Reveal only opens; the caller
+  mounts it when the content should appear.
+- Long lists, tables or anything with its own scroll → render it directly.
+  Reveal animates a layout property every frame, which is fine for a short
+  block and costly for a big one.
+- The element should appear without pushing anything → `Appear`.
+
+## Reduced motion and accessibility
+
+- With `prefers-reduced-motion: reduce` the block opens instantly. The content
+  is the information; the opening only keeps the page from seeming to break.
+- Reveal does not move focus or announce the new text. A validation message
+  should still be tied to its field (`FieldError` inside a `FormControl`, which
+  sets `aria-describedby` and `aria-invalid`) and described in words
+  (WCAG 3.3.1).
+- Reveal adds two `div`s (the animating grid and the clipping box inside it).
+  Do not put it inside a `<button>`, a `<tr>` or an Ark part that needs its
+  children directly (ACCESSIBILITY.md §5); animate the inner element instead.
+
+## Props
+
+Reveal also takes Box props; layout props land on the outer element.
+
+</En>
+
+<Ko>
+
+## 언제 쓰나요
+
+- 답을 확인한 뒤 그 답 아래에 해설이 열릴 때.
+- 선택지 아래에 사유 입력란이나 안내가 열릴 때. 예를 들어 검토 창에서 "거절"을 고르면
+  아래에 의견란이 열립니다. 갈래마다 `key`를 따로 주면, 다른 갈래로 바꿀 때 새 블록이
+  다시 펼쳐집니다.
+- 입력란 아래에 검증 메시지가 나타날 때.
+
+## 언제 쓰지 않나요
+
+- 열렸다가 다시 닫혀야 한다면 `Collapsible`(또는 `Accordion`)을 씁니다. 노드를
+  마운트된 채로 두고 양쪽 방향으로 애니메이션합니다. Reveal은 열기만 하며, 내용이
+  나타날 때 호출하는 쪽이 마운트합니다.
+- 긴 목록, 표, 자체 스크롤이 있는 영역이라면 그냥 바로 그립니다. Reveal은 매 프레임
+  레이아웃 속성을 바꾸므로 짧은 블록에는 괜찮지만 큰 블록에는 부담이 됩니다.
+- 아무것도 밀어내지 않고 나타나야 한다면 `Appear`를 씁니다.
+
+## 동작 줄이기와 접근성
+
+- `prefers-reduced-motion: reduce`에서는 바로 열립니다. 정보는 내용에 있고, 펼치는
+  동작은 페이지가 깨져 보이지 않게 하려는 장치일 뿐입니다.
+- Reveal은 초점을 옮기거나 새 문구를 읽어 주지 않습니다. 검증 메시지는 여전히
+  입력란과 연결하고(`FormControl` 안의 `FieldError`가 `aria-describedby`와
+  `aria-invalid`를 연결합니다) 문장으로 설명해야 합니다(WCAG 3.3.1).
+- Reveal은 `div`를 두 개 더합니다(애니메이션되는 그리드와 그 안에서 내용을 자르는
+  상자). `<button>`, `<tr>`, 자식을 직접 다루는 Ark 파트 안에는 넣지 않고
+  (ACCESSIBILITY.md 5절), 안쪽 요소에 애니메이션을 줍니다.
+
+## 속성
+
+Box 속성도 받으며, 레이아웃 속성은 바깥 요소에 적용됩니다.
+
+</Ko>
+
+<ArgTypes of={RevealStories} include={['durationMs']} />

@@ -1,0 +1,107 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle } from '../../guidelines/_components/Lang';
+import * as AppearStories from './Appear.stories';
+
+<Meta of={AppearStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# Appear
+
+Brings a single element in once, on mount: a fade, plus an optional scale (a
+stamp landing) or a short rise (content arriving).
+
+</En>
+
+<Ko>
+
+# Appear
+
+요소 하나를 마운트될 때 한 번 등장시킵니다. 기본은 페이드이고, 도장이 찍히듯 커지는
+효과나 아래에서 올라오는 효과를 더할 수 있습니다.
+
+</Ko>
+
+<Canvas of={AppearStories.Default} />
+
+<En>
+
+## When to use
+
+- A mark that lands on something the reader just did: a ✓ on a correct
+  answer, a reward medallion (`scaleFrom`).
+- A line or card that arrives on its own schedule, such as the beats of a
+  level-up screen, each with its own `delayMs` (`rise`).
+
+## When not to use
+
+- The element can also close (a menu, popover or modal) →
+  `animationStyle="presence"`, which those parts already use. Appear cannot
+  animate out.
+- Several items of one list arrive together → `staggerProps(index)`.
+- The content opens underneath something and pushes the layout down →
+  `Reveal`.
+- One piece of content replaces another → `SwapTransition`.
+- A value that is already on screen changed → `Pulse` or `CountUp`.
+
+The **어느 것을 쓸까** story plays `presence`, `stagger` and Appear side by side.
+
+## Reduced motion and accessibility
+
+- With `prefers-reduced-motion: reduce` the fade stays and the scale and rise
+  are dropped. The element still has to become visible; the movement carries no
+  information.
+- Appear adds one `div` around `children`, and layout props land on that
+  wrapper. Inside a `<button>` pass `as="span"`, because a button may only hold
+  phrasing content (ACCESSIBILITY.md §5). Where the parent needs its children
+  directly (a `<tr>`, Ark parts such as `Menu.List`), animate the inner element
+  instead of wrapping.
+- Appearing does not announce anything. If the new element is a result the
+  reader has to hear, put the message in a live region yourself
+  (WCAG 4.1.3).
+
+## Props
+
+</En>
+
+<Ko>
+
+## 언제 쓰나요
+
+- 사용자가 방금 한 일 위에 표시가 찍힐 때: 정답 위의 ✓, 보상 메달(`scaleFrom`).
+- 한 줄이나 카드가 각자 정한 시점에 들어올 때. 예를 들어 레벨 업 화면의 문구들은 저마다
+  다른 `delayMs`로 들어옵니다(`rise`).
+
+## 언제 쓰지 않나요
+
+- 요소가 닫히기도 한다면(메뉴, 팝오버, 모달) `animationStyle="presence"`를 씁니다. 이
+  파트들은 이미 presence를 씁니다. Appear는 사라지는 애니메이션이 없습니다.
+- 한 목록의 항목 여럿이 함께 들어온다면 `staggerProps(index)`를 씁니다.
+- 내용이 무언가의 아래에서 열리며 레이아웃을 밀어낸다면 `Reveal`을 씁니다.
+- 한 내용이 다른 내용으로 바뀐다면 `SwapTransition`을 씁니다.
+- 이미 화면에 있는 값이 바뀌었다면 `Pulse`나 `CountUp`을 씁니다.
+
+**어느 것을 쓸까** 스토리에서 `presence`, `stagger`, Appear를 나란히 재생해 볼 수 있습니다.
+
+## 동작 줄이기와 접근성
+
+- `prefers-reduced-motion: reduce`에서는 페이드만 남고 커지는 효과와 올라오는 효과는
+  빠집니다. 요소는 여전히 나타나야 하지만, 움직임 자체는 정보가 아니기 때문입니다.
+- Appear는 `children` 바깥에 `div`를 하나 더하고, 레이아웃 속성은 그 감싸는 요소에
+  적용됩니다. `<button>` 안에서는 `as="span"`을 넘깁니다. 버튼 안에는 phrasing
+  content만 들어갈 수 있습니다(ACCESSIBILITY.md 5절). 부모가 자식을 직접 다뤄야 하는
+  곳(`<tr>`, `Menu.List` 같은 Ark 파트)에서는 감싸지 말고 안쪽 요소에 애니메이션을 줍니다.
+- 나타난다고 해서 무언가를 읽어 주지는 않습니다. 사용자가 들어야 하는 결과라면 그
+  메시지를 직접 라이브 영역에 넣습니다(WCAG 4.1.3).
+
+## 속성
+
+</Ko>
+
+<ArgTypes
+  of={AppearStories}
+  include={['scaleFrom', 'rise', 'delayMs', 'durationMs']}
+/>

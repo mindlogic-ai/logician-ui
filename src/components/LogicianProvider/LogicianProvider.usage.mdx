@@ -1,0 +1,98 @@
+import { ArgTypes, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle } from '../../guidelines/_components/Lang';
+import * as LogicianProviderStories from './LogicianProvider.stories';
+
+<Meta of={LogicianProviderStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# LogicianProvider
+
+The root provider: it gives every component below it the Logician theme, the
+colour-mode runtime and the language for locale-aware parts.
+
+## When to use
+
+- Once, at the root of the app, around everything that renders Logician
+  components. Put it inside your styling registry (for example the Emotion
+  registry in a Next.js app) and outside your own providers.
+- With `config` to extend the theme, `language` from the user's locale, and
+  `defaultColorMode="system"` so a first visit follows the OS.
+- With `forcedColorMode` during a staged rollout, to pin one mode while
+  screens are migrated.
+
+## When not to use
+
+- A second LogicianProvider deeper in the tree to change density → use
+  `ScaledContext`.
+- To recolour one area → use semantic tokens on that area. A nested provider
+  builds a new Chakra system.
+- When the host already mounts its own `next-themes` provider → pass
+  `enableColorMode={false}` instead of mounting two.
+
+## Accessibility
+
+- `language` only feeds the date and month pickers and other locale-aware
+  parts. It does not set `<html lang>`; the app must do that (WCAG 3.1.1).
+- With `loadFonts` (on by default) it adds Pretendard Variable and Inter
+  stylesheets from public CDNs to `<head>`. Set it to `false` if the app loads
+  them itself, or if those hosts are blocked.
+- Colour mode follows the reader's OS setting by default and can be stored per
+  device. See **Setup/ColorMode/Usage** for the contract.
+
+## Props
+
+</En>
+
+<Ko>
+
+# LogicianProvider
+
+최상위 프로바이더입니다. 그 아래 모든 컴포넌트에 Logician 테마, 컬러 모드 동작, 날짜처럼
+지역 설정을 따르는 파트에 쓸 언어를 넘겨줍니다.
+
+## 언제 쓰나요
+
+- 앱의 최상위에서 한 번, Logician 컴포넌트를 그리는 모든 것을 감싸도록 둡니다. 스타일
+  레지스트리(예: Next.js 앱의 Emotion 레지스트리) 안쪽, 앱 자체 프로바이더 바깥쪽에 둡니다.
+- 테마를 넓힐 때는 `config`, 사용자 지역 설정에는 `language`, 첫 방문에서 운영체제 설정을
+  따르게 하려면 `defaultColorMode="system"`을 넘깁니다.
+- 화면을 단계적으로 옮기는 동안 한 모드로 고정하려면 `forcedColorMode`를 씁니다.
+
+## 언제 쓰지 않나요
+
+- 촘촘함을 바꾸려고 트리 안쪽에 LogicianProvider를 하나 더 두지 않습니다.
+  `ScaledContext`를 씁니다.
+- 한 영역의 색만 바꾸려면 그 영역에 시맨틱 토큰을 씁니다. 프로바이더를 겹치면 Chakra
+  시스템을 새로 만듭니다.
+- 호스트 앱이 이미 자체 `next-themes` 프로바이더를 마운트한다면 둘을 겹치지 말고
+  `enableColorMode={false}`를 넘깁니다.
+
+## 접근성
+
+- `language`는 날짜·월 선택기처럼 지역 설정을 따르는 파트에만 쓰입니다. `<html lang>`은
+  정하지 않으므로 앱이 직접 정해야 합니다(WCAG 3.1.1).
+- `loadFonts`(기본값 켜짐)는 Pretendard Variable과 Inter 스타일시트를 공개 CDN에서
+  `<head>`에 추가합니다. 앱이 직접 글꼴을 불러오거나 그 주소가 막혀 있다면 `false`로 둡니다.
+- 컬러 모드는 기본적으로 운영체제 설정을 따르고, 기기마다 저장될 수 있습니다. 자세한
+  약속은 **Setup/ColorMode/Usage**에 있습니다.
+
+## 속성
+
+</Ko>
+
+<ArgTypes
+  of={LogicianProviderStories}
+  include={[
+    'config',
+    'theme',
+    'language',
+    'loadFonts',
+    'defaultColorMode',
+    'forcedColorMode',
+    'enableColorMode',
+  ]}
+/>

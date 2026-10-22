@@ -1,0 +1,135 @@
+import { Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle } from '../../guidelines/_components/Lang';
+import * as ColorModeStories from './ColorMode.stories';
+
+<Meta of={ColorModeStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# ColorMode
+
+The light/dark runtime: `ColorModeProvider`, the `useColorMode` and
+`useColorModeValue` hooks, and a ready-made `ColorModeToggle` button.
+
+</En>
+
+<Ko>
+
+# ColorMode
+
+라이트·다크 모드를 다루는 부분입니다. `ColorModeProvider`, `useColorMode`와
+`useColorModeValue` 훅, 바로 쓸 수 있는 `ColorModeToggle` 버튼으로 이루어집니다.
+
+</Ko>
+
+<Canvas of={ColorModeStories.Basic} />
+
+<En>
+
+In Storybook the toolbar's **Color mode** pins the canvas with
+`forcedColorMode`. Clicking the toggle changes the stored preference shown next
+to it, while the canvas keeps following the toolbar.
+
+## When to use
+
+- `useColorMode().colorMode` when something cannot be a token and has to know
+  the rendered mode: a tenant logo with light and dark files, a diagram
+  library's theme, a chart palette.
+- `setColorMode` with `colorModePreference` for a settings picker that offers
+  light, dark and system.
+- `ColorModeToggle` for a quick light/dark switch in a header or a toolbar.
+- `ColorModeProvider` on its own only when the app composes providers by hand
+  and does not use `LogicianProvider`, which already mounts it.
+
+## When not to use
+
+- A colour that a semantic token can express → the token (`fg.default`,
+  `bg.surface`). Tokens switch with the mode in CSS; `useColorModeValue` is for
+  values that cannot be tokens.
+- A preference that must keep "system" → a picker on `setColorMode`, not
+  `ColorModeToggle`. The toggle only sets `light` or `dark`.
+
+## Accessibility
+
+- The toggle's default name is the English "Toggle color mode". In a Korean UI
+  pass your own `aria-label` (WCAG 4.1.2). The name does not change with the
+  mode, and the button has no pressed state.
+- Its sun and moon icons cross with a short rotation that drops to instant
+  under `prefers-reduced-motion: reduce`. The page-wide colour change is always
+  instant (`disableTransitionOnChange`).
+- Before hydration the toggle shows the light-mode icon, because the resolved
+  mode is only known on the client.
+- Both modes have to pass contrast (WCAG 1.4.3). Check the screen in light and
+  dark after any colour change.
+
+## Props and API
+
+| API                              | What it gives you                                                                                             |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `colorMode`                      | The mode being rendered, `'light'` or `'dark'`. A forced mode wins.                                           |
+| `colorModePreference`            | The stored preference, including `'system'`.                                                                  |
+| `setColorMode(mode)`             | Sets the preference: `'light'`, `'dark'` or `'system'`.                                                       |
+| `toggleColorMode()`              | Switches between light and dark from the user's resolved preference.                                          |
+| `useColorModeValue(light, dark)` | Returns one of two values for the rendered mode.                                                              |
+| `ColorModeToggle`                | An `IconButton`; takes its props except `children`.                                                           |
+| `ColorModeProvider`              | `next-themes` with the class strategy on `<html>`, storage key `logician-color-mode`, `system` resolution on. |
+
+The host app must add `suppressHydrationWarning` to its `<html>` element, and
+should not write `color-scheme` itself: the provider does.
+
+</En>
+
+<Ko>
+
+Storybook에서는 툴바의 **Color mode**가 `forcedColorMode`로 캔버스를 고정합니다.
+토글을 누르면 옆에 보이는 저장된 선호값은 바뀌지만, 캔버스는 계속 툴바를 따릅니다.
+
+## 언제 쓰나요
+
+- 토큰으로 표현할 수 없고 지금 그려지는 모드를 알아야 할 때
+  `useColorMode().colorMode`를 씁니다. 라이트·다크 파일이 따로 있는 테넌트 로고,
+  다이어그램 라이브러리의 테마, 차트 색 목록이 그런 예입니다.
+- 라이트, 다크, 시스템 설정을 고르는 설정 화면에는 `setColorMode`와
+  `colorModePreference`를 씁니다.
+- 헤더나 도구 막대에 빠르게 라이트·다크를 바꾸는 버튼이 필요하면 `ColorModeToggle`을
+  씁니다.
+- `ColorModeProvider`를 따로 쓰는 경우는 앱이 `LogicianProvider` 없이 프로바이더를
+  직접 조합할 때뿐입니다. `LogicianProvider`가 이미 이것을 마운트합니다.
+
+## 언제 쓰지 않나요
+
+- 시맨틱 토큰(`fg.default`, `bg.surface`)으로 표현할 수 있는 색은 토큰을 씁니다. 토큰은
+  CSS에서 모드에 따라 바뀝니다. `useColorModeValue`는 토큰이 될 수 없는 값에만 씁니다.
+- "시스템 설정"을 남겨야 하는 선호 설정에는 `ColorModeToggle` 대신 `setColorMode`로
+  고르는 화면을 만듭니다. 토글은 `light`와 `dark`만 정합니다.
+
+## 접근성
+
+- 토글의 기본 이름은 영어 "Toggle color mode"입니다. 한국어 화면에서는 `aria-label`을
+  직접 넘깁니다(WCAG 4.1.2). 이름은 모드에 따라 바뀌지 않고, 눌림 상태도 없습니다.
+- 해와 달 아이콘은 짧게 회전하며 바뀌는데, `prefers-reduced-motion: reduce`에서는 바로
+  바뀝니다. 페이지 전체의 색 전환은 늘 즉시 일어납니다(`disableTransitionOnChange`).
+- 하이드레이션 전에는 라이트 모드 아이콘을 보여 줍니다. 실제 모드는 클라이언트에서만 알
+  수 있기 때문입니다.
+- 두 모드 모두 명도 대비를 통과해야 합니다(WCAG 1.4.3). 색을 바꿨다면 라이트와 다크에서
+  화면을 확인합니다.
+
+## 속성과 API
+
+| API                              | 하는 일                                                                                                          |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `colorMode`                      | 지금 그려지는 모드, `'light'` 또는 `'dark'`. 강제 모드가 있으면 그 값입니다.                                     |
+| `colorModePreference`            | 저장된 선호값. `'system'`도 포함합니다.                                                                          |
+| `setColorMode(mode)`             | 선호값을 `'light'`, `'dark'`, `'system'` 중 하나로 정합니다.                                                     |
+| `toggleColorMode()`              | 사용자 선호를 기준으로 라이트와 다크를 오갑니다.                                                                 |
+| `useColorModeValue(light, dark)` | 지금 모드에 맞는 값 하나를 돌려줍니다.                                                                           |
+| `ColorModeToggle`                | `IconButton`이며, `children`을 뺀 그 속성을 받습니다.                                                            |
+| `ColorModeProvider`              | `next-themes` 기반. `<html>`에 클래스를 쓰고, 저장 키는 `logician-color-mode`, 시스템 설정 반영이 켜져 있습니다. |
+
+호스트 앱은 `<html>`에 `suppressHydrationWarning`을 붙여야 하고, `color-scheme`은 직접
+쓰지 않습니다. 프로바이더가 씁니다.
+
+</Ko>

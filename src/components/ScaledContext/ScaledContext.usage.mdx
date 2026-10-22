@@ -1,0 +1,111 @@
+import { Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle } from '../../guidelines/_components/Lang';
+import * as ScaledContextStories from './ScaledContext.stories';
+
+<Meta of={ScaledContextStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# ScaledContext
+
+Re-scales a whole subtree from one `fontSize`: type, spacing and component
+sizes grow or shrink together.
+
+</En>
+
+<Ko>
+
+# ScaledContext
+
+`fontSize` 하나로 하위 트리 전체의 크기를 바꿉니다. 글자, 간격, 컴포넌트 크기가 함께
+커지거나 작아집니다.
+
+</Ko>
+
+<Canvas of={ScaledContextStories.ScalingRem} />
+
+<En>
+
+## When to use
+
+- A reading surface that runs at a larger base than the app, such as a chat
+  thread at 16px in a 14px app.
+- A dense block inside that surface (a markdown table, a diff, tool output)
+  that should drop back to the app's 14px base.
+- A column that should grow at a breakpoint as one unit, for example an
+  authentication form at 14px up to `xl` and 16px above it
+  (`fontSize={{ base: '14px', xl: '16px' }}`).
+
+## When not to use
+
+- Changing the size of one piece of text → a `textStyle` or `fontSize` on the
+  Typography component.
+- Making a single control bigger or smaller → that component's `size` prop.
+
+## Accessibility
+
+- Prefer `rem` values. A `rem` scale still follows the reader's browser
+  font-size setting; a `px` value fixes the base for that subtree.
+- Scaling down for density must not push text below a readable size or make
+  targets hard to hit. Check the smallest text and the control heights in the
+  scaled block.
+- ScaledContext renders a `div`. Pass `css={{ display: 'contents' }}` when the
+  wrapper must not take part in layout.
+
+## Props
+
+ScaledContext takes Box props; there are no props of its own. `fontSize` sets
+the scale. Text styles in this theme are already in `em`, so type follows
+`fontSize`; ScaledContext rewrites the `spacing` and `sizes` tokens that are in
+`rem` to `em` on the wrapper, so padding, gaps and control heights follow too.
+Tokens in `px` are left alone. A `style` you pass is merged over the rewritten
+variables. ScaledContexts can be nested; each level scales from its own
+`fontSize`.
+
+It reads Chakra's internal token maps. If a future Chakra release renames them,
+scaling stops silently, so check a scaled screen after a Chakra upgrade.
+
+</En>
+
+<Ko>
+
+## 언제 쓰나요
+
+- 앱보다 큰 기준 크기로 읽히는 영역. 예를 들어 14px 앱 안에서 16px로 보이는 채팅 대화.
+- 그런 영역 안에서 다시 앱 기준인 14px로 돌아가야 하는 촘촘한 블록(마크다운 표, diff,
+  도구 출력).
+- 특정 화면 너비에서 한 덩어리로 커져야 하는 열. 예를 들어 인증 화면의 입력 폼을 `xl`
+  전까지는 14px, 그 위로는 16px로 둡니다(`fontSize={{ base: '14px', xl: '16px' }}`).
+
+## 언제 쓰지 않나요
+
+- 글자 하나의 크기만 바꾼다면 Typography 컴포넌트의 `textStyle`이나 `fontSize`를 씁니다.
+- 컨트롤 하나만 키우거나 줄인다면 그 컴포넌트의 `size` 속성을 씁니다.
+
+## 접근성
+
+- 가능하면 `rem` 값을 씁니다. `rem`은 사용자가 브라우저에서 정한 글자 크기를 그대로
+  따르지만, `px` 값은 그 하위 트리의 기준을 고정합니다.
+- 촘촘하게 줄일 때 글자가 읽기 힘들 만큼 작아지거나 누르기 어려운 크기가 되지 않게
+  합니다. 줄인 블록에서 가장 작은 글자와 컨트롤 높이를 확인합니다.
+- ScaledContext는 `div`를 그립니다. 감싸는 요소가 레이아웃에 끼어들면 안 될 때는
+  `css={{ display: 'contents' }}`를 넘깁니다.
+
+## 속성
+
+ScaledContext는 Box 속성을 받으며 자체 속성은 없습니다. 크기는 `fontSize`로 정합니다.
+이 테마의 텍스트 스타일은 이미 `em` 단위라 글자는 `fontSize`를 따릅니다. ScaledContext는
+`rem`으로 된 `spacing`, `sizes` 토큰을 감싸는 요소에서 `em`으로 바꿔 쓰므로, 안쪽 여백,
+간격, 컨트롤 높이도 함께 따라갑니다. `px` 토큰은 그대로 둡니다. 넘긴 `style`은 바꾼
+변수 위에 합쳐집니다. 여러 겹으로 겹쳐 쓸 수 있고, 각 단계는 자기 `fontSize`를 기준으로
+크기를 정합니다.
+
+Chakra 내부의 토큰 맵을 읽습니다. 이후 Chakra 버전에서 이 구조의 이름이 바뀌면 아무
+경고 없이 크기 조정이 멈추므로, Chakra를 올린 뒤에는 크기를 조정한 화면을 확인합니다.
+
+</Ko>
+
+<Canvas of={ScaledContextStories.NestedScaling} />
