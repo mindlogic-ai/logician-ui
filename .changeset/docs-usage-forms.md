@@ -7,5 +7,5 @@ Textarea, PasswordInput, PinInput, Select (SelectField, Combobox,
 ComboboxField), Checkbox, Radio, Switch, Slider, DatePicker, MonthPicker,
 FileInput, FileItem, FileList, Form, FormControl, FormLabel and form-library
 integration. Adds a FormLabel story set and a `Components/Form` overview
-story. `FormModalFooter` `submitColorPalette` JSDoc now states its 5.0
-behaviour (only `danger` changes the button).
+story. `FormModalFooter` `submitColorPalette` is marked `@deprecated` in its JSDoc
+(5.0 has no colour axis; only `danger` changes the button).
