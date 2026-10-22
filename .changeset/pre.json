@@ -5,6 +5,7 @@
     "@mindlogic-ai/logician-ui": "4.0.0"
   },
   "changesets": [
+    "button-accent-coral",
     "v5-baze-palette"
   ]
 }
