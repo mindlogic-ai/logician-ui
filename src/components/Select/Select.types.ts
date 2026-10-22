@@ -2,6 +2,12 @@ import type { ReactNode } from 'react';
 
 export type SelectSize = 'xs' | 'sm' | 'md' | 'lg';
 
+/**
+ * `outline` (default) — the bordered trigger shared with Input and Textarea.
+ * `ghost` — no border at rest, shown on hover/focus; for dense settings rows.
+ */
+export type SelectVariant = 'outline' | 'ghost';
+
 export interface SelectOption<T = string> {
   label: string;
   value: T;
@@ -46,6 +52,11 @@ interface FieldBaseProps<T> {
 }
 
 export interface SelectFieldProps<T = string> extends FieldBaseProps<T> {
+  /**
+   * Trigger look. `ghost` drops the resting border and sizes the field to its
+   * content (`width` defaults to `auto` instead of `full`).
+   */
+  variant?: SelectVariant;
   /**
    * Deal the options in one after another when the list opens.
    *

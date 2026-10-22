@@ -2,10 +2,12 @@ import { useState } from 'react';
 import {
   Box,
   createListCollection,
+  Flex,
   HStack,
   Portal,
   Span,
   Stack,
+  Text,
 } from '@chakra-ui/react';
 import { Meta } from '@storybook/react';
 
@@ -77,6 +79,59 @@ export const Disabled = () => (
     <SelectField options={options} defaultValue="option1" disabled />
   </Box>
 );
+
+/**
+ * `variant="ghost"` — no resting border, sized to its content. For dense
+ * settings rows where a column of bordered triggers outweighs the card.
+ * Hover shows the control border.
+ */
+export const Ghost = () => {
+  const rows = [
+    ['크레딧 한도 변경', '관리자가 내 크레딧 한도를 바꾸면 알려드립니다.'],
+    ['크레딧 잔량 부족', '내 크레딧이 얼마 남지 않으면 알려드립니다.'],
+    ['결제 실패', '결제에 실패하거나 자동으로 환불되면 알려드립니다.'],
+  ];
+  const channelOptions = [
+    { label: '앱 알림', value: 'app' },
+    { label: '앱 알림 + 이메일', value: 'app_email' },
+    { label: '끄기', value: 'off' },
+  ];
+  return (
+    <Box
+      maxW="640px"
+      borderWidth="1px"
+      borderColor="border.subtle"
+      borderRadius="12px"
+    >
+      {rows.map(([title, description], index) => (
+        <Flex
+          key={title}
+          align="center"
+          justify="space-between"
+          gap={4}
+          px={4}
+          py={3}
+          borderTopWidth={index === 0 ? 0 : '1px'}
+          borderColor="border.subtle"
+        >
+          <Box>
+            <Text fontWeight="semibold">{title}</Text>
+            <Text color="fg.muted" fontSize="sm">
+              {description}
+            </Text>
+          </Box>
+          <SelectField
+            variant="ghost"
+            size="sm"
+            ariaLabel={title}
+            options={channelOptions}
+            defaultValue="app"
+          />
+        </Flex>
+      ))}
+    </Box>
+  );
+};
 
 export const ManyOptions = () => {
   const manyOptions = Array.from({ length: 100 }, (_, i) => ({

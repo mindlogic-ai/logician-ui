@@ -4,6 +4,7 @@ import { createListCollection, Portal } from '@chakra-ui/react';
 import { staggerProps } from '@/utils/staggerProps';
 
 import { Select } from './Select';
+import { ghostContentStyles } from './Select.styles';
 import { SelectFieldProps } from './Select.types';
 
 /**
@@ -28,7 +29,8 @@ export function SelectField<T = string>({
   readOnly,
   required,
   name,
-  width = 'full',
+  variant = 'outline',
+  width = variant === 'ghost' ? 'auto' : 'full',
   stagger = false,
 }: SelectFieldProps<T>) {
   const collection = useMemo(
@@ -50,6 +52,9 @@ export function SelectField<T = string>({
       collection={collection}
       size={size}
       width={width}
+      // A content-sized ghost field sits beside text in a row; without this the
+      // row squeezes it and the value truncates to "앱 …".
+      flexShrink={variant === 'ghost' ? 0 : undefined}
       invalid={invalid}
       disabled={disabled}
       readOnly={readOnly}
@@ -79,7 +84,7 @@ export function SelectField<T = string>({
         )
       )}
       <Select.Control>
-        <Select.Trigger>
+        <Select.Trigger variant={variant}>
           <Select.ValueText placeholder={placeholder} />
         </Select.Trigger>
         <Select.IndicatorGroup>
@@ -88,7 +93,9 @@ export function SelectField<T = string>({
       </Select.Control>
       <Portal>
         <Select.Positioner>
-          <Select.Content>
+          <Select.Content
+            css={variant === 'ghost' ? ghostContentStyles : undefined}
+          >
             {options.map((option, index) => (
               <Select.Item
                 item={option}
