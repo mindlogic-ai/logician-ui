@@ -7,7 +7,16 @@
   "changesets": [
     "blue-data-and-links",
     "button-accent-coral",
+    "chart-series-data-blue",
+    "docs-foundations-badge-usage",
+    "docs-usage-actions",
+    "docs-usage-content-data",
+    "docs-usage-feedback",
+    "docs-usage-forms",
+    "docs-usage-motion-utils",
+    "docs-usage-overlays-nav",
     "select-ghost-variant",
+    "toast-neutral-inverse",
     "v5-baze-palette"
   ]
 }

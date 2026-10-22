@@ -1,5 +1,67 @@
 # Changelog
 
+## 5.0.0-alpha.3
+
+### Minor Changes
+
+- c4b0bc9: LineGraph: series 1 is now the data blue (`blue.base`) instead of the ink
+  `primary.main`, and the remaining series cycle teal → pink → indigo → purple →
+  brown → cyan → mint → orange. `seriesColor(index, isDark)` drops the `primary`
+  argument.
+- 4b921f1: Toast: the `neutral` status (the default) is now inverted — `tooltip.bg` /
+  `tooltip.fg`, ink in light mode and cream in dark — so a plain confirmation no
+  longer sits white-on-white. Status toasts keep their tints.
+
+### Patch Changes
+
+- dd55f1f: Docs: Foundations / Brand & colour usage page (BAZE colour rules mapped to 5.0
+  tokens), a Badge usage page, a component page template, and bilingual
+  (English / 한국어) guideline pages. `Actions in feedback surfaces` now uses the
+  5.0 Button and status token API. Badge `variant` JSDoc: `info` covers
+  well-defined system facts (scope, permission, read-only, New); category-only
+  labels use `Tag` `category`.
+- f012f1a: Docs: bilingual (English / 한국어) usage pages for Button, IconButton and
+  SeeMoreButton, with hidden Do / Don't specimen stories and token tables
+  generated from each component's styles. Storybook `variant` / `isDestructive`
+  descriptions for Button and IconButton now state what each role is for, and
+  SeeMoreButton's `currentCount` / `maxCount` props have JSDoc.
+- 538f301: Docs: bilingual (English / 한국어) usage pages for Typography, Table, Tree,
+  Code, CodeTabs, CopyableCode, InlineCode, Markdown, Card, Accordion,
+  Collapsible, ExpandableText, Avatar, Icon, LineGraph, Masonry, Container and
+  Workflow, with hidden Do/Don't specimen stories and generated token tables.
+  InlineCode gets its first stories. JSDoc: Card `variant` / `clickable`,
+  LineGraph `DataKey.label` (the series name, not the X axis label) and
+  `color`, Masonry `horizontalArrangement` (round-robin vs height-balanced)
+  and `numCols`; the Table interactive-row story now names the real hover
+  token (`primary.wash`).
+- d7bdc5f: Docs: bilingual (English / 한국어) usage pages for the feedback components —
+  Banner, Toast, Tag, Chip (deprecated → Tag), CountBadge, Loaders, Spinner,
+  ProgressBar, RadialProgress, SegmentedProgressBar, ErrorFallback and
+  MaxLengthIndicator — with Do/Don't specimens as hidden stories and token tables
+  generated from each component's styles. JSDoc for Banner `variant`, ProgressBar
+  `size` / `filledTrackColor`, RadialProgress segments and ErrorFallback props now
+  describes the 5.0 meaning of each prop.
+- b9992cd: Docs: bilingual (English / 한국어) usage pages for the form components: Input,
+  Textarea, PasswordInput, PinInput, Select (SelectField, Combobox,
+  ComboboxField), Checkbox, Radio, Switch, Slider, DatePicker, MonthPicker,
+  FileInput, FileItem, FileList, Form, FormControl, FormLabel and form-library
+  integration. Adds a FormLabel story set and a `Components/Form` overview
+  story. `FormModalFooter` `submitColorPalette` is marked `@deprecated` in its JSDoc
+  (5.0 has no colour axis; only `danger` changes the button).
+- e6e03fa: Docs: bilingual (English / 한국어) usage pages for the motion primitives (Appear,
+  Reveal, FlyTo, Pulse, Shake, SwapTransition, CountUp, Confetti) and the setup
+  utilities (ScaledContext, ColorMode, LogicianProvider), plus a Basic story for
+  ColorMode. `ColorModeToggle` now renders its icon wrappers as `<span>`, so the
+  button holds phrasing content only; its JSDoc no longer claims it renders
+  nothing before mount. Confetti `colors` JSDoc now describes the real defaults.
+- cc10b0b: Docs: bilingual (English / 한국어) usage pages for Modal, BottomSheet, Popover,
+  Tooltip, InfoSprinkle, Menu, Tabs, Breadcrumb, Pagination and
+  SegmentedControl, with Do/Don't specimens as hidden stories and token tables.
+  JSDoc: `Pagination` no longer documents a `maxPage` prop (the last page is
+  derived from `numTotalItems` / `itemsPerPage`); the `ModalCloseButton` example
+  drops the extra `ModalOverlay`; `MenuItem` `variant`, `icon` and `rightIcon`
+  are documented.
+
 ## 5.0.0-alpha.2
 
 ### Minor Changes
