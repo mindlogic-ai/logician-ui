@@ -1,5 +1,21 @@
 # Changelog
 
+## 5.0.0-alpha.2
+
+### Minor Changes
+
+- 8ce006e: Select `variant="ghost"` (`SelectField` and `Select.Trigger`): no border at rest,
+  `border.control` on hover, the usual focus/open ring, and the red border kept at
+  rest when invalid. `SelectField` sizes to its content (`width="auto"`) in this
+  variant. For dense settings rows where a column of bordered triggers outweighs
+  the card around them; the default `outline` look is unchanged.
+
+### Patch Changes
+
+- 8e6e285: Docs: blue means data and links. Links use `fg.link`; data visualisation
+  (usage/share bars, single-measure charts, maps) uses a blue monochrome ramp —
+  the step table is in SemanticTokens.mdx and `src/theme/claude.md`.
+
 ## 5.0.0-alpha.1
 
 ### Minor Changes

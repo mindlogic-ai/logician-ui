@@ -5,7 +5,9 @@
     "@mindlogic-ai/logician-ui": "4.0.0"
   },
   "changesets": [
+    "blue-data-and-links",
     "button-accent-coral",
+    "select-ghost-variant",
     "v5-baze-palette"
   ]
 }
