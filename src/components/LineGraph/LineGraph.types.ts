@@ -2,8 +2,14 @@ import { BoxProps } from '@chakra-ui/react';
 import { type DataKey as RechartsDataKey } from 'recharts/types/util/types.d';
 
 export interface LineGraphProps<T extends DatumBase> extends BoxProps {
+  /** One object per point on the X axis; `name` is the axis label. */
   data: Array<Datum<T>>;
+  /** The series to draw, in order. */
   dataKeys: Array<DataKey<T>>;
+  /**
+   * Show the legend under the chart.
+   * @default true
+   */
   displayLegend?: boolean;
 }
 
@@ -31,12 +37,16 @@ export type DataKey<T extends DatumBase> = {
   key: RechartsDataKey<keyof T>;
 
   /**
-   * Label for the XAxis
+   * Series name, shown in the legend and the tooltip.
    */
   label: string;
 
   /**
-   * Optional custom colors for the series
+   * Stroke colour for this series, passed straight to the SVG (recharts does
+   * not resolve Chakra tokens — use a CSS variable such as
+   * `var(--chakra-colors-category-teal-fg)`). Defaults: series 1 is
+   * `primary.main`, the rest cycle meaning-free category hues
+   * (`CHART_SERIES_HUES`).
    */
   color?: string;
 };

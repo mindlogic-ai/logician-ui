@@ -1,6 +1,8 @@
 import { Box, SimpleGrid, Text, useBreakpointValue } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
+import { Card } from '../Card';
+import { Subtext } from '../Typography';
 import { Masonry } from './Masonry';
 
 const meta = {
@@ -25,7 +27,7 @@ const meta = {
     horizontalArrangement: {
       control: 'boolean',
       description:
-        'Whether to arrange items horizontally (true) or balance column heights (false)',
+        'Deal items round-robin across columns (true) or balance column heights (false)',
       defaultValue: false,
     },
   },
@@ -309,4 +311,64 @@ export const ComparisonWithGrid: Story = {
       </Box>
     );
   },
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `Masonry.usage.mdx` with <Canvas of={…} />. Hidden from the
+// sidebar (`!dev`); `tags` is written out on each story because the indexer
+// reads CSF statically.
+
+const MODEL_GROUPS = [
+  { title: '대화', items: ['GPT-4o', 'Claude', 'Gemini', 'Solar', 'Llama'] },
+  { title: '이미지', items: ['Imagen', 'FLUX'] },
+  { title: '음성', items: ['TTS', 'STT', '음성 복제'] },
+  { title: '검색', items: ['웹 검색'] },
+  { title: '영상', items: ['Veo', 'Kling', 'Runway', 'Pika'] },
+  { title: '코드', items: ['Codex', 'Claude Code'] },
+];
+
+export const DoUnorderedGroups: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: unordered groups of different heights',
+  args: { numCols: 3 },
+  render: (args) => (
+    <Masonry {...args}>
+      {MODEL_GROUPS.map((group) => (
+        <Card key={group.title} p={4}>
+          <Text fontWeight="bold" mb={2}>
+            {group.title}
+          </Text>
+          {group.items.map((item) => (
+            <Subtext key={item}>{item}</Subtext>
+          ))}
+        </Card>
+      ))}
+    </Masonry>
+  ),
+};
+
+const STEPS = [
+  '1. 그룹을 만듭니다',
+  '2. 멤버를 초대합니다 — 초대 메일은 7일 동안 유효합니다',
+  '3. 크레딧 한도를 정합니다',
+  '4. 챗봇을 공유합니다',
+  '5. 사용량을 확인합니다 — 대시보드에서 날짜별로 볼 수 있습니다',
+  '6. 결제 수단을 등록합니다',
+];
+
+export const DontOrderedContent: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: steps or a ranking",
+  args: { numCols: 3 },
+  render: (args) => (
+    <Masonry {...args}>
+      {STEPS.map((step) => (
+        <Card key={step} p={4}>
+          <Text>{step}</Text>
+        </Card>
+      ))}
+    </Masonry>
+  ),
 };

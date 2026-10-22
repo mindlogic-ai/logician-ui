@@ -1,5 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 
+import { T } from '../../guidelines/_components/Lang';
+import { TokenTable } from '../../guidelines/_components/TokenTable';
 import { Markdown } from './Markdown';
 
 const meta = {
@@ -215,4 +217,55 @@ The quadratic formula: $x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$
 
 *Markdown component with full GFM support!*`,
   },
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `Markdown.usage.mdx` with <Canvas of={…} />. Hidden from the
+// sidebar (`!dev`); `tags` is written out on each story because the indexer
+// reads CSF statically.
+
+export const DoGeneratedAnswer: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: authored or generated long-form text',
+  args: {
+    children: `요청하신 내용을 정리했습니다.
+
+### 바꿀 점
+1. 요청 본문의 \`model\` 값을 확인합니다.
+2. 응답이 끊기면 \`max_tokens\`를 늘립니다.
+
+| 항목 | 값 |
+| --- | --- |
+| 모델 | gpt-4o |
+| 최대 토큰 | 4,096 |
+
+자세한 내용은 [API 문서](https://example.com/docs)를 보세요.`,
+  },
+};
+
+export const DontUiCopy: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: Markdown for a fixed UI string",
+  args: { children: '**저장되었습니다.**' },
+};
+
+export const UsageTokens: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Tokens',
+  render: () => (
+    <TokenTable
+      rows={[
+        {
+          token: 'fg.default',
+          use: <T en="Container text colour" ko="컨테이너 글자색" />,
+        },
+        { token: 'fg.emphasized', use: <T en="Headings" ko="제목" /> },
+        { token: 'fg.link', use: <T en="Links" ko="링크" /> },
+        { token: 'bg.subtle', use: <T en="Inline code" ko="인라인 코드" /> },
+      ]}
+    />
+  ),
 };

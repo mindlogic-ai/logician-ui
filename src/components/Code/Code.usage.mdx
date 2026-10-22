@@ -1,0 +1,187 @@
+import { Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as CodeStories from './Code.stories';
+
+<Meta of={CodeStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# Code
+
+A syntax-highlighted block of code (Shiki, `github-dark` token colours) with
+an optional language header and copy button. `Markdown` uses it for fenced
+code blocks.
+
+## When to use
+
+- A snippet the reader reads or copies: an API request, a config file, raw
+  JSON from an audit event.
+- More than one line, or a line too long to sit inside a sentence.
+
+## When not to use
+
+- A name or value inside a sentence → `InlineCode`.
+- A single line the user only needs to copy (an endpoint, a key) →
+  `CopyableCode`.
+- The same example in several languages → `CodeTabs`.
+
+## Options
+
+| Prop | Means |
+| --- | --- |
+| `language` | Highlighting language (`js` is read as `javascript`). With a language, the header shows its name. |
+| `onCopy` | Turns the copy button on. The component writes to the clipboard; `onCopy` receives the copied text for side effects. |
+| `hideHeader` | No header. If `onCopy` is set, the copy button floats in the top-right corner with a 복사 / 복사 완료 tooltip. |
+| `showLineNumbers` | Line numbers in the gutter. |
+| `containerProps` | Props for the CodeBlock root (margins, `maxH`, `className`). |
+
+Without `language`, there is no header, and without `onCopy`, no copy button.
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+# Code
+
+문법 강조(Shiki, `github-dark` 색)가 적용된 코드 블록입니다. 언어 이름이 있는 머리
+영역과 복사 버튼을 켤 수 있습니다. `Markdown`의 코드 블록도 이 컴포넌트로 그립니다.
+
+## 언제 쓰나요
+
+- 읽거나 복사할 코드 조각: API 요청, 설정 파일, 감사 로그 이벤트의 원본 JSON.
+- 두 줄 이상이거나, 문장 안에 넣기에는 너무 긴 한 줄.
+
+## 언제 쓰지 않나요
+
+- 문장 안의 이름이나 값은 `InlineCode`를 씁니다.
+- 복사만 하면 되는 한 줄(엔드포인트, 키)은 `CopyableCode`를 씁니다.
+- 같은 예제를 여러 언어로 보여 준다면 `CodeTabs`를 씁니다.
+
+## 옵션
+
+| 속성 | 뜻 |
+| --- | --- |
+| `language` | 강조할 언어(`js`는 `javascript`로 읽음). 언어를 주면 머리 영역에 언어 이름이 나옵니다. |
+| `onCopy` | 복사 버튼을 켭니다. 클립보드에는 컴포넌트가 직접 쓰고, `onCopy`는 복사한 글을 받아 부가 작업에 씁니다. |
+| `hideHeader` | 머리 영역을 숨깁니다. `onCopy`가 있으면 복사 버튼이 오른쪽 위에 떠 있고 '복사' / '복사 완료' 툴팁이 붙습니다. |
+| `showLineNumbers` | 줄 번호를 보여 줍니다. |
+| `containerProps` | CodeBlock 루트에 넘길 속성(여백, `maxH`, `className`). |
+
+`language`가 없으면 머리 영역이 없고, `onCopy`가 없으면 복사 버튼도 없습니다.
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={CodeStories.DoLanguageAndCopy} />
+<Verdict
+  kind="do"
+  en="Set the language and turn on copy for anything the reader will paste into a terminal or file."
+  ko="터미널이나 파일에 붙여 넣을 코드에는 언어를 지정하고 복사 버튼을 켭니다."
+/>
+
+<Canvas of={CodeStories.DontBlockForIdentifier} />
+<Verdict
+  kind="dont"
+  en="Break a sentence with a block for one word. Use InlineCode inside the sentence."
+  ko="한 단어 때문에 블록으로 문장을 끊지 마세요. 문장 안에 InlineCode를 씁니다."
+/>
+
+<En>
+
+## Content
+
+- Show code that runs as pasted. Mark placeholders clearly (`$API_KEY`,
+  `<chatbot_id>`) and never show a real secret.
+- Keep examples short; link to full documentation for the rest.
+- Explain the code in the text around it, not in long comments inside it.
+
+## Accessibility
+
+What Code does for you:
+
+- The code is text, so it can be selected, copied and read by a screen
+  reader.
+- The copy buttons are real buttons with names. The floating copy button
+  takes its name from the translated 복사 / 복사 완료 and has a focus ring
+  (WCAG 4.1.2, 2.4.7).
+
+What you still have to do:
+
+- The header copy button's name is the fixed English "Copy code". In a
+  Korean screen, consider `hideHeader` with `onCopy` (translated name), or
+  note it for a follow-up fix.
+- Introduce the block in the text before it, so a screen reader user knows
+  what the code is for (WCAG 1.3.1).
+- A long line scrolls sideways inside the block. Keep it readable at 320px
+  width by breaking long commands (WCAG 1.4.10).
+
+## Tokens
+
+Shiki's `github-dark` paints the code itself; these are the tokens the
+component sets around it.
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 붙여 넣으면 바로 동작하는 코드를 보여 줍니다. 바꿔 넣을 자리는 `$API_KEY`,
+  `<chatbot_id>`처럼 분명히 표시하고, 실제 비밀 값은 보여 주지 않습니다.
+- 예제는 짧게 두고, 나머지는 전체 문서로 연결합니다.
+- 설명은 코드 안의 긴 주석이 아니라 코드 앞뒤의 본문에 씁니다.
+
+## 접근성
+
+Code가 알아서 하는 일
+
+- 코드는 글자이므로 선택하고 복사할 수 있고 화면 낭독기도 읽습니다.
+- 복사 버튼은 이름이 있는 실제 버튼입니다. 떠 있는 복사 버튼은 번역된 '복사' /
+  '복사 완료'를 이름으로 쓰고 초점 링이 있습니다(WCAG 4.1.2, 2.4.7).
+
+직접 챙겨야 하는 일
+
+- 머리 영역의 복사 버튼 이름은 영어 "Copy code"로 고정되어 있습니다. 한국어 화면에서는
+  `hideHeader`와 `onCopy`를 함께 써서 번역된 이름을 쓰는 방법을 검토하거나, 후속 수정
+  거리로 남깁니다.
+- 블록 앞 본문에서 이 코드가 무엇인지 먼저 알려, 화면 낭독기 사용자도 코드의 쓰임을
+  알 수 있게 합니다(WCAG 1.3.1).
+- 긴 줄은 블록 안에서 가로로 스크롤됩니다. 긴 명령은 줄을 나눠 폭 320px에서도 읽을
+  수 있게 합니다(WCAG 1.4.10).
+
+## 토큰
+
+코드 자체의 색은 Shiki의 `github-dark`가 칠합니다. 아래는 컴포넌트가 그 둘레에 쓰는
+토큰입니다.
+
+</Ko>
+
+<Canvas of={CodeStories.UsageTokens} sourceState="none" />
+
+<En>
+
+## Related
+
+- **InlineCode**: code inside a sentence.
+- **CopyableCode**: one line with a copy button.
+- **CodeTabs**: the same example in several languages.
+- **Markdown**: renders fenced code blocks with Code.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **InlineCode**: 문장 안의 코드.
+- **CopyableCode**: 복사 버튼이 달린 한 줄.
+- **CodeTabs**: 같은 예제를 여러 언어로.
+- **Markdown**: 코드 블록을 Code로 그립니다.
+
+</Ko>

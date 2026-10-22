@@ -1,5 +1,8 @@
 import { Meta, StoryObj } from '@storybook/react';
 
+import { TokenTable } from '../../guidelines/_components/TokenTable';
+import { Card } from '../Card';
+import { LINK_RAMP, Text } from '../Typography';
 import { ExpandableText } from './ExpandableText';
 
 const meta = {
@@ -162,4 +165,56 @@ export const ComponentComparison: Story = {
       </div>
     );
   },
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `ExpandableText.usage.mdx` with <Canvas of={…} />. Hidden from
+// the sidebar (`!dev`); `tags` is written out on each story because the
+// indexer reads CSF statically.
+
+const DESCRIPTION =
+  '회의 내용을 바탕으로 요약, 결정 사항, 할 일을 정리해 주는 챗봇입니다. 녹음 파일이나 회의록을 올리면 참석자별 발언을 나눠 보여 주고, 다음 회의 전에 확인할 항목을 골라 줍니다. 팀 공용 챗봇으로 공유해 같은 형식의 회의록을 쓸 수 있습니다.';
+
+export const DoSecondaryDescription: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: a long secondary description in a card',
+  render: () => (
+    <Card p={5} maxW="360px">
+      <Text fontWeight="bold" mb={1}>
+        회의록 도우미
+      </Text>
+      <ExpandableText lineClamp={2} component="Subtext">
+        {DESCRIPTION}
+      </ExpandableText>
+    </Card>
+  ),
+};
+
+export const DontClipTheMessage: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: clip what the reader must not miss",
+  render: () => (
+    <Card p={5} maxW="360px">
+      <ExpandableText lineClamp={1}>
+        이 작업은 되돌릴 수 없습니다. 그룹을 삭제하면 그룹에 속한 멤버 42명의
+        크레딧 한도와 챗봇 공유 설정이 함께 지워집니다.
+      </ExpandableText>
+    </Card>
+  ),
+};
+
+export const UsageTokens: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Tokens',
+  render: () => (
+    <TokenTable
+      rows={[
+        { token: LINK_RAMP.default, use: '더보기 / 접기 (Link)' },
+        { token: 'fg.default', use: '더보기 / 접기 · hover' },
+      ]}
+    />
+  ),
 };

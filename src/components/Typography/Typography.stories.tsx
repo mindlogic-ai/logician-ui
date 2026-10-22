@@ -1,5 +1,9 @@
+import { Stack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
+import { T } from '../../guidelines/_components/Lang';
+import { TokenTable } from '../../guidelines/_components/TokenTable';
+import { Card } from '../Card';
 import { InlineCode } from '../InlineCode';
 
 import {
@@ -14,6 +18,7 @@ import {
   Subtext,
   Subtitle,
   Text,
+  LINK_RAMP,
 } from '.';
 
 const meta = {
@@ -117,5 +122,117 @@ export const AsElement: Story = {
         이메일
       </Text>
     </>
+  ),
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `Typography.usage.mdx` with <Canvas of={…} />. Hidden from the
+// sidebar (`!dev`); `tags` is written out on each story because the indexer
+// reads CSF statically.
+
+export const DoLevelFromOutline: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: size by layout, level by outline',
+  render: () => (
+    <Card p={6} maxW="420px">
+      <H3 as="h2" mb={1}>
+        사용량
+      </H3>
+      <Subtext color="fg.muted">이번 달 1일부터 오늘까지의 합계입니다.</Subtext>
+    </Card>
+  ),
+};
+
+export const DontSubtitleAsHeading: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: a heading tag for helper copy",
+  render: () => (
+    <Card p={6} maxW="420px">
+      <H2 mb={1}>사용량</H2>
+      <Subtitle as="h6">이번 달 1일부터 오늘까지의 합계입니다.</Subtitle>
+    </Card>
+  ),
+};
+
+export const DoLinkSaysWhere: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: the link text names the destination',
+  render: () => (
+    <Text>
+      팀 요금제는 인원 수에 따라 달라집니다.{' '}
+      <Link href="#plans">요금제 비교 보기</Link>
+    </Text>
+  ),
+};
+
+export const DontLinkHere: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: “click here” and no underline",
+  render: () => (
+    <Text>
+      팀 요금제가 궁금하다면{' '}
+      <Link href="#plans" textDecoration="none">
+        여기
+      </Link>
+      를 누르세요.
+    </Text>
+  ),
+};
+
+export const DoCaptionForMetadata: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: Caption for metadata only',
+  render: () => (
+    <Stack gap={1} maxW="420px">
+      <Text>회의록 요약이 준비되었습니다.</Text>
+      <Caption>오후 3:42 · 12분 분량</Caption>
+    </Stack>
+  ),
+};
+
+export const DontCaptionForErrors: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: Caption for something the user must act on",
+  render: () => (
+    <Stack gap={1} maxW="420px">
+      <Text>회의록 요약이 준비되지 않았습니다.</Text>
+      <Caption>녹음 파일이 손상되어 다시 올려야 합니다.</Caption>
+    </Stack>
+  ),
+};
+
+const TEXT_TOKENS = [
+  { token: 'fg.emphasized', en: 'H1–H5', ko: 'H1–H5' },
+  { token: 'fg.default', en: 'Text, Subtext', ko: 'Text, Subtext' },
+  { token: 'fg.muted', en: 'Subtitle, Overline', ko: 'Subtitle, Overline' },
+  { token: 'fg.subtle', en: 'Caption', ko: 'Caption' },
+];
+
+/** Text colours each tier sets by default, and the link ramp (`LINK_RAMP`). */
+export const UsageTokens: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Tokens',
+  render: () => (
+    <TokenTable
+      rows={[
+        ...TEXT_TOKENS.map(({ token, en, ko }) => ({
+          token,
+          use: <T en={en} ko={ko} />,
+        })),
+        // `errorHover` is the same token as `error` (no darker danger token
+        // exists), so it is not listed twice.
+        ...(['default', 'defaultHover', 'error'] as const).map((state) => ({
+          token: LINK_RAMP[state],
+          use: <T en={`Link · ${state}`} ko={`Link · ${state}`} />,
+        })),
+      ]}
+    />
   ),
 };

@@ -3,7 +3,9 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import { SYSTEM_HUE_NAMES } from '@/theme/colors';
 
-import { Avatar } from '.';
+import { TokenTable } from '../../guidelines/_components/TokenTable';
+import { Subtext } from '../Typography';
+import { Avatar, avatarFallbackColors } from '.';
 
 const meta = {
   title: 'Components/Avatar',
@@ -423,4 +425,72 @@ export const ExplicitHue: Story = {
       ))}
     </Flex>
   ),
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `Avatar.usage.mdx` with <Canvas of={…} />. Hidden from the
+// sidebar (`!dev`); `tags` is written out on each story because the indexer
+// reads CSF statically.
+
+const MEMBERS = ['김지민', '이서준', '박하은'];
+
+export const DoNameNextToIt: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: the name next to the avatar',
+  render: () => (
+    <VStack align="start" gap={3}>
+      {MEMBERS.map((name) => (
+        <HStack key={name} gap={3}>
+          <Avatar size="sm" name={name} aria-hidden />
+          <Box>
+            <Text fontWeight="medium">{name}</Text>
+            <Subtext color="fg.muted">멤버</Subtext>
+          </Box>
+        </HStack>
+      ))}
+    </VStack>
+  ),
+};
+
+export const DontHueAsStatus: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: a hue to mean a status",
+  render: () => (
+    <HStack gap={3}>
+      <Avatar size="sm" name="김지민" colorHue="green" />
+      <Avatar size="sm" name="이서준" colorHue="red" />
+      <Avatar size="sm" name="박하은" colorHue="yellow" />
+    </HStack>
+  ),
+};
+
+/**
+ * Fallback colours per hue, from `avatarFallbackColors` — the same function
+ * the component calls. The first row is the neutral pair used with no name.
+ */
+export const UsageTokens: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Tokens',
+  render: () => {
+    const neutral = avatarFallbackColors(undefined);
+    return (
+      <TokenTable
+        rows={[
+          { token: neutral.bg, use: 'no name · background' },
+          { token: neutral.color, use: 'no name · initials' },
+          ...SYSTEM_HUE_NAMES.flatMap((hue) => {
+            const { bg, color } = avatarFallbackColors('x', hue);
+            return [
+              { token: bg, use: `${hue} · background` },
+              { token: color, use: `${hue} · initials` },
+            ];
+          }),
+          { token: 'border.subtle', use: 'border' },
+        ]}
+      />
+    );
+  },
 };
