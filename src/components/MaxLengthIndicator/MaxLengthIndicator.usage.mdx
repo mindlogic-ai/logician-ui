@@ -1,0 +1,125 @@
+import { Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as MaxLengthIndicatorStories from './MaxLengthIndicator.stories';
+
+<Meta of={MaxLengthIndicatorStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# MaxLengthIndicator
+
+A small `value/maxLength` counter under a text field that has a length limit.
+
+## When to use
+
+- Under an `Input` or `Textarea` with a hard character limit the reader is
+  likely to reach: a description, a prompt, a name with a short limit.
+
+## When not to use
+
+- No limit, or one nobody comes near → leave it out.
+- A count of items, not characters → plain text or `CountBadge`.
+
+## How it works
+
+- It only displays the two numbers, in `subtext` style and `fg.subtle`. It does
+  not count, enforce the limit, change colour near the limit or announce
+  anything.
+- Pass the field's current length as `value` and the same limit you set on the
+  field's `maxLength`, which is what actually stops input.
+- Other `Text` props (`id`, `textAlign`, …) pass through.
+
+## Do
+
+</En>
+
+<Ko>
+
+# MaxLengthIndicator
+
+글자 수 제한이 있는 입력란 아래에 `value/maxLength`를 보여 주는 작은 숫자입니다.
+
+## 언제 쓰나요
+
+- 설명, 프롬프트, 짧은 이름처럼 사용자가 닿을 만한 글자 수 제한이 있는 `Input`이나
+  `Textarea` 아래에 둡니다.
+
+## 언제 쓰지 않나요
+
+- 제한이 없거나 아무도 닿지 않을 제한이라면 두지 않습니다.
+- 글자가 아니라 항목의 개수라면 일반 글자나 `CountBadge`를 씁니다.
+
+## 동작 방식
+
+- 숫자 두 개를 `subtext` 스타일과 `fg.subtle` 색으로 보여 주기만 합니다. 글자를
+  세거나, 제한을 지키게 하거나, 제한에 가까워질 때 색을 바꾸거나, 무언가를 알려 주지
+  않습니다.
+- 입력란의 현재 길이를 `value`로, 입력란의 `maxLength`와 같은 제한 값을 `maxLength`로
+  넘깁니다. 입력을 실제로 막는 것은 입력란의 `maxLength`입니다.
+- `id`, `textAlign` 같은 다른 `Text` 속성은 그대로 전달됩니다.
+
+## 이렇게 하세요
+
+</Ko>
+
+<Canvas of={MaxLengthIndicatorStories.DoUnderField} />
+<Verdict
+  kind="do"
+  en="Put it under the field, set the same limit as the field's maxLength, and point the field's aria-describedby at the counter's id so the limit is read with the field."
+  ko="입력란 아래에 두고, 입력란의 maxLength와 같은 제한 값을 쓰며, 입력란의 aria-describedby가 카운터의 id를 가리키게 해서 제한이 입력란과 함께 읽히게 합니다."
+/>
+
+<En>
+
+## Accessibility
+
+- Tie the counter to the field with `aria-describedby`, so the limit is
+  announced when the field gets focus (WCAG 1.3.1).
+- It does not announce changes while typing, which is usually right: a
+  number read out on every keystroke is noise. If reaching the limit matters,
+  say so once in a `role="status"` region (WCAG 4.1.3).
+- `fg.subtle` is for secondary text. If the counter is the only place the
+  limit is stated, check its contrast on the field's background (WCAG 1.4.3).
+
+## Tokens
+
+</En>
+
+<Ko>
+
+## 접근성
+
+- `aria-describedby`로 카운터를 입력란에 연결해서, 입력란에 초점이 오면 제한이 함께
+  읽히게 합니다(WCAG 1.3.1).
+- 입력하는 동안 바뀐 숫자를 알려 주지 않습니다. 대개는 이것이 맞습니다. 글자를 칠 때마다
+  숫자를 읽으면 소음이 됩니다. 제한에 닿았다는 사실이 중요하다면 `role="status"`
+  영역으로 한 번만 알립니다(WCAG 4.1.3).
+- `fg.subtle`은 보조 글자용 색입니다. 카운터가 제한을 알리는 유일한 곳이라면 입력란
+  배경 위에서 대비를 확인합니다(WCAG 1.4.3).
+
+## 토큰
+
+</Ko>
+
+<Canvas of={MaxLengthIndicatorStories.UsageTokens} sourceState="none" />
+
+<En>
+
+## Related
+
+- **Input** / **Textarea**: the field and its `maxLength`.
+- **FormControl**: label, help and error text for the field.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **Input** / **Textarea**: 입력란과 그 `maxLength`.
+- **FormControl**: 입력란의 라벨, 도움말, 오류 문구.
+
+</Ko>

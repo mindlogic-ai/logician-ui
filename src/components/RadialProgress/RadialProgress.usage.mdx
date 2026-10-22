@@ -1,0 +1,153 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as RadialProgressStories from './RadialProgress.stories';
+
+<Meta of={RadialProgressStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# RadialProgress
+
+A ring split into coloured arcs that shows how a total is used, category by
+category, with the total in the middle.
+
+## When to use
+
+- A share of one total split into a few categories: storage by file type,
+  a budget by team.
+- A summary tile where a ring reads faster than a table.
+
+## When not to use
+
+- One value against a limit → `ProgressBar`.
+- Parts of a job in progress (sent, failed, remaining) → `SegmentedProgressBar`.
+- More than five or six categories, or values the reader must compare
+  precisely → a bar chart or a table.
+
+## Props
+
+</En>
+
+<Ko>
+
+# RadialProgress
+
+전체가 분류별로 어떻게 쓰였는지 색이 다른 호로 나눠 보여 주고, 가운데에 전체 값을
+적는 고리입니다.
+
+## 언제 쓰나요
+
+- 하나의 전체를 몇 가지 분류로 나눈 비율: 파일 종류별 저장 공간, 팀별 예산.
+- 표보다 고리가 더 빨리 읽히는 요약 카드.
+
+## 언제 쓰지 않나요
+
+- 한도에 대한 값 하나는 `ProgressBar`를 씁니다.
+- 진행 중인 작업의 부분(보냄, 실패, 남음)은 `SegmentedProgressBar`를 씁니다.
+- 분류가 대여섯 개를 넘거나 값을 정확히 비교해야 한다면 막대그래프나 표를 씁니다.
+
+## 속성
+
+</Ko>
+
+<ArgTypes of={RadialProgressStories} include={['segments', 'total', 'unit', 'size', 'formatTotal']} />
+
+<En>
+
+- The centre shows `total` (through `formatTotal` if given) and `unit`, not
+  the used amount. Put "82GB used" in text next to the ring.
+- Segments are drawn clockwise from the top with a gap between arcs. Whatever
+  `total` leaves over is a `bg.track` arc.
+- RadialProgress is a default export re-exported as
+  `import { RadialProgress } from '@mindlogic-ai/logician-ui'`.
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+- 가운데에는 쓴 양이 아니라 `total`(`formatTotal`이 있으면 그 결과)과 `unit`이
+  보입니다. "82GB 사용" 같은 문구는 고리 옆에 글자로 씁니다.
+- 세그먼트는 위쪽에서 시작해 시계 방향으로, 호 사이에 틈을 두고 그려집니다. `total`에서
+  남은 부분은 `bg.track` 호로 그려집니다.
+- 기본 내보내기이며, `import { RadialProgress } from '@mindlogic-ai/logician-ui'`로
+  가져옵니다.
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={RadialProgressStories.DoTokensAndLegend} />
+<Verdict
+  kind="do"
+  en="Colour segments with category.{hue}.fg tokens and add a text legend with each value. Mark the ring aria-hidden when the legend says everything."
+  ko="세그먼트 색은 category.{hue}.fg 토큰으로 정하고, 값을 함께 적은 글자 범례를 붙입니다. 범례가 모든 정보를 전한다면 고리에는 aria-hidden을 붙입니다."
+/>
+
+<Canvas of={RadialProgressStories.DontHexNoLegend} />
+<Verdict
+  kind="dont"
+  en="Pass hex colours and leave out the legend. Hex skips the theme, so dark mode keeps light-mode colours, and without a legend nobody knows what each arc is."
+  ko="16진수 색을 넘기고 범례를 빼지 마세요. 16진수는 테마를 거치지 않아 다크 모드에서도 라이트 모드 색이 그대로 남고, 범례가 없으면 각 호가 무엇인지 아무도 모릅니다."
+/>
+
+<En>
+
+## Accessibility
+
+- **RadialProgress exposes nothing to assistive tech except the centre
+  number.** The SVG has no role, title or description, and the arcs have no
+  names. Give the same information in text (a legend, a sentence) next to it
+  (WCAG 1.1.1, 1.3.1).
+- **Words, not colour alone** (WCAG 1.4.1). The legend names each category;
+  the colours only connect legend and arc.
+- Status colours mean status: use `danger.solid` for a segment only when that
+  segment is a problem, such as an overrun.
+
+## Tokens
+
+</En>
+
+<Ko>
+
+## 접근성
+
+- **RadialProgress는 가운데 숫자 말고는 보조 기술에 아무것도 알리지 않습니다.** SVG에는
+  역할, 제목, 설명이 없고 호에도 이름이 없습니다. 같은 정보를 범례나 문장 같은 글자로
+  옆에 씁니다(WCAG 1.1.1, 1.3.1).
+- **색만으로 알리지 않습니다**(WCAG 1.4.1). 분류 이름은 범례가 알려 주고, 색은 범례와
+  호를 이어 줄 뿐입니다.
+- 상태색은 상태를 뜻합니다. 초과 사용처럼 그 세그먼트가 문제일 때만 `danger.solid`를
+  씁니다.
+
+## 토큰
+
+</Ko>
+
+<Canvas of={RadialProgressStories.UsageTokens} sourceState="none" />
+
+<En>
+
+## Related
+
+- **ProgressBar**: one value against a limit.
+- **SegmentedProgressBar**: parts of one job, as a bar.
+- **LineGraph**: change over time.
+- **Foundations/Brand & colour usage**: category hues for categories.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **ProgressBar**: 한도에 대한 값 하나.
+- **SegmentedProgressBar**: 한 작업의 부분을 막대로.
+- **LineGraph**: 시간에 따른 변화.
+- **Foundations/Brand & colour usage**: 분류에는 category 색을 씁니다.
+
+</Ko>

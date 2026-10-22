@@ -1,0 +1,215 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as CountBadgeStories from './CountBadge.stories';
+
+<Meta of={CountBadgeStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# CountBadge
+
+A small coral-red count of things that are waiting for the reader: unread
+messages, new notifications.
+
+## When to use
+
+- An unread or pending count next to a nav item, a tab or a list row.
+- On an icon-only button, such as the notification bell.
+- `dot` when there is something new but the number does not matter.
+
+## When not to use
+
+- A total or a quantity (파일 128개, 멤버 42명) → plain text. Coral says "this
+  needs you"; a total does not.
+- A status or a label → `Badge`.
+- Something the reader can select or remove → `Tag`.
+
+## Variants and what they mean
+
+</En>
+
+<Ko>
+
+# CountBadge
+
+읽지 않은 메시지나 새 알림처럼 사용자를 기다리는 항목의 개수를 보여 주는 작은
+코럴 레드 배지입니다.
+
+## 언제 쓰나요
+
+- 메뉴 항목, 탭, 목록 행 옆에 읽지 않았거나 처리할 항목의 개수를 보여 줄 때.
+- 알림 종 같은 아이콘 버튼 위에 개수를 올릴 때.
+- 새 소식이 있다는 것만 중요하고 개수는 중요하지 않을 때는 `dot`을 씁니다.
+
+## 언제 쓰지 않나요
+
+- 전체 개수나 수량(파일 128개, 멤버 42명)은 일반 글자로 씁니다. 코럴은 "확인이
+  필요함"이라는 뜻인데, 전체 개수에는 그런 뜻이 없습니다.
+- 상태나 라벨은 `Badge`를 씁니다.
+- 사용자가 고르거나 지울 수 있다면 `Tag`를 씁니다.
+
+## 변형과 뜻
+
+</Ko>
+
+<ArgTypes of={CountBadgeStories} include={['count', 'max', 'dot', 'showZero', 'label', 'size']} />
+
+<En>
+
+| Form | Shows | Notes |
+| --- | --- | --- |
+| Number (default) | `count`, capped at `max` (99 → `99+`) | Renders nothing for 0 unless `showZero` |
+| `dot` | A circle with no number | Hidden from assistive tech unless it has a `label`; with a `count` of 0 it disappears |
+
+Sizes `sm` / `md` (default) / `lg` are 16 / 18 / 22 px tall. Digits are
+tabular, so the badge does not change width as the number changes.
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+| 형태 | 보이는 것 | 참고 |
+| --- | --- | --- |
+| 숫자(기본) | `count`, `max`에서 잘림(99 → `99+`) | `showZero`가 없으면 0일 때 아무것도 그리지 않음 |
+| `dot` | 숫자 없는 점 | `label`이 없으면 보조 기술에서 숨겨짐. `count`가 0이면 사라짐 |
+
+크기 `sm` / `md`(기본) / `lg`의 높이는 16 / 18 / 22px입니다. 숫자 폭이 고정되어 있어
+숫자가 바뀌어도 배지 폭이 흔들리지 않습니다.
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={CountBadgeStories.InContext} />
+<Verdict
+  kind="do"
+  en="Next to a nav item, give the badge a label that says what it counts. The screen reader hears 읽지 않은 메시지 12개 instead of a bare 12."
+  ko="메뉴 항목 옆에서는 무엇의 개수인지 알려 주는 label을 붙입니다. 화면 낭독기는 '12' 대신 '읽지 않은 메시지 12개'라고 읽습니다."
+/>
+
+<Canvas of={CountBadgeStories.OnIconButton} />
+<Verdict
+  kind="do"
+  en="On an icon-only button, put the count in the button's aria-label and leave the badge unlabelled. The button's aria-label replaces everything inside it."
+  ko="아이콘 버튼에서는 개수를 버튼의 aria-label에 넣고 배지에는 label을 달지 않습니다. 버튼의 aria-label이 안에 든 내용을 모두 대신합니다."
+/>
+
+<Canvas of={CountBadgeStories.DontCountForTotals} />
+<Verdict
+  kind="dont"
+  en="Use a count badge for totals. Three coral badges in a list read as three things that need attention."
+  ko="전체 개수에 CountBadge를 쓰지 마세요. 목록에 코럴 배지가 세 개 있으면 확인할 일이 세 가지 있는 것처럼 읽힙니다."
+/>
+
+<Canvas of={CountBadgeStories.DoTotalsAsText} />
+<Verdict
+  kind="do"
+  en="Write totals as muted text with the unit."
+  ko="전체 개수는 단위를 붙여 흐린 글자로 씁니다."
+/>
+
+<En>
+
+## Content
+
+- Numbers only; the unit and meaning go in `label` or the surrounding text.
+- Keep the default `max` of 99 unless the exact number above it matters to the
+  reader.
+- Write `label` as a complete phrase with the full number: "읽지 않은 알림
+  120개", even when the badge shows `99+`.
+
+## Accessibility
+
+What CountBadge does for you:
+
+- With a `label`, the visible number is hidden from assistive tech and the
+  label is read instead, so `99+` is announced as the real count.
+- A `dot` without a `label` is `aria-hidden`; with one it is an `img` with that
+  name.
+- It renders as a `<span>`, so it is valid inside a button or link
+  (`ACCESSIBILITY.md` §5, KWCAG 5.4.1.1).
+- `count.fg` on `count.bg` passes the contrast audit in both modes
+  (WCAG 1.4.3).
+
+What you still have to do:
+
+- **Give it a `label` when the number alone makes no sense**, in a nav item or a
+  list row (WCAG 1.1.1).
+- **On an icon-only button, put the count in the button's `aria-label`**
+  (WCAG 4.1.2). A `label` on the badge there is never announced.
+- The badge does not announce changes. If a new count matters while the reader
+  is on the page, announce it through a polite live region (`role="status"`)
+  as well (WCAG 4.1.3).
+
+## Tokens
+
+The table is generated from `CountBadge.styles.ts` and the theme.
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 숫자만 씁니다. 단위와 뜻은 `label`이나 주변 글자에 담습니다.
+- 99보다 큰 정확한 숫자가 사용자에게 중요하지 않다면 기본 `max` 99를 그대로 둡니다.
+- `label`은 실제 숫자를 넣은 완전한 구절로 씁니다. 배지에 `99+`가 보여도 "읽지 않은
+  알림 120개"라고 씁니다.
+
+## 접근성
+
+CountBadge가 알아서 하는 일
+
+- `label`이 있으면 보이는 숫자는 보조 기술에서 숨기고 label을 대신 읽습니다. 그래서
+  `99+`가 실제 개수로 읽힙니다.
+- `label`이 없는 `dot`은 `aria-hidden`이고, label이 있으면 그 이름을 가진 `img`가
+  됩니다.
+- `<span>`으로 그려지므로 버튼이나 링크 안에 넣어도 됩니다(`ACCESSIBILITY.md` §5,
+  KWCAG 5.4.1.1).
+- `count.bg` 위의 `count.fg`는 라이트·다크 모두 대비 감사를 통과합니다(WCAG 1.4.3).
+
+직접 챙겨야 하는 일
+
+- **숫자만으로 뜻이 통하지 않는다면 `label`을 붙입니다.** 메뉴 항목이나 목록 행 옆이
+  그렇습니다(WCAG 1.1.1).
+- **아이콘 버튼에서는 개수를 버튼의 `aria-label`에 넣습니다**(WCAG 4.1.2). 그 자리에서
+  배지의 `label`은 읽히지 않습니다.
+- 배지는 숫자가 바뀌어도 알려 주지 않습니다. 사용자가 화면을 보는 동안 새 개수가
+  중요하다면, 공손한 라이브 영역(`role="status"`)으로도 알립니다(WCAG 4.1.3).
+
+## 토큰
+
+아래 표는 `CountBadge.styles.ts`와 테마에서 자동으로 만듭니다.
+
+</Ko>
+
+<Canvas of={CountBadgeStories.UsageTokens} sourceState="none" />
+
+<En>
+
+## Related
+
+- **Badge**: a status or an attribute.
+- **Tag**: a label the reader can select or remove.
+- **IconButton**: where the bell and its count live.
+- **Foundations/Brand & colour usage**: coral only for send, run, the
+  AI-working mark and counts.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **Badge**: 상태나 속성.
+- **Tag**: 사용자가 고르거나 지울 수 있는 라벨.
+- **IconButton**: 알림 종과 그 개수가 놓이는 곳.
+- **Foundations/Brand & colour usage**: 코럴은 전송, 실행, AI 작업 표시, 개수에만
+  씁니다.
+
+</Ko>

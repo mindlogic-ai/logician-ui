@@ -1,6 +1,8 @@
 import { Box, Flex, Text, VStack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
+import { T } from '../../guidelines/_components/Lang';
+import { TokenTable } from '../../guidelines/_components/TokenTable';
 import { ProgressSegment, SegmentedProgressBar } from './';
 
 const meta = {
@@ -272,5 +274,57 @@ export const CustomColors: Story = {
         </Flex>
       </Box>
     </VStack>
+  ),
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `SegmentedProgressBar.usage.mdx` with <Canvas of={…} />. Hidden
+// from the sidebar (`!dev`).
+
+export const DoCountsInText: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: counts in words next to the bar',
+  render: () => (
+    <Box width="400px">
+      <SegmentedProgressBar max={100} height="8px" aria-hidden>
+        <ProgressSegment value={42} filledTrackColor="success.solid" />
+        <ProgressSegment value={3} filledTrackColor="danger.solid" />
+      </SegmentedProgressBar>
+      <Flex gap={4} mt={2} textStyle="subtext" color="fg.muted">
+        <Text>보냄 42</Text>
+        <Text color="danger.fg">실패 3</Text>
+        <Text>남음 55</Text>
+      </Flex>
+    </Box>
+  ),
+};
+
+export const DontColourOnly: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: segments with no words",
+  render: () => (
+    <Box width="400px">
+      <SegmentedProgressBar max={100} height="8px">
+        <ProgressSegment value={42} filledTrackColor="success.solid" />
+        <ProgressSegment value={3} filledTrackColor="danger.solid" />
+      </SegmentedProgressBar>
+    </Box>
+  ),
+};
+
+/** Tokens the bar reads, from `SegmentedProgressBar.tsx` and the theme. */
+export const UsageTokens: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Tokens',
+  render: () => (
+    <TokenTable
+      rows={[
+        { token: 'bg.track', use: <T en="remainder behind the segments" ko="세그먼트 뒤의 남은 부분" /> },
+        { token: 'primary.main', use: <T en="segment fill (default)" ko="세그먼트 채움(기본)" /> },
+      ]}
+    />
   ),
 };

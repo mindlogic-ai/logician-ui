@@ -1,10 +1,20 @@
-import { useState } from 'react';
-import { Flex, Stack, Text } from '@chakra-ui/react';
+import { ReactNode, useState } from 'react';
+import {
+  Box,
+  Toaster as ChakraToaster,
+  createToaster,
+  Flex,
+  Stack,
+  Text,
+} from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
+import { T } from '../../guidelines/_components/Lang';
+import { TokenTable } from '../../guidelines/_components/TokenTable';
 import { Button } from '../Button';
 import { Toast } from './Toast';
-import type { UseToastOptions } from './Toast.types';
+import { toastStyles } from './Toast.styles';
+import type { ToastAction, ToastStatus, UseToastOptions } from './Toast.types';
 import { Toaster } from './Toaster';
 import { useToast } from './useToast';
 
@@ -13,6 +23,14 @@ const meta = {
   component: Toast,
   parameters: {
     layout: 'centered',
+  },
+  argTypes: {
+    status: {
+      control: 'select',
+      options: ['neutral', 'info', 'success', 'warning', 'error'],
+      description:
+        '`neutral` (default): a plain result with no status, no icon. `success`: done as asked. `info`: a fact about what just happened; nothing is wrong. `warning`: done, but not quite as expected. `error`: it did not happen.',
+    },
   },
 } satisfies Meta<typeof Toast>;
 
@@ -599,6 +617,170 @@ export const ActionShortMessage: Story = {
         description: '채팅을 삭제했습니다.',
         action: { label: '되돌리기', onClick: fired('되돌리기') },
       })}
+    />
+  ),
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `Toast.usage.mdx` with <Canvas of={…} />. Hidden from the
+// sidebar (`!dev`); `tags` is written on each story because the indexer reads
+// CSF statically.
+//
+// Each specimen renders the real `Toast` through its own toaster, held open
+// (`duration: Infinity`) inside a transformed box. The transform makes the
+// toaster's `position: fixed` region relative to the box, so the toast sits in
+// the docs page instead of at the top of the window, and the specimens do not
+// share the app-wide `toaster`.
+
+const ToastPreview = ({
+  status = 'neutral',
+  title,
+  description,
+  action,
+  height = 150,
+}: {
+  status?: ToastStatus;
+  title?: ReactNode;
+  description?: ReactNode;
+  action?: ToastAction;
+  height?: number;
+}) => {
+  // Created with its toast in the initialiser, not in an effect: a toast
+  // dismissed by a StrictMode effect cleanup did not come back.
+  const [local] = useState(() => {
+    const toaster = createToaster({ placement: 'top' });
+    toaster.create({
+      type: status === 'neutral' ? 'info' : status,
+      title,
+      description,
+      duration: Infinity,
+      meta: { status, action },
+    });
+    return toaster;
+  });
+  return (
+    <Box
+      position="relative"
+      transform="translateZ(0)"
+      h={`${height}px`}
+      w="100%"
+      minW={{ md: '420px' }}
+      overflow="hidden"
+    >
+      <ChakraToaster toaster={local} insetInline={{ mdDown: '4' }} gap={3}>
+        {(toast) => {
+          const s = (toast.meta?.status ?? 'neutral') as ToastStatus;
+          return (
+            <Toast
+              title={toast.title}
+              description={toast.description}
+              status={s}
+              action={toast.meta?.action}
+              onClose={() => {}}
+              {...toastStyles[s]}
+            />
+          );
+        }}
+      </ChakraToaster>
+    </Box>
+  );
+};
+
+const noop = () => {};
+
+export const DoActionProp: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: one action through `action`',
+  render: () => (
+    <ToastPreview
+      status="error"
+      description="크레딧이 부족해 응답을 생성하지 못했습니다."
+      action={{ label: '크레딧 구매', onClick: noop }}
+    />
+  ),
+};
+
+export const DontButtonInDescription: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: a Button inside `description`",
+  render: () => (
+    <ToastPreview
+      status="error"
+      height={170}
+      description={
+        <Stack gap={2} align="flex-start">
+          <span>크레딧이 부족해 응답을 생성하지 못했습니다.</span>
+          <Button variant="secondary" size="sm">
+            크레딧 구매
+          </Button>
+        </Stack>
+      }
+    />
+  ),
+};
+
+export const DoUndoAfterDelete: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: confirm, and offer undo',
+  render: () => (
+    <ToastPreview
+      status="success"
+      description="채팅을 삭제했습니다."
+      action={{ label: '되돌리기', onClick: noop }}
+    />
+  ),
+};
+
+export const DontToastForFieldError: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: "Usage / Don't: a toast for a field error",
+  render: () => (
+    <ToastPreview
+      status="error"
+      description="이메일 형식이 올바르지 않습니다."
+    />
+  ),
+};
+
+export const DoNeutralResult: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Do: neutral for a plain result',
+  render: () => <ToastPreview description="링크를 복사했습니다." />,
+};
+
+const STATUSES: ToastStatus[] = ['neutral', 'info', 'success', 'warning', 'error'];
+
+/** Tokens each status reads, from `Toast.styles.ts` and the theme. */
+export const UsageTokens: Story = {
+  tags: ['!dev'],
+  parameters: { layout: 'padded' },
+  name: 'Usage / Tokens',
+  render: () => (
+    <TokenTable
+      rows={STATUSES.flatMap((status) => [
+        {
+          token: toastStyles[status].bg as string,
+          use: <T en={`${status} · background`} ko={`${status} · 배경`} />,
+        },
+        {
+          token: toastStyles[status].borderColor as string,
+          use: <T en={`${status} · border`} ko={`${status} · 테두리`} />,
+        },
+        {
+          token: toastStyles[status].color as string,
+          use: (
+            <T
+              en={`${status} · text, icon, action, ×`}
+              ko={`${status} · 글자, 아이콘, 동작, ×`}
+            />
+          ),
+        },
+      ])}
     />
   ),
 };

@@ -1,6 +1,9 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Flex, HStack, Stack } from '@chakra-ui/react';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { T } from '../../guidelines/_components/Lang';
+import { TokenTable } from '../../guidelines/_components/TokenTable';
+import { Subtext, Text } from '../Typography';
 import RadialProgress from './RadialProgress';
 
 const meta = {
@@ -270,4 +273,74 @@ export const EmptySegments: Story = {
       },
     },
   },
+};
+
+// ───────────────────────── Usage-page specimens ─────────────────────────
+// Pulled into `RadialProgress.usage.mdx` with <Canvas of={…} />. Hidden from
+// the sidebar (`!dev`); `tags` is written on each story because the indexer
+// reads CSF statically.
+
+const STORAGE = [
+  { label: '문서', color: 'category.blue.fg', value: 42 },
+  { label: '이미지', color: 'category.purple.fg', value: 28 },
+  { label: '오디오', color: 'category.orange.fg', value: 12 },
+];
+
+export const DoTokensAndLegend: Story = {
+  tags: ['!dev'],
+  name: 'Usage / Do: category tokens and a text legend',
+  render: () => (
+    <Flex gap={6} align="center" wrap="wrap">
+      <RadialProgress
+        size={160}
+        total={100}
+        unit="GB"
+        segments={STORAGE.map(({ color, value }) => ({ color, value }))}
+        aria-hidden
+        width="auto"
+      />
+      <Stack gap={1}>
+        <Text fontWeight="bold">저장 공간 100GB 중 82GB 사용</Text>
+        {STORAGE.map(({ label, color, value }) => (
+          <HStack key={label} gap={2}>
+            <Box boxSize="10px" borderRadius="full" bg={color} />
+            <Subtext>
+              {label} {value}GB
+            </Subtext>
+          </HStack>
+        ))}
+      </Stack>
+    </Flex>
+  ),
+};
+
+export const DontHexNoLegend: Story = {
+  tags: ['!dev'],
+  name: "Usage / Don't: hex colours and no legend",
+  args: {
+    size: 160,
+    total: 100,
+    unit: 'GB',
+    segments: [
+      { color: '#4ECDC4', value: 42 },
+      { color: '#FF6B6B', value: 28 },
+      { color: '#FFD93D', value: 12 },
+    ],
+  },
+};
+
+/** Tokens the chart reads besides its segments, from `RadialProgress.tsx`. */
+export const UsageTokens: Story = {
+  tags: ['!dev'],
+  name: 'Usage / Tokens',
+  render: () => (
+    <TokenTable
+      rows={[
+        { token: 'bg.track', use: <T en="remaining arc" ko="남은 부분의 호" /> },
+        { token: 'bg.surface', use: <T en="background" ko="배경" /> },
+        { token: 'fg.subtle', use: <T en="centre number" ko="가운데 숫자" /> },
+        { token: 'bg.muted', use: <T en="shadow under the ring" ko="고리 아래 그림자" /> },
+      ]}
+    />
+  ),
 };
