@@ -89,6 +89,7 @@ borrowing a hue.
 | The coral icon on the black run button (`action.iconOnSolid`) | Wide surfaces, light backgrounds, card fills |
 | The AI-working mark, the logo mark, large type (`action.mark`) | Promotion badges |
 | The unread count badge (`count.*`, a deeper coral red) | Warning and error text or borders; switches and checkboxes when on; links |
+| The prize amount on an event screen, as display type (`action.mark`) | Event card headers, modal footer bands, small eyebrow text |
 
 - **Points, not surfaces.** Nothing coral is larger than a button, badge or
   icon. Coral and the error red are only a few degrees apart in hue; at light
@@ -97,6 +98,34 @@ borrowing a hue.
   answer is loading and the loading mark takes its place. A count badge and the
   Super Agent diamond are status and identity marks, so they may appear next to
   a run signal.
+
+## Campaign and event surfaces
+
+First decide whether the screen is product or marketing. A page that needs a
+login, or has controls that change the account, is product. In-app event pages,
+their intro modals and promo banners are product. Marketing is everything
+outside the product that people see logged out: baze.co, SNS posts, print.
+
+- **In the product, events follow the coral rule above.** No coral fills and
+  no text on coral. Emphasis comes from the illustration; a band behind a card
+  header or modal footer is `bg.muted` or `layer.*`, never `secondary.surface`
+  or coral.
+- **The prize may be coral.** The reward amount as display type in
+  `action.mark` (24px and up, or 19px bold) is the screen's one coral moment.
+  Everything around it stays neutral.
+- **Small text is never coral.** Eyebrows and labels use `fg.subtle`. Darkening
+  coral until small text passes contrast lands right next to the error text red
+  (`danger.fg`).
+- **A thin decorative line counts as a point.** A coral line up to 4px with no
+  text or information on it is allowed, like the band under the FactChat promo
+  banner.
+- **Event CTAs stay `primary`.** An event screen is a product screen, so
+  `Button variant="accent"` stays on marketing heroes (see Button usage), and a
+  reward claim is never coral.
+- **A marketing page may have one full-bleed coral band.** Only ink or cream
+  content sits on it; elsewhere on that page coral is large type or art only.
+  The reference is baze.co/social: the offer section is the band, and
+  "80개 이상", "월 5,900원" and "9,000" are the large coral type.
 
 ## Status
 
@@ -238,6 +267,7 @@ BAZE의 화면은 따뜻한 무채색입니다. 크림·아이보리 바탕에 �
 | 블랙 실행 버튼 위의 코랄 아이콘 (`action.iconOnSolid`) | 넓은 면, 옅은 배경, 카드 바탕 |
 | AI 작업 중 표시, 로고 마크, 큰 글씨 (`action.mark`) | 프로모션 배지 |
 | 읽지 않은 숫자 배지 (`count.*`, 조금 더 진한 코랄 레드) | 경고·오류 문구와 테두리, 켜진 스위치·체크박스, 링크 |
+| 이벤트 화면의 보상 금액 큰 글씨 (`action.mark`) | 이벤트 카드 머리와 모달 하단 띠, 작은 머리말 글자 |
 
 - **면이 아니라 점으로 씁니다.** 버튼·배지·아이콘보다 큰 면을 코랄로 칠하지 않습니다.
   코랄과 오류 빨강은 색상 차이가 몇 도밖에 나지 않아 옅게 쓰면 같은 색이 됩니다.
@@ -245,6 +275,32 @@ BAZE의 화면은 따뜻한 무채색입니다. 크림·아이보리 바탕에 �
 - **실행 신호는 한 화면에 하나만 둡니다.** 채팅에서는 답변을 기다리는 동안 보내기
   버튼이 사라지고 그 자리에 로딩 표시가 나타납니다. 숫자 배지와 Super Agent 마름모는
   상태와 정체성을 나타내는 표시라 실행 신호와 함께 보여도 됩니다.
+
+## 캠페인·이벤트 화면
+
+먼저 그 화면이 제품인지 마케팅인지 가립니다. 로그인해야 들어갈 수 있거나 계정을
+바꾸는 조작이 있으면 제품입니다. 앱 안의 이벤트 페이지와 그 안내 모달, 프로모션
+배너도 제품입니다. 마케팅은 제품 밖에서 로그인 없이 보는 화면으로, baze.co, SNS
+게시물, 인쇄물이 여기에 해당합니다.
+
+- **제품 안의 이벤트도 위의 코랄 규칙을 따릅니다.** 코랄로 면을 칠하지 않고 코랄
+  위에 글자를 올리지 않습니다. 강조는 일러스트로 하고, 카드 머리나 모달 하단의 띠는
+  `bg.muted`나 `layer.*`로 칠합니다. `secondary.surface`나 코랄은 쓰지 않습니다.
+- **보상 금액은 코랄로 쓸 수 있습니다.** 보상 금액을 `action.mark` 큰 글씨(24px
+  이상, 또는 19px 굵게)로 쓰는 것이 그 화면의 하나뿐인 코랄입니다. 주변은 모두
+  무채색으로 둡니다.
+- **작은 글자는 코랄로 쓰지 않습니다.** 작은 머리말이나 라벨은 `fg.subtle`을 씁니다.
+  작은 글자가 대비 기준을 넘을 때까지 코랄을 어둡게 하면 오류 문구의 빨강
+  (`danger.fg`)과 거의 같아집니다.
+- **얇은 장식선은 점으로 봅니다.** 글자나 정보 없이 장식만 하는 4px 이하의 코랄 선은
+  써도 됩니다. FactChat 프로모션 배너 아래의 띠가 그 예입니다.
+- **이벤트의 행동 유도 버튼은 `primary`입니다.** 이벤트 화면도 제품 화면이므로
+  `Button variant="accent"`는 마케팅 히어로에만 씁니다(Button 사용법 참고). 보상 받기
+  버튼도 코랄로 칠하지 않습니다.
+- **마케팅 페이지에는 화면 폭을 가득 채우는 코랄 띠를 하나 둘 수 있습니다.** 그 위에는
+  블랙이나 크림색 내용만 올리고, 페이지의 나머지 부분에서 코랄은 큰 글씨나 그림에만
+  씁니다. 기준은 baze.co/social입니다. 혜택 섹션이 그 띠이고, "80개 이상",
+  "월 5,900원", "9,000"이 코랄 큰 글씨입니다.
 
 ## 상태
 
