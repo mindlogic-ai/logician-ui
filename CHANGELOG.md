@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.0.0-alpha.6
+
+### Minor Changes
+
+- 454e5a9: FormModalFooter: new optional `submitLoadingText`, forwarded to the submit
+  Button's `loadingText`. Without it a submitting form footer showed a bare
+  spinner, which breaks the Button rule that `loading` needs `loadingText`.
+
 ## 5.0.0-alpha.5
 
 ### Patch Changes
