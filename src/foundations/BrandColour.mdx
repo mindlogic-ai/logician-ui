@@ -110,13 +110,14 @@ outside the product that people see logged out: baze.co, SNS posts, print.
   `action.mark` (24px and up, or 19px bold) is the screen's one coral moment.
   Everything around it stays neutral.
 - **Small text is never coral.** Eyebrows and labels use `fg.subtle`. Darkening
-  coral until small text passes contrast lands at #B73730, right next to the
-  error text red.
+  coral until small text passes contrast lands right next to the error text red
+  (`danger.fg`).
 - **A thin decorative line counts as a point.** A coral line up to 4px with no
   text or information on it is allowed, like the band under the FactChat promo
   banner.
-- **Event CTAs stay `primary`.** `Button variant="accent"` appears at most once
-  per view and never on a reward claim or payment.
+- **Event CTAs stay `primary`.** An event screen is a product screen, so
+  `Button variant="accent"` stays on marketing heroes (see Button usage), and a
+  reward claim is never coral.
 - **A marketing page may have one full-bleed coral band.** Only ink or cream
   content sits on it; elsewhere on that page coral is large type or art only.
   The reference is baze.co/social: the offer section is the band, and
@@ -282,12 +283,13 @@ BAZE의 화면은 따뜻한 무채색입니다. 크림·아이보리 바탕에 �
   이상, 또는 19px 굵게)로 쓰는 것이 그 화면의 하나뿐인 코랄입니다. 주변은 모두
   무채색으로 둡니다.
 - **작은 글자는 코랄로 쓰지 않습니다.** 작은 머리말이나 라벨은 `fg.subtle`을 씁니다.
-  작은 글자가 대비 기준을 넘을 때까지 코랄을 어둡게 하면 #B73730이 되는데, 이 색은
-  오류 문구의 빨강과 거의 같습니다.
+  작은 글자가 대비 기준을 넘을 때까지 코랄을 어둡게 하면 오류 문구의 빨강
+  (`danger.fg`)과 거의 같아집니다.
 - **얇은 장식선은 점으로 봅니다.** 글자나 정보 없이 장식만 하는 4px 이하의 코랄 선은
   써도 됩니다. FactChat 프로모션 배너 아래의 띠가 그 예입니다.
-- **이벤트의 행동 유도 버튼은 `primary`입니다.** `Button variant="accent"`는 한
-  화면에 하나까지만 쓰고, 보상 받기나 결제에는 쓰지 않습니다.
+- **이벤트의 행동 유도 버튼은 `primary`입니다.** 이벤트 화면도 제품 화면이므로
+  `Button variant="accent"`는 마케팅 히어로에만 씁니다(Button 사용법 참고). 보상 받기
+  버튼도 코랄로 칠하지 않습니다.
 - **마케팅 페이지에는 화면 폭을 가득 채우는 코랄 띠를 하나 둘 수 있습니다.** 그 위에는
   블랙이나 크림색 내용만 올리고, 페이지의 나머지 부분에서 코랄은 큰 글씨나 그림에만
   씁니다. 기준은 baze.co/social입니다. 혜택 섹션이 그 띠이고, "80개 이상",
