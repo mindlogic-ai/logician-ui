@@ -143,11 +143,11 @@ is the maintainer's view.
 
 ### Layers and files
 
-| Layer                                                                                                                                                                     | Where                                            | Rule                                                                          |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------- |
-| Raw scales `ink`/`inkDark`, `sand`/`sandDark`, `slate`/`slateDark` (1–12), `coral`, 12 system hues `{base, baseDark, hc, hcDark, surface, ink, surfaceDark, inkDark}`     | `palette.generated.ts` → `colors` in `colors.ts` | Components and recipes **never** read them                                    |
-| Semantic steps `neutral.1–12`, `secondary.1–12`                                                                                                                           | `createSemanticColors()`                         | Filled by the theme option (`neutral: 'ink' \| 'slate'`, `secondary: 'sand'`) |
-| Roles (`bg.*`, `layer.*`, `fg.*`, `border.*`, `primary.*`, `secondary.*`, `action.*`, `send.*`, `count.*`, `disabled.*`, `focus.ring`, status, `tooltip.*`, `category.*`) | `ROLE_TOKEN_PATHS` + `createSemanticColors()`    | The only colours a component reads                                            |
+| Layer                                                                                                                                                                                              | Where                                            | Rule                                                                          |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------- |
+| Raw scales `ink`/`inkDark`, `sand`/`sandDark`, `slate`/`slateDark` (1–12), `coral`, 12 system hues `{base, baseDark, hc, hcDark, surface, ink, surfaceDark, inkDark}`, `dataviz`                   | `palette.generated.ts` → `colors` in `colors.ts` | Components and recipes **never** read them                                    |
+| Semantic steps `neutral.1–12`, `secondary.1–12`                                                                                                                                                    | `createSemanticColors()`                         | Filled by the theme option (`neutral: 'ink' \| 'slate'`, `secondary: 'sand'`) |
+| Roles (`bg.*`, `layer.*`, `fg.*`, `border.*`, `primary.*`, `secondary.*`, `action.*`, `send.*`, `count.*`, `disabled.*`, `focus.ring`, status, `tooltip.*`, `category.*`, `data.*`, `diverging.*`) | `ROLE_TOKEN_PATHS` + `createSemanticColors()`    | The only colours a component reads                                            |
 
 - **Values come from the generator.** `scripts/palette/generate.mjs` ports the
   designer prototype (OKLCH, contrast-targeted steps) and `--check`s it against
@@ -166,8 +166,9 @@ _moreContrast }`) because Chakra cannot nest `_dark` inside `_moreContrast`
 ### Adding or changing a token
 
 1. Add it to the generator (`buildScheme`) and to `PATHS` in `colors.ts`.
-2. Register its contrast pair(s) in `contrast.test.ts` (`PAIRS`, `SEP`), or a
-   reason in `NO_PAIR`. The registry test fails until you do; the audit runs
+2. Register its contrast pair(s) in `contrast.test.ts` (`PAIRS`, `SEP`; a
+   data-viz fill goes in `DATA_VIZ_LABELS` (`paletteSwatches.ts`) with its in-cell label), or a reason in
+   `NO_PAIR`. The registry test fails until you do; the audit runs
    light / dark / hcLight / hcDark for every neutral scheme.
 3. Add it to `SemanticColorToken` and to SemanticTokens.mdx.
 
@@ -250,9 +251,13 @@ follow the scheme and high contrast. Base font size is 14px.
    badges/tags, the modal header band), never rows or panels.
 5. Disabled = `disabled.*`, not opacity. Focus = `focusRing`.
 6. Blue means data and links: links are `fg.link`; data visualisation
-   (usage bars, single-measure bar charts, maps) is a blue monochrome ramp, never a
-   rainbow or grey ramp; line strokes (single-measure, and series 1) use `blue.base`.
-   Values: SemanticTokens.mdx → "Blue means data and links".
+   (usage bars, single-measure bar charts, maps) fills with `data.1–4` (4 =
+   largest), never a rainbow or grey ramp; line strokes (single-measure, and
+   series 1) use `blue.base`. Values against a real baseline (vs plan, vs
+   average) fill with `diverging.pos.1–3` (above, blue) / `diverging.neg.1–3`
+   (below, orange) and `diverging.mid` at the baseline — never red/green for
+   direction, never orange text or icons. Values and labels:
+   SemanticTokens.mdx → "Blue means data and links".
 
 ## Extending the Theme
 

@@ -48,6 +48,41 @@ export const resolveColor = (value: unknown, mode: Mode, depth = 0): string => {
 
 export type Swatch = { path: string; light: string; dark: string };
 
+/** In-cell label colour on a data-viz fill: `ink.11` (#252525), white, or none. */
+export type DataVizLabel = 'ink' | 'white' | null;
+
+/** Raw token each label resolves to, in either mode. */
+export const DATA_VIZ_LABEL_TOKEN = { ink: 'ink.11', white: 'white' } as const;
+
+/**
+ * Data-visualisation fills (`data.*`, `diverging.*`, by flat key) and the label
+ * a chart may print inside each one, per mode — the tables in
+ * SemanticTokens.mdx. Picked per step by measured contrast (≥ 4.5:1), not by
+ * step number; `null` means neither label clears it, so the value goes outside
+ * the mark. `contrast.test.ts` audits every entry; the BAZE Palette Data Viz
+ * story renders from it.
+ */
+export type DataVizKey =
+  | `data-${1 | 2 | 3 | 4}`
+  | `diverging-${'pos' | 'neg'}-${1 | 2 | 3}`
+  | 'diverging-mid';
+
+export const DATA_VIZ_LABELS: Readonly<
+  Record<DataVizKey, { light: DataVizLabel; dark: DataVizLabel }>
+> = {
+  'data-1': { light: 'ink', dark: 'white' },
+  'data-2': { light: 'ink', dark: 'white' },
+  'data-3': { light: 'ink', dark: 'ink' },
+  'data-4': { light: 'white', dark: 'ink' },
+  'diverging-pos-1': { light: 'ink', dark: 'white' },
+  'diverging-pos-2': { light: 'ink', dark: 'ink' },
+  'diverging-pos-3': { light: 'white', dark: 'ink' },
+  'diverging-neg-1': { light: 'ink', dark: 'white' },
+  'diverging-neg-2': { light: null, dark: null },
+  'diverging-neg-3': { light: 'white', dark: 'ink' },
+  'diverging-mid': { light: 'ink', dark: 'white' },
+};
+
 /**
  * 5.0 semantic colours grouped by their first segment. Deprecated 4.x aliases
  * (including the whole 4.x `slate.*` step scale) and the internal high-contrast

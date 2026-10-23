@@ -30,9 +30,9 @@ const meta = {
 
 Three layers; components read only the last one.
 
-1. **Raw scales** — \`ink\` / \`inkDark\`, \`sand\` / \`sandDark\`, \`slate\` / \`slateDark\` (1–12), \`coral\`, and 12 system hues. Values come from \`scripts/palette/generate.mjs\`.
+1. **Raw scales** — \`ink\` / \`inkDark\`, \`sand\` / \`sandDark\`, \`slate\` / \`slateDark\` (1–12), \`coral\`, 12 system hues, and \`dataviz\`. Values come from \`scripts/palette/generate.mjs\`.
 2. **Semantic steps** — \`neutral.1–12\` and \`secondary.1–12\`, filled by the theme option: \`createLogicianTheme({ neutral: 'ink' | 'slate', secondary: 'sand' })\` (or \`<LogicianProvider theme={…}>\`).
-3. **Role tokens** — \`bg.*\`, \`layer.*\`, \`fg.*\`, \`border.*\`, \`primary.*\`, \`action.*\`, status \`{bg,border,fg,solid,onSolid}\`, \`category.*\` …
+3. **Role tokens** — \`bg.*\`, \`layer.*\`, \`fg.*\`, \`border.*\`, \`primary.*\`, \`action.*\`, status \`{bg,border,fg,solid,onSolid}\`, \`category.*\`, data-viz fills \`data.*\` / \`diverging.*\` …
 
 Every value below is shown in light and dark. Contrast is audited in CI (\`contrast.test.ts\`) in light, dark and both high-contrast modes. The 4.x names still resolve as aliases until 6.0 and are listed at the bottom, not in the grid. Setup/Theme/BAZE Palette shows the raw scales and every role in all four modes.
         `,

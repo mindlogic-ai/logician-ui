@@ -10,6 +10,7 @@ import {
 } from './colors';
 import { system } from './index';
 import { SCHEMES } from './palette.generated';
+import { DATA_VIZ_LABEL_TOKEN, DATA_VIZ_LABELS } from './paletteSwatches';
 
 /**
  * Contrast audit for the BAZE semantic tokens — the same check as section 3-1
@@ -137,6 +138,12 @@ const NO_PAIR: Record<string, string> = {
   track: 'unfilled track; the filled part (primary-main) carries the value',
 };
 
+// Data-viz fills (`data.*`, `diverging.*`) are registered through
+// DATA_VIZ_LABELS (paletteSwatches.ts): each fill with the in-cell label it may
+// carry. Audited at 4.5:1 in light and dark, like the category pairs: the fills
+// keep their value under high contrast (they are fills, like `track`), so an
+// in-cell label is not held to the 7:1 high-contrast text target.
+
 // ───────────────────────────── resolver ─────────────────────────────
 
 const lum = (h: string) => {
@@ -253,6 +260,30 @@ describe.each(SCHEME_NAMES)('contrast — %s scheme', (neutral) => {
     expect(failures).toEqual([]);
   });
 
+  it('data-viz fills: each in-cell label clears 4.5:1, and "no label" means neither does (light and dark)', () => {
+    const failures = Object.entries(DATA_VIZ_LABELS).flatMap(([fill, labels]) =>
+      (['light', 'dark'] as const).flatMap((mode) => {
+        const bg = flat(fill, mode);
+        const label = labels[mode];
+        if (label) {
+          const c = ratio(resolve(DATA_VIZ_LABEL_TOKEN[label], mode), bg);
+          return c >= 4.5
+            ? []
+            : [`${label} on ${fill} ${mode}: ${c.toFixed(2)}`];
+        }
+        const best = Math.max(
+          ...Object.values(DATA_VIZ_LABEL_TOKEN).map((t) =>
+            ratio(resolve(t, mode), bg)
+          )
+        );
+        return best < 4.5
+          ? []
+          : [`${fill} ${mode} has no label but one clears ${best.toFixed(2)}`];
+      })
+    );
+    expect(failures).toEqual([]);
+  });
+
   it('every deprecated 4.x name resolves to its replacement in all modes', () => {
     for (const [oldName, newName] of Object.entries(DEPRECATED_COLOR_TOKENS))
       for (const mode of MODES)
@@ -267,6 +298,7 @@ describe('contrast registry', () => {
     ...PAIRS.flatMap(([a, b]) => [a, b]),
     ...SEP.flatMap(([a, b]) => [a, b]),
     ...Object.keys(NO_PAIR),
+    ...Object.keys(DATA_VIZ_LABELS),
   ]);
 
   it('every role token has a contrast pair or a NO_PAIR reason', () => {

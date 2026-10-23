@@ -7,7 +7,8 @@
  *    black), `sand.1–12` / `sandDark.1–12` (beige-brown), `slate.1–12` /
  *    `slateDark.1–12` (today's cool gray rebuilt on the same contrast targets),
  *    `coral.*`, and the 12 system hues (`red` … `brown`, each
- *    `{base, baseDark, hc, hcDark, surface, ink, surfaceDark, inkDark}`).
+ *    `{base, baseDark, hc, hcDark, surface, ink, surfaceDark, inkDark}`), and
+ *    `dataviz.*` (the data-visualisation values no hue step covers).
  *    The step number is the job (Radix-style): 1–3 backgrounds, 4–6 dividers
  *    and borders, 7 control border (3:1), 8 icon/placeholder (4.5:1), 9–11
  *    text, 12 maximum contrast.
@@ -16,7 +17,9 @@
  *    them (default `ink` / `sand`).
  * 3. **Semantic roles** — `bg.*`, `layer.*`, `fg.*`, `border.*`, `primary.*`,
  *    `secondary.*`, `action.*`, `send.*`, `count.*`, `disabled.*`, `focus.ring`,
- *    the four status families, `tooltip.*`, `category.{hue}.*`.
+ *    the four status families, `tooltip.*`, `category.{hue}.*`, and the
+ *    data-visualisation fills `data.1–4` and `diverging.{pos,neg}.1–3` /
+ *    `diverging.mid`.
  *
  * Every value comes from `palette.generated.ts` (see
  * `scripts/palette/generate.mjs`), which ports the designer-reviewed prototype
@@ -36,7 +39,13 @@
  * `no-deprecated-tokens` lint rule. They are removed in 6.0.
  */
 import DEPRECATED from './deprecatedColorTokens.json';
-import { CORAL, RAMPS, SCHEMES, SYSTEM_HUES } from './palette.generated';
+import {
+  CORAL,
+  DATAVIZ,
+  RAMPS,
+  SCHEMES,
+  SYSTEM_HUES,
+} from './palette.generated';
 
 /** Raw scale that fills `neutral.1–12` and every neutral role. */
 export type NeutralScale = 'ink' | 'slate';
@@ -121,6 +130,9 @@ export const colors = {
         Object.entries(SYSTEM_HUES[hue]).map(([k, val]) => [k, v(val)])
       ),
     ])
+  ),
+  dataviz: Object.fromEntries(
+    Object.entries(DATAVIZ).map(([k, val]) => [k, v(val)])
   ),
   white: v('#FFFFFF'),
 } as Record<string, Record<string, TokenValue> | TokenValue>;
@@ -214,6 +226,20 @@ const PATHS: Record<FlatKey, string> = {
   'info-onSolid': 'info.onSolid',
   'tooltip-bg': 'tooltip.bg',
   'tooltip-fg': 'tooltip.fg',
+  // Data visualisation (fills only). Higher number = larger value, in both
+  // modes; the dark values flip lightness so the strongest step stays the
+  // most prominent on a dark canvas.
+  'data-1': 'data.1',
+  'data-2': 'data.2',
+  'data-3': 'data.3',
+  'data-4': 'data.4',
+  'diverging-pos-1': 'diverging.pos.1',
+  'diverging-pos-2': 'diverging.pos.2',
+  'diverging-pos-3': 'diverging.pos.3',
+  'diverging-neg-1': 'diverging.neg.1',
+  'diverging-neg-2': 'diverging.neg.2',
+  'diverging-neg-3': 'diverging.neg.3',
+  'diverging-mid': 'diverging.mid',
 };
 
 /** Exposed for tests and docs: every role token generated from the scheme table. */
@@ -249,6 +275,7 @@ function buildRefIndex(neutral: NeutralScale, secondary: SecondaryScale) {
   for (const hue of SYSTEM_HUE_NAMES)
     for (const [k, hex] of Object.entries(SYSTEM_HUES[hue]))
       add(hex, `${hue}.${k}`);
+  for (const [k, hex] of Object.entries(DATAVIZ)) add(hex, `dataviz.${k}`);
   // The brand black/cream anchors exist only on ink; reachable from any scheme.
   if (neutral !== 'ink') addScale('ink');
   return (hex: string) => index.get(hex.toUpperCase()) ?? hex;
@@ -421,6 +448,9 @@ export type SemanticColorToken =
   | `danger.${'solidHover' | 'solidActive'}`
   | `tooltip.${'bg' | 'fg'}`
   | `category.${Hue}.${'surface' | 'fg'}`
+  | `data.${1 | 2 | 3 | 4}`
+  | `diverging.${'pos' | 'neg'}.${1 | 2 | 3}`
+  | 'diverging.mid'
   | DeprecatedSemanticColorToken;
 
 /**
