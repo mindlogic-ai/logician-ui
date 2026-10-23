@@ -50,7 +50,7 @@ export const WithDelete: Story = {
 
 /** Mid-request: spinner on submit, every button disabled. */
 export const Submitting: Story = {
-  args: { isSubmitting: true },
+  args: { isSubmitting: true, submitLoadingText: 'Saving' },
 };
 
 /** Gated submit (e.g. a required field is empty). */

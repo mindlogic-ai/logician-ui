@@ -121,7 +121,8 @@ What these parts do for you:
 - `FormModalFooter` keeps the submit a `type="submit"` button inside a
   `<form>`, so Enter submits; pass `onSubmit` only for a portalled or
   form-less modal. `isSubmitting` disables every button so the modal cannot be
-  dismissed mid-request.
+  dismissed mid-request. Pair it with `submitLoadingText` ("Saving") so the
+  busy submit button still says what it is doing.
 - A collapsed `FormSection` with `hasError` swaps its chevron for a danger
   glyph, so hidden errors are not missed.
 
@@ -172,6 +173,7 @@ top rule, `FormSection` `divider` uses `border.subtle`, and `FieldError` uses
 - `FormModalFooter`는 `<form>` 안에서 제출 버튼을 `type="submit"`으로 두어 Enter로
   제출되게 합니다. `onSubmit`은 포털로 그려지거나 `<form>`이 없는 모달에서만 넘깁니다.
   `isSubmitting`이면 모든 버튼이 비활성이 되어 요청 중에 모달이 닫히지 않습니다.
+  `submitLoadingText`("저장 중")를 함께 넘기면 요청 중인 제출 버튼도 무엇을 하는지 말합니다.
 - `hasError`인 `FormSection`이 접혀 있으면 펼침 화살표 대신 위험 표시가 보여 숨은
   오류를 놓치지 않습니다.
 

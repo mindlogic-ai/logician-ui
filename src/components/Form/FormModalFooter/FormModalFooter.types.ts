@@ -36,6 +36,13 @@ export interface FormModalFooterProps extends Omit<
    */
   isSubmitting?: boolean;
   /**
+   * What the submit button says while `isSubmitting`, as a short present-tense
+   * state ("Saving", "저장 중"). Forwarded to the Button's `loadingText`, so the
+   * busy button keeps a name instead of becoming a bare spinner (Button usage:
+   * `loading` needs `loadingText`). The app owns the copy, like every label here.
+   */
+  submitLoadingText?: ReactNode;
+  /**
    * Extra disable condition for the primary button beyond `isSubmitting` — a
    * pristine/invalid gate (e.g. `!name.trim()`).
    */
