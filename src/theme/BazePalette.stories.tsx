@@ -14,6 +14,12 @@ import {
   SCHEMES,
   SYSTEM_HUES,
 } from './palette.generated';
+import {
+  DATA_VIZ_LABEL_TOKEN,
+  DATA_VIZ_LABELS,
+  type DataVizKey,
+  resolveColor,
+} from './paletteSwatches';
 
 /**
  * logician-ui 5.0 BAZE palette — the three token layers.
@@ -169,8 +175,11 @@ export const RoleTokens: Story = {
   ),
 };
 
-const DATA_STEPS = ['data-1', 'data-2', 'data-3', 'data-4'];
-const DIVERGING_STEPS = [
+const DATA_STEPS = (Object.keys(DATA_VIZ_LABELS) as DataVizKey[]).filter((k) =>
+  k.startsWith('data-')
+);
+/** Display order: far below → baseline → far above. */
+const DIVERGING_STEPS: DataVizKey[] = [
   'diverging-neg-3',
   'diverging-neg-2',
   'diverging-neg-1',
@@ -179,20 +188,25 @@ const DIVERGING_STEPS = [
   'diverging-pos-2',
   'diverging-pos-3',
 ];
-const LABEL_INK = '#252525';
-const LABEL_WHITE = '#FFFFFF';
 
-/** The in-cell label a step takes: ink or white by measured contrast (≥ 4.5:1), or none. */
-const DataCell = ({ flat, hex }: { flat: string; hex: string }) => {
-  const label = [LABEL_INK, LABEL_WHITE]
-    .map((c) => ({ c, r: ratio(hex, c) }))
-    .sort((a, b) => b.r - a.r)[0];
-  const ok = label.r >= 4.5;
+/** A fill with the in-cell label `DATA_VIZ_LABELS` gives it (or none). */
+const DataCell = ({
+  flat,
+  hex,
+  mode,
+}: {
+  flat: DataVizKey;
+  hex: string;
+  mode: 'light' | 'dark';
+}) => {
+  const label = DATA_VIZ_LABELS[flat][mode];
+  const labelHex =
+    label && resolveColor(`{colors.${DATA_VIZ_LABEL_TOKEN[label]}}`, mode);
   return (
     <Stack gap={1}>
       <Flex
         bg={hex}
-        color={label.c}
+        color={labelHex || undefined}
         h="56px"
         align="center"
         justify="center"
@@ -200,16 +214,16 @@ const DataCell = ({ flat, hex }: { flat: string; hex: string }) => {
         fontWeight="bold"
         borderRadius="sm"
       >
-        {ok && '42%'}
+        {labelHex && '42%'}
       </Flex>
       {/* Plain boxes: the panel paints its own mode, so text inherits its colour. */}
       <Box fontFamily="mono" fontSize="11px">
-        {ROLE_TOKEN_PATHS[flat as keyof typeof ROLE_TOKEN_PATHS]}
+        {ROLE_TOKEN_PATHS[flat]}
       </Box>
       <Box fontSize="10px">
         {hex} ·{' '}
-        {ok
-          ? `${label.c === LABEL_INK ? 'ink' : 'white'} label ${label.r.toFixed(2)}`
+        {labelHex
+          ? `${label} label ${ratio(hex, labelHex).toFixed(2)}`
           : 'no in-cell label'}
       </Box>
     </Stack>
@@ -238,12 +252,12 @@ export const DataViz: Story = {
             <Box fontWeight="bold">{mode}</Box>
             <Grid templateColumns="repeat(4, 1fr)" gap={2}>
               {DATA_STEPS.map((k) => (
-                <DataCell key={k} flat={k} hex={table[k]} />
+                <DataCell key={k} flat={k} hex={table[k]} mode={mode} />
               ))}
             </Grid>
             <Grid templateColumns="repeat(7, 1fr)" gap={2}>
               {DIVERGING_STEPS.map((k) => (
-                <DataCell key={k} flat={k} hex={table[k]} />
+                <DataCell key={k} flat={k} hex={table[k]} mode={mode} />
               ))}
             </Grid>
           </Stack>

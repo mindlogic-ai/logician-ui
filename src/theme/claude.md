@@ -167,7 +167,7 @@ _moreContrast }`) because Chakra cannot nest `_dark` inside `_moreContrast`
 
 1. Add it to the generator (`buildScheme`) and to `PATHS` in `colors.ts`.
 2. Register its contrast pair(s) in `contrast.test.ts` (`PAIRS`, `SEP`; a
-   data-viz fill goes in `FILL_LABELS` with its in-cell label), or a reason in
+   data-viz fill goes in `DATA_VIZ_LABELS` (`paletteSwatches.ts`) with its in-cell label), or a reason in
    `NO_PAIR`. The registry test fails until you do; the audit runs
    light / dark / hcLight / hcDark for every neutral scheme.
 3. Add it to `SemanticColorToken` and to SemanticTokens.mdx.

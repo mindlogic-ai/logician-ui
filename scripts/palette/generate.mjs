@@ -382,10 +382,11 @@ export const SYSTEM_HUES = Object.fromEntries(
 //   three steps are the blue hue's ink/surface pair (`blue.ink`, `blue.surface`
 //   and their dark twins).
 // - `blue1–3` / `orange1–3`: the diverging ramp (`diverging.pos.*` /
-//   `diverging.neg.*`). A dedicated ramp at OKLCH C ≈ 0.10–0.11, because the
-//   dusty data blue (C ≈ 0.05) turns any warm partner brown. Steps are matched
-//   in OKLCH lightness across the two sides (0.82 / 0.64 / 0.47), so neither
-//   direction looks larger at the same magnitude. Blue ↔ orange keeps the
+//   `diverging.neg.*`). A dedicated ramp — steps 2–3 at OKLCH C ≈ 0.10–0.11,
+//   step 1 at 0.06 — because the dusty data blue (C ≈ 0.05) turns any warm
+//   partner brown. Steps are matched in OKLCH lightness and chroma across the
+//   two sides (L 0.82 / 0.64 / 0.47), so neither direction looks larger at the
+//   same magnitude. Blue ↔ orange keeps the
 //   largest colour-blind separation of the candidates (deutan ΔE 11.4).
 export const DATAVIZ = {
   blueMid: '#7492B3',
