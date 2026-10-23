@@ -1,0 +1,637 @@
+import { Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle } from '../guidelines/_components/Lang';
+import * as BrandAssets from './BrandAssets.stories';
+
+<Meta of={BrandAssets} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# Brand assets
+
+BAZE artwork is black-and-white collage on cream, held together by one shape:
+the Base Unit, the diamond the logo is built from. This page records how
+baze.co and FactChat use the artwork, the units and the motion **today**, read
+from their code. It is a description of what ships, not a new spec. Every rule
+names the file it comes from.
+
+Colour roles for product UI are on **Foundations/Brand & colour usage**. The
+brand colours on this page (`--coral-deep`, `--azure` and so on) are baze.co's
+own `src/styles/tokens.css` names. They belong to the artwork and never stand
+in for a logician-ui token.
+
+## Where the files are
+
+logician-ui ships no brand raster, and it must not start. Link to the sources
+instead.
+
+| What | Source |
+| --- | --- |
+| Logo, symbol and lockup PNGs, the 32 solid and 32 line icons, the 22 key-visual cutouts, the 32-page guidebook PDF | [docs.apps.mindlogic.tools/baze-brand.html](https://docs.apps.mindlogic.tools/baze-brand.html) (company login) |
+| Originals, including the Illustrator masters | The shared drive 「베이즈 Baze」 |
+| The mark and wordmark as vectors | `baze-landing-page` `src/lib/marks.ts`, traced from 경순's Illustrator file `base_brandlogo_v1.3` |
+| The cutouts baze.co renders, with their pixel sizes | `baze-landing-page` `public/images/assets/`, listed in `src/lib/images.ts` |
+| FactChat's resized copies (2x their largest use, webp q72) | `factchat-nextjs` `public/assets/images/baze/collage/`, listed in `src/app/auth/_components/AuthBand/cutouts.ts` |
+
+The specimens below load their images from baze.co, so nothing is bundled.
+
+## The logo
+
+<Canvas of={BrandAssets.LockupForms} sourceState="none" />
+
+- **Draw it from the traced geometry.** `marks.ts` holds the mark and the
+  wordmark as outlines, normalised so the mark is exactly 100 units tall. It
+  renders as inline SVG in `currentColor`, so one component recolours it at
+  every size. Its own instruction is "Do not nudge these numbers. Re-trace from
+  the master file instead." Never redraw the logo, and never set "BAZE" in a
+  font.
+- **The lockup is one SVG.** In mark units (mark height = 100) the wordmark is
+  58 tall, sits 35.4 to the right of the mark, and its centre line is at 49.5,
+  a touch above the mark's own. That gives a lockup about 3.9 times as wide as
+  it is tall. Because it is one SVG, the gap cannot drift with a font fallback
+  or a flex gap.
+- **Use the wordmark alone in running text.** baze.co sets the word without the
+  mark in the philosophy signoff, where the three-unit mark would read as a
+  cluster of bullets (`Wordmark variant="word"`).
+- **Ink or white.** baze.co draws the logo in `--ink` (#252525) on light
+  grounds and in white on the nav bar and the footer. FactChat's auth band
+  tints its corner mark in the current scene's accent.
+
+### Anatomy
+
+<Canvas of={BrandAssets.MarkAnatomy} sourceState="none" />
+
+The mark is four Base Units in three pieces, carved verbatim from the same
+path (`markPiecePaths`), so the pieces stacked in one box render identically to
+the whole.
+
+- **Pair:** the two left units, fused at the pinched waist. They never
+  separate.
+- **Counter:** the top-right unit with the round hole punched through it. The
+  circle and the diamond wind in opposite directions, so they stay one path.
+- **Loose:** the bottom-right unit. It is the only piece that travels (see
+  Motion).
+
+Splitting the mark is reserved for choreography. At rest the mark is always
+whole.
+
+### Size, clear space and misuse
+
+<Canvas of={BrandAssets.ClearSpace} sourceState="none" />
+
+From the guidebook (*BAZE Brand Identity Guidelines*, 2026-09-17):
+
+- **Minimum size.** Wordmark: 100px on screen, 20mm in print. Symbol: 24px on
+  screen, 5mm in print. On baze.co the nav lockup is set at a 24px mark height,
+  which is exactly the symbol minimum.
+- **Clear space.** Keep X empty on every side and put nothing inside it. X is
+  one module: the wordmark's height on the wordmark and the lockup (pp. 5 and
+  11), and about one Base Unit on the symbol alone (p. 11).
+- **Never** change the weight or the proportions, add depth or a shadow, or
+  flip, split or rotate the logo (p. 7).
+
+## Base Units
+
+<Canvas of={BrandAssets.UnitForms} sourceState="none" />
+
+A single unit (`Diamond.astro`) is the `diamondMark` path in a 24 × 24 box.
+
+- **Solid** is the default. **Outline** (a 2.2 stroke, scaled to 0.9) is for a
+  unit on a dark surface; baze.co uses it once, next to a solid unit on the
+  receipt's black stub.
+- **Every unit carries the paper grain**, the filter in `GrainDefs.astro`
+  (fractal noise at 0.55, three octaves, seed 7; a multiply pass darkens to
+  0.62–1.0, a screen pass lightens by up to 0.24, clipped to the unit's own
+  shape). It is generated rather than shipped as an image, so it works at any
+  size and in any colour, the hover colours included. FactChat's
+  `BaseUnitMark` draws the same path without the grain.
+- **Sizes in use:** 10px (page-end links), 11px (the app still), 12px (list
+  bullets, the receipt total), 11–26px (floating over artwork), 40–64px (the
+  faint deep plane).
+
+### Units around artwork
+
+<Canvas of={BrandAssets.UnitsOnArtPlates} sourceState="none" />
+
+This is the most repeated pattern on baze.co: the homepage rows
+(`Highlights.astro`), the closing banner (`CtaBanner.astro`: home, pricing,
+philosophy and every feature page),
+and the feature-page rows and banner collage (`FeatureShowcase.astro`). Feature
+pages transcribed from 경순's renders drop the units from their product rows and
+banner, so today only the HWP page shows them there. The values, measured from
+those files:
+
+| Unit | Size | At rest | On hover | Depth (`--speed`) |
+| --- | --- | --- | --- | --- |
+| **a**, the lead | 26 / 18 / 23px by row; 24px on the banners | `--ink` | the row's first deep colour, `scale: 1.15`, `translate: 0 -2px` | 1.12, floats ahead |
+| **b**, the companion | 12 / 15 / 11px by row; 13px on the feature banner, 14px on the closing banner | the row's base fill (`--azure`, `--coral`, `--mint`) at 0.9 opacity | the row's second deep colour, same lift | 0.85, just behind |
+| **c**, the deep plane | 44 / 52 / 40px by row; 64px on the closing banner | `--ink` at 0.16 opacity, painted behind the cutout | does not answer | 0.75, deepest |
+
+- **Two units, two sizes, opposite sides.** The lead is usually about twice the
+  companion (26/12, 23/11, 24/13, 24/14); the second homepage row, at 18/15, is
+  the exception. On the first homepage row the lead sits at left 16%, top 18%
+  and the companion at left 76%, top 34%. Where copy fills one side of the
+  plate, both go to the open side: the closing banner puts them at right 34%,
+  top 16% and right 8%, top 26%. Positions are percentages of the plate, so the
+  composition holds at any width.
+- **A third, faint unit is optional.** It is large, at 16% opacity, low on the
+  plate (left 7%, top 60% on the first homepage row; right 22%, bottom 12% on
+  the closing banner), and painted before the image so it peeks out from behind
+  the cutout.
+- **Each row draws a different pair.** The rows cycle through
+  coral-deep / azure-deep, mint-deep / coral-deep and azure-deep / mint-deep,
+  and the homepage gives each row its own positions, so the composition moves
+  down the page instead of repeating.
+- **Hover lights the front units only**, always in the *deep* step
+  (`--coral-deep` #da483e, `--mint-deep` #3c967d, `--azure-deep` #24768e): the
+  base fills look washed out as highlights, and the deep steps hold their
+  contrast at 12px. The deep plane ignores hover, which keeps it reading as
+  background.
+- **No units on a flat stage.** A row that shows a product screen or rendered
+  output on its own background gets no units: "a unit on a flat plate reads as
+  a smudge" (`FeatureShowcase.astro`).
+- **FactChat follows the same pattern.** The auth band puts a 24px lead and a
+  16px companion on its front plane, both `fg.emphasized` at rest. While the
+  pointer is over the band, they light up in the scene's accent and companion
+  colours, with `scale(1.15) translateY(-2px)` over 0.35s.
+
+### Units as bullets and links
+
+<Canvas of={BrandAssets.ListBullets} sourceState="none" />
+
+- **List bullet** (`FeatureList.astro`, the pricing cards): a 12px solid unit
+  in `--ink` in a 14px column, 12px from the text, 2px down. Hovering a row
+  lights its bullet in coral-deep, mint-deep or azure-deep in turn, and scales
+  it to 1.15.
+- **Page-end links** (`ExploreMore.astro`): a 10px unit in `--ink-4` that
+  turns `--accent` on hover.
+- **더보기** (`.bz-more` in `components.css` and `motion.css`): the unit is the
+  affordance. It steps 3px forward, scales to 1.1 and turns coral-deep on hover.
+  The styles exist, but no page renders it today.
+
+## Artwork
+
+<Canvas of={BrandAssets.ColourOnShapes} sourceState="none" />
+
+- **Black-and-white cutouts on cream.** People, hands, objects, mountains and
+  clouds are halftone or engraved prints with no colour of their own.
+- **Colour goes on shapes, never on the cutout.** Colour belongs to the flat
+  pieces the figures sit on or hold: the Base Unit plates (coral, blue, beige,
+  mint), cards and puzzle pieces. The asset drop has one hand tinted red
+  (`hand-card-red`), and no page uses it.
+- **Printed, not pasted.** On the wash, a cutout takes `mix-blend-mode:
+  multiply` and `filter: sepia(0.2) saturate(0.85) contrast(1.05)`, so the
+  white paper drops out and overlapping pieces print over each other like ink.
+  The newer per-page drops arrive already aged and are marked `flat` (no blend,
+  no filter); those that cast a shadow use two `drop-shadow`s that follow the
+  cutout's own outline.
+- **Output is never treated.** Generated posters, slides and films are shown
+  flat, with no multiply and no sepia: "ageing a result is a lie about what you
+  get" (`FeatureShowcase.astro`).
+- **In dark mode** FactChat turns the multiply off and inverts pencil sketches
+  so the line stays visible.
+
+### Which cutout goes with which feature
+
+Read from each feature's `heroArt` in `baze-landing-page` `src/i18n/content.ts`.
+
+| Page | Hero pieces |
+| --- | --- |
+| Super Agent | Puzzle board; a hand bringing a blue image piece and a hand bringing a pink PPT piece |
+| Presentation | Laptop, a hand with a pie-chart card, a lightbulb, a person at a standing desk, a hand with a bar-chart card |
+| Image & video | Engraved clouds, a cable-bridge sketch, the flagged mountain, a typewriter, a halftone hand with a pencil |
+| Data | A sketched sphere, the coral unit plate, an orbit diagram, sketched axes, a memo, a man with a laptop |
+| Study tutor | A mountain, two clouds, a lightbulb, books, a clipboard, a notebook with the BAZE mark printed on it, a compass |
+| AI chatbot | A logo grid, a path-and-sphere sketch, an alarm clock, the blue punched unit, taped grid paper, a block sketch, a torn square, a person writing, a hand holding a disc |
+| HWP | Typewriter (centre), a woman with a laptop, an orbit diagram, a lightbulb, torn grid paper |
+
+FactChat's auth band has four scenes, one per accent: basecamp (coral; a figure
+on the ridge), summit (azure; the woman on the blue plate), studio (mint; the
+man at his iMac on the mint plate) and desk wall (ink; the study-tutor pieces).
+
+### Torn scraps
+
+<Canvas of={BrandAssets.PosterBandScraps} sourceState="none" />
+
+On the image and video page's poster band, two torn scraps sit behind opposite
+corners: grid paper at the top left (left −8%, top −14%, 40% wide) and a torn
+square at the bottom right (right −6%, bottom −20%, 30% wide). They sit under
+the posters, multiply into the cream with no sepia (the band is already cream),
+and are cropped by the band's `overflow: clip`.
+
+## Motion
+
+From `src/styles/motion.css`, `docs/motion-ideation.md` and the components that
+move. Product UI keeps its own presets (**Theme/Motion**); this is what the
+brand surfaces do.
+
+### House rules
+
+- **Motion is never load-bearing.** Content is laid out and readable first.
+  Scroll effects sit inside `@supports (animation-timeline: view())`, so a
+  browser without scroll timelines simply shows the content.
+- **Scroll motion is scrubbed, not timed.** Reveals, parallax and the hero
+  journey use scroll position as their clock and rewind when you scroll back.
+  Time-based motion is kept for content already in view at load, and for
+  binary effects (an underline drawn, a heading settled) that would look
+  half-made if a scroll position stranded them.
+- **No bounce.** Only calm curves. The one spring on the site is the page
+  loader's closing snap, a brand moment that plays at most once.
+- **Text never drifts.** Every scene keeps one static frame at speed 1; only
+  the art moves against it.
+- **Reduced motion removes it all.** A global rule in `global.css` cuts every
+  animation and transition to 0.01ms under `prefers-reduced-motion: reduce`,
+  and the hover lifts are reset as well. Colour changes stay, because they are
+  a change of state, not motion. Loops (the marquees) stop.
+
+### Durations and curves (`tokens.css`)
+
+| Token | Value | Used for |
+| --- | --- | --- |
+| `--dur-fast` | 120ms | Button lift, colour on links |
+| `--dur-base` | 200ms | Unit light-up, underline draw-in |
+| `--dur-slow` | 340ms | Image plate push-in (`scale(1.02)`) |
+| `--dur-glide` | 520ms | The Base Unit formations re-gathering |
+| `--dur-enter` / `--enter-stagger` | 640ms / 90ms | Content in view at load rises 14px, staggered |
+| `--reveal-rise` / `--reveal-range` / `--reveal-step` | 20px / 300px / 80px | Scroll reveals: the rise, the scroll distance one reveal takes, and the extra wait for a trailing sibling |
+| `--ease-standard` | `cubic-bezier(0.4, 0, 0.2, 1)` | Colour |
+| `--ease-out` | `cubic-bezier(0.16, 1, 0.3, 1)` | Entrances, scale and position |
+| `--ease-in-out-sine` | `cubic-bezier(0.37, 0, 0.63, 1)` | Long scrubbed trips (the full-bleed band opening) |
+
+### Depth and idle motion
+
+- **Drift.** Each plane declares a `--speed`: 0.75 for the deep unit, 0.85 for
+  the companion and the artwork, 1 for the plate (the static frame), 1.12 for
+  the lead unit. The travel is ±(1 − speed) × 50vh across the piece's time on
+  screen. Neighbouring planes stay at least 0.1 apart, or they merge into one.
+  FactChat's auth band never scrolls, so the pointer drives the same planes
+  (40px of travel at speed 0).
+- **Breath.** Feature-page hero pieces float 18–25px on their own heading, with
+  up to ±1.4° of sway, over 6–11s, alternating, `ease-in-out`. A piece that
+  bleeds off the plate's edge stays still.
+- **The collage gives way.** Under a fine pointer, pieces within 340px of the
+  cursor are pushed up to 22px away from it, easing with a 260ms time constant
+  (`lib/pointer-push.ts`).
+- **Hover nudges.** Buttons rise 1px, image plates scale to 1.02, units scale
+  to 1.15 and rise 2px.
+- **Marquees.** A run is listed twice, with the second copy hidden from
+  assistive technology, so the loop has no seam. Neighbouring lanes run in
+  opposite directions. The model names run at 96s, 116s and 128s per lane, the
+  poster band at 72s, all linear. Under reduced motion they stop.
+
+### The hero: the loose unit
+
+The homepage hero (`Hero.astro`) is the one place baze.co uses GSAP, because it
+hands an element between containers.
+
+1. The mark's pieces open at the corners of the headline block.
+2. On the first scrolled pixel the loose unit sets off for the Highlights
+   heading, and the other pieces converge on it and snap into the lockup.
+3. The pair and the counter park and scroll away with the hero. The loose unit
+   alone rides on, grows into a diamond window and docks on its twin above the
+   Highlights heading.
+
+On the way the window cycles typewriter → notebook → person writing →
+lightbulb, as a pure function of scroll progress, and dips 24% smaller at mid
+flight. The journey is scrubbed (`scrub: 1.8`) from the top of the hero until
+the twin reaches 30% of the viewport. It only runs at
+`(min-width: 800px) and (prefers-reduced-motion: no-preference)`. Without
+script, on narrow screens and under reduced motion, the hero is complete and
+still.
+
+### The page loader
+
+`DraughtLoader` draws the mark with a compass construction, loops for as long
+as loading takes, then snaps the pieces into the logo. It plays only on `/` or
+`/en/`, at most once every 12 hours, and never under reduced motion. Its
+closing snap is the site's only spring (ζ 0.50, 14% overshoot), and a 12s
+failsafe removes it if the script never runs.
+
+## Typography
+
+| Role | Guidebook (p. 16) | What baze.co loads today |
+| --- | --- | --- |
+| Headlines, quotes | Century Schoolbook (serif, English) | Wanted Sans Variable for every heading |
+| One accent word | PD Everyday (handwritten) | Not loaded |
+| Body | Pretendard | Pretendard Variable |
+| Display Latin | — | Archivo 700/800 (`--font-display`: the receipt total, the social page) |
+
+baze.co sets no serif and no handwriting. Follow what ships, and ask the brand
+owner before you bring Century Schoolbook or PD Everyday into a product
+surface. The guidebook's rules on them describe the printed identity, not
+the current site.
+
+## Related
+
+**Foundations/Brand & colour usage** (colour roles in product UI) ·
+**Theme/Motion** (product motion presets) ·
+**Setup/Theme/BAZE Palette** (every product value).
+
+</En>
+
+<Ko>
+
+# 브랜드 에셋
+
+BAZE의 아트워크는 크림 바탕에 놓인 흑백 콜라주이고, 모든 장면을 한 가지 모양이
+이어 줍니다. 로고를 이루는 마름모, 베이스 유닛입니다. 이 페이지는 baze.co와 팩트챗이 **지금**
+아트워크와 유닛, 모션을 어떻게 쓰는지 코드에서 읽어 정리한 것입니다. 새 규격이
+아니라 이미 배포된 모습을 기록합니다. 규칙마다 출처 파일을 적었습니다.
+
+제품 화면의 색 역할은 **Foundations/Brand & colour usage**에 있습니다. 이
+페이지에 나오는 브랜드 색 이름(`--coral-deep`, `--azure` 등)은 baze.co의
+`src/styles/tokens.css`에 있는 이름입니다. 아트워크 전용 색이라 logician-ui
+토큰 대신 쓰지 않습니다.
+
+## 파일 위치
+
+logician-ui 패키지에는 브랜드 이미지 파일이 들어 있지 않고, 앞으로도 넣지
+않습니다. 대신 아래 원본으로 연결합니다.
+
+| 무엇 | 위치 |
+| --- | --- |
+| 로고·심볼·로크업 PNG, 솔리드·라인 아이콘 각 32종, 키 비주얼 콜라주 소재 22종, 가이드북 PDF 32쪽 | [docs.apps.mindlogic.tools/baze-brand.html](https://docs.apps.mindlogic.tools/baze-brand.html) (사내 로그인) |
+| 일러스트레이터 원본을 포함한 원본 파일 | 공유 드라이브 「베이즈 Baze」 |
+| 벡터 마크와 워드마크 | `baze-landing-page`의 `src/lib/marks.ts`. 경순 님의 일러스트레이터 파일 `base_brandlogo_v1.3`에서 따 냈습니다 |
+| baze.co가 쓰는 콜라주 소재와 픽셀 크기 | `baze-landing-page`의 `public/images/assets/`, 목록은 `src/lib/images.ts` |
+| 팩트챗이 줄여 쓰는 사본(가장 크게 쓰이는 크기의 2배, webp 품질 72) | `factchat-nextjs`의 `public/assets/images/baze/collage/`, 목록은 `src/app/auth/_components/AuthBand/cutouts.ts` |
+
+아래 예시는 이미지를 baze.co에서 바로 불러오므로 패키지에 묶이는 파일이 없습니다.
+
+## 로고
+
+<Canvas of={BrandAssets.LockupForms} sourceState="none" />
+
+- **따 낸 도형으로 그립니다.** `marks.ts`에는 마크와 워드마크가 윤곽선으로 들어
+  있고, 마크의 높이가 정확히 100이 되도록 맞춰 두었습니다. 인라인 SVG로
+  `currentColor`를 따르므로 컴포넌트 하나로 어느 크기에서든 색을 바꿀 수 있습니다.
+  파일에는 "숫자를 손으로 고치지 말고 원본에서 다시 따 낼 것"이라고 적혀 있습니다.
+  로고를 다시 그리거나 "BAZE"를 글꼴로 입력하지 않습니다.
+- **로크업은 SVG 하나입니다.** 마크 높이를 100으로 볼 때 워드마크는 높이 58이고,
+  마크 오른쪽으로 35.4 떨어져 있으며, 가운데 선은 49.5로 마크의 가운데보다 살짝
+  위에 있습니다. 그래서 로크업의 너비는 높이의 약 3.9배입니다. SVG 하나이므로
+  대체 글꼴이나 flex 간격 때문에 간격이 틀어지지 않습니다.
+- **문장 안에서는 워드마크만 씁니다.** baze.co는 철학 페이지의 맺음말에 마크 없이
+  워드마크만 둡니다. 세 조각 마크가 문장 안에서는 글머리 기호 묶음처럼 보이기
+  때문입니다(`Wordmark variant="word"`).
+- **잉크 아니면 흰색입니다.** baze.co는 밝은 바탕에서는 로고를 `--ink`(#252525)로,
+  내비게이션 막대와 푸터에서는 흰색으로 그립니다. 팩트챗의 로그인 화면 띠는 모서리
+  마크를 지금 장면의 강조색으로 칠합니다.
+
+### 구조
+
+<Canvas of={BrandAssets.MarkAnatomy} sourceState="none" />
+
+마크는 베이스 유닛 네 개가 세 조각을 이룹니다. 세 조각은 같은 패스에서 그대로
+잘라 냈으므로(`markPiecePaths`) 한 상자에 겹쳐 놓으면 전체 마크와 똑같이 보입니다.
+
+- **페어:** 왼쪽의 두 유닛으로, 잘록한 허리에서 붙어 있습니다. 절대 떨어지지
+  않습니다.
+- **카운터:** 오른쪽 위의 유닛으로, 둥근 구멍이 뚫려 있습니다. 원과 마름모가 서로
+  반대 방향으로 그려져 있어서 한 패스로 남겨 둡니다.
+- **루즈:** 오른쪽 아래의 유닛입니다. 움직이는 조각은 이것 하나뿐입니다(모션 참고).
+
+마크를 나누는 것은 연출에서만 합니다. 멈춰 있을 때 마크는 늘 한 덩어리입니다.
+
+### 크기, 보호 공간, 금지 사항
+
+<Canvas of={BrandAssets.ClearSpace} sourceState="none" />
+
+가이드북(*BAZE Brand Identity Guidelines*, 2026-09-17)의 규칙입니다.
+
+- **최소 크기.** 워드마크는 화면에서 100px, 인쇄에서 20mm입니다. 심볼은 화면에서
+  24px, 인쇄에서 5mm입니다. baze.co의 내비게이션 로크업은 마크 높이 24px로, 심볼
+  최소 크기와 정확히 같습니다.
+- **보호 공간.** 사방으로 X만큼 비우고 그 안에는 아무것도 두지 않습니다. X는
+  모듈 하나입니다. 워드마크와 로크업에서는 워드마크의 높이이고(5쪽, 11쪽), 심볼만
+  쓸 때는 베이스 유닛 하나쯤입니다(11쪽).
+- **하지 않습니다.** 굵기나 비율을 바꾸지 않고, 입체 효과나 그림자를 넣지 않으며,
+  뒤집거나 나누거나 돌리지 않습니다(7쪽).
+
+## 베이스 유닛
+
+<Canvas of={BrandAssets.UnitForms} sourceState="none" />
+
+유닛 하나(`Diamond.astro`)는 24 × 24 상자 안의 `diamondMark` 패스입니다.
+
+- 기본은 **단색**입니다. **윤곽선**(선 두께 2.2, 0.9배로 축소)은 어두운 바탕 위의
+  유닛에 씁니다. baze.co에서는 영수증 끝의 검은 띠에 단색 유닛과 나란히 한 번
+  나옵니다.
+- **모든 유닛에는 종이 질감을 입힙니다.** `GrainDefs.astro`의 필터입니다(프랙털
+  노이즈 0.55, 옥타브 3, 시드 7. 곱하기 단계에서 0.62–1.0으로 어둡게, 스크린
+  단계에서 최대 0.24만큼 밝게 한 뒤 유닛 모양으로 잘라 냅니다). 이미지가 아니라
+  필터로 만들기 때문에 크기와 색에 상관없이, 호버 색에서도 그대로 보입니다.
+  팩트챗의 `BaseUnitMark`는 같은 패스를 질감 없이 그립니다.
+- **쓰이는 크기:** 10px(페이지 끝 링크), 11px(앱 화면 예시), 12px(목록 글머리,
+  영수증 합계), 11–26px(아트워크 위에 떠 있는 유닛), 40–64px(옅은 뒤쪽 유닛).
+
+### 아트워크 둘레의 유닛
+
+<Canvas of={BrandAssets.UnitsOnArtPlates} sourceState="none" />
+
+baze.co에서 가장 자주 반복되는 구성입니다. 홈 화면의 행(`Highlights.astro`),
+마지막 배너(`CtaBanner.astro`: 홈, 요금제, 철학, 모든 기능 페이지), 기능 페이지의 행과 배너
+콜라주(`FeatureShowcase.astro`)에 나옵니다. 다만 경순 님의 시안대로 옮긴 기능
+페이지는 제품 행과 배너에서 유닛을 뺐기 때문에, 지금 기능 페이지 가운데 유닛이
+보이는 곳은 HWP 페이지뿐입니다. 그 파일들에서 잰 값은 아래와 같습니다.
+
+| 유닛 | 크기 | 평소 | 호버 | 깊이(`--speed`) |
+| --- | --- | --- | --- | --- |
+| **a**, 앞 유닛 | 행마다 26 / 18 / 23px, 배너는 24px | `--ink` | 그 행의 첫 번째 진한 색, `scale: 1.15`, `translate: 0 -2px` | 1.12, 앞으로 떠오름 |
+| **b**, 짝 유닛 | 행마다 12 / 15 / 11px, 기능 페이지 배너는 13px, 마지막 배너는 14px | 그 행의 기본 색(`--azure`, `--coral`, `--mint`), 불투명도 0.9 | 그 행의 두 번째 진한 색, 같은 들림 | 0.85, 바로 뒤 |
+| **c**, 뒤쪽 유닛 | 행마다 44 / 52 / 40px, 마지막 배너는 64px | `--ink`, 불투명도 0.16, 소재 뒤에 그림 | 반응하지 않음 | 0.75, 가장 깊음 |
+
+- **두 개를, 크기를 달리해, 마주 보게 둡니다.** 앞 유닛은 대개 짝 유닛의 두 배쯤입니다
+  (26/12, 23/11, 24/13, 24/14). 18/15인 홈 화면 두 번째 행만 예외입니다. 홈 화면
+  첫 번째 행에서는 앞 유닛이 왼쪽 16%·위 18%, 짝 유닛이 왼쪽 76%·위 34%에 있습니다.
+  판의 한쪽을 글이 차지하면 둘 다 빈 쪽으로 갑니다. 마지막 배너에서는 오른쪽
+  34%·위 16%와 오른쪽 8%·위 26%에 둡니다. 위치를 판의 백분율로 잡기 때문에 너비가
+  바뀌어도 구성이 유지됩니다.
+- **옅은 세 번째 유닛은 넣어도 되고 빼도 됩니다.** 크고, 불투명도 16%이며, 판의
+  아래쪽에 둡니다(홈 화면 첫 번째 행에서는 왼쪽 7%·위 60%, 마지막 배너에서는
+  오른쪽 22%·아래 12%). 이미지보다 먼저 그려서 소재 뒤에서 살짝 보이게 합니다.
+- **행마다 색 짝을 바꿉니다.** 코랄-딥과 애저-딥, 민트-딥과 코랄-딥, 애저-딥과
+  민트-딥을 차례로 씁니다. 홈 화면은 행마다 위치도 달리 잡아서, 같은 구성이
+  반복되지 않고 페이지를 따라 흘러가게 합니다.
+- **호버하면 앞의 두 유닛만 밝아지고, 늘 진한 단계로 바뀝니다**(`--coral-deep`
+  #da483e, `--mint-deep` #3c967d, `--azure-deep` #24768e). 기본 색은 강조로 쓰면
+  바래 보이고, 진한 단계는 12px에서도 대비를 지킵니다. 뒤쪽 유닛은 호버에 반응하지
+  않아야 배경으로 읽힙니다.
+- **평평한 판에는 유닛을 두지 않습니다.** 제품 화면이나 결과물을 자기 배경 위에
+  보여 주는 행에는 유닛이 없습니다. 평평한 판 위의 유닛은 얼룩처럼 보이기
+  때문입니다(`FeatureShowcase.astro`).
+- **팩트챗도 같은 구성을 씁니다.** 로그인 화면 띠는 가장 앞 평면에 24px 앞 유닛과
+  16px 짝 유닛을 두고, 평소에는 둘 다 `fg.emphasized`입니다. 포인터가 띠 위에
+  있으면 장면의 강조색과 짝 색으로 밝아지며 0.35초 동안
+  `scale(1.15) translateY(-2px)`만큼 커지고 올라갑니다.
+
+### 글머리 기호와 링크의 유닛
+
+<Canvas of={BrandAssets.ListBullets} sourceState="none" />
+
+- **목록 글머리**(`FeatureList.astro`, 요금제 카드): 14px 칸에 12px 단색 유닛을
+  `--ink`로 두고, 글자와 12px 띄우고 2px 내립니다. 행을 호버하면 글머리가
+  코랄-딥, 민트-딥, 애저-딥 순서로 돌아가며 밝아지고 1.15배로 커집니다.
+- **페이지 끝 링크**(`ExploreMore.astro`): 10px 유닛을 `--ink-4`로 두고, 호버하면
+  `--accent`로 바뀝니다.
+- **더보기**(`components.css`와 `motion.css`의 `.bz-more`): 유닛이 곧 누를 수
+  있다는 표시입니다. 호버하면 3px 앞으로 나가고 1.1배로 커지며 코랄-딥으로
+  바뀝니다. 스타일은 있지만 지금 이것을 쓰는 페이지는 없습니다.
+
+## 아트워크
+
+<Canvas of={BrandAssets.ColourOnShapes} sourceState="none" />
+
+- **크림 바탕에 흑백 소재를 씁니다.** 사람, 손, 사물, 산, 구름은 망점이나 판화
+  느낌의 인쇄물이고, 소재 자체에는 색이 없습니다.
+- **색은 도형에만 넣고 소재에는 넣지 않습니다.** 색은 인물이 앉거나 손에 든 평평한
+  조각의 몫입니다. 베이스 유닛 판(코랄, 파랑, 베이지, 민트), 카드, 퍼즐 조각이
+  여기에 해당합니다. 에셋 중에 손을 빨갛게 칠한 소재(`hand-card-red`)가 하나
+  있지만 어느 페이지도 쓰지 않습니다.
+- **붙이지 않고 찍어 냅니다.** 옅은 바탕 위의 소재에는 `mix-blend-mode: multiply`와
+  `filter: sepia(0.2) saturate(0.85) contrast(1.05)`를 줍니다. 그러면 흰 종이가
+  사라지고, 겹친 소재가 잉크처럼 포개져 찍힙니다. 페이지별로 나중에 받은 소재는
+  이미 바래게 처리되어 있어 `flat`으로 표시하고 혼합도 필터도 주지 않습니다.
+  그림자를 넣는 소재는 소재의 윤곽을 따라가는 `drop-shadow` 두 겹을 씁니다.
+- **결과물은 손대지 않습니다.** 만들어 낸 포스터, 슬라이드, 영상은 곱하기 혼합도
+  세피아도 없이 그대로 보여 줍니다. 결과물을 바래게 하면 실제로 받게 될 결과를
+  속이는 셈이기 때문입니다(`FeatureShowcase.astro`).
+- **다크 모드에서** 팩트챗은 곱하기 혼합을 끄고, 연필 스케치는 색을 뒤집어 선이
+  보이게 합니다.
+
+### 기능별 소재
+
+`baze-landing-page`의 `src/i18n/content.ts`에서 기능마다 `heroArt`를 읽었습니다.
+
+| 페이지 | 첫 화면 소재 |
+| --- | --- |
+| 슈퍼 에이전트 | 퍼즐 판, 파란 이미지 조각을 가져오는 손, 분홍 PPT 조각을 가져오는 손 |
+| 프레젠테이션 | 노트북, 원그래프 카드를 든 손, 전구, 스탠딩 책상 앞의 사람, 막대그래프 카드를 든 손 |
+| 이미지·비디오 | 판화 구름, 사장교 스케치, 깃발 꽂힌 산, 타자기, 연필을 쥔 망점 손 |
+| 데이터 | 스케치한 구, 코랄 유닛 판, 궤도 도식, 스케치한 좌표축, 메모, 노트북을 든 남자 |
+| 스터디 튜터 | 산, 구름 두 개, 전구, 책, 클립보드, BAZE 마크가 찍힌 공책, 컴퍼스 |
+| AI 챗봇 | 로고 격자, 길과 구 스케치, 자명종, 구멍 뚫린 파란 유닛, 테이프 붙인 모눈종이, 블록 스케치, 찢어진 사각 종이, 글을 쓰는 사람, 원판을 든 손 |
+| HWP | 타자기(가운데), 노트북을 쓰는 여자, 궤도 도식, 전구, 찢어진 모눈종이 |
+
+팩트챗의 로그인 화면 띠에는 강조색마다 하나씩 네 장면이 있습니다. 베이스캠프
+(코랄, 능선 위의 인물), 정상(애저, 파란 판 위의 여자), 스튜디오(민트, 민트 판
+위에서 아이맥을 쓰는 남자), 책상 벽(잉크, 스터디 튜터 소재)입니다.
+
+### 찢어진 종이
+
+<Canvas of={BrandAssets.PosterBandScraps} sourceState="none" />
+
+이미지·비디오 페이지의 포스터 띠에는 찢어진 종이 두 장이 마주 보는 모서리 뒤에
+있습니다. 왼쪽 위에는 모눈종이(왼쪽 −8%, 위 −14%, 너비 40%), 오른쪽 아래에는
+찢어진 사각 종이(오른쪽 −6%, 아래 −20%, 너비 30%)입니다. 포스터 아래에 깔리고,
+크림 바탕에 곱하기 혼합으로 찍히며 세피아는 쓰지 않습니다(띠가 이미 크림색이기
+때문입니다). 띠의 `overflow: clip`이 가장자리를 잘라 냅니다.
+
+## 모션
+
+`src/styles/motion.css`, `docs/motion-ideation.md`, 그리고 움직이는 컴포넌트들에서
+읽었습니다. 제품 화면은 자체 프리셋(**Theme/Motion**)을 그대로 쓰고, 여기에는
+브랜드 화면이 하는 일을 적었습니다.
+
+### 원칙
+
+- **모션 없이도 화면이 완성되어 있어야 합니다.** 내용은 먼저 배치되고 읽을 수
+  있어야 합니다. 스크롤 효과는 `@supports (animation-timeline: view())` 안에
+  있으므로, 스크롤 타임라인이 없는 브라우저에서는 내용이 그대로 보입니다.
+- **스크롤 모션은 시간이 아니라 스크롤 위치를 따릅니다.** 나타나기, 깊이감,
+  첫 화면의 여정은 스크롤 위치를 시계로 삼고, 되돌려 스크롤하면 거꾸로 돌아갑니다.
+  시간에 맞춰 움직이는 모션은 처음부터 화면에 보이는 내용과, 중간에 멈추면 덜
+  만들어진 것처럼 보이는 효과(밑줄 긋기, 제목 자리 잡기)에만 씁니다.
+- **튀는 움직임은 쓰지 않습니다.** 차분한 곡선만 씁니다. 사이트에서 스프링을 쓰는
+  곳은 페이지 로더의 마지막 맞물림 하나뿐이고, 이것도 많아야 한 번 재생됩니다.
+- **글자는 떠다니지 않습니다.** 장면마다 속도 1로 고정된 틀이 하나 있고, 아트워크만
+  그 틀을 기준으로 움직입니다.
+- **움직임 줄이기 설정을 켜면 모두 멈춥니다.** `prefers-reduced-motion: reduce`이면
+  `global.css`의 전역 규칙이 모든 애니메이션과 전환을 0.01ms로 줄이고, 호버 때
+  들어 올리는 효과도 없앱니다. 색 변화는 상태가 바뀐 것이지 움직임이 아니므로
+  남겨 둡니다. 흐르는 띠도 멈춥니다.
+
+### 시간과 곡선(`tokens.css`)
+
+| 토큰 | 값 | 쓰는 곳 |
+| --- | --- | --- |
+| `--dur-fast` | 120ms | 버튼 들림, 링크 색 |
+| `--dur-base` | 200ms | 유닛 밝아짐, 밑줄 그어지기 |
+| `--dur-slow` | 340ms | 이미지 판 확대(`scale(1.02)`) |
+| `--dur-glide` | 520ms | 베이스 유닛 배열이 다시 모이기 |
+| `--dur-enter` / `--enter-stagger` | 640ms / 90ms | 처음부터 보이는 내용이 14px 올라오며 차례로 나타남 |
+| `--reveal-rise` / `--reveal-range` / `--reveal-step` | 20px / 300px / 80px | 스크롤로 나타나기: 올라오는 거리, 한 번 나타나는 데 드는 스크롤 거리, 뒤따르는 요소가 더 기다리는 거리 |
+| `--ease-standard` | `cubic-bezier(0.4, 0, 0.2, 1)` | 색 |
+| `--ease-out` | `cubic-bezier(0.16, 1, 0.3, 1)` | 나타나기, 크기와 위치 |
+| `--ease-in-out-sine` | `cubic-bezier(0.37, 0, 0.63, 1)` | 스크롤을 따라가는 긴 움직임(띠가 화면 끝까지 넓어지기) |
+
+### 깊이와 잔잔한 움직임
+
+- **깊이(드리프트).** 평면마다 `--speed`를 정합니다. 뒤쪽 유닛 0.75, 짝 유닛과
+  아트워크 0.85, 판(고정된 틀) 1, 앞 유닛 1.12입니다. 조각이 화면에 머무는 동안
+  ±(1 − 속도) × 50vh만큼 움직입니다. 이웃한 평면은 속도를 0.1 이상 떼어 놓아야
+  하나로 뭉쳐 보이지 않습니다. 팩트챗의 로그인 화면 띠는 스크롤되지 않으므로
+  포인터가 같은 평면들을 움직입니다(속도 0에서 40px).
+- **숨쉬기.** 기능 페이지 첫 화면의 소재는 저마다 다른 방향으로 18–25px 떠다니고,
+  최대 ±1.4° 흔들리며, 6–11초 주기로 `ease-in-out`을 따라 오갑니다. 판의
+  가장자리 밖으로 나간 소재는 움직이지 않습니다.
+- **콜라주가 비켜 줍니다.** 정밀한 포인터를 쓸 때, 커서에서 340px 안의 소재가
+  커서 반대쪽으로 최대 22px 밀리고, 260ms 시간 상수로 천천히 따라옵니다
+  (`lib/pointer-push.ts`).
+- **호버 때의 작은 움직임.** 버튼은 1px 올라가고, 이미지 판은 1.02배로 커지며,
+  유닛은 1.15배로 커지고 2px 올라갑니다.
+- **흐르는 띠.** 같은 목록을 두 번 이어 붙이고 두 번째 목록은 보조 기술에서
+  숨겨서, 이음매 없이 반복되게 합니다. 이웃한 줄은 서로 반대로 흐릅니다. 모델 이름
+  띠는 줄마다 96초, 116초, 128초, 포스터 띠는 72초에 한 바퀴를 일정한 속도로
+  돕니다. 움직임 줄이기 설정에서는 멈춥니다.
+
+### 첫 화면: 루즈 유닛
+
+홈 화면의 첫 화면(`Hero.astro`)은 baze.co에서 GSAP를 쓰는 유일한 곳입니다.
+요소 하나를 여러 영역에 걸쳐 넘겨줘야 하기 때문입니다.
+
+1. 마크의 조각들이 제목 영역의 모서리에서 시작합니다.
+2. 스크롤을 시작하자마자 루즈 유닛이 하이라이트 제목 쪽으로 출발하고, 나머지
+   조각이 그 유닛을 향해 모여 로크업으로 맞물립니다.
+3. 페어와 카운터는 그 자리에 남아 첫 화면과 함께 스크롤되어 사라집니다. 루즈
+   유닛만 계속 내려가며 마름모 창으로 커지고, 하이라이트 제목 위의 같은 모양에
+   가서 자리 잡습니다.
+
+내려가는 동안 창 안의 그림은 타자기, 공책, 글을 쓰는 사람, 전구 순서로 바뀌고,
+이 순서는 스크롤 진행도로만 정해집니다. 중간쯤에서는 24% 작아졌다가 다시
+커집니다. 이 여정은 첫 화면의 맨 위에서 시작해 도착 지점이 화면 높이의 30%에
+닿을 때까지 스크롤을 따라갑니다(`scrub: 1.8`). `(min-width: 800px) and
+(prefers-reduced-motion: no-preference)`일 때만 실행됩니다. 스크립트가 없거나,
+화면이 좁거나, 움직임 줄이기 설정이 켜져 있으면 첫 화면은 완성된 채로 멈춰
+있습니다.
+
+### 페이지 로더
+
+`DraughtLoader`는 컴퍼스로 작도하듯 마크를 그리고, 불러오는 동안 이를 반복한 뒤
+조각들을 로고로 맞물립니다. `/`나 `/en/`에서만, 12시간에 많아야 한 번 재생되고,
+움직임 줄이기 설정에서는 재생되지 않습니다. 마지막 맞물림은 사이트에서 유일한
+스프링입니다(ζ 0.50, 14% 넘침). 스크립트가 끝내 실행되지 않으면 12초 뒤에 저절로
+사라집니다.
+
+## 글꼴
+
+| 역할 | 가이드북(16쪽) | 지금 baze.co가 불러오는 글꼴 |
+| --- | --- | --- |
+| 제목, 인용 | Century Schoolbook(영문 세리프) | 모든 제목에 Wanted Sans Variable |
+| 강조 한 단어 | PD Everyday(손글씨) | 불러오지 않음 |
+| 본문 | Pretendard | Pretendard Variable |
+| 라틴 디스플레이 | — | Archivo 700/800(`--font-display`: 영수증 합계, 소셜 페이지) |
+
+baze.co에는 세리프도 손글씨도 없습니다. 배포된 모습을 따르고, Century Schoolbook이나
+PD Everyday를 제품 화면에 들이기 전에는 브랜드 담당자에게 먼저 물어 주세요. 가이드북의
+글꼴 규칙은 인쇄용 아이덴티티를 설명한 것이고, 지금 사이트의 모습과는 다릅니다.
+
+## 관련 문서
+
+**Foundations/Brand & colour usage**(제품 화면의 색 역할) ·
+**Theme/Motion**(제품 모션 프리셋) ·
+**Setup/Theme/BAZE Palette**(제품의 모든 색 값).
+
+</Ko>
