@@ -17,7 +17,8 @@
  *    them (default `ink` / `sand`).
  * 3. **Semantic roles** — `bg.*`, `layer.*`, `fg.*`, `border.*`, `primary.*`,
  *    `secondary.*`, `action.*`, `send.*`, `count.*`, `disabled.*`, `focus.ring`,
- *    the four status families, `tooltip.*`, `category.{hue}.*`, and the
+ *    the four status families, `tooltip.*`, `category.{hue}.*` (plus the
+ *    nameless `category.neutral.*`), the `bg.logo` / `fg.onLogo` tile, and the
  *    data-visualisation fills `data.1–4` and `diverging.{pos,neg}.1–3` /
  *    `diverging.mid`.
  *
@@ -355,6 +356,11 @@ export function createSemanticColors({
     'fg.emphasized': 'fg.default',
     'bg.invalid.subtle': 'danger.bg',
     'bg.highlighted': 'warning.bg',
+    // The no-identity pair, shaped like a category pair so a `colorPalette`
+    // can point at it (`colorPalette="category.neutral"`, the avatar recipe's
+    // default). Not a 13th hue — `hueForName` never returns it.
+    'category.neutral.surface': 'bg.muted',
+    'category.neutral.fg': 'secondary.fgStrong',
     // Every other name Chakra's own recipes read (menu/combobox `_highlighted`
     // is `bg.emphasized/60`, radiomark borders are `border.emphasized`, the
     // field recipe reads `fg.error` …). 4.x got these for free because its
@@ -404,6 +410,15 @@ export function createSemanticColors({
     } as never);
   }
 
+  // Logo tile: model, chatbot and brand marks are drawn for a light ground,
+  // so the tile stays light in both modes (white, then the warm cream anchor
+  // in dark so it does not glare on the dark canvas), and the text on it stays
+  // dark in both modes. Avatar `variant="logo"` reads the pair.
+  setPath(tree, 'bg.logo', {
+    value: { _light: '{colors.white}', _dark: '{colors.ink.cream}' },
+  } as never);
+  setPath(tree, 'fg.onLogo', { value: `{colors.${neutral}.11}` });
+
   // Deprecated 4.x names → 5.0 replacement (removed in 6.0).
   for (const [oldName, newName] of Object.entries(DEPRECATED.aliases))
     setPath(tree, oldName, { value: `{colors.${newName}}` });
@@ -431,11 +446,11 @@ type StatusFamily = 'danger' | 'success' | 'warning' | 'info';
 export type SemanticColorToken =
   | `neutral.${Step}`
   | `secondary.${Step}`
-  | `bg.${'canvas' | 'surface' | 'raised' | 'subtle' | 'muted' | 'sunken' | 'track' | 'inverse' | 'panel' | 'highlighted'}`
+  | `bg.${'canvas' | 'surface' | 'raised' | 'subtle' | 'muted' | 'sunken' | 'track' | 'inverse' | 'panel' | 'highlighted' | 'logo'}`
   | 'bg.invalid.subtle'
   | `layer.${1 | 2 | 3}`
   | `layer.${1 | 2 | 3}.${'hover' | 'active'}`
-  | `fg.${'default' | 'emphasized' | 'muted' | 'subtle' | 'icon' | 'placeholder' | 'onPrimary' | 'link' | 'linkHover' | 'inverse'}`
+  | `fg.${'default' | 'emphasized' | 'muted' | 'subtle' | 'icon' | 'placeholder' | 'onPrimary' | 'onLogo' | 'link' | 'linkHover' | 'inverse'}`
   | `border.${'subtle' | 'default' | 'strong' | 'control'}`
   | `primary.${'main' | 'hover' | 'active' | 'wash' | 'washActive' | 'selected'}`
   | `secondary.${'surface' | 'surfaceStrong' | 'border' | 'fg' | 'fgStrong'}`
@@ -447,7 +462,7 @@ export type SemanticColorToken =
   | `${StatusFamily}.${'bg' | 'border' | 'fg' | 'solid' | 'onSolid'}`
   | `danger.${'solidHover' | 'solidActive'}`
   | `tooltip.${'bg' | 'fg'}`
-  | `category.${Hue}.${'surface' | 'fg'}`
+  | `category.${Hue | 'neutral'}.${'surface' | 'fg'}`
   | `data.${1 | 2 | 3 | 4}`
   | `diverging.${'pos' | 'neg'}.${1 | 2 | 3}`
   | 'diverging.mid'

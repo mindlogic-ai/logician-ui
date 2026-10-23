@@ -1,27 +1,66 @@
-import { forwardRef } from 'react';
 import {
-  Avatar as ChakraAvatar,
+  Children,
+  type ComponentProps,
+  forwardRef,
+  type ForwardRefExoticComponent,
+  type ReactNode,
+  type RefAttributes,
+} from 'react';
+import {
   AvatarContext,
   AvatarFallback,
-  AvatarGroup,
+  AvatarGroup as ChakraAvatarGroup,
+  AvatarGroupProps as ChakraAvatarGroupProps,
   AvatarIcon,
   AvatarImage,
-  AvatarRoot,
+  AvatarRoot as ChakraAvatarRoot,
   AvatarRootProps as ChakraAvatarRootProps,
-  AvatarRootProvider,
+  AvatarRootProvider as ChakraAvatarRootProvider,
+  type ConditionalValue,
 } from '@chakra-ui/react';
 
 import { SYSTEM_HUE_NAMES, SystemHue } from '@/theme/colors';
 
 export type {
   AvatarFallbackProps,
-  AvatarGroupProps,
   AvatarIconProps,
   AvatarImageProps,
-  AvatarRootProps,
 } from '@chakra-ui/react';
 
-export type AvatarProps = ChakraAvatarRootProps & {
+/**
+ * Chakra's variants plus Logician's `logo`. Chakra types `variant` from its
+ * own recipe, so the theme-level `logo` variant needs widening here.
+ */
+export type AvatarVariant = 'subtle' | 'solid' | 'outline' | 'logo';
+
+/** `P` with `variant` widened to {@link AvatarVariant}. */
+type WithAvatarVariant<P> = Omit<P, 'variant'> & {
+  /**
+   * `subtle` (default): the `colorPalette` fill — a person's category hue, or
+   * the neutral pair. `logo`: the light `bg.logo` tile for model, chatbot and
+   * brand marks, the same in both modes.
+   */
+  variant?: ConditionalValue<AvatarVariant>;
+};
+
+export type AvatarRootProps = WithAvatarVariant<ChakraAvatarRootProps>;
+export type AvatarRootProviderProps = WithAvatarVariant<
+  ComponentProps<typeof ChakraAvatarRootProvider>
+>;
+
+// Chakra's parts, typed for the `logo` variant.
+const AvatarRoot = ChakraAvatarRoot as ForwardRefExoticComponent<
+  AvatarRootProps & RefAttributes<HTMLDivElement>
+>;
+const AvatarRootProvider =
+  ChakraAvatarRootProvider as ForwardRefExoticComponent<
+    AvatarRootProviderProps & RefAttributes<HTMLDivElement>
+  >;
+const ChakraAvatarGroupTyped = ChakraAvatarGroup as ForwardRefExoticComponent<
+  WithAvatarVariant<ChakraAvatarGroupProps> & RefAttributes<HTMLDivElement>
+>;
+
+export type AvatarProps = AvatarRootProps & {
   src?: string;
   name?: string;
   /**
@@ -34,6 +73,19 @@ export type AvatarProps = ChakraAvatarRootProps & {
    */
   colorHue?: SystemHue;
 };
+
+export interface AvatarGroupProps extends Omit<
+  WithAvatarVariant<ChakraAvatarGroupProps>,
+  'children'
+> {
+  children?: ReactNode;
+  /**
+   * Show at most this many avatars; the rest collapse into a trailing "+N"
+   * counter in the neutral pair. Omit to show all. Chakra 3 dropped 2.x's
+   * `max`; this restores it.
+   */
+  max?: number;
+}
 
 /**
  * A stable hash of `name` into one of `SYSTEM_HUE_NAMES`, so a given name
@@ -61,8 +113,25 @@ export function hueForName(name: string | undefined): SystemHue | undefined {
 }
 
 /**
+ * The `colorPalette` an avatar paints with: `category.<hue>` for a person
+ * (`colorHue`, else {@link hueForName}), `category.neutral` with no name. The
+ * avatar recipe maps `colorPalette.surface` / `colorPalette.fg` onto it.
+ */
+export function avatarColorPalette(
+  name: string | undefined,
+  colorHue?: SystemHue
+): `category.${SystemHue | 'neutral'}` {
+  const hue = colorHue ?? hueForName(name);
+  return hue ? `category.${hue}` : 'category.neutral';
+}
+
+/**
  * Fallback (initials / icon) colours: the person's hue when there is one,
  * otherwise the neutral pair Badge `neutral` uses.
+ *
+ * @deprecated The avatar recipe now paints the root from `colorPalette` (see
+ * {@link avatarColorPalette}); `Avatar` no longer calls this. Kept for
+ * callers that colour a non-avatar element to match a person. Removed in 6.0.
  */
 export function avatarFallbackColors(
   name: string | undefined,
@@ -73,26 +142,48 @@ export function avatarFallbackColors(
   return { bg: `category.${hue}.surface`, color: `category.${hue}.fg` };
 }
 
+/**
+ * Chakra's `AvatarGroup` (overlapping avatars; `size` / `variant` reach every
+ * child through the recipe props context) with the `max` overflow cap. The
+ * counter is always the neutral `subtle` pair, whatever the group's variant:
+ * it is a count, not a person or a logo.
+ */
+const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
+  ({ max, children, ...rest }, ref) => {
+    const items = Children.toArray(children);
+    const visible =
+      typeof max === 'number' ? items.slice(0, Math.max(0, max)) : items;
+    const overflow = items.length - visible.length;
+    return (
+      <ChakraAvatarGroupTyped ref={ref} {...rest}>
+        {visible}
+        {overflow > 0 && (
+          <AvatarRoot colorPalette="category.neutral" variant="subtle">
+            <AvatarFallback>+{overflow}</AvatarFallback>
+          </AvatarRoot>
+        )}
+      </ChakraAvatarGroupTyped>
+    );
+  }
+);
+
+AvatarGroup.displayName = 'AvatarGroup';
+
 const AvatarComponent = forwardRef<HTMLDivElement, AvatarProps>(
   (props, ref) => {
     const { src, name, colorHue, ...rest } = props;
-    const fallback = avatarFallbackColors(name, colorHue);
+    // Fill, text colour, border and the full-circle fallback all come from
+    // the avatar recipe (src/theme/recipes/avatar.ts); only the palette is
+    // chosen here. A caller's own `colorPalette` still wins.
     return (
-      <ChakraAvatar.Root
+      <AvatarRoot
         ref={ref}
-        borderWidth="1px"
-        borderColor="border.subtle"
-        overflow="hidden"
-        bgColor="transparent"
+        colorPalette={avatarColorPalette(name, colorHue)}
         {...rest}
       >
-        <ChakraAvatar.Fallback
-          name={name}
-          bg={fallback.bg}
-          color={fallback.color}
-        />
-        <ChakraAvatar.Image src={src} />
-      </ChakraAvatar.Root>
+        <AvatarFallback name={name} />
+        <AvatarImage src={src} />
+      </AvatarRoot>
     );
   }
 );

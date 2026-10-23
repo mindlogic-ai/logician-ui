@@ -25,8 +25,10 @@ one.
 
 ## When not to use
 
-- A chatbot, tenant or product logo → an `<img>` with alt text, or the app's
-  logo component. An avatar implies a person.
+- A chatbot, tenant or product logo as an avatar → `variant="logo"`, which
+  swaps the person's hue for the light `bg.logo` tile those marks are drawn
+  for (light in both modes). Anywhere else a logo is just an `<img>` with alt
+  text: an avatar without `variant="logo"` implies a person.
 - A status (online, blocked) → `Badge` next to the name. Avatar has no status
   colours.
 
@@ -38,6 +40,13 @@ one.
 | `name` | Used for the initials and the hue. With no name, the fallback is the neutral pair (`bg.muted` / `secondary.fgStrong`), never red. |
 | `colorHue` | Overrides the hashed hue. Identity only, never status. |
 | `size` | Chakra sizes, `2xs` to `2xl` and `full`. |
+| `variant` | `subtle` (default): the person's hue, or the neutral pair. `logo`: the light `bg.logo` tile for model and chatbot marks, with `fg.onLogo` initials. |
+| `colorPalette` | Set for you from `name` / `colorHue` (`category.<hue>`, or `category.neutral`). Pass one only to colour a bare `Avatar.Root`. |
+| `Avatar.Group` `max` | Show at most this many; the rest become a "+N" counter in the neutral pair. |
+
+The fill, text colour and border belong to the avatar recipe, and the
+fallback fills the whole circle, so `Avatar.Root` + `Avatar.Fallback` need no
+styling of their own. Do not pass `bg` / `color` to recolour an avatar.
 
 ## Do / Don't
 
@@ -58,7 +67,9 @@ one.
 
 ## 언제 쓰지 않나요
 
-- 챗봇, 기관, 제품 로고에는 대체 글이 있는 `<img>`나 앱의 로고 컴포넌트를 씁니다.
+- 챗봇, 기관, 제품 로고를 아바타 자리에 둘 때는 `variant="logo"`를 씁니다. 사람의
+  색 대신, 그 로고들이 전제하는 밝은 `bg.logo` 타일(라이트·다크 모두 밝음)을 깝니다.
+  그 밖의 자리에서 로고는 대체 글이 있는 `<img>`입니다. `variant="logo"`가 없는
   Avatar는 사람을 뜻합니다.
 - 상태(접속 중, 차단됨)는 이름 옆의 `Badge`로 알립니다. Avatar에는 상태색이 없습니다.
 
@@ -70,6 +81,13 @@ one.
 | `name` | 머리글자와 색을 정합니다. 이름이 없으면 중립 색(`bg.muted` / `secondary.fgStrong`)을 쓰고, 빨강은 쓰지 않습니다. |
 | `colorHue` | 해시로 고른 색을 바꿉니다. 사람을 구분할 때만 쓰고 상태에는 쓰지 않습니다. |
 | `size` | Chakra 크기. `2xs`부터 `2xl`, `full`. |
+| `variant` | `subtle`(기본): 사람의 색, 이름이 없으면 중립 색. `logo`: 모델·챗봇 로고용 밝은 `bg.logo` 타일, 머리글자는 `fg.onLogo`. |
+| `colorPalette` | `name` / `colorHue`로 자동으로 정해집니다(`category.<hue>`, 또는 `category.neutral`). `Avatar.Root`를 직접 쓸 때만 넘깁니다. |
+| `Avatar.Group` `max` | 이 수까지만 보여 주고 나머지는 중립 색 "+N" 표시로 묶습니다. |
+
+배경, 글자 색, 테두리는 아바타 레시피가 정하고 대체 표시는 원 전체를 채웁니다.
+그래서 `Avatar.Root` + `Avatar.Fallback`에는 따로 스타일을 줄 필요가 없습니다.
+아바타 색을 바꾸려고 `bg` / `color`를 넘기지 마세요.
 
 ## 이렇게 하세요 / 이렇게 하지 마세요
 
@@ -113,7 +131,8 @@ What you still have to do:
 
 ## Tokens
 
-Generated with `avatarFallbackColors`, the function the component uses.
+The `category.*` pairs the avatar recipe reads through `colorPalette`, and the
+`logo` tile.
 
 </En>
 
@@ -139,7 +158,7 @@ Avatar가 알아서 하는 일
 
 ## 토큰
 
-컴포넌트가 쓰는 함수인 `avatarFallbackColors`로 만듭니다.
+아바타 레시피가 `colorPalette`로 읽는 `category.*` 쌍과 `logo` 타일입니다.
 
 </Ko>
 
