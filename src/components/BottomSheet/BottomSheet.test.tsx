@@ -29,7 +29,8 @@ beforeAll(() => {
 });
 
 const Sheet = (props: Partial<BottomSheetProps>) => (
-  <LogicianProvider>
+  // Korean copy, so the built-in close label is 닫기 (it follows `language`).
+  <LogicianProvider language="ko">
     <BottomSheet {...props}>
       <BottomSheetContent data-testid="content">
         <BottomSheetHeader>노드 추가</BottomSheetHeader>

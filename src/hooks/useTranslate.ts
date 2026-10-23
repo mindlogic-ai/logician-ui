@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 
 import defaultTranslations from '../translations/Defaults.translations.json';
 import { formatForMarkdown } from '../utils/formatTextForMarkdown';
+import { NO_PROVIDER_LANGUAGE, useLanguage } from './useLanguage';
 
 const DEFAULT_LOCALE = 'ko';
 
@@ -38,12 +39,13 @@ const replaceVariables = (text: string, variables?: { [key: string]: any }) => {
     : parts;
 };
 
-const getLanguage = () => {
-  return 'ko';
-};
-
 export const useTranslate = (translations = {}) => {
-  const userLanguage = getLanguage();
+  // Follow `LogicianProvider`'s `language`, the same one the date pickers
+  // read. Outside a provider there is nothing to follow, so the library keeps
+  // its historical Korean.
+  const context = useLanguage();
+  const userLanguage =
+    context === NO_PROVIDER_LANGUAGE ? DEFAULT_LOCALE : context.language;
   return useCallback(
     (key: string, variables?: { [key: string]: any }) => {
       const locale = (userLanguage as string) ?? DEFAULT_LOCALE;
