@@ -49,6 +49,14 @@ export const globalCss = defineGlobalStyles({
   'html:lang(ko)': {
     wordBreak: 'keep-all',
   },
+  // Japanese wraps at phrase boundaries (文節) where the browser can find them
+  // (Chromium 119+, ja only). Elsewhere the rule is skipped and ja keeps the
+  // default `normal`, which breaks between characters — never `keep-all`.
+  '@supports (word-break: auto-phrase)': {
+    'html:lang(ja)': {
+      wordBreak: 'auto-phrase',
+    },
+  },
 
   '#__next': {
     height: 'var(--chakra-vh)',
