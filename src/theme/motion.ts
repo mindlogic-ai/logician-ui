@@ -237,6 +237,24 @@ const ANCHORED_PRESENCE_TIMING = {
 export const CHECKMARK_DASH = 24;
 
 /**
+ * Dash length for the `ring-draw` keyframe, for the same reason
+ * {@link CHECKMARK_DASH} exists. `SuccessCheck` draws a circle of r=10.5 in a
+ * 24-unit box, whose circumference is ~65.97; 66 clears it.
+ */
+export const RING_DASH = 66;
+
+/**
+ * Dash length for the `tick-draw` keyframe.
+ *
+ * Separate from {@link CHECKMARK_DASH} because the paths are different lengths,
+ * and the dash has to match its own path or the timing lies: a dash longer than
+ * the path finishes revealing it partway through the animation and then idles.
+ * `SuccessCheck`'s tick is scaled to sit inside the ring and measures ~14.5
+ * user units; 15 clears it.
+ */
+export const TICK_DASH = 15;
+
+/**
  * The motion vocabulary — four intents, plus two escape hatches.
  *
  * Applied as `animationStyle="<name>"`, the same shape as `textStyle="h3"`, so
@@ -414,6 +432,48 @@ export const keyframes = {
     // the stroke grows out of the short left tip and up to the right, the way a
     // tick is written.
     from: { strokeDashoffset: String(-CHECKMARK_DASH) },
+    to: { strokeDashoffset: '0' },
+  },
+  'tick-draw': {
+    // Negative for the same reason `checkmark-draw` is: revealing from the path
+    // end grows the stroke out of the short arm and up to the long one, the way
+    // a tick is written. `SuccessCheck`'s polyline runs the same direction as
+    // Chakra's, top-right tip first, so the sign carries over with the shape.
+    from: { strokeDashoffset: String(-TICK_DASH) },
+    to: { strokeDashoffset: '0' },
+  },
+  'shine-sweep': {
+    // A pass, then a rest. `indeterminate` crosses and immediately crosses
+    // again, which is right for "work is happening" and wrong for an ambient
+    // highlight: a band that never stops reads as a loading bar stuck on a
+    // button. The gap is what keeps it a highlight.
+    '0%': { translate: '-120% 0' },
+    '45%, 100%': { translate: '220% 0' },
+  },
+  'nudge-wiggle': {
+    // Rotation, not translation. `shake-x` is the refusal and travels sideways;
+    // this leans and comes back, which reads as a tap on the shoulder rather
+    // than a no. Decays like `shake-x` so it settles rather than stopping dead.
+    '0%, 100%': { rotate: '0deg', scale: '1' },
+    '20%': { rotate: 'calc(var(--nudge-tilt, 2.5deg) * -1)', scale: '1.04' },
+    '40%': { rotate: 'var(--nudge-tilt, 2.5deg)', scale: '1.04' },
+    '60%': { rotate: 'calc(var(--nudge-tilt, 2.5deg) * -0.6)', scale: '1.02' },
+    '80%': { rotate: 'calc(var(--nudge-tilt, 2.5deg) * 0.6)', scale: '1.01' },
+  },
+  'nudge-wiggle-alt': {
+    '0%, 100%': { rotate: '0deg', scale: '1' },
+    '20%': { rotate: 'calc(var(--nudge-tilt, 2.5deg) * -1)', scale: '1.04' },
+    '40%': { rotate: 'var(--nudge-tilt, 2.5deg)', scale: '1.04' },
+    '60%': { rotate: 'calc(var(--nudge-tilt, 2.5deg) * -0.6)', scale: '1.02' },
+    '80%': { rotate: 'calc(var(--nudge-tilt, 2.5deg) * 0.6)', scale: '1.01' },
+  },
+  'ring-draw': {
+    // Positive, unlike `checkmark-draw`. A tick is *written*, so which end it
+    // grows from is the difference between reading as a tick and reading as a
+    // tick played backwards. A ring has no written direction — it only has to
+    // close — so the offset runs the plain way and the component rotates the
+    // circle -90deg instead, which is what puts the start at twelve o'clock.
+    from: { strokeDashoffset: String(RING_DASH) },
     to: { strokeDashoffset: '0' },
   },
 
