@@ -7,6 +7,7 @@
   "changesets": [
     "blue-data-and-links",
     "button-accent-coral",
+    "button-default-loading-text",
     "chart-series-data-blue",
     "dataviz-tokens",
     "docs-coral-campaign-surfaces",

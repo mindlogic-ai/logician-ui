@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.0.0-alpha.8
+
+### Minor Changes
+
+- 8fb7357: Button: a `loading` button with no `loadingText` now shows 처리 중 (translated `processing`) instead of a bare spinner. Pass a verb to name the action, or `loadingText={null}` to keep the spinner-only look.
+
 ## 5.0.0-alpha.7
 
 ### Patch Changes
