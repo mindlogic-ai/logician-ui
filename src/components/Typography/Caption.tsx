@@ -28,7 +28,6 @@ const CaptionImpl = forwardRef<HTMLParagraphElement, TypographyOwnProps>(
         textStyle={fontSize ? undefined : 'caption'}
         fontSize={fontSize}
         color="fg.subtle"
-        wordBreak="keep-all"
         {...rest}
       />
     );

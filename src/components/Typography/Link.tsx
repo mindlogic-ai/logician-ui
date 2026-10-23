@@ -75,7 +75,6 @@ const LinkImpl = forwardRef<HTMLAnchorElement, LinkOwnProps>(
         // scale the way `primary.main` used to. `{...rest}` below still lets
         // a call site override it.
         fontWeight={500}
-        wordBreak="keep-all"
         color={linkColor}
         textDecoration="underline"
         textDecorationThickness="1px"

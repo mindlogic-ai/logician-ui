@@ -39,6 +39,17 @@ export const globalCss = defineGlobalStyles({
     color: 'fg.default',
   },
 
+  // Korean breaks between 어절, not mid-word — but only Korean. Japanese and
+  // Chinese have no spaces, so `keep-all` turns a whole sentence into one
+  // unbreakable run that overflows its box. Set once on <html> by language
+  // and let it inherit (`word-break` is inherited), so a component that asks
+  // for `break-all` (emails, keys, file names) still gets it. The Typography
+  // components used to hard-code `keep-all` on themselves, which left every
+  // ja screen to undo it one call site at a time.
+  'html:lang(ko)': {
+    wordBreak: 'keep-all',
+  },
+
   '#__next': {
     height: 'var(--chakra-vh)',
   },

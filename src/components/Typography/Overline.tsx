@@ -26,7 +26,6 @@ const OverlineImpl = forwardRef<HTMLParagraphElement, TypographyOwnProps>(
         textStyle={fontSize ? undefined : 'overline'}
         fontSize={fontSize}
         color="fg.muted"
-        wordBreak="keep-all"
         {...rest}
       />
     );

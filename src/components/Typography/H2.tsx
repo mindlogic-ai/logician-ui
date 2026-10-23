@@ -14,7 +14,6 @@ const H2Impl = forwardRef<HTMLHeadingElement, HeadingOwnProps>((props, ref) => {
       color="fg.emphasized"
       textStyle={fontSize ? undefined : 'h2'}
       fontSize={fontSize}
-      wordBreak="keep-all"
       {...rest}
     />
   );

@@ -31,7 +31,6 @@ const SubtitleImpl = forwardRef<HTMLParagraphElement, TypographyOwnProps>(
         textStyle={fontSize ? undefined : 'subtitle'}
         fontSize={fontSize}
         color="fg.muted"
-        wordBreak="keep-all"
         {...rest}
       />
     );

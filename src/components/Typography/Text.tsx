@@ -17,7 +17,6 @@ const TextImpl = forwardRef<HTMLParagraphElement, TypographyOwnProps>(
         textStyle={fontSize ? undefined : 'p'}
         fontSize={fontSize}
         color="fg.default"
-        wordBreak="keep-all"
         {...rest}
       />
     );
