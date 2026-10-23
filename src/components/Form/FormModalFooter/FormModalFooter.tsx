@@ -28,6 +28,7 @@ export const FormModalFooter = ({
   submitLabel,
   submitColorPalette = 'primary',
   isSubmitting = false,
+  submitLoadingText,
   submitDisabled = false,
   onSubmit,
   bordered = false,
@@ -73,6 +74,7 @@ export const FormModalFooter = ({
         type={onSubmit ? 'button' : 'submit'}
         onClick={onSubmit}
         loading={isSubmitting}
+        loadingText={submitLoadingText}
         disabled={isSubmitting || submitDisabled}
       >
         {submitLabel}

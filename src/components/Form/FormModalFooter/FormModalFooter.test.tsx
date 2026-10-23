@@ -20,12 +20,14 @@ vi.mock('@/components/Button', () => ({
     type,
     disabled,
     loading,
+    loadingText,
   }: {
     children?: ReactNode;
     onClick?: () => void;
     type?: 'button' | 'submit';
     disabled?: boolean;
     loading?: boolean;
+    loadingText?: ReactNode;
   }) => (
     <button
       type={type}
@@ -33,7 +35,7 @@ vi.mock('@/components/Button', () => ({
       disabled={disabled}
       data-loading={loading ? 'true' : 'false'}
     >
-      {children}
+      {loading && loadingText ? loadingText : children}
     </button>
   ),
 }));
@@ -135,6 +137,22 @@ describe('FormModalFooter', () => {
     expect(screen.getByRole('button', { name: 'Cancel' })).toBeDisabled();
     expect(screen.getByRole('button', { name: /Delete/ })).toBeDisabled();
     const submit = screen.getByRole('button', { name: 'Save' });
+    expect(submit).toBeDisabled();
+    expect(submit).toHaveAttribute('data-loading', 'true');
+  });
+
+  it('names the busy submit button with submitLoadingText', () => {
+    render(
+      <FormModalFooter
+        onCancel={noop}
+        onSubmit={noop}
+        cancelLabel="Cancel"
+        submitLabel="Save"
+        submitLoadingText="Saving"
+        isSubmitting
+      />
+    );
+    const submit = screen.getByRole('button', { name: 'Saving' });
     expect(submit).toBeDisabled();
     expect(submit).toHaveAttribute('data-loading', 'true');
   });
