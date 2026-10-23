@@ -15,7 +15,7 @@ Values and contrast for every token: **Setup/Theme/BAZE Palette**.
 | --- | --- | --- |
 | Raw scale (colour names) | `ink.1–12`, `inkDark.1–12`, `sand.*`, `slate.*`, `coral.*`, `red.base` … | never in components |
 | Semantic step (role names) | `neutral.1–12`, `secondary.1–12` | a specific neutral step no role names |
-| Semantic role | `bg.*`, `layer.*`, `fg.*`, `border.*`, `primary.*`, `secondary.*`, `action.*`, `send.*`, `count.*`, `disabled.*`, `focus.ring`, status, `tooltip.*`, `category.*` | everything else |
+| Semantic role | `bg.*`, `layer.*`, `fg.*`, `border.*`, `primary.*`, `secondary.*`, `action.*`, `send.*`, `count.*`, `disabled.*`, `focus.ring`, status, `tooltip.*`, `category.*`, `data.*`, `diverging.*` | everything else |
 
 ```ts
 createLogicianTheme()                    // BAZE: { neutral: 'ink', secondary: 'sand' }
@@ -45,6 +45,8 @@ createLogicianTheme({ neutral: 'slate' }) // cool gray — app code unchanged
 | Disabled (no opacity) | `disabled.bg` / `disabled.fg` |
 | Status | `danger` · `success` · `warning` · `info` → `.bg` `.border` `.fg` `.solid` `.onSolid` |
 | Decorative category (tiles, avatars, tags, charts) | `category.{hue}.surface` / `.fg` |
+| Single-measure chart, usage bar, map, heatmap fill | `data.1`–`data.4` (4 = largest) |
+| Chart fill above / below a real baseline (vs plan, vs average) | `diverging.pos.1–3` / `diverging.neg.1–3`, `diverging.mid` at the baseline |
 
 Emphasis is weight, not colour: headings use `fg.default`, never `primary.*`.
 Status colours mean status — don't borrow `success`/`warning` for decoration;
@@ -58,28 +60,79 @@ Use it for both, and for nothing decorative.
 - **Links** — `fg.link` / `fg.linkHover` (blue ink, #48607A / #AFC7E1), in chat
   messages, markdown and app copy alike. Never ink-black or coral for a link.
 - **Data visualisation** — usage/share bars, single-measure bar charts, maps,
-  heatmaps, progress-by-share: a **blue monochrome ramp**, never a rainbow and
-  never a grey ramp. Steps differ in lightness only (the saturated `blue.base`
-  is left out); the largest value gets the strongest step.
+  heatmaps, progress-by-share: the `data.*` ramp, a **blue monochrome ramp**,
+  never a rainbow and never a grey ramp. Steps differ in lightness only (the
+  saturated `blue.base` is left out). **The higher number is the larger value**:
+  `data.4` is the strongest step in both modes (dark mode flips the lightness,
+  so `data.4` is the lightest blue there).
 - **Lines** — a single-measure line chart, and series 1 of a multi-series one,
   stroke in `blue.base` (`#4674A4` / `#6892BD`, ≥ 4.5:1). A 2px line is not a
   filled area: the ramp's darkest step `blue.ink` reads as slate grey at that
   width, so lines take the saturated blue the ramp leaves out.
 
-| Step | Light | Dark |
+| Token | Light | Dark |
 | --- | --- | --- |
-| 1 (largest) | `#48607A` (`blue.ink`) · white label | `#AFC7E1` (`blue.inkDark`) · ink label |
-| 2 | `#7492B3` · ink label | `#7492B3` · ink label |
-| 3 | `#AFC7E1` · ink label | `#48607A` · white label |
-| 4 | `#DFEBF9` (`blue.surface`) · ink label | `#232F3D` (`blue.surfaceDark`) · white label |
+| `data.4` (largest) | `#48607A` (`blue.ink`) · white label | `#AFC7E1` (`blue.inkDark`) · ink label |
+| `data.3` | `#7492B3` (`dataviz.blueMid`) · ink label | `#7492B3` · ink label |
+| `data.2` | `#AFC7E1` (`blue.inkDark`) · ink label | `#48607A` (`blue.ink`) · white label |
+| `data.1` (smallest) | `#DFEBF9` (`blue.surface`) · ink label | `#232F3D` (`blue.surfaceDark`) · white label |
 
-Pick each label by measured contrast (≥ 4.5:1), not by step number.
+Pick each label by measured contrast (≥ 4.5:1), not by step number. Ink is
+`#252525`, white is `#FFFFFF`, in either mode; `contrast.test.ts` re-measures
+every label in this section, including the diverging table below.
+
 A chart that must tell several *categories* apart (multi-series lines) starts
 with the same data blue (`blue.base`) and then cycles `CHART_SERIES_HUES` in
 `LineGraph/seriesColors.ts` (teal, pink, indigo, purple, brown, …), which
 leaves red, yellow and green out so no series reads as a status.
 `info` is also blue; status always comes with an icon and words, so a blue
 chart is never mistaken for an info notice.
+
+### Diverging: above and below a baseline
+
+When the value has a **real zero or baseline** and both directions mean
+something — actual vs plan, this month vs the average, change since last
+week — use the `diverging.*` ramp. A one-sided value (a count, a share, a
+usage total) keeps `data.*`, even if some bars are small.
+
+- **Blue is above the baseline, orange is below** (`diverging.pos.*` /
+  `diverging.neg.*`). `3` is the largest distance from the baseline on either
+  side, and the two sides share their lightness per step, so the same
+  distance looks the same size in both directions.
+- **The baseline itself is `diverging.mid`** (neutral step 3, so it follows
+  the neutral scheme). Never white or `bg.canvas`: a "no change" cell must
+  still read as a cell.
+- **Never red and green for direction.** Above/below is not good/bad. When a
+  direction is good or bad, that is a status: say it with an icon and words,
+  as everywhere else.
+- **Orange is for fills only** — bars, cells, areas. Never orange text or
+  icons; labels and axis text stay `fg.*`. Lines keep the stroke rules
+  above.
+- **The legend names the direction in words** ("above plan" / "below plan"),
+  not only with the two colours.
+
+| Token | Light | Dark |
+| --- | --- | --- |
+| `diverging.pos.3` (far above) | `#2C5D91` · white label | `#A9C7EB` · ink label |
+| `diverging.pos.2` | `#5890CD` · ink label | `#5890CD` · ink label |
+| `diverging.pos.1` (just above) | `#A9C7EB` · ink label | `#2C5D91` · white label |
+| `diverging.mid` (at the baseline) | `#EDE9E2` (`neutral.3`) · ink label | `#38332E` (`neutral.3`) · white label |
+| `diverging.neg.1` (just below) | `#E4BBA0` · ink label | `#85491A` · white label |
+| `diverging.neg.2` | `#BF7946` · **no in-cell label**; label outside the mark | `#BF7946` · **no in-cell label**; label outside the mark |
+| `diverging.neg.3` (far below) | `#85491A` · white label | `#E4BBA0` · ink label |
+
+`diverging.neg.2` clears neither label (ink 4.41:1, white 3.48:1), so values
+for that step go beside or above the bar, not inside it. The `diverging.mid`
+values shown are the `ink` scheme; with `neutral: 'slate'` it is slate step 3.
+
+The diverging ramp is a dedicated data-viz ramp (OKLCH chroma ≈ 0.10–0.11):
+paired with the dusty `data.*` blue, any warm hue reads as brown. Blue ↔ orange
+also keeps the widest colour-blind separation of the pairs considered; gold
+reads as a warning and purple collapses into blue for deuteranopes.
+
+`data.*` and `diverging.*` are fills: under high contrast they keep their
+value (like `bg.track`), and in-cell labels are audited at 4.5:1 in light and
+dark.
 
 ## Modes
 

@@ -377,8 +377,54 @@ export const SYSTEM_HUES = Object.fromEntries(
   )
 );
 
+// Data-visualisation values that are not system-hue steps.
+// - `blueMid`: the middle step of the single-measure `data.*` ramp; the other
+//   three steps are the blue hue's ink/surface pair (`blue.ink`, `blue.surface`
+//   and their dark twins).
+// - `blue1–3` / `orange1–3`: the diverging ramp (`diverging.pos.*` /
+//   `diverging.neg.*`). A dedicated ramp at OKLCH C ≈ 0.10–0.11, because the
+//   dusty data blue (C ≈ 0.05) turns any warm partner brown. Steps are matched
+//   in OKLCH lightness across the two sides (0.82 / 0.64 / 0.47), so neither
+//   direction looks larger at the same magnitude. Blue ↔ orange keeps the
+//   largest colour-blind separation of the candidates (deutan ΔE 11.4).
+export const DATAVIZ = {
+  blueMid: '#7492B3',
+  blue1: '#A9C7EB',
+  blue2: '#5890CD',
+  blue3: '#2C5D91',
+  orange1: '#E4BBA0',
+  orange2: '#BF7946',
+  orange3: '#85491A',
+};
+
 // ───────────────────────────── semantic tokens (port of tokens.py) ─────────────────────────────
 const LAYERS = ['bg-canvas', 'layer-1', 'layer-2', 'layer-3'];
+
+/**
+ * Data-visualisation fills. The higher number is always the larger value; in
+ * dark mode the lightness order flips, so the strongest step is the lightest.
+ * They are fills, not text or controls, so high contrast keeps them as they
+ * are (like `track`). `diverging-mid` is neutral step 3 of the active scheme —
+ * the "no change" cell, never the canvas.
+ */
+function dataviz(mode, neutral3) {
+  const B = SYSTEM_HUES.blue;
+  const D = DATAVIZ;
+  const light = mode === 'light';
+  return {
+    'data-1': light ? B.surface : B.surfaceDark,
+    'data-2': light ? B.inkDark : B.ink,
+    'data-3': D.blueMid,
+    'data-4': light ? B.ink : B.inkDark,
+    'diverging-pos-1': light ? D.blue1 : D.blue3,
+    'diverging-pos-2': D.blue2,
+    'diverging-pos-3': light ? D.blue3 : D.blue1,
+    'diverging-neg-1': light ? D.orange1 : D.orange3,
+    'diverging-neg-2': D.orange2,
+    'diverging-neg-3': light ? D.orange3 : D.orange1,
+    'diverging-mid': neutral3,
+  };
+}
 
 function buildScheme(n, s) {
   const iL = n.light;
@@ -465,6 +511,7 @@ function buildScheme(n, s) {
     'tooltip-bg': iL[10],
     'tooltip-fg': A.cream,
     track: iL[3],
+    ...dataviz('light', iL[2]),
   };
   const dark = {
     'bg-canvas': CAND,
@@ -543,6 +590,7 @@ function buildScheme(n, s) {
     'tooltip-bg': A.primaryDark,
     'tooltip-fg': '#252525',
     track: iD[4],
+    ...dataviz('dark', iD[2]),
   };
   const controlBorder = (m, darker) =>
     push(
@@ -684,6 +732,9 @@ export const CORAL = ${JSON.stringify(CORAL, null, 2)} as const;
 
 /** The 12 system hues: status + category colours. */
 export const SYSTEM_HUES = ${JSON.stringify(SYSTEM_HUES, null, 2)} as const;
+
+/** Data-visualisation values that are not system-hue steps (\`data.*\`, \`diverging.*\`). */
+export const DATAVIZ = ${JSON.stringify(DATAVIZ, null, 2)} as const;
 
 /**
  * Resolved hex per semantic token, per neutral scheme, per mode. Keys are the

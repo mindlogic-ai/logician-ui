@@ -7,7 +7,13 @@ import {
   ROLE_TOKEN_PATHS,
   SYSTEM_HUE_NAMES,
 } from './colors';
-import { CORAL, RAMPS, SCHEMES, SYSTEM_HUES } from './palette.generated';
+import {
+  CORAL,
+  DATAVIZ,
+  RAMPS,
+  SCHEMES,
+  SYSTEM_HUES,
+} from './palette.generated';
 
 /**
  * logician-ui 5.0 BAZE palette — the three token layers.
@@ -104,6 +110,12 @@ export const RawScales: Story = {
           <Chip key={k} hex={hex} label={k} />
         ))}
       </Flex>
+      <H4>dataviz</H4>
+      <Flex gap={2} wrap="wrap">
+        {Object.entries(DATAVIZ).map(([k, hex]) => (
+          <Chip key={k} hex={hex} label={k} />
+        ))}
+      </Flex>
       <H4>system hues</H4>
       <Grid templateColumns="120px repeat(8, 1fr)" gap={1} fontSize="11px">
         <span />
@@ -154,6 +166,90 @@ export const RoleTokens: Story = {
         </Box>
       ))}
     </Grid>
+  ),
+};
+
+const DATA_STEPS = ['data-1', 'data-2', 'data-3', 'data-4'];
+const DIVERGING_STEPS = [
+  'diverging-neg-3',
+  'diverging-neg-2',
+  'diverging-neg-1',
+  'diverging-mid',
+  'diverging-pos-1',
+  'diverging-pos-2',
+  'diverging-pos-3',
+];
+const LABEL_INK = '#252525';
+const LABEL_WHITE = '#FFFFFF';
+
+/** The in-cell label a step takes: ink or white by measured contrast (≥ 4.5:1), or none. */
+const DataCell = ({ flat, hex }: { flat: string; hex: string }) => {
+  const label = [LABEL_INK, LABEL_WHITE]
+    .map((c) => ({ c, r: ratio(hex, c) }))
+    .sort((a, b) => b.r - a.r)[0];
+  const ok = label.r >= 4.5;
+  return (
+    <Stack gap={1}>
+      <Flex
+        bg={hex}
+        color={label.c}
+        h="56px"
+        align="center"
+        justify="center"
+        fontSize="13px"
+        fontWeight="bold"
+        borderRadius="sm"
+      >
+        {ok && '42%'}
+      </Flex>
+      {/* Plain boxes: the panel paints its own mode, so text inherits its colour. */}
+      <Box fontFamily="mono" fontSize="11px">
+        {ROLE_TOKEN_PATHS[flat as keyof typeof ROLE_TOKEN_PATHS]}
+      </Box>
+      <Box fontSize="10px">
+        {hex} ·{' '}
+        {ok
+          ? `${label.c === LABEL_INK ? 'ink' : 'white'} label ${label.r.toFixed(2)}`
+          : 'no in-cell label'}
+      </Box>
+    </Stack>
+  );
+};
+
+/**
+ * Data-visualisation fills — `data.1–4` (single measure, 4 = largest) and
+ * `diverging.*` (blue above the baseline, orange below, `diverging.mid` at it)
+ * — in light and dark, each with the in-cell label it can carry.
+ */
+export const DataViz: Story = {
+  render: () => (
+    <Stack gap={6} maxW="1100px">
+      {(['light', 'dark'] as const).map((mode) => {
+        const table = SCHEMES.ink[mode] as Record<string, string>;
+        return (
+          <Stack
+            key={mode}
+            gap={4}
+            p={4}
+            borderRadius="md"
+            bg={table['bg-canvas']}
+            color={table['fg-default']}
+          >
+            <Box fontWeight="bold">{mode}</Box>
+            <Grid templateColumns="repeat(4, 1fr)" gap={2}>
+              {DATA_STEPS.map((k) => (
+                <DataCell key={k} flat={k} hex={table[k]} />
+              ))}
+            </Grid>
+            <Grid templateColumns="repeat(7, 1fr)" gap={2}>
+              {DIVERGING_STEPS.map((k) => (
+                <DataCell key={k} flat={k} hex={table[k]} />
+              ))}
+            </Grid>
+          </Stack>
+        );
+      })}
+    </Stack>
   ),
 };
 

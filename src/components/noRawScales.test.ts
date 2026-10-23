@@ -4,7 +4,7 @@ import { join, relative } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { SYSTEM_HUE_NAMES } from '@/theme/colors';
-import { CORAL } from '@/theme/palette.generated';
+import { CORAL, DATAVIZ } from '@/theme/palette.generated';
 
 /**
  * Components read ROLE tokens (`bg.*`, `fg.*`, `primary.*`, `category.*` …),
@@ -64,6 +64,7 @@ const TOKEN = new RegExp(
   `(?<![\\w.$-])(?:` +
     `(?:${alt(numeric)})\\.\\d+` +
     `|coral\\.(?:${alt(Object.keys(CORAL))})` +
+    `|dataviz\\.(?:${alt(Object.keys(DATAVIZ))})` +
     `|(?:${alt(SYSTEM_HUE_NAMES)})\\.(?:${alt(HUE_KEYS)})` +
     `)(?![\\w.])`,
   'g'
@@ -124,6 +125,7 @@ describe('components read no raw palette scales', () => {
       "'ink.12'",
       "'sandDark.3'",
       "'coral.base'",
+      "'dataviz.blueMid'",
       "'red.surface'",
       "'blue.hc'",
       "'blackAlpha.600'",
@@ -135,6 +137,8 @@ describe('components read no raw palette scales', () => {
       "'category.green.surface'",
       "'green'",
       "'fg.default'",
+      "'data.4'",
+      "'diverging.pos.3'",
       'theme.colors.gray.100',
       "'--chakra-colors-gray-100'",
       "'secondary.surface'",

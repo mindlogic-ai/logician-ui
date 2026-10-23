@@ -137,6 +137,33 @@ const NO_PAIR: Record<string, string> = {
   track: 'unfilled track; the filled part (primary-main) carries the value',
 };
 
+/**
+ * Data-visualisation fills (`data.*`, `diverging.*`) and the label a chart may
+ * print inside each one, per mode — the table in SemanticTokens.mdx. `ink` is
+ * #252525 (`ink.11`), `white` is #FFFFFF, picked per step by measured
+ * contrast, not by step number. `null` means neither clears 4.5:1: no in-cell
+ * label, the value goes outside the mark.
+ *
+ * Audited at 4.5:1 in light and dark, like the category pairs: the fills keep
+ * their value under high contrast (they are fills, like `track`), so an
+ * in-cell label is not held to the 7:1 high-contrast text target.
+ */
+type Label = 'ink' | 'white' | null;
+const FILL_LABELS: Record<string, { light: Label; dark: Label }> = {
+  'data-1': { light: 'ink', dark: 'white' },
+  'data-2': { light: 'ink', dark: 'white' },
+  'data-3': { light: 'ink', dark: 'ink' },
+  'data-4': { light: 'white', dark: 'ink' },
+  'diverging-pos-1': { light: 'ink', dark: 'white' },
+  'diverging-pos-2': { light: 'ink', dark: 'ink' },
+  'diverging-pos-3': { light: 'white', dark: 'ink' },
+  'diverging-neg-1': { light: 'ink', dark: 'white' },
+  'diverging-neg-2': { light: null, dark: null },
+  'diverging-neg-3': { light: 'white', dark: 'ink' },
+  'diverging-mid': { light: 'ink', dark: 'white' },
+};
+const LABEL_TOKEN = { ink: 'ink.11', white: 'white' } as const;
+
 // ───────────────────────────── resolver ─────────────────────────────
 
 const lum = (h: string) => {
@@ -253,6 +280,28 @@ describe.each(SCHEME_NAMES)('contrast — %s scheme', (neutral) => {
     expect(failures).toEqual([]);
   });
 
+  it('data-viz fills: each in-cell label clears 4.5:1, and "no label" means neither does (light and dark)', () => {
+    const failures = Object.entries(FILL_LABELS).flatMap(([fill, labels]) =>
+      (['light', 'dark'] as const).flatMap((mode) => {
+        const bg = flat(fill, mode);
+        const label = labels[mode];
+        if (label) {
+          const c = ratio(resolve(LABEL_TOKEN[label], mode), bg);
+          return c >= 4.5
+            ? []
+            : [`${label} on ${fill} ${mode}: ${c.toFixed(2)}`];
+        }
+        const best = Math.max(
+          ...Object.values(LABEL_TOKEN).map((t) => ratio(resolve(t, mode), bg))
+        );
+        return best < 4.5
+          ? []
+          : [`${fill} ${mode} has no label but one clears ${best.toFixed(2)}`];
+      })
+    );
+    expect(failures).toEqual([]);
+  });
+
   it('every deprecated 4.x name resolves to its replacement in all modes', () => {
     for (const [oldName, newName] of Object.entries(DEPRECATED_COLOR_TOKENS))
       for (const mode of MODES)
@@ -267,6 +316,7 @@ describe('contrast registry', () => {
     ...PAIRS.flatMap(([a, b]) => [a, b]),
     ...SEP.flatMap(([a, b]) => [a, b]),
     ...Object.keys(NO_PAIR),
+    ...Object.keys(FILL_LABELS),
   ]);
 
   it('every role token has a contrast pair or a NO_PAIR reason', () => {

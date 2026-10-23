@@ -248,6 +248,17 @@ export const SYSTEM_HUES = {
   }
 } as const;
 
+/** Data-visualisation values that are not system-hue steps (`data.*`, `diverging.*`). */
+export const DATAVIZ = {
+  "blueMid": "#7492B3",
+  "blue1": "#A9C7EB",
+  "blue2": "#5890CD",
+  "blue3": "#2C5D91",
+  "orange1": "#E4BBA0",
+  "orange2": "#BF7946",
+  "orange3": "#85491A"
+} as const;
+
 /**
  * Resolved hex per semantic token, per neutral scheme, per mode. Keys are the
  * prototype's flat names (`layer-1-hover`, `primary-washActive`); the Chakra
@@ -332,6 +343,17 @@ export const SCHEMES = {
       "tooltip-bg": "#252525",
       "tooltip-fg": "#F5EDE0",
       "track": "#E5DFD9",
+      "data-1": "#DFEBF9",
+      "data-2": "#AFC7E1",
+      "data-3": "#7492B3",
+      "data-4": "#48607A",
+      "diverging-pos-1": "#A9C7EB",
+      "diverging-pos-2": "#5890CD",
+      "diverging-pos-3": "#2C5D91",
+      "diverging-neg-1": "#E4BBA0",
+      "diverging-neg-2": "#BF7946",
+      "diverging-neg-3": "#85491A",
+      "diverging-mid": "#EDE9E2",
       "border-control": "#8F8A82"
     },
     "dark": {
@@ -411,6 +433,17 @@ export const SCHEMES = {
       "tooltip-bg": "#E3D7C4",
       "tooltip-fg": "#252525",
       "track": "#48443E",
+      "data-1": "#232F3D",
+      "data-2": "#48607A",
+      "data-3": "#7492B3",
+      "data-4": "#AFC7E1",
+      "diverging-pos-1": "#2C5D91",
+      "diverging-pos-2": "#5890CD",
+      "diverging-pos-3": "#A9C7EB",
+      "diverging-neg-1": "#85491A",
+      "diverging-neg-2": "#BF7946",
+      "diverging-neg-3": "#E4BBA0",
+      "diverging-mid": "#38332E",
       "border-control": "#948F87"
     },
     "hcLight": {
@@ -490,6 +523,17 @@ export const SCHEMES = {
       "tooltip-bg": "#252525",
       "tooltip-fg": "#F5EDE0",
       "track": "#E5DFD9",
+      "data-1": "#DFEBF9",
+      "data-2": "#AFC7E1",
+      "data-3": "#7492B3",
+      "data-4": "#48607A",
+      "diverging-pos-1": "#A9C7EB",
+      "diverging-pos-2": "#5890CD",
+      "diverging-pos-3": "#2C5D91",
+      "diverging-neg-1": "#E4BBA0",
+      "diverging-neg-2": "#BF7946",
+      "diverging-neg-3": "#85491A",
+      "diverging-mid": "#EDE9E2",
       "border-control": "#726D65"
     },
     "hcDark": {
@@ -569,6 +613,17 @@ export const SCHEMES = {
       "tooltip-bg": "#E3D7C4",
       "tooltip-fg": "#252525",
       "track": "#48443E",
+      "data-1": "#232F3D",
+      "data-2": "#48607A",
+      "data-3": "#7492B3",
+      "data-4": "#AFC7E1",
+      "diverging-pos-1": "#2C5D91",
+      "diverging-pos-2": "#5890CD",
+      "diverging-pos-3": "#A9C7EB",
+      "diverging-neg-1": "#85491A",
+      "diverging-neg-2": "#BF7946",
+      "diverging-neg-3": "#E4BBA0",
+      "diverging-mid": "#38332E",
       "border-control": "#B6B1A9"
     }
   },
@@ -650,6 +705,17 @@ export const SCHEMES = {
       "tooltip-bg": "#1F2534",
       "tooltip-fg": "#ECEEF4",
       "track": "#DBE0EC",
+      "data-1": "#DFEBF9",
+      "data-2": "#AFC7E1",
+      "data-3": "#7492B3",
+      "data-4": "#48607A",
+      "diverging-pos-1": "#A9C7EB",
+      "diverging-pos-2": "#5890CD",
+      "diverging-pos-3": "#2C5D91",
+      "diverging-neg-1": "#E4BBA0",
+      "diverging-neg-2": "#BF7946",
+      "diverging-neg-3": "#85491A",
+      "diverging-mid": "#E6E9F3",
       "border-control": "#858B9C"
     },
     "dark": {
@@ -729,6 +795,17 @@ export const SCHEMES = {
       "tooltip-bg": "#D5D9E1",
       "tooltip-fg": "#252525",
       "track": "#40454E",
+      "data-1": "#232F3D",
+      "data-2": "#48607A",
+      "data-3": "#7492B3",
+      "data-4": "#AFC7E1",
+      "diverging-pos-1": "#2C5D91",
+      "diverging-pos-2": "#5890CD",
+      "diverging-pos-3": "#A9C7EB",
+      "diverging-neg-1": "#85491A",
+      "diverging-neg-2": "#BF7946",
+      "diverging-neg-3": "#E4BBA0",
+      "diverging-mid": "#30343C",
       "border-control": "#8A909B"
     },
     "hcLight": {
@@ -808,6 +885,17 @@ export const SCHEMES = {
       "tooltip-bg": "#1F2534",
       "tooltip-fg": "#ECEEF4",
       "track": "#DBE0EC",
+      "data-1": "#DFEBF9",
+      "data-2": "#AFC7E1",
+      "data-3": "#7492B3",
+      "data-4": "#48607A",
+      "diverging-pos-1": "#A9C7EB",
+      "diverging-pos-2": "#5890CD",
+      "diverging-pos-3": "#2C5D91",
+      "diverging-neg-1": "#E4BBA0",
+      "diverging-neg-2": "#BF7946",
+      "diverging-neg-3": "#85491A",
+      "diverging-mid": "#E6E9F3",
       "border-control": "#686E7E"
     },
     "hcDark": {
@@ -887,6 +975,17 @@ export const SCHEMES = {
       "tooltip-bg": "#D5D9E1",
       "tooltip-fg": "#252525",
       "track": "#40454E",
+      "data-1": "#232F3D",
+      "data-2": "#48607A",
+      "data-3": "#7492B3",
+      "data-4": "#AFC7E1",
+      "diverging-pos-1": "#2C5D91",
+      "diverging-pos-2": "#5890CD",
+      "diverging-pos-3": "#A9C7EB",
+      "diverging-neg-1": "#85491A",
+      "diverging-neg-2": "#BF7946",
+      "diverging-neg-3": "#E4BBA0",
+      "diverging-mid": "#30343C",
       "border-control": "#ACB2BD"
     }
   }

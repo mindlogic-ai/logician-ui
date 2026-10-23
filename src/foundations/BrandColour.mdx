@@ -39,7 +39,11 @@ token for which surface: **Setup/Theme/Using Semantic Tokens**.
 - **The twelve system hues are for categories only.** `category.{hue}.*`
   carries no status meaning.
 - **Blue means data and links.** `fg.link` for links; a blue monochrome ramp
-  for single-measure charts (see Using Semantic Tokens).
+  (`data.1–4`) for single-measure charts (see Using Semantic Tokens).
+- **Above and below a baseline is blue and orange.** Charts against a real
+  baseline (vs plan, vs average) use `diverging.*`: blue above, orange below,
+  `diverging.mid` at the baseline. Orange fills only, never red/green for
+  direction.
 - **No gradients.** A brand band is one solid colour.
 
 ## Neutrals
@@ -186,7 +190,10 @@ BAZE의 화면은 따뜻한 무채색입니다. 크림·아이보리 바탕에 �
 - **열두 가지 시스템 색은 카테고리 구분에만 씁니다.** `category.{hue}.*`에는 상태의
   뜻이 없습니다.
 - **파란색은 데이터와 링크를 뜻합니다.** 링크는 `fg.link`, 하나의 값을 보여 주는
-  차트는 파란색 단색 단계를 씁니다(Using Semantic Tokens 참고).
+  차트는 파란색 단색 단계(`data.1–4`)를 씁니다(Using Semantic Tokens 참고).
+- **기준선 위아래는 파랑과 주황으로 나눕니다.** 계획 대비, 평균 대비처럼 실제 기준선이
+  있는 차트는 `diverging.*`를 씁니다. 기준선 위는 파랑, 아래는 주황, 기준선 자리는
+  `diverging.mid`입니다. 주황은 면에만 쓰고, 방향을 빨강·초록으로 나타내지 않습니다.
 - **그라데이션은 쓰지 않습니다.** 브랜드 띠는 단색 하나로 칠합니다.
 
 ## 무채색
