@@ -21,6 +21,7 @@
     "formmodalfooter-submit-loading-text",
     "select-ghost-variant",
     "toast-neutral-inverse",
-    "v5-baze-palette"
+    "v5-baze-palette",
+    "word-break-by-lang"
   ]
 }
