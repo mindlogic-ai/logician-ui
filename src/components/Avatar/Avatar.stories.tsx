@@ -5,7 +5,8 @@ import { SYSTEM_HUE_NAMES } from '@/theme/colors';
 
 import { TokenTable } from '../../guidelines/_components/TokenTable';
 import { Subtext } from '../Typography';
-import { Avatar, avatarFallbackColors } from '.';
+import { SparklesIcon } from '../Icon';
+import { Avatar } from '.';
 
 const meta = {
   title: 'Components/Avatar',
@@ -145,34 +146,24 @@ export const WithImage: Story = {
           />
         </HStack>
       </Box>
-      {/* Custom background override */}
+      {/* Logos: variant="logo" */}
       <Box>
         <Text fontSize="lg" fontWeight="bold" mb={4} color="fg.default">
-          Custom Background (bg prop)
+          Logos (variant=&quot;logo&quot;)
         </Text>
         <HStack gap={4}>
-          <VStack gap={2}>
-            <Avatar
-              name="GitHub"
-              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
-              size="lg"
-              bg="white"
-            />
-            <Text fontSize="xs" color="fg.muted">
-              bg="white"
-            </Text>
-          </VStack>
-          <VStack gap={2}>
-            <Avatar
-              name="React"
-              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
-              size="lg"
-              bg="category.blue.surface"
-            />
-            <Text fontSize="xs" color="fg.muted">
-              bg="category.blue.surface"
-            </Text>
-          </VStack>
+          <Avatar
+            name="GitHub"
+            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
+            size="lg"
+            variant="logo"
+          />
+          <Avatar
+            name="React"
+            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
+            size="lg"
+            variant="logo"
+          />
         </HStack>
       </Box>
     </VStack>
@@ -427,6 +418,131 @@ export const ExplicitHue: Story = {
   ),
 };
 
+const SIZES = ['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'] as const;
+const PEOPLE = ['박상현', 'Sean Park', '김지민', 'Jaeho Shin', '이서준'];
+
+/**
+ * The regression this recipe fixes: the hue must fill the whole circle at
+ * every size, with the initial centred — not a small pill around the glyph.
+ */
+export const InitialsEverySize: Story = {
+  render: () => (
+    <VStack gap={3} align="start">
+      {PEOPLE.map((name) => (
+        <HStack key={name} gap={4}>
+          <Box w="96px">
+            <Text fontSize="sm" color="fg.muted">
+              {name}
+            </Text>
+          </Box>
+          {SIZES.map((size) => (
+            <Avatar key={size} name={name} size={size} />
+          ))}
+        </HStack>
+      ))}
+      <HStack gap={4}>
+        <Box w="96px">
+          <Text fontSize="sm" color="fg.muted">
+            (no name)
+          </Text>
+        </Box>
+        {SIZES.map((size) => (
+          <Avatar key={size} size={size} />
+        ))}
+      </HStack>
+    </VStack>
+  ),
+};
+
+/**
+ * No name, no photo: the neutral pair (`category.neutral` →
+ * `bg.muted` / `secondary.fgStrong`) and Chakra's person icon — never red.
+ * `Avatar.Root` + `Avatar.Fallback` used bare get the same.
+ */
+export const NoName: Story = {
+  render: () => (
+    <HStack gap={4}>
+      <Avatar size="lg" />
+      <Avatar.Root size="lg">
+        <Avatar.Fallback />
+      </Avatar.Root>
+      <Avatar.Root size="lg">
+        <Avatar.Fallback name="Bare Root" />
+      </Avatar.Root>
+    </HStack>
+  ),
+};
+
+/**
+ * `variant="logo"`: the `bg.logo` tile, light in both modes, for model,
+ * chatbot and brand marks drawn for a light ground. With no image the
+ * fallback (an icon or initials) is centred on the tile.
+ */
+export const Logo: Story = {
+  render: () => (
+    <VStack gap={4} align="start">
+      <HStack gap={4}>
+        {SIZES.map((size) => (
+          <Avatar
+            key={size}
+            size={size}
+            variant="logo"
+            name="React"
+            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
+          />
+        ))}
+      </HStack>
+      <HStack gap={4}>
+        {SIZES.map((size) => (
+          <Avatar.Root key={size} size={size} variant="logo">
+            <Avatar.Fallback>
+              <SparklesIcon boxSize="50%" aria-hidden />
+            </Avatar.Fallback>
+          </Avatar.Root>
+        ))}
+      </HStack>
+      <HStack gap={4}>
+        {SIZES.map((size) => (
+          <Avatar key={size} size={size} variant="logo" name="Chat Bot" />
+        ))}
+      </HStack>
+    </VStack>
+  ),
+};
+
+/**
+ * `Avatar.Group` `max`: the avatars past `max` collapse into a "+N" counter in
+ * the neutral pair, whatever the group's variant.
+ */
+export const GroupMax: Story = {
+  render: () => {
+    const names = ['김지민', '이서준', '박하은', '최유나', '정민호', '한도윤'];
+    return (
+      <VStack gap={6} align="start">
+        {(['sm', 'md', 'lg'] as const).map((size) => (
+          <Avatar.Group key={size} size={size} max={3}>
+            {names.map((name) => (
+              <Avatar key={name} name={name} />
+            ))}
+          </Avatar.Group>
+        ))}
+        <Avatar.Group size="md" max={2} variant="logo">
+          <Avatar
+            name="React"
+            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
+          />
+          <Avatar
+            name="GitHub"
+            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
+          />
+          <Avatar name="Chat Bot" />
+          <Avatar name="Other" />
+        </Avatar.Group>
+      </VStack>
+    );
+  },
+};
+
 // ───────────────────────── Usage-page specimens ─────────────────────────
 // Pulled into `Avatar.usage.mdx` with <Canvas of={…} />. Hidden from the
 // sidebar (`!dev`); `tags` is written out on each story because the indexer
@@ -467,30 +583,30 @@ export const DontHueAsStatus: Story = {
 };
 
 /**
- * Fallback colours per hue, from `avatarFallbackColors` — the same function
- * the component calls. The first row is the neutral pair used with no name.
+ * Fallback colours per hue — the `category.{hue}` palette the avatar recipe
+ * paints the root with. The first row is the `category.neutral` pair used with
+ * no name; the last rows are the `logo` variant's tile.
  */
 export const UsageTokens: Story = {
   tags: ['!dev'],
   parameters: { layout: 'padded' },
   name: 'Usage / Tokens',
-  render: () => {
-    const neutral = avatarFallbackColors(undefined);
-    return (
-      <TokenTable
-        rows={[
-          { token: neutral.bg, use: 'no name · background' },
-          { token: neutral.color, use: 'no name · initials' },
-          ...SYSTEM_HUE_NAMES.flatMap((hue) => {
-            const { bg, color } = avatarFallbackColors('x', hue);
-            return [
-              { token: bg, use: `${hue} · background` },
-              { token: color, use: `${hue} · initials` },
-            ];
-          }),
-          { token: 'border.subtle', use: 'border' },
-        ]}
-      />
-    );
-  },
+  render: () => (
+    <TokenTable
+      rows={[
+        { token: 'category.neutral.surface', use: 'no name · background' },
+        { token: 'category.neutral.fg', use: 'no name · initials' },
+        ...SYSTEM_HUE_NAMES.flatMap((hue) => [
+          { token: `category.${hue}.surface`, use: `${hue} · background` },
+          { token: `category.${hue}.fg`, use: `${hue} · initials` },
+        ]),
+        { token: 'border.subtle', use: 'border' },
+        {
+          token: 'bg.logo',
+          use: 'variant="logo" · tile (light in both modes)',
+        },
+        { token: 'fg.onLogo', use: 'variant="logo" · initials' },
+      ]}
+    />
+  ),
 };

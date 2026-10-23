@@ -260,6 +260,28 @@ describe.each(SCHEME_NAMES)('contrast — %s scheme', (neutral) => {
     expect(failures).toEqual([]);
   });
 
+  it('the nameless avatar pair (category.neutral) reads as text (≥ 4.5:1, all modes)', () => {
+    const failures = MODES.flatMap((mode) => {
+      const c = ratio(
+        resolve('category.neutral.fg', mode),
+        resolve('category.neutral.surface', mode)
+      );
+      return c >= 4.5 ? [] : [`${mode}: ${c.toFixed(2)}`];
+    });
+    expect(failures).toEqual([]);
+  });
+
+  it('logo tile stays light in both modes and its text reads (≥ 4.5:1)', () => {
+    const failures = MODES.flatMap((mode) => {
+      const tile = resolve('bg.logo', mode);
+      const c = ratio(resolve('fg.onLogo', mode), tile);
+      const out = c >= 4.5 ? [] : [`fg.onLogo ${mode}: ${c.toFixed(2)}`];
+      // "Light": a logo drawn for white must keep a light ground in dark mode.
+      return lum(tile) > 0.7 ? out : [...out, `bg.logo ${mode} is not light`];
+    });
+    expect(failures).toEqual([]);
+  });
+
   it('data-viz fills: each in-cell label clears 4.5:1, and "no label" means neither does (light and dark)', () => {
     const failures = Object.entries(DATA_VIZ_LABELS).flatMap(([fill, labels]) =>
       (['light', 'dark'] as const).flatMap((mode) => {
@@ -323,6 +345,7 @@ describe('contrast registry', () => {
       /^secondary\.\d+$/,
       /^scheme\.(light|dark)\.\w+$/, // internal high-contrast helpers
       /^category\.\w+\.(surface|fg)$/, // audited by the category test
+      /^(bg\.logo|fg\.onLogo)$/, // audited by the logo tile test
       // kept 4.x names / Chakra globals that reuse a role value verbatim
       /^(bg|fg|border)$/,
       /^bg\.(panel|raised|inverse|sunken|highlighted|invalid\.subtle)$/,

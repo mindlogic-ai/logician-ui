@@ -5,5 +5,11 @@ export type {
   AvatarImageProps,
   AvatarProps,
   AvatarRootProps,
+  AvatarVariant,
 } from './Avatar';
-export { Avatar, avatarFallbackColors, hueForName } from './Avatar';
+export {
+  Avatar,
+  avatarColorPalette,
+  avatarFallbackColors,
+  hueForName,
+} from './Avatar';

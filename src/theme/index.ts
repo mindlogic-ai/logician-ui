@@ -15,6 +15,7 @@ import {
 import { globalCss } from './global';
 import { animationStyles, durations, easings, keyframes } from './motion';
 import { accordionSlotRecipe } from './recipes/accordion';
+import { avatarSlotRecipe } from './recipes/avatar';
 import { tableSlotRecipe } from './recipes/table';
 
 /**
@@ -403,6 +404,7 @@ export function createLogicianTheme(options: LogicianThemeOptions = {}) {
       },
       slotRecipes: {
         accordion: accordionSlotRecipe,
+        avatar: avatarSlotRecipe,
         table: tableSlotRecipe,
         select: selectSlotRecipe,
       },
