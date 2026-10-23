@@ -13,7 +13,10 @@ import * as TypographyStories from './Typography.stories';
 
 The type scale: headings (`H1`–`H5`), body text (`Text`), supporting text
 (`Subtitle`, `Subtext`, `Caption`, `Overline`) and inline links (`Link`).
-Each tier sets a size, a colour and Korean word breaking (`keep-all`).
+Each tier sets a size and a colour. Word breaking is set by language on
+`<html>` in the global styles: Korean (`lang="ko"`) gets `keep-all`, Japanese
+(`lang="ja"`) gets `auto-phrase` where supported, other languages keep the
+browser default.
 
 ## When to use
 
@@ -61,7 +64,10 @@ explicit size wins.
 
 글자 체계입니다. 제목(`H1`–`H5`), 본문(`Text`), 보조 문구(`Subtitle`, `Subtext`,
 `Caption`, `Overline`), 문장 안 링크(`Link`)로 나뉩니다. 각 단계는 크기와 색을
-정하고, 한국어가 단어 중간에서 끊기지 않도록 `keep-all`을 겁니다.
+정합니다. 줄바꿈 방식은 전역 스타일이 `<html>`의 언어로 정합니다. 한국어
+(`lang="ko"`)는 단어 중간에서 끊기지 않도록 `keep-all`, 일본어(`lang="ja"`)는
+지원 브라우저에서 문절 단위로 끊는 `auto-phrase`이고, 다른 언어는 브라우저
+기본값을 씁니다.
 
 ## 언제 쓰나요
 

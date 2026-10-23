@@ -14,7 +14,6 @@ const SubtextImpl = forwardRef<HTMLParagraphElement, TypographyOwnProps>(
         textStyle={fontSize ? undefined : 'subtext'}
         fontSize={fontSize}
         color="fg.default"
-        wordBreak="keep-all"
         {...rest}
       />
     );

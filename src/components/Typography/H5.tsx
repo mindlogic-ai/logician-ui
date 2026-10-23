@@ -14,7 +14,6 @@ const H5Impl = forwardRef<HTMLHeadingElement, HeadingOwnProps>((props, ref) => {
       color="fg.emphasized"
       textStyle={fontSize ? undefined : 'h5'}
       fontSize={fontSize}
-      wordBreak="keep-all"
       {...rest}
     />
   );
