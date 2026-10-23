@@ -5,6 +5,7 @@ export type {
   AvatarImageProps,
   AvatarProps,
   AvatarRootProps,
+  AvatarRootProviderProps,
   AvatarVariant,
 } from './Avatar';
 export {

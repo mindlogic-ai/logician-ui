@@ -1,5 +1,6 @@
 import {
   Children,
+  type ComponentProps,
   forwardRef,
   type ForwardRefExoticComponent,
   type ReactNode,
@@ -14,7 +15,7 @@ import {
   AvatarImage,
   AvatarRoot as ChakraAvatarRoot,
   AvatarRootProps as ChakraAvatarRootProps,
-  AvatarRootProvider,
+  AvatarRootProvider as ChakraAvatarRootProvider,
   type ConditionalValue,
 } from '@chakra-ui/react';
 
@@ -32,21 +33,31 @@ export type {
  */
 export type AvatarVariant = 'subtle' | 'solid' | 'outline' | 'logo';
 
-export interface AvatarRootProps extends Omit<
-  ChakraAvatarRootProps,
-  'variant'
-> {
+/** `P` with `variant` widened to {@link AvatarVariant}. */
+type WithAvatarVariant<P> = Omit<P, 'variant'> & {
   /**
    * `subtle` (default): the `colorPalette` fill — a person's category hue, or
    * the neutral pair. `logo`: the light `bg.logo` tile for model, chatbot and
    * brand marks, the same in both modes.
    */
   variant?: ConditionalValue<AvatarVariant>;
-}
+};
 
-/** Chakra's `Avatar.Root`, typed for the `logo` variant. */
+export type AvatarRootProps = WithAvatarVariant<ChakraAvatarRootProps>;
+export type AvatarRootProviderProps = WithAvatarVariant<
+  ComponentProps<typeof ChakraAvatarRootProvider>
+>;
+
+// Chakra's parts, typed for the `logo` variant.
 const AvatarRoot = ChakraAvatarRoot as ForwardRefExoticComponent<
   AvatarRootProps & RefAttributes<HTMLDivElement>
+>;
+const AvatarRootProvider =
+  ChakraAvatarRootProvider as ForwardRefExoticComponent<
+    AvatarRootProviderProps & RefAttributes<HTMLDivElement>
+  >;
+const ChakraAvatarGroupTyped = ChakraAvatarGroup as ForwardRefExoticComponent<
+  WithAvatarVariant<ChakraAvatarGroupProps> & RefAttributes<HTMLDivElement>
 >;
 
 export type AvatarProps = AvatarRootProps & {
@@ -64,12 +75,10 @@ export type AvatarProps = AvatarRootProps & {
 };
 
 export interface AvatarGroupProps extends Omit<
-  ChakraAvatarGroupProps,
-  'variant' | 'children'
+  WithAvatarVariant<ChakraAvatarGroupProps>,
+  'children'
 > {
   children?: ReactNode;
-  /** Passed to every avatar in the group (see {@link AvatarRootProps}). */
-  variant?: ConditionalValue<AvatarVariant>;
   /**
    * Show at most this many avatars; the rest collapse into a trailing "+N"
    * counter in the neutral pair. Omit to show all. Chakra 3 dropped 2.x's
@@ -146,17 +155,14 @@ const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
       typeof max === 'number' ? items.slice(0, Math.max(0, max)) : items;
     const overflow = items.length - visible.length;
     return (
-      <ChakraAvatarGroup
-        ref={ref}
-        {...(rest as Omit<ChakraAvatarGroupProps, 'children'>)}
-      >
+      <ChakraAvatarGroupTyped ref={ref} {...rest}>
         {visible}
         {overflow > 0 && (
           <AvatarRoot colorPalette="category.neutral" variant="subtle">
             <AvatarFallback>+{overflow}</AvatarFallback>
           </AvatarRoot>
         )}
-      </ChakraAvatarGroup>
+      </ChakraAvatarGroupTyped>
     );
   }
 );

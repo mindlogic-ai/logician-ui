@@ -356,6 +356,11 @@ export function createSemanticColors({
     'fg.emphasized': 'fg.default',
     'bg.invalid.subtle': 'danger.bg',
     'bg.highlighted': 'warning.bg',
+    // The no-identity pair, shaped like a category pair so a `colorPalette`
+    // can point at it (`colorPalette="category.neutral"`, the avatar recipe's
+    // default). Not a 13th hue — `hueForName` never returns it.
+    'category.neutral.surface': 'bg.muted',
+    'category.neutral.fg': 'secondary.fgStrong',
     // Every other name Chakra's own recipes read (menu/combobox `_highlighted`
     // is `bg.emphasized/60`, radiomark borders are `border.emphasized`, the
     // field recipe reads `fg.error` …). 4.x got these for free because its
@@ -404,16 +409,6 @@ export function createSemanticColors({
       },
     } as never);
   }
-
-  // The no-identity pair, shaped like a category pair so a `colorPalette`
-  // can point at it: a nameless Avatar is `colorPalette="category.neutral"`
-  // (the avatar recipe's default) and reads the same `colorPalette.surface` /
-  // `colorPalette.fg` keys as a hued one. Not a 13th hue — `SYSTEM_HUE_NAMES`
-  // and `hueForName` never return it.
-  setPath(tree, 'category.neutral.surface', { value: '{colors.bg.muted}' });
-  setPath(tree, 'category.neutral.fg', {
-    value: '{colors.secondary.fgStrong}',
-  });
 
   // Logo tile: model, chatbot and brand marks are drawn for a light ground,
   // so the tile stays light in both modes (white, then the warm cream anchor

@@ -9,32 +9,29 @@ const wrap = (ui: React.ReactNode) =>
   render(<ChakraProvider value={system}>{ui}</ChakraProvider>);
 
 /**
- * Every declaration emotion emitted for `el`'s own `css-*` class, flattened to
- * one string. jsdom cannot compute styles inside Chakra's `@layer` blocks, so
- * the test reads the generated rules instead of `getComputedStyle`.
+ * The rules emotion emitted for `el`'s own `css-*` class, one per line. jsdom
+ * cannot compute styles inside Chakra's `@layer` blocks, so the tests read the
+ * generated rules instead of `getComputedStyle`.
  */
-function declarations(el: Element | null): string {
-  if (!el) throw new Error('element not rendered');
-  const cls = [...el.classList].find((c) => c.startsWith('css-'));
-  const css = [...document.querySelectorAll('style')]
-    .map((s) => s.textContent ?? '')
-    .join('\n');
-  const rules = css.match(new RegExp(`\\.${cls}\\{[^}]*\\}`, 'g')) ?? [];
-  return rules.join('');
-}
-
-/**
- * Only the rules emotion emitted outside any `@layer` (style props such as
- * `colorPalette`) — these beat the recipe's `@layer recipes` rules.
- */
-function unlayered(el: Element | null): string {
+function rulesFor(el: Element | null): string[] {
   if (!el) throw new Error('element not rendered');
   const cls = [...el.classList].find((c) => c.startsWith('css-'));
   return [...document.querySelectorAll('style')]
     .flatMap((s) => (s.textContent ?? '').split('\n'))
-    .filter((line) => line.startsWith(`.${cls}{`))
-    .join('');
+    .filter((line) => line.includes(`.${cls}{`));
 }
+
+/** Every declaration for `el`, layered or not, as one string. */
+const declarations = (el: Element | null) => rulesFor(el).join('');
+
+/**
+ * Only the rules outside any `@layer` (style props such as `colorPalette`) —
+ * these beat the recipe's `@layer recipes` rules.
+ */
+const unlayered = (el: Element | null) =>
+  rulesFor(el)
+    .filter((line) => !line.startsWith('@layer'))
+    .join('');
 
 const root = (c: HTMLElement) => c.querySelector('[data-part="root"]');
 const fallback = (c: HTMLElement) => c.querySelector('[data-part="fallback"]');
@@ -51,7 +48,7 @@ describe('avatar recipe', () => {
     expect(f).toContain('justify-content:center');
     expect(f).not.toMatch(/background:/);
     expect(r).toContain(
-      'background:var(--chakra-colors-color-palette-surface)'
+      'background:var(--chakra-colors-color-palette-surface,'
     );
     expect(r).toContain('color:var(--chakra-colors-color-palette-fg)');
     expect(r).toContain('border-width:1px');
@@ -94,6 +91,25 @@ describe('avatar recipe', () => {
     expect(r).toContain('color:var(--chakra-colors-fg-on-logo)');
   });
 
+  it('a Chakra palette without `surface` still fills (falls back to `muted`)', () => {
+    const { container } = wrap(<Avatar name="X" colorPalette="blue" />);
+    expect(declarations(root(container))).toMatch(
+      /background:var\(--chakra-colors-color-palette-surface, ?var\(--chakra-colors-color-palette-muted\)\)/
+    );
+  });
+
+  it('solid / outline fall back onto the category pair', () => {
+    const solid = wrap(<Avatar name="X" variant="solid" />);
+    expect(declarations(root(solid.container))).toMatch(
+      /background:var\(--chakra-colors-color-palette-solid, ?var\(--chakra-colors-color-palette-fg\)\)/
+    );
+    solid.unmount();
+    const outline = wrap(<Avatar name="X" variant="outline" />);
+    expect(declarations(root(outline.container))).toMatch(
+      /border-color:var\(--chakra-colors-color-palette-border, ?var\(--chakra-colors-color-palette-fg\)\)/
+    );
+  });
+
   it('keeps Chakra’s size variants', () => {
     const { container } = wrap(<Avatar name="A" size="2xl" />);
     expect(declarations(root(container))).toContain(
@@ -121,7 +137,7 @@ describe('Avatar.Group max', () => {
       '--chakra-colors-color-palette-surface:var(--chakra-colors-category-neutral-surface)'
     );
     expect(declarations(counter)).toContain(
-      'background:var(--chakra-colors-color-palette-surface)'
+      'background:var(--chakra-colors-color-palette-surface,'
     );
   });
 

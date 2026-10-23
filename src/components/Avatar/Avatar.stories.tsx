@@ -8,6 +8,11 @@ import { Subtext } from '../Typography';
 import { SparklesIcon } from '../Icon';
 import { Avatar } from '.';
 
+const REACT_LOGO =
+  'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg';
+const GITHUB_LOGO =
+  'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg';
+
 const meta = {
   title: 'Components/Avatar',
   component: Avatar,
@@ -152,18 +157,8 @@ export const WithImage: Story = {
           Logos (variant=&quot;logo&quot;)
         </Text>
         <HStack gap={4}>
-          <Avatar
-            name="GitHub"
-            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
-            size="lg"
-            variant="logo"
-          />
-          <Avatar
-            name="React"
-            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
-            size="lg"
-            variant="logo"
-          />
+          <Avatar name="GitHub" src={GITHUB_LOGO} size="lg" variant="logo" />
+          <Avatar name="React" src={REACT_LOGO} size="lg" variant="logo" />
         </HStack>
       </Box>
     </VStack>
@@ -488,7 +483,7 @@ export const Logo: Story = {
             size={size}
             variant="logo"
             name="React"
-            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
+            src={REACT_LOGO}
           />
         ))}
       </HStack>
@@ -527,14 +522,8 @@ export const GroupMax: Story = {
           </Avatar.Group>
         ))}
         <Avatar.Group size="md" max={2} variant="logo">
-          <Avatar
-            name="React"
-            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
-          />
-          <Avatar
-            name="GitHub"
-            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
-          />
+          <Avatar name="React" src={REACT_LOGO} />
+          <Avatar name="GitHub" src={GITHUB_LOGO} />
           <Avatar name="Chat Bot" />
           <Avatar name="Other" />
         </Avatar.Group>

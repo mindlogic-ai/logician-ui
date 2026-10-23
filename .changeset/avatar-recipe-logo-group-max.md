@@ -21,5 +21,11 @@ colorHue)`; `avatarFallbackColors` is deprecated (still exported).
 - `Avatar.Group` gets `max`: avatars past it collapse into a "+N" counter in the
   neutral pair (Chakra 3 dropped 2.x's `max`).
 
+Visible change: the root is now filled behind a loaded image too, so a
+transparent PNG/SVG mark on a person avatar sits on the hue. Use
+`variant="logo"` for those. Chakra's `solid` / `outline` variants keep working
+on the category palettes (they fall back onto the same pair), and a Chakra
+palette passed as `colorPalette` (e.g. `blue`) falls back to its `muted` fill.
+
 Call sites that passed `bg` / `bgColor` / `color` (or a `css` override) to make
 the initials readable can drop them.

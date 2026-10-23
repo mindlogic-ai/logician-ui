@@ -23,9 +23,17 @@ import { defineSlotRecipe } from '@chakra-ui/react';
  *
  * `variant="logo"` is the light tile for model, chatbot and brand marks:
  * `bg.logo` in both modes, `fg.onLogo` for any initials, the fallback icon
- * centred. Chakra's `solid` / `outline` variants are left as Chakra ships
- * them; Logician does not use them.
+ * centred. Chakra's `solid` / `outline` keep working on a category palette
+ * by falling back onto the same `surface` / `fg` pair.
  */
+/**
+ * `colorPalette.<key>`, falling back to `colorPalette.<fallback>` when the
+ * active palette has no `<key>` (Chakra sets a palette's vars only for the
+ * keys it defines). Raw vars because Chakra's token syntax has no fallback.
+ */
+const palette = (key: string, fallback: string) =>
+  `var(--chakra-colors-color-palette-${key}, var(--chakra-colors-color-palette-${fallback}))`;
+
 export const avatarSlotRecipe = defineSlotRecipe({
   slots: ['root', 'image', 'fallback'],
   base: {
@@ -52,9 +60,29 @@ export const avatarSlotRecipe = defineSlotRecipe({
   variants: {
     variant: {
       // Chakra's default variant; Chakra paints it `colorPalette.muted`, which
-      // a category palette does not have.
+      // a category palette does not have — so `surface` first, `muted` for a
+      // Chakra palette a caller passes (`colorPalette="blue"`).
       subtle: {
-        root: { bg: 'colorPalette.surface', color: 'colorPalette.fg' },
+        root: {
+          bg: palette('surface', 'muted'),
+          color: 'colorPalette.fg',
+        },
+      },
+      // Chakra's `solid` / `outline` read `solid` / `contrast` / `border`; a
+      // category palette has only `surface` / `fg`, so each falls back onto the
+      // pair (solid = the pair inverted, still ≥ 4.5:1).
+      solid: {
+        root: {
+          bg: palette('solid', 'fg'),
+          color: palette('contrast', 'surface'),
+        },
+      },
+      outline: {
+        root: {
+          bg: 'transparent',
+          color: 'colorPalette.fg',
+          borderColor: palette('border', 'fg'),
+        },
       },
       logo: {
         root: { bg: 'bg.logo', color: 'fg.onLogo' },
