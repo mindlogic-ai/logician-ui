@@ -223,6 +223,13 @@
     "ja": "ダウンロード中",
     "es": "Descargando"
   },
+  "processing": {
+    "ko": "처리 중",
+    "en": "Processing",
+    "zh": "处理中",
+    "ja": "処理中",
+    "es": "Procesando"
+  },
   "deleting": {
     "ko": "삭제 중",
     "en": "Deleting",

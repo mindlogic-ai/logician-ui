@@ -1,6 +1,7 @@
 import { forwardRef } from 'react';
 import { Button as ChakraButton, SystemStyleObject } from '@chakra-ui/react';
 
+import { useTranslate } from '@/hooks/useTranslate';
 import { focusRing } from '@/utils/focusRing';
 import { mergeCss } from '@/utils/mergeCss';
 
@@ -49,8 +50,19 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
     // 4.x callers (untyped JS, `as any`) can still hand us `colorPalette` and
     // an old variant name. Strip it so it never reaches Chakra's own recipe,
     // and map the pair onto a 5.0 role — see `Button.legacy.ts`.
-    const { colorPalette: legacyPalette, ...rest } =
-      restWithLegacy as typeof restWithLegacy & { colorPalette?: unknown };
+    const {
+      colorPalette: legacyPalette,
+      loadingText: loadingTextProp,
+      ...rest
+    } = restWithLegacy as typeof restWithLegacy & { colorPalette?: unknown };
+    // A busy button says what it is doing: 처리 중 unless the call site names
+    // the verb (저장 중). `loadingText={null}` opts out — spinner only, and the
+    // button keeps its width.
+    const translate = useTranslate();
+    const loadingText =
+      loadingTextProp === undefined
+        ? translate('processing')
+        : (loadingTextProp ?? undefined);
 
     let variant: ButtonVariant = variantProp ?? 'subtle';
     let isDestructive = isDestructiveProp;
@@ -149,6 +161,7 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         data-variant={variant}
         data-destructive={isDestructive || undefined}
+        loadingText={loadingText}
         {...rest}
         // The `action` icon rule lives in `css` (a nested selector cannot be a
         // style prop); merged so a call site's `css` adds to it.
