@@ -133,6 +133,11 @@ describe('Avatar.Group max', () => {
     expect(roots).toHaveLength(4);
     const counter = roots[3];
     expect(counter.textContent).toBe('+2');
+    // Phrasing content, so `<Avatar.Group as="span">` can sit in a button.
+    expect(counter.tagName).toBe('SPAN');
+    expect(counter.querySelector('[data-part="fallback"]')?.tagName).toBe(
+      'SPAN'
+    );
     expect(declarations(counter)).toContain(
       '--chakra-colors-color-palette-surface:var(--chakra-colors-category-neutral-surface)'
     );
