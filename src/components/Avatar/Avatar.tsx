@@ -158,8 +158,14 @@ const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
       <ChakraAvatarGroupTyped ref={ref} {...rest}>
         {visible}
         {overflow > 0 && (
-          <AvatarRoot colorPalette="category.neutral" variant="subtle">
-            <AvatarFallback>+{overflow}</AvatarFallback>
+          // Spans so a group inside a button (a popover trigger) stays phrasing
+          // content; the recipe sets the display, so nothing else changes.
+          <AvatarRoot
+            as="span"
+            colorPalette="category.neutral"
+            variant="subtle"
+          >
+            <AvatarFallback as="span">+{overflow}</AvatarFallback>
           </AvatarRoot>
         )}
       </ChakraAvatarGroupTyped>
