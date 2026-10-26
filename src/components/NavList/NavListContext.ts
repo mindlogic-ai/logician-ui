@@ -4,6 +4,7 @@ import type { NavListResponsiveOrientation } from './NavList.types';
 
 export const NavListContext = createContext<{
   orientation: NavListResponsiveOrientation;
-}>({ orientation: 'vertical' });
+  isCollapsed: boolean;
+}>({ orientation: 'vertical', isCollapsed: false });
 
 export const useNavListContext = () => useContext(NavListContext);

@@ -6,6 +6,9 @@ export type {
   NavListOrientation,
   NavListProps,
   NavListResponsiveOrientation,
+  NavListSkeletonProps,
+  NavListTrailingActionVisibility,
 } from './NavList.types';
 export { NavListGroup } from './NavListGroup';
 export { NavListItem } from './NavListItem';
+export { NavListSkeleton } from './NavListSkeleton';

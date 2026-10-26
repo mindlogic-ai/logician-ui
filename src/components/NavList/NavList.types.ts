@@ -36,7 +36,18 @@ export type NavListProps = Omit<HTMLChakraProps<'ul'>, 'children'> & {
   'aria-label'?: string;
   /** As `aria-label`, pointing at a visible heading. Also makes it a `<nav>`. */
   'aria-labelledby'?: string;
+  /**
+   * The collapsed rail: every row is a 40px icon-only square whose label is
+   * still its accessible name (visually hidden) and shows as a tooltip on
+   * hover and keyboard focus. `trailingVisual`, `trailingAction` and group
+   * titles are hidden; a collapsible group shows its rows. Every row needs a
+   * `leadingVisual` in this mode. Vertical only.
+   * @default false
+   */
+  isCollapsed?: boolean;
 };
+
+export type NavListTrailingActionVisibility = 'always' | 'hover';
 
 export type NavListItemProps = Omit<
   HTMLChakraProps<'a'>,
@@ -78,6 +89,25 @@ export type NavListItemProps = Omit<
    * inside it, so there is no interactive element nested in another.
    */
   trailingAction?: ReactNode;
+  /**
+   * `hover`: the trailing action is transparent until the row is hovered, or
+   * focus is anywhere in the row, or the action's own menu is open
+   * (`aria-expanded="true"` / `data-state="open"` inside it). It is never
+   * removed, so Tab still reaches it — focusing it is what reveals it. Always
+   * shown on touch screens (`hover: none`), where there is no hover to reveal it.
+   * @default 'always'
+   */
+  trailingActionVisibility?: NavListTrailingActionVisibility;
+  /**
+   * A tooltip that adds to the label — a description, or why a row is
+   * disabled. It becomes the row's accessible DESCRIPTION
+   * (`aria-describedby`), so it must not repeat the label.
+   *
+   * Label tooltips need no prop: a label cut off by the ellipsis shows itself
+   * in full on hover/focus, and every row of a collapsed list shows its label.
+   * Those are not wired as a description, because they would read the name twice.
+   */
+  tooltip?: ReactNode;
 };
 
 export type NavListGroupProps = Omit<
@@ -91,4 +121,23 @@ export type NavListGroupProps = Omit<
    * does not add a level to the page outline.
    */
   title?: ReactNode;
+  /**
+   * The title becomes a `<button aria-expanded>` that shows and hides the
+   * group's rows. Needs a `title`. Persisting the state (local storage, a
+   * store) is the caller's: pass `isOpen` + `onOpenChange`.
+   * @default false
+   */
+  isCollapsible?: boolean;
+  /** Controlled open state of a collapsible group. */
+  isOpen?: boolean;
+  /** Uncontrolled initial state of a collapsible group. @default true */
+  defaultOpen?: boolean;
+  onOpenChange?: (isOpen: boolean) => void;
+};
+
+export type NavListSkeletonProps = Omit<HTMLChakraProps<'ul'>, 'children'> & {
+  /** How many placeholder rows. @default 5 */
+  count?: number;
+  /** Lay the placeholders out like the list they stand in for. @default 'vertical' */
+  orientation?: NavListResponsiveOrientation;
 };

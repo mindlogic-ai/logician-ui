@@ -1,8 +1,16 @@
 import { forwardRef } from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
-import { render, screen } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
+
+import { LogicianProvider } from '@/components/LogicianProvider';
 
 import { system } from '../../theme';
 import { NavList } from './NavList';
@@ -16,6 +24,20 @@ const RouterLink = forwardRef<
   React.AnchorHTMLAttributes<HTMLAnchorElement>
 >((props, ref) => <a ref={ref} data-router-link="" {...props} />);
 RouterLink.displayName = 'RouterLink';
+
+beforeAll(() => {
+  // LogicianProvider's color-mode machinery calls it on mount; jsdom has none.
+  window.matchMedia = ((query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: () => {},
+    removeListener: () => {},
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    dispatchEvent: () => false,
+  })) as unknown as typeof window.matchMedia;
+});
 
 describe('NavList', () => {
   describe('structure', () => {
@@ -333,6 +355,327 @@ describe('NavList', () => {
       await user.click(screen.getByRole('link', { name: 'A' }));
       expect(onClick).toHaveBeenCalledTimes(1);
       expect(onChildClick).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('data-current', () => {
+    it('marks the current link, button and router link — and nothing else', () => {
+      const { container } = renderUi(
+        <NavList aria-label="메뉴">
+          <NavList.Item href="/a" isCurrent>
+            A
+          </NavList.Item>
+          <NavList.Item onClick={() => {}} isCurrent>
+            B
+          </NavList.Item>
+          <NavList.Item asChild isCurrent>
+            <RouterLink href="/c">C</RouterLink>
+          </NavList.Item>
+          <NavList.Item href="/d">D</NavList.Item>
+        </NavList>
+      );
+      const marked = container.querySelectorAll('[data-current]');
+      expect([...marked].map((el) => el.textContent)).toEqual(['A', 'B', 'C']);
+      // On the element that carries the role, so `[data-current]` is the row.
+      marked.forEach((el) => expect(el).toHaveAttribute('aria-current'));
+    });
+  });
+
+  describe('new window', () => {
+    it('says so in the name of a target=_blank link', () => {
+      renderUi(
+        <NavList aria-label="메뉴">
+          <NavList.Item href="https://docs.example" target="_blank">
+            문서
+          </NavList.Item>
+          <NavList.Item href="/a">설정</NavList.Item>
+        </NavList>
+      );
+      expect(
+        screen.getByRole('link', { name: '문서 (새 창 열림)' })
+      ).toHaveAttribute('target', '_blank');
+      expect(screen.getByRole('link', { name: '설정' })).toBeInTheDocument();
+    });
+
+    it('reads target from an asChild router link, in the provider language', () => {
+      render(
+        <LogicianProvider language="en" loadFonts={false}>
+          <NavList aria-label="Menu">
+            <NavList.Item asChild>
+              <RouterLink href="https://docs.example" target="_blank">
+                Docs
+              </RouterLink>
+            </NavList.Item>
+          </NavList>
+        </LogicianProvider>
+      );
+      expect(
+        screen.getByRole('link', { name: 'Docs (opens in a new window)' })
+      ).toBeInTheDocument();
+    });
+
+    it('a disabled link opens nothing, so it neither says so nor keeps target', () => {
+      renderUi(
+        <NavList aria-label="메뉴">
+          <NavList.Item href="https://x.example" target="_blank" isDisabled>
+            문서
+          </NavList.Item>
+        </NavList>
+      );
+      const link = screen.getByRole('link', { name: '문서' });
+      expect(link).not.toHaveAttribute('target');
+    });
+  });
+
+  describe('tooltip', () => {
+    const hover = async (el: HTMLElement) => {
+      fireEvent.pointerMove(el, { pointerType: 'mouse' });
+      await act(() => new Promise((r) => setTimeout(r, 400)));
+    };
+
+    it('`tooltip` is the row DESCRIPTION, opens on hover and closes on Escape; the click still lands', async () => {
+      const user = userEvent.setup();
+      const onClick = vi.fn();
+      renderUi(
+        <NavList aria-label="메뉴">
+          <NavList.Item onClick={onClick} tooltip="팀 전체가 쓰는 공간">
+            공유 드라이브
+          </NavList.Item>
+        </NavList>
+      );
+      const row = screen.getByRole('button', { name: '공유 드라이브' });
+      await hover(row);
+      const tip = await screen.findByRole('tooltip');
+      expect(tip).toHaveTextContent('팀 전체가 쓰는 공간');
+      expect(row).toHaveAccessibleDescription('팀 전체가 쓰는 공간');
+      expect(row).toHaveAccessibleName('공유 드라이브');
+      await user.keyboard('{Escape}');
+      await waitFor(() => expect(screen.queryByRole('tooltip')).toBeNull());
+      await user.click(row);
+      expect(onClick).toHaveBeenCalledTimes(1);
+    });
+
+    it('opens on keyboard focus', async () => {
+      const user = userEvent.setup();
+      renderUi(
+        <NavList aria-label="메뉴">
+          <NavList.Item href="/a" tooltip="설명">
+            A
+          </NavList.Item>
+        </NavList>
+      );
+      await user.tab();
+      expect(await screen.findByRole('tooltip')).toHaveTextContent('설명');
+    });
+
+    describe('overflow label', () => {
+      afterEach(() => vi.restoreAllMocks());
+      const widths = (scroll: number, client: number) => {
+        vi.spyOn(HTMLElement.prototype, 'scrollWidth', 'get').mockReturnValue(
+          scroll
+        );
+        vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockReturnValue(
+          client
+        );
+      };
+
+      it('shows the full label only when the ellipsis cuts it off, and not as a description', async () => {
+        widths(300, 120);
+        renderUi(
+          <NavList aria-label="메뉴">
+            <NavList.Item href="/a">
+              영업팀 — 2026년 하반기 제안서와 계약서 보관함
+            </NavList.Item>
+          </NavList>
+        );
+        const row = screen.getByRole('link');
+        await hover(row);
+        await waitFor(() =>
+          expect(
+            document.querySelector('[data-part="content"][data-state="open"]')
+          ).toHaveTextContent('영업팀 — 2026년 하반기 제안서와 계약서 보관함')
+        );
+        // The label is already the name; reading it again as a description is noise.
+        expect(row).toHaveAccessibleDescription('');
+        expect(row).toHaveAccessibleName(
+          '영업팀 — 2026년 하반기 제안서와 계약서 보관함'
+        );
+      });
+
+      it('stays closed when the label fits', async () => {
+        widths(80, 120);
+        renderUi(
+          <NavList aria-label="메뉴">
+            <NavList.Item href="/a">짧음</NavList.Item>
+          </NavList>
+        );
+        await hover(screen.getByRole('link'));
+        expect(
+          document.querySelector('[data-part="content"][data-state="open"]')
+        ).toBeNull();
+      });
+    });
+  });
+
+  describe('isCollapsed', () => {
+    it('keeps the label as the name, drops trailing visuals and actions, and tooltips the label', async () => {
+      renderUi(
+        <NavList aria-label="메뉴" isCollapsed>
+          <NavList.Item
+            href="/a"
+            isCurrent
+            leadingVisual={<svg data-testid="icon" />}
+            trailingVisual="12"
+            trailingAction={<button type="button">옵션</button>}
+          >
+            멤버 관리
+          </NavList.Item>
+        </NavList>
+      );
+      const row = screen.getByRole('link', { name: '멤버 관리' });
+      expect(row).toHaveAttribute('aria-current', 'page');
+      expect(screen.queryByText('12')).toBeNull();
+      expect(screen.queryByRole('button', { name: '옵션' })).toBeNull();
+      fireEvent.pointerMove(row, { pointerType: 'mouse' });
+      await act(() => new Promise((r) => setTimeout(r, 400)));
+      await waitFor(() =>
+        expect(
+          document.querySelector('[data-part="content"][data-state="open"]')
+        ).toHaveTextContent('멤버 관리')
+      );
+      expect(row).toHaveAccessibleDescription('');
+    });
+
+    it('still names group lists, and shows a collapsible group’s rows', () => {
+      renderUi(
+        <NavList aria-label="메뉴" isCollapsed>
+          <NavList.Group title="관리" isCollapsible defaultOpen={false}>
+            <NavList.Item href="/a" leadingVisual={<svg />}>
+              A
+            </NavList.Item>
+          </NavList.Group>
+        </NavList>
+      );
+      expect(screen.getByRole('list', { name: '관리' })).toBeVisible();
+      expect(screen.queryByRole('button', { name: '관리' })).toBeNull();
+      expect(screen.getByRole('link', { name: 'A' })).toBeVisible();
+    });
+  });
+
+  describe('trailingActionVisibility="hover"', () => {
+    it('keeps the action in the DOM and in the tab order', async () => {
+      const user = userEvent.setup();
+      renderUi(
+        <NavList aria-label="세션">
+          <NavList.Item
+            href="/s/1"
+            trailingActionVisibility="hover"
+            trailingAction={<button type="button">세션 1 더 보기</button>}
+          >
+            세션 1
+          </NavList.Item>
+        </NavList>
+      );
+      await user.tab();
+      await user.tab();
+      expect(
+        screen.getByRole('button', { name: '세션 1 더 보기' })
+      ).toHaveFocus();
+    });
+  });
+
+  describe('collapsible group', () => {
+    it('is a disclosure: aria-expanded, aria-controls, rows hidden when closed', async () => {
+      const user = userEvent.setup();
+      const onOpenChange = vi.fn();
+      renderUi(
+        <NavList aria-label="메뉴">
+          <NavList.Group title="관리" isCollapsible onOpenChange={onOpenChange}>
+            <NavList.Item href="/a">A</NavList.Item>
+          </NavList.Group>
+        </NavList>
+      );
+      const trigger = screen.getByRole('button', { name: '관리' });
+      expect(trigger).toHaveAttribute('aria-expanded', 'true');
+      const list = screen.getByRole('list', { name: '관리' });
+      expect(trigger).toHaveAttribute('aria-controls', list.id);
+      await user.click(trigger);
+      expect(trigger).toHaveAttribute('aria-expanded', 'false');
+      expect(onOpenChange).toHaveBeenLastCalledWith(false);
+      expect(screen.queryByRole('link', { name: 'A' })).toBeNull();
+    });
+
+    it('follows a controlled isOpen and only reports clicks', async () => {
+      const user = userEvent.setup();
+      const onOpenChange = vi.fn();
+      renderUi(
+        <NavList aria-label="메뉴">
+          <NavList.Group
+            title="관리"
+            isCollapsible
+            isOpen={false}
+            onOpenChange={onOpenChange}
+          >
+            <NavList.Item href="/a">A</NavList.Item>
+          </NavList.Group>
+        </NavList>
+      );
+      const trigger = screen.getByRole('button', { name: '관리' });
+      await user.click(trigger);
+      expect(onOpenChange).toHaveBeenCalledWith(true);
+      // Still closed: the caller owns the state.
+      expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    });
+  });
+
+  describe('Skeleton', () => {
+    it('renders the requested rows, hidden from assistive tech', () => {
+      const { container } = renderUi(<NavList.Skeleton count={3} />);
+      const ul = container.querySelector('ul');
+      expect(ul).toHaveAttribute('aria-hidden', 'true');
+      expect(ul?.querySelectorAll('li')).toHaveLength(3);
+    });
+  });
+
+  describe('router links', () => {
+    it('onClick + preventDefault reaches the router link as defaultPrevented', async () => {
+      const user = userEvent.setup();
+      let seen: boolean | undefined;
+      renderUi(
+        <NavList>
+          <NavList.Item asChild onClick={(e) => e.preventDefault()}>
+            <RouterLink
+              href="/a"
+              onClick={(e) => {
+                seen = e.defaultPrevented;
+              }}
+            >
+              A
+            </RouterLink>
+          </NavList.Item>
+        </NavList>
+      );
+      await user.click(screen.getByRole('link', { name: 'A' }));
+      expect(seen).toBe(true);
+    });
+
+    it('leaves modifier clicks alone, so cmd/ctrl-click can open a new tab', () => {
+      const onClick = vi.fn();
+      renderUi(
+        <NavList>
+          <NavList.Item href="/a" onClick={onClick}>
+            A
+          </NavList.Item>
+        </NavList>
+      );
+      const event = new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+        metaKey: true,
+      });
+      screen.getByRole('link', { name: 'A' }).dispatchEvent(event);
+      expect(onClick).toHaveBeenCalledTimes(1);
+      expect(event.defaultPrevented).toBe(false);
     });
   });
 });

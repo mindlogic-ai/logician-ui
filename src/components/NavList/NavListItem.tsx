@@ -8,13 +8,18 @@ import {
   MouseEventHandler,
   ReactElement,
   ReactNode,
+  SyntheticEvent,
+  useRef,
 } from 'react';
-import { chakra } from '@chakra-ui/react';
+import { chakra, VisuallyHidden } from '@chakra-ui/react';
 
+import { Tooltip } from '@/components/Tooltip';
+import { useTranslate } from '@/hooks/useTranslate';
 import { disabledText } from '@/utils/disabledControl';
 import { focusRingInset } from '@/utils/focusRing';
 
 import { byOrientation, NAV_LIST_RAMP } from './NavList.styles';
+import NavListTranslations from './NavList.translations.json';
 import { NavListItemProps } from './NavList.types';
 import { useNavListContext } from './NavListContext';
 
@@ -30,8 +35,13 @@ import { useNavListContext } from './NavListContext';
 type RouterChildProps = {
   children?: ReactNode;
   onClick?: MouseEventHandler<HTMLElement>;
+  target?: string;
   'aria-current'?: AriaAttributes['aria-current'];
 };
+
+/** The label span is cut off by its ellipsis. */
+const isTruncated = (el: HTMLElement | null) =>
+  el != null && el.scrollWidth > el.clientWidth + 1;
 
 export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
   (
@@ -45,14 +55,32 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
       leadingVisual,
       trailingVisual,
       trailingAction,
+      trailingActionVisibility = 'always',
+      tooltip,
       ...rest
     },
     ref
   ) => {
-    const { orientation } = useNavListContext();
+    const { orientation, isCollapsed } = useNavListContext();
+    const translate = useTranslate(NavListTranslations);
+    const labelRef = useRef<HTMLSpanElement>(null);
     const isLink = asChild || href != null;
 
-    const content = (label: ReactNode) => (
+    const child = isLink && asChild ? Children.only(children) : null;
+    if (asChild && !isValidElement<RouterChildProps>(child)) {
+      throw new Error(
+        'NavList.Item with asChild needs exactly one element child'
+      );
+    }
+    const routerChild = child as ReactElement<RouterChildProps> | null;
+    const label = routerChild ? routerChild.props.children : children;
+    const opensNewWindow =
+      !isDisabled &&
+      isLink &&
+      (routerChild?.props.target ?? (rest as { target?: string }).target) ===
+        '_blank';
+
+    const content = (
       <>
         {leadingVisual != null && (
           <chakra.span
@@ -64,16 +92,25 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
             {leadingVisual}
           </chakra.span>
         )}
-        <chakra.span
-          flex={byOrientation(orientation, '1 1 auto', '0 0 auto')}
-          minW={0}
-          overflow="hidden"
-          textOverflow="ellipsis"
-          whiteSpace="nowrap"
-        >
-          {label}
-        </chakra.span>
-        {trailingVisual != null && (
+        {isCollapsed ? (
+          <VisuallyHidden>{label}</VisuallyHidden>
+        ) : (
+          <chakra.span
+            ref={labelRef}
+            flex={byOrientation(orientation, '1 1 auto', '0 0 auto')}
+            minW={0}
+            overflow="hidden"
+            textOverflow="ellipsis"
+            whiteSpace="nowrap"
+          >
+            {label}
+          </chakra.span>
+        )}
+        {/* KWCAG 2.1 — a link that opens a new window says so in its name. */}
+        {opensNewWindow && (
+          <VisuallyHidden>{` (${translate('nav_list_opens_new_window')})`}</VisuallyHidden>
+        )}
+        {trailingVisual != null && !isCollapsed && (
           <chakra.span
             display="inline-flex"
             alignItems="center"
@@ -89,6 +126,38 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
       </>
     );
 
+    // One tooltip per row, three jobs. Collapsed: the label, beside the icon.
+    // `tooltip`: the caller's description. Otherwise: the label again, only
+    // while the ellipsis is actually cutting it off.
+    const tooltipKind = isCollapsed
+      ? 'label'
+      : tooltip != null
+        ? 'description'
+        : 'overflow';
+
+    // The overflow tooltip is gated at the trigger: zag skips opening when the
+    // event that would open it was `defaultPrevented`, and the row's own
+    // handlers run before zag's. A controlled `open` cannot do this — zag
+    // enters its open state first and only re-syncs when the prop CHANGES.
+    const restHandlers = rest as {
+      onPointerMove?: (e: SyntheticEvent) => void;
+      onPointerOver?: (e: SyntheticEvent) => void;
+      onFocus?: (e: SyntheticEvent) => void;
+    };
+    const gate =
+      (handler?: (e: SyntheticEvent) => void) => (event: SyntheticEvent) => {
+        if (!isTruncated(labelRef.current)) event.preventDefault();
+        handler?.(event);
+      };
+    const overflowGate =
+      tooltipKind === 'overflow'
+        ? {
+            onPointerMove: gate(restHandlers.onPointerMove),
+            onPointerOver: gate(restHandlers.onPointerOver),
+            onFocus: gate(restHandlers.onFocus),
+          }
+        : undefined;
+
     const handleClick = (event: MouseEvent<HTMLElement>) => {
       // Belt and braces: a disabled `<button>` fires no click and a disabled
       // link has no `href`, so this only guards a caller who forces one.
@@ -99,33 +168,44 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
       onClick?.(event);
     };
 
+    // The fill lives on the `<li>`, not the row, so a trailing action sits on
+    // the same surface: hovering the action keeps the row lit, and the current
+    // row's fill runs under its action instead of stopping short of it.
     const rowStyles = {
       display: 'flex',
       alignItems: 'center',
+      justifyContent: isCollapsed ? 'center' : undefined,
       gap: 2,
-      flex: byOrientation(orientation, '1 1 auto', '0 0 auto'),
+      flex: isCollapsed
+        ? '0 0 auto'
+        : byOrientation(orientation, '1 1 auto', '0 0 auto'),
       minW: 0,
-      minH: 9,
-      px: 2.5,
-      py: 2,
+      minH: isCollapsed ? 10 : 9,
+      w: isCollapsed ? 10 : undefined,
+      px: isCollapsed ? 0 : 2.5,
+      py: isCollapsed ? 0 : 2,
       borderRadius: 'md',
       border: 'none',
+      bg: 'transparent',
       textAlign: 'start',
       textDecoration: 'none',
       textStyle: 'p',
       cursor: 'pointer',
       color: isCurrent ? NAV_LIST_RAMP.currentLabel : NAV_LIST_RAMP.label,
-      bg: isCurrent ? NAV_LIST_RAMP.currentFill : 'transparent',
       fontWeight: isCurrent ? 'bold' : 'normal',
-      // No hover change while disabled, and none on the current row either —
-      // its fill is already the hover fill.
-      _hover: isDisabled
-        ? undefined
-        : { bg: NAV_LIST_RAMP.hoverFill, textDecoration: 'none' },
+      _hover: { textDecoration: 'none' },
       _disabled: { ...disabledText, cursor: 'not-allowed' },
       // Inset: rows sit 2px apart and a horizontal rail scrolls, so the
       // outward ring would land on the neighbour or be clipped.
       ...focusRingInset,
+    } as const;
+
+    // Both state attributes go on the element that carries the role, and on
+    // the router child's own props when there is one (its props win the
+    // `asChild` merge). `data-current` is the hook for scroll-to-current.
+    const stateProps = {
+      'aria-current': isCurrent ? (isLink ? 'page' : 'true') : undefined,
+      'data-current': isCurrent ? '' : undefined,
     } as const;
 
     let row: ReactElement;
@@ -135,29 +215,23 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
           ref={ref as React.Ref<HTMLButtonElement>}
           type="button"
           disabled={isDisabled}
-          aria-current={isCurrent ? 'true' : undefined}
+          {...stateProps}
           onClick={handleClick}
           {...rowStyles}
           // The prop type is the anchor's; the global attributes and style
           // props it carries are the same on a button.
           {...(rest as unknown as React.ComponentProps<typeof chakra.button>)}
+          {...overflowGate}
         >
-          {content(children)}
+          {content}
         </chakra.button>
       );
     } else {
-      const child = asChild ? Children.only(children) : null;
-      if (asChild && !isValidElement<RouterChildProps>(child)) {
-        throw new Error(
-          'NavList.Item with asChild needs exactly one element child'
-        );
-      }
-      const routerChild = child as ReactElement<RouterChildProps> | null;
-      const label = routerChild ? routerChild.props.children : children;
       const linkProps = {
         ref: ref as React.Ref<HTMLAnchorElement>,
         ...rowStyles,
         ...rest,
+        ...overflowGate,
       };
 
       if (isDisabled) {
@@ -170,10 +244,11 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
           <chakra.a
             role="link"
             aria-disabled="true"
-            aria-current={isCurrent ? 'page' : undefined}
+            {...stateProps}
             {...linkProps}
+            target={undefined}
           >
-            {content(label)}
+            {content}
           </chakra.a>
         );
       } else if (routerChild) {
@@ -186,13 +261,13 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
             {cloneElement(
               routerChild,
               {
-                'aria-current': isCurrent ? 'page' : undefined,
+                ...stateProps,
                 onClick: (event: MouseEvent<HTMLElement>) => {
                   handleClick(event);
                   routerChild.props.onClick?.(event);
                 },
               },
-              content(label)
+              content
             )}
           </chakra.a>
         );
@@ -200,15 +275,51 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
         row = (
           <chakra.a
             href={href}
-            aria-current={isCurrent ? 'page' : undefined}
+            {...stateProps}
             onClick={handleClick}
             {...linkProps}
           >
-            {content(label)}
+            {content}
           </chakra.a>
         );
       }
     }
+
+    // The two label tooltips name the tooltip itself (`aria-label`), which
+    // takes it out of the trigger's description — the row is already called that.
+    const tooltipContent = tooltipKind === 'description' ? tooltip : label;
+    const labelText =
+      typeof label === 'string' || typeof label === 'number'
+        ? String(label)
+        : undefined;
+    const withTooltip = (
+      <Tooltip
+        content={tooltipContent}
+        placement={isCollapsed ? 'right' : 'top'}
+        // Zag only checks that this is set; it is not rendered anywhere.
+        aria-label={
+          tooltipKind === 'description' ? undefined : (labelText ?? 'label')
+        }
+        contentProps={
+          tooltipKind === 'description' ? undefined : { 'aria-hidden': true }
+        }
+      >
+        {row}
+      </Tooltip>
+    );
+
+    const hoverFill = isDisabled ? undefined : { bg: NAV_LIST_RAMP.hoverFill };
+    const revealOnHover =
+      trailingActionVisibility === 'hover'
+        ? {
+            '& > [data-part="trailing-action"]': { opacity: 0 },
+            '&:hover > [data-part="trailing-action"], &:focus-within > [data-part="trailing-action"], & > [data-part="trailing-action"]:has([aria-expanded="true"], [data-state="open"])':
+              { opacity: 1 },
+            '@media (hover: none)': {
+              '& > [data-part="trailing-action"]': { opacity: 1 },
+            },
+          }
+        : undefined;
 
     return (
       <chakra.li
@@ -217,10 +328,20 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
         gap={0.5}
         flexShrink={0}
         minW={0}
+        borderRadius="md"
+        bg={isCurrent ? NAV_LIST_RAMP.currentFill : 'transparent'}
+        _hover={hoverFill}
+        css={revealOnHover}
       >
-        {row}
-        {trailingAction != null && (
-          <chakra.span display="inline-flex" alignItems="center" flexShrink={0}>
+        {withTooltip}
+        {trailingAction != null && !isCollapsed && (
+          <chakra.span
+            data-part="trailing-action"
+            display="inline-flex"
+            alignItems="center"
+            flexShrink={0}
+            pe={0.5}
+          >
             {trailingAction}
           </chakra.span>
         )}
