@@ -202,6 +202,7 @@ const PATHS: Record<FlatKey, string> = {
   'count-fg': 'count.fg',
   'disabled-bg': 'disabled.bg',
   'disabled-fg': 'disabled.fg',
+  'disabled-fgGhost': 'disabled.fgGhost',
   focus: 'focus.ring',
   'danger-bg': 'danger.bg',
   'danger-border': 'danger.border',
@@ -457,7 +458,7 @@ export type SemanticColorToken =
   | `action.${'mark' | 'iconOnSolid' | 'bg' | 'bgHover' | 'bgActive' | 'fg' | 'border'}`
   | `send.${'bg' | 'bgHover' | 'bgActive' | 'fg'}`
   | `count.${'bg' | 'fg'}`
-  | `disabled.${'bg' | 'fg'}`
+  | `disabled.${'bg' | 'fg' | 'fgGhost'}`
   | 'focus.ring'
   | `${StatusFamily}.${'bg' | 'border' | 'fg' | 'solid' | 'onSolid'}`
   | `danger.${'solidHover' | 'solidActive'}`

@@ -484,6 +484,9 @@ function buildScheme(n, s) {
     'count-fg': '#FFFFFF',
     'disabled-bg': '#EDEDED',
     'disabled-fg': '#8A8A8A',
+    // Fill-less (ghost) disabled glyph/label: lighter than disabled-fg so it
+    // separates from the resting fg-icon without a disabled-bg to help.
+    'disabled-fgGhost': '#C2C2C2',
     'fg-link': '#48607A',
     'fg-linkHover': '#295684',
     focus: iL[10],
@@ -563,6 +566,7 @@ function buildScheme(n, s) {
     'count-fg': '#FFFFFF',
     'disabled-bg': '#2C2C2C',
     'disabled-fg': '#737373',
+    'disabled-fgGhost': '#4A4A4A',
     'fg-link': '#AFC7E1',
     'fg-linkHover': '#8BB7E3',
     focus: A.primaryDark,

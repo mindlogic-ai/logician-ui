@@ -144,6 +144,15 @@ export const ButtonStates: Story = {
             token: 'disabled.fg',
             use: <T en="Disabled text" ko="비활성 글자" />,
           },
+          {
+            token: 'disabled.fgGhost',
+            use: (
+              <T
+                en="Disabled text/icon of a fill-less ghost button"
+                ko="바탕 없는 고스트 버튼의 비활성 글자·아이콘"
+              />
+            ),
+          },
         ]}
       />
     </Stack>

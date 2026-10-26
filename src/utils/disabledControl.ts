@@ -18,9 +18,16 @@ export const disabledControl = {
   boxShadow: 'none',
 } as const;
 
+/**
+ * Disabled look for fill-less (ghost) buttons — ghost Button, ghost
+ * IconButton. With no `disabled.bg` behind it the colour is the only cue, and
+ * `disabled.fg` sat ~1.4:1 from the resting ghost glyph (`fg.icon`), so the
+ * two read as the same state. `disabled.fgGhost` is a lighter grey (~2.7:1
+ * from `fg.icon` in light and dark).
+ */
 export const disabledText = {
   bg: 'transparent',
-  color: 'disabled.fg',
+  color: 'disabled.fgGhost',
   borderColor: 'transparent',
   opacity: 1,
   boxShadow: 'none',

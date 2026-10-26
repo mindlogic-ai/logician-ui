@@ -4,7 +4,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { system } from '../../theme';
 import { IconButton } from '../IconButton';
-import { getIconButtonStyles } from '../IconButton/IconButton.styles';
+import {
+  getIconButtonStyles,
+  iconButtonVariantStyles,
+} from '../IconButton/IconButton.styles';
 import { Button } from './Button';
 import {
   __resetLegacyButtonWarnings,
@@ -62,8 +65,17 @@ describe('Button variants (5.0)', () => {
       color: 'disabled.fg',
       opacity: 1,
     });
+    // Fill-less: no disabled.bg, so a lighter glyph/label carries the state.
     expect(buttonVariantStyles.ghost._disabled).toMatchObject({
       bg: 'transparent',
+      color: 'disabled.fgGhost',
+    });
+    expect(iconButtonVariantStyles.ghost._disabled).toMatchObject({
+      bg: 'transparent',
+      color: 'disabled.fgGhost',
+    });
+    expect(iconButtonVariantStyles.secondary._disabled).toMatchObject({
+      bg: 'disabled.bg',
       color: 'disabled.fg',
     });
   });

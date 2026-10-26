@@ -226,7 +226,8 @@ What Button does for you:
   pass `type="submit"` when it should.
 - A keyboard focus ring (`focus.ring` with a canvas-coloured inner band) on
   `:focus-visible` only, with no transition (WCAG 2.4.7).
-- Disabled is a fixed colour pair (`disabled.bg` / `disabled.fg`), not
+- Disabled is a fixed colour pair (`disabled.bg` / `disabled.fg`; the
+  fill-less `ghost` uses the lighter `disabled.fgGhost` label alone), not
   opacity, and does not react to hover or press. The cursor is `not-allowed`,
   and `progress` while `loading`.
 - `loading` disables the button and shows a spinner.
@@ -282,7 +283,8 @@ Button이 알아서 하는 일
   `type="submit"`을 줍니다.
 - 키보드 초점에만(`:focus-visible`) 초점 링을 그립니다. `focus.ring`에 바탕색 안쪽
   띠를 더한 모양이며, 전환 효과 없이 바로 나타납니다(WCAG 2.4.7).
-- 비활성 상태는 투명도가 아니라 고정된 색 한 쌍(`disabled.bg` / `disabled.fg`)이며,
+- 비활성 상태는 투명도가 아니라 고정된 색 한 쌍(`disabled.bg` / `disabled.fg`)이며
+  바탕이 없는 `ghost`는 더 옅은 글자색 `disabled.fgGhost`만 씁니다.
   마우스를 올리거나 눌러도 변하지 않습니다. 커서는 `not-allowed`이고, `loading`
   중에는 `progress`입니다.
 - `loading`을 주면 버튼이 비활성이 되고 스피너가 나타납니다.

@@ -306,6 +306,10 @@ const iconButtonTokenRows = () => {
   add('danger.fg', { en: 'isDestructive icon', ko: 'isDestructive 아이콘' });
   add('disabled.bg', { en: 'disabled fill', ko: '비활성 바탕' });
   add('disabled.fg', { en: 'disabled icon', ko: '비활성 아이콘' });
+  add('disabled.fgGhost', {
+    en: 'ghost disabled icon',
+    ko: 'ghost 비활성 아이콘',
+  });
   add('focus.ring', { en: 'keyboard focus ring', ko: '키보드 초점 링' });
   return [...uses].map(([token, list]) => ({
     token,

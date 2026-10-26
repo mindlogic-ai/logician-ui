@@ -172,7 +172,8 @@ What IconButton does for you:
 - The resting glyph on `ghost` and `secondary` is `fg.icon`, chosen for 3:1
   against the surface as a non-text graphic (WCAG 1.4.11).
 - Disabled is a fixed colour pair, not opacity, and does not react to hover or
-  press.
+  press. `ghost` has no fill to grey out, so its disabled glyph is the lighter
+  `disabled.fgGhost` — `disabled.fg` sat too close to the resting `fg.icon`.
 
 What you still have to do:
 
@@ -223,7 +224,8 @@ IconButton이 알아서 하는 일
 - `ghost`와 `secondary`의 평소 아이콘 색은 `fg.icon`입니다. 글자가 아닌 그래픽으로서
   바탕과 3:1 대비를 맞춘 값입니다(WCAG 1.4.11).
 - 비활성 상태는 투명도가 아니라 고정된 색 한 쌍이며, 마우스를 올리거나 눌러도 변하지
-  않습니다.
+  않습니다. `ghost`는 회색으로 바꿀 바탕이 없어서 비활성 아이콘을 더 옅은
+  `disabled.fgGhost`로 칠합니다. `disabled.fg`는 평소 아이콘 색 `fg.icon`과 거의 같아 보였습니다.
 
 직접 챙겨야 하는 일
 
