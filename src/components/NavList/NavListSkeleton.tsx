@@ -30,15 +30,25 @@ export const NavListSkeleton = forwardRef<
         display="flex"
         alignItems="center"
         flexShrink={0}
+        // The row's own box: `minH`, padding and one line of `p` text, so
+        // the placeholder is exactly as tall as the row that replaces it.
         minH={9}
         px={2.5}
+        py={2}
+        textStyle="p"
         w={byOrientation(orientation, 'auto', '96px')}
       >
         <Skeleton
           h={4}
           w={byOrientation(orientation, WIDTHS[i % WIDTHS.length], 'full')}
           borderRadius="sm"
+          // A placeholder that stops pulsing is still a placeholder; there
+          // is no progress for the motion to carry.
+          _motionReduce={{ animation: 'none' }}
         />
+        <chakra.span w={0} overflow="hidden">
+          {'\u00A0'}
+        </chakra.span>
       </chakra.li>
     ))}
   </chakra.ul>

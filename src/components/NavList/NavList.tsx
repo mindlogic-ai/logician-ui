@@ -2,11 +2,12 @@ import {
   forwardRef,
   useCallback,
   useEffect,
-  useImperativeHandle,
+  useLayoutEffect,
   useMemo,
   useRef,
+  useState,
 } from 'react';
-import { chakra } from '@chakra-ui/react';
+import { chakra, mergeRefs } from '@chakra-ui/react';
 
 import { byOrientation, listStyles } from './NavList.styles';
 import { NavListProps } from './NavList.types';
@@ -15,18 +16,24 @@ import { NavListGroup } from './NavListGroup';
 import { NavListItem } from './NavListItem';
 import { NavListSkeleton } from './NavListSkeleton';
 
+const useIsomorphicLayoutEffect =
+  typeof window === 'undefined' ? useEffect : useLayoutEffect;
+
 /**
  * Bring the current row into a sideways-scrolling list's visible range, by
  * moving that list's own `scrollLeft` only — never `scrollIntoView`, which
  * also scrolls the page and every scrolling ancestor. A no-op when the list
  * does not scroll sideways (a vertical rail) or the row is already in view.
  */
-const revealCurrentHorizontally = (list: HTMLUListElement | null) => {
-  if (!list || list.scrollWidth <= list.clientWidth) return;
-  const current = list.querySelector<HTMLElement>('[data-current]');
-  if (!current) return;
+const revealCurrentHorizontally = (
+  list: HTMLUListElement,
+  current: Element
+) => {
+  if (list.scrollWidth <= list.clientWidth) return;
   const listBox = list.getBoundingClientRect();
   const rowBox = (current.closest('li') ?? current).getBoundingClientRect();
+  // Inside a closed group the row has no box; there is nothing to show.
+  if (rowBox.width === 0) return;
   if (rowBox.left < listBox.left) {
     list.scrollLeft -= listBox.left - rowBox.left;
   } else if (rowBox.right > listBox.right) {
@@ -66,31 +73,51 @@ const NavListRoot = forwardRef<HTMLUListElement, NavListProps>(
     const isLandmark = ariaLabel != null || ariaLabelledBy != null;
     // A collapsed rail is a column of icons; it has no sideways form.
     const axis = isCollapsed ? 'vertical' : orientation;
-    const context = useMemo(
-      () => ({ orientation: axis, isCollapsed }),
-      [axis, isCollapsed]
-    );
     const listRef = useRef<HTMLUListElement>(null);
-    useImperativeHandle(ref, () => listRef.current as HTMLUListElement);
+    const mergedRef = useMemo(() => mergeRefs(ref, listRef), [ref]);
 
-    // After every render — the current row may have changed, or the list may
-    // have just laid down into a strip at a breakpoint — and on resize.
-    const reveal = useCallback(
-      () => revealCurrentHorizontally(listRef.current),
-      []
-    );
-    useEffect(reveal);
+    // Reveal the current row when it CHANGES (a row reports it from its own
+    // effect, so this works even when only that row re-rendered) and when the
+    // list is resized — a strip that just laid down at a breakpoint. Not on
+    // every render: a re-render must not snap back a strip the user scrolled.
+    const lastRevealed = useRef<Element | null>(null);
+    const reveal = useCallback((force = false) => {
+      const list = listRef.current;
+      const current = list?.querySelector('[data-current]');
+      if (!list || !current) return;
+      if (!force && current === lastRevealed.current) return;
+      lastRevealed.current = current;
+      revealCurrentHorizontally(list, current);
+    }, []);
     useEffect(() => {
       const list = listRef.current;
+      reveal();
       if (!list || typeof ResizeObserver === 'undefined') return;
-      const observer = new ResizeObserver(reveal);
+      const observer = new ResizeObserver(() => reveal(true));
       observer.observe(list);
       return () => observer.disconnect();
     }, [reveal]);
 
+    // Zag stamps `dir` on every tooltip trigger — the rows — from Ark's
+    // locale, which is `ltr` unless an Ark LocaleProvider says otherwise. Read
+    // the direction the list actually inherits and hand it to the rows, or a
+    // rail inside `dir="rtl"` lays its rows out left to right.
+    const [dir, setDir] = useState<'ltr' | 'rtl'>('ltr');
+    useIsomorphicLayoutEffect(() => {
+      const list = listRef.current;
+      if (!list) return;
+      const next = getComputedStyle(list).direction === 'rtl' ? 'rtl' : 'ltr';
+      if (next !== dir) setDir(next);
+    });
+
+    const context = useMemo(
+      () => ({ orientation: axis, isCollapsed, dir, revealCurrent: reveal }),
+      [axis, isCollapsed, dir, reveal]
+    );
+
     const list = (
       <chakra.ul
-        ref={listRef}
+        ref={mergedRef}
         {...listStyles(axis)}
         alignItems={
           isCollapsed ? 'center' : byOrientation(axis, 'stretch', 'center')

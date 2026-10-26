@@ -100,8 +100,10 @@ export type NavListItemProps = Omit<
   trailingActionVisibility?: NavListTrailingActionVisibility;
   /**
    * A tooltip that adds to the label — a description, or why a row is
-   * disabled. It becomes the row's accessible DESCRIPTION
-   * (`aria-describedby`), so it must not repeat the label.
+   * disabled. It is also the row's accessible DESCRIPTION, through a hidden
+   * element that is referenced whether or not the tooltip is open — so a
+   * disabled row, which cannot take focus, still says why. It must not repeat
+   * the label. In a collapsed list it shows under the label.
    *
    * Label tooltips need no prop: a label cut off by the ellipsis shows itself
    * in full on hover/focus, and every row of a collapsed list shows its label.

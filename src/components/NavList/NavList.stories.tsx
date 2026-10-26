@@ -435,6 +435,7 @@ export const TooltipsAndNewWindow: Story = {
         <NavList.Item
           href="#sso"
           isDisabled
+          tooltip="엔터프라이즈 요금제에서 쓸 수 있습니다"
           leadingVisual={<SettingsIcon boxSize="sm" />}
         >
           SSO

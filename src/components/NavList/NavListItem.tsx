@@ -9,9 +9,18 @@ import {
   ReactElement,
   ReactNode,
   SyntheticEvent,
+  useEffect,
+  useId,
   useRef,
+  useState,
 } from 'react';
-import { chakra, VisuallyHidden } from '@chakra-ui/react';
+import {
+  Box,
+  chakra,
+  LocaleProvider,
+  useLocaleContext,
+  VisuallyHidden,
+} from '@chakra-ui/react';
 
 import { Tooltip } from '@/components/Tooltip';
 import { useTranslate } from '@/hooks/useTranslate';
@@ -61,9 +70,16 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
     },
     ref
   ) => {
-    const { orientation, isCollapsed } = useNavListContext();
+    const { orientation, isCollapsed, dir, revealCurrent } =
+      useNavListContext();
     const translate = useTranslate(NavListTranslations);
     const labelRef = useRef<HTMLSpanElement>(null);
+    const descriptionId = useId();
+    const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+
+    useEffect(() => {
+      if (isCurrent) revealCurrent();
+    }, [isCurrent, revealCurrent]);
     const isLink = asChild || href != null;
 
     const child = isLink && asChild ? Children.only(children) : null;
@@ -158,6 +174,23 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
           }
         : undefined;
 
+    // The description is a visually hidden element of its own, referenced
+    // all the time — not the tooltip, which zag only references while it is
+    // open. A disabled row cannot take focus, so a description that existed
+    // only while open would never reach a keyboard or screen-reader user,
+    // which is exactly when "why is this disabled" matters. The tooltip
+    // itself is then never a description (`aria-label` on its root takes its
+    // id away), and while it is open the row's own value — the caller's ids,
+    // or an empty list — outranks the dangling id zag would leave behind.
+    const callerDescribedBy = (rest as { 'aria-describedby'?: string })[
+      'aria-describedby'
+    ];
+    const describedBy =
+      [callerDescribedBy, tooltip != null ? descriptionId : undefined]
+        .filter(Boolean)
+        .join(' ') || (isTooltipOpen ? '' : undefined);
+    const describedByProps = { 'aria-describedby': describedBy };
+
     const handleClick = (event: MouseEvent<HTMLElement>) => {
       // Belt and braces: a disabled `<button>` fires no click and a disabled
       // link has no `href`, so this only guards a caller who forces one.
@@ -221,6 +254,7 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
           // The prop type is the anchor's; the global attributes and style
           // props it carries are the same on a button.
           {...(rest as unknown as React.ComponentProps<typeof chakra.button>)}
+          {...describedByProps}
           {...overflowGate}
         >
           {content}
@@ -231,6 +265,7 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
         ref: ref as React.Ref<HTMLAnchorElement>,
         ...rowStyles,
         ...rest,
+        ...describedByProps,
         ...overflowGate,
       };
 
@@ -262,6 +297,7 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
               routerChild,
               {
                 ...stateProps,
+                ...describedByProps,
                 onClick: (event: MouseEvent<HTMLElement>) => {
                   handleClick(event);
                   routerChild.props.onClick?.(event);
@@ -287,7 +323,17 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
 
     // The two label tooltips name the tooltip itself (`aria-label`), which
     // takes it out of the trigger's description — the row is already called that.
-    const tooltipContent = tooltipKind === 'description' ? tooltip : label;
+    const tooltipContent =
+      tooltipKind === 'description' ? (
+        tooltip
+      ) : isCollapsed && tooltip != null ? (
+        <>
+          {label}
+          <Box>{tooltip}</Box>
+        </>
+      ) : (
+        label
+      );
     const labelText =
       typeof label === 'string' || typeof label === 'number'
         ? String(label)
@@ -296,24 +342,35 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
       <Tooltip
         content={tooltipContent}
         placement={isCollapsed ? 'right' : 'top'}
-        // Zag only checks that this is set; it is not rendered anywhere.
-        aria-label={
-          tooltipKind === 'description' ? undefined : (labelText ?? 'label')
-        }
-        contentProps={
-          tooltipKind === 'description' ? undefined : { 'aria-hidden': true }
-        }
+        onOpenChange={({ open }) => setIsTooltipOpen(open)}
+        // Zag only checks that this is set — it takes the content's id and
+        // role away, so the trigger is never described by the tooltip. Not
+        // rendered anywhere. The description, if any, is `descriptionId`.
+        aria-label={labelText ?? 'tooltip'}
+        contentProps={{ 'aria-hidden': true }}
       >
         {row}
       </Tooltip>
     );
+
+    // Zag stamps `dir` on the trigger — this row — from Ark's locale, which
+    // is `ltr` unless an Ark LocaleProvider says otherwise. Keep the inherited
+    // locale when its direction matches the one the list measured; otherwise
+    // switch to one that does, so a rail in `dir="rtl"` lays out right to left.
+    const inherited = useLocaleContext();
+    const locale =
+      inherited.dir === dir ? inherited.locale : dir === 'rtl' ? 'ar' : 'en-US';
 
     const hoverFill = isDisabled ? undefined : { bg: NAV_LIST_RAMP.hoverFill };
     const revealOnHover =
       trailingActionVisibility === 'hover'
         ? {
             '& > [data-part="trailing-action"]': { opacity: 0 },
-            '&:hover > [data-part="trailing-action"], &:focus-within > [data-part="trailing-action"], & > [data-part="trailing-action"]:has([aria-expanded="true"], [data-state="open"])':
+            '&:hover > [data-part="trailing-action"], &:focus-within > [data-part="trailing-action"]':
+              { opacity: 1 },
+            // Its own rule: `:has()` is not forgiving, and a browser without
+            // it would drop every selector listed beside it.
+            '& > [data-part="trailing-action"]:has([aria-expanded="true"], [data-state="open"])':
               { opacity: 1 },
             '@media (hover: none)': {
               '& > [data-part="trailing-action"]': { opacity: 1 },
@@ -333,7 +390,14 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
         _hover={hoverFill}
         css={revealOnHover}
       >
-        {withTooltip}
+        <LocaleProvider locale={locale}>{withTooltip}</LocaleProvider>
+        {tooltip != null && (
+          // `hidden`, not visually hidden: a description reference still
+          // reads hidden text, and browse mode does not read it a second time.
+          <chakra.span id={descriptionId} hidden>
+            {tooltip}
+          </chakra.span>
+        )}
         {trailingAction != null && !isCollapsed && (
           <chakra.span
             data-part="trailing-action"

@@ -445,14 +445,58 @@ describe('NavList', () => {
       );
       const row = screen.getByRole('button', { name: '공유 드라이브' });
       await hover(row);
-      const tip = await screen.findByRole('tooltip');
-      expect(tip).toHaveTextContent('팀 전체가 쓰는 공간');
+      const openTip = () =>
+        document.querySelector('[data-part="content"][data-state="open"]');
+      await waitFor(() =>
+        expect(openTip()).toHaveTextContent('팀 전체가 쓰는 공간')
+      );
       expect(row).toHaveAccessibleDescription('팀 전체가 쓰는 공간');
       expect(row).toHaveAccessibleName('공유 드라이브');
       await user.keyboard('{Escape}');
-      await waitFor(() => expect(screen.queryByRole('tooltip')).toBeNull());
+      await waitFor(() => expect(openTip()).toBeNull());
       await user.click(row);
       expect(onClick).toHaveBeenCalledTimes(1);
+    });
+
+    it('a disabled row still carries its tooltip as a description, closed', () => {
+      renderUi(
+        <NavList aria-label="메뉴">
+          <NavList.Item
+            onClick={() => {}}
+            isDisabled
+            tooltip="엔터프라이즈 요금제에서 쓸 수 있습니다"
+          >
+            SSO
+          </NavList.Item>
+          <NavList.Item href="/a" isDisabled tooltip="권한이 없습니다">
+            감사 로그
+          </NavList.Item>
+        </NavList>
+      );
+      expect(
+        screen.getByRole('button', { name: 'SSO' })
+      ).toHaveAccessibleDescription('엔터프라이즈 요금제에서 쓸 수 있습니다');
+      expect(
+        screen.getByRole('link', { name: '감사 로그' })
+      ).toHaveAccessibleDescription('권한이 없습니다');
+      // Not read a second time as text in the list item.
+      expect(screen.queryByText('권한이 없습니다')).not.toBeVisible();
+    });
+
+    it("keeps the caller's own aria-describedby beside the tooltip's", () => {
+      renderUi(
+        <>
+          <p id="hint">새 기능</p>
+          <NavList aria-label="메뉴">
+            <NavList.Item href="/a" aria-describedby="hint" tooltip="설명">
+              A
+            </NavList.Item>
+          </NavList>
+        </>
+      );
+      expect(
+        screen.getByRole('link', { name: 'A' })
+      ).toHaveAccessibleDescription('새 기능 설명');
     });
 
     it('opens on keyboard focus', async () => {
@@ -465,7 +509,11 @@ describe('NavList', () => {
         </NavList>
       );
       await user.tab();
-      expect(await screen.findByRole('tooltip')).toHaveTextContent('설명');
+      await waitFor(() =>
+        expect(
+          document.querySelector('[data-part="content"][data-state="open"]')
+        ).toHaveTextContent('설명')
+      );
     });
 
     describe('overflow label', () => {
@@ -544,6 +592,34 @@ describe('NavList', () => {
         ).toHaveTextContent('멤버 관리')
       );
       expect(row).toHaveAccessibleDescription('');
+      // While open, no reference to a tooltip id that does not exist.
+      const ids = (row.getAttribute('aria-describedby') ?? '')
+        .split(' ')
+        .filter(Boolean);
+      ids.forEach((id) => expect(document.getElementById(id)).not.toBeNull());
+    });
+
+    it('shows a description under the label and keeps it as the description', async () => {
+      renderUi(
+        <NavList aria-label="메뉴" isCollapsed>
+          <NavList.Item
+            href="/a"
+            leadingVisual={<svg />}
+            tooltip="멤버 초대와 권한"
+          >
+            멤버 관리
+          </NavList.Item>
+        </NavList>
+      );
+      const row = screen.getByRole('link', { name: '멤버 관리' });
+      expect(row).toHaveAccessibleDescription('멤버 초대와 권한');
+      fireEvent.pointerMove(row, { pointerType: 'mouse' });
+      await act(() => new Promise((r) => setTimeout(r, 400)));
+      await waitFor(() =>
+        expect(
+          document.querySelector('[data-part="content"][data-state="open"]')
+        ).toHaveTextContent('멤버 관리멤버 초대와 권한')
+      );
     });
 
     it('still names group lists, and shows a collapsible group’s rows', () => {
