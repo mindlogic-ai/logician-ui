@@ -19,6 +19,12 @@ import type {
  * read as different, and `bg.emphasized` is 0.052 (measured in that file).
  * Hover uses the same fill, so the current row does not change under the
  * pointer and a hovered row previews exactly what selecting it looks like.
+ *
+ * `currentLabel` is `fg.emphasized`, which the theme aliases to `fg.default`
+ * today — so on the stock theme the current row is told apart by WEIGHT and
+ * FILL, not by a second ink. The role is still named separately so a theme
+ * that splits the two (and the app's nav rail, which reads the same pair)
+ * moves the current label without touching the rest.
  */
 export const NAV_LIST_RAMP = {
   label: 'fg.default',
@@ -51,3 +57,19 @@ export const byOrientation = <T>(
     ])
   );
 };
+
+/** The list box shared by the root list and every group's list. */
+export const listStyles = (orientation: NavListResponsiveOrientation) =>
+  ({
+    listStyleType: 'none',
+    m: 0,
+    p: 0,
+    display: 'flex',
+    gap: 0.5,
+    minW: 0,
+    flexDirection: byOrientation(orientation, 'column', 'row'),
+    alignItems: byOrientation(orientation, 'stretch', 'center'),
+    // A row never wraps: a strip that grows to three lines as items are added
+    // eats the content it navigates. The root scrolls sideways instead.
+    flexWrap: 'nowrap',
+  }) as const;

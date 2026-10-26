@@ -1,8 +1,9 @@
 import { forwardRef, useId } from 'react';
 import { chakra } from '@chakra-ui/react';
 
-import { Overline } from '../Typography/Overline';
-import { byOrientation, NAV_LIST_RAMP } from './NavList.styles';
+import { Overline } from '@/components/Typography/Overline';
+
+import { byOrientation, listStyles, NAV_LIST_RAMP } from './NavList.styles';
 import { NavListGroupProps } from './NavList.types';
 import { useNavListContext } from './NavListContext';
 
@@ -21,6 +22,14 @@ export const NavListGroup = forwardRef<HTMLLIElement, NavListGroupProps>(
     const titleId = useId();
     const hasTitle = title != null && title !== false;
 
+    // Space on the axis the rows stack along, on both sides of a group: before
+    // it unless it opens the list, and before whatever row follows it, so the
+    // row after a group does not read as one more member of it.
+    const gapBefore = {
+      marginTop: byOrientation(orientation, 3, 0),
+      marginInlineStart: byOrientation(orientation, 0, 3),
+    };
+
     return (
       <chakra.li
         ref={ref}
@@ -30,13 +39,9 @@ export const NavListGroup = forwardRef<HTMLLIElement, NavListGroupProps>(
         gap={0.5}
         flexShrink={0}
         minW={0}
-        // Space before a group that follows other rows or groups, on the axis
-        // they stack along.
         css={{
-          '&:not(:first-child)': {
-            marginTop: byOrientation(orientation, 3, 0),
-            marginInlineStart: byOrientation(orientation, 0, 3),
-          },
+          '&:not(:first-child)': gapBefore,
+          '& + li': gapBefore,
         }}
         {...rest}
       >
@@ -47,8 +52,7 @@ export const NavListGroup = forwardRef<HTMLLIElement, NavListGroupProps>(
             display="block"
             color={NAV_LIST_RAMP.groupTitle}
             px={2.5}
-            pt={byOrientation(orientation, 1, 0)}
-            pb={byOrientation(orientation, 1, 0)}
+            py={byOrientation(orientation, 1, 0)}
             whiteSpace="nowrap"
           >
             {title}
@@ -56,14 +60,7 @@ export const NavListGroup = forwardRef<HTMLLIElement, NavListGroupProps>(
         )}
         <chakra.ul
           aria-labelledby={hasTitle ? titleId : undefined}
-          listStyleType="none"
-          m={0}
-          p={0}
-          display="flex"
-          flexDirection={byOrientation(orientation, 'column', 'row')}
-          alignItems={byOrientation(orientation, 'stretch', 'center')}
-          gap={0.5}
-          minW={0}
+          {...listStyles(orientation)}
         >
           {children}
         </chakra.ul>

@@ -63,8 +63,9 @@ export type NavListItemProps = Omit<
    */
   isCurrent?: boolean;
   /**
-   * A button becomes `disabled`; a link loses its `href` (or, with `asChild`,
-   * cancels the click) and leaves the tab order, with `aria-disabled`.
+   * A button becomes `disabled`. A link — `asChild` included — is rendered
+   * as an `<a role="link" aria-disabled="true">` with no `href`: still
+   * announced as a link, out of the tab order, and nothing to open in a new tab.
    */
   isDisabled?: boolean;
   /** Icon before the label. Decorative — the label names the row. */

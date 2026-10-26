@@ -262,9 +262,9 @@ describe('NavList', () => {
       expect(onClick).not.toHaveBeenCalled();
     });
 
-    it('a disabled link loses its href and is skipped by Tab', async () => {
+    it('a disabled link is still a link, with aria-disabled, no href, skipped by Tab', async () => {
       const user = userEvent.setup();
-      const { container } = renderUi(
+      renderUi(
         <NavList aria-label="메뉴">
           <NavList.Item href="/a" isDisabled>
             A
@@ -272,28 +272,67 @@ describe('NavList', () => {
           <NavList.Item href="/b">B</NavList.Item>
         </NavList>
       );
-      const disabled = container.querySelector('[aria-disabled="true"]');
-      expect(disabled?.tagName).toBe('A');
+      const disabled = screen.getByRole('link', { name: 'A' });
+      expect(disabled.tagName).toBe('A');
+      expect(disabled).toHaveAttribute('aria-disabled', 'true');
       expect(disabled).not.toHaveAttribute('href');
       await user.tab();
       expect(screen.getByRole('link', { name: 'B' })).toHaveFocus();
     });
 
-    it('a disabled asChild link cancels the click and leaves the tab order', async () => {
+    it('a disabled asChild link drops the router link and its handlers entirely', async () => {
       const user = userEvent.setup();
       const onClick = vi.fn();
-      renderUi(
+      const onChildClick = vi.fn();
+      const { container } = renderUi(
         <NavList>
           <NavList.Item asChild isDisabled onClick={onClick}>
-            <RouterLink href="/a">A</RouterLink>
+            <RouterLink href="/a" onClick={onChildClick}>
+              A
+            </RouterLink>
           </NavList.Item>
         </NavList>
       );
       const link = screen.getByRole('link', { name: 'A' });
-      expect(link).toHaveAttribute('tabindex', '-1');
       expect(link).toHaveAttribute('aria-disabled', 'true');
+      expect(link).not.toHaveAttribute('href');
+      expect(container.querySelector('[data-router-link]')).toBeNull();
       await user.click(link);
       expect(onClick).not.toHaveBeenCalled();
+      expect(onChildClick).not.toHaveBeenCalled();
+    });
+
+    it("isCurrent wins over a router link's own aria-current", () => {
+      renderUi(
+        <NavList>
+          <NavList.Item asChild>
+            <RouterLink href="/a" aria-current="page">
+              A
+            </RouterLink>
+          </NavList.Item>
+        </NavList>
+      );
+      expect(screen.getByRole('link', { name: 'A' })).not.toHaveAttribute(
+        'aria-current'
+      );
+    });
+
+    it("runs both the item's and the router link's click handlers", async () => {
+      const user = userEvent.setup();
+      const onClick = vi.fn((e: React.MouseEvent) => e.preventDefault());
+      const onChildClick = vi.fn();
+      renderUi(
+        <NavList>
+          <NavList.Item asChild onClick={onClick}>
+            <RouterLink href="/a" onClick={onChildClick}>
+              A
+            </RouterLink>
+          </NavList.Item>
+        </NavList>
+      );
+      await user.click(screen.getByRole('link', { name: 'A' }));
+      expect(onClick).toHaveBeenCalledTimes(1);
+      expect(onChildClick).toHaveBeenCalledTimes(1);
     });
   });
 });

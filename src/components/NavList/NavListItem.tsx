@@ -1,9 +1,11 @@
 import {
+  AriaAttributes,
   Children,
   cloneElement,
   forwardRef,
   isValidElement,
   MouseEvent,
+  MouseEventHandler,
   ReactElement,
   ReactNode,
 } from 'react';
@@ -25,6 +27,12 @@ import { useNavListContext } from './NavListContext';
  * arrow-key handling on purpose — a rail of links is not a composite widget,
  * and roving focus would hide every row but one from the tab order.
  */
+type RouterChildProps = {
+  children?: ReactNode;
+  onClick?: MouseEventHandler<HTMLElement>;
+  'aria-current'?: AriaAttributes['aria-current'];
+};
+
 export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
   (
     {
@@ -82,9 +90,9 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
     );
 
     const handleClick = (event: MouseEvent<HTMLElement>) => {
+      // Belt and braces: a disabled `<button>` fires no click and a disabled
+      // link has no `href`, so this only guards a caller who forces one.
       if (isDisabled) {
-        // Only reachable on a link: a disabled `<button>` fires no click. An
-        // `asChild` router link keeps its href, so cancel the navigation here.
         event.preventDefault();
         return;
       }
@@ -121,44 +129,7 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
     } as const;
 
     let row: ReactElement;
-    if (asChild) {
-      const child = Children.only(children);
-      if (!isValidElement<{ children?: ReactNode }>(child)) {
-        throw new Error(
-          'NavList.Item with asChild needs exactly one element child'
-        );
-      }
-      row = (
-        <chakra.a
-          ref={ref as React.Ref<HTMLAnchorElement>}
-          asChild
-          aria-current={isCurrent ? 'page' : undefined}
-          aria-disabled={isDisabled || undefined}
-          tabIndex={isDisabled ? -1 : undefined}
-          onClick={handleClick}
-          {...rowStyles}
-          {...rest}
-        >
-          {cloneElement(child, undefined, content(child.props.children))}
-        </chakra.a>
-      );
-    } else if (isLink) {
-      row = (
-        <chakra.a
-          ref={ref as React.Ref<HTMLAnchorElement>}
-          // A disabled link has no destination: without `href` it is not a
-          // link, so it leaves the tab order and cannot be opened in a new tab.
-          href={isDisabled ? undefined : href}
-          aria-current={isCurrent ? 'page' : undefined}
-          aria-disabled={isDisabled || undefined}
-          onClick={handleClick}
-          {...rowStyles}
-          {...rest}
-        >
-          {content(children)}
-        </chakra.a>
-      );
-    } else {
+    if (!isLink) {
       row = (
         <chakra.button
           ref={ref as React.Ref<HTMLButtonElement>}
@@ -174,6 +145,69 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
           {content(children)}
         </chakra.button>
       );
+    } else {
+      const child = asChild ? Children.only(children) : null;
+      if (asChild && !isValidElement<RouterChildProps>(child)) {
+        throw new Error(
+          'NavList.Item with asChild needs exactly one element child'
+        );
+      }
+      const routerChild = child as ReactElement<RouterChildProps> | null;
+      const label = routerChild ? routerChild.props.children : children;
+      const linkProps = {
+        ref: ref as React.Ref<HTMLAnchorElement>,
+        ...rowStyles,
+        ...rest,
+      };
+
+      if (isDisabled) {
+        // A disabled link has no destination, so it is not rendered as one —
+        // not even the router link, which would keep its href for middle-click,
+        // "open in new tab" and prefetch. Still announced as a link, with
+        // `aria-disabled`, the same way whether or not `asChild` was used. With
+        // no `href` it is out of the tab order.
+        row = (
+          <chakra.a
+            role="link"
+            aria-disabled="true"
+            aria-current={isCurrent ? 'page' : undefined}
+            {...linkProps}
+          >
+            {content(label)}
+          </chakra.a>
+        );
+      } else if (routerChild) {
+        // Our state goes on the CHILD's props, not on the slot: Chakra's
+        // `asChild` merge lets the child's own props win, so a router NavLink
+        // that sets its own `aria-current` would otherwise contradict
+        // `isCurrent`. The child's own click handler still runs, after ours.
+        row = (
+          <chakra.a asChild {...linkProps}>
+            {cloneElement(
+              routerChild,
+              {
+                'aria-current': isCurrent ? 'page' : undefined,
+                onClick: (event: MouseEvent<HTMLElement>) => {
+                  handleClick(event);
+                  routerChild.props.onClick?.(event);
+                },
+              },
+              content(label)
+            )}
+          </chakra.a>
+        );
+      } else {
+        row = (
+          <chakra.a
+            href={href}
+            aria-current={isCurrent ? 'page' : undefined}
+            onClick={handleClick}
+            {...linkProps}
+          >
+            {content(label)}
+          </chakra.a>
+        );
+      }
     }
 
     return (

@@ -152,8 +152,10 @@ What NavList does for you:
   5.2.4.2, see `ACCESSIBILITY.md`).
 - `trailingAction` is rendered beside the row, never inside it — no
   interactive element nested in another.
-- A disabled button is `disabled`; a disabled link loses its `href` and gets
-  `aria-disabled`. Both use the fixed `disabled.fg` ink, never opacity.
+- A disabled button is `disabled`. A disabled link (router links included)
+  keeps the link role with `aria-disabled` but has no `href`, so it is out of
+  the tab order and cannot be opened in a new tab. Both use the fixed
+  `disabled.fg` ink, never opacity.
 
 What you still have to do:
 
@@ -198,8 +200,9 @@ NavList가 알아서 하는 일
   문서 개요에 끼어들지 않습니다(KWCAG 5.2.4.2, `ACCESSIBILITY.md` 참고).
 - `trailingAction`은 항목 안이 아니라 옆에 그립니다. 상호작용 요소 안에 다른 상호작용 요소가
   들어가지 않습니다.
-- 쓸 수 없는 버튼은 `disabled`가 되고, 쓸 수 없는 링크는 `href`를 잃고 `aria-disabled`가
-  붙습니다. 둘 다 투명도가 아니라 고정된 `disabled.fg` 색을 씁니다.
+- 쓸 수 없는 버튼은 `disabled`가 됩니다. 쓸 수 없는 링크는 라우터 링크를 포함해 링크로
+  읽히고 `aria-disabled`가 붙지만 `href`가 없습니다. 그래서 Tab 순서에서 빠지고 새 탭으로도
+  열리지 않습니다. 둘 다 투명도가 아니라 고정된 `disabled.fg` 색을 씁니다.
 
 직접 챙겨야 하는 일
 

@@ -1,7 +1,7 @@
-import { forwardRef } from 'react';
+import { forwardRef, useMemo } from 'react';
 import { chakra } from '@chakra-ui/react';
 
-import { byOrientation } from './NavList.styles';
+import { byOrientation, listStyles } from './NavList.styles';
 import { NavListProps } from './NavList.types';
 import { NavListContext } from './NavListContext';
 import { NavListGroup } from './NavListGroup';
@@ -19,8 +19,12 @@ import { NavListItem } from './NavListItem';
  * page has more than one `nav`, and a list inside the app sidebar is already
  * inside one — so the name is what decides whether this is a landmark of its
  * own, rather than a flag the caller has to remember next to it.
+ *
+ * The ref and every other prop land on the `<ul>` either way — it is the flex
+ * and scroll container, so `gap`, `onScroll` and `ref.current.scrollLeft` mean
+ * the same thing whether or not the list is named.
  */
-const NavListRoot = forwardRef<HTMLElement, NavListProps>(
+const NavListRoot = forwardRef<HTMLUListElement, NavListProps>(
   (
     {
       orientation = 'vertical',
@@ -32,29 +36,14 @@ const NavListRoot = forwardRef<HTMLElement, NavListProps>(
     ref
   ) => {
     const isLandmark = ariaLabel != null || ariaLabelledBy != null;
+    const context = useMemo(() => ({ orientation }), [orientation]);
 
-    const listStyles = {
-      listStyleType: 'none',
-      m: 0,
-      p: 0,
-      display: 'flex',
-      gap: 0.5,
-      minW: 0,
-      flexDirection: byOrientation(orientation, 'column', 'row'),
-      alignItems: byOrientation(orientation, 'stretch', 'center'),
-      // A row never wraps: a strip that grows to three lines as items are
-      // added eats the content it navigates. It scrolls sideways instead.
-      flexWrap: 'nowrap',
-      overflowX: byOrientation(orientation, 'visible', 'auto'),
-      overflowY: byOrientation(orientation, 'visible', 'hidden'),
-    } as const;
-
-    const list = isLandmark ? (
-      <chakra.ul {...listStyles}>{children}</chakra.ul>
-    ) : (
+    const list = (
       <chakra.ul
-        ref={ref as React.Ref<HTMLUListElement>}
-        {...listStyles}
+        ref={ref}
+        {...listStyles(orientation)}
+        overflowX={byOrientation(orientation, 'visible', 'auto')}
+        overflowY={byOrientation(orientation, 'visible', 'hidden')}
         {...rest}
       >
         {children}
@@ -62,14 +51,12 @@ const NavListRoot = forwardRef<HTMLElement, NavListProps>(
     );
 
     return (
-      <NavListContext.Provider value={{ orientation }}>
+      <NavListContext.Provider value={context}>
         {isLandmark ? (
           <chakra.nav
-            ref={ref}
             aria-label={ariaLabel}
             aria-labelledby={ariaLabelledBy}
             minW={0}
-            {...(rest as React.ComponentProps<typeof chakra.nav>)}
           >
             {list}
           </chakra.nav>
