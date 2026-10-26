@@ -1,11 +1,23 @@
-import { forwardRef, useId, useState } from 'react';
-import { chakra, VisuallyHidden } from '@chakra-ui/react';
+import { forwardRef, useEffect, useId, useRef, useState } from 'react';
+import {
+  chakra,
+  Collapsible as ChakraCollapsible,
+  LocaleProvider,
+  useLocaleContext,
+} from '@chakra-ui/react';
 
 import { ChevronDownIcon } from '@/components/Icon';
 import { Overline } from '@/components/Typography/Overline';
 import { focusRingInset } from '@/utils/focusRing';
 
-import { byOrientation, listStyles, NAV_LIST_RAMP } from './NavList.styles';
+import {
+  byOrientation,
+  inheritDirection,
+  listStyles,
+  localeFor,
+  NAV_LIST_RAMP,
+  pressedFill,
+} from './NavList.styles';
 import { NavListGroupProps } from './NavList.types';
 import { useNavListContext } from './NavListContext';
 
@@ -21,7 +33,15 @@ import { useNavListContext } from './NavListContext';
  * `isCollapsible` turns the title into a disclosure button
  * (`aria-expanded` + `aria-controls`); the list stays labelled by the title
  * text. A collapsed RAIL (`NavList isCollapsed`) shows every group's rows and
- * hides the titles visually — a column of icons has no room for either.
+ * folds the titles away visually — a column of icons has no room for either.
+ *
+ * The rows open and close on Collapsible's own motion: Ark's collapsible
+ * measures the list into `--height`, the recipe's `expand-height` /
+ * `collapse-height` move it, and `animationStyle="presence"` sets the house
+ * clock (300ms in, 150ms out) with a fade instead of the height under reduced
+ * motion. Ark sets `hidden` once the close has finished, so closed rows are
+ * out of the tab order and the accessibility tree; `inert` covers the 150ms
+ * the list is still leaving, so a closing row cannot be tabbed into.
  */
 export const NavListGroup = forwardRef<HTMLLIElement, NavListGroupProps>(
   (
@@ -36,13 +56,23 @@ export const NavListGroup = forwardRef<HTMLLIElement, NavListGroupProps>(
     },
     ref
   ) => {
-    const { orientation, isCollapsed } = useNavListContext();
+    const { orientation, isCollapsed, tooltipDir } = useNavListContext();
+    const inherited = useLocaleContext();
     const titleId = useId();
     const listId = useId();
     const hasTitle = title != null && title !== false;
     const [isOpenState, setIsOpenState] = useState(defaultOpen);
-    const canCollapse = isCollapsible && hasTitle && !isCollapsed;
+    // The disclosure exists whenever the caller asked for one; a collapsed
+    // rail only forces it open, so toggling the rail does not remount rows.
+    const isDisclosure = isCollapsible && hasTitle;
+    const canCollapse = isDisclosure && !isCollapsed;
     const isOpen = !canCollapse || (isOpenProp ?? isOpenState);
+    const listRef = useRef<HTMLUListElement>(null);
+    // A DOM property rather than the attribute: React 18 does not know
+    // `inert`, and 19 reads it as a boolean.
+    useEffect(() => {
+      if (listRef.current) listRef.current.inert = !isOpen;
+    }, [isOpen]);
 
     const toggle = () => {
       const next = !isOpen;
@@ -73,9 +103,7 @@ export const NavListGroup = forwardRef<HTMLLIElement, NavListGroupProps>(
     );
 
     let heading = null;
-    if (hasTitle && isCollapsed) {
-      heading = <VisuallyHidden id={titleId}>{title}</VisuallyHidden>;
-    } else if (canCollapse) {
+    if (canCollapse) {
       heading = (
         <chakra.button
           type="button"
@@ -95,6 +123,7 @@ export const NavListGroup = forwardRef<HTMLLIElement, NavListGroupProps>(
           color={NAV_LIST_RAMP.groupTitle}
           textAlign="start"
           _hover={{ bg: NAV_LIST_RAMP.hoverFill }}
+          _active={pressedFill}
           {...focusRingInset}
         >
           {titleText}
@@ -102,7 +131,12 @@ export const NavListGroup = forwardRef<HTMLLIElement, NavListGroupProps>(
             aria-hidden
             boxSize={4}
             flexShrink={0}
-            transform={isOpen ? undefined : 'rotate(-90deg)'}
+            // Closed points to the inline end: right, or left on an RTL page.
+            rotate={isOpen ? '0deg' : '-90deg'}
+            _rtl={{ rotate: isOpen ? '0deg' : '90deg' }}
+            // Turns with the list, on the same clock as its enter.
+            animationStyle="travel"
+            transitionProperty="rotate"
           />
         </chakra.button>
       );
@@ -117,17 +151,60 @@ export const NavListGroup = forwardRef<HTMLLIElement, NavListGroupProps>(
         </chakra.span>
       );
     }
+    // A collapsed rail has no room for titles. The title folds to no height
+    // and fades on the rows' clock instead of being swapped out, so the rows
+    // under it slide up with the rail rather than jumping. It stays in the
+    // DOM either way: it is what names the group's list.
+    if (heading) {
+      heading = (
+        <chakra.div
+          display="grid"
+          gridTemplateRows={isCollapsed ? '0fr' : '1fr'}
+          opacity={isCollapsed ? 0 : 1}
+          animationStyle="feedback"
+          transitionProperty="grid-template-rows, opacity"
+        >
+          <chakra.div
+            minH={0}
+            overflow="hidden"
+            display="flex"
+            flexDirection="column"
+          >
+            {heading}
+          </chakra.div>
+        </chakra.div>
+      );
+    }
 
-    return (
+    const listProps = {
+      id: listId,
+      'aria-labelledby': hasTitle ? titleId : undefined,
+      ...listStyles(orientation),
+      alignItems: byOrientation(orientation, 'stretch', 'center'),
+      ...inheritDirection,
+    } as const;
+
+    const list = isDisclosure ? (
+      <ChakraCollapsible.Content
+        asChild
+        animationStyle="presence"
+        // `hidden` loses to the list's own `display: flex`.
+        css={{ '&[hidden]': { display: 'none' } }}
+      >
+        <chakra.ul ref={listRef} {...listProps}>
+          {children}
+        </chakra.ul>
+      </ChakraCollapsible.Content>
+    ) : (
+      <chakra.ul {...listProps}>{children}</chakra.ul>
+    );
+
+    const group = (
       <chakra.li
         ref={ref}
         display="flex"
         flexDirection={byOrientation(orientation, 'column', 'row')}
-        alignItems={
-          isCollapsed
-            ? 'center'
-            : byOrientation(orientation, 'stretch', 'center')
-        }
+        alignItems={byOrientation(orientation, 'stretch', 'center')}
         gap={0.5}
         flexShrink={0}
         minW={0}
@@ -135,25 +212,30 @@ export const NavListGroup = forwardRef<HTMLLIElement, NavListGroupProps>(
           '&:not(:first-child)': gapBefore,
           '& + li': gapBefore,
         }}
+        {...inheritDirection}
         {...rest}
       >
-        {heading}
-        <chakra.ul
-          id={listId}
-          aria-labelledby={hasTitle ? titleId : undefined}
-          hidden={!isOpen}
-          {...listStyles(orientation)}
-          // `hidden` alone loses to the list's own `display: flex`.
-          display={isOpen ? 'flex' : 'none'}
-          alignItems={
-            isCollapsed
-              ? 'center'
-              : byOrientation(orientation, 'stretch', 'center')
-          }
-        >
-          {children}
-        </chakra.ul>
+        <LocaleProvider locale={inherited.locale}>
+          {heading}
+          {list}
+        </LocaleProvider>
       </chakra.li>
+    );
+
+    if (!isDisclosure) return group;
+    // The title stays our own button, so `aria-expanded` flips on the click
+    // rather than when the closing animation ends, and the rail can force the
+    // group open without the button having a say.
+    return (
+      // Zag stamps `dir` on the group and its list; give it the measured
+      // direction so the attributes agree with the layout after mount. The
+      // layout does not read it (`inheritDirection`), and the rows inside get
+      // the caller's own locale back.
+      <LocaleProvider locale={localeFor(inherited, tooltipDir)}>
+        <ChakraCollapsible.Root asChild open={isOpen} ids={{ content: listId }}>
+          {group}
+        </ChakraCollapsible.Root>
+      </LocaleProvider>
     );
   }
 );

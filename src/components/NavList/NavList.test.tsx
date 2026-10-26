@@ -1,4 +1,5 @@
-import { forwardRef } from 'react';
+import { forwardRef, useId } from 'react';
+import { renderToString } from 'react-dom/server';
 import { ChakraProvider } from '@chakra-ui/react';
 import {
   act,
@@ -11,9 +12,13 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { LogicianProvider } from '@/components/LogicianProvider';
+import { Menu } from '@/components/Menu';
+import { Tooltip } from '@/components/Tooltip';
 
 import { system } from '../../theme';
+import { SCHEMES } from '../../theme/palette.generated';
 import { NavList } from './NavList';
+import { NAV_LIST_RAMP } from './NavList.styles';
 
 const renderUi = (ui: React.ReactNode) =>
   render(<ChakraProvider value={system}>{ui}</ChakraProvider>);
@@ -24,6 +29,83 @@ const RouterLink = forwardRef<
   React.AnchorHTMLAttributes<HTMLAnchorElement>
 >((props, ref) => <a ref={ref} data-router-link="" {...props} />);
 RouterLink.displayName = 'RouterLink';
+
+/**
+ * Every emitted rule whose selector names one of `el`'s classes, as
+ * `[at-rule, selector, declarations]`. jsdom runs no transitions and no
+ * `:active`, so what is checked is which declarations reach the element —
+ * the same approach as `Collapsible.presence.test.tsx`.
+ */
+const rulesFor = (el: Element) => {
+  const css = Array.from(document.querySelectorAll('style'))
+    .map((s) => s.textContent ?? '')
+    .join('\n');
+  // Split into [at-rule, block] runs: top level, and each `@media` block.
+  const blocks: [string, string][] = [];
+  const top: string[] = [];
+  let i = 0;
+  while (i < css.length) {
+    const at = css.indexOf('@media', i);
+    if (at === -1) {
+      top.push(css.slice(i));
+      break;
+    }
+    top.push(css.slice(i, at));
+    const open = css.indexOf('{', at);
+    let depth = 1;
+    let j = open + 1;
+    const brace = /[{}]/g;
+    while (depth > 0) {
+      brace.lastIndex = j;
+      const next = brace.exec(css);
+      if (!next) break;
+      depth += next[0] === '{' ? 1 : -1;
+      j = next.index + 1;
+    }
+    blocks.push([css.slice(at, open), css.slice(open + 1, j - 1)]);
+    i = j;
+  }
+  blocks.push(['', top.join('')]);
+  const classes = el.className
+    .toString()
+    .split(' ')
+    .filter((c) => c.startsWith('css-'));
+  const rules = blocks.flatMap(([media, text]) =>
+    text.split('}').flatMap((piece) => {
+      const open = piece.indexOf('{');
+      return open === -1
+        ? []
+        : [
+            [
+              media,
+              piece.slice(0, open).trim(),
+              piece.slice(open + 1),
+            ] as const,
+          ];
+    })
+  );
+  return rules.filter(([, selector]) =>
+    classes.some((c) => new RegExp(`\\.${c}(?![\\w-])`).test(selector))
+  );
+};
+/** The declarations on the element itself — no condition, no descendant. */
+const ownDeclarations = (el: Element) =>
+  rulesFor(el)
+    .filter(([media, selector]) => !media && /^\.css-[\w-]+$/.test(selector))
+    .map(([, , body]) => body)
+    .join(';');
+/** WCAG relative-luminance contrast of two `#rrggbb` colours. */
+const contrast = (a: string, b: string) => {
+  const lum = (hex: string) => {
+    const [r, g, bl] = [1, 3, 5].map((i) => {
+      const v = parseInt(hex.slice(i, i + 2), 16) / 255;
+      return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+    });
+    return 0.2126 * r + 0.7152 * g + 0.0722 * bl;
+  };
+  const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+};
 
 beforeAll(() => {
   // LogicianProvider's color-mode machinery calls it on mount; jsdom has none.
@@ -582,7 +664,9 @@ describe('NavList', () => {
       );
       const row = screen.getByRole('link', { name: '멤버 관리' });
       expect(row).toHaveAttribute('aria-current', 'page');
-      expect(screen.queryByText('12')).toBeNull();
+      // The count stays in the DOM so it can fade with the label, but it is
+      // hidden — out of the name (asserted above) and out of sight.
+      expect(screen.getByText('12')).not.toBeVisible();
       expect(screen.queryByRole('button', { name: '옵션' })).toBeNull();
       fireEvent.pointerMove(row, { pointerType: 'mouse' });
       await act(() => new Promise((r) => setTimeout(r, 400)));
@@ -676,9 +760,86 @@ describe('NavList', () => {
       const list = screen.getByRole('list', { name: '관리' });
       expect(trigger).toHaveAttribute('aria-controls', list.id);
       await user.click(trigger);
+      // On the click, not when the closing animation ends.
       expect(trigger).toHaveAttribute('aria-expanded', 'false');
       expect(onOpenChange).toHaveBeenLastCalledWith(false);
+      // Out of reach while it is still leaving…
+      expect(list.inert).toBe(true);
+      // …and hidden once it has left.
+      await waitFor(() =>
+        expect(screen.queryByRole('link', { name: 'A' })).toBeNull()
+      );
+      expect(list).toHaveAttribute('hidden');
+      await user.click(trigger);
+      expect(trigger).toHaveAttribute('aria-expanded', 'true');
+      expect(list.inert).toBe(false);
+      expect(screen.getByRole('link', { name: 'A' })).toBeVisible();
+    });
+
+    it("animates on Collapsible's own motion: its keyframes, the presence clock, a fade under reduced motion", () => {
+      renderUi(
+        <NavList aria-label="메뉴">
+          <NavList.Group title="관리" isCollapsible>
+            <NavList.Item href="/a">A</NavList.Item>
+          </NavList.Group>
+        </NavList>
+      );
+      const list = screen.getByRole('list', { name: '관리' });
+      expect(list).toHaveAttribute('data-scope', 'collapsible');
+      const rules = rulesFor(list);
+      const all = rules.map(([, , body]) => body).join(';');
+      // The recipe's height keyframes, not new ones.
+      expect(all).toContain('animation-name:expand-height');
+      expect(all).toContain('animation-name:collapse-height');
+      // The house clock: 300ms in, 150ms out.
+      expect(all).toContain(
+        'animation-duration:var(--chakra-durations-motion-base)'
+      );
+      expect(all).toContain('animation-duration:var(--chakra-durations-fast)');
+      const reduced = rules
+        .filter(([media]) => media.includes('prefers-reduced-motion'))
+        .map(([, , body]) => body)
+        .join(';');
+      expect(reduced).toContain('animation-name:fade-in');
+      expect(reduced).toContain('animation-name:fade-out');
+      expect(reduced).not.toContain('height');
+    });
+
+    it('a closed group starts hidden and inert', () => {
+      renderUi(
+        <NavList aria-label="메뉴">
+          <NavList.Group title="관리" isCollapsible defaultOpen={false}>
+            <NavList.Item href="/a">A</NavList.Item>
+          </NavList.Group>
+        </NavList>
+      );
+      const list = document.getElementById(
+        screen
+          .getByRole('button', { name: '관리' })
+          .getAttribute('aria-controls')!
+      )!;
+      expect(list).toHaveAttribute('hidden');
+      expect(list.inert).toBe(true);
       expect(screen.queryByRole('link', { name: 'A' })).toBeNull();
+    });
+
+    it('collapsing the rail opens the group without remounting its rows', () => {
+      const ui = (isCollapsed: boolean) => (
+        <ChakraProvider value={system}>
+          <NavList aria-label="메뉴" isCollapsed={isCollapsed}>
+            <NavList.Group title="관리" isCollapsible defaultOpen={false}>
+              <NavList.Item href="/a" leadingVisual={<svg />}>
+                A
+              </NavList.Item>
+            </NavList.Group>
+          </NavList>
+        </ChakraProvider>
+      );
+      const { rerender } = render(ui(true));
+      const row = screen.getByRole('link', { name: 'A' });
+      rerender(ui(false));
+      rerender(ui(true));
+      expect(screen.getByRole('link', { name: 'A' })).toBe(row);
     });
 
     it('follows a controlled isOpen and only reports clicks', async () => {
@@ -701,6 +862,342 @@ describe('NavList', () => {
       expect(onOpenChange).toHaveBeenCalledWith(true);
       // Still closed: the caller owns the state.
       expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    });
+  });
+
+  describe('pressed', () => {
+    const PRESS = ':has([data-nav-list-row]:active)';
+    const liOf = (name: string) =>
+      screen.getByRole('link', { name }).closest('li')!;
+
+    it('fills the row one step past hover while the ROW is pressed, current rows included', () => {
+      renderUi(
+        <NavList aria-label="메뉴">
+          <NavList.Item href="/a">A</NavList.Item>
+          <NavList.Item href="/b" isCurrent>
+            B
+          </NavList.Item>
+        </NavList>
+      );
+      ['A', 'B'].forEach((name) => {
+        const rules = rulesFor(liOf(name));
+        const pressed = rules.filter(([, sel]) => sel.includes(PRESS));
+        expect(pressed.find(([media]) => !media)?.[2], name).toContain(
+          'background:var(--chakra-colors-border-default)'
+        );
+        // High contrast turns `border.default` into a stroke grey, so it
+        // takes the token high contrast leaves alone.
+        expect(
+          pressed.find(([media]) =>
+            media.includes('prefers-contrast: more')
+          )?.[2],
+          name
+        ).toContain('background:var(--chakra-colors-border-strong)');
+        // And again inside hover, or a pointer press loses to the hover
+        // rule, which is just as specific and comes later.
+        expect(
+          pressed.some(
+            ([media, sel, body]) =>
+              media.includes('hover: hover') &&
+              sel.includes(':hover') &&
+              body.includes('var(--chakra-colors-border-default)')
+          ),
+          name
+        ).toBe(true);
+        // Distinct from hover, which is `bg.emphasized`.
+        const hover = rules.find(([, sel]) => sel.includes(':hover'))?.[2];
+        expect(hover).toContain('var(--chakra-colors-bg-emphasized)');
+      });
+      // The row carries the hook the selector names.
+      expect(screen.getByRole('link', { name: 'A' })).toHaveAttribute(
+        'data-nav-list-row'
+      );
+    });
+
+    it('does not press a disabled row', () => {
+      renderUi(
+        <NavList aria-label="메뉴">
+          <NavList.Item href="/a" isDisabled>
+            A
+          </NavList.Item>
+        </NavList>
+      );
+      const li = screen.getByRole('link', { name: 'A' }).closest('li')!;
+      expect(rulesFor(li).some(([, sel]) => sel.includes(PRESS))).toBe(false);
+    });
+
+    it('keeps the label and the count AA on the pressed fill, in every scheme and mode', () => {
+      // Light and dark press onto `border.default`; high contrast onto
+      // `border.strong` (see NAV_LIST_RAMP). Text and counts need 4.5:1; the
+      // fill has to read as a step from hover (the audit's 1.10:1 for
+      // neighbouring layers).
+      const FILL = {
+        light: 'border-default',
+        dark: 'border-default',
+        hcLight: 'border-strong',
+        hcDark: 'border-strong',
+      } as const;
+      expect(NAV_LIST_RAMP.pressedFill).toBe('border.default');
+      expect(NAV_LIST_RAMP.pressedFillMoreContrast).toBe('border.strong');
+      Object.entries(SCHEMES).forEach(([scheme, modes]) =>
+        Object.entries(FILL).forEach(([mode, fill]) => {
+          const t = (modes as Record<string, Record<string, string>>)[mode];
+          const where = `${scheme} ${mode}`;
+          expect(contrast(t['fg-default'], t[fill]), where).toBeGreaterThan(
+            4.5
+          );
+          expect(contrast(t['fg-muted'], t[fill]), where).toBeGreaterThan(4.5);
+          expect(
+            contrast(t[fill], t['layer-1-active']),
+            where
+          ).toBeGreaterThanOrEqual(1.1);
+        })
+      );
+    });
+  });
+
+  describe('hover-revealed action layout', () => {
+    const setup = (
+      visibility: 'hover' | 'always',
+      orientation: 'vertical' | 'horizontal' = 'vertical'
+    ) => {
+      renderUi(
+        <NavList aria-label="세션" orientation={orientation}>
+          <NavList.Item
+            href="/s/1"
+            trailingActionVisibility={visibility}
+            trailingAction={<button type="button">더 보기</button>}
+          >
+            아주 긴 세션 제목
+          </NavList.Item>
+        </NavList>
+      );
+      const row = screen.getByRole('link', { name: '아주 긴 세션 제목' });
+      return { row, li: row.closest('li')! };
+    };
+
+    it('hover: the label has the whole row at rest and makes room only while the action shows', () => {
+      const { row, li } = setup('hover');
+      expect(ownDeclarations(li)).toContain('display:grid');
+      expect(ownDeclarations(row)).toContain('grid-column:1/-1');
+      const rules = rulesFor(li);
+      const giveBack = (selector: string) =>
+        rules.some(
+          ([media, sel, body]) =>
+            !media &&
+            sel.includes(selector) &&
+            sel.includes('[data-nav-list-row]') &&
+            body.includes('grid-column:1')
+        );
+      expect(giveBack(':hover')).toBe(true);
+      expect(giveBack(':focus-within')).toBe(true);
+      expect(giveBack('[aria-expanded="true"]')).toBe(true);
+      // Touch: shown, with its space kept.
+      const touch = rules.filter(([media]) =>
+        /hover: ?none\), ?\(pointer: ?coarse/.test(media)
+      );
+      expect(
+        touch.some(
+          ([, sel, body]) =>
+            sel.includes('[data-nav-list-row]') &&
+            body.includes('grid-column:1')
+        )
+      ).toBe(true);
+      expect(
+        touch.some(
+          ([, sel, body]) =>
+            sel.includes('trailing-action') && body.includes('opacity:1')
+        )
+      ).toBe(true);
+    });
+
+    it('always: the action keeps its own space, as before', () => {
+      const { row, li } = setup('always');
+      expect(ownDeclarations(li)).toContain('display:flex');
+      expect(ownDeclarations(row)).not.toContain('grid-column');
+    });
+
+    it('a horizontal strip keeps the space: a row there is only as wide as its label', () => {
+      const { li } = setup('hover', 'horizontal');
+      expect(ownDeclarations(li)).toContain('display:flex');
+    });
+  });
+
+  describe('right to left', () => {
+    it('lays out from CSS: every element zag stamps `dir` on inherits `direction` instead', () => {
+      renderUi(
+        <div dir="rtl">
+          <NavList aria-label="القائمة">
+            <NavList.Item href="/1">الرئيسية</NavList.Item>
+            <NavList.Group title="الإدارة" isCollapsible>
+              <NavList.Item href="/2">الإعدادات</NavList.Item>
+            </NavList.Group>
+          </NavList>
+        </div>
+      );
+      const stamped = [
+        screen.getByRole('link', { name: 'الرئيسية' }),
+        screen.getByRole('link', { name: 'الإعدادات' }),
+        screen.getByRole('list', { name: 'الإدارة' }),
+        screen.getByRole('list', { name: 'الإدارة' }).closest('li')!,
+      ];
+      stamped.forEach((el) => {
+        expect(el).toHaveAttribute('dir');
+        expect(ownDeclarations(el)).toContain('direction:inherit');
+      });
+    });
+
+    it('the server markup carries no layout direction of its own beyond that', () => {
+      // What the browser paints before hydration: zag's `dir="ltr"` stamps
+      // are in the HTML, and only the CSS above stops them from deciding
+      // the layout. Nothing in the markup depends on an effect.
+      const html = renderToString(
+        <ChakraProvider value={system}>
+          <div dir="rtl">
+            <NavList aria-label="القائمة">
+              <NavList.Item href="/1">الرئيسية</NavList.Item>
+            </NavList>
+          </div>
+        </ChakraProvider>
+      );
+      const host = document.createElement('div');
+      host.innerHTML = html;
+      const row = host.querySelector('a')!;
+      expect(row.getAttribute('dir')).toBe('ltr');
+      expect(row).toHaveAttribute('data-nav-list-row');
+      expect(row.querySelector('[style*="direction"]')).toBeNull();
+    });
+  });
+
+  describe('rail toggle', () => {
+    const items = (isCollapsed: boolean) => (
+      <ChakraProvider value={system}>
+        <NavList aria-label="메뉴" isCollapsed={isCollapsed}>
+          <NavList.Item
+            href="/a"
+            isCurrent
+            leadingVisual={<svg />}
+            trailingVisual="12"
+          >
+            멤버 관리
+          </NavList.Item>
+          <NavList.Group title="도움말">
+            <NavList.Item href="/b" leadingVisual={<svg />}>
+              사용 가이드
+            </NavList.Item>
+          </NavList.Group>
+        </NavList>
+      </ChakraProvider>
+    );
+
+    it('keeps the same row, label element and current state across the toggle', () => {
+      const { rerender } = render(items(false));
+      const row = screen.getByRole('link', { name: '멤버 관리 12' });
+      const label = row.querySelector('[data-part="label"]');
+      rerender(items(true));
+      const collapsed = screen.getByRole('link', { name: '멤버 관리' });
+      expect(collapsed).toBe(row);
+      expect(collapsed.querySelector('[data-part="label"]')).toBe(label);
+      expect(collapsed).toHaveAttribute('aria-current', 'page');
+      expect(collapsed).toHaveAttribute('data-current');
+      // The group list keeps its name from the folded title.
+      expect(screen.getByRole('list', { name: '도움말' })).toBeInTheDocument();
+    });
+
+    it('fades the label and count on the feedback clock, which reduced motion zeroes', () => {
+      render(items(true));
+      const row = screen.getByRole('link', { name: '멤버 관리' });
+      const label = row.querySelector('[data-part="label"]')!;
+      const count = screen.getByText('12');
+      expect(ownDeclarations(label)).toContain('opacity:0');
+      expect(ownDeclarations(label)).toContain('transition-property:opacity');
+      expect(ownDeclarations(count)).toMatch(
+        /transition-property:opacity, ?visibility/
+      );
+      [label, count].forEach((el) => {
+        expect(ownDeclarations(el)).toContain(
+          'transition-duration:var(--chakra-durations-fast)'
+        );
+        expect(
+          rulesFor(el).some(
+            ([media, , body]) =>
+              media.includes('prefers-reduced-motion') &&
+              body.includes(
+                'transition-duration:var(--chakra-durations-motion-instant)'
+              )
+          )
+        ).toBe(true);
+      });
+    });
+
+    it('keeps the row padding in both modes, so the icon does not move', () => {
+      const { rerender } = render(items(false));
+      const row = screen.getByRole('link', { name: '멤버 관리 12' });
+      const padding = (decl: string) =>
+        decl.match(/padding-inline:[^;]+/)?.[0] ??
+        decl.match(/padding-inline-start:[^;]+/)?.[0];
+      const expanded = padding(ownDeclarations(row));
+      rerender(items(true));
+      expect(padding(ownDeclarations(row))).toBe(expanded);
+      expect(ownDeclarations(row)).not.toContain('justify-content:center');
+    });
+  });
+
+  describe('Tooltip + Menu on one trailing-action trigger', () => {
+    it('both wrappers take `ids.trigger`, so the menu anchors to the button', async () => {
+      const user = userEvent.setup();
+      const RowMenu = () => {
+        const triggerId = useId();
+        return (
+          <Menu ids={{ trigger: triggerId }}>
+            <Tooltip ids={{ trigger: triggerId }} content="더 보기">
+              <Menu.Trigger asChild>
+                <button type="button">세션 1 더 보기</button>
+              </Menu.Trigger>
+            </Tooltip>
+            <Menu.List>
+              <Menu.Item value="rename">이름 바꾸기</Menu.Item>
+            </Menu.List>
+          </Menu>
+        );
+      };
+      renderUi(
+        <NavList aria-label="세션">
+          <NavList.Item
+            href="/s/1"
+            trailingActionVisibility="hover"
+            trailingAction={<RowMenu />}
+          >
+            세션 1
+          </NavList.Item>
+        </NavList>
+      );
+      const button = screen.getByRole('button', { name: '세션 1 더 보기' });
+      await user.click(button);
+      const menu = await screen.findByRole('menu');
+      // One id on the button, and the menu points at it — the reference
+      // zag positions the menu from.
+      expect(menu).toHaveAttribute('aria-labelledby', button.id);
+    });
+
+    it('without the shared id the two triggers disagree — the bug it prevents', async () => {
+      const user = userEvent.setup();
+      renderUi(
+        <Menu>
+          <Tooltip content="더 보기">
+            <Menu.Trigger asChild>
+              <button type="button">더 보기</button>
+            </Menu.Trigger>
+          </Tooltip>
+          <Menu.List>
+            <Menu.Item value="rename">이름 바꾸기</Menu.Item>
+          </Menu.List>
+        </Menu>
+      );
+      const button = screen.getByRole('button', { name: '더 보기' });
+      await user.click(button);
+      const menu = await screen.findByRole('menu');
+      expect(menu.getAttribute('aria-labelledby')).not.toBe(button.id);
     });
   });
 

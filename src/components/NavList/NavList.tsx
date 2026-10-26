@@ -98,30 +98,33 @@ const NavListRoot = forwardRef<HTMLUListElement, NavListProps>(
       return () => observer.disconnect();
     }, [reveal]);
 
-    // Zag stamps `dir` on every tooltip trigger — the rows — from Ark's
-    // locale, which is `ltr` unless an Ark LocaleProvider says otherwise. Read
-    // the direction the list actually inherits and hand it to the rows, or a
-    // rail inside `dir="rtl"` lays its rows out left to right.
-    const [dir, setDir] = useState<'ltr' | 'rtl'>('ltr');
+    // Layout never reads this: rows, groups and the list inherit `direction`
+    // in CSS, so a right-to-left server render is right on its first paint.
+    // Only the rows' TOOLTIPS need it in JS — zag stamps `dir` on their
+    // portalled content from Ark's locale, and a popper placement is
+    // physical — and a tooltip only opens after hydration, when this is known.
+    const [tooltipDir, setTooltipDir] = useState<'ltr' | 'rtl'>('ltr');
     useIsomorphicLayoutEffect(() => {
       const list = listRef.current;
       if (!list) return;
       const next = getComputedStyle(list).direction === 'rtl' ? 'rtl' : 'ltr';
-      if (next !== dir) setDir(next);
+      if (next !== tooltipDir) setTooltipDir(next);
     });
 
     const context = useMemo(
-      () => ({ orientation: axis, isCollapsed, dir, revealCurrent: reveal }),
-      [axis, isCollapsed, dir, reveal]
+      () => ({
+        orientation: axis,
+        isCollapsed,
+        tooltipDir,
+        revealCurrent: reveal,
+      }),
+      [axis, isCollapsed, tooltipDir, reveal]
     );
 
     const list = (
       <chakra.ul
         ref={mergedRef}
         {...listStyles(axis)}
-        alignItems={
-          isCollapsed ? 'center' : byOrientation(axis, 'stretch', 'center')
-        }
         overflowX={byOrientation(axis, 'visible', 'auto')}
         overflowY={byOrientation(axis, 'visible', 'hidden')}
         {...rest}

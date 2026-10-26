@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { Box, Flex, Text, VisuallyHidden } from '@chakra-ui/react';
 import type { Meta, StoryObj } from '@storybook/react';
 
@@ -58,14 +58,53 @@ type Story = StoryObj<typeof meta>;
 const Rail = ({
   children,
   w = '240px',
+  isAnimated = false,
 }: {
   children: React.ReactNode;
   w?: string;
+  /** Animate the width, the way the app's NavigationBarWrapper does. */
+  isAnimated?: boolean;
 }) => (
-  <Box w={w} p={2} bg="bg.subtle" borderRadius="lg">
+  <Box
+    w={w}
+    p={2}
+    bg="bg.subtle"
+    borderRadius="lg"
+    {...(isAnimated && {
+      animationStyle: 'feedback',
+      transitionProperty: 'width',
+      overflowX: 'hidden',
+    })}
+  >
     {children}
   </Box>
 );
+
+/**
+ * A row's more-menu with its own tooltip. Menu and Tooltip both make the
+ * button their trigger, and each would give it a different id — the menu
+ * then cannot find its anchor and opens at the top-left of the page. One
+ * shared `ids.trigger` makes them agree (factchat-nextjs does the same in
+ * ResearchReportActions).
+ */
+const RowMenu = ({ label }: { label: string }) => {
+  const triggerId = useId();
+  return (
+    <Menu ids={{ trigger: triggerId }}>
+      <Tooltip ids={{ trigger: triggerId }} content="더 보기">
+        <Menu.Trigger asChild>
+          <IconButton aria-label={`${label} 더 보기`} size="xs">
+            <DotsHorizontalIcon />
+          </IconButton>
+        </Menu.Trigger>
+      </Tooltip>
+      <Menu.List>
+        <Menu.Item value="rename">이름 바꾸기</Menu.Item>
+        <Menu.Item value="delete">삭제</Menu.Item>
+      </Menu.List>
+    </Menu>
+  );
+};
 
 /** Links with icons. The current page has `aria-current="page"`. */
 export const Basic: Story = {
@@ -284,7 +323,8 @@ export const Responsive: Story = {
 /**
  * Every state in one rail, for side-by-side review in light and dark: rest,
  * current, a count, a disabled link, a disabled button, and disabled + current.
- * Hover and focus are live — point at and Tab through it.
+ * Hover, press and focus are live — point at, press and Tab through it. A
+ * press is one step past hover (`border.default`), on the current row too.
  */
 export const States: Story = {
   render: (args) => (
@@ -365,7 +405,10 @@ export const CollapsedRail: Story = {
         >
           {isCollapsed ? '펼치기' : '접기'}
         </Button>
-        <Rail w={isCollapsed ? '56px' : '240px'}>
+        {/* The parent animates the width; NavList fades its labels, counts
+            and group titles on the same clock and keeps every icon where it
+            is. 3.5em = the 2.5em row square + the rail's 0.5em padding. */}
+        <Rail w={isCollapsed ? '3.5em' : '240px'} isAnimated>
           <NavList aria-label="관리자 메뉴" isCollapsed={isCollapsed}>
             {RAIL_ITEMS.map((item) => (
               <NavList.Item
@@ -381,6 +424,7 @@ export const CollapsedRail: Story = {
                     ? item.activeIcon
                     : item.icon
                 }
+                trailingVisual={item.key === 'members' ? 12 : undefined}
               >
                 {item.label}
               </NavList.Item>
@@ -466,23 +510,36 @@ export const HoverRevealedAction: Story = {
             href={`#s${i}`}
             isCurrent={i === 0}
             trailingActionVisibility="hover"
-            trailingAction={
-              <Menu>
-                <Tooltip content="더 보기">
-                  <Menu.Trigger asChild>
-                    <IconButton aria-label={`${title} 더 보기`} size="xs">
-                      <DotsHorizontalIcon />
-                    </IconButton>
-                  </Menu.Trigger>
-                </Tooltip>
-                <Menu.List>
-                  <Menu.Item value="rename">이름 바꾸기</Menu.Item>
-                  <Menu.Item value="delete">삭제</Menu.Item>
-                </Menu.List>
-              </Menu>
-            }
+            trailingAction={<RowMenu label={title} />}
           >
             {title}
+          </NavList.Item>
+        ))}
+      </NavList>
+    </Rail>
+  ),
+};
+
+/**
+ * The two visibilities side by side, on the same long label. `hover` (top)
+ * gives the label the whole row at rest and lays the action over its end;
+ * the label makes room only while the action shows. `always` (bottom) keeps
+ * the action's space. On a touch screen both keep it, with the action shown.
+ */
+export const TrailingActionVisibility: Story = {
+  render: (args) => (
+    <Rail>
+      <NavList {...args} aria-label="최근 대화">
+        {(['hover', 'always'] as const).map((visibility) => (
+          <NavList.Item
+            key={visibility}
+            href={`#${visibility}`}
+            trailingActionVisibility={visibility}
+            trailingAction={
+              <RowMenu label={`${visibility} 하반기 캠페인 아이디어`} />
+            }
+          >
+            {`${visibility} · 2026 하반기 마케팅 캠페인 아이디어`}
           </NavList.Item>
         ))}
       </NavList>
@@ -688,7 +745,11 @@ export const HorizontalCurrentOffscreen: Story = {
   },
 };
 
-/** Right-to-left: the count and the trailing action follow the inline end. */
+/**
+ * Right-to-left: the count and the trailing action follow the inline end, and
+ * a group title its start. Layout reads the inherited direction in CSS, so a
+ * server render is right to left on its first paint.
+ */
 export const RightToLeft: Story = {
   render: () => (
     <Box dir="rtl">
@@ -713,6 +774,26 @@ export const RightToLeft: Story = {
           >
             الأعضاء
           </NavList.Item>
+          <NavList.Item
+            href="#3"
+            leadingVisual={<ChatIcon boxSize="sm" />}
+            trailingActionVisibility="hover"
+            trailingAction={
+              <IconButton aria-label="خيارات المحادثات" size="xs">
+                <DotsHorizontalIcon />
+              </IconButton>
+            }
+          >
+            المحادثات الأخيرة ومقترحات الحملة التسويقية
+          </NavList.Item>
+          <NavList.Group title="الإدارة" isCollapsible>
+            <NavList.Item
+              href="#4"
+              leadingVisual={<SettingsIcon boxSize="sm" />}
+            >
+              الإعدادات
+            </NavList.Item>
+          </NavList.Group>
         </NavList>
       </Rail>
     </Box>
@@ -782,6 +863,15 @@ export const UsageTokens: Story = {
             <T
               en="Current row and hover · fill"
               ko="현재 항목·마우스 올림 · 배경"
+            />
+          ),
+        },
+        {
+          token: NAV_LIST_RAMP.pressedFill,
+          use: (
+            <T
+              en="Pressed row · fill (border.strong under high contrast)"
+              ko="누르는 동안 · 배경(고대비에서는 border.strong)"
             />
           ),
         },

@@ -25,15 +25,54 @@ import type {
  * FILL, not by a second ink. The role is still named separately so a theme
  * that splits the two (and the app's nav rail, which reads the same pair)
  * moves the current label without touching the rest.
+ *
+ * **Pressed is one step past hover**, on every row, current ones included —
+ * otherwise a press on the row you are already on gives no sign it landed.
+ * No `bg.*` role is darker than `bg.emphasized` in light (it is the top of
+ * the `layer.1` ladder), so the step is `border.default`: the next neutral in
+ * both modes (light `#D8D2CA` after `#E5DFD9`, dark `#48443E` after
+ * `#3F3B34`), the same fill the BottomSheet handle uses. Under
+ * `prefers-contrast: more` that token turns into a 3:1 stroke grey and the
+ * label would drop to 2.8:1, so high contrast takes `border.strong`, which
+ * high contrast leaves alone. `NavList.test.tsx` checks every pair.
  */
 export const NAV_LIST_RAMP = {
   label: 'fg.default',
   currentLabel: 'fg.emphasized',
   currentFill: 'bg.emphasized',
   hoverFill: 'bg.emphasized',
+  pressedFill: 'border.default',
+  pressedFillMoreContrast: 'border.strong',
   trailing: 'fg.muted',
   groupTitle: 'fg.muted',
 } as const;
+
+/** The pressed fill, with its high-contrast swap. */
+export const pressedFill = {
+  bg: NAV_LIST_RAMP.pressedFill,
+  _moreContrast: { bg: NAV_LIST_RAMP.pressedFillMoreContrast },
+} as const;
+
+/**
+ * Chakra's `_rtl`/`_ltr` and `:dir()` read `dir` ATTRIBUTES, and zag stamps
+ * `dir="ltr"` on every part it renders (tooltip triggers — the rows — and the
+ * collapsible group) from Ark's locale, before any effect can measure the
+ * page. An author `direction` beats the UA rule that maps the attribute, so
+ * every stamped element takes the direction it inherits instead: the server
+ * render lays an RTL rail out right to left on its first paint.
+ */
+export const inheritDirection = { direction: 'inherit' } as const;
+
+/**
+ * A locale whose direction is `dir`: the inherited one when it already
+ * agrees, so a Korean app keeps formatting in Korean, otherwise a stand-in.
+ * Ark has no other way to set the `dir` zag stamps (its hooks omit the prop).
+ */
+export const localeFor = (
+  inherited: { locale: string; dir: 'ltr' | 'rtl' },
+  dir: 'ltr' | 'rtl'
+) =>
+  inherited.dir === dir ? inherited.locale : dir === 'rtl' ? 'ar' : 'en-US';
 
 /**
  * Map an orientation (or a per-breakpoint object of them) to a style value per

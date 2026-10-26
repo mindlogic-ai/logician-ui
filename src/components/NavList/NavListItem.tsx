@@ -27,7 +27,13 @@ import { useTranslate } from '@/hooks/useTranslate';
 import { disabledText } from '@/utils/disabledControl';
 import { focusRingInset } from '@/utils/focusRing';
 
-import { byOrientation, NAV_LIST_RAMP } from './NavList.styles';
+import {
+  byOrientation,
+  inheritDirection,
+  localeFor,
+  NAV_LIST_RAMP,
+  pressedFill,
+} from './NavList.styles';
 import NavListTranslations from './NavList.translations.json';
 import { NavListItemProps } from './NavList.types';
 import { useNavListContext } from './NavListContext';
@@ -49,6 +55,15 @@ type RouterChildProps = {
 };
 
 /** The label span is cut off by its ellipsis. */
+// Every selector below names the row by this attribute, not by `data-part`:
+// the tooltip trigger's own `data-part="trigger"` lands on the same element.
+const ROW = '[data-nav-list-row]';
+const ACTION = '[data-part="trailing-action"]';
+/** Touch screens: no hover to reveal on, and a finger needs the space kept. */
+const NO_HOVER = '@media (hover: none), (pointer: coarse)';
+/** The row, not the action beside it, is being pressed. */
+const PRESSED = `&:has(${ROW}:active)`;
+
 const isTruncated = (el: HTMLElement | null) =>
   el != null && el.scrollWidth > el.clientWidth + 1;
 
@@ -70,7 +85,7 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
     },
     ref
   ) => {
-    const { orientation, isCollapsed, dir, revealCurrent } =
+    const { orientation, isCollapsed, tooltipDir, revealCurrent } =
       useNavListContext();
     const translate = useTranslate(NavListTranslations);
     const labelRef = useRef<HTMLSpanElement>(null);
@@ -96,8 +111,9 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
       (routerChild?.props.target ?? (rest as { target?: string }).target) ===
         '_blank';
 
+    const inherited = useLocaleContext();
     const content = (
-      <>
+      <LocaleProvider locale={inherited.locale}>
         {leadingVisual != null && (
           <chakra.span
             aria-hidden
@@ -108,25 +124,29 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
             {leadingVisual}
           </chakra.span>
         )}
-        {isCollapsed ? (
-          <VisuallyHidden>{label}</VisuallyHidden>
-        ) : (
-          <chakra.span
-            ref={labelRef}
-            flex={byOrientation(orientation, '1 1 auto', '0 0 auto')}
-            minW={0}
-            overflow="hidden"
-            textOverflow="ellipsis"
-            whiteSpace="nowrap"
-          >
-            {label}
-          </chakra.span>
-        )}
+        {/* One label element in both modes, so toggling the rail fades it
+            instead of swapping it: collapsed it is transparent and 1px wide —
+            the size VisuallyHidden uses, which every screen reader still
+            reads — and stays the row's accessible name. */}
+        <chakra.span
+          ref={labelRef}
+          data-part="label"
+          flex={byOrientation(orientation, '1 1 auto', '0 0 auto')}
+          minW={isCollapsed ? '1px' : 0}
+          overflow="hidden"
+          textOverflow="ellipsis"
+          whiteSpace="nowrap"
+          opacity={isCollapsed ? 0 : 1}
+          animationStyle="feedback"
+          transitionProperty="opacity"
+        >
+          {label}
+        </chakra.span>
         {/* KWCAG 2.1 — a link that opens a new window says so in its name. */}
         {opensNewWindow && (
           <VisuallyHidden>{` (${translate('nav_list_opens_new_window')})`}</VisuallyHidden>
         )}
-        {trailingVisual != null && !isCollapsed && (
+        {trailingVisual != null && (
           <chakra.span
             display="inline-flex"
             alignItems="center"
@@ -135,11 +155,17 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
             color={isDisabled ? 'disabled.fg' : NAV_LIST_RAMP.trailing}
             fontWeight="normal"
             fontVariantNumeric="tabular-nums"
+            // Fades with the label. `visibility` flips at the END of the fade
+            // (it is discrete), which is when the count leaves the row's name.
+            opacity={isCollapsed ? 0 : 1}
+            visibility={isCollapsed ? 'hidden' : 'visible'}
+            animationStyle="feedback"
+            transitionProperty="opacity, visibility"
           >
             {trailingVisual}
           </chakra.span>
         )}
-      </>
+      </LocaleProvider>
     );
 
     // One tooltip per row, three jobs. Collapsed: the label, beside the icon.
@@ -160,19 +186,34 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
       onPointerOver?: (e: SyntheticEvent) => void;
       onFocus?: (e: SyntheticEvent) => void;
     };
+    // A POINTER also waits for the label to finish fading when the rail is
+    // toggled, so no tooltip flashes over a row that is still changing shape:
+    // the label one only once the label is fully gone, the others only once
+    // it is fully back. The next pointermove after the fade opens it. Focus
+    // is never held back — a cancelled focus is not re-fired, so a row
+    // focused mid-fade would never show its label.
+    const isSettled = () => {
+      const el = labelRef.current;
+      if (!el) return true;
+      const opacity = parseFloat(getComputedStyle(el).opacity);
+      if (Number.isNaN(opacity)) return true;
+      return isCollapsed ? opacity === 0 : opacity === 1;
+    };
     const gate =
-      (handler?: (e: SyntheticEvent) => void) => (event: SyntheticEvent) => {
-        if (!isTruncated(labelRef.current)) event.preventDefault();
+      (handler?: (e: SyntheticEvent) => void, waitForFade = true) =>
+      (event: SyntheticEvent) => {
+        if (
+          (waitForFade && !isSettled()) ||
+          (tooltipKind === 'overflow' && !isTruncated(labelRef.current))
+        )
+          event.preventDefault();
         handler?.(event);
       };
-    const overflowGate =
-      tooltipKind === 'overflow'
-        ? {
-            onPointerMove: gate(restHandlers.onPointerMove),
-            onPointerOver: gate(restHandlers.onPointerOver),
-            onFocus: gate(restHandlers.onFocus),
-          }
-        : undefined;
+    const tooltipGate = {
+      onPointerMove: gate(restHandlers.onPointerMove),
+      onPointerOver: gate(restHandlers.onPointerOver),
+      onFocus: gate(restHandlers.onFocus, false),
+    };
 
     // The description is a visually hidden element of its own, referenced
     // all the time — not the tooltip, which zag only references while it is
@@ -201,22 +242,37 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
       onClick?.(event);
     };
 
+    // `hover`: the action floats over the end of the label instead of keeping
+    // its own column, so a resting row spends its full width on the label —
+    // the app's HoverRevealedKebab. The row and the action share one grid
+    // cell's row; the row spans both columns at rest and gives the second one
+    // back to the action when it shows. Only the label's end moves: the row
+    // is as tall as it ever was, so nothing below it shifts. Vertical only —
+    // a horizontal row is as wide as its label, so there is nothing to give.
+    const overlaysAction =
+      trailingActionVisibility === 'hover' &&
+      trailingAction != null &&
+      !isCollapsed;
+
     // The fill lives on the `<li>`, not the row, so a trailing action sits on
     // the same surface: hovering the action keeps the row lit, and the current
     // row's fill runs under its action instead of stopping short of it.
     const rowStyles = {
       display: 'flex',
       alignItems: 'center',
-      justifyContent: isCollapsed ? 'center' : undefined,
       gap: 2,
-      flex: isCollapsed
-        ? '0 0 auto'
-        : byOrientation(orientation, '1 1 auto', '0 0 auto'),
+      flex: byOrientation(orientation, '1 1 auto', '0 0 auto'),
       minW: 0,
+      // The same inline padding and start alignment in both modes, so the
+      // icon does not move when the rail is toggled: at 2.5 a row is the
+      // 40px square around an `sm` icon. The `<li>` is what narrows.
       minH: isCollapsed ? 10 : 9,
-      w: isCollapsed ? 10 : undefined,
-      px: isCollapsed ? 0 : 2.5,
-      py: isCollapsed ? 0 : 2,
+      px: 2.5,
+      py: 2,
+      // Clips the label and count while the rail narrows around them. Only
+      // collapsed, so an expanded row never clips a badge or a dot that a
+      // visual draws past its own box.
+      overflow: isCollapsed ? 'hidden' : undefined,
       borderRadius: 'md',
       border: 'none',
       bg: 'transparent',
@@ -228,6 +284,8 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
       fontWeight: isCurrent ? 'bold' : 'normal',
       _hover: { textDecoration: 'none' },
       _disabled: { ...disabledText, cursor: 'not-allowed' },
+      ...inheritDirection,
+      ...(overlaysAction && { gridRow: 1, gridColumn: '1 / -1' }),
       // Inset: rows sit 2px apart and a horizontal rail scrolls, so the
       // outward ring would land on the neighbour or be clipped.
       ...focusRingInset,
@@ -239,6 +297,7 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
     const stateProps = {
       'aria-current': isCurrent ? (isLink ? 'page' : 'true') : undefined,
       'data-current': isCurrent ? '' : undefined,
+      'data-nav-list-row': '',
     } as const;
 
     let row: ReactElement;
@@ -255,7 +314,7 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
           // props it carries are the same on a button.
           {...(rest as unknown as React.ComponentProps<typeof chakra.button>)}
           {...describedByProps}
-          {...overflowGate}
+          {...tooltipGate}
         >
           {content}
         </chakra.button>
@@ -266,7 +325,7 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
         ...rowStyles,
         ...rest,
         ...describedByProps,
-        ...overflowGate,
+        ...tooltipGate,
       };
 
       if (isDisabled) {
@@ -341,7 +400,11 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
     const withTooltip = (
       <Tooltip
         content={tooltipContent}
-        placement={isCollapsed ? 'right' : 'top'}
+        // Beside the icon, towards the content: the rail is on the right of
+        // a right-to-left page. Popper placements are physical.
+        placement={
+          isCollapsed ? (tooltipDir === 'rtl' ? 'left' : 'right') : 'top'
+        }
         onOpenChange={({ open }) => setIsTooltipOpen(open)}
         // Zag only checks that this is set — it takes the content's id and
         // role away, so the trigger is never described by the tooltip. Not
@@ -353,44 +416,82 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
       </Tooltip>
     );
 
-    // Zag stamps `dir` on the trigger — this row — from Ark's locale, which
-    // is `ltr` unless an Ark LocaleProvider says otherwise. Keep the inherited
-    // locale when its direction matches the one the list measured; otherwise
-    // switch to one that does, so a rail in `dir="rtl"` lays out right to left.
-    const inherited = useLocaleContext();
-    const locale =
-      inherited.dir === dir ? inherited.locale : dir === 'rtl' ? 'ar' : 'en-US';
-
-    const hoverFill = isDisabled ? undefined : { bg: NAV_LIST_RAMP.hoverFill };
+    const fills = isDisabled
+      ? undefined
+      : {
+          // On the `<li>`, like the hover fill, so the press covers the
+          // action's end of the row too — but only a press on the ROW: a
+          // press on the action is the action's, and lights its own button.
+          // No `>` inside `:has()`: jsdom's selector engine throws on a
+          // relative selector, which would break every consumer's tests.
+          [PRESSED]: pressedFill,
+        };
+    // Shown: hovered, focus anywhere in the row, or the action's menu open.
+    const shown = [`&:hover > ${ACTION}`, `&:focus-within > ${ACTION}`].join(
+      ', '
+    );
     const revealOnHover =
       trailingActionVisibility === 'hover'
         ? {
-            '& > [data-part="trailing-action"]': { opacity: 0 },
-            '&:hover > [data-part="trailing-action"], &:focus-within > [data-part="trailing-action"]':
-              { opacity: 1 },
+            [`& > ${ACTION}`]: { opacity: 0 },
+            [shown]: { opacity: 1 },
             // Its own rule: `:has()` is not forgiving, and a browser without
             // it would drop every selector listed beside it.
-            '& > [data-part="trailing-action"]:has([aria-expanded="true"], [data-state="open"])':
+            [`& > ${ACTION}:has([aria-expanded="true"], [data-state="open"])`]:
               { opacity: 1 },
-            '@media (hover: none)': {
-              '& > [data-part="trailing-action"]': { opacity: 1 },
+            // Touch: always shown, and with its space kept.
+            [NO_HOVER]: {
+              [`& > ${ACTION}`]: { opacity: 1 },
+              ...(overlaysAction && { [`& > ${ROW}`]: { gridColumn: 1 } }),
             },
+            ...(overlaysAction && {
+              // The row gives the action its column back exactly when the
+              // action shows, so the label ends before it.
+              [`&:hover > ${ROW}, &:focus-within > ${ROW}`]: { gridColumn: 1 },
+              [`&:has(${ACTION} [aria-expanded="true"], ${ACTION} [data-state="open"]) > ${ROW}`]:
+                { gridColumn: 1 },
+            }),
           }
         : undefined;
 
     return (
       <chakra.li
-        display="flex"
+        display={
+          overlaysAction ? byOrientation(orientation, 'grid', 'flex') : 'flex'
+        }
+        gridTemplateColumns={overlaysAction ? 'minmax(0, 1fr) auto' : undefined}
         alignItems="center"
         gap={0.5}
         flexShrink={0}
         minW={0}
+        // Narrows to the square when the rail collapses, on the label's clock,
+        // so the fill shrinks with the rail instead of snapping to 40px.
+        maxW={isCollapsed ? 10 : byOrientation(orientation, '100%', 'none')}
+        animationStyle="feedback"
+        transitionProperty="max-width"
         borderRadius="md"
         bg={isCurrent ? NAV_LIST_RAMP.currentFill : 'transparent'}
-        _hover={hoverFill}
-        css={revealOnHover}
+        _hover={
+          isDisabled
+            ? undefined
+            : {
+                bg: NAV_LIST_RAMP.hoverFill,
+                // Again inside hover: Chakra's hover rule is as specific as the
+                // press rule and comes later, so a pointer press would lose.
+                [PRESSED]: pressedFill,
+              }
+        }
+        css={{ ...fills, ...revealOnHover }}
       >
-        <LocaleProvider locale={locale}>{withTooltip}</LocaleProvider>
+        {/* Zag stamps `dir` on the portalled tooltip from Ark's locale (`ltr`
+            unless a LocaleProvider says otherwise), so a tooltip in an RTL
+            rail would set its text left to right. The list measures the
+            direction after mount, and a tooltip only opens after that. The
+            row lays out from CSS (`inheritDirection`), never from this; its
+            content gets the caller's own locale back. */}
+        <LocaleProvider locale={localeFor(inherited, tooltipDir)}>
+          {withTooltip}
+        </LocaleProvider>
         {tooltip != null && (
           // `hidden`, not visually hidden: a description reference still
           // reads hidden text, and browse mode does not read it a second time.
@@ -405,6 +506,13 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
             alignItems="center"
             flexShrink={0}
             pe={0.5}
+            // Over the row's end, above its fill and its focus ring.
+            {...(overlaysAction && {
+              gridRow: 1,
+              gridColumn: 2,
+              position: 'relative',
+              zIndex: 1,
+            })}
           >
             {trailingAction}
           </chakra.span>

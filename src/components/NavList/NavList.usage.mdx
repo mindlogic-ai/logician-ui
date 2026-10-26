@@ -52,8 +52,10 @@ opposite sides. Pick by what the rows are:
 ## Variants and what they mean
 
 NavList has one look. The current row is a _place_, not a value: an ink label,
-bold, on a neutral `bg.emphasized` fill — never the brand hue. `orientation`
-decides the axis:
+bold, on a neutral `bg.emphasized` fill — never the brand hue. Hover shows the
+same fill; a press goes one step further (`border.default`, `border.strong`
+under high contrast), on the current row too, so a press always answers.
+`orientation` decides the axis:
 
 </En>
 
@@ -100,7 +102,9 @@ decides the axis:
 ## 변형과 뜻
 
 NavList의 모양은 하나입니다. 현재 항목은 값이 아니라 지금 있는 곳이므로 브랜드색을 쓰지 않고,
-중립 `bg.emphasized` 배경 위에 진한 글자를 굵게 씁니다. 축은 `orientation`이 정합니다.
+중립 `bg.emphasized` 배경 위에 진한 글자를 굵게 씁니다. 마우스를 올리면 같은 배경이 보이고,
+누르는 동안에는 한 단계 더 진해집니다(`border.default`, 고대비에서는 `border.strong`). 현재
+항목도 마찬가지라서 눌렀다는 반응이 늘 보입니다. 축은 `orientation`이 정합니다.
 
 </Ko>
 
@@ -163,6 +167,15 @@ group titles are hidden; a collapsible group shows its rows. Give every row a
 `leadingVisual`. To swap to a filled icon on the current row, choose the icon
 yourself: `leadingVisual={isCurrent ? <FilledChatIcon /> : <ChatIcon />}`.
 
+Animate the rail width in the parent; NavList fades its labels. Give the
+container `animationStyle="feedback" transitionProperty="width"` (or
+`min-width, max-width`, as the app's NavigationBarWrapper does) and
+`overflowX="hidden"`. On the same clock NavList fades labels, counts and
+group titles and narrows each row to its square, while rows keep their
+padding so the icons do not move. A label tooltip waits until the label has
+faded, so none flashes mid-transition. Under reduced motion it all snaps.
+Collapsed, a row's square is `2.5em`, so the rail is `3.5em` with `p={2}`.
+
 </En>
 
 <Ko>
@@ -176,6 +189,14 @@ yourself: `leadingVisual={isCurrent ? <FilledChatIcon /> : <ChatIcon />}`.
 개수, 뒤쪽 동작 버튼, 묶음 제목은 숨기고, 접을 수 있는 묶음은 항목을 펼쳐 보여 줍니다. 모든
 항목에 `leadingVisual`을 줍니다. 현재 항목만 채운 아이콘으로 바꾸려면 아이콘을 직접 고릅니다.
 `leadingVisual={isCurrent ? <FilledChatIcon /> : <ChatIcon />}`
+
+레일 폭은 바깥 요소가 움직이고, NavList는 라벨을 흐리게 합니다. 바깥 요소에
+`animationStyle="feedback" transitionProperty="width"`(앱의 NavigationBarWrapper처럼
+`min-width, max-width`도 됩니다)와 `overflowX="hidden"`을 줍니다. NavList는 같은 속도로 라벨,
+개수, 묶음 제목을 흐리게 하고 항목을 아이콘 칸 폭으로 줄입니다. 항목 안쪽 여백은 그대로라
+아이콘이 움직이지 않습니다. 라벨 툴팁은 라벨이 다 사라진 뒤에야 열리므로 바뀌는 도중에 깜빡이지
+않습니다. 동작 줄이기 설정에서는 바로 바뀝니다. 접힌 항목 칸은 `2.5em`이라 `p={2}`인 레일은
+`3.5em`입니다.
 
 </Ko>
 
@@ -221,6 +242,17 @@ open. It is never removed, so Tab still reaches it and focusing it is what
 shows it. On touch screens it is always shown. The row's fill sits on its
 `<li>`, so pointing at the action keeps the row lit.
 
+At rest the label has the whole row and the action sits over its end; the
+label makes room only while the action shows, the way the app's sidebar
+sessions do. The row's height never changes. `always` keeps the action's
+space at all times, and so does a touch screen (`hover: none` or
+`pointer: coarse`), where the action is always shown.
+
+Tooltip + Menu on one trigger: share `ids.trigger`. A more-menu button that
+also has a tooltip is the trigger of both, and each gives it its own id — the
+menu then opens at the top-left of the page. Pass one `useId()` to both:
+`<Menu ids={{ trigger: id }}><Tooltip ids={{ trigger: id }} …>`.
+
 </En>
 
 <Ko>
@@ -231,6 +263,15 @@ shows it. On touch screens it is always shown. The row's fill sits on its
 올리거나 항목 안에 초점이 있거나 그 메뉴가 열려 있을 때 보입니다. 없애는 것이 아니라서 Tab으로
 갈 수 있고, 초점이 가면 나타납니다. 터치 화면에서는 늘 보입니다. 배경은 항목의 `<li>`에
 칠하므로 동작 버튼을 가리켜도 항목이 밝게 남아 있습니다.
+
+평소에는 라벨이 항목 폭을 다 쓰고, 동작 버튼은 라벨 끝 위에 겹쳐 있습니다. 버튼이 보이는
+동안에만 라벨이 자리를 비켜 줍니다. 앱 사이드바의 대화 항목과 같습니다. 항목 높이는 바뀌지
+않습니다. `always`는 버튼 자리를 늘 비워 두고, 터치 화면(`hover: none`, `pointer: coarse`)에서도
+버튼을 늘 보이며 자리를 비워 둡니다.
+
+한 버튼에 Tooltip과 Menu를 함께 걸 때는 `ids.trigger`를 같이 씁니다. 툴팁이 달린 더 보기
+버튼은 둘 모두의 여는 요소이고 각자 다른 id를 붙이므로, 메뉴가 화면 왼쪽 위에서 열립니다.
+`useId()` 하나를 양쪽에 넘깁니다: `<Menu ids={{ trigger: id }}><Tooltip ids={{ trigger: id }} …>`.
 
 </Ko>
 
@@ -245,6 +286,11 @@ shows it. On touch screens it is always shown. The row's fill sits on its
 the state across visits, control it — `isOpen` + `onOpenChange` — and store
 it where the app keeps its own UI state.
 
+The rows open and close on Collapsible's own motion (its height keyframes,
+300ms in and 150ms out); under reduced motion they fade instead. A closed
+group's rows leave the tab order as soon as it starts closing and the
+accessibility tree once it has closed.
+
 </En>
 
 <Ko>
@@ -254,6 +300,10 @@ it where the app keeps its own UI state.
 `NavList.Group isCollapsible`을 주면 제목이 펼침 버튼(`aria-expanded`, `aria-controls`)이
 됩니다. 처음에는 펼친 상태입니다(`defaultOpen`). 다음에 와도 상태를 유지하려면 `isOpen`과
 `onOpenChange`로 직접 관리하고, 앱이 UI 상태를 두는 곳에 저장합니다.
+
+항목은 Collapsible과 같은 움직임으로 열리고 닫힙니다(높이 키프레임, 열 때 300ms, 닫을 때
+150ms). 동작 줄이기 설정에서는 높이 대신 흐려졌다 나타납니다. 닫히기 시작하면 바로 Tab 순서에서
+빠지고, 다 닫히면 보조 기술에서도 빠집니다.
 
 </Ko>
 
@@ -387,6 +437,9 @@ What NavList does for you:
 - A collapsed rail keeps each label as its row's accessible name.
 - A hover-revealed trailing action is only transparent, never removed or
   `display: none`, so it stays in the tab order and shows when focused.
+- On a right-to-left page rows, groups and counts follow the inherited
+  direction in CSS, so a server render is right to left from its first paint;
+  nothing waits for JavaScript.
 
 What you still have to do:
 
@@ -441,6 +494,8 @@ NavList가 알아서 하는 일
 - 접힌 레일에서도 항목마다 라벨이 이름으로 남습니다.
 - 마우스를 올리면 나타나는 뒤쪽 동작 버튼은 투명할 뿐 없애거나 `display: none`으로 숨기지
   않습니다. 그래서 Tab 순서에 남고 초점이 가면 보입니다.
+- 오른쪽에서 왼쪽으로 쓰는 페이지에서는 항목, 묶음, 개수가 CSS로 물려받은 방향을 따릅니다.
+  그래서 서버에서 그린 첫 화면부터 오른쪽에서 왼쪽으로 놓이고, 자바스크립트를 기다리지 않습니다.
 
 직접 챙겨야 하는 일
 
