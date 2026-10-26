@@ -25,3 +25,26 @@ export const focusRing = {
     boxShadow: FOCUS_RING_SHADOW,
   },
 } as const;
+
+/**
+ * The same two bands as {@link FOCUS_RING_SHADOW}, drawn INSIDE the element's
+ * edge: the outer 2px in `focus.ring`, then the 2px `bg.canvas` band that keeps
+ * the ring legible against whatever fill the element has.
+ *
+ * {@link focusRing} needs 4px of clear space on every side, because both bands
+ * paint outside the box. Rows packed into a list cannot give it that — the band
+ * lands on the neighbouring row, which paints its own background back over
+ * half of it — and a list that scrolls (`overflow-x: auto`) clips it outright.
+ * Same colour and weight, inside the box instead.
+ */
+export const FOCUS_RING_INSET_SHADOW =
+  'inset 0 0 0 2px var(--chakra-colors-focus-ring), inset 0 0 0 4px var(--chakra-colors-bg-canvas)';
+
+/** {@link focusRing}'s inset counterpart, for rows in a dense or scrolling list. */
+export const focusRingInset = {
+  _focus: { outline: 'none' },
+  _focusVisible: {
+    outline: 'none',
+    boxShadow: FOCUS_RING_INSET_SHADOW,
+  },
+} as const;

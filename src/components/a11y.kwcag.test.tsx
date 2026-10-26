@@ -6,6 +6,7 @@ import { buttonVariantStyles } from '@/components/Button/Button.styles';
 import { FileInput } from '@/components/FileInput';
 import { LogicianProvider } from '@/components/LogicianProvider';
 import { baseMarkdownComponents } from '@/components/Markdown/Markdown';
+import { NavList } from '@/components/NavList';
 import { Radio, RadioGroup } from '@/components/Radio';
 import { SelectField } from '@/components/Select';
 import {
@@ -292,6 +293,34 @@ describe('axe — 구조·ARIA 규칙', () => {
       </RadioGroup>,
     ],
     ['파일 입력', <FileInput key="file" onChange={() => {}} />],
+    [
+      // Rows are links or buttons with aria-current — never tabs — and the
+      // trailing action sits beside its row, not inside it (nested-interactive).
+      '내비게이션 목록',
+      <NavList key="navlist" aria-label="소스">
+        <NavList.Item href="/recent" isCurrent trailingVisual="3">
+          최근
+        </NavList.Item>
+        <NavList.Item href="/off" isDisabled>
+          사용 불가
+        </NavList.Item>
+        <NavList.Group title="공유 드라이브">
+          <NavList.Item
+            onClick={() => {}}
+            trailingAction={
+              <button type="button" aria-label="마케팅 옵션">
+                …
+              </button>
+            }
+          >
+            마케팅
+          </NavList.Item>
+          <NavList.Item onClick={() => {}} isDisabled>
+            보관됨
+          </NavList.Item>
+        </NavList.Group>
+      </NavList>,
+    ],
   ])('%s', async (_name, ui) => {
     const { container } = withProvider(ui);
     expect(await axeViolations(container)).toEqual([]);

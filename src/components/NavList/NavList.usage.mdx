@@ -1,0 +1,242 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as NavListStories from './NavList.stories';
+
+<Meta of={NavListStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# NavList
+
+A list of rows that says where you are: side navigation, and the filter rails
+beside a gallery or a file list. One row is current; every row is its own
+link or button.
+
+## When to use
+
+- For the side navigation of an area: the admin menu, a settings column.
+- For a rail of sources or categories beside the content it filters: the
+  Drive picker's sources, the template kinds beside a media gallery.
+- For a strip of the same choices above the content on a narrow screen, with
+  `orientation={{ base: 'horizontal', md: 'vertical' }}`.
+
+## When not to use
+
+- For sections of one object that swap a panel in place → `Tabs`. Tabs own
+  their panels, move with the arrow keys and mark the choice with
+  `aria-selected`; a rail is links or filters, reached with Tab.
+- To change how the same content is shown (목록/카드, 일/주/월) →
+  `SegmentedControl`.
+- For commands (초대하기, 내보내기) → `Button`, or a `Menu` when there are
+  several. A rail row takes you somewhere; it does not do something.
+- For a hierarchy the user expands and collapses → `Tree`.
+
+## Variants and what they mean
+
+NavList has one look. The current row is a *place*, not a value: an ink label,
+bold, on a neutral `bg.emphasized` fill — never the brand hue. `orientation`
+decides the axis:
+
+</En>
+
+<Ko>
+
+# NavList
+
+지금 어디에 있는지 알려 주는 항목 목록입니다. 옆 내비게이션과, 갤러리나 파일 목록 옆의
+필터 레일에 씁니다. 항목 하나가 현재 항목이고, 항목마다 링크나 버튼입니다.
+
+## 언제 쓰나요
+
+- 한 영역의 옆 내비게이션: 관리자 메뉴, 설정 화면의 왼쪽 열.
+- 보고 있는 내용을 거르는 출처나 분류의 레일: 드라이브 선택 창의 출처, 미디어 갤러리 옆의
+  템플릿 종류.
+- 좁은 화면에서는 같은 항목을 내용 위의 한 줄로 눕힙니다.
+  `orientation={{ base: 'horizontal', md: 'vertical' }}`을 씁니다.
+
+## 언제 쓰지 않나요
+
+- 한 대상의 구역을 그 자리에서 바꿔 보여 주는 것은 `Tabs`가 맡습니다. 탭은 패널을 갖고,
+  방향키로 옮기며, 고른 것을 `aria-selected`로 알립니다. 레일은 링크나 필터이고 Tab 키로
+  오갑니다.
+- 같은 내용을 보는 방식을 바꿀 때(목록/카드, 일/주/월)는 `SegmentedControl`을 씁니다.
+- 명령(초대하기, 내보내기)은 `Button`으로, 여러 개라면 `Menu`로 둡니다. 레일의 항목은
+  어딘가로 데려가는 것이지 무언가를 실행하는 것이 아닙니다.
+- 펼치고 접는 계층은 `Tree`를 씁니다.
+
+## 변형과 뜻
+
+NavList의 모양은 하나입니다. 현재 항목은 값이 아니라 지금 있는 곳이므로 브랜드색을 쓰지 않고,
+중립 `bg.emphasized` 배경 위에 진한 글자를 굵게 씁니다. 축은 `orientation`이 정합니다.
+
+</Ko>
+
+<ArgTypes of={NavListStories} include={['orientation']} />
+
+<En>
+
+| `orientation`                            | Layout                                                                    | Use for                        |
+| ---------------------------------------- | ------------------------------------------------------------------------- | ------------------------------ |
+| `vertical` (default)                     | Full-width rows, labels truncate with an ellipsis                         | A rail beside the content      |
+| `horizontal`                             | Rows as wide as their label, one line that scrolls sideways — never wraps | A strip above the content      |
+| `{ base: 'horizontal', md: 'vertical' }` | Strip below `md`, rail from `md` up (pure CSS)                            | A rail that has to fit a phone |
+
+Each `NavList.Item` is an `<a>` when it has `href` (or `asChild` around a
+router link) and a `<button type="button">` when it has only `onClick`.
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+| `orientation`                            | 배치                                                                             | 쓰는 곳                       |
+| ---------------------------------------- | -------------------------------------------------------------------------------- | ----------------------------- |
+| `vertical` (기본)                        | 항목이 폭을 다 채우고, 긴 글자는 말줄임표로 줄입니다                             | 내용 옆의 레일                |
+| `horizontal`                             | 항목은 글자만큼의 폭이고, 한 줄로 두고 옆으로 스크롤합니다. 줄을 바꾸지 않습니다 | 내용 위의 띠                  |
+| `{ base: 'horizontal', md: 'vertical' }` | `md` 아래에서는 띠, `md`부터는 레일(CSS만으로 바뀝니다)                          | 휴대폰에도 들어가야 하는 레일 |
+
+`NavList.Item`은 `href`가 있거나 라우터 링크를 `asChild`로 감싸면 `<a>`로, `onClick`만
+있으면 `<button type="button">`으로 그려집니다.
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={NavListStories.DoNamedRailOfPlaces} />
+<Verdict
+  kind="do"
+  en="Name the rail with aria-label ('관리자 메뉴') and mark exactly one row current."
+  ko="레일에 aria-label('관리자 메뉴')로 이름을 붙이고, 현재 항목은 하나만 둡니다."
+/>
+
+<Canvas of={NavListStories.DontActionsInARail} />
+<Verdict
+  kind="dont"
+  en="Mix commands into a rail of places. 「멤버 초대하기」 is a button in the page, not a row that looks like a place."
+  ko="곳을 나열한 레일에 명령을 섞지 마세요. 「멤버 초대하기」는 화면 안의 버튼이지, 곳처럼 보이는 항목이 아닙니다."
+/>
+
+<En>
+
+## Content
+
+- A noun for a place or a category: "멤버 관리", "공유 문서함", "이미지". No
+  verbs, no full stop.
+- Put counts in `trailingVisual`, not in the label. They are read as part of
+  the row's name ("이미지 64").
+- Group titles are short nouns in overline style ("공유 드라이브").
+- Long labels truncate in a vertical rail. Keep the words that tell rows
+  apart at the front.
+
+## Accessibility
+
+What NavList does for you:
+
+- With `aria-label` or `aria-labelledby` it is a `<nav>` landmark around a
+  list; without one it is just the list, so a rail inside the app sidebar
+  does not add an unnamed landmark (WCAG 1.3.1, 2.4.1).
+- The current link has `aria-current="page"`; the current filter button has
+  `aria-current="true"` (WCAG 4.1.2). Weight and fill are two cues, not
+  colour alone (WCAG 1.4.1).
+- Every row is a native link or button in the tab order — no roving
+  tabindex, no arrow keys. Enter follows a link; Enter and Space press a
+  button (WCAG 2.1.1).
+- The focus ring is drawn inside the row, so neither the next row nor a
+  scrolling strip clips it (WCAG 2.4.7).
+- `NavList.Group` titles name their group's list (`aria-labelledby`) and are
+  not heading elements, so they add nothing to the page outline (KWCAG
+  5.2.4.2, see `ACCESSIBILITY.md`).
+- `trailingAction` is rendered beside the row, never inside it — no
+  interactive element nested in another.
+- A disabled button is `disabled`; a disabled link loses its `href` and gets
+  `aria-disabled`. Both use the fixed `disabled.fg` ink, never opacity.
+
+What you still have to do:
+
+- **Name the list** when it is a landmark of its own, and keep names unique
+  if a page has two (`관리자 메뉴`, `템플릿 종류`).
+- Give `trailingAction` its own name that says which row it belongs to
+  (`aria-label="회의록 정리 더 보기"`).
+- Leading icons are decorative; do not rely on them to name a row.
+- Put only phrasing content in a row: it renders an `<a>` or a `<button>`
+  (KWCAG 5.4.1.1).
+
+## Tokens
+
+The tokens are `NAV_LIST_RAMP` in `NavList.styles.ts`; disabled and focus come
+from the shared `disabledText` and `focusRingInset` utilities.
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 곳이나 분류를 가리키는 명사로 씁니다. "멤버 관리", "공유 문서함", "이미지". 동사를 쓰지
+  않고 마침표를 찍지 않습니다.
+- 개수는 라벨에 넣지 말고 `trailingVisual`에 둡니다. 항목 이름의 일부로 읽힙니다("이미지 64").
+- 묶음 제목은 짧은 명사로 씁니다("공유 드라이브").
+- 세로 레일에서는 긴 라벨이 잘립니다. 항목을 구별하는 말을 앞에 둡니다.
+
+## 접근성
+
+NavList가 알아서 하는 일
+
+- `aria-label`이나 `aria-labelledby`를 주면 목록을 감싼 `<nav>` 랜드마크가 되고, 주지 않으면
+  목록만 그립니다. 그래서 앱 사이드바 안의 레일이 이름 없는 랜드마크를 하나 더 만들지
+  않습니다(WCAG 1.3.1, 2.4.1).
+- 현재 링크에는 `aria-current="page"`, 현재 필터 버튼에는 `aria-current="true"`가
+  붙습니다(WCAG 4.1.2). 색만이 아니라 굵기와 배경 두 가지로 알립니다(WCAG 1.4.1).
+- 모든 항목이 Tab 순서에 들어가는 기본 링크나 버튼입니다. 방향키로 옮기는 방식은 쓰지
+  않습니다. 링크는 Enter로, 버튼은 Enter와 Space로 누릅니다(WCAG 2.1.1).
+- 초점 테두리는 항목 안쪽에 그려서, 옆 항목이나 스크롤되는 띠에 가려지지 않습니다(WCAG 2.4.7).
+- `NavList.Group`의 제목은 자기 묶음 목록의 이름(`aria-labelledby`)이 되고 제목 요소가 아니라서
+  문서 개요에 끼어들지 않습니다(KWCAG 5.2.4.2, `ACCESSIBILITY.md` 참고).
+- `trailingAction`은 항목 안이 아니라 옆에 그립니다. 상호작용 요소 안에 다른 상호작용 요소가
+  들어가지 않습니다.
+- 쓸 수 없는 버튼은 `disabled`가 되고, 쓸 수 없는 링크는 `href`를 잃고 `aria-disabled`가
+  붙습니다. 둘 다 투명도가 아니라 고정된 `disabled.fg` 색을 씁니다.
+
+직접 챙겨야 하는 일
+
+- 목록이 따로 랜드마크가 될 때는 **이름을 붙입니다.** 한 화면에 둘이라면 이름이 겹치지 않게
+  합니다(`관리자 메뉴`, `템플릿 종류`).
+- `trailingAction`에는 어느 항목의 것인지 알 수 있는 이름을 따로 줍니다
+  (`aria-label="회의록 정리 더 보기"`).
+- 앞쪽 아이콘은 장식입니다. 아이콘으로 항목 이름을 대신하지 않습니다.
+- 항목 안에는 phrasing content만 넣습니다. `<a>`나 `<button>`으로 그려집니다(KWCAG 5.4.1.1).
+
+## 토큰
+
+색은 `NavList.styles.ts`의 `NAV_LIST_RAMP`에서 정하고, 사용 불가와 초점 표시는 공용
+`disabledText`, `focusRingInset`을 씁니다.
+
+</Ko>
+
+<Canvas of={NavListStories.UsageTokens} sourceState="none" />
+
+<En>
+
+## Related
+
+- **Tabs**: sections of one place that swap a panel.
+- **SegmentedControl**: change how the same content is shown.
+- **Breadcrumb**: where this page sits in a hierarchy.
+- **Tree**: a hierarchy that expands and collapses.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **Tabs**: 한 곳의 구역을 바꿔 보여 주는 패널.
+- **SegmentedControl**: 같은 내용을 보는 방식 바꾸기.
+- **Breadcrumb**: 이 페이지가 계층의 어디에 있는지.
+- **Tree**: 펼치고 접는 계층.
+
+</Ko>
