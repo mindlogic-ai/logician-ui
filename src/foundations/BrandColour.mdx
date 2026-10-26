@@ -65,7 +65,8 @@ sand tint (`secondary.surface`) is not a component background; a soft fill is
 - The **focus ring** is `focus.ring`: black in light mode, light beige in dark
   mode. It is never coral, because a coral ring reads as an error border.
 - **Disabled** is a fixed grey (`disabled.bg` / `disabled.fg`) with no opacity
-  and no hover change. Beige is already the hover and pressed colour, so a
+  and no hover change. Fill-less ghost buttons have no `disabled.bg` to carry
+  the state, so their label/icon uses the lighter `disabled.fgGhost`. Beige is already the hover and pressed colour, so a
   beige disabled button would look like one being pressed.
 - Sign-up, payment and upgrade buttons are `Button variant="primary"` (black),
   not coral.
@@ -244,7 +245,8 @@ BAZE의 화면은 따뜻한 무채색입니다. 크림·아이보리 바탕에 �
 - **포커스 링**은 `focus.ring`으로, 라이트에서는 블랙, 다크에서는 밝은 베이지입니다.
   코랄 링은 오류 테두리처럼 보이므로 쓰지 않습니다.
 - **비활성**은 고정된 회색(`disabled.bg` / `disabled.fg`)이며 투명도를 쓰지 않고
-  호버해도 바뀌지 않습니다. 베이지는 이미 호버와 누름의 색이라, 비활성까지 베이지면
+  호버해도 바뀌지 않습니다. 바탕이 없는 고스트 버튼은 `disabled.bg`가 없으므로 글자·아이콘에
+  더 옅은 `disabled.fgGhost`를 씁니다. 베이지는 이미 호버와 누름의 색이라, 비활성까지 베이지면
   누르는 중인 버튼과 구분되지 않습니다.
 - 가입·결제·업그레이드 버튼은 코랄이 아니라 `Button variant="primary"`(블랙)입니다.
 
