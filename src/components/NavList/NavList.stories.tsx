@@ -41,6 +41,12 @@ const meta = {
         "`vertical` is a rail; `horizontal` is one row that scrolls sideways. Accepts a per-breakpoint object, e.g. `{ base: 'horizontal', md: 'vertical' }`.",
       table: { defaultValue: { summary: 'vertical' } },
     },
+    isCollapsed: {
+      control: { type: 'boolean' },
+      description:
+        'The icon-only rail: 40px rows, label as accessible name and tooltip. Every row needs a `leadingVisual`.',
+      table: { defaultValue: { summary: 'false' } },
+    },
   },
 } satisfies Meta<typeof NavList>;
 

@@ -321,6 +321,43 @@ describe('axe — 구조·ARIA 규칙', () => {
         </NavList.Group>
       </NavList>,
     ],
+    [
+      // Icon-only rows keep their label as the name; a new-window link says
+      // so in its name; a collapsible group is a disclosure with its list
+      // still labelled; a hover-revealed action is still in the tree.
+      '접힌 내비게이션 레일과 새 창 링크',
+      <NavList key="navlist-collapsed" aria-label="관리자 메뉴" isCollapsed>
+        <NavList.Item href="/a" isCurrent leadingVisual={<svg />}>
+          멤버 관리
+        </NavList.Item>
+        <NavList.Item
+          href="https://docs.example"
+          target="_blank"
+          leadingVisual={<svg />}
+        >
+          사용 가이드
+        </NavList.Item>
+      </NavList>,
+    ],
+    [
+      '접을 수 있는 내비게이션 묶음',
+      <NavList key="navlist-collapsible" aria-label="설정">
+        <NavList.Group title="결제" isCollapsible>
+          <NavList.Item
+            href="/b"
+            tooltip="요금제와 결제 수단"
+            trailingActionVisibility="hover"
+            trailingAction={
+              <button type="button" aria-label="요금제 옵션">
+                …
+              </button>
+            }
+          >
+            요금제
+          </NavList.Item>
+        </NavList.Group>
+      </NavList>,
+    ],
   ])('%s', async (_name, ui) => {
     const { container } = withProvider(ui);
     expect(await axeViolations(container)).toEqual([]);
