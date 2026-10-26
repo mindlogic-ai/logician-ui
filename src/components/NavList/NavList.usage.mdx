@@ -22,11 +22,12 @@ link or button.
   Drive picker's sources, the template kinds beside a media gallery.
 - For a strip of the same choices above the content on a narrow screen, with
   `orientation={{ base: 'horizontal', md: 'vertical' }}`.
+- When the list is long or keeps growing, or its rows carry counts or icons.
 
 ## When not to use
 
-- For sections of one object that swap a panel in place → `Tabs`. Tabs own
-  their panels, move with the arrow keys and mark the choice with
+- For a few sections of one object that swap a panel in place → `Tabs`. Tabs
+  own their panels, move with the arrow keys and mark the choice with
   `aria-selected`; a rail is links or filters, reached with Tab.
 - To change how the same content is shown (목록/카드, 일/주/월) →
   `SegmentedControl`.
@@ -34,9 +35,23 @@ link or button.
   several. A rail row takes you somewhere; it does not do something.
 - For a hierarchy the user expands and collapses → `Tree`.
 
+## Which component
+
+`Tabs` and NavList both mark one row as current; they say the same thing from
+opposite sides. Pick by what the rows are:
+
+| What you have                                                    | Use                                                                                          |
+| ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| A few sections of one object that swap a panel in place          | `Tabs`                                                                                       |
+| Destinations, or the side navigation of an area                  | `NavList`, each item with `href`                                                             |
+| A filter over one list or grid, with many options or with counts | `NavList`: links (`href`) when the filter state is in the URL, buttons (`onClick`) otherwise |
+| A short horizontal switch of two to five options                 | `SegmentedControl`                                                                           |
+| A hierarchy the user expands and collapses                       | `Tree`                                                                                       |
+| Commands (초대하기, 내보내기)                                    | `Button`, or a `Menu` when there are several                                                 |
+
 ## Variants and what they mean
 
-NavList has one look. The current row is a *place*, not a value: an ink label,
+NavList has one look. The current row is a _place_, not a value: an ink label,
 bold, on a neutral `bg.emphasized` fill — never the brand hue. `orientation`
 decides the axis:
 
@@ -56,16 +71,31 @@ decides the axis:
   템플릿 종류.
 - 좁은 화면에서는 같은 항목을 내용 위의 한 줄로 눕힙니다.
   `orientation={{ base: 'horizontal', md: 'vertical' }}`을 씁니다.
+- 항목이 많거나 계속 늘어나는 목록, 항목에 개수나 아이콘이 붙는 목록.
 
 ## 언제 쓰지 않나요
 
-- 한 대상의 구역을 그 자리에서 바꿔 보여 주는 것은 `Tabs`가 맡습니다. 탭은 패널을 갖고,
+- 한 대상의 구역 몇 개를 그 자리에서 바꿔 보여 주는 것은 `Tabs`가 맡습니다. 탭은 패널을 갖고,
   방향키로 옮기며, 고른 것을 `aria-selected`로 알립니다. 레일은 링크나 필터이고 Tab 키로
   오갑니다.
 - 같은 내용을 보는 방식을 바꿀 때(목록/카드, 일/주/월)는 `SegmentedControl`을 씁니다.
 - 명령(초대하기, 내보내기)은 `Button`으로, 여러 개라면 `Menu`로 둡니다. 레일의 항목은
   어딘가로 데려가는 것이지 무언가를 실행하는 것이 아닙니다.
 - 펼치고 접는 계층은 `Tree`를 씁니다.
+
+## 어떤 컴포넌트를 쓰나요
+
+`Tabs`와 NavList는 둘 다 항목 하나를 현재 항목으로 표시합니다. 두 문서는 같은 기준을 서로
+반대쪽에서 설명합니다. 항목이 무엇인지를 보고 고릅니다.
+
+| 이런 경우                                                            | 쓰는 컴포넌트                                                            |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| 한 대상의 구역 몇 개를 그 자리에서 패널로 바꿔 보여 줄 때            | `Tabs`                                                                   |
+| 다른 곳으로 옮겨 가는 항목, 한 영역의 옆 내비게이션                  | 항목마다 `href`를 준 `NavList`                                           |
+| 목록이나 그리드 하나를 거르는 필터로, 선택지가 많거나 개수를 붙일 때 | `NavList`. 필터 상태가 URL에 있으면 링크(`href`), 아니면 버튼(`onClick`) |
+| 선택지 둘에서 다섯 개를 가로로 짧게 바꿀 때                          | `SegmentedControl`                                                       |
+| 펼치고 접는 계층                                                     | `Tree`                                                                   |
+| 명령(초대하기, 내보내기)                                             | `Button`, 여러 개라면 `Menu`                                             |
 
 ## 변형과 뜻
 
@@ -226,10 +256,11 @@ NavList가 알아서 하는 일
 
 ## Related
 
-- **Tabs**: sections of one place that swap a panel.
+- **Tabs**: a few sections of one object that swap a panel in place.
 - **SegmentedControl**: change how the same content is shown.
 - **Breadcrumb**: where this page sits in a hierarchy.
 - **Tree**: a hierarchy that expands and collapses.
+- **Button** / **Menu**: commands.
 
 </En>
 
@@ -237,9 +268,10 @@ NavList가 알아서 하는 일
 
 ## 관련 컴포넌트
 
-- **Tabs**: 한 곳의 구역을 바꿔 보여 주는 패널.
+- **Tabs**: 한 대상의 구역 몇 개를 그 자리에서 바꿔 보여 주는 패널.
 - **SegmentedControl**: 같은 내용을 보는 방식 바꾸기.
 - **Breadcrumb**: 이 페이지가 계층의 어디에 있는지.
 - **Tree**: 펼치고 접는 계층.
+- **Button** / **Menu**: 명령.
 
 </Ko>
