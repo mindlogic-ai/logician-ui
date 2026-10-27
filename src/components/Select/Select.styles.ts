@@ -37,9 +37,27 @@ const fieldBase = {
   },
 };
 
+/**
+ * Room for the × and its divider at the end of the value, while the × shows.
+ *
+ * The indicator group overlays the value. Chakra keeps the value off the
+ * chevron with `maxW: 80%` on a Select (too little in a narrow filter) and a
+ * 1.5× height padding on a Combobox, and neither counts the × with its
+ * divider. This reserves the whole group instead: padding on both sides, the
+ * × (`8`) with its `me` (`1`), the group `gap` (`1`) and the chevron (`1em`),
+ * so a long value ends in an ellipsis before the ×.
+ */
+const clearTriggerRoom = (paddingVar: string) => ({
+  '[data-part=control]:has([data-part=clear-trigger]:not([hidden])) > &': {
+    pe: `calc(var(${paddingVar}) * 2 + 3.5em)`,
+    '& [data-part=value-text]': { maxW: 'none' },
+  },
+});
+
 /** Select trigger — the clickable control. */
 export const triggerStyles = {
   ...fieldBase,
+  ...clearTriggerRoom('--select-trigger-padding-x'),
   cursor: 'pointer',
   _open: {
     borderColor: 'primary.main',
@@ -80,6 +98,7 @@ export const ghostTriggerStyles = {
 /** Combobox text input — the typeable control. */
 export const inputStyles = {
   ...fieldBase,
+  ...clearTriggerRoom('--combobox-input-padding-x'),
 };
 
 /** Dropdown panel for both Select and Combobox. */
@@ -141,9 +160,23 @@ const clearTriggerStyles = (heightVar: string) => ({
   alignItems: 'center',
   justifyContent: 'center',
   boxSize: '8',
+  me: '1',
   color: 'fg.icon',
   cursor: 'pointer',
   _hover: { color: 'fg.default' },
+  // The divider marks where opening starts: it sits in the `me` gap, takes no
+  // clicks, and everything right of it belongs to the chevron.
+  _after: {
+    content: '""',
+    position: 'absolute',
+    insetEnd: '-1',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    h: '4',
+    borderEndWidth: '1px',
+    borderColor: 'border.subtle',
+    pointerEvents: 'none',
+  },
   // zag hides the × with the `hidden` attribute while nothing is selected,
   // and the `display` above would otherwise override it.
   _hidden: { display: 'none' },
