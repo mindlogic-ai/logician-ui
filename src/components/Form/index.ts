@@ -8,6 +8,8 @@ export type { FieldRowProps } from './FieldRow';
 export { FieldRow } from './FieldRow';
 export type { FormFooterProps } from './FormFooter';
 export { FormFooter } from './FormFooter';
+export type { FormModalProps, FormModalSize } from './FormModal';
+export { FormModal, useFormModalContext } from './FormModal';
 export type { FormModalFooterProps } from './FormModalFooter';
 export { FormModalFooter } from './FormModalFooter';
 export { FormScrollArea } from './FormScrollArea';

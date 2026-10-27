@@ -7,3 +7,8 @@ export { useModalContext } from './ModalContext';
 export { ModalFooter } from './ModalFooter';
 export { ModalHeader, type ModalHeaderProps } from './ModalHeader';
 export { ModalOverlay } from './ModalOverlay';
+export {
+  ViewModal,
+  type ViewModalProps,
+  type ViewModalSize,
+} from './ViewModal';

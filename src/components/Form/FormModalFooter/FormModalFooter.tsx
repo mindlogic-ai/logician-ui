@@ -2,6 +2,7 @@ import { Button } from '@/components/Button';
 import { TrashIcon } from '@/components/Icon';
 import { ModalFooter } from '@/components/Modal';
 
+import { useFormModalContext } from '../FormModal/FormModalContext';
 import { FormModalFooterProps } from './FormModalFooter.types';
 
 /**
@@ -19,6 +20,9 @@ import { FormModalFooterProps } from './FormModalFooter.types';
  * pass `onSubmit` and it becomes a `type="button"` onClick. `...rest` forwards to
  * the logician `ModalFooter`, so callers pin it (`position="sticky"` /
  * `flexShrink={0}`) or zero its padding (`px={0}`) per modal.
+ *
+ * Inside a `FormModal` the submit button is also disabled while the form fails
+ * a native constraint (an empty `required` field), on top of `submitDisabled`.
  */
 export const FormModalFooter = ({
   onDelete,
@@ -34,6 +38,8 @@ export const FormModalFooter = ({
   bordered = false,
   ...rest
 }: FormModalFooterProps) => {
+  const formModal = useFormModalContext();
+
   return (
     <ModalFooter
       justifyContent="flex-end"
@@ -75,7 +81,7 @@ export const FormModalFooter = ({
         onClick={onSubmit}
         loading={isSubmitting}
         loadingText={submitLoadingText}
-        disabled={isSubmitting || submitDisabled}
+        disabled={isSubmitting || submitDisabled || !!formModal?.invalid}
       >
         {submitLabel}
       </Button>
