@@ -18,8 +18,9 @@ const meta: Meta<typeof FormModal> = {
     docs: {
       description: {
         component:
-          '입력을 받는 모달(추가·수정·이름 바꾸기). 배경을 눌러도 닫히지 않고 ' +
-          '살짝 튕겨서 입력한 내용이 남는다. X·Esc·[취소]는 바로 닫힌다. ' +
+          '입력을 받는 모달(추가·수정·이름 바꾸기). 아무것도 입력하지 않았으면 ' +
+          '배경을 눌러 닫히고, 입력했으면 닫히지 않고 좌우로 흔들려서 입력한 ' +
+          '내용이 남는다. X·Esc·[취소]는 언제나 바로 닫힌다. ' +
           '`required` 칸이 비어 있으면 제출 버튼이 꺼지고 Enter도 제출하지 ' +
           '않는다. 제목은 필수이고 헤더에 들어간다.',
       },
@@ -75,7 +76,7 @@ const CategoryForm = ({ size }: { size?: FormModalSize }) => {
   );
 };
 
-/** 두 칸이 `required`. 둘 다 채워야 [추가]가 켜진다. 배경을 눌러 보면 튕긴다. */
+/** 두 칸이 `required`. 둘 다 채워야 [추가]가 켜진다. 입력한 뒤 배경을 누르면 흔들리고, 빈 상태에서 누르면 닫힌다. */
 export const Default: Story = { render: () => <CategoryForm /> };
 
 /** 입력란이 많으면 `lg`·`xl`. */

@@ -25,6 +25,14 @@ export interface FormModalProps {
    * `handleSubmit(save)` as is.
    */
   onSubmit: () => void;
+  /**
+   * Whether the form holds unsaved input, which decides what a backdrop click
+   * does: close (clean) or shake and stay (dirty). Leave unset and FormModal
+   * works it out — a field the person typed into that no longer matches how
+   * the dialog opened. Pass react-hook-form's `formState.isDirty` when the
+   * form has one.
+   */
+  dirty?: boolean;
   /** `ModalBody` with the fields, then `FormModalFooter`. */
   children: ReactNode;
 }

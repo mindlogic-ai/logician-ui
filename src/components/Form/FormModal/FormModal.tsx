@@ -24,11 +24,38 @@ import { FormModalProps } from './FormModal.types';
 import { FormModalContext } from './FormModalContext';
 
 /**
- * Big enough to see, small enough not to read as the dialog opening again.
- * Scale rather than a sideways shake: `Shake` means "that answer is wrong", and
- * nothing is wrong here — the dialog is only saying it is still open.
+ * The same decaying swing as `Shake` (`shake-x` in the theme keyframes), played
+ * through the Web Animations API instead of `animationName`: the dialog content
+ * already owns `animationName` for its enter and exit, and swapping it would
+ * replay the entrance when the shake ended.
  */
-const NUDGE_KEYFRAMES = { scale: ['1', '1.02', '1'] };
+const SHAKE_KEYFRAMES: Keyframe[] = [
+  { offset: 0, translate: '0 0' },
+  { offset: 0.2, translate: '-6px 0' },
+  { offset: 0.4, translate: '6px 0' },
+  { offset: 0.6, translate: '-3.6px 0' },
+  { offset: 0.8, translate: '3.6px 0' },
+  { offset: 1, translate: '0 0' },
+];
+
+/** Every control's current value, in order — what "the form changed" compares. */
+const snapshot = (form: HTMLFormElement) =>
+  JSON.stringify(
+    Array.from(form.elements).map((el) => {
+      if (el instanceof HTMLInputElement) {
+        return el.type === 'checkbox' || el.type === 'radio'
+          ? el.checked
+          : el.value;
+      }
+      if (
+        el instanceof HTMLTextAreaElement ||
+        el instanceof HTMLSelectElement
+      ) {
+        return el.value;
+      }
+      return null;
+    })
+  );
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
@@ -39,9 +66,13 @@ const prefersReducedMotion = () =>
  *
  * What it decides so the caller does not:
  *
- * - **A click on the backdrop does not close it.** It nudges the dialog
- *   instead, so a stray click outside never throws away what was typed. The
- *   close button, Esc and Cancel still close it at once — those are deliberate.
+ * - **A click on the backdrop closes it only while nothing has been typed.**
+ *   Once a field differs from how the dialog opened, a backdrop click (or focus
+ *   leaving the dialog) is refused and the dialog shakes, so a stray click
+ *   never throws away what was typed. An empty dialog has nothing to lose and
+ *   closes like any other. The close button, Esc and Cancel always close at
+ *   once — those are deliberate. Pass `dirty` to decide this yourself (e.g.
+ *   react-hook-form's `formState.isDirty`).
  * - **It is a `<form>`.** Enter in a field submits, and `onSubmit` receives no
  *   event to `preventDefault`.
  * - **The submit button waits for the form to be valid.** While any native
@@ -76,12 +107,18 @@ export const FormModal = ({
   subtitle,
   size = 'md',
   onSubmit,
+  dirty,
   children,
 }: FormModalProps) => {
   const translate = useTranslate();
   const formRef = useRef<HTMLFormElement | null>(null);
-  const nudgeRef = useRef<Animation | null>(null);
+  const shakeRef = useRef<Animation | null>(null);
   const [invalid, setInvalid] = useState(false);
+  // The values the dialog opened with. Re-taken on every render until the
+  // person first types, so a caller that prefills or resets the fields after
+  // opening moves the baseline with it instead of counting as an edit.
+  const baselineRef = useRef<string | null>(null);
+  const touchedRef = useRef(false);
 
   const readValidity = useCallback(() => {
     const form = formRef.current;
@@ -92,15 +129,42 @@ export const FormModal = ({
   // caller resetting or prefilling the fields re-renders through here, and the
   // form only exists once the dialog has mounted. Same value bails out, so
   // running on every render does not loop.
-  useLayoutEffect(readValidity);
+  useLayoutEffect(() => {
+    readValidity();
+    const form = formRef.current;
+    if (form && !touchedRef.current) baselineRef.current = snapshot(form);
+  });
 
   const setFormRef = useCallback((node: HTMLFormElement | null) => {
     formRef.current = node;
+    touchedRef.current = false;
     // Children commit before this ref is set, so the fields are already there.
-    if (node) setInvalid(!node.checkValidity());
+    if (node) {
+      setInvalid(!node.checkValidity());
+      baselineRef.current = snapshot(node);
+    }
   }, []);
 
-  const nudge = useCallback(() => {
+  // A dialog that stays mounted while closed would otherwise reopen dirty.
+  useLayoutEffect(() => {
+    if (open) touchedRef.current = false;
+  }, [open]);
+
+  const handleInput = useCallback(() => {
+    touchedRef.current = true;
+    readValidity();
+  }, [readValidity]);
+
+  const isDirty = useCallback(() => {
+    if (dirty !== undefined) return dirty;
+    const form = formRef.current;
+    // Typed and then erased back to the start is not an edit.
+    return (
+      !!form && touchedRef.current && snapshot(form) !== baselineRef.current
+    );
+  }, [dirty]);
+
+  const shake = useCallback(() => {
     const content = formRef.current?.closest<HTMLElement>(
       '[data-scope="dialog"][data-part="content"]'
     );
@@ -108,8 +172,8 @@ export const FormModal = ({
     if (prefersReducedMotion()) return;
     // Only our own animation — cancelling every animation on the element would
     // also cut the dialog's entrance short when the click lands mid-open.
-    nudgeRef.current?.cancel();
-    nudgeRef.current = content.animate(NUDGE_KEYFRAMES, {
+    shakeRef.current?.cancel();
+    shakeRef.current = content.animate(SHAKE_KEYFRAMES, {
       duration: MOTION_DURATION_MS.base,
       easing: easings.standard.value,
     });
@@ -134,11 +198,16 @@ export const FormModal = ({
       onOpenChange={(e) => {
         if (!e.open) onClose();
       }}
-      // Blocks both ways out that are not a choice: a backdrop click and focus
-      // leaving the dialog. Only the click nudges — focus moving away is not
-      // something the person did to the dialog.
-      closeOnInteractOutside={false}
-      onPointerDownOutside={nudge}
+      // Both ways out that are not a choice — a backdrop click and focus
+      // leaving the dialog — are refused once something has been typed. Only
+      // the click shakes: focus moving away is not something the person did
+      // to the dialog.
+      onInteractOutside={(e) => {
+        if (isDirty()) e.preventDefault();
+      }}
+      onPointerDownOutside={() => {
+        if (isDirty()) shake();
+      }}
     >
       <ModalContent maxH={MODAL_MAX_H}>
         <FormModalContext.Provider value={ctx}>
@@ -148,8 +217,8 @@ export const FormModal = ({
             ref={setFormRef}
             noValidate
             onSubmit={handleSubmit}
-            onInput={readValidity}
-            onChange={readValidity}
+            onInput={handleInput}
+            onChange={handleInput}
             // Keeps the dialog's column layout going through the form, so a
             // tall body still scrolls between a fixed header and footer.
             display="flex"
