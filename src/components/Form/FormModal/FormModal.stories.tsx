@@ -82,8 +82,11 @@ export const Default: Story = { render: () => <CategoryForm /> };
 /** 입력란이 많으면 `lg`·`xl`. */
 export const Large: Story = { render: () => <CategoryForm size="lg" /> };
 
-/** 수정 모달: 왼쪽 끝 삭제 버튼은 `FormModalFooter` 옵션 그대로. */
-export const EditWithDelete: Story = {
+/**
+ * 수정 모달은 [취소] [저장]만 둔다. 삭제는 목록의 행·카드 메뉴(⋯)에서 하고
+ * 위험 확인 모달로 한 번 더 묻는다. `FormModalFooter`의 `onDelete`는 deprecated.
+ */
+export const Edit: Story = {
   render: () => {
     const [open, setOpen] = useState(false);
     const close = () => setOpen(false);
@@ -105,8 +108,6 @@ export const EditWithDelete: Story = {
             onCancel={close}
             cancelLabel="취소"
             submitLabel="저장"
-            onDelete={close}
-            deleteLabel="삭제"
           />
         </FormModal>
       </>

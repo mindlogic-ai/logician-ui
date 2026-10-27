@@ -12,9 +12,19 @@ export interface FormModalFooterProps extends Omit<
   /**
    * Optional left-aligned destructive action. Renders the standard danger
    * delete button (trash glyph + label), pushed to the far left of the footer.
+   *
+   * @deprecated Do not put delete in an edit modal. Delete from the list —
+   * a row or card menu (⋯) opening a danger confirm — and keep the edit modal
+   * to Cancel + Save. A third button beside Save is one slip from losing the
+   * record, and confirming from inside the edit modal stacks a modal on a
+   * modal. Still rendered for existing callers; removed in a later major.
    */
   onDelete?: () => void;
-  /** Delete button label. Rendered verbatim (no default — the app owns copy). */
+  /**
+   * Delete button label. Rendered verbatim (no default — the app owns copy).
+   *
+   * @deprecated Goes with `onDelete` — see there.
+   */
   deleteLabel?: ReactNode;
   /** Cancel/dismiss handler. */
   onCancel: () => void;

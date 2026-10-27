@@ -22,7 +22,7 @@ footer with the actions.
 | `FormSectionHeader`                       | The section title row (`H5`, description, `titleAdornment`, `action`) on its own.                                                                                                                      |
 | `FormScrollArea`                          | A full-height scrolling column, so a sticky footer pins to its bottom.                                                                                                                                 |
 | `FormFooter`                              | A sticky footer for panel forms: `start` on the left, `meta` (saved time, cost) and `action` on the right.                                                                                             |
-| `FormModalFooter`                         | The modal footer: optional delete on the far left, Cancel, and a primary submit with its own loading and disabled state.                                                                               |
+| `FormModalFooter`                         | The modal footer: Cancel and a primary submit with its own loading and disabled state. Its far-left delete is deprecated.                                                                              |
 
 ## When to use
 
@@ -55,7 +55,7 @@ footer with the actions.
 | `FormSectionHeader`                       | 섹션 제목 줄(`H5`, 설명, `titleAdornment`, `action`)만 따로 쓸 때.                                                                                                                                |
 | `FormScrollArea`                          | 높이를 꽉 채우고 스크롤되는 세로 영역. 붙박이 푸터가 아래에 고정됩니다.                                                                                                                           |
 | `FormFooter`                              | 패널 폼의 붙박이 푸터. 왼쪽에 `start`, 오른쪽에 `meta`(저장 시각, 비용)와 `action`.                                                                                                               |
-| `FormModalFooter`                         | 모달 푸터. 맨 왼쪽의 삭제(선택), 취소, 로딩과 비활성 상태를 스스로 가진 기본 제출 버튼.                                                                                                           |
+| `FormModalFooter`                         | 모달 푸터. 취소, 로딩과 비활성 상태를 스스로 가진 기본 제출 버튼. 맨 왼쪽 삭제는 deprecated.                                                                                                      |
 
 ## 언제 쓰나요
 
@@ -89,8 +89,15 @@ footer with the actions.
 <Canvas of={FormStories.DoModalFooter} />
 <Verdict
   kind="do"
-  en="Use FormModalFooter in modals: delete far left, Cancel, then the primary action last."
-  ko="모달에는 FormModalFooter를 씁니다. 삭제는 맨 왼쪽, 그다음 취소, 기본 동작은 맨 끝입니다."
+  en="Use FormModalFooter in modals: Cancel, then the primary action last."
+  ko="모달에는 FormModalFooter를 씁니다. 취소 다음에 기본 동작을 맨 끝에 둡니다."
+/>
+
+<Canvas of={FormStories.DontDeleteInEditModal} />
+<Verdict
+  kind="dont"
+  en="Put delete in the edit modal. A third button beside Save is one slip from losing the record, and confirming it stacks a modal on a modal. Delete from the list: a row or card menu (⋯) that opens a danger confirm."
+  ko="수정 모달에 삭제를 넣지 마세요. 저장 옆의 세 번째 버튼은 잘못 누르면 바로 지워지고, 확인을 붙이면 모달 위에 모달이 뜹니다. 삭제는 목록의 행·카드 메뉴(⋯)에서 하고 위험 확인 모달로 묻습니다."
 />
 
 <Canvas of={FormStories.DontHandRolledFooter} />
@@ -106,9 +113,8 @@ footer with the actions.
 
 - Section titles are nouns (기본 정보, 동작). Field rules are on the Input and
   Select pages.
-- Footer labels name the result (저장, 만들기, 그룹 삭제). The design system
-  owns no copy: `cancelLabel`, `submitLabel` and `deleteLabel` come from your
-  translations.
+- Footer labels name the result (저장, 만들기). The design system owns no
+  copy: `cancelLabel` and `submitLabel` come from your translations.
 - `meta` is a fact, not an instruction: 오후 2:14에 저장됨, 10 크레딧.
 
 ## Accessibility
@@ -159,8 +165,8 @@ top rule, `FormSection` `divider` uses `border.subtle`, and `FieldError` uses
 
 - 섹션 제목은 명사로 씁니다(기본 정보, 동작). 필드 문구 규칙은 Input과 Select 페이지에
   있습니다.
-- 푸터 버튼에는 결과를 씁니다(저장, 만들기, 그룹 삭제). 디자인 시스템은 문구를 가지지
-  않으므로 `cancelLabel`, `submitLabel`, `deleteLabel`은 앱의 번역에서 넘깁니다.
+- 푸터 버튼에는 결과를 씁니다(저장, 만들기). 디자인 시스템은 문구를 가지지 않으므로
+  `cancelLabel`, `submitLabel`은 앱의 번역에서 넘깁니다.
 - `meta`에는 지시가 아니라 사실을 씁니다. 예: 오후 2:14에 저장됨, 10 크레딧.
 
 ## 접근성
