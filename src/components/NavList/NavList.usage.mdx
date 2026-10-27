@@ -209,6 +209,9 @@ Collapsed, a row's square is `2.5em`, so the rail is `3.5em` with `p={2}`.
 - `tooltip` adds something the label does not say — a description, or why
   a row is disabled. It is the row's accessible description
   (`aria-describedby`), so never repeat the label in it.
+- `tooltipPlacement="end"` opens an expanded row's tooltips beside it (on the
+  right in a left-to-right page) instead of above it — for a side rail, where
+  a tooltip on top covers the row above.
 - A label cut off by the ellipsis shows itself in full on hover and focus,
   and only while it is cut off. You pass nothing for this.
 - A link with `target="_blank"` (on the item, or on the `asChild` router
@@ -223,6 +226,8 @@ Collapsed, a row's square is `2.5em`, so the rail is `3.5em` with `p={2}`.
 
 - `tooltip`에는 라벨이 말하지 않는 것을 씁니다. 설명이나, 항목을 쓸 수 없는 이유 같은
   것입니다. 항목의 설명(`aria-describedby`)으로 읽히므로 라벨을 되풀이하지 않습니다.
+- `tooltipPlacement="end"`를 주면 펼친 행의 툴팁이 위가 아니라 옆(왼쪽에서 오른쪽으로 읽는
+  화면에서는 오른쪽)에 뜹니다. 위에 뜨면 윗행을 가리는 사이드 레일에 씁니다.
 - 말줄임표로 잘린 라벨은 마우스를 올리거나 초점을 옮기면 전체가 툴팁으로 보입니다. 잘렸을
   때만 뜨고, 따로 줄 prop은 없습니다.
 - `target="_blank"` 링크는(항목에 주든 `asChild` 라우터 링크에 주든) 항목 이름 뒤에

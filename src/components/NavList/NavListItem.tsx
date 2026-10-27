@@ -81,6 +81,7 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
       trailingAction,
       trailingActionVisibility = 'always',
       tooltip,
+      tooltipPlacement = 'top',
       ...rest
     },
     ref
@@ -403,7 +404,11 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
         // Beside the icon, towards the content: the rail is on the right of
         // a right-to-left page. Popper placements are physical.
         placement={
-          isCollapsed ? (tooltipDir === 'rtl' ? 'left' : 'right') : 'top'
+          isCollapsed || tooltipPlacement === 'end'
+            ? tooltipDir === 'rtl'
+              ? 'left'
+              : 'right'
+            : 'top'
         }
         onOpenChange={({ open }) => setIsTooltipOpen(open)}
         // Zag only checks that this is set — it takes the content's id and
