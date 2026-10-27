@@ -35,7 +35,7 @@ export const globalCss = defineGlobalStyles({
   },
 
   'html, body': {
-    // Mode-aware primary text (neutral.11 light / cream dark).
+    // Mode-aware primary text (neutral.11 light / off-white dark).
     color: 'fg.default',
   },
 

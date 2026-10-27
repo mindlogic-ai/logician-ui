@@ -540,6 +540,58 @@ describe('NavList', () => {
       expect(onClick).toHaveBeenCalledTimes(1);
     });
 
+    it.each([
+      // jsdom has no layout, so the popper may flip to the opposite side:
+      // only the axis is asserted.
+      [undefined, /^(top|bottom)/],
+      ['end', /^(left|right)/],
+    ] as const)(
+      "tooltipPlacement=%s opens an expanded row's tooltip on the %s axis",
+      async (tooltipPlacement, side) => {
+        renderUi(
+          <NavList aria-label="메뉴">
+            <NavList.Item
+              onClick={() => {}}
+              tooltip="팀 전체가 쓰는 공간"
+              tooltipPlacement={tooltipPlacement}
+            >
+              공유 드라이브
+            </NavList.Item>
+          </NavList>
+        );
+        await hover(screen.getByRole('button', { name: '공유 드라이브' }));
+        await waitFor(() =>
+          expect(
+            document.querySelector('[data-part="content"][data-state="open"]')
+          ).toHaveAttribute('data-placement', expect.stringMatching(side))
+        );
+      }
+    );
+
+    it('an end tooltip on a row with a trailing action measures from the whole <li>', async () => {
+      const liRect = vi.spyOn(HTMLLIElement.prototype, 'getBoundingClientRect');
+      renderUi(
+        <NavList aria-label="메뉴">
+          <NavList.Item
+            onClick={() => {}}
+            tooltip="회의를 녹음하고 요약을 받아요"
+            tooltipPlacement="end"
+            trailingAction={<button type="button">고정</button>}
+          >
+            회의록
+          </NavList.Item>
+        </NavList>
+      );
+      await hover(screen.getByRole('button', { name: '회의록' }));
+      await waitFor(() =>
+        expect(
+          document.querySelector('[data-part="content"][data-state="open"]')
+        ).not.toBeNull()
+      );
+      expect(liRect).toHaveBeenCalled();
+      liRect.mockRestore();
+    });
+
     it('a disabled row still carries its tooltip as a description, closed', () => {
       renderUi(
         <NavList aria-label="메뉴">

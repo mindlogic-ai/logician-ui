@@ -96,17 +96,25 @@ function rampTokens(
   return out;
 }
 
+/** Brand anchor (generator name) → raw token: `{name}.key` or `{name}Dark.key`. */
+const ANCHOR_TOKENS = [
+  ['cream', 'light', 'cream'],
+  ['press', 'light', 'press'],
+  ['fgDark', 'dark', 'fg'],
+  ['primaryDark', 'dark', 'primary'],
+  ['primaryHoverDark', 'dark', 'primaryHover'],
+  ['pressDark', 'dark', 'press'],
+] as const;
+
 function scaleTokens(name: 'ink' | 'sand' | 'slate') {
   const r = RAMPS[name];
-  const a = r.anchors as Partial<
-    Record<'cream' | 'press' | 'primaryDark' | 'pressDark', string>
-  >;
+  const a = r.anchors as Record<string, string | undefined>;
   const light: Record<string, string> = {};
   const dark: Record<string, string> = { canvas: r.canvasDark };
-  if (a.cream) light.cream = a.cream;
-  if (a.press) light.press = a.press;
-  if (a.primaryDark) dark.primary = a.primaryDark;
-  if (a.pressDark) dark.press = a.pressDark;
+  for (const [anchor, mode, key] of ANCHOR_TOKENS) {
+    const hex = a[anchor];
+    if (hex) (mode === 'light' ? light : dark)[key] = hex;
+  }
   return {
     [name]: rampTokens(r.light, light),
     [`${name}Dark`]: rampTokens(r.dark, dark),
@@ -265,10 +273,9 @@ function buildRefIndex(neutral: NeutralScale, secondary: SecondaryScale) {
     for (const s of STEPS) add(RAMPS[name].dark[s], `${name}Dark.${s}`);
     add(RAMPS[name].canvasDark, `${name}Dark.canvas`);
     const a = RAMPS[name].anchors as Record<string, string>;
-    if (a.cream) add(a.cream, `${name}.cream`);
-    if (a.press) add(a.press, `${name}.press`);
-    if (a.primaryDark) add(a.primaryDark, `${name}Dark.primary`);
-    if (a.pressDark) add(a.pressDark, `${name}Dark.press`);
+    for (const [anchor, mode, key] of ANCHOR_TOKENS)
+      if (a[anchor])
+        add(a[anchor], `${name}${mode === 'dark' ? 'Dark' : ''}.${key}`);
   };
   addScale(neutral);
   addScale(secondary);

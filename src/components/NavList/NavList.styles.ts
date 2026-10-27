@@ -30,8 +30,8 @@ import type {
  * otherwise a press on the row you are already on gives no sign it landed.
  * No `bg.*` role is darker than `bg.emphasized` in light (it is the top of
  * the `layer.1` ladder), so the step is `border.default`: the next neutral in
- * both modes (light `#D8D2CA` after `#E5DFD9`, dark `#48443E` after
- * `#3F3B34`), the same fill the BottomSheet handle uses. Under
+ * both modes (light `#D8D2CA` after `#E5DFD9`, dark `#3F403F` after
+ * `#363636`), the same fill the BottomSheet handle uses. Under
  * `prefers-contrast: more` that token turns into a 3:1 stroke grey and the
  * label would drop to 2.8:1, so high contrast takes `border.strong`, which
  * high contrast leaves alone. `NavList.test.tsx` checks every pair.

@@ -22,6 +22,7 @@ import {
   contentStyles,
   indicatorStyles,
   itemStyles,
+  selectClearTriggerStyles,
   triggerStyles,
 } from './Select.styles';
 import { SelectField } from './SelectField';
@@ -196,6 +197,76 @@ export const MultiSelect = () => (
       </Portal>
     </Select.Root>
   </Box>
+);
+
+/**
+ * An optional field the member can empty again. `ClearTrigger` goes before
+ * the chevron and shows only while something is selected. It draws its own
+ * icon and is named 「선택 지우기」 in the provider's language; pass
+ * `aria-label` to say what is cleared. A divider separates it from the
+ * chevron, and a long value ends in an ellipsis before it. On a touch screen
+ * its hit area widens to 44px toward the value, at the field's own height.
+ */
+const longValueCollection = createListCollection({
+  items: [
+    {
+      label: 'Engineering / Platform / Developer Experience',
+      value: 'dx',
+    },
+    { label: 'Design', value: 'design' },
+  ],
+});
+
+export const Clearable = () => (
+  <Stack maxW="320px" gap={4}>
+    <Box maxW="180px">
+      <Select.Root collection={longValueCollection} defaultValue={['dx']}>
+        <Select.HiddenSelect />
+        <Select.Label>Team (180px)</Select.Label>
+        <Select.Control>
+          <Select.Trigger>
+            <Select.ValueText placeholder="Select a team" />
+          </Select.Trigger>
+          <Select.IndicatorGroup>
+            <Select.ClearTrigger />
+            <Select.Indicator />
+          </Select.IndicatorGroup>
+        </Select.Control>
+      </Select.Root>
+    </Box>
+    {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
+      <Select.Root
+        key={size}
+        size={size}
+        collection={frameworkCollection}
+        defaultValue={['react']}
+      >
+        <Select.HiddenSelect />
+        <Select.Label>{`Framework (${size})`}</Select.Label>
+        <Select.Control>
+          <Select.Trigger>
+            <Select.ValueText placeholder="Select a framework" />
+          </Select.Trigger>
+          <Select.IndicatorGroup>
+            <Select.ClearTrigger />
+            <Select.Indicator />
+          </Select.IndicatorGroup>
+        </Select.Control>
+        <Portal>
+          <Select.Positioner>
+            <Select.Content>
+              {frameworkCollection.items.map((item) => (
+                <Select.Item item={item} key={item.value}>
+                  <Select.ItemText>{item.label}</Select.ItemText>
+                  <Select.ItemIndicator />
+                </Select.Item>
+              ))}
+            </Select.Content>
+          </Select.Positioner>
+        </Portal>
+      </Select.Root>
+    ))}
+  </Stack>
 );
 
 /* -------------------------------------------------------------------------
@@ -949,6 +1020,16 @@ export const UsageTokens: UsageStory = {
         {
           token: indicatorStyles.color,
           use: <T en="Chevron" ko="펼침 화살표" />,
+        },
+        {
+          token: selectClearTriggerStyles.color,
+          use: <T en="Clear (×) button" ko="선택 지우기(×) 버튼" />,
+        },
+        {
+          token: selectClearTriggerStyles._hover.color,
+          use: (
+            <T en="Clear button on hover" ko="마우스를 올렸을 때 지우기 버튼" />
+          ),
         },
         {
           token: contentStyles.bg,

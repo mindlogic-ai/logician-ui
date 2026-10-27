@@ -1,5 +1,53 @@
 # Changelog
 
+## 5.0.0-alpha.19
+
+### Patch Changes
+
+- f071886: Select·Combobox 의 선택 지우기 × 에서 구분선과 화살표 사이 간격을 × 와 구분선 사이 간격(14px 글자 기준 약 13px)에 맞춘다. 늘어난 만큼 값 영역의 오른쪽 여백도 늘린다.
+
+## 5.0.0-alpha.18
+
+### Patch Changes
+
+- 3602ef2: Dark mode is a neutral charcoal instead of sepia. `inkDark` surfaces, dividers
+  and borders (steps 1–7) carry next to no chroma, the dark canvas is `#171717`
+  (was `#1F1E1D`), body text is a dedicated off-white `inkDark.fg` `#E8E6E3`
+  (14:1, was cream `#F5EDE0`; high-contrast dark `#F2F0ED`), the dark primary/tooltip fill is a warm grey
+  `#D6D3CD` (was beige `#E3D7C4`), and `sandDark` keeps well under half its old
+  chroma so `secondary.*` reads as a faint warm tint, not brown. Dark
+  `action.fg` uses the same off-white (was pure white), so CodeTabs' muted label
+  is now `action.fg/80`. In high-contrast dark, `fg.muted` sits midway between
+  `fg.subtle` and body text instead of matching `fg.subtle`. Light mode and light
+  high contrast are unchanged.
+
+## 5.0.0-alpha.17
+
+### Patch Changes
+
+- 57a8f7b: NavList.Item: with `tooltipPlacement="end"`, an expanded row's tooltip now measures from the whole row, so it no longer covers a trailing action.
+
+## 5.0.0-alpha.16
+
+### Patch Changes
+
+- 5a767ea: Select, Combobox: `ClearTrigger` 에 디자인 시스템 스타일을 입힌다. × 는 12px(`3.5`)·`fg.icon` 으로 펼침 화살표(14px·`fg.muted`)보다 작고 옅게, 버튼은 `8` 크기로 그리고, 화살표와의 사이에 `border.subtle` 구분선을 둔다. × 가 보이는 동안은 값 끝에 × 와 구분선 자리를 비워, 긴 값이 × 아래로 들어가지 않고 말줄임으로 끝난다. 지금까지는 Chakra 기본값이라 21px × 가 화살표보다 컸다. 터치 화면에서는 누르는 영역을 값 쪽으로만 44px 까지 넓히고, 높이는 입력칸 높이에 맞춘다. 아이콘을 넘기지 않으면 `CloseIcon` 을 그리고, 접근 이름은 영어 「Clear value」 대신 provider 언어의 「선택 지우기」로 붙인다. 호출부에서 `aria-label` 을 넘기면 그 값이 우선한다.
+
+## 5.0.0-alpha.15
+
+### Patch Changes
+
+- 616f66d: `Avatar.Group` `max`: the "+N" counter renders as `<span>` elements instead of
+  `<div>`s, so a group passed `as="span"` inside a button (a popover trigger) no
+  longer gains block content once it overflows. Children you pass in are yours to
+  render as spans. Looks the same; the recipe sets the display.
+
+## 5.0.0-alpha.14
+
+### Patch Changes
+
+- 156e17f: NavList.Item: `tooltipPlacement="end"` opens an expanded row's tooltips beside the row instead of above it.
+
 ## 5.0.0-alpha.13
 
 ### Minor Changes

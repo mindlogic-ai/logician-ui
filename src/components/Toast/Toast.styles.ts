@@ -11,7 +11,7 @@ import type { ToastStatus } from './Toast.types';
  * inverted: the tooltip pair `tooltip.bg` / `tooltip.fg`. A `bg.surface` toast
  * was white on a white canvas in light mode, set apart only by a 1px border
  * and the shadow — a "링크를 복사했어요" confirmation was easy to miss. The
- * tooltip pair already flips per mode (ink in light, cream in dark), so the
+ * tooltip pair already flips per mode (ink in light, off-white in dark), so the
  * toast stays the highest-contrast thing on the page in both.
  */
 export const toastStyles: Record<ToastStatus, BoxProps> = {

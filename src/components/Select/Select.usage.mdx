@@ -96,6 +96,32 @@ Other props: `size` (`xs`–`lg`, default `md`), `invalid`, `disabled`,
 `null` when the selection is cleared. `ComboboxField` adds `emptyText`; it has
 no `variant` or `stagger`.
 
+## Clearing the value
+
+When "nothing chosen" is a valid value, let the user empty the field again: a
+filter, or a form field that is not required. Do not offer it on a required
+field.
+
+`ComboboxField` already has the button. `SelectField` has none, so a
+clearable select is composed from `Select.*`. With `Select.*` or
+`Combobox.*`, put `ClearTrigger` in the indicator group, before the chevron:
+
+```tsx
+<Select.IndicatorGroup>
+  <Select.ClearTrigger aria-label="조직 선택 지우기" />
+  <Select.Indicator />
+</Select.IndicatorGroup>
+```
+
+The part does the rest. It shows only while something is selected. It draws
+its own icon, smaller and lighter than the chevron, with a divider between
+them. While it shows, the value ends in an ellipsis before it. On a touch
+screen its hit area widens to 44px toward the value, at the field's own
+height. Do not pass a size, a colour or your own divider.
+
+`onValueChange` receives an empty value when it is pressed;
+`ComboboxField` passes `null` to `onChange`.
+
 ## Do / Don't
 
 </En>
@@ -111,6 +137,30 @@ no `variant` or `stagger`.
 `required`, `name`, `width`. `onChange`는 고른 값을 받고, 선택을 지우면 `null`을
 받습니다. `ComboboxField`에는 `emptyText`가 더 있고, `variant`와 `stagger`는
 없습니다.
+
+## 선택 지우기
+
+"아무것도 고르지 않음"도 올바른 값일 때는 사용자가 필드를 다시 비울 수 있게 합니다.
+필터나 필수가 아닌 폼 필드가 그렇습니다. 필수 필드에는 두지 않습니다.
+
+`ComboboxField`에는 이미 들어 있습니다. `SelectField`에는 없으므로, 지울 수 있는
+셀렉트는 `Select.*`로 조합합니다. `Select.*`나 `Combobox.*`로 조합할 때는
+`ClearTrigger`를 indicator group 안, 화살표 앞에 둡니다.
+
+```tsx
+<Select.IndicatorGroup>
+  <Select.ClearTrigger aria-label="조직 선택 지우기" />
+  <Select.Indicator />
+</Select.IndicatorGroup>
+```
+
+나머지는 부품이 처리합니다. 무언가 골라져 있을 때만 보입니다. 아이콘을 직접 그리고,
+화살표보다 작고 옅게 그리며, 화살표와의 사이에 구분선을 둡니다. 보이는 동안 값은
+버튼 앞에서 말줄임으로 끝납니다. 터치 화면에서는 누르는 영역이 값 쪽으로 44px까지
+넓어지고, 높이는 필드 높이를 따릅니다. 크기, 색, 구분선을 따로 넘기지 마세요.
+
+누르면 `onValueChange`가 빈 값을 받습니다. `ComboboxField`는 `onChange`에
+`null`을 넘깁니다.
 
 ## 이렇게 하세요 / 이렇게 하지 마세요
 
@@ -142,6 +192,13 @@ no `variant` or `stagger`.
   kind="do"
   en="Use ComboboxField when the user knows the name and the list is long. Translate emptyText; the default is English."
   ko="사용자가 이름을 알고 목록이 길다면 ComboboxField를 씁니다. emptyText의 기본값은 영어이므로 번역해서 넘깁니다."
+/>
+
+<Canvas of={SelectStories.Clearable} />
+<Verdict
+  kind="do"
+  en="On an optional field, put ClearTrigger before the chevron and pass an aria-label that says what is cleared. Without one it is named 'Clear selection' in the provider language."
+  ko="필수가 아닌 필드에는 화살표 앞에 ClearTrigger를 두고, 무엇을 지우는지 aria-label로 넘깁니다. 넘기지 않으면 provider 언어의 '선택 지우기'로 읽힙니다."
 />
 
 <Canvas of={SelectStories.DontSelectForTwo} />
@@ -183,6 +240,9 @@ What these components do for you:
 - **Keyboard.** The Chakra / Zag listbox handles it: Enter, Space or the arrow
   keys open the list; arrows move; Enter selects; Escape closes and returns
   focus to the trigger. In `ComboboxField` typing filters the list.
+- **A name for the clear button.** `ClearTrigger` is named 「선택 지우기」 /
+  "Clear selection" in the provider language, instead of Chakra's English
+  "Clear value" in every locale. A caller's `aria-label` wins.
 - **Focus and states.** The trigger shows a `primary.main` border and ring on
   focus and while open (WCAG 2.4.7). The selected option is bold on
   `primary.selected` and carries a check mark, so it does not rely on colour
@@ -228,6 +288,9 @@ Generated from `Select.styles.ts`. Select and Combobox share these.
 - **키보드.** Chakra와 Zag의 목록 상자가 처리합니다. Enter, Space, 방향키로 목록을
   열고, 방향키로 옮기고, Enter로 고르며, Escape로 닫으면 초점이 트리거로 돌아갑니다.
   `ComboboxField`에서는 입력하면 목록이 걸러집니다.
+- **지우기 버튼의 이름.** `ClearTrigger`는 provider 언어로 「선택 지우기」
+  ("Clear selection")라는 이름을 가집니다. Chakra 기본값은 어느 언어에서나 영어
+  "Clear value"였습니다. 호출부에서 넘긴 `aria-label`이 우선합니다.
 - **초점과 상태.** 트리거는 초점을 받거나 열려 있는 동안 `primary.main` 테두리와 링을
   보여 줍니다(WCAG 2.4.7). 선택된 항목은 `primary.selected` 위에 굵은 글자와 체크
   표시로 나타나므로 색에만 기대지 않습니다(WCAG 1.4.1).
