@@ -1,5 +1,29 @@
 # Changelog
 
+## 5.0.0-alpha.14
+
+### Patch Changes
+
+- 156e17f: NavList.Item: `tooltipPlacement="end"` opens an expanded row's tooltips beside the row instead of above it.
+
+## 5.0.0-alpha.13
+
+### Minor Changes
+
+- 55073ec: NavList: a new `NavList` / `NavList.Item` / `NavList.Group` for side navigation and in-page filter rails. Rows are native links (`aria-current="page"`, `asChild` for `next/link`) or buttons (`aria-current="true"`), with `leadingVisual`, `trailingVisual`, `trailingAction` and `isDisabled`; the current row is ink and bold on `bg.emphasized`. `orientation` takes a per-breakpoint object so a rail can lie down into a sideways-scrolling strip below `md`. Also exports `focusRingInset` / `FOCUS_RING_INSET_SHADOW`, the inset counterpart of `focusRing` for rows in a dense or scrolling list. `isCollapsed` gives the icon-only rail (label as accessible name and tooltip); `tooltip` adds a described-by tooltip, and a truncated label shows itself in full on hover/focus; `target="_blank"` links announce "(새 창 열림)"; the current row carries `data-current` and a horizontal strip scrolls it into view; `trailingActionVisibility="hover"` reveals the trailing action on hover or focus without taking it out of the tab order; `NavList.Group isCollapsible` is a disclosure with controlled or uncontrolled state; `NavList.Skeleton` stands in while entries load.
+
+## 5.0.0-alpha.12
+
+### Patch Changes
+
+- 9c43a0f: Input, Textarea: readOnly 상태에서 마우스를 올려도 테두리 색이 바뀌지 않는다. 읽기 전용 칸은 입력할 수 없으므로 hover 가 편집을 암시하지 않게 한다.
+
+## 5.0.0-alpha.11
+
+### Minor Changes
+
+- 7059a44: New token `disabled.fgGhost` (light `#C2C2C2`, dark `#4A4A4A`) for the disabled label/icon of fill-less ghost buttons. `disabledText` now uses it, so a disabled ghost `IconButton` / `Button` (and `SeeMoreButton`, which renders a ghost Button) no longer looks almost the same as the resting one: `disabled.fg` sat ~1.4:1 from the resting `fg.icon`, the new token ~2.7:1. Filled controls (`disabledControl`) keep `disabled.bg` / `disabled.fg`; the ghost `Select` trigger keeps `disabled.fg` for its value text.
+
 ## 5.0.0-alpha.10
 
 ### Minor Changes

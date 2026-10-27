@@ -498,6 +498,10 @@ const buttonTokenRows = () => {
   });
   add('disabled.bg', { en: 'disabled fill', ko: '비활성 바탕' });
   add('disabled.fg', { en: 'disabled label', ko: '비활성 글자' });
+  add('disabled.fgGhost', {
+    en: 'ghost disabled label',
+    ko: 'ghost 비활성 글자',
+  });
   add('focus.ring', { en: 'keyboard focus ring', ko: '키보드 초점 링' });
   return [...uses].map(([token, list]) => ({
     token,

@@ -187,7 +187,7 @@ export const UsageTokens: Story = {
               ]
             : []),
           {
-            token: 'disabled.fg',
+            token: 'disabled.fgGhost',
             use: <T en="disabled label" ko="비활성 글자" />,
           },
           {

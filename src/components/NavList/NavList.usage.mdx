@@ -1,0 +1,545 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/blocks';
+
+import { En, Ko, LangToggle, Verdict } from '../../guidelines/_components/Lang';
+import * as NavListStories from './NavList.stories';
+
+<Meta of={NavListStories} name="Usage" />
+
+<LangToggle />
+
+<En>
+
+# NavList
+
+A list of rows that says where you are: side navigation, and the filter rails
+beside a gallery or a file list. One row is current; every row is its own
+link or button.
+
+## When to use
+
+- For the side navigation of an area: the admin menu, a settings column.
+- For a rail of sources or categories beside the content it filters: the
+  Drive picker's sources, the template kinds beside a media gallery.
+- For a strip of the same choices above the content on a narrow screen, with
+  `orientation={{ base: 'horizontal', md: 'vertical' }}`.
+- When the list is long or keeps growing, or its rows carry counts or icons.
+
+## When not to use
+
+- For a few sections of one object that swap a panel in place → `Tabs`. Tabs
+  own their panels, move with the arrow keys and mark the choice with
+  `aria-selected`; a rail is links or filters, reached with Tab.
+- To change how the same content is shown (목록/카드, 일/주/월) →
+  `SegmentedControl`.
+- For commands (초대하기, 내보내기) → `Button`, or a `Menu` when there are
+  several. A rail row takes you somewhere; it does not do something.
+- For a hierarchy the user expands and collapses → `Tree`.
+
+## Which component
+
+`Tabs` and NavList both mark one row as current; they say the same thing from
+opposite sides. Pick by what the rows are:
+
+| What you have                                                    | Use                                                                                          |
+| ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| A few sections of one object that swap a panel in place          | `Tabs`                                                                                       |
+| Destinations, or the side navigation of an area                  | `NavList`, each item with `href`                                                             |
+| A filter over one list or grid, with many options or with counts | `NavList`: links (`href`) when the filter state is in the URL, buttons (`onClick`) otherwise |
+| A short horizontal switch of two to five options                 | `SegmentedControl`                                                                           |
+| A hierarchy the user expands and collapses                       | `Tree`                                                                                       |
+| Commands (초대하기, 내보내기)                                    | `Button`, or a `Menu` when there are several                                                 |
+
+## Variants and what they mean
+
+NavList has one look. The current row is a _place_, not a value: an ink label,
+bold, on a neutral `bg.emphasized` fill — never the brand hue. Hover shows the
+same fill; a press goes one step further (`border.default`, `border.strong`
+under high contrast), on the current row too, so a press always answers.
+`orientation` decides the axis:
+
+</En>
+
+<Ko>
+
+# NavList
+
+지금 어디에 있는지 알려 주는 항목 목록입니다. 옆 내비게이션과, 갤러리나 파일 목록 옆의
+필터 레일에 씁니다. 항목 하나가 현재 항목이고, 항목마다 링크나 버튼입니다.
+
+## 언제 쓰나요
+
+- 한 영역의 옆 내비게이션: 관리자 메뉴, 설정 화면의 왼쪽 열.
+- 보고 있는 내용을 거르는 출처나 분류의 레일: 드라이브 선택 창의 출처, 미디어 갤러리 옆의
+  템플릿 종류.
+- 좁은 화면에서는 같은 항목을 내용 위의 한 줄로 눕힙니다.
+  `orientation={{ base: 'horizontal', md: 'vertical' }}`을 씁니다.
+- 항목이 많거나 계속 늘어나는 목록, 항목에 개수나 아이콘이 붙는 목록.
+
+## 언제 쓰지 않나요
+
+- 한 대상의 구역 몇 개를 그 자리에서 바꿔 보여 주는 것은 `Tabs`가 맡습니다. 탭은 패널을 갖고,
+  방향키로 옮기며, 고른 것을 `aria-selected`로 알립니다. 레일은 링크나 필터이고 Tab 키로
+  오갑니다.
+- 같은 내용을 보는 방식을 바꿀 때(목록/카드, 일/주/월)는 `SegmentedControl`을 씁니다.
+- 명령(초대하기, 내보내기)은 `Button`으로, 여러 개라면 `Menu`로 둡니다. 레일의 항목은
+  어딘가로 데려가는 것이지 무언가를 실행하는 것이 아닙니다.
+- 펼치고 접는 계층은 `Tree`를 씁니다.
+
+## 어떤 컴포넌트를 쓰나요
+
+`Tabs`와 NavList는 둘 다 항목 하나를 현재 항목으로 표시합니다. 두 문서는 같은 기준을 서로
+반대쪽에서 설명합니다. 항목이 무엇인지를 보고 고릅니다.
+
+| 이런 경우                                                            | 쓰는 컴포넌트                                                            |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| 한 대상의 구역 몇 개를 그 자리에서 패널로 바꿔 보여 줄 때            | `Tabs`                                                                   |
+| 다른 곳으로 옮겨 가는 항목, 한 영역의 옆 내비게이션                  | 항목마다 `href`를 준 `NavList`                                           |
+| 목록이나 그리드 하나를 거르는 필터로, 선택지가 많거나 개수를 붙일 때 | `NavList`. 필터 상태가 URL에 있으면 링크(`href`), 아니면 버튼(`onClick`) |
+| 선택지 둘에서 다섯 개를 가로로 짧게 바꿀 때                          | `SegmentedControl`                                                       |
+| 펼치고 접는 계층                                                     | `Tree`                                                                   |
+| 명령(초대하기, 내보내기)                                             | `Button`, 여러 개라면 `Menu`                                             |
+
+## 변형과 뜻
+
+NavList의 모양은 하나입니다. 현재 항목은 값이 아니라 지금 있는 곳이므로 브랜드색을 쓰지 않고,
+중립 `bg.emphasized` 배경 위에 진한 글자를 굵게 씁니다. 마우스를 올리면 같은 배경이 보이고,
+누르는 동안에는 한 단계 더 진해집니다(`border.default`, 고대비에서는 `border.strong`). 현재
+항목도 마찬가지라서 눌렀다는 반응이 늘 보입니다. 축은 `orientation`이 정합니다.
+
+</Ko>
+
+<ArgTypes of={NavListStories} include={['orientation', 'isCollapsed']} />
+
+<En>
+
+| `orientation`                            | Layout                                                                    | Use for                        |
+| ---------------------------------------- | ------------------------------------------------------------------------- | ------------------------------ |
+| `vertical` (default)                     | Full-width rows, labels truncate with an ellipsis                         | A rail beside the content      |
+| `horizontal`                             | Rows as wide as their label, one line that scrolls sideways — never wraps | A strip above the content      |
+| `{ base: 'horizontal', md: 'vertical' }` | Strip below `md`, rail from `md` up (pure CSS)                            | A rail that has to fit a phone |
+
+Each `NavList.Item` is an `<a>` when it has `href` (or `asChild` around a
+router link) and a `<button type="button">` when it has only `onClick`.
+
+## Do / Don't
+
+</En>
+
+<Ko>
+
+| `orientation`                            | 배치                                                                             | 쓰는 곳                       |
+| ---------------------------------------- | -------------------------------------------------------------------------------- | ----------------------------- |
+| `vertical` (기본)                        | 항목이 폭을 다 채우고, 긴 글자는 말줄임표로 줄입니다                             | 내용 옆의 레일                |
+| `horizontal`                             | 항목은 글자만큼의 폭이고, 한 줄로 두고 옆으로 스크롤합니다. 줄을 바꾸지 않습니다 | 내용 위의 띠                  |
+| `{ base: 'horizontal', md: 'vertical' }` | `md` 아래에서는 띠, `md`부터는 레일(CSS만으로 바뀝니다)                          | 휴대폰에도 들어가야 하는 레일 |
+
+`NavList.Item`은 `href`가 있거나 라우터 링크를 `asChild`로 감싸면 `<a>`로, `onClick`만
+있으면 `<button type="button">`으로 그려집니다.
+
+## 이렇게 하세요 / 이렇게 하지 마세요
+
+</Ko>
+
+<Canvas of={NavListStories.DoNamedRailOfPlaces} />
+<Verdict
+  kind="do"
+  en="Name the rail with aria-label ('관리자 메뉴') and mark exactly one row current."
+  ko="레일에 aria-label('관리자 메뉴')로 이름을 붙이고, 현재 항목은 하나만 둡니다."
+/>
+
+<Canvas of={NavListStories.DontActionsInARail} />
+<Verdict
+  kind="dont"
+  en="Mix commands into a rail of places. 「멤버 초대하기」 is a button in the page, not a row that looks like a place."
+  ko="곳을 나열한 레일에 명령을 섞지 마세요. 「멤버 초대하기」는 화면 안의 버튼이지, 곳처럼 보이는 항목이 아닙니다."
+/>
+
+<En>
+
+## Patterns
+
+### Collapsed icon rail
+
+`isCollapsed` on the list turns every row into a 40px icon square. The label
+is still the row's accessible name (visually hidden) and shows as a tooltip
+beside the icon on hover and keyboard focus. Counts, trailing actions and
+group titles are hidden; a collapsible group shows its rows. Give every row a
+`leadingVisual`. To swap to a filled icon on the current row, choose the icon
+yourself: `leadingVisual={isCurrent ? <FilledChatIcon /> : <ChatIcon />}`.
+
+Animate the rail width in the parent; NavList fades its labels. Give the
+container `animationStyle="feedback" transitionProperty="width"` (or
+`min-width, max-width`, as the app's NavigationBarWrapper does) and
+`overflowX="hidden"`. On the same clock NavList fades labels, counts and
+group titles and narrows each row to its square, while rows keep their
+padding so the icons do not move. A label tooltip waits until the label has
+faded, so none flashes mid-transition. Under reduced motion it all snaps.
+Collapsed, a row's square is `2.5em`, so the rail is `3.5em` with `p={2}`.
+
+</En>
+
+<Ko>
+
+## 쓰는 방법
+
+### 접힌 아이콘 레일
+
+목록에 `isCollapsed`를 주면 항목마다 40px 아이콘 칸이 됩니다. 라벨은 보이지 않을 뿐 그대로
+항목 이름으로 읽히고, 마우스를 올리거나 키보드로 초점을 옮기면 아이콘 옆에 툴팁으로 보입니다.
+개수, 뒤쪽 동작 버튼, 묶음 제목은 숨기고, 접을 수 있는 묶음은 항목을 펼쳐 보여 줍니다. 모든
+항목에 `leadingVisual`을 줍니다. 현재 항목만 채운 아이콘으로 바꾸려면 아이콘을 직접 고릅니다.
+`leadingVisual={isCurrent ? <FilledChatIcon /> : <ChatIcon />}`
+
+레일 폭은 바깥 요소가 움직이고, NavList는 라벨을 흐리게 합니다. 바깥 요소에
+`animationStyle="feedback" transitionProperty="width"`(앱의 NavigationBarWrapper처럼
+`min-width, max-width`도 됩니다)와 `overflowX="hidden"`을 줍니다. NavList는 같은 속도로 라벨,
+개수, 묶음 제목을 흐리게 하고 항목을 아이콘 칸 폭으로 줄입니다. 항목 안쪽 여백은 그대로라
+아이콘이 움직이지 않습니다. 라벨 툴팁은 라벨이 다 사라진 뒤에야 열리므로 바뀌는 도중에 깜빡이지
+않습니다. 동작 줄이기 설정에서는 바로 바뀝니다. 접힌 항목 칸은 `2.5em`이라 `p={2}`인 레일은
+`3.5em`입니다.
+
+</Ko>
+
+<Canvas of={NavListStories.CollapsedRail} />
+
+<En>
+
+### Tooltips, long labels and new windows
+
+- `tooltip` adds something the label does not say — a description, or why
+  a row is disabled. It is the row's accessible description
+  (`aria-describedby`), so never repeat the label in it.
+- `tooltipPlacement="end"` opens an expanded row's tooltips beside it (on the
+  right in a left-to-right page) instead of above it — for a side rail, where
+  a tooltip on top covers the row above.
+- A label cut off by the ellipsis shows itself in full on hover and focus,
+  and only while it is cut off. You pass nothing for this.
+- A link with `target="_blank"` (on the item, or on the `asChild` router
+  link) gets "(새 창 열림)" / "(opens in a new window)" added to its
+  accessible name, in the `LogicianProvider` language.
+
+</En>
+
+<Ko>
+
+### 툴팁, 긴 라벨, 새 창
+
+- `tooltip`에는 라벨이 말하지 않는 것을 씁니다. 설명이나, 항목을 쓸 수 없는 이유 같은
+  것입니다. 항목의 설명(`aria-describedby`)으로 읽히므로 라벨을 되풀이하지 않습니다.
+- `tooltipPlacement="end"`를 주면 펼친 행의 툴팁이 위가 아니라 옆(왼쪽에서 오른쪽으로 읽는
+  화면에서는 오른쪽)에 뜹니다. 위에 뜨면 윗행을 가리는 사이드 레일에 씁니다.
+- 말줄임표로 잘린 라벨은 마우스를 올리거나 초점을 옮기면 전체가 툴팁으로 보입니다. 잘렸을
+  때만 뜨고, 따로 줄 prop은 없습니다.
+- `target="_blank"` 링크는(항목에 주든 `asChild` 라우터 링크에 주든) 항목 이름 뒤에
+  "(새 창 열림)"이 붙습니다. 언어는 `LogicianProvider`를 따릅니다.
+
+</Ko>
+
+<Canvas of={NavListStories.TooltipsAndNewWindow} />
+
+<En>
+
+### A more-menu that appears on hover
+
+`trailingActionVisibility="hover"` keeps a row's trailing action transparent
+until the row is hovered, focus is anywhere in it, or the action's menu is
+open. It is never removed, so Tab still reaches it and focusing it is what
+shows it. On touch screens it is always shown. The row's fill sits on its
+`<li>`, so pointing at the action keeps the row lit.
+
+At rest the label has the whole row and the action sits over its end; the
+label makes room only while the action shows, the way the app's sidebar
+sessions do. The row's height never changes. `always` keeps the action's
+space at all times, and so does a touch screen (`hover: none` or
+`pointer: coarse`), where the action is always shown.
+
+Tooltip + Menu on one trigger: share `ids.trigger`. A more-menu button that
+also has a tooltip is the trigger of both, and each gives it its own id — the
+menu then opens at the top-left of the page. Pass one `useId()` to both:
+`<Menu ids={{ trigger: id }}><Tooltip ids={{ trigger: id }} …>`.
+
+</En>
+
+<Ko>
+
+### 마우스를 올리면 나타나는 더 보기 메뉴
+
+`trailingActionVisibility="hover"`를 주면 뒤쪽 동작 버튼이 평소에는 투명하고, 항목에 마우스를
+올리거나 항목 안에 초점이 있거나 그 메뉴가 열려 있을 때 보입니다. 없애는 것이 아니라서 Tab으로
+갈 수 있고, 초점이 가면 나타납니다. 터치 화면에서는 늘 보입니다. 배경은 항목의 `<li>`에
+칠하므로 동작 버튼을 가리켜도 항목이 밝게 남아 있습니다.
+
+평소에는 라벨이 항목 폭을 다 쓰고, 동작 버튼은 라벨 끝 위에 겹쳐 있습니다. 버튼이 보이는
+동안에만 라벨이 자리를 비켜 줍니다. 앱 사이드바의 대화 항목과 같습니다. 항목 높이는 바뀌지
+않습니다. `always`는 버튼 자리를 늘 비워 두고, 터치 화면(`hover: none`, `pointer: coarse`)에서도
+버튼을 늘 보이며 자리를 비워 둡니다.
+
+한 버튼에 Tooltip과 Menu를 함께 걸 때는 `ids.trigger`를 같이 씁니다. 툴팁이 달린 더 보기
+버튼은 둘 모두의 여는 요소이고 각자 다른 id를 붙이므로, 메뉴가 화면 왼쪽 위에서 열립니다.
+`useId()` 하나를 양쪽에 넘깁니다: `<Menu ids={{ trigger: id }}><Tooltip ids={{ trigger: id }} …>`.
+
+</Ko>
+
+<Canvas of={NavListStories.HoverRevealedAction} />
+
+<En>
+
+### Collapsible groups
+
+`NavList.Group isCollapsible` makes the title a disclosure button
+(`aria-expanded`, `aria-controls`). It starts open (`defaultOpen`). To keep
+the state across visits, control it — `isOpen` + `onOpenChange` — and store
+it where the app keeps its own UI state.
+
+The rows open and close on Collapsible's own motion (its height keyframes,
+300ms in and 150ms out); under reduced motion they fade instead. A closed
+group's rows leave the tab order as soon as it starts closing and the
+accessibility tree once it has closed.
+
+</En>
+
+<Ko>
+
+### 접을 수 있는 묶음
+
+`NavList.Group isCollapsible`을 주면 제목이 펼침 버튼(`aria-expanded`, `aria-controls`)이
+됩니다. 처음에는 펼친 상태입니다(`defaultOpen`). 다음에 와도 상태를 유지하려면 `isOpen`과
+`onOpenChange`로 직접 관리하고, 앱이 UI 상태를 두는 곳에 저장합니다.
+
+항목은 Collapsible과 같은 움직임으로 열리고 닫힙니다(높이 키프레임, 열 때 300ms, 닫을 때
+150ms). 동작 줄이기 설정에서는 높이 대신 흐려졌다 나타납니다. 닫히기 시작하면 바로 Tab 순서에서
+빠지고, 다 닫히면 보조 기술에서도 빠집니다.
+
+</Ko>
+
+<Canvas of={NavListStories.CollapsibleGroups} />
+
+<En>
+
+### Loading
+
+Render `NavList.Skeleton` instead of the list while its entries load; its
+rows have the same height and gap, so nothing moves when the list swaps in.
+It is hidden from assistive tech — say "loading" on the region
+(`aria-busy`) or in a status message. Counts that arrive later need no
+skeleton: leave `trailingVisual` unset until they do.
+
+</En>
+
+<Ko>
+
+### 불러오는 중
+
+항목을 불러오는 동안에는 목록 대신 `NavList.Skeleton`을 그립니다. 높이와 간격이 같아서 목록으로
+바뀔 때 화면이 움직이지 않습니다. 보조 기술에는 숨겨 두므로, 불러오는 중이라는 사실은 영역
+(`aria-busy`)이나 상태 메시지로 알립니다. 나중에 오는 개수에는 스켈레톤이 필요 없습니다.
+도착할 때까지 `trailingVisual`을 비워 둡니다.
+
+</Ko>
+
+<Canvas of={NavListStories.Loading} />
+
+<En>
+
+### Scrolling to the current row
+
+The current row carries `data-current` next to `aria-current`. A horizontal
+strip scrolls itself sideways to show its current row, on mount and when it
+changes, without scrolling the page. In a scrolling sidebar, reveal it
+yourself: `list.querySelector('[data-current]')?.scrollIntoView({ block: 'nearest' })`.
+
+### Router links
+
+`asChild` merges the row onto one link element (`next/link`, a prefetching
+link). Its own props — `prefetch`, `replace`, `scroll`, `onNavigate` — pass
+through untouched, and NavList never cancels a click, so cmd/ctrl/middle-click
+still open a new tab. An `onClick` that calls `preventDefault()` runs first,
+so the router link sees the click as cancelled.
+
+### Composing drag and drop
+
+NavList has no drag and drop. To make rows draggable or droppable (the
+group-management drilldown), pass the library's ref and listeners to the row
+— `ref`, `{...attributes}` and `{...listeners}` land on the row's `<button>` —
+and show the drop target with a `data-*` attribute and a `css` rule on the row:
+`css={{ '&[data-drop-target]': { bg: 'primary.wash' } }}`. Insert zones
+between rows are siblings in the list: `<li aria-hidden>` children of
+`NavList`. Keep a keyboard way to do the same move (a menu or a dialog).
+
+</En>
+
+<Ko>
+
+### 현재 항목으로 스크롤
+
+현재 항목에는 `aria-current`와 함께 `data-current`가 붙습니다. 가로 띠는 처음 그릴 때와 현재
+항목이 바뀔 때 현재 항목이 보이도록 띠 안에서만 옆으로 스크롤하고, 페이지는 움직이지 않습니다.
+스크롤되는 사이드바에서는 직접 보여 줍니다.
+`list.querySelector('[data-current]')?.scrollIntoView({ block: 'nearest' })`
+
+### 라우터 링크
+
+`asChild`는 링크 요소 하나(`next/link`, 미리 불러오는 링크)에 항목을 합칩니다. 그 링크의
+prop(`prefetch`, `replace`, `scroll`, `onNavigate`)은 그대로 전달되고, NavList는 클릭을 막지
+않으므로 cmd/ctrl/가운데 클릭으로 새 탭을 여는 동작도 그대로입니다. `preventDefault()`를
+부르는 `onClick`이 먼저 실행되므로, 라우터 링크는 그 클릭을 취소된 것으로 받습니다.
+
+### 끌어다 놓기와 함께 쓰기
+
+NavList에는 끌어다 놓기가 없습니다. 항목을 끌거나 놓을 수 있게 하려면(그룹 관리의 단계별
+목록) 라이브러리의 ref와 리스너를 항목에 넘깁니다. `ref`, `{...attributes}`, `{...listeners}`는
+항목의 `<button>`에 붙습니다. 놓을 자리 표시는 `data-*` 속성과 항목의 `css` 규칙으로 합니다.
+`css={{ '&[data-drop-target]': { bg: 'primary.wash' } }}` 항목 사이의 끼워 넣기 영역은 목록
+안의 형제 요소(`NavList`의 자식 `<li aria-hidden>`)로 둡니다. 같은 이동을 키보드로 할 방법(메뉴나
+대화상자)도 남겨 둡니다.
+
+</Ko>
+
+<Canvas of={NavListStories.HorizontalCurrentOffscreen} />
+
+<En>
+
+## Content
+
+- A noun for a place or a category: "멤버 관리", "공유 문서함", "이미지". No
+  verbs, no full stop.
+- Put counts in `trailingVisual`, not in the label. They are read as part of
+  the row's name ("이미지 64").
+- Group titles are short nouns in overline style ("공유 드라이브").
+- Long labels truncate in a vertical rail and show in full in a tooltip.
+  Keep the words that tell rows apart at the front.
+
+## Accessibility
+
+What NavList does for you:
+
+- With `aria-label` or `aria-labelledby` it is a `<nav>` landmark around a
+  list; without one it is just the list, so a rail inside the app sidebar
+  does not add an unnamed landmark (WCAG 1.3.1, 2.4.1).
+- The current link has `aria-current="page"`; the current filter button has
+  `aria-current="true"` (WCAG 4.1.2). Weight and fill are two cues, not
+  colour alone (WCAG 1.4.1).
+- Every row is a native link or button in the tab order — no roving
+  tabindex, no arrow keys. Enter follows a link; Enter and Space press a
+  button (WCAG 2.1.1).
+- The focus ring is drawn inside the row, so neither the next row nor a
+  scrolling strip clips it (WCAG 2.4.7).
+- `NavList.Group` titles name their group's list (`aria-labelledby`) and are
+  not heading elements, so they add nothing to the page outline (KWCAG
+  5.2.4.2, see `ACCESSIBILITY.md`).
+- `trailingAction` is rendered beside the row, never inside it — no
+  interactive element nested in another.
+- A disabled button is `disabled`. A disabled link (router links included)
+  keeps the link role with `aria-disabled` but has no `href`, so it is out of
+  the tab order and cannot be opened in a new tab. Both use the fixed
+  `disabled.fg` ink, never opacity.
+- A `target="_blank"` link says it opens a new window in its accessible
+  name (KWCAG 2.1 — 새 창 알림).
+- Label tooltips (a collapsed rail, a truncated label) are not wired as a
+  description, so the name is not read twice; a `tooltip` you pass is. Every
+  tooltip opens on keyboard focus as well as hover and closes on Escape
+  (WCAG 1.4.13).
+- A collapsed rail keeps each label as its row's accessible name.
+- A hover-revealed trailing action is only transparent, never removed or
+  `display: none`, so it stays in the tab order and shows when focused.
+- On a right-to-left page rows, groups and counts follow the inherited
+  direction in CSS, so a server render is right to left from its first paint;
+  nothing waits for JavaScript.
+
+What you still have to do:
+
+- **Name the list** when it is a landmark of its own, and keep names unique
+  if a page has two (`관리자 메뉴`, `템플릿 종류`).
+- Give `trailingAction` its own name that says which row it belongs to
+  (`aria-label="회의록 정리 더 보기"`).
+- Leading icons are decorative; do not rely on them to name a row.
+- Put only phrasing content in a row: it renders an `<a>` or a `<button>`
+  (KWCAG 5.4.1.1).
+
+## Tokens
+
+The tokens are `NAV_LIST_RAMP` in `NavList.styles.ts`; disabled and focus come
+from the shared `disabledText` and `focusRingInset` utilities.
+
+</En>
+
+<Ko>
+
+## 문구
+
+- 곳이나 분류를 가리키는 명사로 씁니다. "멤버 관리", "공유 문서함", "이미지". 동사를 쓰지
+  않고 마침표를 찍지 않습니다.
+- 개수는 라벨에 넣지 말고 `trailingVisual`에 둡니다. 항목 이름의 일부로 읽힙니다("이미지 64").
+- 묶음 제목은 짧은 명사로 씁니다("공유 드라이브").
+- 세로 레일에서는 긴 라벨이 잘리고, 전체는 툴팁으로 보입니다. 항목을 구별하는 말을 앞에 둡니다.
+
+## 접근성
+
+NavList가 알아서 하는 일
+
+- `aria-label`이나 `aria-labelledby`를 주면 목록을 감싼 `<nav>` 랜드마크가 되고, 주지 않으면
+  목록만 그립니다. 그래서 앱 사이드바 안의 레일이 이름 없는 랜드마크를 하나 더 만들지
+  않습니다(WCAG 1.3.1, 2.4.1).
+- 현재 링크에는 `aria-current="page"`, 현재 필터 버튼에는 `aria-current="true"`가
+  붙습니다(WCAG 4.1.2). 색만이 아니라 굵기와 배경 두 가지로 알립니다(WCAG 1.4.1).
+- 모든 항목이 Tab 순서에 들어가는 기본 링크나 버튼입니다. 방향키로 옮기는 방식은 쓰지
+  않습니다. 링크는 Enter로, 버튼은 Enter와 Space로 누릅니다(WCAG 2.1.1).
+- 초점 테두리는 항목 안쪽에 그려서, 옆 항목이나 스크롤되는 띠에 가려지지 않습니다(WCAG 2.4.7).
+- `NavList.Group`의 제목은 자기 묶음 목록의 이름(`aria-labelledby`)이 되고 제목 요소가 아니라서
+  문서 개요에 끼어들지 않습니다(KWCAG 5.2.4.2, `ACCESSIBILITY.md` 참고).
+- `trailingAction`은 항목 안이 아니라 옆에 그립니다. 상호작용 요소 안에 다른 상호작용 요소가
+  들어가지 않습니다.
+- 쓸 수 없는 버튼은 `disabled`가 됩니다. 쓸 수 없는 링크는 라우터 링크를 포함해 링크로
+  읽히고 `aria-disabled`가 붙지만 `href`가 없습니다. 그래서 Tab 순서에서 빠지고 새 탭으로도
+  열리지 않습니다. 둘 다 투명도가 아니라 고정된 `disabled.fg` 색을 씁니다.
+- `target="_blank"` 링크는 항목 이름에 새 창으로 열린다는 사실을 담습니다(KWCAG 2.1 새 창 알림).
+- 라벨을 보여 주는 툴팁(접힌 레일, 잘린 라벨)은 설명으로 연결하지 않아서 이름을 두 번 읽지
+  않습니다. 직접 준 `tooltip`은 설명으로 연결합니다. 모든 툴팁은 마우스뿐 아니라 키보드 초점으로도
+  열리고 Esc로 닫힙니다(WCAG 1.4.13).
+- 접힌 레일에서도 항목마다 라벨이 이름으로 남습니다.
+- 마우스를 올리면 나타나는 뒤쪽 동작 버튼은 투명할 뿐 없애거나 `display: none`으로 숨기지
+  않습니다. 그래서 Tab 순서에 남고 초점이 가면 보입니다.
+- 오른쪽에서 왼쪽으로 쓰는 페이지에서는 항목, 묶음, 개수가 CSS로 물려받은 방향을 따릅니다.
+  그래서 서버에서 그린 첫 화면부터 오른쪽에서 왼쪽으로 놓이고, 자바스크립트를 기다리지 않습니다.
+
+직접 챙겨야 하는 일
+
+- 목록이 따로 랜드마크가 될 때는 **이름을 붙입니다.** 한 화면에 둘이라면 이름이 겹치지 않게
+  합니다(`관리자 메뉴`, `템플릿 종류`).
+- `trailingAction`에는 어느 항목의 것인지 알 수 있는 이름을 따로 줍니다
+  (`aria-label="회의록 정리 더 보기"`).
+- 앞쪽 아이콘은 장식입니다. 아이콘으로 항목 이름을 대신하지 않습니다.
+- 항목 안에는 phrasing content만 넣습니다. `<a>`나 `<button>`으로 그려집니다(KWCAG 5.4.1.1).
+
+## 토큰
+
+색은 `NavList.styles.ts`의 `NAV_LIST_RAMP`에서 정하고, 사용 불가와 초점 표시는 공용
+`disabledText`, `focusRingInset`을 씁니다.
+
+</Ko>
+
+<Canvas of={NavListStories.UsageTokens} sourceState="none" />
+
+<En>
+
+## Related
+
+- **Tabs**: a few sections of one object that swap a panel in place.
+- **SegmentedControl**: change how the same content is shown.
+- **Breadcrumb**: where this page sits in a hierarchy.
+- **Tree**: a hierarchy that expands and collapses.
+- **Button** / **Menu**: commands.
+
+</En>
+
+<Ko>
+
+## 관련 컴포넌트
+
+- **Tabs**: 한 대상의 구역 몇 개를 그 자리에서 바꿔 보여 주는 패널.
+- **SegmentedControl**: 같은 내용을 보는 방식 바꾸기.
+- **Breadcrumb**: 이 페이지가 계층의 어디에 있는지.
+- **Tree**: 펼치고 접는 계층.
+- **Button** / **Menu**: 명령.
+
+</Ko>

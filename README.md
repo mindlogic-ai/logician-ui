@@ -93,6 +93,7 @@ function App() {
 - **Pagination** - Page navigation component
 - **Menu** - Dropdown and context menus
 - **Tabs** - Tab navigation component
+- **NavList** - Side navigation and filter rails (links or filters, not tabs)
 
 #### Feedback
 

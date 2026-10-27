@@ -67,6 +67,11 @@ export const ghostTriggerStyles = {
   _hover: { borderColor: 'border.control' },
   _disabled: {
     ...disabledText,
+    // A field, not a ghost button: the value text stays readable at
+    // `disabled.fg` (well apart from the resting `fg.default` already).
+    // `disabled.fgGhost` is for fill-less buttons whose resting glyph is
+    // `fg.icon`.
+    color: 'disabled.fg',
     cursor: 'not-allowed',
     fontWeight: 'semibold',
   },

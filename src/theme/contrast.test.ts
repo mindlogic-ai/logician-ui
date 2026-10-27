@@ -130,6 +130,8 @@ const NO_PAIR: Record<string, string> = {
     'disabled controls are exempt from WCAG contrast (1.4.3 / 1.4.11)',
   'disabled-fg':
     'disabled controls are exempt from WCAG contrast (1.4.3 / 1.4.11)',
+  'disabled-fgGhost':
+    'disabled controls are exempt from WCAG contrast (1.4.3 / 1.4.11)',
   'danger-border':
     'decorative edge of a status surface; the fg/icon carries the status',
   'success-border': 'decorative edge of a status surface',

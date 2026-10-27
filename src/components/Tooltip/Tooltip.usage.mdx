@@ -144,6 +144,10 @@ What you still have to do:
   shows.
 - Never put the only copy of required information in a tooltip; touch screens
   have no hover.
+- **Tooltip + Menu on one trigger: share `ids.trigger`.** Both make the
+  button their trigger and each gives it its own id, so the menu cannot find
+  its anchor and opens at the top-left of the page. Pass one `useId()` to
+  both: `<Menu ids={{ trigger: id }}><Tooltip ids={{ trigger: id }} …>`.
 
 ## Tokens
 
@@ -178,6 +182,10 @@ Tooltip이 알아서 하는 일
   자식은 실제 버튼, 링크처럼 초점을 받는 요소여야 합니다. 비활성 버튼은 포인터도 초점도
   받지 않아 툴팁이 뜨지 않습니다.
 - 꼭 필요한 정보를 툴팁에만 두지 않습니다. 터치 화면에는 마우스 올리기가 없습니다.
+- **한 버튼에 Tooltip과 Menu를 함께 걸 때는 `ids.trigger`를 같이 씁니다.** 둘 다 그 버튼을
+  여는 요소로 삼고 각자 다른 id를 붙이므로, 메뉴가 기준 위치를 못 찾고 화면 왼쪽 위에서
+  열립니다. `useId()` 하나를 양쪽에 넘깁니다:
+  `<Menu ids={{ trigger: id }}><Tooltip ids={{ trigger: id }} …>`.
 
 ## 토큰
 
