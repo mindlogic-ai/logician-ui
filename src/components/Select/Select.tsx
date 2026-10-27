@@ -96,7 +96,7 @@ const ClearTrigger = forwardRef<
 /**
  * Compound Select primitives — Chakra's `Select` namespace with the Logician
  * design-system styling baked into the visual parts (`Trigger`, `Content`,
- * `Item`, `Indicator`). Use these directly for full compositional control
+ * `Item`, `Indicator`, `ClearTrigger`). Use these directly for full compositional control
  * (multi-select, grouped options, custom layouts); use `SelectField` for the
  * common single-select case.
  */

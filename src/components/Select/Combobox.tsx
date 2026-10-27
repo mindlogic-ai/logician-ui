@@ -75,7 +75,7 @@ const ClearTrigger = forwardRef<
 /**
  * Compound Combobox primitives — Chakra's `Combobox` namespace with the
  * Logician design-system styling baked into the visual parts (`Input`,
- * `Content`, `Item`). Use these directly for full compositional control;
+ * `Content`, `Item`, `ClearTrigger`). Use these directly for full compositional control;
  * use `ComboboxField` for the common single-select case.
  */
 export const Combobox = {
