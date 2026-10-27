@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { SYSTEM_HUES } from '@/theme/palette.generated';
+import { RAMPS, SYSTEM_HUES } from '@/theme/palette.generated';
 
 import { CHART_SERIES_HUES, seriesColor } from './seriesColors';
 
@@ -33,9 +33,9 @@ describe('chart series colours', () => {
       expect(contrast(seriesColor(i, false), '#FFFFFF')).toBeGreaterThanOrEqual(
         3
       );
-      expect(contrast(seriesColor(i, true), '#1F1E1D')).toBeGreaterThanOrEqual(
-        3
-      );
+      expect(
+        contrast(seriesColor(i, true), RAMPS.ink.canvasDark)
+      ).toBeGreaterThanOrEqual(3);
     });
   });
 });

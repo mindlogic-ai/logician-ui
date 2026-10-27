@@ -31,7 +31,7 @@ export const verticalStyles = {
  * The indicator moves with the label, EXCEPT on 5.0's BAZE palette: the
  * indicator is a 2px underline — a GRAPHIC judged at 3:1, not text at 4.5:1 —
  * so it reads the brand accent `primary.main` directly (black in light, the
- * inverted cream fill in dark), matching the house gallery spec. The label
+ * inverted off-white fill in dark), matching the house gallery spec. The label
  * stays on `fg.emphasized` (= `fg.default`): it is still a PLACE, not a
  * value, and `primary.main` in dark mode is a solid-fill colour tuned for a
  * button face under `fg.onPrimary`, not for text on the page.
