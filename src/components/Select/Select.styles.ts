@@ -44,12 +44,12 @@ const fieldBase = {
  * chevron with `maxW: 80%` on a Select (too little in a narrow filter) and a
  * 1.5× height padding on a Combobox, and neither counts the × with its
  * divider. This reserves the whole group instead: padding on both sides, the
- * × (`8`) with its `me` (`1`), the group `gap` (`1`) and the chevron (`1em`),
+ * × (`8`) with its `me` (`3`), the group `gap` (`1`) and the chevron (`1em`),
  * so a long value ends in an ellipsis before the ×.
  */
 const clearTriggerRoom = (paddingVar: string) => ({
   '[data-part=control]:has([data-part=clear-trigger]:not([hidden])) > &': {
-    pe: `calc(var(${paddingVar}) * 2 + 3.5em)`,
+    pe: `calc(var(${paddingVar}) * 2 + 4em)`,
     '& [data-part=value-text]': { maxW: 'none' },
   },
 });
@@ -160,7 +160,10 @@ const clearTriggerStyles = (heightVar: string) => ({
   alignItems: 'center',
   justifyContent: 'center',
   boxSize: '8',
-  me: '1',
+  // The divider sits `1` past the box. `3` leaves the same space between the
+  // divider and the chevron glyph as between the × glyph and the divider
+  // (about 13px at 14px text).
+  me: '3',
   color: 'fg.icon',
   cursor: 'pointer',
   _hover: { color: 'fg.default' },
