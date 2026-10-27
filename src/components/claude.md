@@ -348,7 +348,7 @@ When adding to `src/index.ts`, follow these categories:
 
 - **Core Components**: Button, Card, Badge, Tag
 - **Form Components**: Input, Select, Checkbox, Radio
-- **Navigation**: Breadcrumb, Pagination, Menu, Tabs
+- **Navigation**: Breadcrumb, Pagination, Menu, Tabs, NavList
 - **Feedback**: Alert, Toast, Modal, Tooltip
 - **Data Display**: Table, Avatar, Typography, Code
 - **File Components**: FileInput, FileItem, FileList

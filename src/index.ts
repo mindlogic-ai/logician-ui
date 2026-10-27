@@ -66,6 +66,7 @@ export * from './components/MonthPicker';
 export * from './components/Popover';
 
 // Navigation Components
+export * from './components/NavList';
 export * from './components/Pagination';
 
 // Input Variants
@@ -178,7 +179,12 @@ export {
 } from './theme/motion';
 export { cubicBezier } from './utils/cubicBezier';
 export { disabledControl, disabledText } from './utils/disabledControl';
-export { FOCUS_RING_SHADOW, focusRing } from './utils/focusRing';
+export {
+  FOCUS_RING_INSET_SHADOW,
+  FOCUS_RING_SHADOW,
+  focusRing,
+  focusRingInset,
+} from './utils/focusRing';
 export {
   staggerDelayMs,
   type StaggerProps,

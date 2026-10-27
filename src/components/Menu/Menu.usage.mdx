@@ -152,6 +152,10 @@ What you still have to do:
   ask the user. Open a `Modal`.
 - A row that navigates should be a real link: `Menu.Item as={NextLink}
   href=…`, so middle-click and "open in new tab" still work.
+- **Tooltip + Menu on one trigger: share `ids.trigger`.** Both make the
+  button their trigger and each gives it its own id, so the menu cannot find
+  its anchor and opens at the top-left of the page. Pass one `useId()` to
+  both: `<Menu ids={{ trigger: id }}><Tooltip ids={{ trigger: id }} …>`.
 
 ## Tokens
 
@@ -197,6 +201,10 @@ Menu가 알아서 하는 일
   묻지 않습니다. `Modal`을 엽니다.
 - 다른 페이지로 가는 줄은 실제 링크로 만듭니다. `Menu.Item as={NextLink} href=…`로
   쓰면 가운데 클릭과 "새 탭에서 열기"가 그대로 동작합니다.
+- **한 버튼에 Tooltip과 Menu를 함께 걸 때는 `ids.trigger`를 같이 씁니다.** 둘 다 그 버튼을
+  여는 요소로 삼고 각자 다른 id를 붙이므로, 메뉴가 기준 위치를 못 찾고 화면 왼쪽 위에서
+  열립니다. `useId()` 하나를 양쪽에 넘깁니다:
+  `<Menu ids={{ trigger: id }}><Tooltip ids={{ trigger: id }} …>`.
 
 ## 토큰
 
