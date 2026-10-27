@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.0.0-alpha.17
+
+### Patch Changes
+
+- 57a8f7b: NavList.Item: with `tooltipPlacement="end"`, an expanded row's tooltip now measures from the whole row, so it no longer covers a trailing action.
+
 ## 5.0.0-alpha.16
 
 ### Patch Changes
