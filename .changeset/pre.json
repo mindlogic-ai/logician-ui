@@ -5,6 +5,7 @@
     "@mindlogic-ai/logician-ui": "4.0.0"
   },
   "changesets": [
+    "avatar-group-counter-span",
     "avatar-recipe-logo-group-max",
     "blue-data-and-links",
     "button-accent-coral",
