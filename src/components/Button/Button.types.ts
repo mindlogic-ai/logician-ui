@@ -122,7 +122,14 @@ export type ButtonOwnProps = Omit<
    * - Tab still reaches it and the focus ring shows;
    * - activating it (click, Enter, Space) does **not** call `onClick`, and its
    *   default action is cancelled, so a `type="submit"` button does not submit
-   *   its form; `onDisabledClick` is called instead.
+   *   its form; the click does not bubble to ancestors; `onDisabledClick` is
+   *   called instead.
+   *
+   * Only activation is blocked: other handlers (`onKeyDown`, `onPointerDown`,
+   * …) still run, as they would on any focusable element. Inside a trigger
+   * (`Menu.Trigger asChild`, `Popover.Trigger asChild`) disable the root as
+   * well. Meant for `<button>`: with `as="a"` the `href` stays, so middle-click
+   * still opens it.
    *
    * Has no effect unless `disabled` is set. `loading` keeps the native
    * `disabled` — a busy button is working, not refusing.

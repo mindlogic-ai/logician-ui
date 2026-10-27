@@ -1,5 +1,5 @@
 import { ChakraProvider } from '@chakra-ui/react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -145,8 +145,42 @@ describe('Button focusableWhenDisabled', () => {
     expect(button).toBeDisabled();
     expect(button).not.toHaveAttribute('aria-disabled');
     expect(getComputedStyle(button).cursor).toBe('progress');
-    fireEvent.click(button);
-    expect(onDisabledClick).not.toHaveBeenCalled();
+  });
+
+  it('the click does not reach an ancestor', async () => {
+    const user = userEvent.setup();
+    const onRowClick = vi.fn();
+    const onDisabledClick = vi.fn();
+    wrap(
+      <div onClick={onRowClick}>
+        <Button
+          disabled
+          focusableWhenDisabled
+          onDisabledClick={onDisabledClick}
+        >
+          결제
+        </Button>
+      </div>
+    );
+    await user.click(screen.getByRole('button', { name: '결제' }));
+    expect(onDisabledClick).toHaveBeenCalledTimes(1);
+    expect(onRowClick).not.toHaveBeenCalled();
+  });
+
+  it('a call-site aria-disabled / data-disabled cannot undo it', () => {
+    wrap(
+      <Button
+        disabled
+        focusableWhenDisabled
+        aria-disabled={false}
+        data-disabled={undefined}
+      >
+        결제
+      </Button>
+    );
+    const button = screen.getByRole('button', { name: '결제' });
+    expect(button).toHaveAttribute('aria-disabled', 'true');
+    expect(button).toHaveAttribute('data-disabled');
   });
 
   describe('without the prop nothing changes', () => {

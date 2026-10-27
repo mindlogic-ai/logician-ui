@@ -1,4 +1,4 @@
-import { type ReactNode, useRef, useState } from 'react';
+import { type ReactNode, useId, useRef, useState } from 'react';
 import { Box, Flex, Grid, HStack, Text, VStack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
@@ -279,6 +279,7 @@ export const FocusableWhenDisabled: Story = {
     const [nudged, setNudged] = useState(false);
     const [paid, setPaid] = useState(0);
     const checkboxRef = useRef<HTMLInputElement>(null);
+    const hintId = useId();
     return (
       <VStack align="flex-start" gap={3} p={4} maxW="360px">
         <label style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -295,7 +296,7 @@ export const FocusableWhenDisabled: Story = {
         </label>
         {!agreed && (
           <Text
-            id="fwd-hint"
+            id={hintId}
             fontSize="sm"
             color={nudged ? 'danger.fg' : 'fg.muted'}
           >
@@ -307,7 +308,7 @@ export const FocusableWhenDisabled: Story = {
             variant="primary"
             disabled={!agreed}
             focusableWhenDisabled
-            aria-describedby={agreed ? undefined : 'fwd-hint'}
+            aria-describedby={agreed ? undefined : hintId}
             onDisabledClick={() => {
               setNudged(true);
               checkboxRef.current?.focus();

@@ -94,6 +94,9 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
       ? (event: MouseEvent<HTMLButtonElement>) => {
           // Also what stops a `type="submit"` button from submitting.
           event.preventDefault();
+          // A native disabled button sends no click to its ancestors either —
+          // a clickable row around it must not run its own action.
+          event.stopPropagation();
           onDisabledClick?.(event);
         }
       : onClick;
@@ -182,10 +185,14 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
         data-destructive={isDestructive || undefined}
         loadingText={loadingText}
         disabled={softDisabled ? undefined : disabled}
-        aria-disabled={softDisabled ? true : undefined}
-        data-disabled={softDisabled ? '' : undefined}
         onClick={handleClick}
         {...rest}
+        // After `rest`, so a stray `aria-disabled` / `data-disabled` from the
+        // call site or a merging `asChild` parent cannot undo it.
+        {...(softDisabled && {
+          'aria-disabled': true,
+          'data-disabled': '',
+        })}
         // The `action` icon rule lives in `css` (a nested selector cannot be a
         // style prop); merged so a call site's `css` adds to it.
         css={mergeCss(base.css as SystemStyleObject | undefined, cssProp)}
