@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.0.0-alpha.14
+
+### Patch Changes
+
+- 156e17f: NavList.Item: `tooltipPlacement="end"` opens an expanded row's tooltips beside the row instead of above it.
+
 ## 5.0.0-alpha.13
 
 ### Minor Changes
