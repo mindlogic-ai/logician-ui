@@ -110,7 +110,17 @@ export type NavListItemProps = Omit<
    * Those are not wired as a description, because they would read the name twice.
    */
   tooltip?: ReactNode;
+  /**
+   * Which side of an expanded row its tooltips open on. `'end'` is the side
+   * away from the label's start — the right on a left-to-right page — for a
+   * side rail whose description should sit beside the row, not over the row
+   * above it. A collapsed list always opens them at the end.
+   * @default 'top'
+   */
+  tooltipPlacement?: NavListTooltipPlacement;
 };
+
+export type NavListTooltipPlacement = 'top' | 'end';
 
 export type NavListGroupProps = Omit<
   HTMLChakraProps<'li'>,
