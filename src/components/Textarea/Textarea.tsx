@@ -84,6 +84,10 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           bg: 'bg.subtle',
           color: 'fg.muted',
           borderColor: 'border.subtle',
+          // Nothing can be typed here, so hovering must not promise an edit.
+          _hover: {
+            borderColor: 'border.subtle',
+          },
         }}
         _disabled={{
           opacity: 1,
