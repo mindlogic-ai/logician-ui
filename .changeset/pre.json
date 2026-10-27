@@ -26,6 +26,7 @@
     "input-readonly-hover-border",
     "nav-list",
     "navlist-tooltip-placement",
+    "select-clear-trigger",
     "select-ghost-variant",
     "toast-neutral-inverse",
     "translate-follows-provider-language",
