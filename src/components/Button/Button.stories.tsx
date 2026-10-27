@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { type ReactNode, useRef, useState } from 'react';
 import { Box, Flex, Grid, HStack, Text, VStack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
@@ -262,6 +262,70 @@ export const AsLink: Story = {
       </Button>
     </Flex>
   ),
+};
+
+/**
+ * `focusableWhenDisabled` keeps a disabled button reachable so it can explain
+ * itself. Tab to 결제 with the box unticked, then press it: `onClick` does not
+ * run, `onDisabledClick` moves focus to the box and the hint turns red.
+ *
+ * It is disabled by `aria-disabled="true"` instead of the native attribute, so
+ * it looks the same as the native disabled button next to it, ignores hover
+ * and press, and does not submit a form.
+ */
+export const FocusableWhenDisabled: Story = {
+  render: function Render() {
+    const [agreed, setAgreed] = useState(false);
+    const [nudged, setNudged] = useState(false);
+    const [paid, setPaid] = useState(0);
+    const checkboxRef = useRef<HTMLInputElement>(null);
+    return (
+      <VStack align="flex-start" gap={3} p={4} maxW="360px">
+        <label style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <input
+            ref={checkboxRef}
+            type="checkbox"
+            checked={agreed}
+            onChange={(event) => {
+              setAgreed(event.target.checked);
+              setNudged(false);
+            }}
+          />
+          <Text fontSize="sm">이용 및 환불 안내에 동의합니다</Text>
+        </label>
+        {!agreed && (
+          <Text
+            id="fwd-hint"
+            fontSize="sm"
+            color={nudged ? 'danger.fg' : 'fg.muted'}
+          >
+            안내에 동의하면 결제할 수 있습니다.
+          </Text>
+        )}
+        <HStack gap={3}>
+          <Button
+            variant="primary"
+            disabled={!agreed}
+            focusableWhenDisabled
+            aria-describedby={agreed ? undefined : 'fwd-hint'}
+            onDisabledClick={() => {
+              setNudged(true);
+              checkboxRef.current?.focus();
+            }}
+            onClick={() => setPaid((n) => n + 1)}
+          >
+            결제
+          </Button>
+          <Button variant="primary" disabled>
+            native disabled
+          </Button>
+        </HStack>
+        <Text fontSize="sm" color="fg.muted">
+          onClick: {paid}
+        </Text>
+      </VStack>
+    );
+  },
 };
 
 // ───────────────────────── Usage-page specimens ─────────────────────────

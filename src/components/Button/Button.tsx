@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef, MouseEvent } from 'react';
 import { Button as ChakraButton, SystemStyleObject } from '@chakra-ui/react';
 
 import { useTranslate } from '@/hooks/useTranslate';
@@ -38,6 +38,10 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
       isDestructive: isDestructiveProp = false,
       size,
       lift,
+      disabled,
+      focusableWhenDisabled = false,
+      onDisabledClick,
+      onClick,
       children,
       _hover: hoverProp,
       _active: activeProp,
@@ -78,6 +82,21 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
     }
 
     const base = getButtonStyles(variant, isDestructive);
+
+    // `focusableWhenDisabled`: disabled by ARIA, not by the attribute, so the
+    // button stays focusable and can answer a press. `aria-disabled=true` is
+    // in Chakra's `_disabled` condition, so the disabled colours and cursor
+    // still apply; `data-disabled` is what `_hover` / `_active` exclude, so
+    // without it the button would still react to the pointer. `loading` keeps
+    // the native attribute (Chakra sets it) — see `focusableWhenDisabled`.
+    const softDisabled = !!disabled && focusableWhenDisabled && !rest.loading;
+    const handleClick = softDisabled
+      ? (event: MouseEvent<HTMLButtonElement>) => {
+          // Also what stops a `type="submit"` button from submitting.
+          event.preventDefault();
+          onDisabledClick?.(event);
+        }
+      : onClick;
 
     // Merged rather than spread after: each variant already owns `_hover` and
     // `_active` for its colours, and replacing either would drop them.
@@ -162,6 +181,10 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
         data-variant={variant}
         data-destructive={isDestructive || undefined}
         loadingText={loadingText}
+        disabled={softDisabled ? undefined : disabled}
+        aria-disabled={softDisabled ? true : undefined}
+        data-disabled={softDisabled ? '' : undefined}
+        onClick={handleClick}
         {...rest}
         // The `action` icon rule lives in `css` (a nested selector cannot be a
         // style prop); merged so a call site's `css` adds to it.

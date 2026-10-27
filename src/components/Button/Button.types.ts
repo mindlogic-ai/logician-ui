@@ -1,4 +1,4 @@
-import type { ElementType } from 'react';
+import type { ElementType, MouseEvent } from 'react';
 import { ButtonProps as ChakraButtonProps } from '@chakra-ui/react';
 
 // Relative, NOT `@/types/polymorphic`. Path aliases survive into the emitted
@@ -107,6 +107,36 @@ export type ButtonOwnProps = Omit<
    * @default false
    */
   lift?: boolean;
+  /**
+   * Keeps a `disabled` button in the Tab order and lets it receive clicks, so
+   * the screen can say *why* it is disabled.
+   *
+   * A natively `disabled` `<button>` cannot be focused and swallows every
+   * click: a keyboard or screen reader user may never find it, and a mouse
+   * user who presses it gets no answer at all. With this prop, `disabled`
+   * renders as `aria-disabled="true"` (plus `data-disabled`) instead of the
+   * native attribute:
+   *
+   * - the disabled colours, the `not-allowed` cursor and the "no hover, no
+   *   press" behaviour are the same as a native disabled button;
+   * - Tab still reaches it and the focus ring shows;
+   * - activating it (click, Enter, Space) does **not** call `onClick`, and its
+   *   default action is cancelled, so a `type="submit"` button does not submit
+   *   its form; `onDisabledClick` is called instead.
+   *
+   * Has no effect unless `disabled` is set. `loading` keeps the native
+   * `disabled` — a busy button is working, not refusing.
+   *
+   * @default false
+   */
+  focusableWhenDisabled?: boolean;
+  /**
+   * Called when a `disabled` + `focusableWhenDisabled` button is activated
+   * (click, Enter, Space) — where `onClick` would have been. Use it to explain
+   * the reason or move focus to what is missing (an unticked consent box).
+   * Never called on a natively disabled button, and never while `loading`.
+   */
+  onDisabledClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 };
 
 /**
