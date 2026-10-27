@@ -8,10 +8,11 @@
  * light, ~1.1:1 in dark).
  *
  * `action.*` is the one role pair that is dark in every mode (BAZE ink:
- * #252525 light / #2E2F2F dark, `action.fg` 12.5–13.4:1 on it, high contrast
+ * #252525 light / #2E2F2F dark, `action.fg` 10.8–13.4:1 on it, high contrast
  * included), so the chrome reads it. The unselected label is `action.fg` at
- * 70% — ≥ 7.0:1 on `action.bg` and ≥ 5.6:1 on `action.bgHover`, both schemes,
- * all four modes.
+ * 80% — ≥ 7.4:1 on `action.bg` and ≥ 6.7:1 on `action.bgHover`, both schemes,
+ * all four modes. (70% fell to 6.1:1 once dark `action.fg` became the
+ * off-white body text instead of pure white.)
  *
  * Borrowed rather than owned: `action.*` is the Run button's role. A dedicated
  * `code.*` role family (bg / fg / fgMuted / bgHover) would be the clean home.
@@ -21,6 +22,6 @@ export const CODE_CHROME = {
   bgHover: 'action.bgHover',
   bgActive: 'action.bgActive',
   fg: 'action.fg',
-  fgMuted: 'action.fg/70',
+  fgMuted: 'action.fg/80',
   divider: 'action.fg/15',
 } as const;

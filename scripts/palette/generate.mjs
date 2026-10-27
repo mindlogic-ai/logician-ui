@@ -578,7 +578,8 @@ function buildScheme(n, s) {
     'action-bg': iD[2],
     'action-bgHover': iD[3],
     'action-bgActive': iD[1],
-    'action-fg': '#FFFFFF',
+    // Same off-white as body text: pure white glared brighter than the page.
+    'action-fg': A.fgDark ?? '#FFFFFF',
     'action-border': iD[6],
     'send-bg': CORAL.baseDark,
     'send-bgHover': CORAL.hoverDark,
@@ -690,7 +691,17 @@ function buildScheme(n, s) {
   const hcDark = hc(dark, false);
   // push() only raises fg-default to 7:1, which the dark value already clears,
   // so without its own anchor HC body text would equal normal dark.
-  if (A.fgHcDark) hcDark['fg-default'] = A.fgHcDark;
+  if (A.fgHcDark) {
+    hcDark['fg-default'] = A.fgHcDark;
+    hcDark['action-fg'] = A.fgHcDark;
+    // Pushing muted and subtle to the same 7:1 floor made them one colour
+    // (1.01:1 apart). Muted takes the OKLCH lightness midway between subtle
+    // and body text; its contrast only goes up, so 7:1 still holds.
+    const [Ls] = hex2oklch(hcDark['fg-subtle']);
+    const [Lf] = hex2oklch(hcDark['fg-default']);
+    const [, C, H] = hex2oklch(hcDark['fg-muted']);
+    hcDark['fg-muted'] = oklch2hex((Ls + Lf) / 2, C, H);
+  }
   return { light, dark, hcLight: hc(light, true), hcDark };
 }
 
