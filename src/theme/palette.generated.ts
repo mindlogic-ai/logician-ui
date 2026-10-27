@@ -37,7 +37,8 @@ export const RAMPS = {
     "anchors": {
       "cream": "#F5EDE0",
       "press": "#2E2A25",
-      "fgDark": "#E0DCD6",
+      "fgDark": "#E8E6E3",
+      "fgHcDark": "#F2F0ED",
       "primaryDark": "#D6D3CD",
       "primaryHoverDark": "#EBE8E3",
       "pressDark": "#C5C2BC"
@@ -376,7 +377,7 @@ export const SCHEMES = {
       "border-subtle": "#363636",
       "border-default": "#3F403F",
       "border-strong": "#4E4E4D",
-      "fg-default": "#E0DCD6",
+      "fg-default": "#E8E6E3",
       "fg-muted": "#C9C6C1",
       "fg-subtle": "#ADAAA7",
       "fg-icon": "#8C8A87",
@@ -558,7 +559,7 @@ export const SCHEMES = {
       "border-subtle": "#363636",
       "border-default": "#898A89",
       "border-strong": "#4E4E4D",
-      "fg-default": "#E0DCD6",
+      "fg-default": "#F2F0ED",
       "fg-muted": "#D7D4CE",
       "fg-subtle": "#D7D3D0",
       "fg-icon": "#ADAAA7",

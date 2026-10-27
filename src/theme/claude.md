@@ -157,7 +157,7 @@ is the maintainer's view.
   (re-tuned 2026-10-27; light is still the prototype). `inkDark` steps 1–7
   hold chroma ≤ 0.003 and only the text steps keep a trace of warmth
   (≤ 0.008); the canvas is `#171717`; body text is its own anchor
-  (`fgDark`, ≈ 13:1), not cream. A warm tint that is invisible in light
+  (`fgDark`, ≈ 14:1; HC dark `fgHcDark`, ≈ 16:1), not cream. A warm tint that is invisible in light
   reads as sepia on a dark ground — keep new dark values near-neutral.
 - **High contrast** (`prefers-contrast: more`): a role whose HC value differs
   reads an internal helper `scheme.light.*` / `scheme.dark.*` (`{ base,

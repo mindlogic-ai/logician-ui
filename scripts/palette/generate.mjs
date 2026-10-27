@@ -182,9 +182,12 @@ const SCALES = {
     anchors: {
       cream: '#F5EDE0', // text on primary (light)
       press: '#2E2A25', // primary/action pressed (light)
-      // Body text (dark): an off-white at ≈ 13:1 on the dark canvas. Cream
+      // Body text (dark): an off-white at ≈ 14:1 on the dark canvas. Cream
       // (15:1, C 0.019) glares yellow on a large dark page.
-      fgDark: '#E0DCD6',
+      fgDark: '#E8E6E3',
+      // Body text (high-contrast dark): brighter than fgDark, so HC lifts body
+      // text above normal dark and above the 7:1-pushed muted/subtle steps.
+      fgHcDark: '#F2F0ED',
       primaryDark: '#D6D3CD', // primary fill · tooltip (dark) — a warm grey, not beige
       primaryHoverDark: '#EBE8E3', // primary hover (dark) — lifts toward white
       pressDark: '#C5C2BC', // primary pressed (dark)
@@ -684,7 +687,11 @@ function buildScheme(n, s) {
     h['count-bg'] = push(m['count-bg'], [m['count-fg']], 7, true);
     return h;
   };
-  return { light, dark, hcLight: hc(light, true), hcDark: hc(dark, false) };
+  const hcDark = hc(dark, false);
+  // push() only raises fg-default to 7:1, which the dark value already clears,
+  // so without its own anchor HC body text would equal normal dark.
+  if (A.fgHcDark) hcDark['fg-default'] = A.fgHcDark;
+  return { light, dark, hcLight: hc(light, true), hcDark };
 }
 
 // ───────────────────────────── run ─────────────────────────────
