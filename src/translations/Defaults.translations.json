@@ -243,5 +243,12 @@
     "zh": "关闭",
     "ja": "閉じる",
     "es": "Cerrar"
+  },
+  "clear_selection": {
+    "ko": "선택 지우기",
+    "en": "Clear selection",
+    "zh": "清除选择",
+    "ja": "選択をクリア",
+    "es": "Borrar selección"
   }
 }

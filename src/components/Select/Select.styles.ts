@@ -120,3 +120,51 @@ export const itemStyles = {
 export const indicatorStyles = {
   color: 'fg.muted',
 };
+
+/**
+ * Clear (×) button for both Select and Combobox.
+ *
+ * Chakra's recipe gives this part a colour and no size, and its default icon
+ * is `1em`, so a bare `ClearTrigger` drew a 21px × next to a 14px chevron. The
+ * × is the secondary action, so it is smaller (`3.5`, 12px at 14px text) and
+ * lighter (`fg.icon`) than the chevron, on an `8` box. `& svg` rather than
+ * `_icon` so the size also wins over an icon passed with its own `boxSize`.
+ *
+ * On a touch screen the hit area widens to 44px, toward the value only: the
+ * chevron sits to the right and has to keep opening the list. The height stays
+ * the control's own height (`heightVar`), so the area never reaches the field
+ * above or below. Every control height is over the 24px KWCAG minimum.
+ */
+const clearTriggerStyles = (heightVar: string) => ({
+  position: 'relative',
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  boxSize: '8',
+  color: 'fg.icon',
+  cursor: 'pointer',
+  _hover: { color: 'fg.default' },
+  // zag hides the × with the `hidden` attribute while nothing is selected,
+  // and the `display` above would otherwise override it.
+  _hidden: { display: 'none' },
+  '& svg': { width: '3.5', height: '3.5' },
+  '@media (pointer: coarse)': {
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      insetEnd: 0,
+      top: '50%',
+      transform: 'translateY(-50%)',
+      width: '44px',
+      height: `var(${heightVar})`,
+    },
+  },
+});
+
+export const selectClearTriggerStyles = clearTriggerStyles(
+  '--select-trigger-height'
+);
+
+export const comboboxClearTriggerStyles = clearTriggerStyles(
+  '--combobox-input-height'
+);

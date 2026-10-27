@@ -1,10 +1,17 @@
 import { forwardRef } from 'react';
 import { Combobox as ChakraCombobox } from '@chakra-ui/react';
 
+import { useTranslate } from '@/hooks/useTranslate';
 import { noZoomOnFocus } from '@/theme/formControls';
 import { mergeCss } from '@/utils/mergeCss';
 
-import { contentStyles, inputStyles, itemStyles } from './Select.styles';
+import { CloseIcon } from '../Icon';
+import {
+  comboboxClearTriggerStyles,
+  contentStyles,
+  inputStyles,
+  itemStyles,
+} from './Select.styles';
 
 const Input = forwardRef<HTMLInputElement, ChakraCombobox.InputProps>(
   function ComboboxInput({ css, ...props }, ref) {
@@ -47,6 +54,24 @@ const Item = forwardRef<HTMLDivElement, ChakraCombobox.ItemProps>(
   }
 );
 
+/** Same × as `Select.ClearTrigger`; see there. */
+const ClearTrigger = forwardRef<
+  HTMLButtonElement,
+  ChakraCombobox.ClearTriggerProps
+>(function ComboboxClearTrigger({ css, children, ...props }, ref) {
+  const translate = useTranslate();
+  return (
+    <ChakraCombobox.ClearTrigger
+      ref={ref}
+      aria-label={translate('clear_selection') as string}
+      {...props}
+      css={mergeCss(comboboxClearTriggerStyles, css)}
+    >
+      {children ?? <CloseIcon aria-hidden />}
+    </ChakraCombobox.ClearTrigger>
+  );
+});
+
 /**
  * Compound Combobox primitives — Chakra's `Combobox` namespace with the
  * Logician design-system styling baked into the visual parts (`Input`,
@@ -62,7 +87,7 @@ export const Combobox = {
   Input,
   Trigger: ChakraCombobox.Trigger,
   IndicatorGroup: ChakraCombobox.IndicatorGroup,
-  ClearTrigger: ChakraCombobox.ClearTrigger,
+  ClearTrigger,
   Positioner: ChakraCombobox.Positioner,
   Content,
   Empty: ChakraCombobox.Empty,
