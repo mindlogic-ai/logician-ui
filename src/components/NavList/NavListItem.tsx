@@ -398,18 +398,31 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
       typeof label === 'string' || typeof label === 'number'
         ? String(label)
         : undefined;
+    // Beside the icon, towards the content: the rail is on the right of
+    // a right-to-left page. Popper placements are physical.
+    const placement =
+      isCollapsed || tooltipPlacement === 'end'
+        ? tooltipDir === 'rtl'
+          ? 'left'
+          : 'right'
+        : 'top';
+    // An expanded row's end tooltip measures from the whole `<li>`, not the
+    // row link: with a trailing action the link stops short of the row's
+    // end, and the tooltip would sit over the action.
+    const anchorsToItem = !isCollapsed && tooltipPlacement === 'end';
     const withTooltip = (
       <Tooltip
         content={tooltipContent}
-        // Beside the icon, towards the content: the rail is on the right of
-        // a right-to-left page. Popper placements are physical.
-        placement={
-          isCollapsed || tooltipPlacement === 'end'
-            ? tooltipDir === 'rtl'
-              ? 'left'
-              : 'right'
-            : 'top'
-        }
+        placement={placement}
+        {...(anchorsToItem && {
+          positioning: {
+            placement,
+            getAnchorRect: (el) =>
+              el instanceof HTMLElement
+                ? (el.closest('li')?.getBoundingClientRect() ?? null)
+                : null,
+          },
+        })}
         onOpenChange={({ open }) => setIsTooltipOpen(open)}
         // Zag only checks that this is set — it takes the content's id and
         // role away, so the trigger is never described by the tooltip. Not

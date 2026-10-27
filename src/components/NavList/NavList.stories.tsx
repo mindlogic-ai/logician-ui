@@ -490,6 +490,38 @@ export const TooltipsAndNewWindow: Story = {
 };
 
 /**
+ * `tooltipPlacement="end"`: the description opens beside the row instead of
+ * above it. On a row with a `trailingAction` it is placed from the whole row,
+ * past the action, not from the link, which stops before the action.
+ */
+export const EndTooltipWithAction: Story = {
+  render: (args) => (
+    <Rail w="220px">
+      <NavList {...args} aria-label="에이전트">
+        {[
+          ['회의록', '회의를 녹음하고 요약을 받아요'],
+          ['이미지 생성', 'AI로 생성한 이미지를 관리하세요'],
+        ].map(([title, description]) => (
+          <NavList.Item
+            key={title}
+            href="#"
+            tooltip={description}
+            tooltipPlacement="end"
+            trailingAction={
+              <IconButton aria-label={`${title} 더 보기`} size="xs">
+                <DotsHorizontalIcon />
+              </IconButton>
+            }
+          >
+            {title}
+          </NavList.Item>
+        ))}
+      </NavList>
+    </Rail>
+  ),
+};
+
+/**
  * Session rows: `trailingActionVisibility="hover"` keeps the more-menu out of
  * the way until the row is hovered or focused, or its menu is open. It stays
  * in the tab order — focusing it reveals it — and is always shown on touch

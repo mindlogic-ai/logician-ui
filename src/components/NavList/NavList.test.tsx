@@ -568,6 +568,30 @@ describe('NavList', () => {
       }
     );
 
+    it('an end tooltip on a row with a trailing action measures from the whole <li>', async () => {
+      const liRect = vi.spyOn(HTMLLIElement.prototype, 'getBoundingClientRect');
+      renderUi(
+        <NavList aria-label="메뉴">
+          <NavList.Item
+            onClick={() => {}}
+            tooltip="회의를 녹음하고 요약을 받아요"
+            tooltipPlacement="end"
+            trailingAction={<button type="button">고정</button>}
+          >
+            회의록
+          </NavList.Item>
+        </NavList>
+      );
+      await hover(screen.getByRole('button', { name: '회의록' }));
+      await waitFor(() =>
+        expect(
+          document.querySelector('[data-part="content"][data-state="open"]')
+        ).not.toBeNull()
+      );
+      expect(liRect).toHaveBeenCalled();
+      liRect.mockRestore();
+    });
+
     it('a disabled row still carries its tooltip as a description, closed', () => {
       renderUi(
         <NavList aria-label="메뉴">
