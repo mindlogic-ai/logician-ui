@@ -1,3 +1,8 @@
+export {
+  ConfirmModal,
+  type ConfirmModalProps,
+  type ConfirmModalTone,
+} from './ConfirmModal';
 export { Modal } from './Modal';
 export { type ModalHeaderTone, type ModalProps } from './Modal.types';
 export { ModalBody } from './ModalBody';
