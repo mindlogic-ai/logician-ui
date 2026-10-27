@@ -14,10 +14,12 @@
  *      text/control token clears its contrast target on every layer,
  *   3. writes `src/theme/palette.generated.ts`.
  *
- * The values for `ink`/`sand` must equal the prototype's `ramps.json` /
- * `tokens.json` (the designer-reviewed source of truth). `--check` fails if
- * they drift. `slate` is new: today's cool gray rebuilt on the same contrast
- * targets as `ink`, for products/tenants that need a cool neutral.
+ * The values for `ink`/`sand` must equal `reference.json`: the prototype's
+ * `ramps.json` / `tokens.json` (the designer-reviewed source of truth) for
+ * light, and the 2026-10-27 neutral-charcoal re-tune for dark (the prototype's
+ * warm dark ramps read sepia in FactChat). `--check` fails if they drift.
+ * `slate` is new: today's cool gray rebuilt on the same contrast targets as
+ * `ink`, for products/tenants that need a cool neutral.
  *
  * Usage:
  *   node scripts/palette/generate.mjs          # write the TS module
@@ -113,13 +115,18 @@ export function contrast(a, b) {
 function solve(target, ref, C, H, darker = true) {
   let lo = 0;
   let hi = 1;
+  const refLum = luminance(ref);
   for (let i = 0; i < 60; i++) {
     const mid = (lo + hi) / 2;
-    const c = contrast(oklch2hex(mid, C, H), ref);
+    const hex = oklch2hex(mid, C, H);
+    const c = contrast(hex, ref);
+    // Searching upward from a dark canvas, a candidate DARKER than the canvas
+    // also has contrast with it (on #171717 black clears 1.1:1), so without
+    // the luminance guard the search walks down to #000000.
     if (darker) {
       if (c < target) hi = mid;
       else lo = mid;
-    } else if (c < target) lo = mid;
+    } else if (c < target || luminance(hex) < refLum) lo = mid;
     else hi = mid;
   }
   return oklch2hex(darker ? lo : hi, C, H);
@@ -152,6 +159,10 @@ function pyRound4(x) {
   return Math.round(x * 1e4) / 1e4;
 }
 
+// FactChat 4.x dark depth (#151515): darker than the prototype's #1F1E1D so the
+// layers above it separate without having to be lighter, and neutral.
+const CANVAS_DARK = '#171717';
+
 const SCALES = {
   ink: {
     hue: 75,
@@ -159,19 +170,27 @@ const SCALES = {
       0.005, 0.008, 0.01, 0.011, 0.012, 0.012, 0.011, 0.01, 0.009, 0.008, 0.004,
       0.003,
     ],
-    dark: [
-      0.008, 0.01, 0.011, 0.012, 0.012, 0.012, 0.012, 0.012, 0.012, 0.014, 0.02,
-      0.022,
-    ],
-    canvasDark: '#1F1E1D',
+    // Dark is a neutral charcoal: surfaces, dividers and borders (steps 1–7)
+    // carry next to no chroma — a warm tint that is invisible in light mode
+    // reads as sepia/brown on a dark ground, and more so the lighter the
+    // step. Only the text steps keep a trace of the warmth (≤ 0.008).
+    dark: [0, 0, 0, 0, 0, 0.002, 0.003, 0.004, 0.006, 0.007, 0.008, 0.008],
+    canvasDark: CANVAS_DARK,
     // Brand anchor: step 11 is the guide's primary black, not the solved value.
     lightOverrides: { 10: '#252525' },
     // Brand anchors that are not ramp steps (guide values).
     anchors: {
-      cream: '#F5EDE0', // text on primary (light) · body text (dark)
+      cream: '#F5EDE0', // text on primary (light)
       press: '#2E2A25', // primary/action pressed (light)
-      primaryDark: '#E3D7C4', // primary fill (dark)
-      pressDark: '#D6C8B2', // primary pressed (dark)
+      // Body text (dark): an off-white at ≈ 14:1 on the dark canvas. Cream
+      // (15:1, C 0.019) glares yellow on a large dark page.
+      fgDark: '#E8E6E3',
+      // Body text (high-contrast dark): brighter than fgDark, so HC lifts body
+      // text above normal dark and above the 7:1-pushed muted/subtle steps.
+      fgHcDark: '#F2F0ED',
+      primaryDark: '#D6D3CD', // primary fill · tooltip (dark) — a warm grey, not beige
+      primaryHoverDark: '#EBE8E3', // primary hover (dark) — lifts toward white
+      pressDark: '#C5C2BC', // primary pressed (dark)
     },
   },
   sand: {
@@ -180,11 +199,13 @@ const SCALES = {
       0.012, 0.02, 0.028, 0.035, 0.042, 0.05, 0.058, 0.06, 0.056, 0.048, 0.036,
       0.024,
     ]),
-    dark: sandChroma([
-      0.012, 0.018, 0.024, 0.03, 0.036, 0.044, 0.052, 0.056, 0.054, 0.046,
-      0.034, 0.024,
-    ]),
-    canvasDark: '#1F1E1D',
+    // Dark keeps well under half the light chroma: on a dark ground the light
+    // ramp's saturation reads as brown, not as a beige tint.
+    dark: [
+      0.006, 0.008, 0.01, 0.012, 0.014, 0.018, 0.022, 0.026, 0.028, 0.026, 0.02,
+      0.014,
+    ],
+    canvasDark: CANVAS_DARK,
   },
   // Today's cool gray (golden-ratio `gray`, OKLCH hue ≈ 267) rebuilt on the
   // same targets as ink. Chroma per step is read off the old ramp at the same
@@ -534,14 +555,15 @@ function buildScheme(n, s) {
     'border-subtle': iD[3],
     'border-default': iD[4],
     'border-strong': iD[5],
-    'fg-default': A.cream,
+    // Schemes without a dedicated dark text/hover anchor (slate) use cream.
+    'fg-default': A.fgDark ?? A.cream,
     'fg-muted': iD[9],
     'fg-subtle': iD[8],
     'fg-icon': iD[7],
     'fg-placeholder': iD[7],
     'fg-onPrimary': '#252525',
     'primary-main': A.primaryDark,
-    'primary-hover': A.cream,
+    'primary-hover': A.primaryHoverDark ?? A.cream,
     'primary-active': A.pressDark,
     'primary-wash': iD[1],
     'primary-washActive': iD[2],
@@ -556,7 +578,8 @@ function buildScheme(n, s) {
     'action-bg': iD[2],
     'action-bgHover': iD[3],
     'action-bgActive': iD[1],
-    'action-fg': '#FFFFFF',
+    // Same off-white as body text: pure white glared brighter than the page.
+    'action-fg': A.fgDark ?? '#FFFFFF',
     'action-border': iD[6],
     'send-bg': CORAL.baseDark,
     'send-bgHover': CORAL.hoverDark,
@@ -665,7 +688,21 @@ function buildScheme(n, s) {
     h['count-bg'] = push(m['count-bg'], [m['count-fg']], 7, true);
     return h;
   };
-  return { light, dark, hcLight: hc(light, true), hcDark: hc(dark, false) };
+  const hcDark = hc(dark, false);
+  // push() only raises fg-default to 7:1, which the dark value already clears,
+  // so without its own anchor HC body text would equal normal dark.
+  if (A.fgHcDark) {
+    hcDark['fg-default'] = A.fgHcDark;
+    hcDark['action-fg'] = A.fgHcDark;
+    // Pushing muted and subtle to the same 7:1 floor made them one colour
+    // (1.01:1 apart). Muted takes the OKLCH lightness midway between subtle
+    // and body text; its contrast only goes up, so 7:1 still holds.
+    const [Ls] = hex2oklch(hcDark['fg-subtle']);
+    const [Lf] = hex2oklch(hcDark['fg-default']);
+    const [, C, H] = hex2oklch(hcDark['fg-muted']);
+    hcDark['fg-muted'] = oklch2hex((Ls + Lf) / 2, C, H);
+  }
+  return { light, dark, hcLight: hc(light, true), hcDark };
 }
 
 // ───────────────────────────── run ─────────────────────────────

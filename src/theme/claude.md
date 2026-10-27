@@ -153,6 +153,14 @@ is the maintainer's view.
   designer prototype (OKLCH, contrast-targeted steps) and `--check`s it against
   `scripts/palette/reference.json`. Change a value there, regenerate, commit
   `palette.generated.ts`. Never hand-edit the generated file.
+- **Dark mode is a neutral charcoal**, not the prototype's warm dark ramp
+  (re-tuned 2026-10-27; light is still the prototype). `inkDark` steps 1–7
+  hold chroma ≤ 0.003 and only the text steps keep a trace of warmth
+  (≤ 0.008); the canvas is `#171717`; body text is its own anchor
+  (`fgDark`, ≈ 14:1; HC dark `fgHcDark`, ≈ 16:1), not cream; dark
+  `action.fg` uses the same anchor. HC dark `fg.muted` is the OKLCH midpoint
+  of `fg.subtle` and `fg.default`, so the three text levels stay distinct. A warm tint that is invisible in light
+  reads as sepia on a dark ground — keep new dark values near-neutral.
 - **High contrast** (`prefers-contrast: more`): a role whose HC value differs
   reads an internal helper `scheme.light.*` / `scheme.dark.*` (`{ base,
 _moreContrast }`) because Chakra cannot nest `_dark` inside `_moreContrast`

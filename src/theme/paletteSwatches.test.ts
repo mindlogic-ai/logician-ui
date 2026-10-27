@@ -32,7 +32,7 @@ describe('Setup/Theme → Default swatches', () => {
   });
 
   it('follows semantic → semantic references per mode', () => {
-    // fg.default → neutral.11 (light) / cream-ish (dark): two different hexes.
+    // fg.default → neutral.11 (light) / off-white (dark): two different hexes.
     const light = resolveColor('{colors.fg.default}', 'light');
     const dark = resolveColor('{colors.fg.default}', 'dark');
     expect(light).toMatch(/^#[0-9a-f]{6}$/i);
