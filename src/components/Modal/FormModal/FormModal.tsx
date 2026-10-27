@@ -10,16 +10,14 @@ import React, {
 } from 'react';
 import { chakra } from '@chakra-ui/react';
 
-import {
-  Modal,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-} from '@/components/Modal';
-import { MODAL_MAX_H } from '@/components/Modal/Modal.styles';
 import { useTranslate } from '@/hooks/useTranslate';
 import { easings, MOTION_DURATION_MS } from '@/theme/motion';
 
+import { Modal } from '../Modal';
+import { MODAL_MAX_H } from '../Modal.styles';
+import { ModalCloseButton } from '../ModalCloseButton';
+import { ModalContent } from '../ModalContent';
+import { ModalHeader } from '../ModalHeader';
 import { FormModalProps } from './FormModal.types';
 import { FormModalContext } from './FormModalContext';
 

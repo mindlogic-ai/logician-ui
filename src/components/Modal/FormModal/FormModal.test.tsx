@@ -3,12 +3,11 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import { FieldRow, FormModalFooter } from '@/components/Form';
 import { Input } from '@/components/Input';
-import { ModalBody } from '@/components/Modal';
 import { system } from '@/theme';
 
-import { FieldRow } from '../FieldRow';
-import { FormModalFooter } from '../FormModalFooter';
+import { ModalBody } from '../ModalBody';
 import { FormModal } from './FormModal';
 
 const Harness = ({

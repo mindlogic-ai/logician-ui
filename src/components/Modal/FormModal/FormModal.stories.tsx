@@ -3,16 +3,16 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
-import { ModalBody } from '@/components/Modal';
+import { FieldRow, FormModalFooter } from '@/components/Form';
+
+import { ModalBody } from '../ModalBody';
 import { Textarea } from '@/components/Textarea';
 
-import { FieldRow } from '../FieldRow';
-import { FormModalFooter } from '../FormModalFooter';
 import { FormModal } from './FormModal';
 import type { FormModalSize } from './FormModal.types';
 
 const meta: Meta<typeof FormModal> = {
-  title: 'Components/Form/FormModal',
+  title: 'Components/Modal/FormModal',
   component: FormModal,
   parameters: {
     docs: {

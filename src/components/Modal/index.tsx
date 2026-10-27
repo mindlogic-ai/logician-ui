@@ -3,6 +3,12 @@ export {
   type ConfirmModalProps,
   type ConfirmModalTone,
 } from './ConfirmModal';
+export {
+  FormModal,
+  type FormModalProps,
+  type FormModalSize,
+  useFormModalContext,
+} from './FormModal';
 export { Modal } from './Modal';
 export { type ModalHeaderTone, type ModalProps } from './Modal.types';
 export { ModalBody } from './ModalBody';

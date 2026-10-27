@@ -1,8 +1,8 @@
 import { Button } from '@/components/Button';
 import { TrashIcon } from '@/components/Icon';
 import { ModalFooter } from '@/components/Modal';
+import { useFormModalContext } from '@/components/Modal/FormModal/FormModalContext';
 
-import { useFormModalContext } from '../FormModal/FormModalContext';
 import { FormModalFooterProps } from './FormModalFooter.types';
 
 /**
