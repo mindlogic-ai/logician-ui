@@ -8,6 +8,7 @@ import { Text } from '@/components/Typography';
 import { useTranslate } from '@/hooks/useTranslate';
 
 import { Modal } from '../Modal';
+import { MODAL_MAX_H } from '../Modal.styles';
 import { ModalBody } from '../ModalBody';
 import { ModalCloseButton } from '../ModalCloseButton';
 import { ModalContent } from '../ModalContent';
@@ -29,7 +30,8 @@ import { ConfirmModalProps } from './ConfirmModal.types';
  * - **[취소] [동작]**, the action last. The confirm label is the action's verb.
  * - **Every way out closes it** — close button, Esc, a backdrop click. Nothing
  *   has been typed, so nothing is lost.
- * - **`md` width**, fixed.
+ * - **`md` width**, fixed. Past `min(820px, 85dvh)` only the body scrolls,
+ *   like the other presets.
  *
  * ```tsx
  * <ConfirmModal open={open} onClose={close}
@@ -59,11 +61,12 @@ export const ConfirmModal = ({
     <Modal
       open={open}
       size="md"
+      scrollBehavior="inside"
       onOpenChange={(e) => {
         if (!e.open) onClose();
       }}
     >
-      <ModalContent>
+      <ModalContent maxH={MODAL_MAX_H}>
         <ModalHeader textStyle="h5">{title}</ModalHeader>
         <ModalCloseButton aria-label={translate('close') as string} />
         <ModalBody>

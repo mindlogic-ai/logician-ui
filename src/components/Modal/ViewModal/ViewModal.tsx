@@ -55,7 +55,7 @@ export const ViewModal = ({
       <ModalContent maxH={MODAL_MAX_H}>
         <ModalHeader subtitle={subtitle}>{title}</ModalHeader>
         <ModalCloseButton aria-label={translate('close') as string} />
-        <ModalBody overscrollBehavior="contain">{children}</ModalBody>
+        <ModalBody>{children}</ModalBody>
         <ModalFooter>
           <Button variant="secondary" onClick={onClose}>
             {closeLabel ?? translate('close')}
