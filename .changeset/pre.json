@@ -35,6 +35,8 @@
     "select-clear-divider-gap",
     "select-clear-trigger",
     "select-ghost-variant",
+    "switch-off-state-contrast",
+    "switch-on-success",
     "toast-neutral-inverse",
     "toast-neutral-muted",
     "translate-follows-provider-language",
