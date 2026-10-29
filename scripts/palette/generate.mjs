@@ -524,7 +524,7 @@ function buildScheme(n, s) {
     'success-bg': '#E5EDDD',
     'success-border': '#C5D4B5',
     'success-fg': '#556344',
-    'success-solid': '#5E7A37',
+    'success-solid': '#30862D',
     'success-onSolid': '#FFFFFF',
     'warning-bg': '#FEE9BC',
     'warning-border': '#F0CF83',
