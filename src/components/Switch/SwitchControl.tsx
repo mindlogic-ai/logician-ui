@@ -22,7 +22,7 @@ export const SwitchControl = forwardRef<HTMLSpanElement, SwitchControlProps>(
       // thumb; no hue is added (the BAZE colour guide keeps controls black).
       bg="bg.surface"
       boxShadow={OFF_OUTLINE}
-      _checked={{ bg: 'primary.main', boxShadow: 'none' }}
+      _checked={{ bg: 'success.solid', boxShadow: 'none' }}
       animationStyle="feedback"
       transitionProperty="background-color, box-shadow"
       _disabled={{ ...disabledControl, cursor: 'not-allowed' }}
@@ -47,7 +47,7 @@ export const SwitchControl = forwardRef<HTMLSpanElement, SwitchControlProps>(
         // On: fg.onPrimary (cream in light, ink in dark) to match
         // Checkbox/Radio.
         bg="border.control"
-        _checked={{ bg: 'fg.onPrimary' }}
+        _checked={{ bg: 'success.onSolid' }}
       />
     </ChakraSwitch.Control>
   )
