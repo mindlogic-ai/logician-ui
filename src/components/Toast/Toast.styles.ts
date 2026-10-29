@@ -7,12 +7,15 @@ import type { ToastStatus } from './Toast.types';
  *
  * Each status is bg `{s}.bg` + text `{s}.fg` + a 1px `{s}.border` outline —
  * `info` reads its own `info.*` family instead of borrowing `primary.*`.
- * `neutral` carries no status (it is the default when none is given) and is
- * inverted: the tooltip pair `tooltip.bg` / `tooltip.fg`. A `bg.surface` toast
- * was white on a white canvas in light mode, set apart only by a 1px border
- * and the shadow — a "링크를 복사했어요" confirmation was easy to miss. The
- * tooltip pair already flips per mode (ink in light, off-white in dark), so the
- * toast stays the highest-contrast thing on the page in both.
+ * `neutral` carries no status (it is the default when none is given) and sits
+ * on the muted ground: `bg.muted` + `fg.default` + a `border.default` outline.
+ * Not `bg.surface` — that was white on a white canvas in light mode, set apart
+ * only by a 1px border and the shadow, so a "링크를 복사했어요" confirmation was
+ * easy to miss. Not the inverted tooltip pair either — ink (#252525) is
+ * `primary.main`, the user's own chat bubble, so a plain "복사 완료" read as
+ * the heaviest thing on the page, louder than an error toast. `bg.muted` is
+ * already a registered separation from `bg.canvas` (see `contrast.test.ts`)
+ * and flips per mode with the rest of the neutral ramp.
  */
 export const toastStyles: Record<ToastStatus, BoxProps> = {
   info: {
@@ -36,9 +39,9 @@ export const toastStyles: Record<ToastStatus, BoxProps> = {
     borderColor: 'danger.border',
   },
   neutral: {
-    bg: 'tooltip.bg',
-    color: 'tooltip.fg',
-    borderColor: 'tooltip.bg',
+    bg: 'bg.muted',
+    color: 'fg.default',
+    borderColor: 'border.default',
   },
 };
 
@@ -73,11 +76,9 @@ export const closeButtonStyles: Record<ToastStatus, BoxProps> = {
     },
   },
   neutral: {
-    color: 'tooltip.fg',
+    color: 'fg.muted',
     _hover: {
-      // A tint of the toast's own text colour: no surface token sits on the
-      // inverted ground in both modes.
-      bg: 'color-mix(in srgb, var(--chakra-colors-tooltip-fg) 16%, transparent)',
+      bg: 'layer.1.active',
     },
   },
 };
@@ -133,11 +134,9 @@ export const actionStyles: Record<ToastStatus, BoxProps> = {
   },
   neutral: {
     ...actionBase,
-    color: 'tooltip.fg',
-    _hover: {
-      bg: 'color-mix(in srgb, var(--chakra-colors-tooltip-fg) 16%, transparent)',
-    },
-    _focusVisible: { outline: '2px solid', outlineColor: 'tooltip.fg' },
+    color: 'fg.default',
+    _hover: { bg: 'layer.1.active' },
+    _focusVisible: { outline: '2px solid', outlineColor: 'fg.default' },
   },
 };
 
