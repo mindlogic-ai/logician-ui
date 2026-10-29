@@ -2,23 +2,38 @@ import { forwardRef } from 'react';
 import { Switch as ChakraSwitch, SwitchControlProps } from '@chakra-ui/react';
 
 import { disabledControl } from '@/utils/disabledControl';
-import { focusRing } from '@/utils/focusRing';
+import { FOCUS_RING_SHADOW, focusRing } from '@/utils/focusRing';
+
+// Drawn as an inset shadow, not a border, so the thumb's travel and the
+// track's size stay exactly what Chakra's recipe computes.
+const OFF_OUTLINE = 'inset 0 0 0 1px var(--chakra-colors-border-control)';
 
 export const SwitchControl = forwardRef<HTMLSpanElement, SwitchControlProps>(
   (props, ref) => (
     <ChakraSwitch.Control
       ref={ref}
-      // The off-state track is a meter surface — its extent is the information —
-      // so it needs a visible fill, not just an edge. bg.muted (gray.100) is
-      // only ~1.03:1 against the bg.sunken page wash (gray.50) and vanishes
-      // there; bg.track (gray.300) reads as a filled track on any background.
-      // The checked state is the self-defining primary.main fill.
-      bg="bg.track"
-      _checked={{ bg: 'primary.main' }}
+      // Off is drawn the way an unchecked Checkbox is: a bg.surface track with a
+      // border.control outline and a border.control thumb, each at least 3:1
+      // against what it sits on (WCAG 1.4.11). The previous off state, a
+      // bg.track fill with a bg.surface thumb, measured 1.3:1 (light) and
+      // 1.4:1 (dark) between thumb and track, so the thumb's position, the only
+      // thing that tells off from on, could not be seen.
+      // On is success.solid with a success.onSolid thumb. With a black (light) or
+      // pale (dark) primary fill, neither state carried colour, and dark-mode
+      // "on" read as light-mode "off"; green gives both modes one meaning.
+      bg="bg.surface"
+      boxShadow={OFF_OUTLINE}
+      _checked={{ bg: 'success.solid', boxShadow: 'none' }}
       animationStyle="feedback"
-      transitionProperty="background-color"
+      transitionProperty="background-color, box-shadow"
       _disabled={{ ...disabledControl, cursor: 'not-allowed' }}
       {...focusRing}
+      // focusRing's shadow would replace the outline; keep both while off.
+      _focusVisible={{
+        ...focusRing._focusVisible,
+        boxShadow: `${OFF_OUTLINE}, ${FOCUS_RING_SHADOW}`,
+        _checked: { boxShadow: FOCUS_RING_SHADOW },
+      }}
       {...props}
     >
       <ChakraSwitch.Thumb
@@ -29,12 +44,11 @@ export const SwitchControl = forwardRef<HTMLSpanElement, SwitchControlProps>(
         // reverses direction — `standard` vs `emphasized` would not.
         animationStyle="spring"
         transitionProperty="translate"
-        // Chakra's default is a raw `white` thumb that stays `white` when
-        // checked via an undefined `colorPalette.contrast`. bg.surface reads
-        // as the same near-white in light and flips correctly in dark; the
-        // checked thumb is fg.onPrimary (cream) to match Checkbox/Radio.
-        bg="bg.surface"
-        _checked={{ bg: 'fg.onPrimary' }}
+        // Off: border.control, the same 3:1 control token as the outline.
+        // On: success.onSolid, the text colour success buttons put on the same
+        // fill (white in light, ink in dark).
+        bg="border.control"
+        _checked={{ bg: 'success.onSolid' }}
       />
     </ChakraSwitch.Control>
   )
