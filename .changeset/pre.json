@@ -36,6 +36,7 @@
     "select-clear-trigger",
     "select-ghost-variant",
     "toast-neutral-inverse",
+    "toast-neutral-muted",
     "translate-follows-provider-language",
     "v5-baze-palette",
     "word-break-by-lang"
