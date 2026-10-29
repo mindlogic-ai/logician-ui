@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.0.0-alpha.23
+
+### Patch Changes
+
+- 0d56e86: Dark mode: `success.bg`, `success.border`, `success.fg` and `success.solid` are
+  more saturated, so success toasts, banners, badges and chips read as green instead
+  of grey-olive. `success.solid` no longer equals `success.fg`. Light mode is unchanged.
+
 ## 5.0.0-alpha.22
 
 ### Patch Changes
