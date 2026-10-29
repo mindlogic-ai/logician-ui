@@ -179,12 +179,17 @@ export const UsageTokens: Story = {
   render: () => (
     <TokenTable
       rows={[
-        { token: 'bg.track', use: <T en="Track when off" ko="꺼짐 트랙" /> },
-        { token: 'primary.main', use: <T en="Track when on" ko="켜짐 트랙" /> },
+        { token: 'bg.surface', use: <T en="Track when off" ko="꺼짐 트랙" /> },
         {
-          token: 'bg.surface',
-          use: <T en="Thumb when off" ko="꺼짐 손잡이" />,
+          token: 'border.control',
+          use: (
+            <T
+              en="Track outline and thumb when off"
+              ko="꺼짐 트랙 테두리·손잡이"
+            />
+          ),
         },
+        { token: 'primary.main', use: <T en="Track when on" ko="켜짐 트랙" /> },
         {
           token: 'fg.onPrimary',
           use: <T en="Thumb when on" ko="켜짐 손잡이" />,
