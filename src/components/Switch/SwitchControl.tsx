@@ -18,8 +18,9 @@ export const SwitchControl = forwardRef<HTMLSpanElement, SwitchControlProps>(
       // bg.track fill with a bg.surface thumb, measured 1.3:1 (light) and
       // 1.4:1 (dark) between thumb and track, so the thumb's position, the only
       // thing that tells off from on, could not be seen.
-      // On stays the self-defining primary.main fill with an fg.onPrimary
-      // thumb; no hue is added (the BAZE colour guide keeps controls black).
+      // On is success.solid with a success.onSolid thumb. With a black (light) or
+      // pale (dark) primary fill, neither state carried colour, and dark-mode
+      // "on" read as light-mode "off"; green gives both modes one meaning.
       bg="bg.surface"
       boxShadow={OFF_OUTLINE}
       _checked={{ bg: 'success.solid', boxShadow: 'none' }}
@@ -44,8 +45,8 @@ export const SwitchControl = forwardRef<HTMLSpanElement, SwitchControlProps>(
         animationStyle="spring"
         transitionProperty="translate"
         // Off: border.control, the same 3:1 control token as the outline.
-        // On: fg.onPrimary (cream in light, ink in dark) to match
-        // Checkbox/Radio.
+        // On: success.onSolid, the text colour success buttons put on the same
+        // fill (white in light, ink in dark).
         bg="border.control"
         _checked={{ bg: 'success.onSolid' }}
       />

@@ -189,9 +189,12 @@ export const UsageTokens: Story = {
             />
           ),
         },
-        { token: 'primary.main', use: <T en="Track when on" ko="켜짐 트랙" /> },
         {
-          token: 'fg.onPrimary',
+          token: 'success.solid',
+          use: <T en="Track when on" ko="켜짐 트랙" />,
+        },
+        {
+          token: 'success.onSolid',
           use: <T en="Thumb when on" ko="켜짐 손잡이" />,
         },
         {
