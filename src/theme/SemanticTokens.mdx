@@ -32,7 +32,7 @@ createLogicianTheme({ neutral: 'slate' }) // cool gray — app code unchanged
 | Raised surface (card, menu, popover, input) | `bg.surface` |
 | Body · secondary · caption text | `fg.default` · `fg.muted` · `fg.subtle` |
 | Icon · placeholder | `fg.icon` · `fg.placeholder` |
-| Link | `fg.link` + underline, hover `fg.linkHover` |
+| Link | `fg.link` + 1px underline at rest; hover `fg.linkHover` + 2px underline |
 | Divider · card border · input/checkbox border | `border.subtle` · `border.default` · `border.control` |
 | Primary (black) fill · text on it | `primary.main` / `.hover` / `.active` · `fg.onPrimary` |
 | Hover / press wash, selected row | `primary.wash` / `primary.washActive` · `primary.selected` |
@@ -57,8 +57,14 @@ that is what `category.*` is for.
 Blue is the one hue BAZE gives a meaning outside status: **data and links**.
 Use it for both, and for nothing decorative.
 
-- **Links** — `fg.link` / `fg.linkHover` (blue ink, #48607A / #AFC7E1), in chat
+- **Links** — `fg.link` (blue ink, #48607A light / #AFC7E1 dark), in chat
   messages, markdown and app copy alike. Never ink-black or coral for a link.
+  **Always underlined, at rest too**: next to body text (#252525) the blue is
+  only 2.36:1, under the 3:1 that colour alone would need (WCAG 1.4.1), so the
+  underline is what marks it as a link. Hover is `fg.linkHover` — further from
+  the canvas than rest, never toward it: #304760 light (9.56:1 on white vs
+  6.50:1 at rest), #C5DEF8 dark (10.66:1 vs 8.48:1 on `bg.surface`) — and the
+  underline thickens to 2px.
 - **Data visualisation** — usage/share bars, single-measure bar charts, maps,
   heatmaps, progress-by-share: the `data.*` ramp, a **blue monochrome ramp**,
   never a rainbow and never a grey ramp. Steps differ in lightness only (the

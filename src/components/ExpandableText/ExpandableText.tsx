@@ -89,7 +89,6 @@ export const ExpandableText = ({
       {(isOverflowing || isExpanded) && (
         <Link
           as="button"
-          textDecor="none"
           _hover={{ color: 'fg.default' }}
           onClick={handleToggle}
           aria-expanded={isExpanded}
