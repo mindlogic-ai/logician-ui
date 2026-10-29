@@ -459,27 +459,18 @@ describe('브랜드 색 대비 — Link · Tab 램프', () => {
     expect(hover).toBeGreaterThan(resting);
   });
 
-  // KNOWN (5.0 open question, needs designer sign-off): the BAZE guide's dark
-  // `fg.linkHover` #8BB7E3 is 6.52:1 on bg.surface against the resting link's
-  // 7.89:1 — the hover moves TOWARD the background. Both still clear 4.5:1 and
-  // the underline thickens 1px → 2px, so the hover cue survives, but this is
-  // the exact inversion this file was written to stop. `it.fails` keeps the
-  // invariant on record: when the value is fixed this starts passing and fails
-  // the suite, so flip it back to `it`.
-  it.fails(
-    'hover 가 배경 반대쪽으로 간다 — 다크 (BAZE 가이드 값 확인 필요)',
-    () => {
-      const resting = contrast(
-        resolve(LINK_RAMP.default, '_dark'),
-        DARK_CANVAS
-      );
-      const hover = contrast(
-        resolve(LINK_RAMP.defaultHover, '_dark'),
-        DARK_CANVAS
-      );
-      expect(hover).toBeGreaterThan(resting);
-    }
-  );
+  // The BAZE guide's dark `fg.linkHover` #8BB7E3 went TOWARD the background
+  // (6.52:1 on bg.surface against the resting link's 7.89:1) and sat here as
+  // `it.fails`. Fixed by making the dark hover lighter than the resting link
+  // (#C5DEF8, 10.66:1 on bg.surface).
+  it('hover 가 배경 반대쪽으로 간다 — 다크', () => {
+    const resting = contrast(resolve(LINK_RAMP.default, '_dark'), DARK_CANVAS);
+    const hover = contrast(
+      resolve(LINK_RAMP.defaultHover, '_dark'),
+      DARK_CANVAS
+    );
+    expect(hover).toBeGreaterThan(resting);
+  });
 
   it('선택된 가로 탭의 레이블이 라이트·다크 양쪽에서 4.5:1 을 넘는다', () => {
     // Measured against the RAISED surface (bg.surface), not the page canvas:

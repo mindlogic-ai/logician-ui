@@ -509,7 +509,10 @@ function buildScheme(n, s) {
     // separates from the resting fg-icon without a disabled-bg to help.
     'disabled-fgGhost': '#C2C2C2',
     'fg-link': '#48607A',
-    'fg-linkHover': '#295684',
+    // Hover goes AWAY from the canvas: same OKLCH hue/chroma as fg-link, L 0.48
+    // → 0.39 (9.56:1 on white). The BAZE guide's #295684 is the info-fg blue —
+    // more saturated, and too close to fg-link to read as a state change.
+    'fg-linkHover': '#304760',
     focus: iL[10],
     'danger-bg': '#FEE9E6',
     'danger-border': '#F3C3BD',
@@ -591,7 +594,10 @@ function buildScheme(n, s) {
     'disabled-fg': '#737373',
     'disabled-fgGhost': '#4A4A4A',
     'fg-link': '#AFC7E1',
-    'fg-linkHover': '#8BB7E3',
+    // Lighter than the resting link, i.e. away from the dark canvas (the
+    // guide's #8BB7E3 went toward it: 7.89:1 → 6.52:1). Same hue/chroma as
+    // fg-link, L 0.82 → 0.89.
+    'fg-linkHover': '#C5DEF8',
     focus: A.primaryDark,
     'danger-bg': '#47211E',
     'danger-border': '#6E3530',
