@@ -244,6 +244,13 @@
     "ja": "閉じる",
     "es": "Cerrar"
   },
+  "cancel": {
+    "ko": "취소",
+    "en": "Cancel",
+    "zh": "取消",
+    "ja": "キャンセル",
+    "es": "Cancelar"
+  },
   "clear_selection": {
     "ko": "선택 지우기",
     "en": "Clear selection",
