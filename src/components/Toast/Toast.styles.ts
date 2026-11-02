@@ -8,14 +8,18 @@ import type { ToastStatus } from './Toast.types';
  * Each status is bg `{s}.bg` + text `{s}.fg` + a 1px `{s}.border` outline —
  * `info` reads its own `info.*` family instead of borrowing `primary.*`.
  * `neutral` carries no status (it is the default when none is given) and sits
- * on the muted ground: `bg.muted` + `fg.default` + a `border.default` outline.
+ * on the muted ground: `bg.muted` + `fg.default` + a `border.strong` outline.
  * Not `bg.surface` — that was white on a white canvas in light mode, set apart
  * only by a 1px border and the shadow, so a "링크를 복사했어요" confirmation was
  * easy to miss. Not the inverted tooltip pair either — ink (#252525) is
  * `primary.main`, the user's own chat bubble, so a plain "복사 완료" read as
  * the heaviest thing on the page, louder than an error toast. `bg.muted` is
  * already a registered separation from `bg.canvas` (see `contrast.test.ts`)
- * and flips per mode with the rest of the neutral ramp.
+ * and flips per mode with the rest of the neutral ramp. Its separation from
+ * a white canvas (1.13:1) is the weakest of the five grounds, so the outline is
+ * `border.strong`, not `border.default`, to give it the same edge as a status
+ * toast. High contrast keeps `border.default`: there it is the darker of the
+ * two (#908A83 vs #BEB9B1 in light).
  */
 export const toastStyles: Record<ToastStatus, BoxProps> = {
   info: {
@@ -41,7 +45,8 @@ export const toastStyles: Record<ToastStatus, BoxProps> = {
   neutral: {
     bg: 'bg.muted',
     color: 'fg.default',
-    borderColor: 'border.default',
+    borderColor: 'border.strong',
+    _moreContrast: { borderColor: 'border.default' },
   },
 };
 
