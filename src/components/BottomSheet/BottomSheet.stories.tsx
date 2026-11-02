@@ -14,6 +14,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { T } from '../../guidelines/_components/Lang';
 import { TokenTable } from '../../guidelines/_components/TokenTable';
 import { Button } from '../Button';
+import { Input } from '../Input';
 import {
   BoltIcon,
   ClockIcon,
@@ -199,6 +200,80 @@ export const LongScrollingList: Story = {
               <Button variant="primary" onClick={() => setOpen(false)}>
                 확인
               </Button>
+            </BottomSheetFooter>
+          </BottomSheetContent>
+        </BottomSheet>
+      </>
+    );
+  },
+};
+
+/**
+ * A form that asks before it drops unsaved edits. Once something is typed the
+ * sheet stops dragging (`dragDisabled`); the X, Escape and a backdrop tap still
+ * reach `onOpenChange`, which asks first. Without the prop a drag would close
+ * past the question or, with the close refused, leave the sheet where it was
+ * dropped.
+ */
+export const UnsavedChanges: Story = {
+  args: {},
+  render: (args) => {
+    const [open, setOpen] = useState(false);
+    const [name, setName] = useState('');
+    const [asking, setAsking] = useState(false);
+    const isDirty = name !== '';
+
+    const close = () => {
+      setOpen(false);
+      setAsking(false);
+      setName('');
+    };
+
+    return (
+      <>
+        <Button onClick={() => setOpen(true)}>이름 바꾸기</Button>
+        <BottomSheet
+          {...args}
+          open={open}
+          onOpenChange={(e) => {
+            if (e.open) return;
+            if (isDirty) setAsking(true);
+            else close();
+          }}
+        >
+          <BottomSheetContent dragDisabled={isDirty}>
+            <BottomSheetHeader>이름 바꾸기</BottomSheetHeader>
+            <BottomSheetCloseButton />
+            <BottomSheetBody>
+              <Stack gap="3">
+                <Input
+                  aria-label="새 이름"
+                  placeholder="새 이름"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+                {asking && (
+                  <Subtext color="fg.muted">
+                    저장하지 않은 변경이 있습니다. 닫으면 사라집니다.
+                  </Subtext>
+                )}
+              </Stack>
+            </BottomSheetBody>
+            <BottomSheetFooter>
+              {asking ? (
+                <>
+                  <Button variant="ghost" onClick={() => setAsking(false)}>
+                    계속 편집
+                  </Button>
+                  <Button variant="primary" onClick={close}>
+                    닫기
+                  </Button>
+                </>
+              ) : (
+                <Button variant="primary" onClick={close}>
+                  저장
+                </Button>
+              )}
             </BottomSheetFooter>
           </BottomSheetContent>
         </BottomSheet>

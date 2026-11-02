@@ -69,12 +69,13 @@ The sheet has no visual variants. These props decide how it behaves:
 
 <En>
 
-| Prop | Effect | Use for |
-| --- | --- | --- |
-| `modal` (default `true`) | Scrim, focus trap and scroll lock. | Most sheets: a pick or a set of choices. |
-| `modal={false}` | No scrim, no focus trap, no scroll lock; the page behind stays usable. | A palette beside a canvas, usually with `snapPoints`. |
-| `snapPoints` / `defaultSnapPoint` | Heights the sheet rests at. Numbers up to 1 are fractions of the viewport (`[0.4, 1]`); strings take `px` or `rem`. | A sheet that opens half-way and expands. |
-| `BottomSheetContent showGrabber` (default `true`) | Draws the drag handle. | Leave it on; turn it off only when the sheet cannot be dragged. |
+| Prop                                                | Effect                                                                                                                                       | Use for                                                                                                                           |
+| --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `modal` (default `true`)                            | Scrim, focus trap and scroll lock.                                                                                                           | Most sheets: a pick or a set of choices.                                                                                          |
+| `modal={false}`                                     | No scrim, no focus trap, no scroll lock; the page behind stays usable.                                                                       | A palette beside a canvas, usually with `snapPoints`.                                                                             |
+| `snapPoints` / `defaultSnapPoint`                   | Heights the sheet rests at. Numbers up to 1 are fractions of the viewport (`[0.4, 1]`); strings take `px` or `rem`.                          | A sheet that opens half-way and expands.                                                                                          |
+| `BottomSheetContent showGrabber` (default `true`)   | Draws the drag handle.                                                                                                                       | Leave it on; turn it off only when the sheet cannot be dragged.                                                                   |
+| `BottomSheetContent dragDisabled` (default `false`) | The sheet cannot be dragged, from the body or the handle. The handle stays drawn. The X, `Escape` and a scrim tap still call `onOpenChange`. | While closing asks for confirmation, e.g. a form with unsaved changes. A guarded drag would leave the sheet where it was dropped. |
 
 ## Do / Don't
 
@@ -82,12 +83,13 @@ The sheet has no visual variants. These props decide how it behaves:
 
 <Ko>
 
-| 속성 | 효과 | 쓰는 곳 |
-| --- | --- | --- |
-| `modal` (기본 `true`) | 배경 막, 초점 가두기, 스크롤 잠금. | 대부분의 시트: 하나 고르기, 선택지 묶음. |
-| `modal={false}` | 배경 막, 초점 가두기, 스크롤 잠금이 모두 없어 뒤의 페이지를 쓸 수 있습니다. | 캔버스 옆의 팔레트. 보통 `snapPoints`와 함께 씁니다. |
-| `snapPoints` / `defaultSnapPoint` | 시트가 멈추는 높이. 1 이하의 숫자는 화면 높이의 비율(`[0.4, 1]`)이고, 문자열은 `px`나 `rem` 값입니다. | 반쯤 열렸다가 더 펼치는 시트. |
-| `BottomSheetContent`의 `showGrabber` (기본 `true`) | 끌기 손잡이를 그립니다. | 켜 둡니다. 시트를 끌 수 없을 때만 끕니다. |
+| 속성                                                 | 효과                                                                                                                                    | 쓰는 곳                                                                                                       |
+| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `modal` (기본 `true`)                                | 배경 막, 초점 가두기, 스크롤 잠금.                                                                                                      | 대부분의 시트: 하나 고르기, 선택지 묶음.                                                                      |
+| `modal={false}`                                      | 배경 막, 초점 가두기, 스크롤 잠금이 모두 없어 뒤의 페이지를 쓸 수 있습니다.                                                             | 캔버스 옆의 팔레트. 보통 `snapPoints`와 함께 씁니다.                                                          |
+| `snapPoints` / `defaultSnapPoint`                    | 시트가 멈추는 높이. 1 이하의 숫자는 화면 높이의 비율(`[0.4, 1]`)이고, 문자열은 `px`나 `rem` 값입니다.                                   | 반쯤 열렸다가 더 펼치는 시트.                                                                                 |
+| `BottomSheetContent`의 `showGrabber` (기본 `true`)   | 끌기 손잡이를 그립니다.                                                                                                                 | 켜 둡니다. 시트를 끌 수 없을 때만 끕니다.                                                                     |
+| `BottomSheetContent`의 `dragDisabled` (기본 `false`) | 본문과 손잡이 어디서도 시트를 끌 수 없습니다. 손잡이는 그대로 그립니다. X, `Escape`, 배경 막 누르기는 그대로 `onOpenChange`를 부릅니다. | 닫을 때 확인을 받는 동안: 저장 안 한 변경이 있는 양식. 끌어서 닫기를 막으면 시트가 놓은 자리에 멈춰 버립니다. |
 
 ## 이렇게 하세요 / 이렇게 하지 마세요
 
