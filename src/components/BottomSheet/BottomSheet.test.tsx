@@ -143,6 +143,79 @@ describe('BottomSheet — dragDisabled', () => {
   });
 });
 
+describe('BottomSheet — pull-down while dragDisabled', () => {
+  /**
+   * Presses at (100, 100) and makes one move to (100 + dx, 100 + dy). Returns
+   * whether that first move was cancelled: an uncancelled downward move is
+   * what iOS Safari turns into a page overscroll and pull-to-refresh.
+   */
+  const firstMoveCancelled = (el: HTMLElement, dx: number, dy: number) => {
+    fireEvent.touchStart(el, { touches: [{ clientX: 100, clientY: 100 }] });
+    const notCancelled = fireEvent.touchMove(el, {
+      touches: [{ clientX: 100 + dx, clientY: 100 + dy }],
+    });
+    fireEvent.touchEnd(el, { touches: [] });
+    return !notCancelled;
+  };
+
+  it('cancels a downward pull on the body, the grabber and a text field', () => {
+    render(
+      <LogicianProvider language="ko">
+        <BottomSheet open>
+          <BottomSheetContent dragDisabled>
+            <BottomSheetHeader>이름 바꾸기</BottomSheetHeader>
+            <BottomSheetBody>
+              <input aria-label="이름" defaultValue="DeepWiki" />
+              <p>본문</p>
+            </BottomSheetBody>
+          </BottomSheetContent>
+        </BottomSheet>
+      </LogicianProvider>
+    );
+    const grabber = document.querySelector<HTMLElement>(
+      '[data-scope="drawer"][data-part="grabber"]'
+    )!;
+    expect(firstMoveCancelled(screen.getByText('본문'), 0, 3)).toBe(true);
+    expect(firstMoveCancelled(grabber, 0, 3)).toBe(true);
+    expect(firstMoveCancelled(screen.getByLabelText('이름'), 0, 3)).toBe(true);
+  });
+
+  it('leaves upward and sideways moves to the browser', () => {
+    render(<Sheet open dragDisabled />);
+    const body = screen.getByText('본문');
+    expect(firstMoveCancelled(body, 0, -3)).toBe(false);
+    expect(firstMoveCancelled(body, 4, 3)).toBe(false);
+  });
+
+  it('leaves a list scrolled away from its top to scroll back', () => {
+    render(
+      <LogicianProvider language="ko">
+        <BottomSheet open>
+          <BottomSheetContent dragDisabled>
+            <BottomSheetBody data-testid="list" overflowY="auto">
+              <p>항목</p>
+            </BottomSheetBody>
+          </BottomSheetContent>
+        </BottomSheet>
+      </LogicianProvider>
+    );
+    const list = screen.getByTestId('list');
+    list.style.overflowY = 'auto';
+    Object.defineProperty(list, 'scrollHeight', { value: 600 });
+    Object.defineProperty(list, 'clientHeight', { value: 200 });
+
+    list.scrollTop = 120;
+    expect(firstMoveCancelled(screen.getByText('항목'), 0, 3)).toBe(false);
+    list.scrollTop = 0;
+    expect(firstMoveCancelled(screen.getByText('항목'), 0, 3)).toBe(true);
+  });
+
+  it('cancels nothing while dragDisabled is off: zag owns the drag then', () => {
+    render(<Sheet open />);
+    expect(firstMoveCancelled(screen.getByText('본문'), 0, 3)).toBe(false);
+  });
+});
+
 describe('BottomSheet — onDisabledDrag', () => {
   beforeAll(() => {
     // jsdom has no PointerEvent; without one fireEvent drops pointerType and

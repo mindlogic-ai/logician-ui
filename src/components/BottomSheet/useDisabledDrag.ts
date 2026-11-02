@@ -36,7 +36,7 @@ const scrollsVertically = (el: Element) => {
  * a swipe down inside a list that is scrolled away from its top scrolls the
  * list back, it is not a drag.
  */
-const isScrolledAwayFromTop = (target: Element, container: Element) => {
+export const isScrolledAwayFromTop = (target: Element, container: Element) => {
   let scrolled = 0;
   let el: Element | null = target;
   while (el) {

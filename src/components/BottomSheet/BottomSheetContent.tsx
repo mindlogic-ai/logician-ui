@@ -1,4 +1,5 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useMemo } from 'react';
+import { mergeRefs } from '@chakra-ui/react';
 
 import { ScaledContext } from '../ScaledContext';
 import type { BottomSheetContentProps } from './BottomSheet.types';
@@ -8,6 +9,7 @@ import {
   StyledGrabberIndicator,
   StyledPositioner,
 } from './BottomSheetContext';
+import { useBlockPullDown } from './useBlockPullDown';
 import { useDisabledDrag } from './useDisabledDrag';
 
 /**
@@ -27,11 +29,16 @@ export const BottomSheetContent = forwardRef<
     enabled: dragDisabled,
     props,
   });
+  const pullDownRef = useBlockPullDown(dragDisabled);
+  const contentRef = useMemo(
+    () => mergeRefs(ref, pullDownRef),
+    [ref, pullDownRef]
+  );
 
   return (
     <StyledPositioner>
       <StyledContent
-        ref={ref}
+        ref={contentRef}
         pt={showGrabber ? undefined : 3}
         {...props}
         {...disabledDragHandlers}
