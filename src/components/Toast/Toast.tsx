@@ -40,7 +40,14 @@ export const Toast = ({
           </ChakraToast.Title>
         )}
         {description && (
-          <ChakraToast.Description color="inherit" fontWeight="semibold">
+          // Chakra's toast recipe fades the description to opacity 0.8. It is
+          // the only text in most toasts, so the fade dimmed every status and
+          // took the registered fg/bg pairs below their tested contrast.
+          <ChakraToast.Description
+            color="inherit"
+            fontWeight="semibold"
+            opacity={1}
+          >
             {description}
           </ChakraToast.Description>
         )}
