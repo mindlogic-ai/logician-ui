@@ -48,6 +48,17 @@ export type BottomSheetContentProps = HTMLChakraProps<
    * @default false
    */
   dragDisabled?: boolean;
+  /**
+   * Called while `dragDisabled` is on, when a press on the content or the
+   * grabber becomes a swipe down — where a drag would have started. Use it to
+   * say why the sheet stays, e.g. by opening the same unsaved-changes prompt
+   * as the X. Called once per press, after it moves 10px down and more down
+   * than sideways; never for a tap, a sideways or upward swipe, a swipe that
+   * starts in a text field or `data-no-drag`, or a swipe down in a list
+   * scrolled away from its top (the list scrolls back instead, as with
+   * `preventDragOnScroll`). The sheet itself does not move.
+   */
+  onDisabledDrag?: () => void;
 };
 
 export type BottomSheetHeaderProps = HTMLChakraProps<'div'>;

@@ -8,6 +8,7 @@ import {
   StyledGrabberIndicator,
   StyledPositioner,
 } from './BottomSheetContext';
+import { useDisabledDrag } from './useDisabledDrag';
 
 /**
  * The sheet surface: Ark's positioner, the content panel and, by default, the
@@ -20,12 +21,20 @@ export const BottomSheetContent = forwardRef<
   HTMLDivElement,
   BottomSheetContentProps
 >(({ showGrabber = true, dragDisabled = false, children, ...rest }, ref) => {
+  const { onDisabledDrag, ...props } = rest;
+  const disabledDragHandlers = useDisabledDrag({
+    onDisabledDrag,
+    enabled: dragDisabled,
+    props,
+  });
+
   return (
     <StyledPositioner>
       <StyledContent
         ref={ref}
         pt={showGrabber ? undefined : 3}
-        {...rest}
+        {...props}
+        {...disabledDragHandlers}
         // Only when set: Ark spreads the prop over its own `draggable: true`,
         // so an explicit `undefined` would turn content drags off.
         {...(dragDisabled && { draggable: false })}

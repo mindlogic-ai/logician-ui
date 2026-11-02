@@ -30,12 +30,20 @@ beforeAll(() => {
 
 const Sheet = ({
   dragDisabled,
+  onDisabledDrag,
   ...props
-}: Partial<BottomSheetProps> & { dragDisabled?: boolean }) => (
+}: Partial<BottomSheetProps> & {
+  dragDisabled?: boolean;
+  onDisabledDrag?: () => void;
+}) => (
   // Korean copy, so the built-in close label is 닫기 (it follows `language`).
   <LogicianProvider language="ko">
     <BottomSheet {...props}>
-      <BottomSheetContent data-testid="content" dragDisabled={dragDisabled}>
+      <BottomSheetContent
+        data-testid="content"
+        dragDisabled={dragDisabled}
+        onDisabledDrag={onDisabledDrag}
+      >
         <BottomSheetHeader>노드 추가</BottomSheetHeader>
         <BottomSheetCloseButton />
         <BottomSheetBody>본문</BottomSheetBody>
@@ -132,6 +140,142 @@ describe('BottomSheet — dragDisabled', () => {
     expect(onOpenChange).toHaveBeenCalledWith(
       expect.objectContaining({ open: false })
     );
+  });
+});
+
+describe('BottomSheet — onDisabledDrag', () => {
+  beforeAll(() => {
+    // jsdom has no PointerEvent; without one fireEvent drops pointerType and
+    // the coordinates, so a mouse press could not be told apart from a touch.
+    if (!('PointerEvent' in window)) {
+      class PointerEvent extends MouseEvent {
+        pointerType: string;
+        constructor(type: string, init: PointerEventInit = {}) {
+          super(type, init);
+          this.pointerType = init.pointerType ?? 'mouse';
+        }
+      }
+      Object.assign(window, { PointerEvent });
+    }
+  });
+
+  const grabber = () =>
+    document.querySelector<HTMLElement>(
+      '[data-scope="drawer"][data-part="grabber"]'
+    )!;
+
+  /** A one-finger press at (100, 100) that moves to (100 + dx, 100 + dy). */
+  const swipe = (el: HTMLElement, dx: number, dy: number) => {
+    fireEvent.touchStart(el, { touches: [{ clientX: 100, clientY: 100 }] });
+    fireEvent.touchMove(el, {
+      touches: [{ clientX: 100 + dx, clientY: 100 + dy }],
+    });
+    fireEvent.touchEnd(el, { touches: [] });
+  };
+
+  it('calls it once when a press on the body swipes down', () => {
+    const onDisabledDrag = vi.fn();
+    render(<Sheet open dragDisabled onDisabledDrag={onDisabledDrag} />);
+    const body = screen.getByText('본문');
+    fireEvent.touchStart(body, { touches: [{ clientX: 100, clientY: 100 }] });
+    for (const y of [104, 112, 140, 300]) {
+      fireEvent.touchMove(body, { touches: [{ clientX: 100, clientY: y }] });
+    }
+    fireEvent.touchEnd(body, { touches: [] });
+    expect(onDisabledDrag).toHaveBeenCalledTimes(1);
+
+    // The next press is a new gesture.
+    swipe(body, 0, 40);
+    expect(onDisabledDrag).toHaveBeenCalledTimes(2);
+  });
+
+  it('calls it for a swipe that starts on the grabber', () => {
+    const onDisabledDrag = vi.fn();
+    render(<Sheet open dragDisabled onDisabledDrag={onDisabledDrag} />);
+    // The grabber takes no pointer, so the press lands on the content around it.
+    swipe(grabber(), 0, 40);
+    expect(onDisabledDrag).toHaveBeenCalledTimes(1);
+  });
+
+  it('calls it for a mouse drag down', () => {
+    const onDisabledDrag = vi.fn();
+    render(<Sheet open dragDisabled onDisabledDrag={onDisabledDrag} />);
+    const header = screen.getByText('노드 추가');
+    fireEvent.pointerDown(header, { button: 0, clientX: 100, clientY: 100 });
+    fireEvent.pointerMove(header, { clientX: 100, clientY: 160 });
+    fireEvent.pointerUp(header);
+    expect(onDisabledDrag).toHaveBeenCalledTimes(1);
+  });
+
+  it('counts from 10px down: 9px is a tap, 10px is a swipe', () => {
+    const onDisabledDrag = vi.fn();
+    render(<Sheet open dragDisabled onDisabledDrag={onDisabledDrag} />);
+    const body = screen.getByText('본문');
+    swipe(body, 0, 0);
+    swipe(body, 0, 9);
+    expect(onDisabledDrag).not.toHaveBeenCalled();
+    swipe(body, 0, 10);
+    expect(onDisabledDrag).toHaveBeenCalledTimes(1);
+  });
+
+  it('ignores sideways and upward swipes', () => {
+    const onDisabledDrag = vi.fn();
+    render(<Sheet open dragDisabled onDisabledDrag={onDisabledDrag} />);
+    const body = screen.getByText('본문');
+    swipe(body, 40, 0);
+    swipe(body, 30, 30); // as far sideways as down
+    swipe(body, 0, -40);
+    expect(onDisabledDrag).not.toHaveBeenCalled();
+  });
+
+  it('is not called while dragDisabled is off', () => {
+    const onDisabledDrag = vi.fn();
+    render(<Sheet open onDisabledDrag={onDisabledDrag} />);
+    swipe(screen.getByText('본문'), 0, 40);
+    expect(onDisabledDrag).not.toHaveBeenCalled();
+  });
+
+  it('is not called for a swipe down in a list scrolled away from its top', () => {
+    const onDisabledDrag = vi.fn();
+    render(
+      <LogicianProvider language="ko">
+        <BottomSheet open>
+          <BottomSheetContent dragDisabled onDisabledDrag={onDisabledDrag}>
+            <BottomSheetBody data-testid="list" overflowY="auto">
+              <p>항목</p>
+            </BottomSheetBody>
+          </BottomSheetContent>
+        </BottomSheet>
+      </LogicianProvider>
+    );
+    const list = screen.getByTestId('list');
+    list.style.overflowY = 'auto';
+    Object.defineProperty(list, 'scrollHeight', { value: 600 });
+    Object.defineProperty(list, 'clientHeight', { value: 200 });
+
+    list.scrollTop = 120;
+    swipe(screen.getByText('항목'), 0, 40);
+    expect(onDisabledDrag).not.toHaveBeenCalled();
+
+    // Back at the top, the same swipe would have dragged the sheet.
+    list.scrollTop = 0;
+    swipe(screen.getByText('항목'), 0, 40);
+    expect(onDisabledDrag).toHaveBeenCalledTimes(1);
+  });
+
+  it('is not called for a swipe that starts in a text field', () => {
+    const onDisabledDrag = vi.fn();
+    render(
+      <LogicianProvider language="ko">
+        <BottomSheet open>
+          <BottomSheetContent dragDisabled onDisabledDrag={onDisabledDrag}>
+            <input aria-label="이름" />
+          </BottomSheetContent>
+        </BottomSheet>
+      </LogicianProvider>
+    );
+    swipe(screen.getByLabelText('이름'), 0, 40);
+    expect(onDisabledDrag).not.toHaveBeenCalled();
   });
 });
 
