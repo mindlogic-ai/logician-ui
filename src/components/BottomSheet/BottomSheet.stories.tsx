@@ -211,7 +211,8 @@ export const LongScrollingList: Story = {
 /**
  * A form that asks before it drops unsaved edits. Once something is typed the
  * sheet stops dragging (`dragDisabled`); the X, Escape and a backdrop tap still
- * reach `onOpenChange`, which asks first. Without the prop a drag would close
+ * reach `onOpenChange`, which asks first, and a swipe down asks the same
+ * through `onDisabledDrag`. Without `dragDisabled` a drag would close
  * past the question or, with the close refused, leave the sheet where it was
  * dropped.
  */
@@ -241,7 +242,11 @@ export const UnsavedChanges: Story = {
             else close();
           }}
         >
-          <BottomSheetContent dragDisabled={isDirty}>
+          <BottomSheetContent
+            dragDisabled={isDirty}
+            // A drag that can't close asks the same question as the X.
+            onDisabledDrag={() => setAsking(true)}
+          >
             <BottomSheetHeader>이름 바꾸기</BottomSheetHeader>
             <BottomSheetCloseButton />
             <BottomSheetBody>
