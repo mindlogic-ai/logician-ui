@@ -28,11 +28,14 @@ beforeAll(() => {
   })) as unknown as typeof window.matchMedia;
 });
 
-const Sheet = (props: Partial<BottomSheetProps>) => (
+const Sheet = ({
+  dragDisabled,
+  ...props
+}: Partial<BottomSheetProps> & { dragDisabled?: boolean }) => (
   // Korean copy, so the built-in close label is 닫기 (it follows `language`).
   <LogicianProvider language="ko">
     <BottomSheet {...props}>
-      <BottomSheetContent data-testid="content">
+      <BottomSheetContent data-testid="content" dragDisabled={dragDisabled}>
         <BottomSheetHeader>노드 추가</BottomSheetHeader>
         <BottomSheetCloseButton />
         <BottomSheetBody>본문</BottomSheetBody>
@@ -101,6 +104,34 @@ describe('BottomSheet', () => {
       </LogicianProvider>
     );
     expect(grabber()).not.toBeInTheDocument();
+  });
+});
+
+describe('BottomSheet — dragDisabled', () => {
+  const grabber = () =>
+    document.querySelector<HTMLElement>(
+      '[data-scope="drawer"][data-part="grabber"]'
+    )!;
+
+  it('keeps the grabber painted and takes it off the pointer', () => {
+    const { unmount } = render(<Sheet open />);
+    expect(getComputedStyle(grabber()).pointerEvents).not.toBe('none');
+    unmount();
+
+    render(<Sheet open dragDisabled />);
+    expect(grabber()).toBeInTheDocument();
+    expect(getComputedStyle(grabber()).pointerEvents).toBe('none');
+  });
+
+  it('the close button still asks to close', async () => {
+    const onOpenChange = vi.fn();
+    render(<Sheet open dragDisabled onOpenChange={onOpenChange} />);
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: '닫기' }));
+    });
+    expect(onOpenChange).toHaveBeenCalledWith(
+      expect.objectContaining({ open: false })
+    );
   });
 });
 

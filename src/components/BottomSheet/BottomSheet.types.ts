@@ -38,6 +38,16 @@ export type BottomSheetContentProps = HTMLChakraProps<
    * @default true
    */
   showGrabber?: boolean;
+  /**
+   * Stops the sheet from being dragged at all, from the content and from the
+   * grabber. Set it while closing is guarded, e.g. by unsaved changes: when
+   * `onOpenChange` is set, zag leaves a dragged sheet where it was dropped
+   * instead of snapping it back, so a guarded drag-to-close strands the sheet
+   * mid-screen. The X, Escape and a backdrop tap still call `onOpenChange`,
+   * and the grabber stays painted so the layout doesn't move.
+   * @default false
+   */
+  dragDisabled?: boolean;
 };
 
 export type BottomSheetHeaderProps = HTMLChakraProps<'div'>;

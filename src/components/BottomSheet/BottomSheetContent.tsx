@@ -19,14 +19,26 @@ import {
 export const BottomSheetContent = forwardRef<
   HTMLDivElement,
   BottomSheetContentProps
->(({ showGrabber = true, children, ...rest }, ref) => {
+>(({ showGrabber = true, dragDisabled = false, children, ...rest }, ref) => {
   return (
     <StyledPositioner>
-      <StyledContent ref={ref} pt={showGrabber ? undefined : 3} {...rest}>
+      <StyledContent
+        ref={ref}
+        pt={showGrabber ? undefined : 3}
+        {...rest}
+        // Only when set: Ark spreads the prop over its own `draggable: true`,
+        // so an explicit `undefined` would turn content drags off.
+        {...(dragDisabled && { draggable: false })}
+      >
         {showGrabber && (
           // The handle is a pointer affordance only — the sheet is closed from
-          // the keyboard with Escape or BottomSheetCloseButton.
-          <StyledGrabber aria-hidden>
+          // the keyboard with Escape or BottomSheetCloseButton. zag starts a
+          // drag from it whatever `draggable` says, so `dragDisabled` takes it
+          // off the pointer instead.
+          <StyledGrabber
+            aria-hidden
+            pointerEvents={dragDisabled ? 'none' : undefined}
+          >
             <StyledGrabberIndicator />
           </StyledGrabber>
         )}
