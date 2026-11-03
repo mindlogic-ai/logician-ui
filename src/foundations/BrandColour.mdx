@@ -36,6 +36,9 @@ token for which surface: **Setup/Theme/Using Semantic Tokens**.
   type. Coral never fills a wide surface.
 - **Status colours mean status.** `danger`, `warning`, `success` and `info`
   are never decoration or a way to tell groups apart.
+- **State is not status.** A control that is on is `control.on`; something the
+  user marked to keep (a star, a bookmark) is `mark.starred`. Never
+  `primary`, black, white or a status colour for state.
 - **The twelve system hues are for categories only.** `category.{hue}.*`
   carries no status meaning.
 - **Blue means data and links.** `fg.link` for links; a blue monochrome ramp
@@ -128,6 +131,21 @@ outside the product that people see logged out: baze.co, SNS posts, print.
   The reference is baze.co/social: the offer section is the band, and
   "80개 이상", "월 5,900원" and "9,000" are the large coral type.
 
+## State: on and starred
+
+<Canvas of={BrandColour.State} sourceState="none" />
+
+- **Binary on/off state uses `control.on`.** The Switch track when on, a
+  selected toggle chip, any on/off control; the thumb or label on it is
+  `control.onFg`. It is green, but it is not `success`: "on" does not mean
+  "succeeded".
+- **User-marked items use `mark.starred`.** Favourites, saved templates,
+  starred items, bookmarks: the filled icon is `mark.starred`, the unmarked
+  outline stays `fg.icon`. A `primary.main` star is the same ink as the
+  outline, so marked and unmarked differ only in shape.
+- **Never `primary`, black, white or a status colour for state.** Coral stays
+  with send, run, AI-working and counts; blue with data and links.
+
 ## Status
 
 <Canvas of={BrandColour.Status} sourceState="none" />
@@ -217,6 +235,9 @@ BAZE의 화면은 따뜻한 무채색입니다. 크림·아이보리 바탕에 �
   넓은 면은 코랄로 칠하지 않습니다.
 - **상태색은 상태를 뜻할 때만 씁니다.** `danger`, `warning`, `success`, `info`를
   장식이나 그룹 구분에 빌려 쓰지 않습니다.
+- **켜짐·표시 상태는 상태색이 아닙니다.** 켜진 컨트롤은 `control.on`, 사용자가 남겨
+  두려고 표시한 항목(별표, 북마크)은 `mark.starred`입니다. 이 상태에 `primary`,
+  검정, 흰색, 상태색을 쓰지 않습니다.
 - **열두 가지 시스템 색은 카테고리 구분에만 씁니다.** `category.{hue}.*`에는 상태의
   뜻이 없습니다.
 - **파란색은 데이터와 링크를 뜻합니다.** 링크는 `fg.link`, 하나의 값을 보여 주는
@@ -303,6 +324,19 @@ BAZE의 화면은 따뜻한 무채색입니다. 크림·아이보리 바탕에 �
   블랙이나 크림색 내용만 올리고, 페이지의 나머지 부분에서 코랄은 큰 글씨나 그림에만
   씁니다. 기준은 baze.co/social입니다. 혜택 섹션이 그 띠이고, "80개 이상",
   "월 5,900원", "9,000"이 코랄 큰 글씨입니다.
+
+## 켜짐과 별표
+
+<Canvas of={BrandColour.State} sourceState="none" />
+
+- **켜고 끄는 상태는 `control.on`입니다.** 켜진 Switch 트랙, 선택된 토글 칩 같은
+  켜짐/꺼짐 컨트롤에 쓰고, 그 위의 손잡이나 글자는 `control.onFg`입니다. 초록색이지만
+  `success`가 아닙니다. 켜졌다는 것은 성공했다는 뜻이 아닙니다.
+- **사용자가 표시한 항목은 `mark.starred`입니다.** 즐겨찾기, 저장한 템플릿, 별표,
+  북마크의 채운 아이콘에 쓰고, 표시하지 않은 외곽선은 `fg.icon`으로 둡니다.
+  `primary.main` 별은 옆의 외곽선과 같은 잉크라 모양으로만 구분됩니다.
+- **상태에 `primary`, 검정, 흰색, 상태색을 쓰지 않습니다.** 코랄은 보내기·실행·AI
+  작업 중·숫자 배지에, 파랑은 데이터와 링크에 남깁니다.
 
 ## 상태
 

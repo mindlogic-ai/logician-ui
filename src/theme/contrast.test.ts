@@ -47,6 +47,10 @@ const PAIRS: [string, string, Kind][] = [
         ['action-mark', bg, 'nontext'],
         ['primary-main', bg, 'nontext'],
         ['danger-fg', bg, 'nontext'],
+        // An on Switch track / selected chip against the ground it sits on,
+        // and a starred mark (a filled icon) on every layer (WCAG 1.4.11).
+        ['control-on', bg, 'nontext'],
+        ['mark-starred', bg, 'nontext'],
       ] as [string, string, Kind][]
   ),
   ['fg-placeholder', 'bg-surface', 'text'],
@@ -65,6 +69,10 @@ const PAIRS: [string, string, Kind][] = [
   ['fg-muted', 'bg-subtle', 'text'],
   ['fg-icon', 'bg-muted', 'nontext'],
   ['fg-icon', 'bg-subtle', 'nontext'],
+  // The favourite star sits on a bg.surface circle over thumbnails, and on
+  // bg.muted cards.
+  ['mark-starred', 'bg-surface', 'nontext'],
+  ['mark-starred', 'bg-muted', 'nontext'],
   ['fg-default', 'secondary-surface', 'text'],
   ['secondary-fgStrong', 'secondary-surface', 'text'],
   ['secondary-fgStrong', 'secondary-surfaceStrong', 'text'],
@@ -86,6 +94,8 @@ const PAIRS: [string, string, Kind][] = [
   ['danger-onSolid', 'danger-solid', 'text'],
   ['success-fg', 'success-bg', 'text'],
   ['success-onSolid', 'success-solid', 'text'],
+  // `text`: a selected toggle chip puts its label on control.on.
+  ['control-onFg', 'control-on', 'text'],
   ['warning-fg', 'warning-bg', 'text'],
   ['warning-onSolid', 'warning-solid', 'text'],
   ['info-fg', 'info-bg', 'text'],

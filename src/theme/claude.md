@@ -143,11 +143,11 @@ is the maintainer's view.
 
 ### Layers and files
 
-| Layer                                                                                                                                                                                              | Where                                            | Rule                                                                          |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------- |
-| Raw scales `ink`/`inkDark`, `sand`/`sandDark`, `slate`/`slateDark` (1–12), `coral`, 12 system hues `{base, baseDark, hc, hcDark, surface, ink, surfaceDark, inkDark}`, `dataviz`                   | `palette.generated.ts` → `colors` in `colors.ts` | Components and recipes **never** read them                                    |
-| Semantic steps `neutral.1–12`, `secondary.1–12`                                                                                                                                                    | `createSemanticColors()`                         | Filled by the theme option (`neutral: 'ink' \| 'slate'`, `secondary: 'sand'`) |
-| Roles (`bg.*`, `layer.*`, `fg.*`, `border.*`, `primary.*`, `secondary.*`, `action.*`, `send.*`, `count.*`, `disabled.*`, `focus.ring`, status, `tooltip.*`, `category.*`, `data.*`, `diverging.*`) | `ROLE_TOKEN_PATHS` + `createSemanticColors()`    | The only colours a component reads                                            |
+| Layer                                                                                                                                                                                                                           | Where                                            | Rule                                                                          |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------- |
+| Raw scales `ink`/`inkDark`, `sand`/`sandDark`, `slate`/`slateDark` (1–12), `coral`, 12 system hues `{base, baseDark, hc, hcDark, surface, ink, surfaceDark, inkDark}`, `dataviz`                                                | `palette.generated.ts` → `colors` in `colors.ts` | Components and recipes **never** read them                                    |
+| Semantic steps `neutral.1–12`, `secondary.1–12`                                                                                                                                                                                 | `createSemanticColors()`                         | Filled by the theme option (`neutral: 'ink' \| 'slate'`, `secondary: 'sand'`) |
+| Roles (`bg.*`, `layer.*`, `fg.*`, `border.*`, `primary.*`, `secondary.*`, `action.*`, `send.*`, `count.*`, `control.*`, `mark.starred`, `disabled.*`, `focus.ring`, status, `tooltip.*`, `category.*`, `data.*`, `diverging.*`) | `ROLE_TOKEN_PATHS` + `createSemanticColors()`    | The only colours a component reads                                            |
 
 - **Values come from the generator.** `scripts/palette/generate.mjs` ports the
   designer prototype (OKLCH, contrast-targeted steps) and `--check`s it against
@@ -255,6 +255,9 @@ follow the scheme and high contrast. Base font size is 14px.
 1. Read only role tokens; reach for `neutral.N` only when no role names the job.
 2. Emphasis is weight, not colour — never `primary.*` for text.
 3. Status colours carry status meaning; decoration uses `category.*`.
+   State is neither: binary on/off state uses `control.on` (+ `control.onFg`
+   for the thumb or label on it); user-marked items (star/bookmark) use
+   `mark.starred`; never `primary`/black/white or a status colour for state.
 4. Beige (`secondary.surface*`) is for small surfaces (bubbles, soft
    badges/tags, the modal header band), never rows or panels.
 5. Disabled = `disabled.*`, not opacity. Focus = `focusRing`.

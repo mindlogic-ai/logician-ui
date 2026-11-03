@@ -1,13 +1,19 @@
-import { Flex, Stack } from '@chakra-ui/react';
+import { Box, Flex, Stack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
 import { Badge } from '../components/Badge';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import { CountBadge } from '../components/CountBadge';
-import { SendIcon, Sparkles } from '../components/Icon';
+import {
+  SendIcon,
+  Sparkles,
+  StarFilledIcon,
+  StarIcon,
+} from '../components/Icon';
 import { IconButton } from '../components/IconButton';
 import { Tag } from '../components/Tag';
+import { Switch } from '../components/Switch';
 import { Link, Text } from '../components/Typography';
 import { T } from '../guidelines/_components/Lang';
 import { TokenTable } from '../guidelines/_components/TokenTable';
@@ -266,6 +272,124 @@ const STATUS = [
   { s: 'success', en: 'Done', ko: '완료' },
   { s: 'info', en: 'This group only', ko: '이 그룹만' },
 ] as const;
+
+/**
+ * A favourite toggle as it sits on a thumbnail: a bg.surface circle over the
+ * image, the star inside it. `fill` is the colour of the filled (marked) star;
+ * the unmarked outline is always `fg.icon`.
+ */
+const StarPair = ({ fill }: { fill: string }) => (
+  <Flex gap={3}>
+    {[true, false].map((marked) => (
+      <Box
+        key={String(marked)}
+        position="relative"
+        w="96px"
+        h="64px"
+        borderRadius="md"
+        bg="bg.muted"
+        borderWidth="1px"
+        borderColor="border.subtle"
+      >
+        <Flex
+          position="absolute"
+          top={1.5}
+          right={1.5}
+          w="28px"
+          h="28px"
+          borderRadius="full"
+          bg="bg.surface"
+          align="center"
+          justify="center"
+          aria-label={marked ? '즐겨찾기됨' : '즐겨찾기 안 됨'}
+          role="img"
+        >
+          {marked ? (
+            <StarFilledIcon boxSize="sm" color={fill} />
+          ) : (
+            <StarIcon boxSize="sm" color="fg.icon" />
+          )}
+        </Flex>
+      </Box>
+    ))}
+  </Flex>
+);
+
+/**
+ * State is neither status nor brand: `control.on` for a control that is on,
+ * `mark.starred` for something the user marked to keep. The "Don't" row is
+ * the `primary.main` star this replaces: the same ink as the outline beside it.
+ */
+export const State: Story = {
+  render: () => (
+    <Stack gap={5}>
+      <Flex gap={8} wrap="wrap" align="flex-start">
+        <Stack gap={2}>
+          <Text textStyle="subtext" color="fg.muted">
+            <T en="Switch: off · on" ko="Switch: 꺼짐 · 켜짐" />
+          </Text>
+          <Flex gap={4} align="center">
+            <Switch aria-label="꺼진 스위치">
+              <Switch.Control />
+            </Switch>
+            <Switch defaultChecked aria-label="켜진 스위치">
+              <Switch.Control />
+            </Switch>
+          </Flex>
+        </Stack>
+        <Stack gap={2}>
+          <Text textStyle="subtext" color="fg.muted">
+            <T
+              en="Do: mark.starred · fg.icon outline"
+              ko="이렇게: mark.starred · fg.icon 외곽선"
+            />
+          </Text>
+          <StarPair fill="mark.starred" />
+        </Stack>
+        <Stack gap={2}>
+          <Text textStyle="subtext" color="fg.muted">
+            <T
+              en="Don't: primary.main · same ink as the outline"
+              ko="이렇게 하지 않기: primary.main · 외곽선과 같은 잉크"
+            />
+          </Text>
+          <StarPair fill="primary.main" />
+        </Stack>
+      </Flex>
+      <TokenTable
+        rows={[
+          {
+            token: 'control.on',
+            use: (
+              <T
+                en="On state: Switch track, selected toggle chip"
+                ko="켜짐 상태: Switch 트랙, 선택된 토글 칩"
+              />
+            ),
+          },
+          {
+            token: 'control.onFg',
+            use: (
+              <T
+                en="Thumb or label on control.on"
+                ko="control.on 위 손잡이·글자"
+              />
+            ),
+          },
+          {
+            token: 'mark.starred',
+            use: (
+              <T
+                en="Marked to keep: favourite, saved template, bookmark"
+                ko="사용자가 표시한 항목: 즐겨찾기, 저장한 템플릿, 북마크"
+              />
+            ),
+          },
+        ]}
+      />
+    </Stack>
+  ),
+};
 
 export const Status: Story = {
   render: () => (

@@ -18,12 +18,15 @@ export const SwitchControl = forwardRef<HTMLSpanElement, SwitchControlProps>(
       // bg.track fill with a bg.surface thumb, measured 1.3:1 (light) and
       // 1.4:1 (dark) between thumb and track, so the thumb's position, the only
       // thing that tells off from on, could not be seen.
-      // On is success.solid with a success.onSolid thumb. With a black (light) or
-      // pale (dark) primary fill, neither state carried colour, and dark-mode
-      // "on" read as light-mode "off"; green gives both modes one meaning.
+      // On is control.on with a control.onFg thumb: the role for binary on/off
+      // state, not a status. With a black (light) or pale (dark) primary fill,
+      // neither state carried colour, and dark-mode "on" read as light-mode
+      // "off"; a green fill gives both modes one meaning. It is the same green
+      // success.solid used to supply, under its own name, because "on" does
+      // not mean "succeeded".
       bg="bg.surface"
       boxShadow={OFF_OUTLINE}
-      _checked={{ bg: 'success.solid', boxShadow: 'none' }}
+      _checked={{ bg: 'control.on', boxShadow: 'none' }}
       animationStyle="feedback"
       transitionProperty="background-color, box-shadow"
       _disabled={{ ...disabledControl, cursor: 'not-allowed' }}
@@ -45,10 +48,10 @@ export const SwitchControl = forwardRef<HTMLSpanElement, SwitchControlProps>(
         animationStyle="spring"
         transitionProperty="translate"
         // Off: border.control, the same 3:1 control token as the outline.
-        // On: success.onSolid, the text colour success buttons put on the same
-        // fill (white in light, ink in dark).
+        // On: control.onFg, the colour for anything drawn on control.on
+        // (white in light, ink in dark).
         bg="border.control"
-        _checked={{ bg: 'success.onSolid' }}
+        _checked={{ bg: 'control.onFg' }}
       />
     </ChakraSwitch.Control>
   )

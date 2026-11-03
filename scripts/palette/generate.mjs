@@ -503,6 +503,15 @@ function buildScheme(n, s) {
     'send-fg': '#252525',
     'count-bg': CORAL.count,
     'count-fg': '#FFFFFF',
+    // Binary on/off state (Switch on, selected toggle chip). Today the same
+    // green as success-solid, so Switch did not change when it moved here; a
+    // name of its own because "on" is not "succeeded" and the two may part.
+    'control-on': '#30862D',
+    'control-onFg': '#FFFFFF',
+    // Something the user marked to keep (favourite, saved, starred,
+    // bookmarked). The yellow hue (5.0's gold), darkened in OKLCH below until
+    // it clears 3:1 on every light layer: yellow.base is 2.04:1 on white.
+    'mark-starred': SYSTEM_HUES.yellow.base,
     'disabled-bg': '#EDEDED',
     'disabled-fg': '#8A8A8A',
     // Fill-less (ghost) disabled glyph/label: lighter than disabled-fg so it
@@ -590,6 +599,10 @@ function buildScheme(n, s) {
     'send-fg': '#252525',
     'count-bg': CORAL.count,
     'count-fg': '#FFFFFF',
+    'control-on': '#8FC46E',
+    'control-onFg': '#1B1B1B',
+    // yellow.baseDark as is: ≥ 4.7:1 on every dark layer of either scheme.
+    'mark-starred': SYSTEM_HUES.yellow.baseDark,
     'disabled-bg': '#2C2C2C',
     'disabled-fg': '#737373',
     'disabled-fgGhost': '#4A4A4A',
@@ -646,6 +659,12 @@ function buildScheme(n, s) {
     m['fg-placeholder'] = push(m['fg-placeholder'], [m['bg-surface']], 4.5, dk);
     m['fg-link'] = push(m['fg-link'], L, 4.5, dk);
     m['action-mark'] = push(m['action-mark'], L, 3.0, dk);
+    m['mark-starred'] = push(
+      m['mark-starred'],
+      [...L, m['bg-surface'], m['bg-muted']],
+      3.0,
+      dk
+    );
     m.focus = push(m.focus, L, 3.0, dk);
   }
   // High contrast: all text 7:1, controls/icons/focus 4.5:1.
@@ -661,7 +680,13 @@ function buildScheme(n, s) {
     ])
       h[k] = push(m[k], L, 7, dk);
     h['fg-placeholder'] = push(m['fg-placeholder'], [m['bg-surface']], 7, dk);
-    for (const k of ['fg-icon', 'border-control', 'focus', 'action-mark'])
+    for (const k of [
+      'fg-icon',
+      'border-control',
+      'focus',
+      'action-mark',
+      'mark-starred',
+    ])
       h[k] = push(m[k], L, 4.5, dk);
     h['border-default'] = push(m['border-default'], L, 3.0, dk);
     for (const s of ['danger', 'success', 'warning', 'info']) {
@@ -680,6 +705,7 @@ function buildScheme(n, s) {
       ['success-solid', 'success-onSolid'],
       ['info-solid', 'info-onSolid'],
       ['warning-solid', 'warning-onSolid'],
+      ['control-on', 'control-onFg'],
     ])
       h[bg] = push(m[bg], [m[fg]], 7, luminance(m[fg]) > 0.5);
     for (const k of ['danger-solidHover', 'danger-solidActive'])
