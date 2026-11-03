@@ -15,7 +15,7 @@ Values and contrast for every token: **Setup/Theme/BAZE Palette**.
 | --- | --- | --- |
 | Raw scale (colour names) | `ink.1–12`, `inkDark.1–12`, `sand.*`, `slate.*`, `coral.*`, `red.base` … | never in components |
 | Semantic step (role names) | `neutral.1–12`, `secondary.1–12` | a specific neutral step no role names |
-| Semantic role | `bg.*`, `layer.*`, `fg.*`, `border.*`, `primary.*`, `secondary.*`, `action.*`, `send.*`, `count.*`, `disabled.*`, `focus.ring`, status, `tooltip.*`, `category.*`, `data.*`, `diverging.*` | everything else |
+| Semantic role | `bg.*`, `layer.*`, `fg.*`, `border.*`, `primary.*`, `secondary.*`, `action.*`, `send.*`, `count.*`, `control.*`, `mark.starred`, `disabled.*`, `focus.ring`, status, `tooltip.*`, `category.*`, `data.*`, `diverging.*` | everything else |
 
 ```ts
 createLogicianTheme()                    // BAZE: { neutral: 'ink', secondary: 'sand' }
@@ -42,6 +42,8 @@ createLogicianTheme({ neutral: 'slate' }) // cool gray — app code unchanged
 | Run button (black + coral icon) · small coral marks | `action.bg` / `.fg` / `.iconOnSolid` · `action.mark` |
 | Send button, Button `accent` | `send.bg` / `.bgHover` / `.bgActive` / `.fg` |
 | Unread count | `count.bg` / `count.fg` |
+| On/off state: Switch on, selected toggle chip · thumb or label on it | `control.on` · `control.onFg` |
+| User-marked item: favourite star, saved template, bookmark (filled) | `mark.starred` (the unmarked outline stays `fg.icon`) |
 | Disabled (no opacity) | `disabled.bg` / `disabled.fg` · fill-less ghost button: `disabled.fgGhost` |
 | Status | `danger` · `success` · `warning` · `info` → `.bg` `.border` `.fg` `.solid` `.onSolid` |
 | Decorative category (tiles, avatars, tags, charts) | `category.{hue}.surface` / `.fg` |
@@ -51,6 +53,38 @@ createLogicianTheme({ neutral: 'slate' }) // cool gray — app code unchanged
 Emphasis is weight, not colour: headings use `fg.default`, never `primary.*`.
 Status colours mean status — don't borrow `success`/`warning` for decoration;
 that is what `category.*` is for.
+
+## State: on and starred
+
+**Binary on/off state uses `control.on`; user-marked items (star/bookmark) use
+`mark.starred`; never `primary`/black/white or a status colour for state.**
+
+- **`control.on`** fills a control that is on: the Switch track, a selected
+  toggle chip, any on/off control. Whatever is drawn on it (the thumb, the
+  chip label) is `control.onFg`. It is green today (#30862D light / #8FC46E
+  dark), the value Switch read from `success.solid` before, but it is not a
+  status: "on" does not mean "succeeded", and the two may move apart.
+- **`mark.starred`** fills something the user marked to keep: a favourite, a
+  saved template, a starred item, a bookmark. The filled icon takes
+  `mark.starred`; the unmarked outline stays `fg.icon`, so selected and
+  unselected differ in colour as well as in shape.
+- **Why not `primary`.** `primary.main` is the same ink (#252525 light, the
+  pale sand in dark) as the outline icon next to it, so a filled star and an
+  empty one could only be told apart by shape. A status colour would say
+  something about the item that is not true.
+- **Not coral, blue or teal/mint.** Coral is send, run, AI-working and the
+  count badge; blue is data and links; teal and mint are not product UI.
+- Checkbox stays `primary.main` when checked.
+
+| Token | Light | Dark | High contrast (light / dark) |
+| --- | --- | --- | --- |
+| `control.on` | `#30862D` (4.59:1 on white) | `#8FC46E` (7.22:1 on `bg.surface`) | `#036805` / `#8FC46E` |
+| `control.onFg` | `#FFFFFF` | `#1B1B1B` | same |
+| `mark.starred` | `#B78100` (3.41:1 on white, 3.01:1 on `layer.1`) | `#E4AC44` (`yellow.base`, 7.22:1 on `bg.surface`) | `#976300` (4.51:1 on `layer.1`) / `#E4AC44` |
+
+`mark.starred` is the yellow hue (BAZE's gold). `yellow.base` is only 2.04:1
+on white, so light mode darkens it in OKLCH (same hue) until it clears 3:1 on
+every light layer; dark mode uses `yellow.base` itself.
 
 ## Blue means data and links
 

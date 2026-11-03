@@ -16,7 +16,8 @@
  *    `createLogicianTheme({ neutral, secondary })` decides which raw scale fills
  *    them (default `ink` / `sand`).
  * 3. **Semantic roles** — `bg.*`, `layer.*`, `fg.*`, `border.*`, `primary.*`,
- *    `secondary.*`, `action.*`, `send.*`, `count.*`, `disabled.*`, `focus.ring`,
+ *    `secondary.*`, `action.*`, `send.*`, `count.*`, `control.*` (on/off
+ *    state), `mark.starred` (user-marked items), `disabled.*`, `focus.ring`,
  *    the four status families, `tooltip.*`, `category.{hue}.*` (plus the
  *    nameless `category.neutral.*`), the `bg.logo` / `fg.onLogo` tile, and the
  *    data-visualisation fills `data.1–4` and `diverging.{pos,neg}.1–3` /
@@ -208,6 +209,13 @@ const PATHS: Record<FlatKey, string> = {
   'send-fg': 'send.fg',
   'count-bg': 'count.bg',
   'count-fg': 'count.fg',
+  // State, not status: a binary control that is on (Switch, selected toggle
+  // chip) and the thing on it (thumb, chip label); something the user marked
+  // to keep (favourite star, bookmark). Never primary/black/white or a status
+  // colour for either.
+  'control-on': 'control.on',
+  'control-onFg': 'control.onFg',
+  'mark-starred': 'mark.starred',
   'disabled-bg': 'disabled.bg',
   'disabled-fg': 'disabled.fg',
   'disabled-fgGhost': 'disabled.fgGhost',
@@ -465,6 +473,8 @@ export type SemanticColorToken =
   | `action.${'mark' | 'iconOnSolid' | 'bg' | 'bgHover' | 'bgActive' | 'fg' | 'border'}`
   | `send.${'bg' | 'bgHover' | 'bgActive' | 'fg'}`
   | `count.${'bg' | 'fg'}`
+  | `control.${'on' | 'onFg'}`
+  | 'mark.starred'
   | `disabled.${'bg' | 'fg' | 'fgGhost'}`
   | 'focus.ring'
   | `${StatusFamily}.${'bg' | 'border' | 'fg' | 'solid' | 'onSolid'}`

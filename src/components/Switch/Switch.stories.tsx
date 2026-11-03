@@ -190,11 +190,11 @@ export const UsageTokens: Story = {
           ),
         },
         {
-          token: 'success.solid',
+          token: 'control.on',
           use: <T en="Track when on" ko="켜짐 트랙" />,
         },
         {
-          token: 'success.onSolid',
+          token: 'control.onFg',
           use: <T en="Thumb when on" ko="켜짐 손잡이" />,
         },
         {

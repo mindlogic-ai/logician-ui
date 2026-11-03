@@ -82,7 +82,8 @@ row above; for the rest pick the role by use (`primary.*`, a status family,
 `fg.placeholder`, `fg.onPrimary`, `fg.link`/`fg.linkHover`,
 `primary.{hover,active,wash,washActive,selected}`,
 `secondary.{surface,surfaceStrong,border,fg,fgStrong}`, `action.*`, `send.*`,
-`count.*`, `disabled.*`, `focus.ring`, `info.*`, status
+`count.*`, `control.{on,onFg}` (on/off state), `mark.starred` (favourite,
+bookmark), `disabled.*`, `focus.ring`, `info.*`, status
 `{bg,border,fg,solid,onSolid}` (+`danger.solidHover/solidActive`), `tooltip.*`,
 `category.{hue}.{surface,fg}`, `neutral.1–12`, `secondary.1–12`. High-contrast
 values apply under `prefers-contrast: more`.
