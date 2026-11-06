@@ -73,8 +73,9 @@ export const SegmentedControl = forwardRef<
       // Track is bg.subtle and the selected indicator rides on `bg.raised` — a
       // raised neutral surface that resolves white in light and a lighter
       // neutral than the track in dark, so the thumb reads as lifted
-      // above the track in both modes. The indicator also gains a shadow: an md drop
-      // shadow in light, and in dark — where a drop shadow is invisible on a
+      // above the track in both modes. The indicator also gains a shadow: an xs drop
+      // shadow in light (md's 4px/8px drop filled the 4px track padding below the
+      // thumb and made it read as sagging), and in dark — where a drop shadow is invisible on a
       // dark canvas — a soft ambient shadow + a translucent-white hairline edge.
       //
       // The track itself only contrasts where the page wash is darker (light) or
@@ -99,7 +100,7 @@ export const SegmentedControl = forwardRef<
       css={mergeCss(
         {
           '--segment-indicator-bg': `var(--chakra-colors-bg-raised)`,
-          '--segment-indicator-shadow': `var(--chakra-shadows-md)`,
+          '--segment-indicator-shadow': `var(--chakra-shadows-xs)`,
           boxShadow: '0 0 0 1px var(--chakra-colors-border-default)',
           '.dark &': {
             '--segment-indicator-shadow':
