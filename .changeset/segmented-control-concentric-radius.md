@@ -10,3 +10,8 @@ unchanged.
 The light-mode indicator shadow drops from `md` (4px offset, 8px blur) to `xs`
 (1px, 2px): `md` filled the 4px track padding under the thumb and made it look
 like it sat low. Dark mode is unchanged.
+
+The root padding is now a fixed 4px instead of the `1` spacing token (0.25em).
+At a 14px font the token is 3.5px, and the indicator is positioned from the
+item's integer `offsetTop`, so it sat half a pixel low. The track is 1px taller
+at 14px fonts as a result, which matches the Button heights it was meant to.

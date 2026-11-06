@@ -17,13 +17,19 @@ const fontSizeBySize: Record<string, string> = {
   lg: 'md',
 };
 
-// Item heights so that itemHeight + 2×root-padding(p="1") equals the Button height for each size
+// Item heights so that itemHeight + 2×ROOT_PADDING (4px) equals the Button height for each size
 const itemHeightBySize: Record<string, string> = {
   xs: '6', // 32 - 8 = 24px
   sm: '7', // 36 - 8 = 28px
   md: '8', // 40 - 8 = 32px
   lg: '9', // 44 - 8 = 36px
 };
+
+// Root padding in px, not the `1` spacing token: that token is 0.25em, so at a
+// 14px font it is 3.5px, and Ark positions the indicator from the item's
+// integer offsetTop/offsetLeft (3.5 rounds to 4). The thumb then sat 0.5px low
+// and its bottom gap was a pixel narrower than its top.
+const ROOT_PADDING = '4px';
 
 export const SegmentedControl = forwardRef<
   HTMLDivElement,
@@ -51,12 +57,12 @@ export const SegmentedControl = forwardRef<
   }));
 
   // Concentric with the root: inner radius = outer radius − root padding
-  // (p="1"), floored at 0, so the gap between the two curves stays even.
+  // (ROOT_PADDING), floored at 0, so the gap between the two curves stays even.
   const indicatorRadius =
     typeof borderRadius === 'string'
-      ? `max(0px, calc(var(--chakra-radii-${borderRadius}) - var(--chakra-spacing-1)))`
+      ? `max(0px, calc(var(--chakra-radii-${borderRadius}) - ${ROOT_PADDING}))`
       : typeof borderRadius === 'number'
-        ? `max(0px, calc(${borderRadius}px - var(--chakra-spacing-1)))`
+        ? `max(0px, calc(${borderRadius}px - ${ROOT_PADDING}))`
         : borderRadius;
 
   return (
@@ -93,7 +99,7 @@ export const SegmentedControl = forwardRef<
       // rings are box-shadows (not borders) so the matched item-height math is
       // preserved.
       bg="bg.subtle"
-      p="1"
+      p={ROOT_PADDING}
       borderRadius={borderRadius}
       w="fit-content"
       {...rest}
