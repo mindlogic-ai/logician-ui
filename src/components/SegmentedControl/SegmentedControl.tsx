@@ -50,11 +50,14 @@ export const SegmentedControl = forwardRef<
     disabled: option.disabled,
   }));
 
-  // Use theme borderRadius token directly via CSS variable
+  // Concentric with the root: inner radius = outer radius − root padding
+  // (p="1"), floored at 0, so the gap between the two curves stays even.
   const indicatorRadius =
     typeof borderRadius === 'string'
-      ? `var(--chakra-radii-${borderRadius})`
-      : borderRadius;
+      ? `max(0px, calc(var(--chakra-radii-${borderRadius}) - var(--chakra-spacing-1)))`
+      : typeof borderRadius === 'number'
+        ? `max(0px, calc(${borderRadius}px - var(--chakra-spacing-1)))`
+        : borderRadius;
 
   return (
     <SegmentGroup.Root
