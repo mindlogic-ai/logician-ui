@@ -97,7 +97,11 @@ export const SegmentedControl = forwardRef<
       // it. `border.default` keeps the edge present but light — `border.strong`
       // reads as a heavy box for a control that normally has no outline.) Both
       // rings are box-shadows (not borders) so the matched item-height math is
-      // preserved.
+      // preserved, and both are inset: an outer ring sits 1px outside the box,
+      // so any `overflow` ancestor flush with the control (a horizontal scroll
+      // row) clipped its straight edges and left only the rounded corners.
+      // Inset, it is drawn inside the root padding, where the indicator never
+      // reaches.
       bg="bg.subtle"
       p={ROOT_PADDING}
       borderRadius={borderRadius}
@@ -107,11 +111,11 @@ export const SegmentedControl = forwardRef<
         {
           '--segment-indicator-bg': `var(--chakra-colors-bg-raised)`,
           '--segment-indicator-shadow': `var(--chakra-shadows-xs)`,
-          boxShadow: '0 0 0 1px var(--chakra-colors-border-default)',
+          boxShadow: 'inset 0 0 0 1px var(--chakra-colors-border-default)',
           '.dark &': {
             '--segment-indicator-shadow':
               '0 1px 2px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08)',
-            boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.12)',
+            boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.12)',
           },
         },
         css
