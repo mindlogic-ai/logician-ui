@@ -17,13 +17,19 @@ const fontSizeBySize: Record<string, string> = {
   lg: 'md',
 };
 
-// Item heights so that itemHeight + 2×root-padding(p="1") equals the Button height for each size
+// Item heights so that itemHeight + 2×ROOT_PADDING (4px) equals the Button height for each size
 const itemHeightBySize: Record<string, string> = {
   xs: '6', // 32 - 8 = 24px
   sm: '7', // 36 - 8 = 28px
   md: '8', // 40 - 8 = 32px
   lg: '9', // 44 - 8 = 36px
 };
+
+// Root padding in px, not the `1` spacing token: that token is 0.25em, so at a
+// 14px font it is 3.5px, and Ark positions the indicator from the item's
+// integer offsetTop/offsetLeft (3.5 rounds to 4). The thumb then sat 0.5px low
+// and its bottom gap was a pixel narrower than its top.
+const ROOT_PADDING = '4px';
 
 export const SegmentedControl = forwardRef<
   HTMLDivElement,
@@ -50,11 +56,14 @@ export const SegmentedControl = forwardRef<
     disabled: option.disabled,
   }));
 
-  // Use theme borderRadius token directly via CSS variable
+  // Concentric with the root: inner radius = outer radius − root padding
+  // (ROOT_PADDING), floored at 0, so the gap between the two curves stays even.
   const indicatorRadius =
     typeof borderRadius === 'string'
-      ? `var(--chakra-radii-${borderRadius})`
-      : borderRadius;
+      ? `max(0px, calc(var(--chakra-radii-${borderRadius}) - ${ROOT_PADDING}))`
+      : typeof borderRadius === 'number'
+        ? `max(0px, calc(${borderRadius}px - ${ROOT_PADDING}))`
+        : borderRadius;
 
   return (
     <SegmentGroup.Root
@@ -70,8 +79,9 @@ export const SegmentedControl = forwardRef<
       // Track is bg.subtle and the selected indicator rides on `bg.raised` — a
       // raised neutral surface that resolves white in light and a lighter
       // neutral than the track in dark, so the thumb reads as lifted
-      // above the track in both modes. The indicator also gains a shadow: an md drop
-      // shadow in light, and in dark — where a drop shadow is invisible on a
+      // above the track in both modes. The indicator also gains a shadow: an xs drop
+      // shadow in light (md's 4px/8px drop filled the 4px track padding below the
+      // thumb and made it read as sagging), and in dark — where a drop shadow is invisible on a
       // dark canvas — a soft ambient shadow + a translucent-white hairline edge.
       //
       // The track itself only contrasts where the page wash is darker (light) or
@@ -87,21 +97,25 @@ export const SegmentedControl = forwardRef<
       // it. `border.default` keeps the edge present but light — `border.strong`
       // reads as a heavy box for a control that normally has no outline.) Both
       // rings are box-shadows (not borders) so the matched item-height math is
-      // preserved.
+      // preserved, and both are inset: an outer ring sits 1px outside the box,
+      // so any `overflow` ancestor flush with the control (a horizontal scroll
+      // row) clipped its straight edges and left only the rounded corners.
+      // Inset, it is drawn inside the root padding, where the indicator never
+      // reaches.
       bg="bg.subtle"
-      p="1"
+      p={ROOT_PADDING}
       borderRadius={borderRadius}
       w="fit-content"
       {...rest}
       css={mergeCss(
         {
           '--segment-indicator-bg': `var(--chakra-colors-bg-raised)`,
-          '--segment-indicator-shadow': `var(--chakra-shadows-md)`,
-          boxShadow: '0 0 0 1px var(--chakra-colors-border-default)',
+          '--segment-indicator-shadow': `var(--chakra-shadows-xs)`,
+          boxShadow: 'inset 0 0 0 1px var(--chakra-colors-border-default)',
           '.dark &': {
             '--segment-indicator-shadow':
               '0 1px 2px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08)',
-            boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.12)',
+            boxShadow: 'inset 0 0 0 1px rgba(255, 255, 255, 0.12)',
           },
         },
         css
