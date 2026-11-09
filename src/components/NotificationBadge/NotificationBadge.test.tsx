@@ -59,4 +59,58 @@ describe('NotificationBadge', () => {
   it('keeps CountBadge as a deprecated alias', () => {
     expect(CountBadge).toBe(NotificationBadge);
   });
+
+  describe('wrapping an icon (children)', () => {
+    it('renders the icon and floats the badge in the same span', () => {
+      wrap(
+        <NotificationBadge count={3} data-testid="b">
+          <svg data-testid="icon" />
+        </NotificationBadge>
+      );
+      const icon = screen.getByTestId('icon');
+      const badge = screen.getByTestId('b');
+      expect(badge.textContent).toBe('3');
+      expect(icon.parentElement?.tagName).toBe('SPAN');
+      expect(icon.parentElement?.contains(badge)).toBe(true);
+      // badge → Float span → wrapper span
+      expect(badge.parentElement?.tagName).toBe('SPAN');
+      expect(badge.parentElement?.parentElement).toBe(icon.parentElement);
+    });
+
+    it('keeps the icon and drops the badge at count 0', () => {
+      const { container } = wrap(
+        <NotificationBadge count={0}>
+          <svg data-testid="icon" />
+        </NotificationBadge>
+      );
+      expect(screen.getByTestId('icon')).toBeTruthy();
+      expect(container.querySelector('[data-notification-badge]')).toBeNull();
+    });
+
+    it('keeps the icon and drops the dot when invisible', () => {
+      const { container } = wrap(
+        <NotificationBadge dot invisible>
+          <svg data-testid="icon" />
+        </NotificationBadge>
+      );
+      expect(screen.getByTestId('icon')).toBeTruthy();
+      expect(container.querySelector('[data-notification-badge]')).toBeNull();
+    });
+
+    it('nests no div, so it is valid inside a button', () => {
+      const { container } = wrap(
+        <button type="button" aria-label="알림, 읽지 않음 3개">
+          <NotificationBadge count={3}>
+            <svg />
+          </NotificationBadge>
+        </button>
+      );
+      expect(container.querySelector('button div')).toBeNull();
+    });
+  });
+
+  it('invisible hides an inline badge too', () => {
+    const { container } = wrap(<NotificationBadge count={5} invisible />);
+    expect(container.querySelector('[data-notification-badge]')).toBeNull();
+  });
 });

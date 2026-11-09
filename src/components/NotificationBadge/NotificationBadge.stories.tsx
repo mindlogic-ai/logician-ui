@@ -3,6 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import { T } from '../../guidelines/_components/Lang';
 import { TokenTable } from '../../guidelines/_components/TokenTable';
+import { Avatar } from '../Avatar';
 import { BellIcon } from '../Icon';
 import { IconButton } from '../IconButton';
 import { NotificationBadge } from '.';
@@ -22,6 +23,8 @@ const meta = {
     showZero: { control: 'boolean' },
     label: { control: 'text' },
     size: { control: 'radio', options: ['sm', 'md', 'lg'] },
+    invisible: { control: 'boolean' },
+    ringColor: { control: 'text' },
   },
 } satisfies Meta<typeof NotificationBadge>;
 
@@ -84,10 +87,11 @@ export const InContext: Story = {
 };
 
 /**
- * On an icon-only button the count belongs in the BUTTON's `aria-label`:
- * that label replaces the button's whole subtree as its accessible name, so a
- * `label` on the badge would never be announced. The badge stays unlabelled
- * and is only the visible number.
+ * On an icon-only button, wrap the icon: the badge floats at its top-end
+ * corner and `ringColor` (the colour behind the button) cuts it out of the
+ * icon. The count belongs in the BUTTON's `aria-label` — that label replaces
+ * the button's whole subtree as its accessible name, so a `label` on the
+ * badge would never be announced.
  */
 export const OnIconButton: Story = {
   render: () => {
@@ -96,19 +100,32 @@ export const OnIconButton: Story = {
       <IconButton
         aria-label={`알림, 읽지 않음 ${unread}개`}
         variant="ghost"
-        position="relative"
+        overflow="visible"
       >
-        <BellIcon />
-        <NotificationBadge
-          count={unread}
-          size="sm"
-          position="absolute"
-          top="-2px"
-          right="-2px"
-        />
+        <NotificationBadge count={unread} ringColor="bg.canvas">
+          <BellIcon />
+        </NotificationBadge>
       </IconButton>
     );
   },
+};
+
+/**
+ * A dot on an avatar: "something new", no number. `invisible` hides the dot
+ * and keeps the avatar. The dot is `aria-hidden`, so the surrounding button's
+ * name has to say there is something unread.
+ */
+export const DotOnAvatar: Story = {
+  render: () => (
+    <HStack gap={6}>
+      <NotificationBadge dot ringColor="bg.canvas">
+        <Avatar name="김재경" size="sm" aria-hidden />
+      </NotificationBadge>
+      <NotificationBadge dot invisible ringColor="bg.canvas">
+        <Avatar name="김재경" size="sm" aria-hidden />
+      </NotificationBadge>
+    </HStack>
+  ),
 };
 
 // ───────────────────────── Usage-page specimens ─────────────────────────
