@@ -1,5 +1,5 @@
 import type { ElementType, ReactNode } from 'react';
-import { TagRootProps } from '@chakra-ui/react';
+import type { ConditionalValue, TagRootProps } from '@chakra-ui/react';
 
 import type { SystemHue } from '@/theme/colors';
 
@@ -46,9 +46,12 @@ export type TagOwnProps = Omit<
    * back to `sm`). An interactive tag — `onClick`, `selected`, `as="button"`
    * or a link — uses the shared control scale (`xs`–`xl`), so it matches a
    * `Button` / `Input` of the same size in a row.
+   *
+   * Responsive values (`{ base: 'xs', md: 'sm' }`, arrays) work for both;
+   * an interactive tag resolves the control scale per breakpoint.
    * @default 'md'
    */
-  size?: TagSize;
+  size?: ConditionalValue<TagSize>;
   /**
    * Colour role of the tag. Ignored while `selected` is true or `category`
    * is set.

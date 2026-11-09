@@ -1,7 +1,15 @@
-import { SystemStyleObject, TagRootProps } from '@chakra-ui/react';
+import type {
+  ConditionalValue,
+  SystemStyleObject,
+  TagRootProps,
+} from '@chakra-ui/react';
 
 import type { SystemHue } from '@/theme/colors';
-import { CONTROL_RADIUS, getControlSize } from '@/theme/controlSizes';
+import {
+  CONTROL_RADIUS,
+  type ControlSizeSpec,
+  getControlSize,
+} from '@/theme/controlSizes';
 import { disabledControl } from '@/utils/disabledControl';
 import { isDev } from '@/utils/isDev';
 
@@ -112,41 +120,109 @@ export const getTagStyles = ({
   };
 };
 
+type ResponsiveTagSize = ConditionalValue<TagSize>;
+
+const isPlainObject = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
+
+/**
+ * Map every leaf of a Chakra conditional value (`'sm'`, `['xs', null, 'md']`,
+ * `{ base: 'xs', md: 'lg' }`, nested conditions) through `fn`, keeping its
+ * shape so Chakra still applies each result at its breakpoint. `null` array
+ * slots ("no change at this breakpoint") stay `null`.
+ */
+const mapConditional = <R>(
+  value: ResponsiveTagSize,
+  fn: (size: TagSize) => R
+): ConditionalValue<R> => {
+  if (Array.isArray(value)) {
+    return value.map((v) => (v == null ? null : (mapConditional(v, fn) as R)));
+  }
+  if (isPlainObject(value)) {
+    return Object.fromEntries(
+      Object.entries(value).map(([k, v]) => [
+        k,
+        v == null ? v : mapConditional(v as ResponsiveTagSize, fn),
+      ])
+    ) as ConditionalValue<R>;
+  }
+  return fn(value as TagSize);
+};
+
+/**
+ * An interactive tag must draw a control size at every width. A responsive
+ * value that starts above `base` (`{ md: 'lg' }`, `[null, 'sm']`) would leave
+ * the narrowest screens on the badge recipe, so they start at the default `md`.
+ */
+const withBaseSize = (
+  size: ResponsiveTagSize | undefined
+): ResponsiveTagSize => {
+  if (size == null) return 'md';
+  if (Array.isArray(size)) {
+    return size[0] == null ? ['md', ...size.slice(1)] : size;
+  }
+  if (isPlainObject(size)) {
+    return 'base' in size && size.base != null ? size : { base: 'md', ...size };
+  }
+  return size;
+};
+
 /**
  * Size styles for a tag.
  *
  * - **Interactive** (a filter chip, a toggle, a link): the shared control
  *   scale — the same height, type, inline padding, gap, icon size and radius
  *   as a `Button` of that `size` (default `md`), so a chip row lines up with
- *   the search field and buttons next to it.
+ *   the search field and buttons next to it. A responsive `size` resolves the
+ *   scale per breakpoint. A composed `TagLabel` inherits the control type
+ *   instead of the badge recipe's smaller label type.
  * - **Static** (a badge): Chakra's tag sizes, unchanged. `xs` exists only on
  *   the control scale, so a static `xs` falls back to the smallest badge.
  */
 export const getTagSizeStyles = (
-  size: TagSize | undefined,
+  size: ResponsiveTagSize | undefined,
   interactive: boolean
 ): {
   sizeStyles: StyleProps;
   recipeSize: TagRootProps['size'];
   cssVars?: SystemStyleObject;
 } => {
-  const recipeSize = size === 'xs' ? 'sm' : size;
+  const recipeSize =
+    size == null
+      ? undefined
+      : (mapConditional(size, (s) =>
+          s === 'xs' ? 'sm' : s
+        ) as TagRootProps['size']);
   if (!interactive) return { sizeStyles: { fontSize: 'sm' }, recipeSize };
-  const control = getControlSize(size ?? 'md');
+  const scale = withBaseSize(size);
+  const pick = <K extends keyof ControlSizeSpec>(key: K) =>
+    mapConditional(scale, (s) => getControlSize(s)[key]);
+  const height = pick('height');
   return {
     sizeStyles: {
-      h: control.height,
-      minH: control.height,
-      px: control.actionPaddingX,
-      gap: control.gap,
-      textStyle: control.textStyle,
+      h: height,
+      minH: height,
+      px: pick('actionPaddingX'),
+      gap: pick('gap'),
+      textStyle: pick('textStyle') as StyleProps['textStyle'],
       borderRadius: CONTROL_RADIUS,
     },
     recipeSize,
-    // The `icon` slot is sized by this variable.
     cssVars: {
-      '--tag-element-size': `var(--chakra-sizes-${control.iconSize.replace('.', '\\.')})`,
-    },
+      // The `icon` slot is sized by this variable.
+      '--tag-element-size': mapConditional(
+        scale,
+        (s) =>
+          `var(--chakra-sizes-${getControlSize(s).iconSize.replace('.', '\\.')})`
+      ),
+      // The tag recipe gives its label the badge type (`xs` at sm/md). Inside
+      // a control that would shrink the label below the root's control type
+      // (12.25px instead of Button's 14px at desktop md), so it inherits.
+      '& .chakra-tag__label': {
+        fontSize: 'inherit',
+        lineHeight: 'inherit',
+      },
+    } as SystemStyleObject,
   };
 };
 

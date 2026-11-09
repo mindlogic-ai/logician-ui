@@ -265,6 +265,10 @@ pickers, MonthPicker) call `getControlSize(size)`.
 - Overriding a Chakra **slot** recipe: pass the full anatomy
   (`selectAnatomy.keys()` from `@chakra-ui/react/anatomy`), never a partial
   `slots` list — Chakra merges arrays by index and drops slots.
+- Keep `size` responsive (`ConditionalValue<…>`) where Chakra allowed it, and
+  resolve the scale per breakpoint — never collapse an object/array to `md`.
+  A composed sub-part with its own recipe type (e.g. `TagLabel` in an
+  interactive Tag) must inherit the control's type, not keep the badge's.
 - `src/theme/controlSizes.test.ts` fails if a control stops resolving to the
   scale; the Storybook page **Foundations / Control sizes** measures it live.
 
