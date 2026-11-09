@@ -1,8 +1,8 @@
 import type { BoxProps } from '@chakra-ui/react';
 
-export type CountBadgeSize = 'sm' | 'md' | 'lg';
+export type NotificationBadgeSize = 'sm' | 'md' | 'lg';
 
-export type CountBadgeProps = Omit<BoxProps, 'children'> & {
+export type NotificationBadgeProps = Omit<BoxProps, 'children'> & {
   /**
    * The number to show. In numeric mode a count of 0 (or less, or missing)
    * renders nothing unless `showZero`. In dot mode a count is optional — pass
@@ -30,5 +30,5 @@ export type CountBadgeProps = Omit<BoxProps, 'children'> & {
    */
   label?: string;
   /** @default 'md' */
-  size?: CountBadgeSize;
+  size?: NotificationBadgeSize;
 };

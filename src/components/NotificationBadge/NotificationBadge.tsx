@@ -2,16 +2,16 @@ import { ForwardedRef, forwardRef } from 'react';
 import { Box } from '@chakra-ui/react';
 
 import {
-  countBadgeBaseStyles,
-  countBadgeDotSizes,
-  countBadgeSizeStyles,
   formatCount,
-} from './CountBadge.styles';
-import { CountBadgeProps } from './CountBadge.types';
+  notificationBadgeBaseStyles,
+  notificationBadgeDotSizes,
+  notificationBadgeSizeStyles,
+} from './NotificationBadge.styles';
+import { NotificationBadgeProps } from './NotificationBadge.types';
 
 /**
- * CountBadge — an unread / notification count (moved into the design system
- * from FactChat's `UnreadCountBadge`).
+ * NotificationBadge — an unread / notification count (moved into the design system
+ * from FactChat's `UnreadCountBadge`; formerly `CountBadge`).
  *
  * - Numeric: `count` as text, capped at `max` (default 99 → `"99+"`). Renders
  *   nothing for 0 unless `showZero`.
@@ -30,18 +30,18 @@ import { CountBadgeProps } from './CountBadge.types';
  * ```tsx
  * <IconButton aria-label={`알림, 읽지 않음 ${n}개`} variant="ghost">
  *   <BellIcon />
- *   <CountBadge count={n} position="absolute" top={0} right={0} />
+ *   <NotificationBadge count={n} position="absolute" top={0} right={0} />
  * </IconButton>
  * ```
  *
  * @example
  * ```tsx
- * <CountBadge count={5} />
- * <CountBadge count={120} label="읽지 않은 알림 120개" />   // shows 99+
- * <CountBadge dot label="새 소식" />
+ * <NotificationBadge count={5} />
+ * <NotificationBadge count={120} label="읽지 않은 알림 120개" />   // shows 99+
+ * <NotificationBadge dot label="새 소식" />
  * ```
  */
-export const CountBadge = forwardRef(
+export const NotificationBadge = forwardRef(
   (
     {
       count,
@@ -52,7 +52,7 @@ export const CountBadge = forwardRef(
       size = 'md',
       'aria-label': ariaLabel,
       ...rest
-    }: CountBadgeProps,
+    }: NotificationBadgeProps,
     ref?: ForwardedRef<HTMLSpanElement>
   ) => {
     const name = label ?? ariaLabel;
@@ -60,7 +60,7 @@ export const CountBadge = forwardRef(
 
     if (dot) {
       if (count !== undefined && isEmpty && !showZero) return null;
-      const dotSize = countBadgeDotSizes[size];
+      const dotSize = notificationBadgeDotSizes[size];
       return (
         <Box
           as="span"
@@ -72,7 +72,7 @@ export const CountBadge = forwardRef(
           {...(name
             ? { role: 'img', 'aria-label': name }
             : { 'aria-hidden': true })}
-          data-count-badge="dot"
+          data-notification-badge="dot"
           {...rest}
           ref={ref}
         />
@@ -86,9 +86,9 @@ export const CountBadge = forwardRef(
     return (
       <Box
         as="span"
-        {...countBadgeBaseStyles}
-        {...countBadgeSizeStyles[size]}
-        data-count-badge="count"
+        {...notificationBadgeBaseStyles}
+        {...notificationBadgeSizeStyles[size]}
+        data-notification-badge="count"
         {...rest}
         ref={ref}
       >
@@ -109,4 +109,4 @@ export const CountBadge = forwardRef(
   }
 );
 
-CountBadge.displayName = 'CountBadge';
+NotificationBadge.displayName = 'NotificationBadge';

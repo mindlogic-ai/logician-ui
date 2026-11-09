@@ -4,7 +4,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { Badge } from '../components/Badge';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
-import { CountBadge } from '../components/CountBadge';
+import { NotificationBadge } from '../components/NotificationBadge';
 import {
   SendIcon,
   Sparkles,
@@ -216,7 +216,7 @@ export const Coral: Story = {
         <IconButton variant="action" aria-label="보내기">
           <SendIcon />
         </IconButton>
-        <CountBadge count={3} label="읽지 않은 알림 3개" />
+        <NotificationBadge count={3} label="읽지 않은 알림 3개" />
       </Flex>
       <TokenTable
         rows={[
