@@ -1,10 +1,11 @@
-import { TagRootProps } from '@chakra-ui/react';
+import { SystemStyleObject, TagRootProps } from '@chakra-ui/react';
 
 import type { SystemHue } from '@/theme/colors';
+import { CONTROL_RADIUS, getControlSize } from '@/theme/controlSizes';
 import { disabledControl } from '@/utils/disabledControl';
 import { isDev } from '@/utils/isDev';
 
-import { TagColorPalette, TagTone, TagVariant } from './Tag.types';
+import { TagColorPalette, TagSize, TagTone, TagVariant } from './Tag.types';
 
 type StyleProps = Partial<TagRootProps>;
 
@@ -108,6 +109,44 @@ export const getTagStyles = ({
     ...TAG_TRANSITION,
     cursor: interactive ? 'pointer' : undefined,
     _disabled: { ...disabledControl, cursor: 'not-allowed' },
+  };
+};
+
+/**
+ * Size styles for a tag.
+ *
+ * - **Interactive** (a filter chip, a toggle, a link): the shared control
+ *   scale — the same height, type, inline padding, gap, icon size and radius
+ *   as a `Button` of that `size` (default `md`), so a chip row lines up with
+ *   the search field and buttons next to it.
+ * - **Static** (a badge): Chakra's tag sizes, unchanged. `xs` exists only on
+ *   the control scale, so a static `xs` falls back to the smallest badge.
+ */
+export const getTagSizeStyles = (
+  size: TagSize | undefined,
+  interactive: boolean
+): {
+  sizeStyles: StyleProps;
+  recipeSize: TagRootProps['size'];
+  cssVars?: SystemStyleObject;
+} => {
+  const recipeSize = size === 'xs' ? 'sm' : size;
+  if (!interactive) return { sizeStyles: { fontSize: 'sm' }, recipeSize };
+  const control = getControlSize(size ?? 'md');
+  return {
+    sizeStyles: {
+      h: control.height,
+      minH: control.height,
+      px: control.actionPaddingX,
+      gap: control.gap,
+      textStyle: control.textStyle,
+      borderRadius: CONTROL_RADIUS,
+    },
+    recipeSize,
+    // The `icon` slot is sized by this variable.
+    cssVars: {
+      '--tag-element-size': `var(--chakra-sizes-${control.iconSize.replace('.', '\\.')})`,
+    },
   };
 };
 

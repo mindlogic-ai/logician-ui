@@ -17,6 +17,7 @@ import { format, isAfter, isSameMonth } from 'date-fns';
 import { Text } from '@/components/Typography';
 import useLanguage from '@/hooks/useLanguage';
 import { useTranslate } from '@/hooks/useTranslate';
+import { getControlSize } from '@/theme/controlSizes';
 
 import {
   IoChevronForward,
@@ -45,6 +46,7 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
   popoverProps,
   name,
   showClearButton = true,
+  size,
   ...boxProps
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -294,10 +296,14 @@ export const MonthPicker: React.FC<MonthPickerProps> = ({
           <Box>
             <InputGroup
               startElement={
-                <MdOutlineCalendarToday boxSize="xs" color="fg.muted" />
+                <MdOutlineCalendarToday
+                  boxSize={getControlSize(size).iconBoxSize}
+                  color="fg.muted"
+                />
               }
             >
               <Input
+                size={size}
                 name={name}
                 value={displayValue}
                 placeholder={effectivePlaceholder}

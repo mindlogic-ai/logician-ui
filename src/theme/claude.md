@@ -230,6 +230,14 @@ fontSizes: {
 
 **Base font size:** `14px` (set in `global.ts`)
 
+## Control sizes
+
+`controlSizes.ts` is the single size scale for every control (Button's values:
+xs `sizes.8` · sm `sizes.9` · md `sizes.10` · lg `sizes.11`, one textStyle per
+size). `recipes/controls.ts` maps Chakra's button / input / textarea / select /
+combobox / tabs / checkbox / radioGroup / switch recipes onto it. See
+`src/components/claude.md` → Control sizes.
+
 ## Border Radius
 
 ```tsx

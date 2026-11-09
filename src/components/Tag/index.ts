@@ -3,6 +3,7 @@ import { Icon } from '@chakra-ui/react';
 export { Tag } from './Tag';
 export type { LegacyTagResolution, TagStyleOptions } from './Tag.styles';
 export {
+  getTagSizeStyles,
   getTagStyles,
   mapLegacyTagProps,
   tagTones,
@@ -12,6 +13,7 @@ export type {
   TagColorPalette,
   TagOwnProps,
   TagProps,
+  TagSize,
   TagTone,
   TagVariant,
 } from './Tag.types';

@@ -144,6 +144,44 @@ Kept as `@deprecated` exports: `ButtonColorPalette`, `buttonColorPalettes`,
 `getIconButtonStyles(variant, isDestructive)`, `getTagStyles({ tone, selected,
 category, interactive })`. `LINK_RAMP` entries are plain token strings now.
 
+### Control sizes (shared scale)
+
+Every control that takes `size` now resolves it through one table,
+`controlSizes` (`src/theme/controlSizes.ts`, exported from the package root):
+the same height, type size, inline padding, icon size and corner per size.
+`Button` is the reference and does not change.
+
+| size | height     | 14px root | 16px `ScaledContext` | type (textStyle)    |
+| ---- | ---------- | --------- | -------------------- | ------------------- |
+| xs   | `sizes.8`  | 28px      | 28px                 | `xs` (12.25 / 14px) |
+| sm   | `sizes.9`  | 31.5px    | 36px                 | `sm` (14 / 16px)    |
+| md   | `sizes.10` | 35px      | 40px                 | `sm`                |
+| lg   | `sizes.11` | 38.5px    | 44px                 | `md` (14 / 16px)    |
+
+What changes on screen:
+
+- **Interactive `Tag`** (`as="button"`, `selected`, `onClick`, a link) now has
+  the control height of its `size` (default `md`, 35px) instead of the badge
+  height (`lg` was 21px). Filter chips written as `<Tag as="button" size="lg">`
+  become 38.5px — pick `size="xs"` / `"sm"` to match the row they sit in.
+  Static tags (badges) are unchanged. `xs` is new.
+- **SegmentedControl** is 1px shorter at every size at the 14px root (it was
+  Button + 1px) and its labels use the control type (xs 10.5 → 12.25px,
+  sm / md 12.25 → 14px).
+- **Input / PasswordInput / Textarea / Select `lg` (and `xl`)** type goes back
+  to the 14 / 16px control step (was 16 / 18.3px); the height is unchanged at
+  the root, and inside a `ScaledContext` `lg` is 44px (was 50px).
+- **Combobox `lg`** is 38.5px (was 42px), like every other `lg` control.
+- **Input, Textarea, Select, Combobox** corners are 8px (`radii.md`, Button's)
+  instead of 6px.
+- **Switch label** takes the size's type (was a fixed 12.25px).
+- **SingleDatePicker / RangeDatePicker** take `size`; the trigger's calendar
+  icon follows the control icon ramp (was a fixed 21px). **MonthPicker** takes
+  `size` (was always `md`).
+
+To put your own icon in a control, size it from the same table:
+`<SearchIcon boxSize={controlSizes[size].iconBoxSize} />`.
+
 ## 4. After the codemod — what a human checks
 
 - Call sites the codemod reported (dynamic props, spreads, raw primitives).

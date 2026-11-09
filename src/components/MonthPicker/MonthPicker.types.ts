@@ -1,4 +1,4 @@
-import { BoxProps, Popover } from '@chakra-ui/react';
+import { BoxProps, InputProps, Popover } from '@chakra-ui/react';
 
 export interface MonthRange {
   startMonth: Date;
@@ -6,6 +6,13 @@ export interface MonthRange {
 }
 
 export interface MonthPickerProps extends Omit<BoxProps, 'onChange'> {
+  /**
+   * Size of the trigger field, on the shared control scale (`controlSizes`) —
+   * the same height and type as an `Input` / `Button` of that size.
+   * @default 'md'
+   */
+  size?: InputProps['size'];
+
   /** The selected month range */
   selectedRange?: MonthRange | null;
 
