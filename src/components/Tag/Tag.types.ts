@@ -1,5 +1,5 @@
 import type { ElementType, ReactNode } from 'react';
-import { TagRootProps } from '@chakra-ui/react';
+import type { ConditionalValue, TagRootProps } from '@chakra-ui/react';
 
 import type { SystemHue } from '@/theme/colors';
 
@@ -13,6 +13,9 @@ import type { PolymorphicProps } from '../../types/polymorphic';
  * - `success` / `warning` / `danger` / `info`: status family `.bg` + `.fg`.
  *   Use them only when the tag reports a status.
  */
+/** Tag sizes: the badge sizes plus `xs`, which only interactive tags draw. */
+export type TagSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+
 export type TagTone = 'neutral' | 'success' | 'warning' | 'danger' | 'info';
 
 /**
@@ -36,8 +39,19 @@ export type TagVariant = 'soft' | 'solid' | 'outline';
 
 export type TagOwnProps = Omit<
   TagRootProps,
-  'colorPalette' | 'variant' | 'as'
+  'colorPalette' | 'variant' | 'as' | 'size'
 > & {
+  /**
+   * A static tag uses the badge sizes (`sm` · `md` · `lg` · `xl`; `xs` falls
+   * back to `sm`). An interactive tag — `onClick`, `selected`, `as="button"`
+   * or a link — uses the shared control scale (`xs`–`xl`), so it matches a
+   * `Button` / `Input` of the same size in a row.
+   *
+   * Responsive values (`{ base: 'xs', md: 'sm' }`, arrays) work for both;
+   * an interactive tag resolves the control scale per breakpoint.
+   * @default 'md'
+   */
+  size?: ConditionalValue<TagSize>;
   /**
    * Colour role of the tag. Ignored while `selected` is true or `category`
    * is set.

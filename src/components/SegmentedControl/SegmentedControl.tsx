@@ -1,35 +1,24 @@
 import { forwardRef } from 'react';
 import { SegmentGroup } from '@chakra-ui/react';
 
+import { getControlSize } from '@/theme/controlSizes';
 import { mergeCss } from '@/utils/mergeCss';
 
-import { indicatorTravel } from './SegmentedControl.styles';
+import {
+  indicatorTravel,
+  SEGMENT_ROOT_PADDING_PX,
+  segmentItemHeight,
+} from './SegmentedControl.styles';
 import {
   SegmentedControlOption,
   SegmentedControlProps,
 } from './SegmentedControl.types';
 
-// Match font sizes to the equivalent Chakra button sizes
-const fontSizeBySize: Record<string, string> = {
-  xs: 'xs',
-  sm: 'sm',
-  md: 'sm',
-  lg: 'md',
-};
-
-// Item heights so that itemHeight + 2×ROOT_PADDING (4px) equals the Button height for each size
-const itemHeightBySize: Record<string, string> = {
-  xs: '6', // 32 - 8 = 24px
-  sm: '7', // 36 - 8 = 28px
-  md: '8', // 40 - 8 = 32px
-  lg: '9', // 44 - 8 = 36px
-};
-
 // Root padding in px, not the `1` spacing token: that token is 0.25em, so at a
 // 14px font it is 3.5px, and Ark positions the indicator from the item's
 // integer offsetTop/offsetLeft (3.5 rounds to 4). The thumb then sat 0.5px low
 // and its bottom gap was a pixel narrower than its top.
-const ROOT_PADDING = '4px';
+const ROOT_PADDING = `${SEGMENT_ROOT_PADDING_PX}px`;
 
 export const SegmentedControl = forwardRef<
   HTMLDivElement,
@@ -46,8 +35,10 @@ export const SegmentedControl = forwardRef<
     ...rest
   } = props;
 
-  const fontSize = fontSizeBySize[size as string] ?? 'sm';
-  const itemHeight = itemHeightBySize[size as string] ?? '8';
+  // Same textStyle as every other control at this size (see controlSizes):
+  // the item height is em inside a ScaledContext, so equal type is what keeps
+  // the outer height equal to Button's there too.
+  const spec = getControlSize(size);
 
   // Normalize options to the format expected by SegmentGroup.Items
   const items = options.map((option: SegmentedControlOption) => ({
@@ -134,14 +125,16 @@ export const SegmentedControl = forwardRef<
           disabled={item.disabled}
           cursor={item.disabled ? 'not-allowed' : 'pointer'}
           flex="1"
-          height={itemHeight}
+          height={segmentItemHeight(size)}
+          textStyle={spec.textStyle}
+          px={spec.actionPaddingX}
+          gap={spec.gap}
           _hover={{ bg: 'transparent' }}
         >
           <SegmentGroup.ItemText
             data-text={typeof item.label === 'string' ? item.label : undefined}
             color="fg.muted"
             fontWeight="500"
-            fontSize={fontSize}
             whiteSpace="nowrap"
             display="inline-flex"
             flexDirection="column"

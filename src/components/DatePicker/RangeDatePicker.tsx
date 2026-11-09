@@ -6,6 +6,7 @@ import {
 import { format } from 'date-fns';
 
 import useLanguage from '@/hooks/useLanguage';
+import { getControlSize } from '@/theme/controlSizes';
 
 import { Button, ButtonProps } from '../Button';
 import { MdOutlineCalendarToday } from '../Icon';
@@ -15,13 +16,16 @@ import {
   getDefaultFullDateFormat,
   getMonthNames,
 } from '../MonthPicker/constants';
+import type { DatePickerSizeProps } from './DatePicker.types';
 
 export const RangeDatePicker = ({
   propsConfigs,
   configs,
   usePortal = true,
+  size,
   ...rest
-}: RangeDatepickerProps) => {
+}: RangeDatepickerProps & DatePickerSizeProps) => {
+  const control = getControlSize(size);
   const { language } = useLanguage();
   const dateFormat = configs?.dateFormat ?? getDefaultFullDateFormat(language);
   const dateFnsLocale = getDateFnsLocale(language);
@@ -163,9 +167,11 @@ export const RangeDatePicker = ({
           <Button
             pl={2}
             variant="secondary"
+            size={size}
             {...(propsConfigs?.triggerBtnProps as ButtonProps)}
           >
             <MdOutlineCalendarToday
+              boxSize={control.iconBoxSize}
               color="fg.subtle"
               style={{ marginInlineEnd: 3 }}
             />

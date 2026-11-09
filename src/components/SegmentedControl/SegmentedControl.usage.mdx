@@ -75,12 +75,16 @@ SegmentedControl의 모양은 하나입니다. `bg.subtle` 트랙 위에 선택�
 
 <En>
 
+Heights come from the shared control scale (`controlSizes`), so they are
+always the `Button` height of the same size: px below at the 14px root, and in
+brackets inside a 16px `ScaledContext` (FactChat's `ReadingScale`).
+
 | `size` | Height | Next to |
 | --- | --- | --- |
-| `xs` | 32px | A `Button size="xs"`, a dense field header |
-| `sm` | 36px | Settings rows and filters in admin tables |
-| `md` (default) | 40px | Page-level view switches |
-| `lg` | 44px | A `Button size="lg"` |
+| `xs` | 28px (28px) | A `Button size="xs"`, a dense field header |
+| `sm` | 31.5px (36px) | Settings rows and filters in admin tables |
+| `md` (default) | 35px (40px) | Page-level view switches |
+| `lg` | 38.5px (44px) | A `Button size="lg"` |
 
 ## Do / Don't
 
@@ -88,12 +92,15 @@ SegmentedControl의 모양은 하나입니다. `bg.subtle` 트랙 위에 선택�
 
 <Ko>
 
+높이는 공통 컨트롤 스케일(`controlSizes`)에서 오므로 언제나 같은 크기 `Button`의 높이와 같습니다.
+아래 값은 14px 루트 기준이고, 괄호 안은 16px `ScaledContext`(FactChat `ReadingScale`) 안의 값입니다.
+
 | `size` | 높이 | 함께 두는 것 |
 | --- | --- | --- |
-| `xs` | 32px | `Button size="xs"`, 촘촘한 입력란 머리 |
-| `sm` | 36px | 관리 화면 표의 설정 줄과 필터 |
-| `md` (기본) | 40px | 페이지 전체의 보기 전환 |
-| `lg` | 44px | `Button size="lg"` |
+| `xs` | 28px (28px) | `Button size="xs"`, 촘촘한 입력란 머리 |
+| `sm` | 31.5px (36px) | 관리 화면 표의 설정 줄과 필터 |
+| `md` (기본) | 35px (40px) | 페이지 전체의 보기 전환 |
+| `lg` | 38.5px (44px) | `Button size="lg"` |
 
 ## 이렇게 하세요 / 이렇게 하지 마세요
 

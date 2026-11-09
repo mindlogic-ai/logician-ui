@@ -2,9 +2,11 @@ import { ElementType, ForwardedRef, forwardRef, MouseEvent } from 'react';
 import { Tag as ChakraTag } from '@chakra-ui/react';
 
 import { focusRing } from '@/utils/focusRing';
+import { mergeCss } from '@/utils/mergeCss';
 
 import { polymorphic } from '../../types/polymorphic';
 import {
+  getTagSizeStyles,
   getTagStyles,
   mapLegacyTagProps,
   warnLegacyTagProps,
@@ -36,6 +38,13 @@ type LegacyTagInput = {
  * toggle (`selected` passed) or renders as a `button` / `a`. Render filter
  * chips `as="button"` so they are keyboard-operable.
  *
+ * **Size depends on that.** A static tag is a badge and keeps Chakra's badge
+ * sizes (`sm` 15.75px · `md` 17.5px · `lg` 21px · `xl` 28px at the 14px root).
+ * An interactive tag is a control that sits in a row with buttons and inputs,
+ * so its `size` (`xs`–`xl`, default `md`) follows the shared control scale
+ * (`controlSizes`): the same height, type, padding and icon size as a
+ * `Button` of that size.
+ *
  * @example
  * ```tsx
  * <Tag>Draft</Tag>
@@ -58,6 +67,8 @@ const TagImpl = forwardRef(
       colorPalette: legacyPalette,
       variant: legacyVariant,
       as,
+      size,
+      css: cssProp,
       __legacyComponent: legacyComponent,
       ...rest
     } = props as TagOwnProps & LegacyTagInput;
@@ -94,6 +105,14 @@ const TagImpl = forwardRef(
 
     const styles = getTagStyles({ tone, selected, category, interactive });
 
+    // Decided on `wantsInteraction`, not `interactive`, so disabling a filter
+    // chip does not shrink it.
+    const { sizeStyles, recipeSize, cssVars } = getTagSizeStyles(
+      size,
+      wantsInteraction
+    );
+    const css = cssVars ? mergeCss(cssVars, cssProp) : cssProp;
+
     const handleClick = disabled
       ? (event: MouseEvent<HTMLSpanElement>) => event.preventDefault()
       : onClick;
@@ -103,8 +122,9 @@ const TagImpl = forwardRef(
         border="1px solid"
         borderRadius="md"
         boxShadow="none"
-        fontSize="sm"
         fontWeight="semibold"
+        size={recipeSize}
+        {...sizeStyles}
         {...styles}
         {...focusRing}
         data-selected={selected ? '' : undefined}
@@ -119,6 +139,7 @@ const TagImpl = forwardRef(
         // After `rest`: a disabled link must not stay reachable by Tab.
         {...(disabledNonNative && { tabIndex: -1 })}
         as={as}
+        css={css}
         ref={ref}
       >
         {icon != null ? (

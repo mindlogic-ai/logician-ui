@@ -298,6 +298,26 @@ function App() {
 </Button>
 ```
 
+### Rows of controls (filter bars, toolbars, inline forms)
+
+Give every control in the row the same `size` and nothing else — no `h=` /
+`height` overrides. `Button`, `IconButton`, `Input`, `Select`, `Combobox`,
+`SegmentedControl`, interactive `Tag`, the date-picker triggers and `Tabs` all
+resolve `size` through the shared `controlSizes` scale, so they share height,
+type, padding and corner per size (also inside `ScaledContext`). See the
+Storybook page **Foundations / Control sizes**.
+
+```tsx
+<HStack gap="2">
+  <SegmentedControl size="sm" options={views} />
+  <Tag as="button" size="sm" selected>전체 22</Tag>
+  <Input size="sm" leftIcon={<SearchIcon boxSize={controlSizes.sm.iconBoxSize} />} />
+  <SelectField size="sm" options={sortOptions} ariaLabel="정렬" />
+  <RangeDatePicker size="sm" selectedDates={dates} onDateChange={setDates} />
+  <IconButton size="sm" aria-label="필터"><FilterIcon boxSize={controlSizes.sm.iconBoxSize} /></IconButton>
+</HStack>
+```
+
 ### 5. Actions in Feedback Surfaces
 
 - A toast takes at most one action, through the `action` prop; dismiss is the ×

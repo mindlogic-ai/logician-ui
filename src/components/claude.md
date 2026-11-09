@@ -249,6 +249,29 @@ const createSyntheticEvent = (
 };
 ```
 
+## Control sizes
+
+Every control that takes `size` resolves it through **one** table,
+`controlSizes` in `src/theme/controlSizes.ts` — height token, textStyle, icon
+size, inline padding (action vs field ramp) and `CONTROL_RADIUS`. `Button` is
+the reference. Recipe-driven controls get it from `src/theme/recipes/controls.ts`;
+components with their own maps (SegmentedControl, interactive Tag, the date
+pickers, MonthPicker) call `getControlSize(size)`.
+
+- Never add a per-component height / font-size map. Read the scale.
+- Control type must be the textStyle of the size, not a fixed `fontSize`:
+  inside a `ScaledContext` the sizes tokens are em and resolve against the
+  control's own type, so a different type means a different height.
+- Overriding a Chakra **slot** recipe: pass the full anatomy
+  (`selectAnatomy.keys()` from `@chakra-ui/react/anatomy`), never a partial
+  `slots` list — Chakra merges arrays by index and drops slots.
+- Keep `size` responsive (`ConditionalValue<…>`) where Chakra allowed it, and
+  resolve the scale per breakpoint — never collapse an object/array to `md`.
+  A composed sub-part with its own recipe type (e.g. `TagLabel` in an
+  interactive Tag) must inherit the control's type, not keep the badge's.
+- `src/theme/controlSizes.test.ts` fails if a control stops resolving to the
+  scale; the Storybook page **Foundations / Control sizes** measures it live.
+
 ## Component Props Best Practices
 
 ### Default Values

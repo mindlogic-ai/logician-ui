@@ -163,6 +163,18 @@ export {
   SYSTEM_HUE_NAMES,
   type SystemHue,
 } from './theme/colors';
+export {
+  CONTROL_RADIUS,
+  CONTROL_SIZES,
+  controlHeightToken,
+  controlHeightVar,
+  type ControlSize,
+  controlSizes,
+  type ControlSizeSpec,
+  CORE_CONTROL_SIZES,
+  type CoreControlSize,
+  getControlSize,
+} from './theme/controlSizes';
 export { noZoomOnFocus } from './theme/formControls';
 export {
   animationStyles,
