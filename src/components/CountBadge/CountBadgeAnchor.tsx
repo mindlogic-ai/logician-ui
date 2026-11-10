@@ -12,7 +12,7 @@ import { CountBadgeProps } from './CountBadge.types';
  * a `<button>`. Nothing floats when the badge would render nothing (a 0
  * count, `invisible`), so no empty span is left on the icon.
  */
-export const CountBadgeFloat = forwardRef(
+export const CountBadgeAnchor = forwardRef(
   (
     {
       children,
@@ -47,4 +47,4 @@ export const CountBadgeFloat = forwardRef(
   }
 );
 
-CountBadgeFloat.displayName = 'CountBadgeFloat';
+CountBadgeAnchor.displayName = 'CountBadgeAnchor';

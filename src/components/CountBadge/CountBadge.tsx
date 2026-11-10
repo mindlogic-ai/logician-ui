@@ -8,7 +8,7 @@ import {
   formatCount,
 } from './CountBadge.styles';
 import { CountBadgeProps } from './CountBadge.types';
-import { CountBadgeFloat } from './CountBadgeFloat';
+import { CountBadgeAnchor } from './CountBadgeAnchor';
 
 /**
  * CountBadge — an unread / notification count (moved into the design system
@@ -19,7 +19,7 @@ import { CountBadgeFloat } from './CountBadgeFloat';
  * - Dot (`dot`): a small circle with no number. `aria-hidden` unless it is
  *   given a `label` — then it is an `img` with that name.
  * - On an icon or avatar: pass it as `children`. The badge floats at its
- *   top-end corner (`CountBadgeFloat`), and `ringColor` draws a ring outside
+ *   top-end corner (`CountBadgeAnchor`), and `ringColor` draws a ring outside
  *   it in the colour behind it.
  *
  * Give it a `label` whenever the number alone would not make sense out of
@@ -69,7 +69,7 @@ export const CountBadge = forwardRef(
   ) => {
     if (children != null) {
       return (
-        <CountBadgeFloat
+        <CountBadgeAnchor
           count={count}
           max={max}
           dot={dot}
@@ -84,7 +84,7 @@ export const CountBadge = forwardRef(
           ref={ref}
         >
           {children}
-        </CountBadgeFloat>
+        </CountBadgeAnchor>
       );
     }
 
