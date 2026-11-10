@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react';
 import type { BoxProps, FloatProps } from '@chakra-ui/react';
 
-export type NotificationBadgeSize = 'sm' | 'md' | 'lg';
+export type CountBadgeSize = 'sm' | 'md' | 'lg';
 
-export type NotificationBadgeProps = Omit<BoxProps, 'children'> & {
+export type CountBadgeProps = Omit<BoxProps, 'children'> & {
   /**
    * The number to show. In numeric mode a count of 0 (or less, or missing)
    * renders nothing unless `showZero`. In dot mode a count is optional — pass
@@ -31,7 +31,7 @@ export type NotificationBadgeProps = Omit<BoxProps, 'children'> & {
    */
   label?: string;
   /** @default 'md' */
-  size?: NotificationBadgeSize;
+  size?: CountBadgeSize;
   /**
    * The icon or avatar the badge sits on. When given, the badge wraps it in a
    * `position: relative` span and floats at its top-end corner, so the app

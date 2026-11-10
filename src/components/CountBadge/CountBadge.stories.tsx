@@ -6,12 +6,12 @@ import { TokenTable } from '../../guidelines/_components/TokenTable';
 import { Avatar } from '../Avatar';
 import { BellIcon } from '../Icon';
 import { IconButton } from '../IconButton';
-import { NotificationBadge } from '.';
-import { notificationBadgeBaseStyles } from './NotificationBadge.styles';
+import { CountBadge } from '.';
+import { countBadgeBaseStyles } from './CountBadge.styles';
 
 const meta = {
-  title: 'Components/NotificationBadge',
-  component: NotificationBadge,
+  title: 'Components/CountBadge',
+  component: CountBadge,
   tags: ['autodocs'],
   args: {
     count: 5,
@@ -26,7 +26,7 @@ const meta = {
     invisible: { control: 'boolean' },
     ringColor: { control: 'text' },
   },
-} satisfies Meta<typeof NotificationBadge>;
+} satisfies Meta<typeof CountBadge>;
 
 export default meta;
 
@@ -44,9 +44,9 @@ export const Zero: Story = {
   render: () => (
     <HStack gap={4}>
       <Text textStyle="subtext">count=0 →</Text>
-      <NotificationBadge count={0} />
+      <CountBadge count={0} />
       <Text textStyle="subtext">showZero →</Text>
-      <NotificationBadge count={0} showZero />
+      <CountBadge count={0} showZero />
     </HStack>
   ),
 };
@@ -55,9 +55,9 @@ export const Zero: Story = {
 export const Dot: Story = {
   render: () => (
     <HStack gap={4}>
-      <NotificationBadge dot size="sm" />
-      <NotificationBadge dot />
-      <NotificationBadge dot size="lg" label="새 소식" />
+      <CountBadge dot size="sm" />
+      <CountBadge dot />
+      <CountBadge dot size="lg" label="새 소식" />
     </HStack>
   ),
 };
@@ -67,9 +67,9 @@ export const Sizes: Story = {
     <Flex gap={4} align="center">
       {(['sm', 'md', 'lg'] as const).map((size) => (
         <HStack key={size} gap={2}>
-          <NotificationBadge size={size} count={3} />
-          <NotificationBadge size={size} count={42} />
-          <NotificationBadge size={size} count={1000} />
+          <CountBadge size={size} count={3} />
+          <CountBadge size={size} count={42} />
+          <CountBadge size={size} count={1000} />
         </HStack>
       ))}
     </Flex>
@@ -81,7 +81,7 @@ export const InContext: Story = {
   render: () => (
     <HStack gap={2}>
       <Text>받은 편지함</Text>
-      <NotificationBadge count={12} label="읽지 않은 메시지 12개" />
+      <CountBadge count={12} label="읽지 않은 메시지 12개" />
     </HStack>
   ),
 };
@@ -102,9 +102,9 @@ export const OnIconButton: Story = {
         variant="ghost"
         overflow="visible"
       >
-        <NotificationBadge count={unread} size="sm" ringColor="bg.canvas">
+        <CountBadge count={unread} size="sm" ringColor="bg.canvas">
           <BellIcon />
-        </NotificationBadge>
+        </CountBadge>
       </IconButton>
     );
   },
@@ -118,18 +118,18 @@ export const OnIconButton: Story = {
 export const DotOnAvatar: Story = {
   render: () => (
     <HStack gap={6}>
-      <NotificationBadge dot ringColor="bg.canvas">
+      <CountBadge dot ringColor="bg.canvas">
         <Avatar name="김재경" size="sm" aria-hidden />
-      </NotificationBadge>
-      <NotificationBadge dot invisible ringColor="bg.canvas">
+      </CountBadge>
+      <CountBadge dot invisible ringColor="bg.canvas">
         <Avatar name="김재경" size="sm" aria-hidden />
-      </NotificationBadge>
+      </CountBadge>
     </HStack>
   ),
 };
 
 // ───────────────────────── Usage-page specimens ─────────────────────────
-// Pulled into `NotificationBadge.usage.mdx` with <Canvas of={…} />. Hidden from the
+// Pulled into `CountBadge.usage.mdx` with <Canvas of={…} />. Hidden from the
 // sidebar (`!dev`); `tags` is written on each story because the indexer reads
 // CSF statically.
 
@@ -148,7 +148,7 @@ export const DontCountForTotals: Story = {
       {FOLDERS.map((folder) => (
         <HStack key={folder.name} justify="space-between">
           <Text>{folder.name}</Text>
-          <NotificationBadge count={folder.files} />
+          <CountBadge count={folder.files} />
         </HStack>
       ))}
     </Flex>
@@ -173,7 +173,7 @@ export const DoTotalsAsText: Story = {
   ),
 };
 
-/** Tokens the badge reads, from `NotificationBadge.styles.ts` and the theme. */
+/** Tokens the badge reads, from `CountBadge.styles.ts` and the theme. */
 export const UsageTokens: Story = {
   tags: ['!dev'],
   parameters: { layout: 'padded' },
@@ -182,11 +182,11 @@ export const UsageTokens: Story = {
     <TokenTable
       rows={[
         {
-          token: notificationBadgeBaseStyles.bgColor as string,
+          token: countBadgeBaseStyles.bgColor as string,
           use: <T en="fill (number and dot)" ko="바탕(숫자, 점)" />,
         },
         {
-          token: notificationBadgeBaseStyles.color as string,
+          token: countBadgeBaseStyles.color as string,
           use: <T en="number" ko="숫자" />,
         },
       ]}
