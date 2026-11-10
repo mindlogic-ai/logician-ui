@@ -102,7 +102,7 @@ export const OnIconButton: Story = {
         variant="ghost"
         overflow="visible"
       >
-        <NotificationBadge count={unread} ringColor="bg.canvas">
+        <NotificationBadge count={unread} size="sm" ringColor="bg.canvas">
           <BellIcon />
         </NotificationBadge>
       </IconButton>
