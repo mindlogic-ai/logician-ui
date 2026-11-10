@@ -1,11 +1,15 @@
 import { describe, expect, it } from 'vitest';
 
+import { boop, BOOP_REST } from './Boop/Boop.styles';
 import { checkmarkDraw } from './Checkbox/Checkbox.styles';
 import { modalAnimation } from './Modal/Modal.styles';
+import { nudgeWiggle } from './Nudge/Nudge.styles';
 import { indeterminateSweep } from './ProgressBar/ProgressBar.styles';
 import { dotPop } from './Radio/Radio.styles';
 import { indicatorTravel } from './SegmentedControl/SegmentedControl.styles';
+import { shineSweep } from './Shine/Shine.styles';
 import { spinAnimation } from './Spinner/Spinner.styles';
+import { successMarkDraw } from './SuccessCheck/SuccessCheck.styles';
 
 /**
  * The six motions that are one component's own business rather than shared
@@ -28,6 +32,10 @@ const LOCAL = [
   { name: 'checkmarkDraw', style: checkmarkDraw, loop: false },
   { name: 'dotPop', style: dotPop, loop: false },
   { name: 'indicatorTravel', style: indicatorTravel, loop: false },
+  { name: 'successMarkDraw', style: successMarkDraw, loop: false },
+  { name: 'boop', style: boop('tilt'), loop: false },
+  { name: 'nudgeWiggle', style: nudgeWiggle(1), loop: false },
+  { name: 'shineSweep', style: shineSweep, loop: true },
 ] as const;
 
 describe('component-local motion', () => {
@@ -106,5 +114,51 @@ describe('component-local motion', () => {
     >;
     expect(reduced['& polyline, & path'].strokeDasharray).toBe('none');
     expect(reduced['& polyline, & path'].animation).toBe('none');
+  });
+
+  it('removes the boop rather than making it instant', () => {
+    // `_hover: {}` emits no declarations, so the base hover rule survives and
+    // the gesture snaps into place in one frame with the transition off — the
+    // one outcome worse than the eased motion. Measured before this check
+    // existed: `rotate` still read 18deg on hover under reduced motion.
+    //
+    // The expected properties come from the gesture itself, so a new gesture
+    // moving on a new axis fails here until the reduced hover resets it too.
+    const rest = BOOP_REST as Record<string, unknown>;
+
+    (['tilt', 'grow', 'lift'] as const).forEach((gesture) => {
+      const style = boop(gesture);
+      const hovered = style._hover as Record<string, unknown>;
+      const reducedHover = (
+        style[REDUCE] as Record<string, Record<string, unknown>>
+      )._hover;
+
+      Object.keys(hovered).forEach((property) => {
+        expect(rest, `${gesture}.${property}`).toHaveProperty(property);
+        expect(reducedHover[property], `${gesture}.${property}`).toBe(
+          rest[property]
+        );
+      });
+    });
+  });
+
+  it('leaves the success mark drawn when the drawing is removed', () => {
+    // The mark IS the confirmation, so unlike a flourish it cannot reduce to
+    // nothing. Both shapes rest at offset 0 and animate backwards from empty,
+    // so dropping the animation leaves a finished mark rather than an empty
+    // box — and the dash goes with it, or `round` caps wrap the pattern into a
+    // hairline gap.
+    const reduced = successMarkDraw[REDUCE] as Record<
+      string,
+      Record<string, unknown>
+    >;
+    expect(reduced['& circle, & polyline'].animation).toBe('none');
+    expect(reduced['& circle, & polyline'].strokeDasharray).toBe('none');
+
+    (['& circle', '& polyline'] as const).forEach((shape) => {
+      const style = successMarkDraw[shape] as Record<string, unknown>;
+      expect(style.strokeDashoffset, shape).toBe(0);
+      expect(String(style.animation), shape).toContain('backwards');
+    });
   });
 });
