@@ -1,24 +1,31 @@
 import { Button } from '@/components/Button';
 import { TrashIcon } from '@/components/Icon';
 import { ModalFooter } from '@/components/Modal';
+import { useFormModalContext } from '@/components/Modal/FormModal/FormModalContext';
 
 import { FormModalFooterProps } from './FormModalFooter.types';
 
 /**
  * The action footer shared by form-in-a-modal surfaces — the form analog of a
- * confirm-modal footer. It standardizes the button trio every create/edit modal
- * hand-rolls: an optional far-left destructive action, a neutral Cancel, and the
- * primary submit that carries its own loading + disabled state.
+ * confirm-modal footer. It standardizes the pair every create/edit modal
+ * hand-rolls: a neutral Cancel and the primary submit that carries its own
+ * loading + disabled state.
+ *
+ * The far-left delete (`onDelete`) is deprecated: delete belongs on the list,
+ * in a row or card menu that opens a danger confirm, not beside Save.
  *
  * Copy-agnostic by design: as a design-system component it owns no strings, so
- * `cancelLabel` is required and `deleteLabel` is rendered verbatim — the
- * consuming app supplies its own (translated) labels.
+ * `cancelLabel` is required — the consuming app supplies its own (translated)
+ * labels.
  *
  * Submit path: inside a `<form onSubmit>` leave `onSubmit` unset so the button
  * stays `type="submit"` (Enter submits); for a portaled or no-`<form>` modal
  * pass `onSubmit` and it becomes a `type="button"` onClick. `...rest` forwards to
  * the logician `ModalFooter`, so callers pin it (`position="sticky"` /
  * `flexShrink={0}`) or zero its padding (`px={0}`) per modal.
+ *
+ * Inside a `FormModal` the submit button is also disabled while the form fails
+ * a native constraint (an empty `required` field), on top of `submitDisabled`.
  */
 export const FormModalFooter = ({
   onDelete,
@@ -34,6 +41,8 @@ export const FormModalFooter = ({
   bordered = false,
   ...rest
 }: FormModalFooterProps) => {
+  const formModal = useFormModalContext();
+
   return (
     <ModalFooter
       justifyContent="flex-end"
@@ -75,7 +84,7 @@ export const FormModalFooter = ({
         onClick={onSubmit}
         loading={isSubmitting}
         loadingText={submitLoadingText}
-        disabled={isSubmitting || submitDisabled}
+        disabled={isSubmitting || submitDisabled || !!formModal?.invalid}
       >
         {submitLabel}
       </Button>

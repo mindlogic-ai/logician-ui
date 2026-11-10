@@ -39,8 +39,12 @@ type Story = StoryObj<typeof FormModalFooter>;
 /** The common shape: Cancel + primary submit. */
 export const Default: Story = {};
 
-/** Edit modal shape: a far-left destructive Delete beside Cancel + submit. */
-export const WithDelete: Story = {
+/**
+ * Deprecated: `onDelete` is kept for existing callers only. Delete from the
+ * list (a row or card menu opening a danger confirm), not from the edit modal.
+ */
+export const DeprecatedWithDelete: Story = {
+  name: 'Deprecated: with delete',
   args: {
     onDelete: () => {},
     deleteLabel: 'Delete',
@@ -60,5 +64,5 @@ export const SubmitDisabled: Story = {
 
 /** Scroll-inside modal: the bordered separator against a pinned footer. */
 export const Bordered: Story = {
-  args: { bordered: true, onDelete: () => {}, deleteLabel: 'Delete' },
+  args: { bordered: true },
 };

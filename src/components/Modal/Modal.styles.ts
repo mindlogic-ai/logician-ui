@@ -31,3 +31,9 @@ export const modalAnimation = {
   _open: { animationName: 'modal-in' },
   _closed: { animationName: 'modal-out' },
 };
+
+/**
+ * The height ceiling of the preset modals (`FormModal`, `ViewModal`). Past it
+ * only the body scrolls, so the title and the buttons never leave the screen.
+ */
+export const MODAL_MAX_H = 'min(820px, 85dvh)';

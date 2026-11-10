@@ -115,6 +115,29 @@ export const DoModalFooter: Story = {
         borderRadius="12px"
       >
         <FormModalFooter
+          onCancel={() => {}}
+          cancelLabel="취소"
+          submitLabel="저장"
+          onSubmit={() => {}}
+        />
+      </Box>
+    </Dialog.Root>
+  ),
+};
+
+export const DontDeleteInEditModal: Story = {
+  tags: ['!dev'],
+  name: "Usage / Don't: delete inside the edit modal",
+  render: () => (
+    <Dialog.Root>
+      <Box
+        w="480px"
+        bg="bg.surface"
+        borderWidth="1px"
+        borderColor="border.subtle"
+        borderRadius="12px"
+      >
+        <FormModalFooter
           onDelete={() => {}}
           deleteLabel="그룹 삭제"
           onCancel={() => {}}
