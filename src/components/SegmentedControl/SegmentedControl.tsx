@@ -6,19 +6,13 @@ import { mergeCss } from '@/utils/mergeCss';
 
 import {
   indicatorTravel,
-  SEGMENT_ROOT_PADDING_PX,
   segmentItemHeight,
+  segmentRootPaddingPx,
 } from './SegmentedControl.styles';
 import {
   SegmentedControlOption,
   SegmentedControlProps,
 } from './SegmentedControl.types';
-
-// Root padding in px, not the `1` spacing token: that token is 0.25em, so at a
-// 14px font it is 3.5px, and Ark positions the indicator from the item's
-// integer offsetTop/offsetLeft (3.5 rounds to 4). The thumb then sat 0.5px low
-// and its bottom gap was a pixel narrower than its top.
-const ROOT_PADDING = `${SEGMENT_ROOT_PADDING_PX}px`;
 
 export const SegmentedControl = forwardRef<
   HTMLDivElement,
@@ -40,6 +34,12 @@ export const SegmentedControl = forwardRef<
   // the outer height equal to Button's there too.
   const spec = getControlSize(size);
 
+  // Root padding in px, not the `1` spacing token: that token is 0.25em, so at
+  // a 14px font it is 3.5px, and Ark positions the indicator from the item's
+  // integer offsetTop/offsetLeft (3.5 rounds to 4). The thumb then sat 0.5px
+  // low and its bottom gap was a pixel narrower than its top.
+  const rootPadding = `${segmentRootPaddingPx(size)}px`;
+
   // Normalize options to the format expected by SegmentGroup.Items
   const items = options.map((option: SegmentedControlOption) => ({
     value: option.value,
@@ -48,12 +48,12 @@ export const SegmentedControl = forwardRef<
   }));
 
   // Concentric with the root: inner radius = outer radius − root padding
-  // (ROOT_PADDING), floored at 0, so the gap between the two curves stays even.
+  // (rootPadding), floored at 0, so the gap between the two curves stays even.
   const indicatorRadius =
     typeof borderRadius === 'string'
-      ? `max(0px, calc(var(--chakra-radii-${borderRadius}) - ${ROOT_PADDING}))`
+      ? `max(0px, calc(var(--chakra-radii-${borderRadius}) - ${rootPadding}))`
       : typeof borderRadius === 'number'
-        ? `max(0px, calc(${borderRadius}px - ${ROOT_PADDING}))`
+        ? `max(0px, calc(${borderRadius}px - ${rootPadding}))`
         : borderRadius;
 
   return (
@@ -94,7 +94,7 @@ export const SegmentedControl = forwardRef<
       // Inset, it is drawn inside the root padding, where the indicator never
       // reaches.
       bg="bg.subtle"
-      p={ROOT_PADDING}
+      p={rootPadding}
       borderRadius={borderRadius}
       w="fit-content"
       {...rest}
