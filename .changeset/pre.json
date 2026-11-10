@@ -35,6 +35,7 @@
     "navlist-end-tooltip-row-anchor",
     "navlist-tooltip-placement",
     "segmented-control-concentric-radius",
+    "segmented-control-xs-padding",
     "select-clear-divider-gap",
     "select-clear-trigger",
     "select-ghost-variant",
