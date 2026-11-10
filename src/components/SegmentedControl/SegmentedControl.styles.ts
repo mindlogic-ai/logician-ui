@@ -28,26 +28,33 @@ export const indicatorTravel: SystemStyleObject = {
 };
 
 /**
- * The root's padding in px (see `ROOT_PADDING` in SegmentedControl.tsx for
- * why px). Shared with the item-height calc so the two cannot disagree.
+ * The root's padding in px (see `rootPadding` in SegmentedControl.tsx for
+ * why px), per size. Shared with the item-height calc so the two cannot
+ * disagree.
+ *
+ * 4px from `sm` up; 2px at `xs` / `2xs`. A fixed 4px left an `xs` item 20px
+ * tall (28 − 8) inside a 16px `ScaledContext`, shorter than its own 14px type's
+ * 21px line, and the label read squeezed against the indicator (FactChat
+ * coding-agent toolbar, 박상현 2026-11-10). At 2px the item is 24px.
  */
-export const SEGMENT_ROOT_PADDING_PX = 4;
+export const segmentRootPaddingPx = (size: unknown): number =>
+  size === 'xs' || size === '2xs' ? 2 : 4;
 
 /**
- * Item height so that the OUTER height (item + 2 × ROOT_PADDING) equals the
+ * Item height so that the OUTER height (item + 2 × root padding) equals the
  * Button height for the same size — `controlSizes[size].height`, i.e. 28 /
  * 31.5 / 35 / 38.5px for xs / sm / md / lg at the 14px root, and 36 / 40 / 44
  * for sm / md / lg inside a 16px `ScaledContext`.
  *
  * A `calc()` on the height token rather than a smaller token: the root padding
- * is a fixed 4px while the sizes tokens are rem (em inside a ScaledContext),
- * so no single token equals "Button height − 8px" at every font size. The old
- * one-token-smaller table (`6`/`7`/`8`/`9`) was written for a 16px rem and
- * came out 1px taller than Button at the real 14px root.
+ * is a fixed px value while the sizes tokens are rem (em inside a
+ * ScaledContext), so no single token equals "Button height − padding" at every
+ * font size. The old one-token-smaller table (`6`/`7`/`8`/`9`) was written for
+ * a 16px rem and came out 1px taller than Button at the real 14px root.
  */
 export const segmentItemHeight = (size: unknown): string =>
   `calc(${controlHeightVar(
     (typeof size === 'string' && size in controlSizes
       ? size
       : 'md') as ControlSize
-  )} - ${SEGMENT_ROOT_PADDING_PX * 2}px)`;
+  )} - ${segmentRootPaddingPx(size) * 2}px)`;

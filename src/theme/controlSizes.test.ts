@@ -1,7 +1,10 @@
 import { defaultSystem } from '@chakra-ui/react';
 import { describe, expect, it } from 'vitest';
 
-import { segmentItemHeight } from '../components/SegmentedControl/SegmentedControl.styles';
+import {
+  segmentItemHeight,
+  segmentRootPaddingPx,
+} from '../components/SegmentedControl/SegmentedControl.styles';
 import { getTagSizeStyles } from '../components/Tag/Tag.styles';
 import {
   CONTROL_RADIUS,
@@ -97,10 +100,12 @@ describe('controlSizes — every other control resolves to the same scale', () =
   });
 
   it.each(CORE_CONTROL_SIZES)(
-    'SegmentedControl %s: item + 2×4px root padding = the height token',
+    'SegmentedControl %s: item + 2 × root padding = the height token',
     (size) => {
+      const padding = size === 'xs' ? 2 : 4;
+      expect(segmentRootPaddingPx(size)).toBe(padding);
       expect(segmentItemHeight(size)).toBe(
-        `calc(var(--chakra-sizes-${controlSizes[size].height}) - 8px)`
+        `calc(var(--chakra-sizes-${controlSizes[size].height}) - ${padding * 2}px)`
       );
     }
   );
