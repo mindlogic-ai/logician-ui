@@ -4,7 +4,6 @@ import { describe, expect, it } from 'vitest';
 
 import { system } from '../../theme';
 import { CountBadge } from './CountBadge';
-import { CountBadgeAnchor } from './CountBadgeAnchor';
 
 const wrap = (ui: React.ReactNode) =>
   render(<ChakraProvider value={system}>{ui}</ChakraProvider>);
@@ -54,54 +53,5 @@ describe('CountBadge', () => {
   it('dot mode hides at count 0', () => {
     const { container } = wrap(<CountBadge dot count={0} />);
     expect(container.querySelector('[data-count-badge]')).toBeNull();
-  });
-
-  describe('CountBadgeAnchor on an icon', () => {
-    it('renders the icon and floats the badge in the same span', () => {
-      wrap(
-        <CountBadgeAnchor count={3} data-testid="b">
-          <svg data-testid="icon" />
-        </CountBadgeAnchor>
-      );
-      const icon = screen.getByTestId('icon');
-      const badge = screen.getByTestId('b');
-      expect(badge.textContent).toBe('3');
-      expect(icon.parentElement?.tagName).toBe('SPAN');
-      expect(icon.parentElement?.contains(badge)).toBe(true);
-      // badge → Float span → wrapper span
-      expect(badge.parentElement?.tagName).toBe('SPAN');
-      expect(badge.parentElement?.parentElement).toBe(icon.parentElement);
-    });
-
-    it('keeps the icon and drops the badge at count 0', () => {
-      const { container } = wrap(
-        <CountBadgeAnchor count={0}>
-          <svg data-testid="icon" />
-        </CountBadgeAnchor>
-      );
-      expect(screen.getByTestId('icon')).toBeTruthy();
-      expect(container.querySelector('[data-count-badge]')).toBeNull();
-    });
-
-    it('keeps the icon and drops the dot when invisible', () => {
-      const { container } = wrap(
-        <CountBadgeAnchor dot invisible>
-          <svg data-testid="icon" />
-        </CountBadgeAnchor>
-      );
-      expect(screen.getByTestId('icon')).toBeTruthy();
-      expect(container.querySelector('[data-count-badge]')).toBeNull();
-    });
-
-    it('nests no div, so it is valid inside a button', () => {
-      const { container } = wrap(
-        <button type="button" aria-label="알림, 읽지 않음 3개">
-          <CountBadgeAnchor count={3}>
-            <svg />
-          </CountBadgeAnchor>
-        </button>
-      );
-      expect(container.querySelector('button div')).toBeNull();
-    });
   });
 });

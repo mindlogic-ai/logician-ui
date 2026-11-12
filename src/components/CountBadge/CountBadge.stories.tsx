@@ -6,7 +6,8 @@ import { TokenTable } from '../../guidelines/_components/TokenTable';
 import { Avatar } from '../Avatar';
 import { BellIcon } from '../Icon';
 import { IconButton } from '../IconButton';
-import { CountBadge, CountBadgeAnchor } from '.';
+import { CornerBadge } from '../CornerBadge';
+import { CountBadge } from '.';
 import { countBadgeBaseStyles } from './CountBadge.styles';
 
 const meta = {
@@ -85,7 +86,7 @@ export const InContext: Story = {
 };
 
 /**
- * On an icon-only button, wrap the icon in `CountBadgeAnchor`: the badge floats at its top-end
+ * On an icon-only button, wrap the icon in `CornerBadge`: the badge floats at its top-end
  * corner and `ringColor` (the colour behind the button) cuts it out of the
  * icon. The count belongs in the BUTTON's `aria-label` — that label replaces
  * the button's whole subtree as its accessible name, so a `label` on the
@@ -100,9 +101,9 @@ export const OnIconButton: Story = {
         variant="ghost"
         overflow="visible"
       >
-        <CountBadgeAnchor count={unread} size="sm" ringColor="bg.canvas">
+        <CornerBadge count={unread} size="sm" ringColor="bg.canvas">
           <BellIcon />
-        </CountBadgeAnchor>
+        </CornerBadge>
       </IconButton>
     );
   },
@@ -116,12 +117,12 @@ export const OnIconButton: Story = {
 export const DotOnAvatar: Story = {
   render: () => (
     <HStack gap={6}>
-      <CountBadgeAnchor dot ringColor="bg.canvas">
+      <CornerBadge dot ringColor="bg.canvas">
         <Avatar name="김재경" size="sm" aria-hidden />
-      </CountBadgeAnchor>
-      <CountBadgeAnchor dot invisible ringColor="bg.canvas">
+      </CornerBadge>
+      <CornerBadge dot invisible ringColor="bg.canvas">
         <Avatar name="김재경" size="sm" aria-hidden />
-      </CountBadgeAnchor>
+      </CornerBadge>
     </HStack>
   ),
 };

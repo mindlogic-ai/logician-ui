@@ -1,11 +1,11 @@
 import { ForwardedRef, forwardRef } from 'react';
 import { Box, Float } from '@chakra-ui/react';
 
-import { CountBadge } from './CountBadge';
-import { CountBadgeAnchorProps } from './CountBadge.types';
+import { CountBadge } from '../CountBadge';
+import { CornerBadgeProps } from './CornerBadge.types';
 
 /**
- * CountBadgeAnchor — a CountBadge on the top-end corner of the icon or avatar
+ * CornerBadge — a CountBadge on the top-end corner of the icon or avatar
  * it wraps (an icon-only button, an account avatar). Next to text, use
  * `CountBadge` on its own.
  *
@@ -16,23 +16,18 @@ import { CountBadgeAnchorProps } from './CountBadge.types';
  * @example
  * ```tsx
  * <IconButton aria-label={`알림, 읽지 않음 ${n}개`} variant="ghost">
- *   <CountBadgeAnchor count={n} size="sm" ringColor="bg.canvas">
+ *   <CornerBadge count={n} size="sm" ringColor="bg.canvas">
  *     <BellIcon />
- *   </CountBadgeAnchor>
+ *   </CornerBadge>
  * </IconButton>
- * <CountBadgeAnchor dot invisible={!hasUnread} ringColor="bg.panel">
+ * <CornerBadge dot invisible={!hasUnread} ringColor="bg.panel">
  *   <Avatar name={name} size="sm" aria-hidden />
- * </CountBadgeAnchor>
+ * </CornerBadge>
  * ```
  */
-export const CountBadgeAnchor = forwardRef(
+export const CornerBadge = forwardRef(
   (
-    {
-      children,
-      ringColor,
-      invisible = false,
-      ...badgeProps
-    }: CountBadgeAnchorProps,
+    { children, ringColor, invisible = false, ...badgeProps }: CornerBadgeProps,
     ref?: ForwardedRef<HTMLSpanElement>
   ) => {
     const { count, dot = false, showZero = false } = badgeProps;
@@ -66,4 +61,4 @@ export const CountBadgeAnchor = forwardRef(
   }
 );
 
-CountBadgeAnchor.displayName = 'CountBadgeAnchor';
+CornerBadge.displayName = 'CornerBadge';
