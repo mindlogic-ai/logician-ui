@@ -33,6 +33,16 @@ describe('CornerBadge', () => {
     );
     expect(screen.getByTestId('icon')).toBeTruthy();
     expect(container.querySelector('[data-count-badge]')).toBeNull();
+    // The float left empty is hidden by its :empty rule
+    const float = screen.getByTestId('icon').nextElementSibling;
+    expect(float?.childElementCount).toBe(0);
+    const css = Array.from(document.querySelectorAll('style'))
+      .map((s) => s.textContent)
+      .join('\n');
+    const emptyRule = new RegExp(
+      `\\.${float?.className.split(' ').at(-1)}:is\\(:empty, \\[data-empty\\]\\)\\s*\\{[^}]*display:\\s*none`
+    );
+    expect(css).toMatch(emptyRule);
   });
 
   it('keeps the icon and drops the dot when invisible', () => {

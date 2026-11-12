@@ -10,8 +10,8 @@ import { CornerBadgeProps } from './CornerBadge.types';
  * `CountBadge` on its own.
  *
  * The wrapper and the float are `<span>`s, so the whole thing is valid inside
- * a `<button>`. Nothing floats when the badge would render nothing (a 0
- * count, `invisible`), so no empty span is left on the icon.
+ * a `<button>`. When the badge renders nothing (a 0 count, `invisible`), only
+ * the icon shows.
  *
  * @example
  * ```tsx
@@ -30,30 +30,27 @@ export const CornerBadge = forwardRef(
     { children, ringColor, invisible = false, ...badgeProps }: CornerBadgeProps,
     ref?: ForwardedRef<HTMLSpanElement>
   ) => {
-    const { count, dot = false, showZero = false } = badgeProps;
-    const isEmpty = (count ?? 0) <= 0;
-    // Same rule CountBadge uses: a dot without a count always shows
-    const isHidden =
-      invisible ||
-      (!showZero && (dot ? count !== undefined && isEmpty : isEmpty));
-    // outline, not border: a border is inside the border-box and eats the
-    // fill (an 8px dot kept only 4px of red in FactChat's UnreadDot)
-    const ring = ringColor
-      ? { outline: '2px solid', outlineColor: ringColor }
-      : undefined;
-
     return (
       <Box as="span" position="relative" display="inline-flex">
         {children}
-        {!isHidden && (
+        {!invisible && (
           <Float
             as="span"
             placement="top-end"
             // A dot sits just inside the corner; a number is centred on it
-            offset={dot ? '0.5' : '0'}
+            offset={badgeProps.dot ? '0.5' : '0'}
             pointerEvents="none"
+            // CountBadge renders nothing at 0, so the float is left empty
+            _empty={{ display: 'none' }}
           >
-            <CountBadge {...badgeProps} {...ring} ref={ref} />
+            <CountBadge
+              {...badgeProps}
+              // outline, not border: a border sits inside the border-box and
+              // eats the fill (FactChat's 8px dot kept only 4px of red)
+              outline={ringColor ? '2px solid' : undefined}
+              outlineColor={ringColor}
+              ref={ref}
+            />
           </Float>
         )}
       </Box>
