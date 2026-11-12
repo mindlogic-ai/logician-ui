@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { system } from '../../theme';
-import { CountBadge } from '.';
 import { CountBadge } from './CountBadge';
 
 const wrap = (ui: React.ReactNode) =>
@@ -54,10 +53,6 @@ describe('CountBadge', () => {
   it('dot mode hides at count 0', () => {
     const { container } = wrap(<CountBadge dot count={0} />);
     expect(container.querySelector('[data-count-badge]')).toBeNull();
-  });
-
-  it('keeps CountBadge as a deprecated alias', () => {
-    expect(CountBadge).toBe(CountBadge);
   });
 
   describe('wrapping an icon (children)', () => {
