@@ -1,2 +1,7 @@
 export { CountBadge } from './CountBadge';
-export type { CountBadgeProps, CountBadgeSize } from './CountBadge.types';
+export type {
+  CountBadgeAnchorProps,
+  CountBadgeProps,
+  CountBadgeSize,
+} from './CountBadge.types';
+export { CountBadgeAnchor } from './CountBadgeAnchor';

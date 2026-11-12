@@ -8,7 +8,6 @@ import {
   formatCount,
 } from './CountBadge.styles';
 import { CountBadgeProps } from './CountBadge.types';
-import { CountBadgeAnchor } from './CountBadgeAnchor';
 
 /**
  * CountBadge — an unread / notification count (moved into the design system
@@ -18,9 +17,6 @@ import { CountBadgeAnchor } from './CountBadgeAnchor';
  *   nothing for 0 unless `showZero`.
  * - Dot (`dot`): a small circle with no number. `aria-hidden` unless it is
  *   given a `label` — then it is an `img` with that name.
- * - On an icon or avatar: pass it as `children`. The badge floats at its
- *   top-end corner (`CountBadgeAnchor`), and `ringColor` draws a ring outside
- *   it in the colour behind it.
  *
  * Give it a `label` whenever the number alone would not make sense out of
  * context and the badge sits in readable content — next to a nav item's
@@ -33,9 +29,8 @@ import { CountBadgeAnchor } from './CountBadgeAnchor';
  *
  * ```tsx
  * <IconButton aria-label={`알림, 읽지 않음 ${n}개`} variant="ghost">
- *   <CountBadge count={n} ringColor="bg.canvas">
- *     <BellIcon />
- *   </CountBadge>
+ *   <BellIcon />
+ *   <CountBadge count={n} position="absolute" top={0} right={0} />
  * </IconButton>
  * ```
  *
@@ -44,9 +39,6 @@ import { CountBadgeAnchor } from './CountBadgeAnchor';
  * <CountBadge count={5} />
  * <CountBadge count={120} label="읽지 않은 알림 120개" />   // shows 99+
  * <CountBadge dot label="새 소식" />
- * <CountBadge dot invisible={!hasUnread} ringColor="bg.panel">
- *   <Avatar name={name} size="sm" aria-hidden />
- * </CountBadge>
  * ```
  */
 export const CountBadge = forwardRef(
@@ -59,42 +51,12 @@ export const CountBadge = forwardRef(
       label,
       size = 'md',
       'aria-label': ariaLabel,
-      children,
-      ringColor,
-      invisible = false,
       ...rest
     }: CountBadgeProps,
     ref?: ForwardedRef<HTMLSpanElement>
   ) => {
-    if (children != null) {
-      return (
-        <CountBadgeAnchor
-          count={count}
-          max={max}
-          dot={dot}
-          showZero={showZero}
-          label={label}
-          aria-label={ariaLabel}
-          size={size}
-          ringColor={ringColor}
-          invisible={invisible}
-          {...rest}
-          ref={ref}
-        >
-          {children}
-        </CountBadgeAnchor>
-      );
-    }
-
-    if (invisible) return null;
-
     const name = label ?? ariaLabel;
     const isEmpty = (count ?? 0) <= 0;
-    // outline, not border: a border is inside the border-box and eats the
-    // fill (an 8px dot kept only 4px of red in FactChat's UnreadDot)
-    const ring = ringColor
-      ? { outline: '2px solid', outlineColor: ringColor }
-      : undefined;
 
     if (dot) {
       if (count !== undefined && isEmpty && !showZero) return null;
@@ -107,7 +69,6 @@ export const CountBadge = forwardRef(
           boxSize={dotSize}
           borderRadius="full"
           bgColor="count.bg"
-          {...ring}
           {...(name
             ? { role: 'img', 'aria-label': name }
             : { 'aria-hidden': true })}
@@ -128,7 +89,6 @@ export const CountBadge = forwardRef(
         {...countBadgeBaseStyles}
         {...countBadgeSizeStyles[size]}
         data-count-badge="count"
-        {...ring}
         {...rest}
         ref={ref}
       >

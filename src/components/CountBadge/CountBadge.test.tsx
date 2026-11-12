@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 import { system } from '../../theme';
 import { CountBadge } from './CountBadge';
+import { CountBadgeAnchor } from './CountBadgeAnchor';
 
 const wrap = (ui: React.ReactNode) =>
   render(<ChakraProvider value={system}>{ui}</ChakraProvider>);
@@ -55,12 +56,12 @@ describe('CountBadge', () => {
     expect(container.querySelector('[data-count-badge]')).toBeNull();
   });
 
-  describe('wrapping an icon (children)', () => {
+  describe('CountBadgeAnchor on an icon', () => {
     it('renders the icon and floats the badge in the same span', () => {
       wrap(
-        <CountBadge count={3} data-testid="b">
+        <CountBadgeAnchor count={3} data-testid="b">
           <svg data-testid="icon" />
-        </CountBadge>
+        </CountBadgeAnchor>
       );
       const icon = screen.getByTestId('icon');
       const badge = screen.getByTestId('b');
@@ -74,9 +75,9 @@ describe('CountBadge', () => {
 
     it('keeps the icon and drops the badge at count 0', () => {
       const { container } = wrap(
-        <CountBadge count={0}>
+        <CountBadgeAnchor count={0}>
           <svg data-testid="icon" />
-        </CountBadge>
+        </CountBadgeAnchor>
       );
       expect(screen.getByTestId('icon')).toBeTruthy();
       expect(container.querySelector('[data-count-badge]')).toBeNull();
@@ -84,9 +85,9 @@ describe('CountBadge', () => {
 
     it('keeps the icon and drops the dot when invisible', () => {
       const { container } = wrap(
-        <CountBadge dot invisible>
+        <CountBadgeAnchor dot invisible>
           <svg data-testid="icon" />
-        </CountBadge>
+        </CountBadgeAnchor>
       );
       expect(screen.getByTestId('icon')).toBeTruthy();
       expect(container.querySelector('[data-count-badge]')).toBeNull();
@@ -95,17 +96,12 @@ describe('CountBadge', () => {
     it('nests no div, so it is valid inside a button', () => {
       const { container } = wrap(
         <button type="button" aria-label="알림, 읽지 않음 3개">
-          <CountBadge count={3}>
+          <CountBadgeAnchor count={3}>
             <svg />
-          </CountBadge>
+          </CountBadgeAnchor>
         </button>
       );
       expect(container.querySelector('button div')).toBeNull();
     });
-  });
-
-  it('invisible hides an inline badge too', () => {
-    const { container } = wrap(<CountBadge count={5} invisible />);
-    expect(container.querySelector('[data-count-badge]')).toBeNull();
   });
 });

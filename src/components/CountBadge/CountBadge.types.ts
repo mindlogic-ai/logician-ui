@@ -32,15 +32,15 @@ export type CountBadgeProps = Omit<BoxProps, 'children'> & {
   label?: string;
   /** @default 'md' */
   size?: CountBadgeSize;
+};
+
+export type CountBadgeAnchorProps = CountBadgeProps & {
   /**
-   * The icon or avatar the badge sits on. When given, the badge wraps it in a
-   * `position: relative` span and floats at its top-end corner, so the app
-   * does not place it by hand. Without children the badge renders inline, as
-   * before (next to a nav item's text, in a list row).
-   *
-   * The wrapper is a `<span>`, so it is valid inside a `<button>`.
+   * The icon or avatar the badge sits on. The badge floats at its top-end
+   * corner, so the app does not place it by hand. The wrapper is a `<span>`,
+   * so it is valid inside a `<button>`.
    */
-  children?: ReactNode;
+  children: ReactNode;
   /**
    * Colour of a 2px ring drawn OUTSIDE the badge (`outline`), so the badge
    * keeps its full size. Pass the colour behind the badge (`bg.canvas`,
