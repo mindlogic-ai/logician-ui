@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { BoxProps, FloatProps } from '@chakra-ui/react';
+import type { BoxProps } from '@chakra-ui/react';
 
 export type CountBadgeSize = 'sm' | 'md' | 'lg';
 
@@ -52,10 +52,4 @@ export type CountBadgeProps = Omit<BoxProps, 'children'> & {
    * numeric badge already hides at 0.
    */
   invisible?: boolean;
-  /**
-   * How far the badge centre is pulled in from the corner when it wraps
-   * `children`. Defaults to `'0.5'` for a dot (sits on the icon's edge) and
-   * `'0'` for a number (centred on the corner).
-   */
-  floatOffset?: FloatProps['offset'];
 };

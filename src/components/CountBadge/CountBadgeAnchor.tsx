@@ -14,12 +14,7 @@ import { CountBadgeProps } from './CountBadge.types';
  */
 export const CountBadgeAnchor = forwardRef(
   (
-    {
-      children,
-      invisible = false,
-      floatOffset,
-      ...badgeProps
-    }: CountBadgeProps,
+    { children, invisible = false, ...badgeProps }: CountBadgeProps,
     ref?: ForwardedRef<HTMLSpanElement>
   ) => {
     const { count, dot = false, showZero = false } = badgeProps;
@@ -36,7 +31,7 @@ export const CountBadgeAnchor = forwardRef(
           <Float
             as="span"
             placement="top-end"
-            offset={floatOffset ?? (dot ? '0.5' : '0')}
+            offset={dot ? '0.5' : '0'}
             pointerEvents="none"
           >
             <CountBadge {...badgeProps} ref={ref} />

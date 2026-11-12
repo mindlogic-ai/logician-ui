@@ -62,7 +62,6 @@ export const CountBadge = forwardRef(
       children,
       ringColor,
       invisible = false,
-      floatOffset,
       ...rest
     }: CountBadgeProps,
     ref?: ForwardedRef<HTMLSpanElement>
@@ -79,7 +78,6 @@ export const CountBadge = forwardRef(
           size={size}
           ringColor={ringColor}
           invisible={invisible}
-          floatOffset={floatOffset}
           {...rest}
           ref={ref}
         >
