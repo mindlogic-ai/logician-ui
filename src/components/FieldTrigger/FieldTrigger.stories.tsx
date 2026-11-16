@@ -93,10 +93,10 @@ export const InFilterBar = () => {
         ? picked[0]
         : `「${picked[0]}」 외 ${picked.length - 1}개`;
   return (
-    <HStack gap={2} align="start" flexWrap="wrap">
+    <HStack gap={2} align="start">
       <Popover positioning={{ placement: 'bottom-start' }}>
         <Popover.Trigger asChild>
-          <FieldTrigger placeholder="이벤트" w="2xs">
+          <FieldTrigger placeholder="이벤트" w="2xs" flexShrink={0}>
             {summary}
           </FieldTrigger>
         </Popover.Trigger>
@@ -126,7 +126,7 @@ export const InFilterBar = () => {
           </Popover.Body>
         </Popover.Content>
       </Popover>
-      <Box w="2xs">
+      <Box w="2xs" flexShrink={0}>
         <SelectField
           placeholder="최근 7일"
           options={[
@@ -135,8 +135,10 @@ export const InFilterBar = () => {
           ]}
         />
       </Box>
-      <Input w="2xs" placeholder="이메일 (완전 일치)" />
-      <FieldTrigger placeholder="그룹" w="3xs" />
+      <Box w="2xs" flexShrink={0}>
+        <Input placeholder="이메일 (완전 일치)" />
+      </Box>
+      <FieldTrigger placeholder="그룹" w="3xs" flexShrink={0} />
     </HStack>
   );
 };
