@@ -25,7 +25,9 @@ const fieldTriggerStyles = {
   width: 'full',
   minW: 0,
   pe: 'var(--select-trigger-padding-x)',
-  fontWeight: 'normal',
+  // A Select trigger's value text is `medium`; a Button's label is heavier,
+  // which is half of why a Button-built picker never matched the row.
+  fontWeight: 'medium',
   // Popover/Menu triggers announce themselves with `aria-expanded` (and
   // `data-state="open"`, which `triggerStyles._open` already covers). Chakra's
   // outline recipe darkens `_expanded` to `border.emphasized`; keep the open
@@ -100,6 +102,8 @@ export const FieldTrigger = forwardRef<HTMLButtonElement, FieldTriggerProps>(
           triggerStyles,
           variant === 'ghost' && ghostTriggerStyles,
           fieldTriggerStyles,
+          // Ghost sizes to its value, as a ghost Select does.
+          variant === 'ghost' && { width: 'auto', flex: 'none' },
           css
         )}
       >
