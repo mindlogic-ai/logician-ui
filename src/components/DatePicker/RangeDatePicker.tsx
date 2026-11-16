@@ -1,4 +1,3 @@
-import { Popover } from '@chakra-ui/react';
 import {
   RangeDatepicker as BaseRangeDatePicker,
   RangeDatepickerProps,
@@ -6,10 +5,7 @@ import {
 import { format } from 'date-fns';
 
 import useLanguage from '@/hooks/useLanguage';
-import { getControlSize } from '@/theme/controlSizes';
 
-import { Button, ButtonProps } from '../Button';
-import { MdOutlineCalendarToday } from '../Icon';
 import {
   getDateFnsLocale,
   getDayNames,
@@ -17,6 +13,7 @@ import {
   getMonthNames,
 } from '../MonthPicker/constants';
 import type { DatePickerSizeProps } from './DatePicker.types';
+import { DatePickerTrigger } from './DatePickerTrigger';
 
 export const RangeDatePicker = ({
   propsConfigs,
@@ -25,7 +22,6 @@ export const RangeDatePicker = ({
   size,
   ...rest
 }: RangeDatepickerProps & DatePickerSizeProps) => {
-  const control = getControlSize(size);
   const { language } = useLanguage();
   const dateFormat = configs?.dateFormat ?? getDefaultFullDateFormat(language);
   const dateFnsLocale = getDateFnsLocale(language);
@@ -41,12 +37,6 @@ export const RangeDatePicker = ({
         dateFormat,
       }}
       propsConfigs={{
-        triggerBtnProps: {
-          fontWeight: 'regular',
-          color: 'fg.default',
-          fontSize: 'md',
-          ...propsConfigs?.triggerBtnProps,
-        },
         inputProps: {
           color: 'fg.default',
           ...propsConfigs?.inputProps,
@@ -163,25 +153,17 @@ export const RangeDatePicker = ({
       }}
     >
       {(selectedDates) => (
-        <Popover.Trigger asChild>
-          <Button
-            pl={2}
-            variant="secondary"
-            size={size}
-            {...(propsConfigs?.triggerBtnProps as ButtonProps)}
-          >
-            <MdOutlineCalendarToday
-              boxSize={control.iconBoxSize}
-              color="fg.subtle"
-              style={{ marginInlineEnd: 3 }}
-            />
-            {selectedDates && selectedDates.length > 0
-              ? selectedDates.length === 1
-                ? `${format(selectedDates[0], dateFormat, { locale: dateFnsLocale })} - `
-                : `${format(selectedDates[0], dateFormat, { locale: dateFnsLocale })} - ${format(selectedDates[1], dateFormat, { locale: dateFnsLocale })}`
-              : ''}
-          </Button>
-        </Popover.Trigger>
+        <DatePickerTrigger
+          size={size}
+          disabled={rest.disabled}
+          triggerProps={propsConfigs?.triggerBtnProps}
+        >
+          {selectedDates && selectedDates.length > 0
+            ? selectedDates.length === 1
+              ? `${format(selectedDates[0], dateFormat, { locale: dateFnsLocale })} - `
+              : `${format(selectedDates[0], dateFormat, { locale: dateFnsLocale })} - ${format(selectedDates[1], dateFormat, { locale: dateFnsLocale })}`
+            : ''}
+        </DatePickerTrigger>
       )}
     </BaseRangeDatePicker>
   );

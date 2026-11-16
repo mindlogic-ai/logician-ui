@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import { Box, HStack } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
@@ -8,7 +8,9 @@ import { Text } from '../Typography';
 import { T } from '../../guidelines/_components/Lang';
 import { TokenTable } from '../../guidelines/_components/TokenTable';
 import { FieldRow } from '../Form';
+import { SelectField } from '../Select';
 import { RangeDatePicker } from './RangeDatePicker';
+import { SingleDatePicker } from './SingleDatePicker';
 
 const meta = {
   title: 'Components/DatePicker/RangeDatePicker',
@@ -42,6 +44,38 @@ export default meta;
 type Story = StoryObj<typeof RangeDatePicker>;
 
 export const Basic: Story = {};
+
+/**
+ * A filter bar: the date triggers take the closed `Select` trigger's look
+ * (border, weight, padding, hover, focus ring, open) from the Select recipe,
+ * so the three fields read as one family.
+ */
+export const NextToSelect: Story = {
+  render: () => {
+    const [dates, setDates] = useState<Date[]>([
+      new Date(2026, 9, 1),
+      new Date(2026, 9, 22),
+    ]);
+    const [date, setDate] = useState(new Date(2026, 9, 22));
+    return (
+      <HStack gap={2} align="center">
+        <Box w="160px">
+          <SelectField
+            ariaLabel="상태"
+            placeholder="상태"
+            defaultValue="active"
+            options={[
+              { label: '활성', value: 'active' },
+              { label: '비활성', value: 'inactive' },
+            ]}
+          />
+        </Box>
+        <SingleDatePicker date={date} onDateChange={setDate} />
+        <RangeDatePicker selectedDates={dates} onDateChange={setDates} />
+      </HStack>
+    );
+  },
+};
 // ───────────────────────── Usage-page specimens ─────────────────────────
 // Pulled into `DatePicker.usage.mdx` with <Canvas of={…} />. Hidden (`!dev`).
 

@@ -1,4 +1,3 @@
-import { Popover } from '@chakra-ui/react';
 import {
   SingleDatepicker,
   SingleDatepickerProps,
@@ -6,10 +5,7 @@ import {
 import { format } from 'date-fns';
 
 import useLanguage from '@/hooks/useLanguage';
-import { getControlSize } from '@/theme/controlSizes';
 
-import { Button, ButtonProps } from '../Button';
-import { MdOutlineCalendarToday } from '../Icon';
 import {
   getDateFnsLocale,
   getDayNames,
@@ -17,6 +13,7 @@ import {
   getMonthNames,
 } from '../MonthPicker/constants';
 import type { DatePickerSizeProps } from './DatePicker.types';
+import { DatePickerTrigger } from './DatePickerTrigger';
 
 export const SingleDatePicker = ({
   propsConfigs,
@@ -25,7 +22,6 @@ export const SingleDatePicker = ({
   size,
   ...rest
 }: SingleDatepickerProps & DatePickerSizeProps) => {
-  const control = getControlSize(size);
   const { language } = useLanguage();
   const dateFormat = configs?.dateFormat ?? getDefaultFullDateFormat(language);
   const dateFnsLocale = getDateFnsLocale(language);
@@ -41,13 +37,6 @@ export const SingleDatePicker = ({
         dateFormat,
       }}
       propsConfigs={{
-        triggerBtnProps: {
-          justifyContent: 'left',
-          fontWeight: 'regular',
-          color: 'fg.default',
-          fontSize: 'md',
-          ...propsConfigs?.triggerBtnProps,
-        },
         inputProps: {
           color: 'fg.default',
           ...propsConfigs?.inputProps,
@@ -121,23 +110,15 @@ export const SingleDatePicker = ({
       }}
     >
       {(selectedDate) => (
-        <Popover.Trigger asChild>
-          <Button
-            pl={2}
-            variant="secondary"
-            size={size}
-            {...(propsConfigs?.triggerBtnProps as ButtonProps)}
-          >
-            <MdOutlineCalendarToday
-              boxSize={control.iconBoxSize}
-              color="fg.subtle"
-              style={{ marginInlineEnd: 3 }}
-            />
-            {selectedDate
-              ? format(selectedDate, dateFormat, { locale: dateFnsLocale })
-              : ''}
-          </Button>
-        </Popover.Trigger>
+        <DatePickerTrigger
+          size={size}
+          disabled={rest.disabled}
+          triggerProps={propsConfigs?.triggerBtnProps}
+        >
+          {selectedDate
+            ? format(selectedDate, dateFormat, { locale: dateFnsLocale })
+            : ''}
+        </DatePickerTrigger>
       )}
     </SingleDatepicker>
   );

@@ -33,7 +33,9 @@ Both wrap `chakra-dayzed-datepicker`; its props pass through.
 `SingleDatePicker` takes `date` and `onDateChange(date)`; `RangeDatePicker`
 takes `selectedDates` and `onDateChange(dates)`. Month and weekday names and
 the default `configs.dateFormat` follow the provider language. The trigger is
-a secondary `Button` with a calendar icon; style it with
+a `button` with a calendar icon, drawn like a closed `Select` trigger (border,
+weight, padding, hover, focus ring and open state come from the Select recipe)
+so it lines up with the fields beside it; style it with
 `propsConfigs.triggerBtnProps`. The calendar is portalled (`usePortal`
 defaults to `true`).
 
@@ -66,7 +68,9 @@ defaults to `true`).
 `SingleDatePicker`는 `date`와 `onDateChange(date)`를, `RangeDatePicker`는
 `selectedDates`와 `onDateChange(dates)`를 받습니다. 월과 요일 이름, 기본
 `configs.dateFormat`은 프로바이더의 언어를 따릅니다. 트리거는 달력 아이콘이 있는
-secondary `Button`이고, 모양은 `propsConfigs.triggerBtnProps`로 바꿉니다. 달력은
+`button`이고, 닫힌 `Select` 트리거와 같은 모양(테두리·굵기·여백·hover·포커스 링·열림
+상태를 Select 레시피에서 읽음)이라 옆 필드와 맞습니다. 모양은
+`propsConfigs.triggerBtnProps`로 바꿉니다. 달력은
 포털로 그려집니다(`usePortal` 기본값 `true`).
 
 ## 이렇게 하세요 / 이렇게 하지 마세요
