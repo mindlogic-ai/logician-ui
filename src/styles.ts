@@ -17,4 +17,4 @@
  *
  * These names are also on the root entry, so existing imports keep working.
  */
-export { noZoomOnFocus } from './theme/formControls';
+export { fieldBorder, noZoomOnFocus } from './theme/formControls';

@@ -1,13 +1,14 @@
 /**
  * Shared style objects for the Select and Combobox components.
  *
- * These mirror the Input component (`Input.tsx`) so the form controls share
- * the same border, hover, focus and disabled behavior. They are applied on
- * top of Chakra's built-in `select` / `combobox` slot recipes via the `css`
- * prop — only the design-system deltas live here. When `Input.tsx` changes,
- * update these values to match.
+ * The border colours come from `fieldBorder` (`theme/formControls.ts`), the
+ * same source `Input`, `Textarea`, `PinInput` and `FieldTrigger` read, so the
+ * form controls cannot drift apart. They are applied on top of Chakra's
+ * built-in `select` / `combobox` slot recipes via the `css` prop — only the
+ * design-system deltas live here.
  */
 
+import { fieldBorder } from '@/theme/formControls';
 import { disabledControl, disabledText } from '@/utils/disabledControl';
 
 const focusVars = {
@@ -19,16 +20,16 @@ const fieldBase = {
   ...focusVars,
   bg: 'bg.surface',
   color: 'fg.default',
-  borderColor: 'border.control',
-  _hover: { borderColor: 'fg.icon' },
+  borderColor: fieldBorder.rest,
+  _hover: { borderColor: fieldBorder.hover },
   _focus: {
-    borderColor: 'primary.main',
-    boxShadow: '0 0 0 1px var(--chakra-colors-primary-main)',
+    borderColor: fieldBorder.focus,
+    boxShadow: fieldBorder.focusRing,
   },
   _invalid: {
-    borderColor: 'danger.solid',
-    _hover: { borderColor: 'danger.solid' },
-    _focus: { borderColor: 'danger.solid' },
+    borderColor: fieldBorder.invalid,
+    _hover: { borderColor: fieldBorder.invalid },
+    _focus: { borderColor: fieldBorder.invalid },
   },
   _disabled: {
     ...disabledControl,
@@ -60,8 +61,8 @@ export const triggerStyles = {
   ...clearTriggerRoom('--select-trigger-padding-x'),
   cursor: 'pointer',
   _open: {
-    borderColor: 'primary.main',
-    boxShadow: '0 0 0 1px var(--chakra-colors-primary-main)',
+    borderColor: fieldBorder.focus,
+    boxShadow: fieldBorder.focusRing,
   },
 };
 
@@ -82,7 +83,7 @@ export const ghostTriggerStyles = {
   // room (indicator group = icon + padding on both sides) instead.
   pe: 'calc(var(--select-trigger-padding-x) * 2 + 1rem)',
   '& [data-part=value-text]': { maxW: 'none', whiteSpace: 'nowrap' },
-  _hover: { borderColor: 'border.control' },
+  _hover: { borderColor: fieldBorder.rest },
   _disabled: {
     ...disabledText,
     // A field, not a ghost button: the value text stays readable at

@@ -1,7 +1,7 @@
 import { ChangeEvent, forwardRef, useEffect, useState } from 'react';
 import { Textarea as ChakraTextarea } from '@chakra-ui/react';
 
-import { noZoomOnFocus } from '@/theme/formControls';
+import { fieldBorder, noZoomOnFocus } from '@/theme/formControls';
 import { disabledControl } from '@/utils/disabledControl';
 import { mergeCss } from '@/utils/mergeCss';
 
@@ -58,28 +58,26 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         // `Textarea` recipe does not — so the focus ring defaults to
         // `colorPalette.focusRing` (gray.400) and ends up visibly
         // different from Input/Select. Mirror Input's chain explicitly.
-        focusRingColor={invalid ? 'danger.solid' : 'primary.main'}
+        focusRingColor={invalid ? fieldBorder.invalid : fieldBorder.focus}
         borderColor={
-          borderColor ?? (invalid ? 'danger.solid' : 'border.control')
+          borderColor ?? (invalid ? fieldBorder.invalid : fieldBorder.rest)
         }
         _hover={{
-          borderColor: invalid ? 'danger.solid' : 'fg.icon',
+          borderColor: invalid ? fieldBorder.invalid : fieldBorder.hover,
           ..._hover,
         }}
         _focus={{
-          borderColor: invalid ? 'danger.solid' : 'primary.main',
-          boxShadow: invalid
-            ? 'none'
-            : '0 0 0 1px var(--chakra-colors-primary-main)',
+          borderColor: invalid ? fieldBorder.invalid : fieldBorder.focus,
+          boxShadow: invalid ? 'none' : fieldBorder.focusRing,
           ..._focus,
         }}
         _invalid={{
-          borderColor: 'danger.solid',
+          borderColor: fieldBorder.invalid,
           _hover: {
-            borderColor: 'danger.solid',
+            borderColor: fieldBorder.invalid,
           },
           _focus: {
-            borderColor: 'danger.solid',
+            borderColor: fieldBorder.invalid,
           },
         }}
         _readOnly={{

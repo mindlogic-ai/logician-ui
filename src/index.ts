@@ -30,6 +30,7 @@ export * from './components/FileItem';
 export * from './components/FileList';
 
 // Form Components
+export * from './components/FieldTrigger';
 export * from './components/Form';
 export * from './components/FormControl';
 export * from './components/FormLabel';
@@ -175,7 +176,7 @@ export {
   type CoreControlSize,
   getControlSize,
 } from './theme/controlSizes';
-export { noZoomOnFocus } from './theme/formControls';
+export { fieldBorder, noZoomOnFocus } from './theme/formControls';
 export {
   animationStyles,
   durations,

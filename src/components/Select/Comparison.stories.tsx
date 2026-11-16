@@ -2,13 +2,14 @@ import type { ReactNode } from 'react';
 import { Stack, Text } from '@chakra-ui/react';
 import { Meta } from '@storybook/react';
 
+import { FieldTrigger } from '../FieldTrigger';
 import { Input } from '../Input';
 import { Textarea } from '../Textarea';
 import { SelectField } from './SelectField';
 
 /**
- * Temporary visual comparison between Input, Select and Textarea.
- * Verifies the three controls share the same default look (border, hover,
+ * Temporary visual comparison between Input, Select, FieldTrigger and
+ * Textarea. Verifies the controls share the same default look (border, hover,
  * focus, disabled / invalid states).
  *
  * Safe to delete once the unified style is no longer being iterated on.
@@ -42,16 +43,19 @@ export const SideBySide = () => (
     <Row label="Default">
       <Input placeholder="Input" />
       <SelectField options={categoryOptions} placeholder="Select" />
+      <FieldTrigger placeholder="FieldTrigger" />
       <Textarea placeholder="Textarea" />
     </Row>
     <Row label="Filled">
       <Input defaultValue="Input value" />
       <SelectField options={categoryOptions} defaultValue="business" />
+      <FieldTrigger>FieldTrigger value</FieldTrigger>
       <Textarea defaultValue="Textarea value" />
     </Row>
     <Row label="Invalid">
       <Input placeholder="Input" invalid />
       <SelectField options={categoryOptions} placeholder="Select" invalid />
+      <FieldTrigger placeholder="FieldTrigger" invalid />
       <Textarea placeholder="Textarea" invalid />
     </Row>
     <Row label='Select variant="ghost" — default / invalid / disabled'>
@@ -76,6 +80,7 @@ export const SideBySide = () => (
     <Row label="Disabled">
       <Input placeholder="Input" disabled />
       <SelectField options={categoryOptions} placeholder="Select" disabled />
+      <FieldTrigger placeholder="FieldTrigger" disabled />
       <Textarea placeholder="Textarea" disabled />
     </Row>
   </Stack>
@@ -94,6 +99,7 @@ export const SizeProgression = () => (
           options={categoryOptions}
           placeholder={`Select ${size}`}
         />
+        <FieldTrigger size={size} placeholder={`FieldTrigger ${size}`} />
         <Textarea size={size} placeholder={`Textarea ${size}`} />
       </Row>
     ))}

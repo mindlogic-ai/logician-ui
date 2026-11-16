@@ -56,3 +56,28 @@ import type { SystemStyleObject } from '@chakra-ui/react';
 export const noZoomOnFocus: SystemStyleObject = {
   '@media (pointer: coarse)': { fontSize: '16px' },
 };
+
+/**
+ * The border every form field draws: `Input`, `Textarea`, `PinInput`,
+ * `Select`, `Combobox` and `FieldTrigger`.
+ *
+ * These four colours used to be literals repeated in each component, with a
+ * comment in `Select.styles.ts` asking whoever changed `Input.tsx` to copy the
+ * change across. Nothing checked that, and the controls a consumer built
+ * itself — a Popover opened from a `Button variant="secondary"` — picked up
+ * `border.default` instead, so a filter bar mixed two border weights. Every
+ * field now reads from here, and a custom trigger uses `FieldTrigger` rather
+ * than restating them.
+ */
+export const fieldBorder = {
+  /** Resting border. */
+  rest: 'border.control',
+  /** Hover — one step darker. */
+  hover: 'fg.icon',
+  /** Focus and open. Paired with {@link fieldBorder.focusRing}. */
+  focus: 'primary.main',
+  /** Invalid, at rest, hover and focus alike. */
+  invalid: 'danger.solid',
+  /** 1px ring outside the focus border, so focus reads at 2px. */
+  focusRing: '0 0 0 1px var(--chakra-colors-primary-main)',
+} as const;

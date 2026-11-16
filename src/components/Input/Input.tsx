@@ -9,7 +9,7 @@ import {
 } from 'react';
 import { Input as ChakraInput, InputGroup } from '@chakra-ui/react';
 
-import { noZoomOnFocus } from '@/theme/formControls';
+import { fieldBorder, noZoomOnFocus } from '@/theme/formControls';
 import { disabledControl } from '@/utils/disabledControl';
 import { formatNumber } from '@/utils/formatNumber';
 import { mergeCss } from '@/utils/mergeCss';
@@ -324,26 +324,24 @@ export const Input = forwardRef(
           bg="bg.surface"
           color="fg.default"
           borderColor={
-            borderColor ?? (invalid ? 'danger.solid' : 'border.control')
+            borderColor ?? (invalid ? fieldBorder.invalid : fieldBorder.rest)
           }
           _hover={{
-            borderColor: invalid ? 'danger.solid' : 'fg.icon',
+            borderColor: invalid ? fieldBorder.invalid : fieldBorder.hover,
             ..._hover,
           }}
           _focus={{
-            borderColor: invalid ? 'danger.solid' : 'primary.main',
-            boxShadow: invalid
-              ? 'none'
-              : '0 0 0 1px var(--chakra-colors-primary-main)',
+            borderColor: invalid ? fieldBorder.invalid : fieldBorder.focus,
+            boxShadow: invalid ? 'none' : fieldBorder.focusRing,
             ..._focus,
           }}
           _invalid={{
-            borderColor: 'danger.solid',
+            borderColor: fieldBorder.invalid,
             _hover: {
-              borderColor: 'danger.solid',
+              borderColor: fieldBorder.invalid,
             },
             _focus: {
-              borderColor: 'danger.solid',
+              borderColor: fieldBorder.invalid,
             },
           }}
           _readOnly={{
