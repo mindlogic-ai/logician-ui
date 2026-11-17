@@ -200,11 +200,12 @@ export const RowStates: Story = {
 
 /**
  * `<Thead sticky>` pins the header to the top of the scroll container
- * (position: sticky, opaque surface bg, hairline shadow).
+ * (position: sticky, opaque surface bg, hairline shadow). The container clips
+ * vertically by default, so a fixed-height table opts in with `overflowY="auto"`.
  */
 export const StickyHeader: Story = {
   render: (args) => (
-    <TableContainer maxH="240px">
+    <TableContainer maxH="240px" overflowY="auto">
       <Table {...args}>
         <Thead sticky>
           <Tr>

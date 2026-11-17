@@ -17,7 +17,9 @@ values: members, usage, invoices, API keys.
 
 `TableContainer` › `Table` › `Thead` / `Tbody` › `Tr` › `Th` / `Td`. The
 container draws the rounded border, scrolls horizontally, and tracks scroll
-position for sticky columns.
+position for sticky columns. It does not scroll vertically unless you pass
+`overflowY="auto"` (with a `maxH` or a flex height) — the default is `hidden`
+so fractional row heights don't leave a 1px vertical scrollbar.
 
 ## When to use
 
@@ -46,7 +48,9 @@ position for sticky columns.
 
 구조는 `TableContainer` › `Table` › `Thead` / `Tbody` › `Tr` › `Th` / `Td`입니다.
 컨테이너가 둥근 테두리를 그리고, 가로 스크롤을 맡고, 고정 열을 위해 스크롤 위치를
-추적합니다.
+추적합니다. 세로 스크롤은 기본으로 꺼져 있습니다(`hidden`). 행 높이가 소수 픽셀이면
+넘치는 내용이 없어도 1px 세로 스크롤바가 생기기 때문입니다. 세로로 스크롤해야 하면
+`maxH`(또는 flex 높이)와 함께 `overflowY="auto"`를 넘기세요.
 
 ## 언제 쓰나요
 
@@ -75,7 +79,7 @@ position for sticky columns.
 | `<Tr state="invalid">` | Something in the row is wrong (`bg.invalid.subtle`) | A failed import row |
 | `<Tr state="highlighted">` | Draw the eye to one row (`bg.highlighted`) | The row just added or edited |
 | `onClick` / `tabIndex` / `role="button"` on `Tr` | The row is clickable; it gets the pointer, `primary.wash` hover and a focus outline | Opening a detail drawer |
-| `<Thead sticky>` | The header stays at the top of the scroll area | Long lists in a fixed-height container |
+| `<Thead sticky>` | The header stays at the top of the scroll area | Long lists in a fixed-height container (`TableContainer maxH=… overflowY="auto"`) |
 | `isSticky` + `stickyDirection` + `stickyIndex` on `Th`/`Td` | The column stays put while the table scrolls sideways | A name column on a wide table |
 | `Td wrap` | Long text wraps instead of being cut off | Addresses, descriptions |
 | `ExpandingTr` | A row with a detail row under it, opened by `isExpanded` | Error details for one row |
@@ -92,7 +96,7 @@ position for sticky columns.
 | `<Tr state="invalid">` | 행 안의 무언가가 잘못됨(`bg.invalid.subtle`) | 가져오기에 실패한 행 |
 | `<Tr state="highlighted">` | 한 행으로 눈길을 끎(`bg.highlighted`) | 방금 추가하거나 고친 행 |
 | `Tr`의 `onClick` / `tabIndex` / `role="button"` | 누를 수 있는 행. 포인터, `primary.wash` 호버, 초점 테두리가 생김 | 상세 서랍 열기 |
-| `<Thead sticky>` | 스크롤해도 머리글이 위에 남음 | 높이가 정해진 영역 안의 긴 목록 |
+| `<Thead sticky>` | 스크롤해도 머리글이 위에 남음 | 높이가 정해진 영역 안의 긴 목록 (`TableContainer maxH=… overflowY="auto"`) |
 | `Th`/`Td`의 `isSticky` + `stickyDirection` + `stickyIndex` | 표를 옆으로 스크롤해도 그 열은 그대로 있음 | 넓은 표의 이름 열 |
 | `Td wrap` | 긴 글을 자르지 않고 줄바꿈함 | 주소, 설명 |
 | `ExpandingTr` | 아래에 상세 행이 붙은 행. `isExpanded`로 엶 | 한 행의 오류 상세 |

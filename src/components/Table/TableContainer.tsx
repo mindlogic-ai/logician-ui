@@ -31,6 +31,12 @@ const TableContainerInner = forwardRef<HTMLDivElement, TableContainerProps>(
         borderRadius="md"
         borderColor="border.subtle"
         ref={handleRef}
+        // Table.ScrollArea 기본값은 양축 overflow: auto. 행 높이가 소수(56.5px 등)면
+        // scrollHeight 가 clientHeight 보다 1px 크게 반올림돼, 넘치는 내용이 없어도
+        // 1px 세로 스크롤바가 생긴다. 세로는 기본 hidden — 세로 스크롤이 필요한
+        // 호출부는 overflowY="auto" 를 넘긴다({...rest} 가 뒤라서 덮어쓴다).
+        overflowX="auto"
+        overflowY="hidden"
         {...rest}
       >
         {children}
