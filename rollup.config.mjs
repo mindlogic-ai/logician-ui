@@ -53,6 +53,12 @@ const external = [
   'react-spinners',
   /^rehype-/,
   /^remark-/,
+  // Code's highlighter. Bundled, it copied every Shiki grammar and theme into
+  // dist/node_modules (~46 MB of a ~60 MB dist) and shipped a second Shiki
+  // next to the one the app installs. It stays in `dependencies`, so apps get
+  // it without listing it themselves.
+  /^shiki(\/|$)/,
+  /^@shikijs\//,
 ];
 
 // Check if a module ID matches external patterns
