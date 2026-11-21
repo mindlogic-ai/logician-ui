@@ -57,7 +57,7 @@
     "changeset:status": "changeset status",
     "optimize-icons": "node scripts/optimize-icons.js",
     "update-intl": "./scripts/get-lang-pack.sh",
-    "check-exports": "node check-component-exports.js"
+    "check-exports": "node check-component-exports.js && node scripts/eslint/generate-exports.cjs --check"
   },
   "peerDependencies": {
     "@ark-ui/react": "^5.39.0",

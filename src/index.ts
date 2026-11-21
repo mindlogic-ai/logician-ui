@@ -210,3 +210,7 @@ export type {
   PolymorphicRef,
 } from './types/polymorphic';
 export { polymorphic } from './types/polymorphic';
+
+// Raw Chakra pass-throughs (layout, utilities, hooks) that logician-ui has no
+// DS version of yet. Explicit allowlist — see the header of ./chakra.ts.
+export * from './chakra';
