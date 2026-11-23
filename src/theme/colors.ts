@@ -10,7 +10,7 @@
  *    `{base, baseDark, hc, hcDark, surface, ink, surfaceDark, inkDark}`), and
  *    `dataviz.*` (the data-visualisation values no hue step covers).
  *    The step number is the job (Radix-style): 1–3 backgrounds, 4–6 dividers
- *    and borders, 7 control border (3:1), 8 icon (4.5:1), 9–11
+ *    and borders, 7 control border (3:1), 8 icon/placeholder (4.5:1), 9–11
  *    text, 12 maximum contrast.
  * 2. **Semantic steps** carry role names: `neutral.1–12` and `secondary.1–12`.
  *    `createLogicianTheme({ neutral, secondary })` decides which raw scale fills
