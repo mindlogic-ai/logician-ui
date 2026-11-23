@@ -92,16 +92,7 @@ export const textareaRecipe = defineRecipe({
 
 export const selectSlotRecipe = defineSlotRecipe({
   slots: selectAnatomy.keys(),
-  base: {
-    trigger: {
-      borderRadius: CONTROL_RADIUS,
-      // Empty value is a span, not ::placeholder (see global.ts). Slant only
-      // the value text so a consumer's own content in the trigger stays upright.
-      _placeholderShown: {
-        '& [data-part=value-text]': { fontStyle: 'italic' },
-      },
-    },
-  },
+  base: { trigger: { borderRadius: CONTROL_RADIUS } },
   variants: {
     size: bySize(CORE_CONTROL_SIZES, (size) => ({
       root: {

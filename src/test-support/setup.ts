@@ -22,19 +22,3 @@ if (!('ResizeObserver' in globalThis)) {
     disconnect() {}
   };
 }
-
-// jsdom has no matchMedia; Chakra's color-mode/responsive machinery and the
-// presence parts (prefers-reduced-motion) call it on mount. Tests that need a
-// specific answer still assign their own.
-if (!window.matchMedia) {
-  window.matchMedia = ((query: string) => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: () => {},
-    removeListener: () => {},
-    addEventListener: () => {},
-    removeEventListener: () => {},
-    dispatchEvent: () => false,
-  })) as unknown as typeof window.matchMedia;
-}

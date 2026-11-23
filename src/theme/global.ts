@@ -58,15 +58,6 @@ export const globalCss = defineGlobalStyles({
     },
   },
 
-  // Placeholders are italic so an empty field never reads as a typed value
-  // (R30 2nd-round QA #8); colour stays Chakra's. No font in the stack has an
-  // italic face, so the slant is synthesised; `oblique Ndeg` draws none in
-  // Chromium, hence `italic`. Native ::placeholder only — contenteditable
-  // overlays (FactChat's composer) stay upright; Select: recipes/controls.ts.
-  '*::placeholder': {
-    fontStyle: 'italic',
-  },
-
   '#__next': {
     height: 'var(--chakra-vh)',
   },
