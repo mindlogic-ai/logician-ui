@@ -62,7 +62,7 @@ export const globalCss = defineGlobalStyles({
   // HC 7:1),
   // lighter than Chakra's `fg.muted/80` (~6:1) so an empty field never reads
   // as a typed value (R30 2nd-round QA #8). Same selector as Chakra's rule so
-  // this one replaces it. Select's empty value: recipes/controls.ts.
+  // this one replaces it. Select's empty value: Select.styles.ts.
   '*::placeholder, *[data-placeholder]': {
     color: 'fg.placeholder',
   },
