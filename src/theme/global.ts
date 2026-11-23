@@ -59,17 +59,10 @@ export const globalCss = defineGlobalStyles({
   },
 
   // Placeholders are italic so an empty field never reads as a typed value
-  // (R30 2nd-round QA #8). Only the slant changes: the colour stays where
-  // Chakra's own `*::placeholder` rule puts it, so the contrast audit
-  // (contrast.test.ts) is unaffected. Pretendard, Noto Sans KR and the
-  // consuming app's Wanted Sans (FactChat) ship no italic face, so the browser
-  // synthesises the slant; that was accepted. Use `italic`, not
-  // `oblique Ndeg`: Chromium draws no slant for the latter with Wanted Sans.
-  //
-  // Native `::placeholder` only, on purpose. A contenteditable editor that
-  // draws its placeholder as a sibling element (FactChat's chat composer) is
-  // left upright. Select's empty value is a span, not a ::placeholder; its
-  // recipe (recipes/controls.ts) applies the same slant.
+  // (R30 2nd-round QA #8); colour stays Chakra's. No font in the stack has an
+  // italic face, so the slant is synthesised; `oblique Ndeg` draws none in
+  // Chromium, hence `italic`. Native ::placeholder only — contenteditable
+  // overlays (FactChat's composer) stay upright; Select: recipes/controls.ts.
   '*::placeholder': {
     fontStyle: 'italic',
   },

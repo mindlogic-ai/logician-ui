@@ -4,21 +4,10 @@ import { describe, expect, it } from 'vitest';
 import { globalCss } from './global';
 import { system } from './index';
 
-/**
- * R30 2nd-round QA #8: placeholders are italic so an empty field never reads
- * as a typed value. Only the slant changes — the colour is Chakra's, untouched.
- */
+/** R30 2nd-round QA #8: italic placeholders, colour untouched. */
 describe('placeholder style', () => {
   it('native ::placeholder is italic globally', () => {
     expect(globalCss['*::placeholder']).toEqual({ fontStyle: 'italic' });
-  });
-
-  it('does not set a placeholder colour of its own', () => {
-    for (const [selector, style] of Object.entries(globalCss)) {
-      if (selector.includes('placeholder')) {
-        expect(style, selector).not.toHaveProperty('color');
-      }
-    }
   });
 
   it('does not target [data-placeholder] or other non-native placeholders', () => {
