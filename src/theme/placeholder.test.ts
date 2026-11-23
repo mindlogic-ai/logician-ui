@@ -34,7 +34,11 @@ describe('placeholder style', () => {
     >;
     const chakra = defaultSystem.getSlotRecipe('select').base
       ?.trigger as Record<string, any>;
-    expect(shipped._placeholderShown).toMatchObject({ fontStyle: 'italic' });
+    expect(shipped._placeholderShown).toMatchObject({
+      '& [data-part=value-text]': { fontStyle: 'italic' },
+    });
+    // Only the value text slants — never the trigger itself.
+    expect(shipped._placeholderShown.fontStyle).toBeUndefined();
     expect(shipped._placeholderShown.color).toBe(
       chakra._placeholderShown.color
     );

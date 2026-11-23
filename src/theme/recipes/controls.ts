@@ -97,9 +97,14 @@ export const selectSlotRecipe = defineSlotRecipe({
       borderRadius: CONTROL_RADIUS,
       // The empty value is placeholder text in a span, not a native
       // ::placeholder, so the global italic (global.ts) cannot reach it. Zag
-      // marks the trigger `data-placeholder-shown` while nothing is selected;
-      // the trigger holds only the value text (indicators are a sibling).
-      _placeholderShown: { fontStyle: 'italic' },
+      // marks the trigger `data-placeholder-shown` while nothing is selected.
+      // Slant only the value text: a consumer may put its own label or badge
+      // inside `Select.Trigger`, and that must stay upright. Lives in the
+      // recipe (next to Chakra's own placeholder colour for the trigger) so a
+      // raw Chakra `Select` under this system gets it too.
+      _placeholderShown: {
+        '& [data-part=value-text]': { fontStyle: 'italic' },
+      },
     },
   },
   variants: {
