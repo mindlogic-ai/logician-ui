@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.0.0-alpha.34
+
+### Patch Changes
+
+- c7c9e0d: Placeholders are upright again: reverts the italic `::placeholder` and Select
+  empty value text from alpha.33. The synthesised slant clipped the last glyph
+  in truncated fields and did not suit Hangul or search inputs.
+
 ## 5.0.0-alpha.33
 
 ### Patch Changes
