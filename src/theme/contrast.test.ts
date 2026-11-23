@@ -18,6 +18,7 @@ import { DATA_VIZ_LABEL_TOKEN, DATA_VIZ_LABELS } from './paletteSwatches';
  *
  * - text ≥ 4.5:1 (high contrast ≥ 7:1)
  * - non-text — icons, control borders, focus ring, marks ≥ 3:1 (HC ≥ 4.5:1)
+ * - placeholder ≥ 3.5:1 (HC ≥ 7:1) — lighter than text on purpose (QA #8)
  * - neighbouring layers ≥ 1.10:1
  * in light, dark, hcLight and hcDark, for every neutral scheme.
  *
@@ -30,7 +31,7 @@ import { DATA_VIZ_LABEL_TOKEN, DATA_VIZ_LABELS } from './paletteSwatches';
 type Mode = 'light' | 'dark' | 'hcLight' | 'hcDark';
 const MODES: Mode[] = ['light', 'dark', 'hcLight', 'hcDark'];
 const SCHEME_NAMES: NeutralScale[] = ['ink', 'slate'];
-type Kind = 'text' | 'nontext';
+type Kind = 'text' | 'nontext' | 'placeholder';
 
 // Ported verbatim from the prototype (`PAIRS` / `SEP` in index.html v4).
 const PAIRS: [string, string, Kind][] = [
@@ -53,7 +54,7 @@ const PAIRS: [string, string, Kind][] = [
         ['mark-starred', bg, 'nontext'],
       ] as [string, string, Kind][]
   ),
-  ['fg-placeholder', 'bg-surface', 'text'],
+  ['fg-placeholder', 'bg-surface', 'placeholder'],
   ['fg-default', 'primary-wash', 'text'],
   ['fg-default', 'primary-washActive', 'text'],
   ['fg-default', 'primary-selected', 'text'],
@@ -218,6 +219,7 @@ function makeResolver(neutral: NeutralScale) {
 
 const need = (kind: Kind, mode: Mode) => {
   const hc = mode === 'hcLight' || mode === 'hcDark';
+  if (kind === 'placeholder') return hc ? 7 : 3.5;
   return kind === 'text' ? (hc ? 7 : 4.5) : hc ? 4.5 : 3;
 };
 

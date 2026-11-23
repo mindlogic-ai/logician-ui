@@ -149,7 +149,9 @@ function push(h, bgs, target, darker) {
 // ───────────────────────────── ramps ─────────────────────────────
 // Contrast target per step against the mode's canvas (white / dark canvas).
 // Step 1–3 backgrounds · 4–6 dividers & borders · 7 control border (3:1)
-// · 8 icon/placeholder (4.5:1) · 9–11 text · 12 maximum contrast.
+// · 8 icon (4.5:1) · 9–11 text · 12 maximum contrast. Placeholder is derived
+// from step 7 at PLACEHOLDER_CONTRAST (see buildScheme).
+const PLACEHOLDER_CONTRAST = 3.5;
 const LT = [1.06, 1.13, 1.21, 1.32, 1.5, 1.95, 3.1, 4.8, 7.4, 11.0, 15.3, 18.0];
 const DT = [1.1, 1.21, 1.33, 1.48, 1.72, 2.15, 3.2, 4.8, 7.4, 10.5, 13.0, 15.0];
 
@@ -656,7 +658,16 @@ function buildScheme(n, s) {
     const L = LAYERS.map((x) => m[x]);
     m['fg-subtle'] = push(m['fg-subtle'], L, 4.5, dk);
     m['fg-icon'] = push(m['fg-icon'], L, 3.0, dk);
-    m['fg-placeholder'] = push(m['fg-placeholder'], [m['bg-surface']], 4.5, dk);
+    // Placeholder sits deliberately lighter than text (3.5:1, not 4.5:1) so an
+    // empty field never reads as a typed value — R30 2nd-round QA #8, Sean's
+    // pick after comparing GitHub 6.1 / Material 8.9 / Linear 2.6 / Notion 2.6.
+    // Starts from step 7 and darkens just far enough. HC still pushes to 7:1.
+    m['fg-placeholder'] = push(
+      dk ? iL[6] : iD[6],
+      [m['bg-surface']],
+      PLACEHOLDER_CONTRAST,
+      dk
+    );
     m['fg-link'] = push(m['fg-link'], L, 4.5, dk);
     m['action-mark'] = push(m['action-mark'], L, 3.0, dk);
     m['mark-starred'] = push(
@@ -679,7 +690,13 @@ function buildScheme(n, s) {
       'fg-linkHover',
     ])
       h[k] = push(m[k], L, 7, dk);
-    h['fg-placeholder'] = push(m['fg-placeholder'], [m['bg-surface']], 7, dk);
+    // From step 8, as before the 3.5:1 base — HC placeholder is unchanged.
+    h['fg-placeholder'] = push(
+      push(dk ? iL[7] : iD[7], [m['bg-surface']], 4.5, dk),
+      [m['bg-surface']],
+      7,
+      dk
+    );
     for (const k of [
       'fg-icon',
       'border-control',

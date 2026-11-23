@@ -92,7 +92,13 @@ export const textareaRecipe = defineRecipe({
 
 export const selectSlotRecipe = defineSlotRecipe({
   slots: selectAnatomy.keys(),
-  base: { trigger: { borderRadius: CONTROL_RADIUS } },
+  base: {
+    trigger: {
+      borderRadius: CONTROL_RADIUS,
+      // Empty value is a span, not ::placeholder: same colour as global.ts.
+      _placeholderShown: { color: 'fg.placeholder' },
+    },
+  },
   variants: {
     size: bySize(CORE_CONTROL_SIZES, (size) => ({
       root: {
