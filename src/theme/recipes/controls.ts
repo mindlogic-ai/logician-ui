@@ -92,7 +92,16 @@ export const textareaRecipe = defineRecipe({
 
 export const selectSlotRecipe = defineSlotRecipe({
   slots: selectAnatomy.keys(),
-  base: { trigger: { borderRadius: CONTROL_RADIUS } },
+  base: {
+    trigger: {
+      borderRadius: CONTROL_RADIUS,
+      // The empty value is placeholder text in a span, not a native
+      // ::placeholder, so the global italic (global.ts) cannot reach it. Zag
+      // marks the trigger `data-placeholder-shown` while nothing is selected;
+      // the trigger holds only the value text (indicators are a sibling).
+      _placeholderShown: { fontStyle: 'italic' },
+    },
+  },
   variants: {
     size: bySize(CORE_CONTROL_SIZES, (size) => ({
       root: {
