@@ -7,6 +7,8 @@ import { FOCUS_RING_SHADOW, focusRing } from '@/utils/focusRing';
 // Drawn as an inset shadow, not a border, so the thumb's travel and the
 // track's size stay exactly what Chakra's recipe computes.
 const OFF_OUTLINE = 'inset 0 0 0 1px var(--chakra-colors-border-control)';
+// The disabled off outline, one step lighter than OFF_OUTLINE.
+const DISABLED_OFF_OUTLINE = 'inset 0 0 0 1px var(--chakra-colors-disabled-fg)';
 
 export const SwitchControl = forwardRef<HTMLSpanElement, SwitchControlProps>(
   (props, ref) => (
@@ -29,7 +31,20 @@ export const SwitchControl = forwardRef<HTMLSpanElement, SwitchControlProps>(
       _checked={{ bg: 'control.on', boxShadow: 'none' }}
       animationStyle="feedback"
       transitionProperty="background-color, box-shadow"
-      _disabled={{ ...disabledControl, cursor: 'not-allowed' }}
+      // disabledControl drops the shadow, which here is the off outline, and
+      // fills the track with disabled.bg. On a disabled.bg ground (a disabled
+      // card or row) that left the track with no edge in either state, so only
+      // the thumb showed. Off keeps an outline; on fills with disabled.fg, so
+      // on and off still differ as outlined and filled, without the role colour.
+      // The off outline (and the thumb, below) take the disabled greys rather
+      // than border.control, so a disabled off switch does not read as an
+      // enabled one.
+      _disabled={{
+        ...disabledControl,
+        cursor: 'not-allowed',
+        boxShadow: DISABLED_OFF_OUTLINE,
+        _checked: { bg: 'disabled.fg', boxShadow: 'none' },
+      }}
       {...focusRing}
       // focusRing's shadow would replace the outline; keep both while off.
       _focusVisible={{
@@ -52,6 +67,9 @@ export const SwitchControl = forwardRef<HTMLSpanElement, SwitchControlProps>(
         // (white in light, ink in dark).
         bg="border.control"
         _checked={{ bg: 'control.onFg' }}
+        // Disabled off: disabled.fgGhost, lighter than the enabled thumb. On
+        // keeps control.onFg, which sits on the disabled.fg track.
+        _disabled={{ bg: 'disabled.fgGhost', _checked: { bg: 'control.onFg' } }}
       />
     </ChakraSwitch.Control>
   )

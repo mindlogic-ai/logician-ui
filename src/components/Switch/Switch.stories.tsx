@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Stack, Text } from '@chakra-ui/react';
+import { Box, HStack, Stack, Text } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
 import { T } from '../../guidelines/_components/Lang';
@@ -70,6 +70,65 @@ export const Disabled: Story = {
     disabled: true,
     checked: true,
   },
+};
+
+/**
+ * A disabled switch on the two grounds it sits on: a normal surface, and a
+ * `disabled.bg` surface (a disabled card or row). The track fills with
+ * `disabled.bg` too, so its `disabled.fg` outline (off) and `disabled.fg`
+ * fill (on) are what keep it visible there. The enabled pair is drawn first
+ * for comparison.
+ */
+export const DisabledOnSurfaces: Story = {
+  parameters: { layout: 'padded' },
+  render: () => (
+    <Stack gap={4} maxW="2xl">
+      {(['bg.surface', 'disabled.bg'] as const).map((ground) => (
+        <Stack
+          key={ground}
+          data-ground={ground}
+          direction="row"
+          align="center"
+          wrap="wrap"
+          columnGap={6}
+          rowGap={3}
+          p={4}
+          bg={ground}
+          borderRadius="lg"
+          borderWidth="1px"
+          borderColor="border.subtle"
+        >
+          {/* Full row on a narrow canvas, so the off/on pairs below wrap as
+              pairs instead of running past the ground. */}
+          <Text flexBasis={{ base: 'full', md: 0 }} flexGrow={1}>
+            {ground}
+          </Text>
+          <HStack gap={3}>
+            {/* readOnly: fixed specimens, so a click cannot flip the native
+                checkbox away from the state the track shows. */}
+            <Switch size="lg" checked={false} readOnly aria-label="enabled off">
+              <Switch.Control />
+            </Switch>
+            <Switch size="lg" checked readOnly aria-label="enabled on">
+              <Switch.Control />
+            </Switch>
+          </HStack>
+          {(['sm', 'md', 'lg'] as const).map((size) => (
+            <HStack key={size} gap={3}>
+              <Switch size={size} disabled checked={false}>
+                <Switch.Control />
+                <Switch.Label srOnly>{`disabled off, ${size}`}</Switch.Label>
+              </Switch>
+              <Switch size={size} disabled checked>
+                <Switch.Control />
+                <Switch.Label srOnly>{`disabled on, ${size}`}</Switch.Label>
+              </Switch>
+            </HStack>
+          ))}
+        </Stack>
+      ))}
+    </Stack>
+  ),
 };
 
 export const WithLabel: Story = {
@@ -199,7 +258,20 @@ export const UsageTokens: Story = {
         },
         {
           token: 'disabled.bg',
-          use: <T en="Disabled track" ko="비활성 트랙" />,
+          use: <T en="Disabled track when off" ko="비활성 꺼짐 트랙" />,
+        },
+        {
+          token: 'disabled.fg',
+          use: (
+            <T
+              en="Disabled outline when off, disabled track when on"
+              ko="비활성 꺼짐 테두리, 비활성 켜짐 트랙"
+            />
+          ),
+        },
+        {
+          token: 'disabled.fgGhost',
+          use: <T en="Disabled thumb when off" ko="비활성 꺼짐 손잡이" />,
         },
         {
           token: 'focus.ring',
