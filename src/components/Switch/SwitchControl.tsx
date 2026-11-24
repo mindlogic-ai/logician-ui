@@ -29,7 +29,17 @@ export const SwitchControl = forwardRef<HTMLSpanElement, SwitchControlProps>(
       _checked={{ bg: 'control.on', boxShadow: 'none' }}
       animationStyle="feedback"
       transitionProperty="background-color, box-shadow"
-      _disabled={{ ...disabledControl, cursor: 'not-allowed' }}
+      // disabledControl drops the shadow, which here is the off outline, and
+      // fills the track with disabled.bg. On a disabled.bg ground (a disabled
+      // card or row) that left the track with no edge in either state, so only
+      // the thumb showed. Off keeps the outline; on fills with disabled.fg, so
+      // on and off still differ as filled and outlined, without the role colour.
+      _disabled={{
+        ...disabledControl,
+        cursor: 'not-allowed',
+        boxShadow: OFF_OUTLINE,
+        _checked: { bg: 'disabled.fg', boxShadow: 'none' },
+      }}
       {...focusRing}
       // focusRing's shadow would replace the outline; keep both while off.
       _focusVisible={{

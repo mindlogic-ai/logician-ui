@@ -72,6 +72,46 @@ export const Disabled: Story = {
   },
 };
 
+/**
+ * A disabled switch on the two grounds it sits on: a normal surface, and a
+ * `disabled.bg` surface (a disabled card or row). The track fills with
+ * `disabled.bg` too, so its outline (off) and `disabled.fg` fill (on) are what
+ * keep it visible there.
+ */
+export const DisabledOnSurfaces: Story = {
+  parameters: { layout: 'padded' },
+  render: () => (
+    <Stack gap={4} maxW="lg">
+      {(['bg.surface', 'disabled.bg'] as const).map((ground) => (
+        <Stack
+          key={ground}
+          data-ground={ground}
+          direction="row"
+          align="center"
+          gap={6}
+          p={4}
+          bg={ground}
+          borderRadius="lg"
+          borderWidth="1px"
+          borderColor="border.subtle"
+        >
+          <Text flex={1}>{ground}</Text>
+          {(['sm', 'md', 'lg'] as const).map((size) => (
+            <React.Fragment key={size}>
+              <Switch size={size} disabled checked={false}>
+                <Switch.Control />
+              </Switch>
+              <Switch size={size} disabled checked>
+                <Switch.Control />
+              </Switch>
+            </React.Fragment>
+          ))}
+        </Stack>
+      ))}
+    </Stack>
+  ),
+};
+
 export const WithLabel: Story = {
   render: (args) => (
     <Switch {...args}>
@@ -199,7 +239,11 @@ export const UsageTokens: Story = {
         },
         {
           token: 'disabled.bg',
-          use: <T en="Disabled track" ko="비활성 트랙" />,
+          use: <T en="Disabled track when off" ko="비활성 꺼짐 트랙" />,
+        },
+        {
+          token: 'disabled.fg',
+          use: <T en="Disabled track when on" ko="비활성 켜짐 트랙" />,
         },
         {
           token: 'focus.ring',
