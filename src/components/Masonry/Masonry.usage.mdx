@@ -14,6 +14,11 @@ import * as MasonryStories from './Masonry.stories';
 Equal-width columns that pack items of different heights without gaps,
 re-measuring as items resize. FactChat uses it for the model and voice menus.
 
+Where the Masonry can render while hidden (a closed popover, a tab panel),
+pass `itemWeights`: one number per item, such as its row count. A hidden item
+measures 0, so without it the columns reshuffle when the content is shown.
+With it, nothing is measured and the columns are final on the first render.
+
 ## When to use
 
 - Unordered groups or cards whose heights differ a lot, where a grid would
@@ -37,6 +42,11 @@ re-measuring as items resize. FactChat uses it for the model and voice menus.
 너비가 같은 열에 높이가 다른 항목을 빈틈없이 채우고, 항목 크기가 바뀌면 다시 재는
 레이아웃입니다. FactChat은 모델 메뉴와 음성 메뉴에 씁니다.
 
+닫힌 popover나 탭 패널처럼 숨은 채로 그려질 수 있는 곳에서는 `itemWeights`를 넘깁니다.
+항목마다 숫자 하나(예: 줄 수)입니다. 숨은 항목은 높이가 0으로 재져서, 넘기지 않으면
+내용이 보일 때 항목이 다른 열로 옮겨집니다. 넘기면 화면에서 재지 않고 처음부터 같은
+열에 놓입니다.
+
 ## 언제 쓰나요
 
 - 순서가 없고 높이 차이가 커서 격자로 놓으면 빈칸이 생기는 묶음이나 카드.
@@ -52,7 +62,7 @@ re-measuring as items resize. FactChat uses it for the model and voice menus.
 
 </Ko>
 
-<ArgTypes of={MasonryStories} include={['numCols', 'gap', 'horizontalArrangement']} />
+<ArgTypes of={MasonryStories} include={['numCols', 'gap', 'itemWeights', 'horizontalArrangement']} />
 
 <En>
 
