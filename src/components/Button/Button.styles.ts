@@ -134,7 +134,9 @@ export const buttonVariantStyles: Record<ButtonVariant, StyleProps> = {
     _disabled: { ...disabledControl },
   },
   secondary: {
-    borderColor: 'border.default',
+    // Same outline as Input/Select (`border.control`, 3:1) so a button beside a
+    // field lines up — Primer and Material share one control border too.
+    borderColor: 'border.control',
     bgColor: 'bg.surface',
     color: 'fg.default',
     _hover: { bgColor: 'primary.wash' },

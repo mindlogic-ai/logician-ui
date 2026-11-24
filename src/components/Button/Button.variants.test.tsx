@@ -44,7 +44,7 @@ describe('Button variants (5.0)', () => {
     expect(getButtonStyles('subtle', true).color).toBe('danger.fg');
     // border stays the variant's own
     expect(getButtonStyles('secondary', true).borderColor).toBe(
-      'border.default'
+      'border.control'
     );
     expect(getButtonStyles('primary', true).color).toBe('fg.onPrimary');
     expect(getButtonStyles('danger', true).color).toBe('danger.onSolid');
