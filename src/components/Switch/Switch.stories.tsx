@@ -97,10 +97,12 @@ export const DisabledOnSurfaces: Story = {
           borderColor="border.subtle"
         >
           <Text flex={1}>{ground}</Text>
-          <Switch size="lg" checked={false} aria-label="enabled off">
+          {/* readOnly: fixed specimens, so a click cannot flip the native
+              checkbox away from the state the track shows. */}
+          <Switch size="lg" checked={false} readOnly aria-label="enabled off">
             <Switch.Control />
           </Switch>
-          <Switch size="lg" checked aria-label="enabled on">
+          <Switch size="lg" checked readOnly aria-label="enabled on">
             <Switch.Control />
           </Switch>
           {(['sm', 'md', 'lg'] as const).map((size) => (
