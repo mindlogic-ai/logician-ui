@@ -54,6 +54,8 @@ const PAIRS: [string, string, Kind][] = [
       ] as [string, string, Kind][]
   ),
   ['fg-placeholder', 'bg-surface', 'text'],
+  // Input/Textarea `subtle` variant fill.
+  ['fg-placeholder', 'bg-muted', 'text'],
   ['fg-default', 'primary-wash', 'text'],
   ['fg-default', 'primary-washActive', 'text'],
   ['fg-default', 'primary-selected', 'text'],

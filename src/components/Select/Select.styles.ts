@@ -59,6 +59,13 @@ export const triggerStyles = {
   ...fieldBase,
   ...clearTriggerRoom('--select-trigger-padding-x'),
   cursor: 'pointer',
+  // Empty trigger shows its placeholder in `fg.placeholder`, like a native
+  // field. Without this, `fieldBase.color` (fg.default) beat Chakra's recipe
+  // and the placeholder read exactly like a chosen value (R30 2nd-round QA #8).
+  // Disabled keeps its own colour.
+  '&[data-placeholder-shown]:not(:disabled, [data-disabled])': {
+    color: 'fg.placeholder',
+  },
   _open: {
     borderColor: 'primary.main',
     boxShadow: '0 0 0 1px var(--chakra-colors-primary-main)',

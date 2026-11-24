@@ -656,7 +656,14 @@ function buildScheme(n, s) {
     const L = LAYERS.map((x) => m[x]);
     m['fg-subtle'] = push(m['fg-subtle'], L, 4.5, dk);
     m['fg-icon'] = push(m['fg-icon'], L, 3.0, dk);
-    m['fg-placeholder'] = push(m['fg-placeholder'], [m['bg-surface']], 4.5, dk);
+    // Every field fill a placeholder sits on: the outline/flushed surface and
+    // the `subtle` variant's bg.muted (R30 2nd-round QA #8).
+    m['fg-placeholder'] = push(
+      m['fg-placeholder'],
+      [m['bg-surface'], m['bg-muted']],
+      4.5,
+      dk
+    );
     m['fg-link'] = push(m['fg-link'], L, 4.5, dk);
     m['action-mark'] = push(m['action-mark'], L, 3.0, dk);
     m['mark-starred'] = push(
@@ -679,7 +686,12 @@ function buildScheme(n, s) {
       'fg-linkHover',
     ])
       h[k] = push(m[k], L, 7, dk);
-    h['fg-placeholder'] = push(m['fg-placeholder'], [m['bg-surface']], 7, dk);
+    h['fg-placeholder'] = push(
+      m['fg-placeholder'],
+      [m['bg-surface'], m['bg-muted']],
+      7,
+      dk
+    );
     for (const k of [
       'fg-icon',
       'border-control',
