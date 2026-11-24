@@ -98,6 +98,21 @@ describe('Masonry with itemWeights', () => {
     );
     expect(columnTexts(container)).toEqual([['a'], ['b', 'c']]);
   });
+
+  it('counts a NaN weight as 0 instead of throwing', () => {
+    // e.g. `rows + 1` where `rows` is undefined for one group.
+    const { container } = wrap(
+      <Masonry data-testid="masonry" numCols={2} itemWeights={[NaN, 5, 1, 1]}>
+        {['a', 'b', 'c', 'd'].map((t) => (
+          <div key={t}>{t}</div>
+        ))}
+      </Masonry>
+    );
+    expect(columnTexts(container)).toEqual([
+      ['a', 'b'],
+      ['c', 'd'],
+    ]);
+  });
 });
 
 describe('Masonry without itemWeights', () => {

@@ -173,8 +173,10 @@ export const Masonry = ({
 
         // Update column height. A weight already stands for the item's whole
         // share of the column, so gap is only added to a measured px height.
+        // A missing or NaN weight counts as 0: one NaN column height would make
+        // Math.min return NaN and leave no column to pick.
         columnHeights[shortestColumnIndex] += itemWeights
-          ? (itemWeights[index] ?? 0)
+          ? itemWeights[index] || 0
           : (itemHeights[itemKey] || 0) + (typeof gap === 'number' ? gap : 0);
       });
     }

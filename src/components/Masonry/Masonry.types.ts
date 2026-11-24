@@ -28,7 +28,8 @@ export interface MasonryProps extends Omit<GridProps, 'gap'> {
    * a hidden item measures 0, so the columns reshuffle once it is shown.
    * Null, false and non-element children are dropped before the index is
    * taken, so build `children` and `itemWeights` from the same list.
-   * Ignored when `horizontalArrangement` is true.
+   * A missing or NaN weight counts as 0. Ignored when `horizontalArrangement`
+   * is true.
    */
   itemWeights?: readonly number[];
 }
