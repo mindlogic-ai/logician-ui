@@ -11,6 +11,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import { flushSync } from 'react-dom';
 import { Box, Flex, Grid } from '@chakra-ui/react';
 
 import { MasonryProps } from './Masonry.types';
@@ -66,16 +67,17 @@ export const Masonry = ({
 
   // Setup measurements on initial render and when children change
   useLayoutEffect(() => {
-    // Use layout effect for synchronous measurement before paint
     cleanupItemRefs();
 
-    // Measure after DOM update but before browser paint
     if (isInitialRender.current) {
       isInitialRender.current = false;
     }
 
-    const timer = setTimeout(measureItemHeights, 0);
-    return () => clearTimeout(timer);
+    // Measure in the layout effect itself. A state update made here is
+    // rendered before the browser paints, so the first paint already has the
+    // measured layout. Deferring it (setTimeout) painted the unmeasured
+    // round-robin layout first.
+    measureItemHeights();
   }, [childrenArray.length, cleanupItemRefs, measureItemHeights]);
 
   // Set up resize observer
@@ -85,11 +87,12 @@ export const Masonry = ({
       resizeObserverRef.current.disconnect();
     }
 
-    // Create new observer that uses throttled measurement
-    let rafId: number;
+    // ResizeObserver callbacks run after layout and before paint. Measuring
+    // and re-rendering right here keeps the corrected layout in the same
+    // frame. Deferring to the next frame painted the stale layout once, which
+    // showed as items jumping columns when a hidden Masonry became visible.
     const handleResize = () => {
-      cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(measureItemHeights);
+      flushSync(measureItemHeights);
     };
 
     resizeObserverRef.current = new ResizeObserver(handleResize);
@@ -102,7 +105,6 @@ export const Masonry = ({
     });
 
     return () => {
-      cancelAnimationFrame(rafId);
       resizeObserverRef.current?.disconnect();
     };
   }, [measureItemHeights, childrenArray.length]);
