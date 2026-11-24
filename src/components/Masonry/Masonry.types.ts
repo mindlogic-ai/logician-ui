@@ -20,4 +20,15 @@ export interface MasonryProps extends Omit<GridProps, 'gap'> {
    * @default false
    */
   horizontalArrangement?: boolean;
+  /**
+   * One number per child, in the same order, saying how tall it is relative
+   * to the others (a row count is enough). When given, each item goes into
+   * the column with the smallest sum and nothing is measured. Pass it when
+   * the Masonry can render while hidden (a closed popover, a tab panel):
+   * a hidden item measures 0, so the columns reshuffle once it is shown.
+   * Null, false and non-element children are dropped before the index is
+   * taken, so build `children` and `itemWeights` from the same list.
+   * Ignored when `horizontalArrangement` is true.
+   */
+  itemWeights?: readonly number[];
 }

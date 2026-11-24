@@ -20,6 +20,7 @@ export const Masonry = ({
   numCols = 3,
   gap = 4,
   horizontalArrangement = false,
+  itemWeights,
   ...rest
 }: PropsWithChildren<MasonryProps>) => {
   const childrenArray = useMemo(
@@ -31,6 +32,8 @@ export const Masonry = ({
   const itemRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const resizeObserverRef = useRef<ResizeObserver | null>(null);
   const isInitialRender = useRef(true);
+  // With itemWeights the columns never depend on the DOM, so nothing is measured.
+  const hasItemWeights = itemWeights !== undefined;
 
   // Clear refs for items that no longer exist
   const cleanupItemRefs = useCallback(() => {
@@ -66,6 +69,8 @@ export const Masonry = ({
 
   // Setup measurements on initial render and when children change
   useLayoutEffect(() => {
+    if (hasItemWeights) return;
+
     // Use layout effect for synchronous measurement before paint
     cleanupItemRefs();
 
@@ -76,10 +81,17 @@ export const Masonry = ({
 
     const timer = setTimeout(measureItemHeights, 0);
     return () => clearTimeout(timer);
-  }, [childrenArray.length, cleanupItemRefs, measureItemHeights]);
+  }, [
+    childrenArray.length,
+    cleanupItemRefs,
+    measureItemHeights,
+    hasItemWeights,
+  ]);
 
   // Set up resize observer
   useEffect(() => {
+    if (hasItemWeights) return;
+
     // Clear previous observer
     if (resizeObserverRef.current) {
       resizeObserverRef.current.disconnect();
@@ -105,7 +117,7 @@ export const Masonry = ({
       cancelAnimationFrame(rafId);
       resizeObserverRef.current?.disconnect();
     };
-  }, [measureItemHeights, childrenArray.length]);
+  }, [measureItemHeights, childrenArray.length, hasItemWeights]);
 
   // Create column layout with optimized distribution
   const columns = useMemo(() => {
@@ -159,15 +171,23 @@ export const Masonry = ({
           </Box>
         );
 
-        // Update column height
-        const itemHeight = itemHeights[itemKey] || 0;
-        columnHeights[shortestColumnIndex] +=
-          itemHeight + (typeof gap === 'number' ? gap : 0);
+        // Update column height. A weight already stands for the item's whole
+        // share of the column, so gap is only added to a measured px height.
+        columnHeights[shortestColumnIndex] += itemWeights
+          ? (itemWeights[index] ?? 0)
+          : (itemHeights[itemKey] || 0) + (typeof gap === 'number' ? gap : 0);
       });
     }
 
     return colElements;
-  }, [childrenArray, numCols, horizontalArrangement, gap, itemHeights]);
+  }, [
+    childrenArray,
+    numCols,
+    horizontalArrangement,
+    gap,
+    itemHeights,
+    itemWeights,
+  ]);
 
   // Use Chakra UI's Grid for perfectly equal column widths
   return (
