@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Stack, Text } from '@chakra-ui/react';
+import { Box, HStack, Stack, Text } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
 
 import { T } from '../../guidelines/_components/Lang';
@@ -89,24 +89,32 @@ export const DisabledOnSurfaces: Story = {
           data-ground={ground}
           direction="row"
           align="center"
-          gap={6}
+          wrap="wrap"
+          columnGap={6}
+          rowGap={3}
           p={4}
           bg={ground}
           borderRadius="lg"
           borderWidth="1px"
           borderColor="border.subtle"
         >
-          <Text flex={1}>{ground}</Text>
-          {/* readOnly: fixed specimens, so a click cannot flip the native
-              checkbox away from the state the track shows. */}
-          <Switch size="lg" checked={false} readOnly aria-label="enabled off">
-            <Switch.Control />
-          </Switch>
-          <Switch size="lg" checked readOnly aria-label="enabled on">
-            <Switch.Control />
-          </Switch>
+          {/* Full row on a narrow canvas, so the off/on pairs below wrap as
+              pairs instead of running past the ground. */}
+          <Text flexBasis={{ base: 'full', md: 0 }} flexGrow={1}>
+            {ground}
+          </Text>
+          <HStack gap={3}>
+            {/* readOnly: fixed specimens, so a click cannot flip the native
+                checkbox away from the state the track shows. */}
+            <Switch size="lg" checked={false} readOnly aria-label="enabled off">
+              <Switch.Control />
+            </Switch>
+            <Switch size="lg" checked readOnly aria-label="enabled on">
+              <Switch.Control />
+            </Switch>
+          </HStack>
           {(['sm', 'md', 'lg'] as const).map((size) => (
-            <React.Fragment key={size}>
+            <HStack key={size} gap={3}>
               <Switch size={size} disabled checked={false}>
                 <Switch.Control />
                 <Switch.Label srOnly>{`disabled off, ${size}`}</Switch.Label>
@@ -115,7 +123,7 @@ export const DisabledOnSurfaces: Story = {
                 <Switch.Control />
                 <Switch.Label srOnly>{`disabled on, ${size}`}</Switch.Label>
               </Switch>
-            </React.Fragment>
+            </HStack>
           ))}
         </Stack>
       ))}
