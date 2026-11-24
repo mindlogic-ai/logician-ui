@@ -31,8 +31,41 @@ const columnTexts = (container: HTMLElement) =>
     [...col.children].map((item) => item.textContent)
   );
 
+// jsdom never calls a ResizeObserver, so this one records what is observed
+// and lets a test fire the callback itself.
+class FakeResizeObserver {
+  static instances: FakeResizeObserver[] = [];
+  observed = new Set<Element>();
+  constructor(private callback: ResizeObserverCallback) {
+    FakeResizeObserver.instances.push(this);
+  }
+  observe(el: Element) {
+    this.observed.add(el);
+  }
+  unobserve(el: Element) {
+    this.observed.delete(el);
+  }
+  disconnect() {
+    this.observed.clear();
+  }
+  fire() {
+    this.callback([], this as unknown as ResizeObserver);
+  }
+}
+const liveObservers = () =>
+  FakeResizeObserver.instances.filter((o) => o.observed.size > 0);
+
+const mockHeights = (heights: Record<string, number>) =>
+  vi
+    .spyOn(HTMLElement.prototype, 'offsetHeight', 'get')
+    .mockImplementation(function (this: HTMLElement) {
+      return heights[this.textContent ?? ''] ?? 0;
+    });
+
 afterEach(() => {
   vi.restoreAllMocks();
+  vi.unstubAllGlobals();
+  FakeResizeObserver.instances = [];
 });
 
 describe('Masonry with itemWeights', () => {
@@ -134,6 +167,76 @@ describe('Masonry without itemWeights', () => {
     // beside the tall a.
     await waitFor(() =>
       expect(columnTexts(container)).toEqual([['a'], ['b', 'c', 'd']])
+    );
+  });
+});
+
+describe('Masonry when itemWeights changes', () => {
+  // The same element array on every render, as a memoized parent passes it.
+  const ITEMS = ['a', 'b', 'c', 'd'].map((t) => <div key={t}>{t}</div>);
+  const ui = (itemWeights?: number[]) => (
+    <ChakraProvider value={system}>
+      <Masonry
+        data-testid="masonry"
+        numCols={2}
+        gap={2}
+        itemWeights={itemWeights}
+      >
+        {ITEMS}
+      </Masonry>
+    </ChakraProvider>
+  );
+
+  it('creates no observer while itemWeights is given', () => {
+    vi.stubGlobal('ResizeObserver', FakeResizeObserver);
+    render(ui([1, 1, 1, 1]));
+    expect(FakeResizeObserver.instances).toHaveLength(0);
+  });
+
+  it('lays out again when only the weights change', () => {
+    const { container, rerender } = render(ui([8, 1, 1, 1]));
+    expect(columnTexts(container)).toEqual([['a'], ['b', 'c', 'd']]);
+    rerender(ui([1, 1, 1, 8]));
+    expect(columnTexts(container)).toEqual([
+      ['a', 'c'],
+      ['b', 'd'],
+    ]);
+  });
+
+  it('starts measuring when itemWeights is removed', async () => {
+    mockHeights({ a: 300, b: 50, c: 50, d: 50 });
+    const { container, rerender } = render(ui([1, 1, 1, 1]));
+    expect(columnTexts(container)).toEqual([
+      ['a', 'c'],
+      ['b', 'd'],
+    ]);
+    rerender(ui(undefined));
+    await waitFor(() =>
+      expect(columnTexts(container)).toEqual([['a'], ['b', 'c', 'd']])
+    );
+  });
+
+  it('observes the items again when itemWeights is removed after a measured layout', async () => {
+    vi.stubGlobal('ResizeObserver', FakeResizeObserver);
+    const heights: Record<string, number> = { a: 300, b: 50, c: 50, d: 50 };
+    mockHeights(heights);
+    const { container, rerender } = render(ui(undefined));
+    await waitFor(() =>
+      expect(columnTexts(container)).toEqual([['a'], ['b', 'c', 'd']])
+    );
+    rerender(ui([1, 1, 1, 1]));
+    expect(liveObservers()).toHaveLength(0);
+
+    // Heights are the same as before, so only the effect's own dependency on
+    // itemWeights brings the observer back.
+    rerender(ui(undefined));
+    await waitFor(() => expect(liveObservers()).toHaveLength(1));
+    expect(liveObservers()[0].observed.size).toBe(4);
+
+    Object.assign(heights, { a: 50, b: 300 });
+    liveObservers()[0].fire();
+    await waitFor(() =>
+      expect(columnTexts(container)).toEqual([['a', 'c', 'd'], ['b']])
     );
   });
 });
