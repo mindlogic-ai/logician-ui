@@ -109,9 +109,11 @@ export const DisabledOnSurfaces: Story = {
             <React.Fragment key={size}>
               <Switch size={size} disabled checked={false}>
                 <Switch.Control />
+                <Switch.Label srOnly>{`disabled off, ${size}`}</Switch.Label>
               </Switch>
               <Switch size={size} disabled checked>
                 <Switch.Control />
+                <Switch.Label srOnly>{`disabled on, ${size}`}</Switch.Label>
               </Switch>
             </React.Fragment>
           ))}
