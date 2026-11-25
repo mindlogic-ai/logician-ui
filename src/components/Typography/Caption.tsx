@@ -2,6 +2,7 @@ import { forwardRef } from 'react';
 import { Text } from '@chakra-ui/react';
 
 import { polymorphic } from '../../types/polymorphic';
+import { omitUndefined } from '../../utils/omitUndefined';
 import { TypographyOwnProps } from './Typography.types';
 
 /**
@@ -28,7 +29,7 @@ const CaptionImpl = forwardRef<HTMLParagraphElement, TypographyOwnProps>(
         textStyle={fontSize ? undefined : 'caption'}
         fontSize={fontSize}
         color="fg.subtle"
-        {...rest}
+        {...omitUndefined(rest)}
       />
     );
   }

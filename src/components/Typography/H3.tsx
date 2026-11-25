@@ -2,6 +2,7 @@ import { forwardRef } from 'react';
 import { Heading } from '@chakra-ui/react';
 
 import { polymorphic } from '../../types/polymorphic';
+import { omitUndefined } from '../../utils/omitUndefined';
 import { HeadingOwnProps } from './Typography.types';
 
 const H3Impl = forwardRef<HTMLHeadingElement, HeadingOwnProps>((props, ref) => {
@@ -14,7 +15,7 @@ const H3Impl = forwardRef<HTMLHeadingElement, HeadingOwnProps>((props, ref) => {
       color="fg.emphasized"
       textStyle={fontSize ? undefined : 'h3'}
       fontSize={fontSize}
-      {...rest}
+      {...omitUndefined(rest)}
     />
   );
 });

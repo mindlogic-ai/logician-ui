@@ -2,11 +2,12 @@ import React, { forwardRef } from 'react';
 import { Text as ChakraText } from '@chakra-ui/react';
 
 import { polymorphic } from '../../types/polymorphic';
+import { omitUndefined } from '../../utils/omitUndefined';
 import { TypographyOwnProps } from './Typography.types';
 
 const TextImpl = forwardRef<HTMLParagraphElement, TypographyOwnProps>(
   (props, ref) => {
-    // Extract fontSize and textStyle to handle them conditionally
+    // Pull fontSize out: when it is set, textStyle is dropped so the size wins
     const { fontSize, ...rest } = props;
 
     return (
@@ -17,7 +18,7 @@ const TextImpl = forwardRef<HTMLParagraphElement, TypographyOwnProps>(
         textStyle={fontSize ? undefined : 'p'}
         fontSize={fontSize}
         color="fg.default"
-        {...rest}
+        {...omitUndefined(rest)}
       />
     );
   }

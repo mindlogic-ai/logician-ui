@@ -5,6 +5,7 @@ import { Link as ChakraLink, LinkProps } from '@chakra-ui/react';
 // Relative, NOT `@/types/*` — see `src/types/polymorphic.ts`.
 import type { PolymorphicProps } from '../../types/polymorphic';
 import { polymorphic } from '../../types/polymorphic';
+import { omitUndefined } from '../../utils/omitUndefined';
 
 export type LinkOwnProps = Omit<LinkProps, 'variant' | 'as'> & {
   variant?: 'error';
@@ -72,7 +73,7 @@ const LinkImpl = forwardRef<HTMLAnchorElement, LinkOwnProps>(
         // 5.0: links carry their own weight (500) instead of inheriting the
         // surrounding text's, because colour alone (`fg.link`) no longer
         // reads as an affordance against every body-text colour in the fg.*
-        // scale the way `primary.main` used to. `{...rest}` below still lets
+        // scale the way `primary.main` used to. The spread below still lets
         // a call site override it.
         fontWeight={500}
         color={linkColor}
@@ -83,7 +84,7 @@ const LinkImpl = forwardRef<HTMLAnchorElement, LinkOwnProps>(
           color: hoverColor,
           textDecorationThickness: '2px',
         }}
-        {...rest}
+        {...omitUndefined(rest)}
       />
     );
   }

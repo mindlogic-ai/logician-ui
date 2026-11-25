@@ -100,6 +100,49 @@ export const InlineCodeInTextStyles: Story = {
 };
 
 /**
+ * Every tier with `textStyle={undefined}`, next to the same tier with no
+ * `textStyle` at all. The two columns must look identical.
+ *
+ * A conditional prop such as `textStyle={isIframe ? {…} : undefined}` puts an
+ * explicit `undefined` into the props. Up to 5.0.0-alpha.37 the component's
+ * own `{...rest}` spread let that `undefined` replace the default, so the
+ * right-hand column fell back to Chakra's base `Heading`/`Text` size. An
+ * explicit `undefined` now means the same as leaving the prop out.
+ */
+export const ExplicitUndefinedTextStyle: Story = {
+  render: () => {
+    const tiers = [
+      ['H1', H1],
+      ['H2', H2],
+      ['H3', H3],
+      ['H4', H4],
+      ['H5', H5],
+      ['Text', Text],
+      ['Subtitle', Subtitle],
+      ['Subtext', Subtext],
+      ['Caption', Caption],
+      ['Overline', Overline],
+    ] as const;
+    return (
+      <Stack gap={3}>
+        <Stack direction="row" gap={8}>
+          <Caption w="240px">no textStyle prop</Caption>
+          <Caption w="240px">textStyle={'{undefined}'}</Caption>
+        </Stack>
+        {tiers.map(([name, Tier]) => (
+          <Stack key={name} direction="row" gap={8} align="baseline">
+            <Tier w="240px">{name} 제목</Tier>
+            <Tier w="240px" textStyle={undefined}>
+              {name} 제목
+            </Tier>
+          </Stack>
+        ))}
+      </Stack>
+    );
+  },
+};
+
+/**
  * `as` swaps the rendered element **and** the props it accepts.
  *
  * This scale is a *type* scale, not a document outline. The two are chosen for

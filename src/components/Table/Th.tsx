@@ -1,6 +1,7 @@
 import { forwardRef, useCallback, useRef } from 'react';
 import { Table, useToken } from '@chakra-ui/react';
 
+import { omitUndefined } from '../../utils/omitUndefined';
 import { getStickyStyles } from './Table.styles';
 import { TableCellProps } from './Table.types';
 import { useTableContext } from './TableContext';
@@ -149,7 +150,7 @@ export const Th = forwardRef<
           },
         }}
         {...stickyStyles}
-        {...rest}
+        {...omitUndefined(rest)}
       >
         {children}
       </Table.ColumnHeader>
