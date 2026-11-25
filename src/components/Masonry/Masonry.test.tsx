@@ -36,28 +36,39 @@ class FakeResizeObserver {
 const liveObservers = () =>
   FakeResizeObserver.instances.filter((o) => o.observed.size > 0);
 
-const mockHeights = (heights: Record<string, number>) =>
-  vi
-    .spyOn(HTMLElement.prototype, 'offsetHeight', 'get')
-    .mockImplementation(function (this: HTMLElement) {
-      return heights[this.textContent ?? ''] ?? 0;
-    });
+// jsdom has no layout. `hidden` stands for an ancestor with display: none:
+// every height reads 0 and no item has an offsetParent.
+type FakeLayout = { hidden: boolean; heights: Record<string, number> };
+const mockLayout = (layout: FakeLayout) => {
+  vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockImplementation(
+    function (this: HTMLElement) {
+      return layout.hidden ? 0 : (layout.heights[this.textContent ?? ''] ?? 0);
+    }
+  );
+  vi.spyOn(HTMLElement.prototype, 'offsetParent', 'get').mockImplementation(
+    () => (layout.hidden ? null : document.body)
+  );
+};
 
 const columnTexts = (container: HTMLElement) =>
   [...container.querySelector('[data-testid="masonry"]')!.children].map((col) =>
     [...col.children].map((item) => item.textContent)
   );
 
-const renderMasonry = () =>
-  render(
-    <ChakraProvider value={system}>
-      <Masonry data-testid="masonry" numCols={2} gap={2}>
-        {['a', 'b', 'c', 'd'].map((t) => (
-          <div key={t}>{t}</div>
-        ))}
-      </Masonry>
-    </ChakraProvider>
-  );
+const masonry = (items: string[]) => (
+  <ChakraProvider value={system}>
+    <Masonry data-testid="masonry" numCols={2} gap={2}>
+      {items.map((t) => (
+        <div key={t}>{t}</div>
+      ))}
+    </Masonry>
+  </ChakraProvider>
+);
+const renderMasonry = (items = ['a', 'b', 'c', 'd']) => render(masonry(items));
+const fireObservers = () =>
+  act(() => {
+    liveObservers().forEach((o) => o.fire());
+  });
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -68,16 +79,15 @@ afterEach(() => {
 describe('Masonry', () => {
   it('has the measured layout right after the first render, without waiting', () => {
     // a is tall, the rest are short. Round-robin would give [a, c] and [b, d].
-    mockHeights({ a: 300, b: 50, c: 50, d: 50 });
+    mockLayout({ hidden: false, heights: { a: 300, b: 50, c: 50, d: 50 } });
     const { container } = renderMasonry();
     expect(columnTexts(container)).toEqual([['a'], ['b', 'c', 'd']]);
   });
 
   it('re-lays out inside the ResizeObserver callback when a hidden Masonry becomes visible', () => {
     vi.stubGlobal('ResizeObserver', FakeResizeObserver);
-    // Rendered under display: none, every height reads 0.
-    const heights: Record<string, number> = {};
-    mockHeights(heights);
+    const layout = { hidden: true, heights: { a: 300, b: 50, c: 50, d: 50 } };
+    mockLayout(layout);
     const { container } = renderMasonry();
     expect(columnTexts(container)).toEqual([
       ['a', 'c'],
@@ -85,10 +95,44 @@ describe('Masonry', () => {
     ]);
 
     // The container is shown: real heights, and the observer fires.
-    Object.assign(heights, { a: 300, b: 50, c: 50, d: 50 });
-    act(() => {
-      liveObservers().forEach((o) => o.fire());
-    });
+    layout.hidden = false;
+    fireObservers();
     expect(columnTexts(container)).toEqual([['a'], ['b', 'c', 'd']]);
+  });
+
+  it('keeps the measured layout while it is hidden', () => {
+    vi.stubGlobal('ResizeObserver', FakeResizeObserver);
+    const layout = { hidden: false, heights: { a: 300, b: 50, c: 50, d: 50 } };
+    mockLayout(layout);
+    const { container } = renderMasonry();
+    expect(columnTexts(container)).toEqual([['a'], ['b', 'c', 'd']]);
+
+    // The container is hidden: heights read 0, and the observer fires.
+    layout.hidden = true;
+    fireObservers();
+    expect(columnTexts(container)).toEqual([['a'], ['b', 'c', 'd']]);
+  });
+
+  it('lays out a list that changed while hidden once it is shown again', () => {
+    vi.stubGlobal('ResizeObserver', FakeResizeObserver);
+    const layout = {
+      hidden: false,
+      heights: { a: 300, b: 50, c: 50, d: 50, e: 400 } as Record<
+        string,
+        number
+      >,
+    };
+    mockLayout(layout);
+    const { container, rerender } = renderMasonry();
+
+    layout.hidden = true;
+    fireObservers();
+    rerender(masonry(['e', 'b', 'c', 'd', 'a']));
+
+    layout.hidden = false;
+    fireObservers();
+    // e (400) alone in the first column until b, c, d (50 each) and a (300)
+    // have filled the second.
+    expect(columnTexts(container)).toEqual([['e'], ['b', 'c', 'd', 'a']]);
   });
 });

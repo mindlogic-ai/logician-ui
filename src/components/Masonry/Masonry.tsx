@@ -51,7 +51,10 @@ export const Masonry = ({
     const newHeights = { ...itemHeights };
 
     Object.entries(itemRefs.current).forEach(([key, ref]) => {
-      if (ref) {
+      // An item under `display: none` has no offsetParent and reads 0. Keep
+      // its last measured height instead: storing 0 re-laid out the whole
+      // Masonry every time its container was hidden and again when shown.
+      if (ref && ref.offsetParent !== null) {
         const height = Math.round(ref.offsetHeight);
         if (newHeights[key] !== height) {
           newHeights[key] = height;
