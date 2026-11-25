@@ -100,6 +100,20 @@ describe('Masonry', () => {
     expect(columnTexts(container)).toEqual([['a'], ['b', 'c', 'd']]);
   });
 
+  it('has re-laid out by the time the ResizeObserver callback returns', () => {
+    vi.stubGlobal('ResizeObserver', FakeResizeObserver);
+    const layout = { hidden: true, heights: { a: 300, b: 50, c: 50, d: 50 } };
+    mockLayout(layout);
+    const { container } = renderMasonry();
+
+    // Fired without act(), as the browser does. act() would flush a scheduled
+    // update before the assertion and hide a callback that only schedules
+    // one, which is what paints the stale layout for a frame.
+    layout.hidden = false;
+    liveObservers().forEach((o) => o.fire());
+    expect(columnTexts(container)).toEqual([['a'], ['b', 'c', 'd']]);
+  });
+
   it('keeps the measured layout while it is hidden', () => {
     vi.stubGlobal('ResizeObserver', FakeResizeObserver);
     const layout = { hidden: false, heights: { a: 300, b: 50, c: 50, d: 50 } };
