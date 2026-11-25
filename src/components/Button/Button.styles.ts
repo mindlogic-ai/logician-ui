@@ -134,9 +134,13 @@ export const buttonVariantStyles: Record<ButtonVariant, StyleProps> = {
     _disabled: { ...disabledControl },
   },
   secondary: {
-    // Same outline as Input/Select (`border.control`, 3:1) so a button beside a
-    // field lines up — Primer and Material share one control border too.
-    borderColor: 'border.control',
+    // The light card border, not the field's `border.control`. A labelled
+    // button is identified by its label, so its outline is decoration and
+    // needs no 3:1; at 3:1 every 취소 / 관리자 페이지 chip outweighed the
+    // content around it (R30 3차 QA #2). A button that *acts as a field* — it
+    // opens a list and shows the chosen value — is `FieldTrigger`, which keeps
+    // the field outline.
+    borderColor: 'border.default',
     bgColor: 'bg.surface',
     color: 'fg.default',
     _hover: { bgColor: 'primary.wash' },
