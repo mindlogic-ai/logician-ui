@@ -32,17 +32,18 @@ import {
  */
 type AnyTypography = ComponentType<Record<string, unknown>>;
 
-const COMPONENTS: Array<[string, AnyTypography, string]> = [
-  ['H1', H1 as AnyTypography, 'H1'],
-  ['H2', H2 as AnyTypography, 'H2'],
-  ['H3', H3 as AnyTypography, 'H3'],
-  ['H4', H4 as AnyTypography, 'H4'],
-  ['H5', H5 as AnyTypography, 'H5'],
-  ['Text', Text as AnyTypography, 'P'],
-  ['Subtitle', Subtitle as AnyTypography, 'P'],
-  ['Subtext', Subtext as AnyTypography, 'P'],
-  ['Caption', Caption as AnyTypography, 'P'],
-  ['Overline', Overline as AnyTypography, 'P'],
+// [name, component, rendered tag, the tier's own default textStyle]
+const COMPONENTS: Array<[string, AnyTypography, string, string]> = [
+  ['H1', H1 as AnyTypography, 'H1', 'h1'],
+  ['H2', H2 as AnyTypography, 'H2', 'h2'],
+  ['H3', H3 as AnyTypography, 'H3', 'h3'],
+  ['H4', H4 as AnyTypography, 'H4', 'h4'],
+  ['H5', H5 as AnyTypography, 'H5', 'h5'],
+  ['Text', Text as AnyTypography, 'P', 'p'],
+  ['Subtitle', Subtitle as AnyTypography, 'P', 'subtitle'],
+  ['Subtext', Subtext as AnyTypography, 'P', 'subtext'],
+  ['Caption', Caption as AnyTypography, 'P', 'caption'],
+  ['Overline', Overline as AnyTypography, 'P', 'overline'],
 ];
 
 const renderEl = (ui: ReactNode) => {
@@ -57,7 +58,7 @@ const renderEl = (ui: ReactNode) => {
 
 describe.each(COMPONENTS)(
   '%s with explicitly undefined props',
-  (_name, C, tag) => {
+  (_name, C, tag, ownStyle) => {
     const base = renderEl(<C>label</C>);
 
     it('textStyle={undefined} keeps the default text style', () => {
@@ -85,13 +86,21 @@ describe.each(COMPONENTS)(
 
     it('fontSize still disables the default text style', () => {
       const sized = renderEl(<C fontSize="40px">label</C>);
-      const sizedWithStyle = renderEl(
-        <C fontSize="40px" textStyle={undefined}>
+      // The same size with the tier's own style put back explicitly. If
+      // `fontSize` stopped dropping the default, these would be equal.
+      const sizedWithOwnStyle = renderEl(
+        <C fontSize="40px" textStyle={ownStyle}>
           label
         </C>
       );
-      expect(sized.className).not.toBe(base.className);
-      expect(sizedWithStyle).toEqual(sized);
+      expect(sized.className).not.toBe(sizedWithOwnStyle.className);
+      expect(
+        renderEl(
+          <C fontSize="40px" textStyle={undefined}>
+            label
+          </C>
+        )
+      ).toEqual(sized);
     });
   }
 );
