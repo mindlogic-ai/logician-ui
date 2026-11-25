@@ -12,7 +12,7 @@ import {
   getDefaultFullDateFormat,
   getMonthNames,
 } from '../MonthPicker/constants';
-import { calendarIndicator, toFieldTriggerSize } from './DatePicker.trigger';
+import { calendarStartElement, toFieldTriggerSize } from './DatePicker.trigger';
 import type { RangeDatePickerProps } from './DatePicker.types';
 
 export const RangeDatePicker = ({
@@ -160,7 +160,8 @@ export const RangeDatePicker = ({
           <FieldTrigger
             placeholder={placeholder ?? translate('date_range_placeholder')}
             size={toFieldTriggerSize(size)}
-            indicator={calendarIndicator}
+            startElement={calendarStartElement}
+            indicator={null}
             // The library only disables its own trigger; this one is ours.
             disabled={rest.disabled}
             {...triggerBtnProps}

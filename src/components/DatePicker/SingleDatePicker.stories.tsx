@@ -57,7 +57,8 @@ const OCT_22 = new Date(2026, 9, 22);
 /**
  * Both pickers, empty and with a value, beside a `SelectField` of the same
  * size. The trigger is a `FieldTrigger`: Select's height, field padding,
- * type and outline, and the calendar in the chevron's column.
+ * type and outline, with the calendar ahead of the date (chevron-sized, in
+ * the chevron's colour) and no chevron.
  */
 export const BesideSelect: Story = {
   parameters: { layout: 'padded' },

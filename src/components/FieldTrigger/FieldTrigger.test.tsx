@@ -106,6 +106,50 @@ describe('FieldTrigger', () => {
     expect(sizeRule).toMatch(/height:/);
   });
 
+  it('startElement leads the value, decorative, sized like the chevron', () => {
+    wrap(
+      <FieldTrigger
+        placeholder="날짜"
+        size="sm"
+        startElement={<svg data-testid="calendar" />}
+      />
+    );
+    const button = screen.getByRole('button', { name: '날짜' });
+    const start = button.firstElementChild!;
+    expect(start).toHaveAttribute('data-part', 'start-element');
+    expect(start).toHaveAttribute('aria-hidden', 'true');
+    expect(start.querySelector('[data-testid="calendar"]')).not.toBeNull();
+    // The chevron stays unless `indicator` says otherwise.
+    expect(button.lastElementChild).toHaveAttribute('data-part', 'indicator');
+    const cls = [...start.classList].find((c) => c.startsWith('css-'));
+    const rules = [...document.querySelectorAll('style')].flatMap((s) =>
+      (s.textContent ?? '').split('\n')
+    );
+    const sizeRule = rules.filter((l) => l.includes(`.${cls} svg{`)).join('');
+    expect(sizeRule).toMatch(/width:/);
+    expect(sizeRule).toMatch(/height:/);
+    expect(rules.filter((l) => l.includes(`.${cls}{`)).join('')).toContain(
+      'flex-shrink:0'
+    );
+  });
+
+  it('no startElement renders no leading slot', () => {
+    wrap(<FieldTrigger placeholder="그룹" />);
+    expect(document.querySelector('[data-part="start-element"]')).toBeNull();
+  });
+
+  it('indicator={null} draws no trailing slot', () => {
+    wrap(
+      <FieldTrigger
+        placeholder="날짜"
+        startElement={<svg data-testid="calendar" />}
+        indicator={null}
+      />
+    );
+    expect(document.querySelector('[data-part="indicator"]')).toBeNull();
+    expect(screen.getByRole('button').querySelectorAll('svg')).toHaveLength(1);
+  });
+
   it('invalid sets aria-invalid', () => {
     wrap(<FieldTrigger placeholder="그룹" invalid />);
     expect(screen.getByRole('button')).toHaveAttribute('aria-invalid', 'true');

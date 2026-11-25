@@ -29,22 +29,31 @@ const declarations = (el: Element) => {
     .join('');
 };
 
+/**
+ * One cue: the calendar sits ahead of the value as the `startElement`, and
+ * there is no trailing indicator (no chevron).
+ */
+const expectLeadingCalendarOnly = (button: HTMLElement) => {
+  const start = button.firstElementChild;
+  expect(start).toHaveAttribute('data-part', 'start-element');
+  expect(start).toHaveAttribute('aria-hidden', 'true');
+  expect(start?.querySelector('svg')).not.toBeNull();
+  expect(button.querySelector('[data-part="indicator"]')).toBeNull();
+  expect(button.querySelectorAll('svg')).toHaveLength(1);
+};
+
 const OCT_1 = new Date(2026, 9, 1);
 const OCT_22 = new Date(2026, 9, 22);
 
 describe('SingleDatePicker trigger', () => {
-  it('is a FieldTrigger: placeholder while empty, calendar in the indicator slot', () => {
+  it('is a FieldTrigger: placeholder while empty, calendar leading, no chevron', () => {
     wrap(<SingleDatePicker onDateChange={noop} />);
     const button = screen.getByRole('button', { name: '날짜 선택' });
     expect(button).toHaveAttribute('data-placeholder-shown');
     expect(declarations(button)).toContain(
       'border-color:var(--chakra-colors-border-control)'
     );
-    const indicator = button.querySelector('[data-part="indicator"]');
-    expect(indicator).toHaveAttribute('aria-hidden', 'true');
-    // One cue: the calendar replaces the chevron, nothing leads the value.
-    expect(button.querySelectorAll('svg')).toHaveLength(1);
-    expect(indicator?.querySelector('svg')).not.toBeNull();
+    expectLeadingCalendarOnly(button);
   });
 
   it('follows the provider language for the default placeholder', () => {
@@ -109,11 +118,11 @@ describe('SingleDatePicker trigger', () => {
 });
 
 describe('RangeDatePicker trigger', () => {
-  it('reads "기간 선택" while empty', () => {
+  it('reads "기간 선택" while empty, calendar leading, no chevron', () => {
     wrap(<RangeDatePicker selectedDates={[]} onDateChange={noop} />);
-    expect(screen.getByRole('button', { name: '기간 선택' })).toHaveAttribute(
-      'data-placeholder-shown'
-    );
+    const button = screen.getByRole('button', { name: '기간 선택' });
+    expect(button).toHaveAttribute('data-placeholder-shown');
+    expectLeadingCalendarOnly(button);
   });
 
   it('shows the picked range, and the open end while only the start is picked', () => {

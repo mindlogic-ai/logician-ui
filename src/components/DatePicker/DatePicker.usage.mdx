@@ -34,8 +34,8 @@ Both wrap `chakra-dayzed-datepicker`; its props pass through.
 takes `selectedDates` and `onDateChange(dates)`. Month and weekday names and
 the default `configs.dateFormat` follow the provider language. The trigger is
 a `FieldTrigger`, drawn like a `Select` of the same `size`: field height,
-padding, type and `border.control` outline, with the calendar in the
-chevron's column. `size` takes the control scale; `2xs` draws as `xs` and
+padding, type and `border.control` outline, with the calendar ahead of the
+date and no chevron. `size` takes the control scale; `2xs` draws as `xs` and
 `xl` as `lg`, the nearest field sizes. While nothing is picked it shows
 `placeholder` in `fg.placeholder` (default 날짜 선택 / 기간 선택 in the
 provider language). Style it with `propsConfigs.triggerBtnProps`, which takes
@@ -72,7 +72,7 @@ portalled (`usePortal` defaults to `true`).
 `selectedDates`와 `onDateChange(dates)`를 받습니다. 월과 요일 이름, 기본
 `configs.dateFormat`은 프로바이더의 언어를 따릅니다. 트리거는 `FieldTrigger`라서
 같은 `size`의 `Select`와 똑같이 그려집니다. 필드 높이, 여백, 글자 크기,
-`border.control` 테두리가 같고, 달력 아이콘은 Select 화살표 자리에 있습니다. `size`는
+`border.control` 테두리가 같고, 달력 아이콘은 날짜 앞에 있으며 화살표는 없습니다. `size`는
 컨트롤 공통 크기를 받으며 `2xs`는 `xs`로, `xl`은 `lg`로 그립니다. 아무것도 고르지
 않았을 때는 `placeholder`를 `fg.placeholder` 색으로 보여 줍니다(기본값은 프로바이더
 언어의 날짜 선택 / 기간 선택). 모양은 `propsConfigs.triggerBtnProps`로 바꾸고,

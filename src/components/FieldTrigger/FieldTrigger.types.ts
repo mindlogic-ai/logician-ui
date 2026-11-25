@@ -38,11 +38,19 @@ export interface FieldTriggerProps extends Omit<
    */
   size?: FieldTriggerSize;
   /**
-   * The trailing cue, in the chevron's slot: same place, colour (`fg.muted`)
-   * and size as a `Select` chevron of this `size` — any `svg` inside is sized
-   * to it, whatever `boxSize` it carries. Decorative (`aria-hidden`). Replace
-   * the chevron only with a cue that says more about the popup, such as the
-   * calendar on `SingleDatePicker` / `RangeDatePicker`; keep one cue per field.
+   * An icon ahead of the value, such as the calendar on `SingleDatePicker` /
+   * `RangeDatePicker`. Drawn like the chevron — same colour (`fg.muted`) and
+   * the `Select` icon size of this `size`, whatever `boxSize` the icon carries
+   * — and kept off the value by the trigger's gap. Decorative
+   * (`aria-hidden`), and it does not shrink.
+   */
+  startElement?: ReactNode;
+  /**
+   * The trailing cue, in the chevron's slot and at its colour and size. Leave
+   * it out for the chevron; pass `null` to draw none, as the date pickers do
+   * when the `startElement` calendar is the field's cue. Replace the chevron
+   * only with a cue that says more about the popup; keep one cue per field.
+   * Decorative (`aria-hidden`).
    * @default <ChevronDownIcon />
    */
   indicator?: ReactNode;

@@ -2,6 +2,7 @@ import { Box, Grid, HStack, Text, VStack } from '@chakra-ui/react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { Button } from '../Button';
+import { MdOutlineCalendarToday } from '../Icon';
 import { Popover } from '../Popover';
 import { SelectField } from '../Select';
 import { FieldTrigger } from '.';
@@ -101,6 +102,39 @@ export const States: Story = {
           content-sized when no width is given
         </Text>
       </HStack>
+    </VStack>
+  ),
+};
+
+/**
+ * `startElement` puts an icon ahead of the value; `indicator={null}` drops
+ * the chevron so that icon is the one cue, as on the date pickers. Both slots
+ * take the chevron's colour and the Select icon size of the trigger's `size`.
+ */
+export const StartElement: Story = {
+  render: () => (
+    <VStack align="flex-start" gap={3}>
+      <FieldTrigger
+        placeholder="날짜 선택"
+        startElement={<MdOutlineCalendarToday />}
+        indicator={null}
+        w="2xs"
+      />
+      <FieldTrigger
+        placeholder="날짜 선택"
+        startElement={<MdOutlineCalendarToday />}
+        indicator={null}
+        w="2xs"
+      >
+        2026년 10월 01일
+      </FieldTrigger>
+      <FieldTrigger
+        placeholder="그룹"
+        startElement={<MdOutlineCalendarToday />}
+        w="2xs"
+      >
+        leading icon and the default chevron
+      </FieldTrigger>
     </VStack>
   ),
 };

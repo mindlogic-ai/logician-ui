@@ -21,7 +21,8 @@ export const toFieldTriggerSize = (
 ): FieldTriggerSize => FIELD_SIZE[size ?? 'md'] ?? 'md';
 
 /**
- * The cue in the trigger's indicator slot, where a `Select` has its chevron:
- * `FieldTrigger` sizes and colours it like the chevron of the same size.
+ * The calendar ahead of the date, as `FieldTrigger`'s `startElement`:
+ * coloured and sized like a `Select` chevron of the same size. It is the
+ * field's one cue, so the pickers pass `indicator={null}` and draw no chevron.
  */
-export const calendarIndicator = <MdOutlineCalendarToday />;
+export const calendarStartElement = <MdOutlineCalendarToday />;

@@ -16,7 +16,7 @@ import { SelectField } from './SelectField';
  *
  * The row holds three kinds of control. Fields (Select, Input), the popover
  * pickers (이벤트, 그룹, `FieldTrigger`) and the custom period's
- * `RangeDatePicker` (also a `FieldTrigger`, with a calendar for a chevron) all
+ * `RangeDatePicker` (also a `FieldTrigger`, a leading calendar, no chevron) all
  * show a value, so they share the field's height, padding and outline
  * (`border.control`). The actions at the end (초기화,
  * 내보내기) are `secondary` Buttons with the lighter `border.default`: a
