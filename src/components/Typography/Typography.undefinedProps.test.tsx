@@ -4,8 +4,8 @@ import { render } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { system } from '../../theme';
-import { omitUndefined } from '../../utils/omitUndefined';
 import { InlineCode } from '../InlineCode/InlineCode';
+import { MaxLengthIndicator } from '../MaxLengthIndicator/MaxLengthIndicator';
 import {
   Caption,
   H1,
@@ -132,16 +132,12 @@ describe('InlineCode with explicitly undefined props', () => {
   });
 });
 
-describe('omitUndefined', () => {
-  it('drops undefined keys and keeps null, false and 0', () => {
+describe('MaxLengthIndicator with explicitly undefined props', () => {
+  it("textStyle={undefined} keeps its own subtext default, not Subtitle's", () => {
     expect(
-      omitUndefined({ a: undefined, b: null, c: false, d: 0, e: 'x' })
-    ).toEqual({ b: null, c: false, d: 0, e: 'x' });
-    expect(Object.keys(omitUndefined({ a: undefined }))).toEqual([]);
-  });
-
-  it('returns the same object when nothing is undefined', () => {
-    const props = { a: 1, b: 'x' };
-    expect(omitUndefined(props)).toBe(props);
+      renderEl(
+        <MaxLengthIndicator value={1} maxLength={10} textStyle={undefined} />
+      )
+    ).toEqual(renderEl(<MaxLengthIndicator value={1} maxLength={10} />));
   });
 });

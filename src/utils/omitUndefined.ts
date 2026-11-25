@@ -10,12 +10,17 @@
  * expect from a conditional prop.
  *
  * `null` is kept: it is a deliberate value, not an absent one.
+ *
+ * Runs on every render of every typography node, so the common case (nothing
+ * undefined) returns the same object without allocating.
  */
 export function omitUndefined<T extends object>(props: T): T {
-  const entries = Object.entries(props);
-  if (entries.every(([, value]) => value !== undefined)) return props;
-
-  return Object.fromEntries(
-    entries.filter(([, value]) => value !== undefined)
-  ) as T;
+  for (const key in props) {
+    if (props[key] === undefined) {
+      const out: Partial<T> = {};
+      for (const k in props) if (props[k] !== undefined) out[k] = props[k];
+      return out as T;
+    }
+  }
+  return props;
 }

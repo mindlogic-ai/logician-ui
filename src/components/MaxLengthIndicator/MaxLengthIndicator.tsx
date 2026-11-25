@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { TextProps } from '@chakra-ui/react';
 
+import { omitUndefined } from '../../utils/omitUndefined';
 import { Subtitle } from '../Typography';
 
 export const MaxLengthIndicator = ({
@@ -18,7 +19,7 @@ export const MaxLengthIndicator = ({
   }, [value]);
 
   return (
-    <Subtitle textStyle="subtext" color="fg.subtle" {...rest}>
+    <Subtitle textStyle="subtext" color="fg.subtle" {...omitUndefined(rest)}>
       {currentValue}/{maxLength}
     </Subtitle>
   );

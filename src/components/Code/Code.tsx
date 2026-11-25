@@ -5,6 +5,7 @@ import {
 } from '@chakra-ui/react';
 
 import { useTranslate } from '@/hooks/useTranslate';
+import { omitUndefined } from '@/utils/omitUndefined';
 
 import { FaCheck, FaRegCopy } from '../Icon';
 import { IconButton } from '../IconButton';
@@ -111,8 +112,8 @@ export const Code = ({
         position="relative"
         overflow="hidden"
         borderColor="border.default"
-        {...containerPropsRest}
-        {...restWithoutMeta}
+        {...omitUndefined(containerPropsRest)}
+        {...omitUndefined(restWithoutMeta)}
         meta={mergedMeta}
         onCopy={handleCopy}
         className={['ml-code', containerProps?.className]
