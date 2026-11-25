@@ -2,6 +2,7 @@ import { forwardRef } from 'react';
 import { Text } from '@chakra-ui/react';
 
 import { polymorphic } from '../../types/polymorphic';
+import { omitUndefined } from '../../utils/omitUndefined';
 import { TypographyOwnProps } from './Typography.types';
 
 /**
@@ -31,7 +32,7 @@ const SubtitleImpl = forwardRef<HTMLParagraphElement, TypographyOwnProps>(
         textStyle={fontSize ? undefined : 'subtitle'}
         fontSize={fontSize}
         color="fg.muted"
-        {...rest}
+        {...omitUndefined(rest)}
       />
     );
   }

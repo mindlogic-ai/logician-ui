@@ -1,6 +1,7 @@
 import React, { Fragment, isValidElement, ReactNode } from 'react';
 import { Dialog } from '@chakra-ui/react';
 
+import { omitUndefined } from '../../utils/omitUndefined';
 import { Subtext } from '../Typography';
 import { useModalContext } from './ModalContext';
 
@@ -64,7 +65,7 @@ export const ModalHeader = ({
         borderBottomWidth: '1px',
         borderBottomColor: 'secondary.border',
       })}
-      {...rest}
+      {...omitUndefined(rest)}
     >
       {isOwnMarkup ? (
         <Dialog.Title asChild {...inheritType}>

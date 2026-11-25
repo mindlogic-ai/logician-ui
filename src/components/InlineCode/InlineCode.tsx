@@ -3,6 +3,8 @@ import {
   CodeProps as ChakraCodeProps,
 } from '@chakra-ui/react';
 
+import { omitUndefined } from '../../utils/omitUndefined';
+
 export const InlineCode = ({ children, ...rest }: ChakraCodeProps) => {
   return (
     <ChakraCode
@@ -24,7 +26,7 @@ export const InlineCode = ({ children, ...rest }: ChakraCodeProps) => {
       // heavy box inline in running text. Box-shadow so inline flow and
       // sizing are untouched.
       boxShadow="0 0 0 1px var(--chakra-colors-border-subtle)"
-      {...rest}
+      {...omitUndefined(rest)}
     >
       {children}
     </ChakraCode>
