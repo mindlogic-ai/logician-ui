@@ -3,6 +3,7 @@ import { Box, HStack, Stack, Wrap, WrapItem } from '@chakra-ui/react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { Button } from '../Button';
+import { RangeDatePicker } from '../DatePicker';
 import { FieldTrigger } from '../FieldTrigger';
 import { Input } from '../Input';
 import { Popover } from '../Popover';
@@ -13,9 +14,11 @@ import { SelectField } from './SelectField';
  * Replica of FactChat's admin audit-log filter bar
  * (`factchat-nextjs/src/app/admin/audit-logs/_components/FilterBar`).
  *
- * The row holds three kinds of control. Fields (Select, Input) and the
- * popover pickers (이벤트, 그룹, `FieldTrigger`) all show a value, so they share
- * the field outline (`border.control`). The actions at the end (초기화,
+ * The row holds three kinds of control. Fields (Select, Input), the popover
+ * pickers (이벤트, 그룹, `FieldTrigger`) and the custom period's
+ * `RangeDatePicker` (also a `FieldTrigger`, with a calendar for a chevron) all
+ * show a value, so they share the field's height, padding and outline
+ * (`border.control`). The actions at the end (초기화,
  * 내보내기) are `secondary` Buttons with the lighter `border.default`: a
  * labelled button does not need a field's 3:1 edge. Same container, widths and
  * sizes as the app; only the data is static.
@@ -33,6 +36,7 @@ const PERIODS = [
   { label: '최근 7일', value: '7d' },
   { label: '최근 30일', value: '30d' },
   { label: '최근 90일', value: '90d' },
+  { label: '직접 지정', value: 'custom' },
 ];
 const CHANNELS = [
   { label: '웹', value: 'web' },
@@ -69,11 +73,18 @@ const PickerTrigger = ({
 const FilterRow = ({
   withActions = false,
   eventValue,
+  customPeriod = false,
 }: {
   withActions?: boolean;
   eventValue?: string;
+  /** Start on 직접 지정, which shows the range picker (`DateRangeWidget`). */
+  customPeriod?: boolean;
 }) => {
-  const [period, setPeriod] = useState('7d');
+  const [period, setPeriod] = useState(customPeriod ? 'custom' : '7d');
+  const [dates, setDates] = useState<Date[]>([
+    new Date(2026, 9, 1),
+    new Date(2026, 9, 22),
+  ]);
   return (
     <HStack
       gap={3}
@@ -97,6 +108,15 @@ const FilterRow = ({
             />
           </Box>
         </WrapItem>
+        {period === 'custom' && (
+          <WrapItem>
+            <RangeDatePicker
+              selectedDates={dates}
+              onDateChange={setDates}
+              placeholder="기간"
+            />
+          </WrapItem>
+        )}
         <WrapItem>
           <Input placeholder="이메일" aria-label="이메일" minW="200px" />
         </WrapItem>
@@ -163,9 +183,9 @@ export const WithActions: Story = {
     <Stack gap="6" maxW="1185px">
       <Box>
         <Subtext color="fg.muted" mb="2">
-          이벤트 선택됨 + 초기화 · 내보내기 (secondary Button)
+          이벤트 선택됨 + 직접 지정 기간 + 초기화 · 내보내기 (secondary Button)
         </Subtext>
-        <FilterRow withActions eventValue="로그인 외 2개" />
+        <FilterRow withActions customPeriod eventValue="로그인 외 2개" />
       </Box>
       <Box maxW="390px">
         <Subtext color="fg.muted" mb="2">

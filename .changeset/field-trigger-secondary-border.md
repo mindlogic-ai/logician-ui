@@ -22,5 +22,18 @@ the accessible name once a value is shown, and leaves `aria-haspopup` /
 </Popover.Trigger>
 ```
 
-`SingleDatePicker` / `RangeDatePicker` triggers keep the field outline
-(`border.control`): they show the chosen date, so they are fields, not actions.
+`FieldTrigger` takes an optional `indicator` that replaces the chevron in the
+same slot, colour and size.
+
+`SingleDatePicker` / `RangeDatePicker` triggers are now a `FieldTrigger`
+instead of a secondary `Button`: the same height, field padding, type and
+`border.control` outline as the `Select` beside them, with the calendar moved
+from the leading edge to the chevron's column. While nothing is picked they
+show a new `placeholder` prop in `fg.placeholder` (default 날짜 선택 / 기간
+선택, following the provider language) instead of an empty button, and the
+placeholder stays in the accessible name once a date is shown. `size` maps
+onto the field sizes (`2xs` → `xs`, `xl` → `lg`). `propsConfigs.triggerBtnProps`
+keeps its name and now takes `FieldTrigger` props; `w`, `bg`, `justifyContent`
+and `aria-label` work as before. A `disabled` picker now disables its trigger.
+The library's ignored trigger options (`triggerVariant`, `triggerIcon`, a
+`children` render prop) are dropped from the props type.

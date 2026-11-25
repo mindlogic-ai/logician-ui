@@ -1,32 +1,31 @@
 import { Popover } from '@chakra-ui/react';
-import {
-  RangeDatepicker as BaseRangeDatePicker,
-  RangeDatepickerProps,
-} from 'chakra-dayzed-datepicker';
+import { RangeDatepicker as BaseRangeDatePicker } from 'chakra-dayzed-datepicker';
 import { format } from 'date-fns';
 
 import useLanguage from '@/hooks/useLanguage';
-import { getControlSize } from '@/theme/controlSizes';
+import { useTranslate } from '@/hooks/useTranslate';
 
-import { Button, ButtonProps } from '../Button';
-import { MdOutlineCalendarToday } from '../Icon';
+import { FieldTrigger } from '../FieldTrigger';
 import {
   getDateFnsLocale,
   getDayNames,
   getDefaultFullDateFormat,
   getMonthNames,
 } from '../MonthPicker/constants';
-import type { DatePickerSizeProps } from './DatePicker.types';
+import { calendarIndicator, toFieldTriggerSize } from './DatePicker.trigger';
+import type { RangeDatePickerProps } from './DatePicker.types';
 
 export const RangeDatePicker = ({
   propsConfigs,
   configs,
   usePortal = true,
   size,
+  placeholder,
   ...rest
-}: RangeDatepickerProps & DatePickerSizeProps) => {
-  const control = getControlSize(size);
+}: RangeDatePickerProps) => {
   const { language } = useLanguage();
+  const translate = useTranslate();
+  const { triggerBtnProps, ...libPropsConfigs } = propsConfigs ?? {};
   const dateFormat = configs?.dateFormat ?? getDefaultFullDateFormat(language);
   const dateFnsLocale = getDateFnsLocale(language);
 
@@ -41,12 +40,6 @@ export const RangeDatePicker = ({
         dateFormat,
       }}
       propsConfigs={{
-        triggerBtnProps: {
-          fontWeight: 'regular',
-          color: 'fg.default',
-          fontSize: 'md',
-          ...propsConfigs?.triggerBtnProps,
-        },
         inputProps: {
           color: 'fg.default',
           ...propsConfigs?.inputProps,
@@ -159,31 +152,25 @@ export const RangeDatePicker = ({
           },
           ...propsConfigs?.dayOfMonthBtnProps,
         },
-        ...propsConfigs,
+        ...libPropsConfigs,
       }}
     >
       {(selectedDates) => (
         <Popover.Trigger asChild>
-          <Button
-            pl={2}
-            variant="secondary"
-            // A date field, not an action: it shows the chosen date, so it
-            // keeps the field outline (3:1) that secondary Buttons dropped.
-            borderColor="border.control"
-            size={size}
-            {...(propsConfigs?.triggerBtnProps as ButtonProps)}
+          <FieldTrigger
+            placeholder={placeholder ?? translate('date_range_placeholder')}
+            size={toFieldTriggerSize(size)}
+            indicator={calendarIndicator}
+            // The library only disables its own trigger; this one is ours.
+            disabled={rest.disabled}
+            {...triggerBtnProps}
           >
-            <MdOutlineCalendarToday
-              boxSize={control.iconBoxSize}
-              color="fg.subtle"
-              style={{ marginInlineEnd: 3 }}
-            />
             {selectedDates && selectedDates.length > 0
               ? selectedDates.length === 1
                 ? `${format(selectedDates[0], dateFormat, { locale: dateFnsLocale })} - `
                 : `${format(selectedDates[0], dateFormat, { locale: dateFnsLocale })} - ${format(selectedDates[1], dateFormat, { locale: dateFnsLocale })}`
               : ''}
-          </Button>
+          </FieldTrigger>
         </Popover.Trigger>
       )}
     </BaseRangeDatePicker>

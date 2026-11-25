@@ -37,6 +37,15 @@ export interface FieldTriggerProps extends Omit<
    * @default 'md'
    */
   size?: FieldTriggerSize;
+  /**
+   * The trailing cue, in the chevron's slot: same place, colour (`fg.muted`)
+   * and size as a `Select` chevron of this `size` — any `svg` inside is sized
+   * to it, whatever `boxSize` it carries. Decorative (`aria-hidden`). Replace
+   * the chevron only with a cue that says more about the popup, such as the
+   * calendar on `SingleDatePicker` / `RangeDatePicker`; keep one cue per field.
+   * @default <ChevronDownIcon />
+   */
+  indicator?: ReactNode;
   /** Red outline, as on an invalid `Select`. Sets `aria-invalid`. */
   invalid?: boolean;
 }

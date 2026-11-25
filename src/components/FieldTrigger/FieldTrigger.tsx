@@ -54,7 +54,9 @@ const valueStyles: SystemStyleObject = {
  * A button that acts as a field: it opens a list or a panel and shows what is
  * chosen. It looks like a `Select` trigger of the same size — `border.control`
  * outline, field padding and type, `fg.placeholder` while empty, a trailing
- * chevron — because to the user it *is* a field. Use it for the pickers a
+ * chevron — because to the user it *is* a field. `indicator` swaps the
+ * chevron for another cue in the same slot and size (the date pickers pass a
+ * calendar). Use it for the pickers a
  * Select cannot hold (a tree in a popover, a multi-select with a summary).
  *
  * It renders a plain `<button>` and leaves the popup semantics to the trigger
@@ -82,6 +84,7 @@ export const FieldTrigger = forwardRef<HTMLButtonElement, FieldTriggerProps>(
       placeholder,
       size = 'md',
       invalid = false,
+      indicator,
       type = 'button',
       css,
       ...rest
@@ -142,10 +145,11 @@ export const FieldTrigger = forwardRef<HTMLButtonElement, FieldTriggerProps>(
           css={mergeCss(slots.indicator, indicatorStyles, {
             // The chevron is a `boxSize` icon, which sets its own width and
             // height; the descendant rule outranks it and takes Select's size.
+            // Same for a custom `indicator` (the date pickers' calendar).
             '& svg': sizeVariant.indicator?._icon,
           })}
         >
-          <ChevronDownIcon />
+          {indicator ?? <ChevronDownIcon />}
         </chakra.span>
       </chakra.button>
     );

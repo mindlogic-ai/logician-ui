@@ -84,6 +84,28 @@ describe('FieldTrigger', () => {
     expect(indicator?.querySelector('svg')).not.toBeNull();
   });
 
+  it('indicator replaces the chevron in the same slot, sized like it', () => {
+    wrap(
+      <FieldTrigger
+        placeholder="날짜"
+        size="sm"
+        indicator={<svg data-testid="calendar" />}
+      />
+    );
+    const indicator = document.querySelector('[data-part="indicator"]')!;
+    expect(indicator).toHaveAttribute('aria-hidden', 'true');
+    expect(indicator.querySelectorAll('svg')).toHaveLength(1);
+    expect(indicator.querySelector('[data-testid="calendar"]')).not.toBeNull();
+    // The `& svg` size rule lives on the slot, so it reaches any icon.
+    const cls = [...indicator.classList].find((c) => c.startsWith('css-'));
+    const sizeRule = [...document.querySelectorAll('style')]
+      .flatMap((s) => (s.textContent ?? '').split('\n'))
+      .filter((line) => line.includes(`.${cls} svg{`))
+      .join('');
+    expect(sizeRule).toMatch(/width:/);
+    expect(sizeRule).toMatch(/height:/);
+  });
+
   it('invalid sets aria-invalid', () => {
     wrap(<FieldTrigger placeholder="그룹" invalid />);
     expect(screen.getByRole('button')).toHaveAttribute('aria-invalid', 'true');
