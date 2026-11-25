@@ -54,6 +54,9 @@ const PAIRS: [string, string, Kind][] = [
       ] as [string, string, Kind][]
   ),
   ['fg-placeholder', 'bg-surface', 'text'],
+  // A field's outline is its only boundary (WCAG 1.4.11): Input, Select and
+  // FieldTrigger draw border.control on their own bg.surface fill.
+  ['border-control', 'bg-surface', 'nontext'],
   // Input/Textarea `subtle` variant fill.
   ['fg-placeholder', 'bg-muted', 'text'],
   ['fg-default', 'primary-wash', 'text'],
@@ -132,7 +135,8 @@ const NO_PAIR: Record<string, string> = {
   'layer-3-active': 'pressed state of layer-3',
   'border-subtle':
     'decorative divider — no WCAG requirement (controls use border-control)',
-  'border-default': 'decorative card border — no WCAG requirement',
+  'border-default':
+    'decorative card border and secondary Button / IconButton outline — the label or icon identifies a button, so its edge has no 3:1 requirement (a button that acts as a field is FieldTrigger, on border-control)',
   'border-strong': 'decorative emphasis border — no WCAG requirement',
   'fg-linkHover': 'hover state of fg-link; link stays underlined',
   'secondary-border': 'decorative border of a secondary surface',

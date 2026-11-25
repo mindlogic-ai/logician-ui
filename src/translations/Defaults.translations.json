@@ -76,6 +76,20 @@
     "ja": "月範囲を選択",
     "es": "Seleccionar rango de meses"
   },
+  "date_placeholder": {
+    "ko": "날짜 선택",
+    "en": "Select date",
+    "zh": "选择日期",
+    "ja": "日付を選択",
+    "es": "Seleccionar fecha"
+  },
+  "date_range_placeholder": {
+    "ko": "기간 선택",
+    "en": "Select date range",
+    "zh": "选择日期范围",
+    "ja": "期間を選択",
+    "es": "Seleccionar rango de fechas"
+  },
   "clear": {
     "ko": "지우기",
     "en": "Clear",

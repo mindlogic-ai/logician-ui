@@ -23,7 +23,7 @@ export type IconButtonColorPalette =
  * IconButton variant (5.0 BAZE palette).
  *
  * - `ghost` (default): icon in `fg.icon`, warm wash on hover
- * - `secondary`: same, with a `border.control` outline (same as fields)
+ * - `secondary`: same, with a `border.default` outline
  * - `primary`: BAZE black fill
  * - `danger`: red fill
  * - `action`: the coral SEND button (`send.*`) — chat composers

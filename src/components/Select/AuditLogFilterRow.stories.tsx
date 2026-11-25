@@ -3,7 +3,8 @@ import { Box, HStack, Stack, Wrap, WrapItem } from '@chakra-ui/react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { Button } from '../Button';
-import { ChevronDownIcon } from '../Icon';
+import { RangeDatePicker } from '../DatePicker';
+import { FieldTrigger } from '../FieldTrigger';
 import { Input } from '../Input';
 import { Popover } from '../Popover';
 import { Subtext } from '../Typography';
@@ -13,10 +14,14 @@ import { SelectField } from './SelectField';
  * Replica of FactChat's admin audit-log filter bar
  * (`factchat-nextjs/src/app/admin/audit-logs/_components/FilterBar`).
  *
- * It mixes two kinds of trigger in one row: popover pickers built on a
- * `secondary` Button (이벤트, 그룹) and fields (Select, Input). They should
- * share one outline (`border.control`). Same container, widths and sizes as
- * the app; only the data is static.
+ * The row holds three kinds of control. Fields (Select, Input), the popover
+ * pickers (이벤트, 그룹, `FieldTrigger`) and the custom period's
+ * `RangeDatePicker` (also a `FieldTrigger`, a leading calendar, no chevron) all
+ * show a value, so they share the field's height, padding and outline
+ * (`border.control`). The actions at the end (초기화,
+ * 내보내기) are `secondary` Buttons with the lighter `border.default`: a
+ * labelled button does not need a field's 3:1 edge. Same container, widths and
+ * sizes as the app; only the data is static.
  */
 const meta = {
   title: 'Patterns/Audit log filter row',
@@ -31,6 +36,7 @@ const PERIODS = [
   { label: '최근 7일', value: '7d' },
   { label: '최근 30일', value: '30d' },
   { label: '최근 90일', value: '90d' },
+  { label: '직접 지정', value: 'custom' },
 ];
 const CHANNELS = [
   { label: '웹', value: 'web' },
@@ -43,18 +49,20 @@ const RESULTS = [
 ];
 
 /** `ScopedMultiSelectWidget` (이벤트) and `GroupTypeFilter` (그룹). */
-const PickerTrigger = ({ label, w }: { label: string; w?: string }) => (
+const PickerTrigger = ({
+  label,
+  value,
+  w,
+}: {
+  label: string;
+  value?: string;
+  w?: string;
+}) => (
   <Popover positioning={{ placement: 'bottom-start' }}>
     <Popover.Trigger asChild>
-      <Button
-        variant="secondary"
-        size="md"
-        w={w}
-        justifyContent={w ? 'space-between' : undefined}
-      >
-        {label}
-        <ChevronDownIcon boxSize="sm" flexShrink={0} />
-      </Button>
+      <FieldTrigger placeholder={label} w={w}>
+        {value}
+      </FieldTrigger>
     </Popover.Trigger>
     <Popover.Content>
       <Popover.Description>{label} 선택 패널</Popover.Description>
@@ -62,8 +70,21 @@ const PickerTrigger = ({ label, w }: { label: string; w?: string }) => (
   </Popover>
 );
 
-const FilterRow = () => {
-  const [period, setPeriod] = useState('7d');
+const FilterRow = ({
+  withActions = false,
+  eventValue,
+  customPeriod = false,
+}: {
+  withActions?: boolean;
+  eventValue?: string;
+  /** Start on 직접 지정, which shows the range picker (`DateRangeWidget`). */
+  customPeriod?: boolean;
+}) => {
+  const [period, setPeriod] = useState(customPeriod ? 'custom' : '7d');
+  const [dates, setDates] = useState<Date[]>([
+    new Date(2026, 9, 1),
+    new Date(2026, 9, 22),
+  ]);
   return (
     <HStack
       gap={3}
@@ -75,18 +96,27 @@ const FilterRow = () => {
     >
       <Wrap gap={2}>
         <WrapItem>
-          <PickerTrigger label="이벤트" w="2xs" />
+          <PickerTrigger label="이벤트" value={eventValue} w="2xs" />
         </WrapItem>
         <WrapItem>
           <Box minW="180px">
             <SelectField
               options={PERIODS}
               value={period}
-              onChange={v => v && setPeriod(v)}
+              onChange={(v) => v && setPeriod(v)}
               ariaLabel="기간"
             />
           </Box>
         </WrapItem>
+        {period === 'custom' && (
+          <WrapItem>
+            <RangeDatePicker
+              selectedDates={dates}
+              onDateChange={setDates}
+              placeholder="기간"
+            />
+          </WrapItem>
+        )}
         <WrapItem>
           <Input placeholder="이메일" aria-label="이메일" minW="200px" />
         </WrapItem>
@@ -103,6 +133,20 @@ const FilterRow = () => {
             <SelectField options={RESULTS} placeholder="결과" />
           </Box>
         </WrapItem>
+        {withActions && (
+          <>
+            <WrapItem>
+              <Button variant="secondary" size="md">
+                초기화
+              </Button>
+            </WrapItem>
+            <WrapItem>
+              <Button variant="secondary" size="md">
+                내보내기
+              </Button>
+            </WrapItem>
+          </>
+        )}
       </Wrap>
     </HStack>
   );
@@ -123,6 +167,31 @@ export const Default: Story = {
           모바일 폭 (390px, 줄바꿈)
         </Subtext>
         <FilterRow />
+      </Box>
+    </Stack>
+  ),
+};
+
+/**
+ * The same row with the filter bar's actions at the end. The pickers and
+ * fields share the field outline; 초기화 and 내보내기 keep the lighter button
+ * outline, so the split by role is visible in one row.
+ */
+export const WithActions: Story = {
+  name: 'With 초기화 · 내보내기 actions',
+  render: () => (
+    <Stack gap="6" maxW="1185px">
+      <Box>
+        <Subtext color="fg.muted" mb="2">
+          이벤트 선택됨 + 직접 지정 기간 + 초기화 · 내보내기 (secondary Button)
+        </Subtext>
+        <FilterRow withActions customPeriod eventValue="로그인 외 2개" />
+      </Box>
+      <Box maxW="390px">
+        <Subtext color="fg.muted" mb="2">
+          모바일 폭 (390px, 줄바꿈)
+        </Subtext>
+        <FilterRow withActions />
       </Box>
     </Stack>
   ),

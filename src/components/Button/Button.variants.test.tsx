@@ -44,10 +44,27 @@ describe('Button variants (5.0)', () => {
     expect(getButtonStyles('subtle', true).color).toBe('danger.fg');
     // border stays the variant's own
     expect(getButtonStyles('secondary', true).borderColor).toBe(
-      'border.control'
+      'border.default'
     );
     expect(getButtonStyles('primary', true).color).toBe('fg.onPrimary');
     expect(getButtonStyles('danger', true).color).toBe('danger.onSolid');
+  });
+
+  // R30 3차 QA #2: at `border.control` (3:1) every secondary chip outweighed
+  // the content around it. A labelled button's outline is decoration; the
+  // field outline belongs to `FieldTrigger`, which acts as a field.
+  it('secondary Button and IconButton use the light border.default outline', () => {
+    expect(buttonVariantStyles.secondary.borderColor).toBe('border.default');
+    expect(iconButtonVariantStyles.secondary.borderColor).toBe(
+      'border.default'
+    );
+    // Same hover / press as before #285: a wash, no border change.
+    expect(buttonVariantStyles.secondary._hover).toEqual({
+      bgColor: 'primary.wash',
+    });
+    expect(buttonVariantStyles.secondary._active).toMatchObject({
+      bgColor: 'primary.washActive',
+    });
   });
 
   it('accent is the coral fill with a dark label (send.* tokens)', () => {

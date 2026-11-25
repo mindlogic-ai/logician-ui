@@ -35,7 +35,7 @@ export const iconButtonVariantStyles: Record<IconButtonVariant, StyleProps> = {
     _disabled: { ...disabledText },
   },
   secondary: {
-    borderColor: 'border.control', // matches Button secondary and fields
+    borderColor: 'border.default', // same light outline as Button secondary
     bgColor: 'transparent',
     color: 'fg.icon',
     _hover: { bgColor: 'primary.wash', color: 'fg.default' },

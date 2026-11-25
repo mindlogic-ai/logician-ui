@@ -1,13 +1,13 @@
+import { useState } from 'react';
 import { Box } from '@chakra-ui/react';
 import { Meta, StoryObj } from '@storybook/react';
-import { useState } from 'react';
 
 import { formatDateByLocale } from '@/utils/formatDateByLocale';
 
-import { Text } from '../Typography';
 import { T } from '../../guidelines/_components/Lang';
 import { TokenTable } from '../../guidelines/_components/TokenTable';
 import { FieldRow } from '../Form';
+import { Text } from '../Typography';
 import { RangeDatePicker } from './RangeDatePicker';
 
 const meta = {
@@ -42,6 +42,21 @@ export default meta;
 type Story = StoryObj<typeof RangeDatePicker>;
 
 export const Basic: Story = {};
+
+/** Nothing picked: the placeholder, in `fg.placeholder`, as on a Select. */
+export const Empty: Story = {
+  render: (args) => {
+    const [dates, setDates] = useState<Date[]>([]);
+    return (
+      <RangeDatePicker
+        {...args}
+        selectedDates={dates}
+        onDateChange={setDates}
+        placeholder="조회 기간"
+      />
+    );
+  },
+};
 // ───────────────────────── Usage-page specimens ─────────────────────────
 // Pulled into `DatePicker.usage.mdx` with <Canvas of={…} />. Hidden (`!dev`).
 
@@ -67,7 +82,7 @@ export const DoLabelledRange: Story = {
 export const DontEmptyTrigger: Story = {
   tags: ['!dev'],
   parameters: { layout: 'padded' },
-  name: "Usage / Don't: an empty trigger with no label",
+  name: "Usage / Don't: the default placeholder with no label",
   render: () => {
     const [dates, setDates] = useState<Date[]>([]);
     return <RangeDatePicker selectedDates={dates} onDateChange={setDates} />;
@@ -107,12 +122,27 @@ export const UsageTokens: Story = {
           token: 'border.strong',
           use: <T en="Today outline" ko="오늘 표시 테두리" />,
         },
-        { token: 'fg.muted', use: <T en="Weekday names" ko="요일 이름" /> },
         {
-          token: 'fg.subtle',
+          token: 'fg.muted',
           use: (
-            <T en="Calendar icon in the trigger" ko="트리거의 달력 아이콘" />
+            <T
+              en="Weekday names; calendar icon in the trigger"
+              ko="요일 이름, 트리거의 달력 아이콘"
+            />
           ),
+        },
+        {
+          token: 'fg.placeholder',
+          use: (
+            <T
+              en="Trigger text while nothing is picked"
+              ko="아무것도 고르지 않았을 때 트리거 글자"
+            />
+          ),
+        },
+        {
+          token: 'border.control',
+          use: <T en="Trigger outline" ko="트리거 테두리" />,
         },
         { token: 'bg.surface', use: <T en="Calendar panel" ko="달력 패널" /> },
         {

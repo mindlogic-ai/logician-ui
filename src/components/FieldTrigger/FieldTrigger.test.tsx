@@ -1,0 +1,202 @@
+import { ChakraProvider } from '@chakra-ui/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
+
+import { system } from '../../theme';
+import { controlSizes } from '../../theme/controlSizes';
+import { Menu } from '../Menu';
+import { Popover } from '../Popover';
+import { FieldTrigger } from '.';
+
+const wrap = (ui: React.ReactNode) =>
+  render(<ChakraProvider value={system}>{ui}</ChakraProvider>);
+
+/** Every rule emotion emitted for `el`'s own class (see Avatar.recipe.test). */
+const declarations = (el: Element) => {
+  const cls = [...el.classList].find((c) => c.startsWith('css-'));
+  return [...document.querySelectorAll('style')]
+    .flatMap((s) => (s.textContent ?? '').split('\n'))
+    .filter((line) => line.includes(`.${cls}{`))
+    .join('');
+};
+
+describe('FieldTrigger', () => {
+  it('shows the placeholder while empty and marks it for the placeholder colour', () => {
+    wrap(<FieldTrigger placeholder="이벤트" />);
+    const button = screen.getByRole('button', { name: '이벤트' });
+    expect(button).toHaveAttribute('type', 'button');
+    expect(button).toHaveAttribute('data-placeholder-shown');
+  });
+
+  it('keeps what it picks in the name once a value is shown', () => {
+    wrap(<FieldTrigger placeholder="이벤트">로그인 외 2개</FieldTrigger>);
+    const button = screen.getByRole('button', {
+      name: '이벤트: 로그인 외 2개',
+    });
+    expect(button).not.toHaveAttribute('data-placeholder-shown');
+  });
+
+  it('falls back to the placeholder when the value is cleared or renders nothing', () => {
+    const { rerender } = wrap(
+      <FieldTrigger placeholder="이벤트">{['로그인']}</FieldTrigger>
+    );
+    expect(
+      screen.getByRole('button', { name: '이벤트: 로그인' })
+    ).toBeInTheDocument();
+    for (const cleared of [[], null, false, '']) {
+      rerender(
+        <ChakraProvider value={system}>
+          <FieldTrigger placeholder="이벤트">{cleared}</FieldTrigger>
+        </ChakraProvider>
+      );
+      const button = screen.getByRole('button', { name: '이벤트' });
+      expect(button).toHaveAttribute('data-placeholder-shown');
+    }
+  });
+
+  it('0 is a value, not empty', () => {
+    wrap(<FieldTrigger placeholder="선택 수">{0}</FieldTrigger>);
+    expect(
+      screen.getByRole('button', { name: '선택 수: 0' })
+    ).not.toHaveAttribute('data-placeholder-shown');
+  });
+
+  it('accepts css as an array, like any Chakra element', () => {
+    wrap(<FieldTrigger placeholder="그룹" css={[{ width: '123px' }]} />);
+    expect(declarations(screen.getByRole('button'))).toContain('width:123px');
+  });
+
+  it('an aria-label replaces the generated name', () => {
+    wrap(
+      <FieldTrigger placeholder="이벤트" aria-label="이벤트 필터, 3개 선택">
+        로그인 외 2개
+      </FieldTrigger>
+    );
+    expect(
+      screen.getByRole('button', { name: '이벤트 필터, 3개 선택' })
+    ).toBeInTheDocument();
+  });
+
+  it('the chevron is decoration', () => {
+    wrap(<FieldTrigger placeholder="그룹" />);
+    const indicator = document.querySelector('[data-part="indicator"]');
+    expect(indicator).toHaveAttribute('aria-hidden', 'true');
+    expect(indicator?.querySelector('svg')).not.toBeNull();
+  });
+
+  it('indicator replaces the chevron in the same slot, sized like it', () => {
+    wrap(
+      <FieldTrigger
+        placeholder="날짜"
+        size="sm"
+        indicator={<svg data-testid="calendar" />}
+      />
+    );
+    const indicator = document.querySelector('[data-part="indicator"]')!;
+    expect(indicator).toHaveAttribute('aria-hidden', 'true');
+    expect(indicator.querySelectorAll('svg')).toHaveLength(1);
+    expect(indicator.querySelector('[data-testid="calendar"]')).not.toBeNull();
+    // The `& svg` size rule lives on the slot, so it reaches any icon.
+    const cls = [...indicator.classList].find((c) => c.startsWith('css-'));
+    const sizeRule = [...document.querySelectorAll('style')]
+      .flatMap((s) => (s.textContent ?? '').split('\n'))
+      .filter((line) => line.includes(`.${cls} svg{`))
+      .join('');
+    expect(sizeRule).toMatch(/width:/);
+    expect(sizeRule).toMatch(/height:/);
+  });
+
+  it('startElement leads the value, decorative, sized like the chevron', () => {
+    wrap(
+      <FieldTrigger
+        placeholder="날짜"
+        size="sm"
+        startElement={<svg data-testid="calendar" />}
+      />
+    );
+    const button = screen.getByRole('button', { name: '날짜' });
+    const start = button.firstElementChild!;
+    expect(start).toHaveAttribute('data-part', 'start-element');
+    expect(start).toHaveAttribute('aria-hidden', 'true');
+    expect(start.querySelector('[data-testid="calendar"]')).not.toBeNull();
+    // The chevron stays unless `indicator` says otherwise.
+    expect(button.lastElementChild).toHaveAttribute('data-part', 'indicator');
+    const cls = [...start.classList].find((c) => c.startsWith('css-'));
+    const rules = [...document.querySelectorAll('style')].flatMap((s) =>
+      (s.textContent ?? '').split('\n')
+    );
+    const sizeRule = rules.filter((l) => l.includes(`.${cls} svg{`)).join('');
+    expect(sizeRule).toMatch(/width:/);
+    expect(sizeRule).toMatch(/height:/);
+    expect(rules.filter((l) => l.includes(`.${cls}{`)).join('')).toContain(
+      'flex-shrink:0'
+    );
+  });
+
+  it('no startElement renders no leading slot', () => {
+    wrap(<FieldTrigger placeholder="그룹" />);
+    expect(document.querySelector('[data-part="start-element"]')).toBeNull();
+  });
+
+  it('indicator={null} draws no trailing slot', () => {
+    wrap(
+      <FieldTrigger
+        placeholder="날짜"
+        startElement={<svg data-testid="calendar" />}
+        indicator={null}
+      />
+    );
+    expect(document.querySelector('[data-part="indicator"]')).toBeNull();
+    expect(screen.getByRole('button').querySelectorAll('svg')).toHaveLength(1);
+  });
+
+  it('invalid sets aria-invalid', () => {
+    wrap(<FieldTrigger placeholder="그룹" invalid />);
+    expect(screen.getByRole('button')).toHaveAttribute('aria-invalid', 'true');
+  });
+
+  it.each(['xs', 'sm', 'md', 'lg'] as const)(
+    'takes the Select height, field padding and field outline at %s',
+    (size) => {
+      wrap(<FieldTrigger placeholder="그룹" size={size} />);
+      const css = declarations(screen.getByRole('button'));
+      expect(css).toContain(
+        `--select-trigger-height:var(--chakra-sizes-${controlSizes[size].height})`
+      );
+      expect(css).toContain('min-height:var(--select-trigger-height)');
+      expect(css).toContain('border-color:var(--chakra-colors-border-control)');
+    }
+  );
+
+  it('inside Popover.Trigger, Ark supplies aria-haspopup / aria-expanded', async () => {
+    wrap(
+      <Popover>
+        <Popover.Trigger asChild>
+          <FieldTrigger placeholder="이벤트" />
+        </Popover.Trigger>
+        <Popover.Content>
+          <Popover.Description>패널</Popover.Description>
+        </Popover.Content>
+      </Popover>
+    );
+    const button = screen.getByRole('button', { name: '이벤트' });
+    expect(button).toHaveAttribute('aria-haspopup', 'dialog');
+    expect(button).toHaveAttribute('aria-expanded', 'false');
+    fireEvent.click(button);
+    await waitFor(() =>
+      expect(button).toHaveAttribute('aria-expanded', 'true')
+    );
+    expect(button).toHaveAttribute('data-state', 'open');
+  });
+
+  it('inside Menu.Trigger, aria-haspopup is menu', () => {
+    wrap(
+      <Menu>
+        <Menu.Trigger asChild>
+          <FieldTrigger placeholder="역할">편집자</FieldTrigger>
+        </Menu.Trigger>
+      </Menu>
+    );
+    expect(screen.getByRole('button')).toHaveAttribute('aria-haspopup', 'menu');
+  });
+});
