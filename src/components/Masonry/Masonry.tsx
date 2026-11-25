@@ -114,7 +114,10 @@ export const Masonry = ({
     return () => {
       resizeObserverRef.current?.disconnect();
     };
-  }, [measureItemHeights, childrenArray.length]);
+    // itemHeights is here so the observer is set up again after a re-layout.
+    // An item that moves to another column is mounted as a new element, and
+    // the previous observer never saw it.
+  }, [measureItemHeights, childrenArray.length, itemHeights]);
 
   // Create column layout with optimized distribution
   const columns = useMemo(() => {

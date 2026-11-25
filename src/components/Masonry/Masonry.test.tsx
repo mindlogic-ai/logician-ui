@@ -114,6 +114,23 @@ describe('Masonry', () => {
     expect(columnTexts(container)).toEqual([['a'], ['b', 'c', 'd']]);
   });
 
+  it('observes the items that a re-layout moved to another column', () => {
+    vi.stubGlobal('ResizeObserver', FakeResizeObserver);
+    const layout = { hidden: true, heights: { a: 300, b: 50, c: 50, d: 50 } };
+    mockLayout(layout);
+    const { container } = renderMasonry();
+
+    // c moves from the first column to the second. React mounts a new
+    // element for it, which no observer has seen yet.
+    layout.hidden = false;
+    fireObservers();
+    const items = [
+      ...container.querySelectorAll('[data-testid="masonry"] > * > *'),
+    ];
+    const observed = new Set(liveObservers().flatMap((o) => [...o.observed]));
+    expect(items.filter((item) => !observed.has(item))).toEqual([]);
+  });
+
   it('keeps the measured layout while it is hidden', () => {
     vi.stubGlobal('ResizeObserver', FakeResizeObserver);
     const layout = { hidden: false, heights: { a: 300, b: 50, c: 50, d: 50 } };
