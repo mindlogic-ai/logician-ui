@@ -45,28 +45,32 @@ export const Masonry = ({
     });
   }, [childrenArray]);
 
-  // Measure item heights with optimized comparison
+  // Measure item heights and store them only when one changed.
+  //
+  // The comparison runs inside the state updater so this callback does not
+  // depend on `itemHeights`. When it did, every stored height gave the layout
+  // effect below a new callback and ran it again. An item whose height depends
+  // on the column it lands in then re-measured without end, and React threw
+  // "Maximum update depth exceeded".
   const measureItemHeights = useCallback(() => {
-    let hasChanges = false;
-    const newHeights = { ...itemHeights };
+    const measured: Record<string, number> = {};
 
     Object.entries(itemRefs.current).forEach(([key, ref]) => {
       // An item under `display: none` has no offsetParent and reads 0. Keep
       // its last measured height instead: storing 0 re-laid out the whole
       // Masonry every time its container was hidden and again when shown.
       if (ref && ref.offsetParent !== null) {
-        const height = Math.round(ref.offsetHeight);
-        if (newHeights[key] !== height) {
-          newHeights[key] = height;
-          hasChanges = true;
-        }
+        measured[key] = Math.round(ref.offsetHeight);
       }
     });
 
-    if (hasChanges) {
-      setItemHeights(newHeights);
-    }
-  }, [itemHeights]);
+    setItemHeights((prev) => {
+      const hasChanges = Object.entries(measured).some(
+        ([key, height]) => prev[key] !== height
+      );
+      return hasChanges ? { ...prev, ...measured } : prev;
+    });
+  }, []);
 
   // Setup measurements on initial render and when children change
   useLayoutEffect(() => {

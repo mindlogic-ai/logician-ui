@@ -113,6 +113,26 @@ describe('Masonry', () => {
     expect(columnTexts(container)).toEqual([['a'], ['b', 'c', 'd']]);
   });
 
+  it('renders when an item height depends on the column it lands in', () => {
+    // i1 and i2 are 300 tall next to w and 50 otherwise, so every re-layout
+    // changes a height. Measuring again after each one never settled and
+    // React threw "Maximum update depth exceeded".
+    vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockImplementation(
+      function (this: HTMLElement) {
+        const text = this.textContent ?? '';
+        if (text === 'w') return 40;
+        const siblings = [...(this.parentElement?.children ?? [])];
+        return siblings.some((s) => s.textContent === 'w') ? 300 : 50;
+      }
+    );
+    vi.spyOn(HTMLElement.prototype, 'offsetParent', 'get').mockImplementation(
+      () => document.body
+    );
+
+    const { container } = renderMasonry(['i1', 'i2', 'w']);
+    expect(columnTexts(container).flat().sort()).toEqual(['i1', 'i2', 'w']);
+  });
+
   it('lays out a list that changed while hidden once it is shown again', () => {
     vi.stubGlobal('ResizeObserver', FakeResizeObserver);
     const layout = {
