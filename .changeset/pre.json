@@ -51,6 +51,7 @@
     "toast-neutral-inverse",
     "toast-neutral-muted",
     "translate-follows-provider-language",
+    "typography-undefined-props",
     "v5-baze-palette",
     "word-break-by-lang"
   ]
