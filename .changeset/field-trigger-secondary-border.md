@@ -21,3 +21,6 @@ the accessible name once a value is shown, and leaves `aria-haspopup` /
   </FieldTrigger>
 </Popover.Trigger>
 ```
+
+`SingleDatePicker` / `RangeDatePicker` triggers keep the field outline
+(`border.control`): they show the chosen date, so they are fields, not actions.

@@ -36,6 +36,36 @@ describe('FieldTrigger', () => {
     expect(button).not.toHaveAttribute('data-placeholder-shown');
   });
 
+  it('falls back to the placeholder when the value is cleared or renders nothing', () => {
+    const { rerender } = wrap(
+      <FieldTrigger placeholder="이벤트">{['로그인']}</FieldTrigger>
+    );
+    expect(
+      screen.getByRole('button', { name: '이벤트: 로그인' })
+    ).toBeInTheDocument();
+    for (const cleared of [[], null, false, '']) {
+      rerender(
+        <ChakraProvider value={system}>
+          <FieldTrigger placeholder="이벤트">{cleared}</FieldTrigger>
+        </ChakraProvider>
+      );
+      const button = screen.getByRole('button', { name: '이벤트' });
+      expect(button).toHaveAttribute('data-placeholder-shown');
+    }
+  });
+
+  it('0 is a value, not empty', () => {
+    wrap(<FieldTrigger placeholder="선택 수">{0}</FieldTrigger>);
+    expect(
+      screen.getByRole('button', { name: '선택 수: 0' })
+    ).not.toHaveAttribute('data-placeholder-shown');
+  });
+
+  it('accepts css as an array, like any Chakra element', () => {
+    wrap(<FieldTrigger placeholder="그룹" css={[{ width: '123px' }]} />);
+    expect(declarations(screen.getByRole('button'))).toContain('width:123px');
+  });
+
   it('an aria-label replaces the generated name', () => {
     wrap(
       <FieldTrigger placeholder="이벤트" aria-label="이벤트 필터, 3개 선택">

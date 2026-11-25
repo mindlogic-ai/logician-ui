@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { Children, forwardRef, type ReactNode } from 'react';
 import {
   chakra,
   type SystemStyleObject,
@@ -23,8 +23,12 @@ const cssVariables = (style: SystemStyleObject | undefined) =>
     Object.entries(style ?? {}).filter(([key]) => key.startsWith('--'))
   ) as SystemStyleObject;
 
-const isEmpty = (value: unknown) =>
-  value === undefined || value === null || value === false || value === '';
+/**
+ * Nothing React would render: `null`, booleans, `''`, or a collection of only
+ * those (a `selected.map(...)` of an empty selection). `0` is a value.
+ */
+const isEmpty = (value: ReactNode) =>
+  Children.toArray(value).every((child) => child === '');
 
 /**
  * Deltas a `<button>` needs that a `Select.Trigger` gets from its parts.
@@ -111,7 +115,8 @@ export const FieldTrigger = forwardRef<HTMLButtonElement, FieldTriggerProps>(
           slots.trigger,
           triggerStyles as SystemStyleObject,
           fieldTriggerStyles,
-          css as SystemStyleObject | undefined
+          // Chakra also takes an array of style objects; merge each in order.
+          ...((Array.isArray(css) ? css : [css]) as SystemStyleObject[])
         )}
       >
         <chakra.span css={valueStyles}>

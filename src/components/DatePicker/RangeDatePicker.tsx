@@ -167,6 +167,9 @@ export const RangeDatePicker = ({
           <Button
             pl={2}
             variant="secondary"
+            // A date field, not an action: it shows the chosen date, so it
+            // keeps the field outline (3:1) that secondary Buttons dropped.
+            borderColor="border.control"
             size={size}
             {...(propsConfigs?.triggerBtnProps as ButtonProps)}
           >
