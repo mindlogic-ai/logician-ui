@@ -177,6 +177,71 @@ export const buttonVariantStyles: Record<ButtonVariant, StyleProps> = {
   },
 };
 
+/**
+ * The open state of a menu / popover trigger: `aria-expanded="true"`.
+ *
+ * Menu, Popover and Select triggers are Buttons and IconButtons, and with no
+ * open state in the library each product styled "open" its own way — a border
+ * here, an ad-hoc `aria-expanded` rule there, Chakra's `_expanded`, a util, an
+ * icon colour (R30 3차 QA #4). Open now looks like the variant *held down*:
+ * the colours a press shows, without the press `scale` (nothing is being
+ * touched) and without an added border.
+ *
+ * ## Why not Chakra's `_expanded`
+ * `_expanded` is `:is([aria-expanded=true], [data-expanded], …)`, and a
+ * Tooltip puts `data-expanded` on its trigger while it shows — so hovering a
+ * button that has a tooltip would make it look open. Only `aria-expanded` is
+ * set by the things that actually open (Menu, Popover).
+ *
+ * ## Why the hover arm
+ * `_hover` and the bare open selector have the same specificity, so whichever
+ * Chakra happens to emit later would win and an open trigger would change
+ * under the pointer. Matching `:hover` too (and `[data-hover]`, as `_hover`
+ * does) makes open + hover read the same as open.
+ *
+ * ## Disabled still wins
+ * The selector excludes everything `_disabled` matches, so a disabled trigger
+ * keeps its disabled colours even with `aria-expanded="true"`.
+ */
+const OPEN =
+  '&[aria-expanded=true]:not(:disabled, [data-disabled], [aria-disabled=true])';
+export const openStateSelector = `${OPEN}, ${OPEN}:is(:hover, [data-hover])`;
+
+/** The colour properties a press changes; the open state copies only these. */
+const OPEN_PROPERTIES = ['bgColor', 'borderColor', 'color'] as const;
+
+/**
+ * Derive the open state from a variant's own states, so a new variant gets it
+ * without writing one.
+ *
+ * A press is seen while hovering, so the pressed look is `_hover` with
+ * `_active` on top — that is what this copies (e.g. IconButton ghost's glyph
+ * darkens on hover and stays dark while pressed, so it stays dark while open).
+ * Only colours: `scale` and anything else `_active` carries is left out.
+ * Variants that set no `borderColor` in either state get none, so open adds no
+ * border. Pass the styles *after* `isDestructive` so its label colour carries.
+ */
+export const withOpenState = (style: StyleProps): StyleProps => {
+  const pressed = {
+    ...(style._hover as Record<string, unknown> | undefined),
+    ...(style._active as Record<string, unknown> | undefined),
+  };
+  const open = Object.fromEntries(
+    OPEN_PROPERTIES.filter((key) => pressed[key] !== undefined).map((key) => [
+      key,
+      pressed[key],
+    ])
+  );
+  if (Object.keys(open).length === 0) return style;
+  return {
+    ...style,
+    css: {
+      ...(style.css as Record<string, unknown> | undefined),
+      [openStateSelector]: open,
+    },
+  } as StyleProps;
+};
+
 /** Variants on which `isDestructive` recolours the label. */
 export const destructiveCapableVariants: readonly ButtonVariant[] = [
   'secondary',
@@ -189,7 +254,8 @@ export const destructiveCapableVariants: readonly ButtonVariant[] = [
  *
  * `isDestructive` swaps only the text colour to `danger.fg` (prototype
  * `.btn.destr`); fill, border and states stay the variant's. Disabled still
- * wins, because `_disabled` sets its own colour.
+ * wins, because `_disabled` sets its own colour. Includes the open state
+ * (`withOpenState`).
  */
 export const getButtonStyles = (
   variant: ButtonVariant = 'subtle',
@@ -197,13 +263,13 @@ export const getButtonStyles = (
 ): StyleProps => {
   const base = buttonVariantStyles[variant] ?? buttonVariantStyles.subtle;
   if (!isDestructive || !destructiveCapableVariants.includes(variant)) {
-    return base;
+    return withOpenState(base);
   }
-  return {
+  return withOpenState({
     ...base,
     color: 'danger.fg',
     _hover: { ...(base._hover as object), color: 'danger.fg' },
-  };
+  });
 };
 
 /**

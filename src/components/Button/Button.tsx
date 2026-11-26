@@ -11,7 +11,11 @@ import {
   resolveLegacyButtonVariant,
   warnLegacyButtonProps,
 } from './Button.legacy';
-import { buttonTransition, getButtonStyles } from './Button.styles';
+import {
+  buttonTransition,
+  getButtonStyles,
+  openStateSelector,
+} from './Button.styles';
 import { ButtonOwnProps, ButtonProps, ButtonVariant } from './Button.types';
 
 /**
@@ -193,9 +197,17 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
           'aria-disabled': true,
           'data-disabled': '',
         })}
-        // The `action` icon rule lives in `css` (a nested selector cannot be a
-        // style prop); merged so a call site's `css` adds to it.
-        css={mergeCss(base.css as SystemStyleObject | undefined, cssProp)}
+        // The `action` icon rule and the open state (`aria-expanded="true"`,
+        // see `withOpenState`) live in `css` — a nested selector cannot be a
+        // style prop; merged so a call site's `css` adds to them. An open
+        // trigger does not lift on hover either: open + hover reads as open.
+        css={mergeCss(
+          base.css as SystemStyleObject | undefined,
+          lift && {
+            [openStateSelector]: { translate: '0 0', filter: 'none' },
+          },
+          cssProp
+        )}
       >
         {children}
       </ChakraButton>

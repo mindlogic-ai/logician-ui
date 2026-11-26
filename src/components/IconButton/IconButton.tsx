@@ -1,7 +1,11 @@
 import { ForwardedRef, forwardRef } from 'react';
-import { IconButton as ChakraIconButton } from '@chakra-ui/react';
+import {
+  IconButton as ChakraIconButton,
+  SystemStyleObject,
+} from '@chakra-ui/react';
 
 import { focusRing } from '@/utils/focusRing';
+import { mergeCss } from '@/utils/mergeCss';
 
 import { polymorphic } from '../../types/polymorphic';
 import {
@@ -34,6 +38,7 @@ const IconButtonImpl = forwardRef(
       variant: variantProp,
       isDestructive: isDestructiveProp = false,
       children,
+      css: cssProp,
       ...restWithLegacy
     }: IconButtonProps,
     ref?: ForwardedRef<HTMLButtonElement>
@@ -74,6 +79,10 @@ const IconButtonImpl = forwardRef(
         data-variant={variant}
         data-destructive={isDestructive || undefined}
         {...rest}
+        // The open state (`aria-expanded="true"`, see `withOpenState`) is a
+        // nested selector, so it lives in `css`; merged so a call site's `css`
+        // adds to it instead of dropping it.
+        css={mergeCss(styles.css as SystemStyleObject | undefined, cssProp)}
       >
         {children}
       </ChakraIconButton>
