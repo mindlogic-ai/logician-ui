@@ -15,16 +15,23 @@ const focusVars = {
   '--error-color': 'var(--chakra-colors-danger-solid)',
 };
 
+/** The focus/open ring: a `primary.main` border plus a 1px shadow. */
+const focusRing = {
+  borderColor: 'primary.main',
+  boxShadow: '0 0 0 1px var(--chakra-colors-primary-main)',
+};
+
+/**
+ * Shared by the Select trigger (a button) and the Combobox input (a text
+ * field). The focus ring is not here: each control decides when it shows.
+ * An invalid field keeps its red border on any focus, mouse or keyboard.
+ */
 const fieldBase = {
   ...focusVars,
   bg: 'bg.surface',
   color: 'fg.default',
   borderColor: 'border.control',
   _hover: { borderColor: 'fg.icon' },
-  _focus: {
-    borderColor: 'primary.main',
-    boxShadow: '0 0 0 1px var(--chakra-colors-primary-main)',
-  },
   _invalid: {
     borderColor: 'danger.solid',
     _hover: { borderColor: 'danger.solid' },
@@ -54,7 +61,16 @@ const clearTriggerRoom = (paddingVar: string) => ({
   },
 });
 
-/** Select trigger — the clickable control. */
+/**
+ * Select trigger — the clickable control. Also `FieldTrigger` (and the date
+ * pickers built on it).
+ *
+ * The ring shows on keyboard focus only (`_focusVisible`), and while the list
+ * is open (`_open`). Picking an option with the mouse returns focus to the
+ * trigger; with `_focus` that left a ring on the field just used, which read
+ * as a 2px border beside its neighbours (R30 3rd-round QA e112a67e). After a
+ * keyboard pick the browser still matches `:focus-visible`, so the ring stays.
+ */
 export const triggerStyles = {
   ...fieldBase,
   ...clearTriggerRoom('--select-trigger-padding-x'),
@@ -66,19 +82,17 @@ export const triggerStyles = {
   '&[data-placeholder-shown]:not(:disabled, [data-disabled])': {
     color: 'fg.placeholder',
   },
-  _open: {
-    borderColor: 'primary.main',
-    boxShadow: '0 0 0 1px var(--chakra-colors-primary-main)',
-  },
+  _focusVisible: focusRing,
+  _open: focusRing,
 };
 
 /**
  * `variant="ghost"` delta on top of `triggerStyles`, for dense rows (settings
  * lists) where a column of bordered triggers outweighs the card around them.
- * No border at rest; hover brings back `border.control`, focus/open keep the
- * normal ring, and an invalid field keeps its red border at rest so an error
- * is never hidden. The chevron identifies the control (`fg.muted`, well over
- * the 3:1 non-text floor), which is what lets the resting border go.
+ * No border at rest; hover brings back `border.control`, keyboard focus and
+ * open keep the normal ring, and an invalid field keeps its red border at rest
+ * so an error is never hidden. The chevron identifies the control (`fg.muted`,
+ * well over the 3:1 non-text floor), which is what lets the resting border go.
  */
 export const ghostTriggerStyles = {
   bg: 'transparent',
@@ -102,9 +116,13 @@ export const ghostTriggerStyles = {
   },
 };
 
-/** Combobox text input — the typeable control. */
+/**
+ * Combobox text input — the typeable control. Like `Input`, it rings on any
+ * focus: a ring while typing is expected, whatever moved focus there.
+ */
 export const inputStyles = {
   ...fieldBase,
+  _focus: focusRing,
   ...clearTriggerRoom('--combobox-input-padding-x'),
 };
 
