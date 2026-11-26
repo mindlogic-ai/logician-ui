@@ -997,11 +997,11 @@ export const UsageTokens: UsageStory = {
           use: <T en="Border on hover" ko="마우스를 올렸을 때 테두리" />,
         },
         {
-          token: triggerStyles._focus.borderColor,
+          token: triggerStyles._focusVisible.borderColor,
           use: (
             <T
-              en="Border and ring on focus or open"
-              ko="초점을 받거나 열렸을 때 테두리와 링"
+              en="Border and ring on keyboard focus or open"
+              ko="키보드로 초점을 받거나 열렸을 때 테두리와 링"
             />
           ),
         },

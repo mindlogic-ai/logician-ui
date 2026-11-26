@@ -291,8 +291,10 @@ Generated from `Select.styles.ts`. Select and Combobox share these.
 - **지우기 버튼의 이름.** `ClearTrigger`는 provider 언어로 「선택 지우기」
   ("Clear selection")라는 이름을 가집니다. Chakra 기본값은 어느 언어에서나 영어
   "Clear value"였습니다. 호출부에서 넘긴 `aria-label`이 우선합니다.
-- **초점과 상태.** 트리거는 초점을 받거나 열려 있는 동안 `primary.main` 테두리와 링을
-  보여 줍니다(WCAG 2.4.7). 선택된 항목은 `primary.selected` 위에 굵은 글자와 체크
+- **초점과 상태.** 트리거는 키보드로 초점을 받았을 때(`:focus-visible`)와 열려 있는
+  동안 `primary.main` 테두리와 링을 보여 줍니다(WCAG 2.4.7). 마우스로 고르고 나면 초점은
+  트리거로 돌아오지만 링은 그리지 않습니다. `ComboboxField`의 입력란은 `Input`처럼
+  어떻게 초점을 받든 링을 그립니다. 선택된 항목은 `primary.selected` 위에 굵은 글자와 체크
   표시로 나타나므로 색에만 기대지 않습니다(WCAG 1.4.1).
 
 직접 챙겨야 하는 일
