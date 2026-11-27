@@ -79,6 +79,52 @@ export const Variants: Story = {
 };
 
 /**
+ * Open: a Button that opens a menu or popover shows its role's *pressed*
+ * colours while `aria-expanded="true"` — no press `scale`, no added border,
+ * and hovering it while open changes nothing. Menu and Popover triggers set
+ * `aria-expanded` for you; a Tooltip's `data-expanded` does not count, so a
+ * button with a tooltip never looks open on hover. Disabled still wins.
+ */
+export const Open: Story = {
+  render: () => (
+    <Grid templateColumns="max-content repeat(3, max-content)" gap={4}>
+      <Box />
+      <Text fontSize="xs" color="fg.muted">
+        <T en="closed" ko="닫힘" />
+      </Text>
+      <Text fontSize="xs" color="fg.muted">
+        <T en="open" ko="열림" />
+      </Text>
+      <Text fontSize="xs" color="fg.muted">
+        <T en="open, disabled" ko="열림 · 비활성" />
+      </Text>
+      {buttonVariants.map((variant) => (
+        <Box key={variant} display="contents">
+          <Text fontSize="sm" fontWeight="semibold" color="fg.default">
+            {variant}
+          </Text>
+          {[
+            {},
+            { 'aria-expanded': true },
+            { 'aria-expanded': true, disabled: true },
+          ].map((props, i) => (
+            <Button
+              key={i}
+              variant={variant}
+              aria-haspopup="menu"
+              aria-expanded={false}
+              {...props}
+            >
+              {variant === 'action' && <Sparkles />}더 보기
+            </Button>
+          ))}
+        </Box>
+      ))}
+    </Grid>
+  ),
+};
+
+/**
  * `isDestructive` turns the label `danger.fg` on the three quiet roles; the
  * border and fill stay the variant's. For a filled destructive button use
  * `variant="danger"`.
@@ -529,7 +575,7 @@ const STATE_LABELS = {
   borderColor: { en: 'border', ko: '테두리' },
   color: { en: 'label', ko: '글자' },
   hover: { en: 'hover fill', ko: '마우스 올림' },
-  active: { en: 'pressed fill', ko: '누름' },
+  active: { en: 'pressed / open fill', ko: '누름·열림' },
 } as const;
 
 type Use = { en: string; ko: string };

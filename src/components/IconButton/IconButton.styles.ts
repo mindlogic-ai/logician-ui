@@ -6,6 +6,7 @@ import { resolveLegacyButtonVariant } from '../Button/Button.legacy';
 import {
   buttonColorPalettes,
   buttonVariantStyles,
+  withOpenState,
 } from '../Button/Button.styles';
 import {
   ButtonColorPalette,
@@ -72,12 +73,16 @@ export const getIconButtonStyles = (
 ): StyleProps => {
   const base =
     iconButtonVariantStyles[variant] ?? iconButtonVariantStyles.ghost;
-  if (!isDestructive || !destructiveCapable.includes(variant)) return base;
-  return {
+  // Open state (`aria-expanded="true"`) derived like Button's — see
+  // `withOpenState`.
+  if (!isDestructive || !destructiveCapable.includes(variant)) {
+    return withOpenState(base);
+  }
+  return withOpenState({
     ...base,
     color: 'danger.fg',
     _hover: { ...(base._hover as object), color: 'danger.fg' },
-  };
+  });
 };
 
 const legacyVariants: LegacyButtonVariant[] = [

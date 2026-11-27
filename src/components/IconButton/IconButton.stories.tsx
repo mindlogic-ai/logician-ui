@@ -102,6 +102,51 @@ export const Variants: Story = {
 };
 
 /**
+ * Open: an IconButton that opens a menu or popover (the ⋯ of a row, a toolbar
+ * menu) shows its role's pressed colours while `aria-expanded="true"` — no
+ * press `scale`, no added border, unchanged by hover. Ghost's glyph stays
+ * `fg.default`, as it is while pressed. A Tooltip's `data-expanded` does not
+ * count. Disabled still wins.
+ */
+export const Open: Story = {
+  render: (args) => (
+    <Grid templateColumns="max-content repeat(3, max-content)" gap={4}>
+      <Box />
+      <Text fontSize="xs" color="fg.muted">
+        <T en="closed" ko="닫힘" />
+      </Text>
+      <Text fontSize="xs" color="fg.muted">
+        <T en="open" ko="열림" />
+      </Text>
+      <Text fontSize="xs" color="fg.muted">
+        <T en="open, disabled" ko="열림 · 비활성" />
+      </Text>
+      {iconButtonVariants.map((variant) => (
+        <Box key={variant} display="contents">
+          <Text fontSize="sm" fontWeight="semibold" color="fg.default">
+            {variant}
+          </Text>
+          {[
+            {},
+            { 'aria-expanded': true },
+            { 'aria-expanded': true, disabled: true },
+          ].map((props, i) => (
+            <IconButton
+              key={i}
+              {...args}
+              variant={variant}
+              aria-haspopup="menu"
+              aria-expanded={false}
+              {...props}
+            />
+          ))}
+        </Box>
+      ))}
+    </Grid>
+  ),
+};
+
+/**
  * `isDestructive`: a delete icon in a row. Ghost and secondary only.
  */
 export const Destructive: Story = {
@@ -301,7 +346,7 @@ const iconButtonTokenRows = () => {
     add(s.color, at('icon', '아이콘'));
     add(s._hover?.bgColor, at('hover fill', '마우스 올림 바탕'));
     add(s._hover?.color, at('hover icon', '마우스 올림 아이콘'));
-    add(s._active?.bgColor, at('pressed fill', '누름 바탕'));
+    add(s._active?.bgColor, at('pressed / open fill', '누름·열림 바탕'));
   });
   add('danger.fg', { en: 'isDestructive icon', ko: 'isDestructive 아이콘' });
   add('disabled.bg', { en: 'disabled fill', ko: '비활성 바탕' });

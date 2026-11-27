@@ -9,7 +9,7 @@ import {
   resolveLegacyButtonVariant,
   warnLegacyButtonProps,
 } from '../Button/Button.legacy';
-import { buttonTransition } from '../Button/Button.styles';
+import { buttonTransition, cssList } from '../Button/Button.styles';
 import { getIconButtonStyles } from './IconButton.styles';
 import {
   IconButtonOwnProps,
@@ -34,6 +34,7 @@ const IconButtonImpl = forwardRef(
       variant: variantProp,
       isDestructive: isDestructiveProp = false,
       children,
+      css: cssProp,
       ...restWithLegacy
     }: IconButtonProps,
     ref?: ForwardedRef<HTMLButtonElement>
@@ -74,6 +75,11 @@ const IconButtonImpl = forwardRef(
         data-variant={variant}
         data-destructive={isDestructive || undefined}
         {...rest}
+        // The open state (`aria-expanded="true"`, see `withOpenState`) is a
+        // nested selector, so it lives in `css`; merged so a call site's `css`
+        // adds to it instead of dropping it. Passed as an array so Chakra
+        // normalizes each entry (responsive values survive).
+        css={cssList(styles.css, cssProp)}
       >
         {children}
       </ChakraIconButton>
