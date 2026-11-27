@@ -1042,7 +1042,10 @@ describe('NavList', () => {
             body.includes('grid-column:1')
         );
       expect(giveBack(':hover')).toBe(true);
-      expect(giveBack(':focus-within')).toBe(true);
+      // Keyboard focus only: a mouse click leaves focus on the link, and the
+      // row it opened must not keep its action up.
+      expect(giveBack(':has(:focus-visible)')).toBe(true);
+      expect(giveBack(':focus-within')).toBe(false);
       expect(giveBack('[aria-expanded="true"]')).toBe(true);
       // Touch: shown, with its space kept.
       const touch = rules.filter(([media]) =>
