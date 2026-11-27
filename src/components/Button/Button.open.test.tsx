@@ -13,6 +13,8 @@ import { Button } from './Button';
 import {
   buttonVariantStyles,
   getButtonStyles,
+  openHoverMedia,
+  openHoverSelector,
   openStateSelector,
 } from './Button.styles';
 import { ButtonVariant } from './Button.types';
@@ -85,7 +87,7 @@ describe('Button / IconButton open state', () => {
     });
 
     it('excludes everything _disabled matches, incl. [disabled] (as="a")', () => {
-      for (const arm of openStateSelector.split(/,\s(?=&)/)) {
+      for (const arm of [openStateSelector, openHoverSelector]) {
         for (const d of [
           ':disabled',
           '[disabled]',
@@ -100,13 +102,24 @@ describe('Button / IconButton open state', () => {
     it('the resting arm adds no specificity beyond aria-expanded', () => {
       // Exclusion inside :where(), so a call site's `&[aria-expanded=true]`
       // ties it and wins by merging later (Codex review on #293).
-      expect(openStateSelector.split(/,\s(?=&)/)[0]).toMatch(
-        /^&\[aria-expanded=true\]:where\(:not\(/
+      expect(openStateSelector).toMatch(
+        /^&\[aria-expanded=true\]:where\(:not\([^)]*\)\)$/
       );
+    });
+
+    it('the hover arm sits under @media (hover: hover), like _hover', () => {
+      // A tap leaves :hover stuck on touch screens while _hover is off.
+      const css = getButtonStyles('secondary').css as States;
+      expect(openHoverMedia).toBe('@media (hover: hover)');
+      expect(
+        (css[openHoverMedia] as unknown as States)[openHoverSelector]
+      ).toEqual(css[openStateSelector]);
+      expect(Object.keys(css)).not.toContain(openHoverSelector);
     });
 
     it('the selector never uses data-expanded (Tooltip sets it)', () => {
       expect(openStateSelector).not.toMatch(/data-expanded/);
+      expect(openHoverSelector).not.toMatch(/data-expanded/);
     });
   });
 

@@ -1,5 +1,5 @@
 import { forwardRef, MouseEvent } from 'react';
-import { Button as ChakraButton, SystemStyleObject } from '@chakra-ui/react';
+import { Button as ChakraButton } from '@chakra-ui/react';
 
 import { useTranslate } from '@/hooks/useTranslate';
 import { focusRing } from '@/utils/focusRing';
@@ -11,8 +11,11 @@ import {
   resolveLegacyButtonVariant,
   warnLegacyButtonProps,
 } from './Button.legacy';
-import { buttonTransition, getButtonStyles } from './Button.styles';
+import { buttonTransition, cssList, getButtonStyles } from './Button.styles';
 import { ButtonOwnProps, ButtonProps, ButtonVariant } from './Button.types';
+
+/** Lift scope: hover lift only on a trigger that is not open. */
+const LIFT_CLOSED = '&:not([aria-expanded=true])';
 
 /**
  * Button — one `variant` role per button (5.0 BAZE palette).
@@ -101,6 +104,24 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
         }
       : onClick;
 
+    // Closed triggers only: an open menu trigger does not lift — open + hover
+    // reads as open. Scoped rather than reset under the open selector, so the
+    // dark-mode shadow cannot out-rank a reset and a call site's own resting
+    // `translate` / `filter` is never overwritten when it opens. The scope
+    // adds specificity, so the call site's `_hover` is merged into it as well
+    // (below) and still wins over the lift.
+    const liftHover = {
+      translate: '0 -1px',
+      // `drop-shadow`, not `box-shadow`. The keyboard focus ring is a
+      // box-shadow, and Chakra emits `:hover` after `:focus-visible`, so a
+      // focused button being hovered would lose its ring to this. A different
+      // property cannot collide with it at all — and unlike a box-shadow it
+      // follows the border radius for free.
+      filter: 'drop-shadow(0 3px 6px rgba(0, 0, 0, 0.18))',
+      // A black shadow does nothing on a dark canvas; deepen it there.
+      _dark: { filter: 'drop-shadow(0 3px 8px rgba(0, 0, 0, 0.55))' },
+    };
+
     // Merged rather than spread after: each variant already owns `_hover` and
     // `_active` for its colours, and replacing either would drop them.
     const styles = lift
@@ -108,22 +129,7 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
           ...base,
           _hover: {
             ...base._hover,
-            // Closed triggers only: an open menu trigger does not lift —
-            // open + hover reads as open. Scoped here rather than reset under
-            // the open selector, so the dark-mode shadow cannot out-rank the
-            // reset and a call site's own resting `translate` / `filter` is
-            // never overwritten when it opens.
-            '&:not([aria-expanded=true])': {
-              translate: '0 -1px',
-              // `drop-shadow`, not `box-shadow`. The keyboard focus ring is a
-              // box-shadow, and Chakra emits `:hover` after `:focus-visible`,
-              // so a focused button being hovered would lose its ring to
-              // this. A different property cannot collide with it at all —
-              // and unlike a box-shadow it follows the border radius for free.
-              filter: 'drop-shadow(0 3px 6px rgba(0, 0, 0, 0.18))',
-              // A black shadow does nothing on a dark canvas; deepen it there.
-              _dark: { filter: 'drop-shadow(0 3px 8px rgba(0, 0, 0, 0.55))' },
-            },
+            [LIFT_CLOSED]: liftHover,
           },
           // Pressing puts it back on the surface, under the `scale`.
           _active: { ...base._active, translate: '0 0', filter: 'none' },
@@ -163,7 +169,11 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
         // stopped reading as pressed at all. Its own keys still win; it just
         // no longer erases the ones it did not mention. Deep, so a nested
         // condition (lift's `_hover._dark`) survives a call site's own `_dark`.
-        _hover={mergeCss(styles._hover, hoverProp)}
+        _hover={mergeCss(
+          styles._hover,
+          hoverProp,
+          lift && hoverProp && { [LIFT_CLOSED]: hoverProp }
+        )}
         _active={mergeCss(styles._active, activeProp)}
         // `cursor` is a style prop, so it lands outside Chakra's
         // `@layer recipes` and beat the recipe's disabled cursor — every
@@ -202,14 +212,11 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
         })}
         // The `action` icon rule and the open state (`aria-expanded="true"`,
         // see `withOpenState`) live in `css` — a nested selector cannot be a
-        // style prop; merged so a call site's `css` adds to them. Chakra also
-        // takes an array of style objects; merge each in order.
-        css={mergeCss(
-          base.css as SystemStyleObject | undefined,
-          ...((Array.isArray(cssProp)
-            ? cssProp
-            : [cssProp]) as SystemStyleObject[])
-        )}
+        // style prop; a call site's `css` (object or array) comes after them.
+        // Passed to Chakra as an array, not merged here: Chakra normalizes
+        // each entry (responsive arrays, breakpoint objects) before merging,
+        // and a plain object merge would drop a breakpoint (Codex on #293).
+        css={cssList(base.css, cssProp)}
       >
         {children}
       </ChakraButton>

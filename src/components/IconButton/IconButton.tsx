@@ -1,11 +1,7 @@
 import { ForwardedRef, forwardRef } from 'react';
-import {
-  IconButton as ChakraIconButton,
-  SystemStyleObject,
-} from '@chakra-ui/react';
+import { IconButton as ChakraIconButton } from '@chakra-ui/react';
 
 import { focusRing } from '@/utils/focusRing';
-import { mergeCss } from '@/utils/mergeCss';
 
 import { polymorphic } from '../../types/polymorphic';
 import {
@@ -13,7 +9,7 @@ import {
   resolveLegacyButtonVariant,
   warnLegacyButtonProps,
 } from '../Button/Button.legacy';
-import { buttonTransition } from '../Button/Button.styles';
+import { buttonTransition, cssList } from '../Button/Button.styles';
 import { getIconButtonStyles } from './IconButton.styles';
 import {
   IconButtonOwnProps,
@@ -81,14 +77,9 @@ const IconButtonImpl = forwardRef(
         {...rest}
         // The open state (`aria-expanded="true"`, see `withOpenState`) is a
         // nested selector, so it lives in `css`; merged so a call site's `css`
-        // adds to it instead of dropping it. Chakra also takes an array of
-        // style objects; merge each in order.
-        css={mergeCss(
-          styles.css as SystemStyleObject | undefined,
-          ...((Array.isArray(cssProp)
-            ? cssProp
-            : [cssProp]) as SystemStyleObject[])
-        )}
+        // adds to it instead of dropping it. Passed as an array so Chakra
+        // normalizes each entry (responsive values survive).
+        css={cssList(styles.css, cssProp)}
       >
         {children}
       </ChakraIconButton>

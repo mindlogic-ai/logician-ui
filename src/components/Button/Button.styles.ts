@@ -1,4 +1,7 @@
-import { ButtonProps as ChakraButtonProps } from '@chakra-ui/react';
+import {
+  ButtonProps as ChakraButtonProps,
+  type SystemStyleObject,
+} from '@chakra-ui/react';
 
 import { disabledControl, disabledText } from '@/utils/disabledControl';
 
@@ -194,11 +197,15 @@ export const buttonVariantStyles: Record<ButtonVariant, StyleProps> = {
  * set by the things that actually open (Menu, Popover).
  *
  * ## Why the hover arm
- * `_hover` is `&:is(:hover, [data-hover]):not(:disabled, [data-disabled])`,
- * and Chakra emits style props after `css`, so a hover rule of the same
- * specificity wins and an open trigger would change under the pointer. The
- * hover arm (`:hover` and `[data-hover]`, as `_hover` matches) carries a real
- * `:not(...)`, so it out-ranks `_hover` and open + hover reads as open.
+ * `_hover` is `&:is(:hover, [data-hover]):not(:disabled, [data-disabled])`
+ * under `@media (hover: hover)`, and Chakra emits style props after `css`, so
+ * a hover rule of the same specificity would lose and an open trigger would
+ * change under the pointer. The hover arm (`:hover` and `[data-hover]`, as
+ * `_hover` matches) carries a real `:not(...)`, so it out-ranks `_hover` and
+ * open + hover reads as open. It sits under the same `@media (hover: hover)`
+ * as `_hover`: on a touch screen `:hover` sticks after a tap while `_hover`
+ * is off, and an unguarded hover arm would then override a call site's own
+ * open colours for nothing.
  *
  * ## Disabled still wins
  * Both arms skip everything `_disabled` matches (`:disabled`, `[disabled]`,
@@ -216,7 +223,22 @@ export const buttonVariantStyles: Record<ButtonVariant, StyleProps> = {
 const NOT_DISABLED =
   ':not(:disabled, [disabled], [data-disabled], [aria-disabled=true])';
 const OPEN = '&[aria-expanded=true]';
-export const openStateSelector = `${OPEN}:where(${NOT_DISABLED}), ${OPEN}${NOT_DISABLED}:is(:hover, [data-hover])`;
+/** Resting arm of the open state (no added specificity). */
+export const openStateSelector = `${OPEN}:where(${NOT_DISABLED})`;
+/** Hover arm of the open state; lives under `openHoverMedia`. */
+export const openHoverSelector = `${OPEN}${NOT_DISABLED}:is(:hover, [data-hover])`;
+/** The same media guard Chakra puts on `_hover`. */
+export const openHoverMedia = '@media (hover: hover)';
+
+/**
+ * The component's own `css` followed by a call site's `css` (an object or
+ * Chakra's array form), as one array for Chakra to normalize and merge in
+ * order — so responsive values and breakpoint objects survive.
+ */
+export const cssList = (own: unknown, callSite: unknown): SystemStyleObject[] =>
+  [own, ...(Array.isArray(callSite) ? callSite : [callSite])].filter(
+    (entry): entry is SystemStyleObject => !!entry && typeof entry === 'object'
+  );
 
 /** The colour properties a press changes; the open state copies only these. */
 const OPEN_PROPERTIES = ['bgColor', 'borderColor', 'color'] as const;
@@ -249,6 +271,7 @@ export const withOpenState = (style: StyleProps): StyleProps => {
     css: {
       ...(style.css as Record<string, unknown> | undefined),
       [openStateSelector]: open,
+      [openHoverMedia]: { [openHoverSelector]: open },
     },
   } as StyleProps;
 };
