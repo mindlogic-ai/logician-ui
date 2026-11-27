@@ -11,6 +11,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import { flushSync } from 'react-dom';
 import { Box, Flex, Grid } from '@chakra-ui/react';
 
 import { MasonryProps } from './Masonry.types';
@@ -44,38 +45,46 @@ export const Masonry = ({
     });
   }, [childrenArray]);
 
-  // Measure item heights with optimized comparison
+  // Measure item heights and store them only when one changed.
+  //
+  // The comparison runs inside the state updater so this callback does not
+  // depend on `itemHeights`. When it did, every stored height gave the layout
+  // effect below a new callback and ran it again. An item whose height depends
+  // on the column it lands in then re-measured without end, and React threw
+  // "Maximum update depth exceeded".
   const measureItemHeights = useCallback(() => {
-    let hasChanges = false;
-    const newHeights = { ...itemHeights };
+    const measured: Record<string, number> = {};
 
     Object.entries(itemRefs.current).forEach(([key, ref]) => {
-      if (ref) {
-        const height = Math.round(ref.offsetHeight);
-        if (newHeights[key] !== height) {
-          newHeights[key] = height;
-          hasChanges = true;
-        }
+      // An item under `display: none` has no offsetParent and reads 0. Keep
+      // its last measured height instead: storing 0 re-laid out the whole
+      // Masonry every time its container was hidden and again when shown.
+      if (ref && ref.offsetParent !== null) {
+        measured[key] = Math.round(ref.offsetHeight);
       }
     });
 
-    if (hasChanges) {
-      setItemHeights(newHeights);
-    }
-  }, [itemHeights]);
+    setItemHeights((prev) => {
+      const hasChanges = Object.entries(measured).some(
+        ([key, height]) => prev[key] !== height
+      );
+      return hasChanges ? { ...prev, ...measured } : prev;
+    });
+  }, []);
 
   // Setup measurements on initial render and when children change
   useLayoutEffect(() => {
-    // Use layout effect for synchronous measurement before paint
     cleanupItemRefs();
 
-    // Measure after DOM update but before browser paint
     if (isInitialRender.current) {
       isInitialRender.current = false;
     }
 
-    const timer = setTimeout(measureItemHeights, 0);
-    return () => clearTimeout(timer);
+    // Measure in the layout effect itself. A state update made here is
+    // rendered before the browser paints, so the first paint already has the
+    // measured layout. Deferring it (setTimeout) painted the unmeasured
+    // round-robin layout first.
+    measureItemHeights();
   }, [childrenArray.length, cleanupItemRefs, measureItemHeights]);
 
   // Set up resize observer
@@ -85,11 +94,12 @@ export const Masonry = ({
       resizeObserverRef.current.disconnect();
     }
 
-    // Create new observer that uses throttled measurement
-    let rafId: number;
+    // ResizeObserver callbacks run after layout and before paint. Measuring
+    // and re-rendering right here keeps the corrected layout in the same
+    // frame. Deferring to the next frame painted the stale layout once, which
+    // showed as items jumping columns when a hidden Masonry became visible.
     const handleResize = () => {
-      cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(measureItemHeights);
+      flushSync(measureItemHeights);
     };
 
     resizeObserverRef.current = new ResizeObserver(handleResize);
@@ -102,10 +112,12 @@ export const Masonry = ({
     });
 
     return () => {
-      cancelAnimationFrame(rafId);
       resizeObserverRef.current?.disconnect();
     };
-  }, [measureItemHeights, childrenArray.length]);
+    // itemHeights is here so the observer is set up again after a re-layout.
+    // An item that moves to another column is mounted as a new element, and
+    // the previous observer never saw it.
+  }, [measureItemHeights, childrenArray.length, itemHeights]);
 
   // Create column layout with optimized distribution
   const columns = useMemo(() => {
