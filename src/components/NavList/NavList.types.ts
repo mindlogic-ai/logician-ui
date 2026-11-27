@@ -91,7 +91,8 @@ export type NavListItemProps = Omit<
   trailingAction?: ReactNode;
   /**
    * `hover`: the trailing action is transparent until the row is hovered, or
-   * focus is anywhere in the row, or the action's own menu is open
+   * keyboard focus (`:focus-visible`) is anywhere in the row — not the focus a
+   * mouse click leaves behind — or the action's own menu is open
    * (`aria-expanded="true"` / `data-state="open"` inside it). It is never
    * removed, so Tab still reaches it — focusing it is what reveals it. Always
    * shown on touch screens (`hover: none`), where there is no hover to reveal it.

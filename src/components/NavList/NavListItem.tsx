@@ -444,15 +444,19 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
           // relative selector, which would break every consumer's tests.
           [PRESSED]: pressedFill,
         };
-    // Shown: hovered, focus anywhere in the row, or the action's menu open.
-    const shown = [`&:hover > ${ACTION}`, `&:focus-within > ${ACTION}`].join(
-      ', '
-    );
+    // Shown: hovered, keyboard focus anywhere in the row, or the action's
+    // menu open. Keyboard focus only (`:focus-visible`): a mouse click leaves
+    // focus on the link it pressed, and `:focus-within` kept the action up on
+    // the row just opened until the member clicked somewhere else.
+    const keyboardFocus = '&:has(:focus-visible)';
     const revealOnHover =
       trailingActionVisibility === 'hover'
         ? {
             [`& > ${ACTION}`]: { opacity: 0 },
-            [shown]: { opacity: 1 },
+            [`&:hover > ${ACTION}`]: { opacity: 1 },
+            // Its own rule: `:has()` is not forgiving, and a browser without
+            // it would drop every selector listed beside it.
+            [`${keyboardFocus} > ${ACTION}`]: { opacity: 1 },
             // Its own rule: `:has()` is not forgiving, and a browser without
             // it would drop every selector listed beside it.
             [`& > ${ACTION}:has([aria-expanded="true"], [data-state="open"])`]:
@@ -465,7 +469,8 @@ export const NavListItem = forwardRef<HTMLElement, NavListItemProps>(
             ...(overlaysAction && {
               // The row gives the action its column back exactly when the
               // action shows, so the label ends before it.
-              [`&:hover > ${ROW}, &:focus-within > ${ROW}`]: { gridColumn: 1 },
+              [`&:hover > ${ROW}`]: { gridColumn: 1 },
+              [`${keyboardFocus} > ${ROW}`]: { gridColumn: 1 },
               [`&:has(${ACTION} [aria-expanded="true"], ${ACTION} [data-state="open"]) > ${ROW}`]:
                 { gridColumn: 1 },
             }),

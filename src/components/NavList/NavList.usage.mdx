@@ -242,9 +242,10 @@ Collapsed, a row's square is `2.5em`, so the rail is `3.5em` with `p={2}`.
 ### A more-menu that appears on hover
 
 `trailingActionVisibility="hover"` keeps a row's trailing action transparent
-until the row is hovered, focus is anywhere in it, or the action's menu is
-open. It is never removed, so Tab still reaches it and focusing it is what
-shows it. On touch screens it is always shown. The row's fill sits on its
+until the row is hovered, keyboard focus is anywhere in it, or the action's
+menu is open. A mouse click leaves focus on the row it opened; that focus does
+not count, so the row just opened goes back to rest once the pointer leaves.
+It is never removed, so Tab still reaches it and focusing it is what shows it. On touch screens it is always shown. The row's fill sits on its
 `<li>`, so pointing at the action keeps the row lit.
 
 At rest the label has the whole row and the action sits over its end; the
@@ -265,7 +266,8 @@ menu then opens at the top-left of the page. Pass one `useId()` to both:
 ### 마우스를 올리면 나타나는 더 보기 메뉴
 
 `trailingActionVisibility="hover"`를 주면 뒤쪽 동작 버튼이 평소에는 투명하고, 항목에 마우스를
-올리거나 항목 안에 초점이 있거나 그 메뉴가 열려 있을 때 보입니다. 없애는 것이 아니라서 Tab으로
+올리거나 키보드 초점이 항목 안에 있거나 그 메뉴가 열려 있을 때 보입니다. 마우스로 누른 뒤 남는
+초점은 치지 않으므로, 방금 연 항목도 마우스가 떠나면 평소 모습으로 돌아갑니다. 없애는 것이 아니라서 Tab으로
 갈 수 있고, 초점이 가면 나타납니다. 터치 화면에서는 늘 보입니다. 배경은 항목의 `<li>`에
 칠하므로 동작 버튼을 가리켜도 항목이 밝게 남아 있습니다.
 
