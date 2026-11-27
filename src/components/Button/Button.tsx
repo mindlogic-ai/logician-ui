@@ -1,5 +1,8 @@
 import { forwardRef, MouseEvent } from 'react';
-import { Button as ChakraButton } from '@chakra-ui/react';
+import {
+  Button as ChakraButton,
+  type SystemStyleObject,
+} from '@chakra-ui/react';
 
 import { useTranslate } from '@/hooks/useTranslate';
 import { focusRing } from '@/utils/focusRing';
@@ -16,6 +19,27 @@ import { ButtonOwnProps, ButtonProps, ButtonVariant } from './Button.types';
 
 /** Lift scope: hover lift only on a trigger that is not open. */
 const LIFT_CLOSED = '&:not([aria-expanded=true])';
+
+/** The lift properties a call site's `_hover` sets, for the lift scope. */
+const LIFT_KEYS = ['translate', 'filter'] as const;
+const liftOverrides = (hover: unknown): SystemStyleObject | undefined => {
+  if (!hover || typeof hover !== 'object') return undefined;
+  const source = hover as Record<string, unknown>;
+  const pick = (from: Record<string, unknown> | undefined) =>
+    Object.fromEntries(
+      LIFT_KEYS.filter((key) => from?.[key] !== undefined).map((key) => [
+        key,
+        from![key],
+      ])
+    );
+  const own = pick(source);
+  const dark = pick(source._dark as Record<string, unknown> | undefined);
+  const out = {
+    ...own,
+    ...(Object.keys(dark).length > 0 && { _dark: dark }),
+  };
+  return Object.keys(out).length > 0 ? (out as SystemStyleObject) : undefined;
+};
 
 /**
  * Button — one `variant` role per button (5.0 BAZE palette).
@@ -108,8 +132,11 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
     // reads as open. Scoped rather than reset under the open selector, so the
     // dark-mode shadow cannot out-rank a reset and a call site's own resting
     // `translate` / `filter` is never overwritten when it opens. The scope
-    // adds specificity, so the call site's `_hover` is merged into it as well
-    // (below) and still wins over the lift.
+    // adds specificity, so the call site's own hover `translate` / `filter`
+    // (and their `_dark` values) are copied into it as well (below) and still
+    // win over the lift. Only those: copying the whole `_hover` would raise
+    // unrelated properties too (a `boxShadow: 'none'` would then beat a
+    // hovered focus ring — Codex on #293).
     const liftHover = {
       translate: '0 -1px',
       // `drop-shadow`, not `box-shadow`. The keyboard focus ring is a
@@ -172,7 +199,7 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
         _hover={mergeCss(
           styles._hover,
           hoverProp,
-          lift && hoverProp && { [LIFT_CLOSED]: hoverProp }
+          lift && { [LIFT_CLOSED]: liftOverrides(hoverProp) }
         )}
         _active={mergeCss(styles._active, activeProp)}
         // `cursor` is a style prop, so it lands outside Chakra's
