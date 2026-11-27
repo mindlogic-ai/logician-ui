@@ -194,18 +194,29 @@ export const buttonVariantStyles: Record<ButtonVariant, StyleProps> = {
  * set by the things that actually open (Menu, Popover).
  *
  * ## Why the hover arm
- * `_hover` and the bare open selector have the same specificity, so whichever
- * Chakra happens to emit later would win and an open trigger would change
- * under the pointer. Matching `:hover` too (and `[data-hover]`, as `_hover`
- * does) makes open + hover read the same as open.
+ * `_hover` is `&:is(:hover, [data-hover]):not(:disabled, [data-disabled])`,
+ * and Chakra emits style props after `css`, so a hover rule of the same
+ * specificity wins and an open trigger would change under the pointer. The
+ * hover arm (`:hover` and `[data-hover]`, as `_hover` matches) carries a real
+ * `:not(...)`, so it out-ranks `_hover` and open + hover reads as open.
  *
  * ## Disabled still wins
- * The selector excludes everything `_disabled` matches, so a disabled trigger
- * keeps its disabled colours even with `aria-expanded="true"`.
+ * Both arms skip everything `_disabled` matches (`:disabled`, `[disabled]`,
+ * `[data-disabled]`, `[aria-disabled=true]`), so a disabled trigger keeps its
+ * disabled colours — `[disabled]` covers a polymorphic `as="a"` trigger,
+ * which never matches `:disabled`.
+ *
+ * ## A call site can still restyle its own open trigger
+ * In the resting arm the exclusion sits inside `:where()`, which adds no
+ * specificity, so a call site's `css` `&[aria-expanded=true]` ties it and,
+ * merged after this one, wins. (Under the pointer a call site has to beat
+ * `_hover` anyway — with `_hover` or a more specific selector — exactly as
+ * it would without this rule.)
  */
-const OPEN =
-  '&[aria-expanded=true]:not(:disabled, [data-disabled], [aria-disabled=true])';
-export const openStateSelector = `${OPEN}, ${OPEN}:is(:hover, [data-hover])`;
+const NOT_DISABLED =
+  ':not(:disabled, [disabled], [data-disabled], [aria-disabled=true])';
+const OPEN = '&[aria-expanded=true]';
+export const openStateSelector = `${OPEN}:where(${NOT_DISABLED}), ${OPEN}${NOT_DISABLED}:is(:hover, [data-hover])`;
 
 /** The colour properties a press changes; the open state copies only these. */
 const OPEN_PROPERTIES = ['bgColor', 'borderColor', 'color'] as const;

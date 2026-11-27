@@ -81,8 +81,14 @@ const IconButtonImpl = forwardRef(
         {...rest}
         // The open state (`aria-expanded="true"`, see `withOpenState`) is a
         // nested selector, so it lives in `css`; merged so a call site's `css`
-        // adds to it instead of dropping it.
-        css={mergeCss(styles.css as SystemStyleObject | undefined, cssProp)}
+        // adds to it instead of dropping it. Chakra also takes an array of
+        // style objects; merge each in order.
+        css={mergeCss(
+          styles.css as SystemStyleObject | undefined,
+          ...((Array.isArray(cssProp)
+            ? cssProp
+            : [cssProp]) as SystemStyleObject[])
+        )}
       >
         {children}
       </ChakraIconButton>

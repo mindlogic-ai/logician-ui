@@ -11,11 +11,7 @@ import {
   resolveLegacyButtonVariant,
   warnLegacyButtonProps,
 } from './Button.legacy';
-import {
-  buttonTransition,
-  getButtonStyles,
-  openStateSelector,
-} from './Button.styles';
+import { buttonTransition, getButtonStyles } from './Button.styles';
 import { ButtonOwnProps, ButtonProps, ButtonVariant } from './Button.types';
 
 /**
@@ -112,15 +108,22 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
           ...base,
           _hover: {
             ...base._hover,
-            translate: '0 -1px',
-            // `drop-shadow`, not `box-shadow`. The keyboard focus ring is a
-            // box-shadow, and Chakra emits `:hover` after `:focus-visible`, so
-            // a focused button being hovered would lose its ring to this. A
-            // different property cannot collide with it at all — and unlike a
-            // box-shadow it follows the border radius for free.
-            filter: 'drop-shadow(0 3px 6px rgba(0, 0, 0, 0.18))',
-            // A black shadow does nothing on a dark canvas; deepen it there.
-            _dark: { filter: 'drop-shadow(0 3px 8px rgba(0, 0, 0, 0.55))' },
+            // Closed triggers only: an open menu trigger does not lift —
+            // open + hover reads as open. Scoped here rather than reset under
+            // the open selector, so the dark-mode shadow cannot out-rank the
+            // reset and a call site's own resting `translate` / `filter` is
+            // never overwritten when it opens.
+            '&:not([aria-expanded=true])': {
+              translate: '0 -1px',
+              // `drop-shadow`, not `box-shadow`. The keyboard focus ring is a
+              // box-shadow, and Chakra emits `:hover` after `:focus-visible`,
+              // so a focused button being hovered would lose its ring to
+              // this. A different property cannot collide with it at all —
+              // and unlike a box-shadow it follows the border radius for free.
+              filter: 'drop-shadow(0 3px 6px rgba(0, 0, 0, 0.18))',
+              // A black shadow does nothing on a dark canvas; deepen it there.
+              _dark: { filter: 'drop-shadow(0 3px 8px rgba(0, 0, 0, 0.55))' },
+            },
           },
           // Pressing puts it back on the surface, under the `scale`.
           _active: { ...base._active, translate: '0 0', filter: 'none' },
@@ -199,14 +202,13 @@ const ButtonImpl = forwardRef<HTMLButtonElement, ButtonProps>(
         })}
         // The `action` icon rule and the open state (`aria-expanded="true"`,
         // see `withOpenState`) live in `css` — a nested selector cannot be a
-        // style prop; merged so a call site's `css` adds to them. An open
-        // trigger does not lift on hover either: open + hover reads as open.
+        // style prop; merged so a call site's `css` adds to them. Chakra also
+        // takes an array of style objects; merge each in order.
         css={mergeCss(
           base.css as SystemStyleObject | undefined,
-          lift && {
-            [openStateSelector]: { translate: '0 0', filter: 'none' },
-          },
-          cssProp
+          ...((Array.isArray(cssProp)
+            ? cssProp
+            : [cssProp]) as SystemStyleObject[])
         )}
       >
         {children}
