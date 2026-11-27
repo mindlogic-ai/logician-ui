@@ -11,8 +11,9 @@ import * as CountBadgeStories from './CountBadge.stories';
 
 # CountBadge
 
-A small coral-red count of things that are waiting for the reader: unread
-messages, new notifications.
+A small coral-red mark for things that are waiting for the reader: a count of
+unread messages, or a dot for "something new". Display only — it is never a
+control.
 
 ## When to use
 
@@ -35,8 +36,8 @@ messages, new notifications.
 
 # CountBadge
 
-읽지 않은 메시지나 새 알림처럼 사용자를 기다리는 항목의 개수를 보여 주는 작은
-코럴 레드 배지입니다.
+읽지 않은 메시지 개수나 새 소식 점처럼 사용자를 기다리는 항목을 알려 주는 작은
+코럴 레드 배지입니다. 누를 수 없는 표시 전용입니다.
 
 ## 언제 쓰나요
 
@@ -64,6 +65,12 @@ messages, new notifications.
 | Number (default) | `count`, capped at `max` (99 → `99+`) | Renders nothing for 0 unless `showZero` |
 | `dot` | A circle with no number | Hidden from assistive tech unless it has a `label`; with a `count` of 0 it disappears |
 
+On an icon or avatar, use `CornerBadge` and wrap the icon in it: the
+badge floats at its top-end corner, so the app does not position it by hand.
+It takes the same props plus `ringColor`, a 2px ring outside the badge in the
+colour behind it, and `invisible`, which hides the badge but keeps the icon.
+Next to text, use `CountBadge` on its own.
+
 Sizes `sm` / `md` (default) / `lg` are 16 / 18 / 22 px tall. Digits are
 tabular, so the badge does not change width as the number changes.
 
@@ -77,6 +84,11 @@ tabular, so the badge does not change width as the number changes.
 | --- | --- | --- |
 | 숫자(기본) | `count`, `max`에서 잘림(99 → `99+`) | `showZero`가 없으면 0일 때 아무것도 그리지 않음 |
 | `dot` | 숫자 없는 점 | `label`이 없으면 보조 기술에서 숨겨짐. `count`가 0이면 사라짐 |
+
+아이콘이나 아바타 위에 올릴 때는 `CornerBadge`로 아이콘을 감쌉니다. 배지가 오른쪽 위
+모서리에 올라가므로 앱에서 위치를 직접 잡지 않습니다. props는 `CountBadge`와 같고,
+`ringColor`를 주면 배지 바깥에 그 색으로 2px 테두리를 그리고, `invisible`을 주면 아이콘은
+두고 배지만 숨깁니다. 글자 옆에는 `CountBadge`를 그대로 씁니다.
 
 크기 `sm` / `md`(기본) / `lg`의 높이는 16 / 18 / 22px입니다. 숫자 폭이 고정되어 있어
 숫자가 바뀌어도 배지 폭이 흔들리지 않습니다.
@@ -95,8 +107,15 @@ tabular, so the badge does not change width as the number changes.
 <Canvas of={CountBadgeStories.OnIconButton} />
 <Verdict
   kind="do"
-  en="On an icon-only button, put the count in the button's aria-label and leave the badge unlabelled. The button's aria-label replaces everything inside it."
-  ko="아이콘 버튼에서는 개수를 버튼의 aria-label에 넣고 배지에는 label을 달지 않습니다. 버튼의 aria-label이 안에 든 내용을 모두 대신합니다."
+  en="On an icon-only button, wrap the icon in CornerBadge and give ringColor the colour behind the button. Put the count in the button's aria-label and leave the badge unlabelled — the button's aria-label replaces everything inside it."
+  ko="아이콘 버튼에서는 CornerBadge로 아이콘을 감싸고 ringColor에 버튼 뒤 바탕색을 줍니다. 개수는 버튼의 aria-label에 넣고 배지에는 label을 달지 않습니다. 버튼의 aria-label이 안에 든 내용을 모두 대신합니다."
+/>
+
+<Canvas of={CountBadgeStories.DotOnAvatar} />
+<Verdict
+  kind="do"
+  en="For something new without a number, use CornerBadge with dot and toggle it with invisible, so the avatar stays put. Say it in the surrounding button's name; the dot itself is hidden from assistive tech."
+  ko="개수 없이 새 소식만 알릴 때는 CornerBadge에 dot을 주고 invisible로 켜고 끕니다. 아바타는 그대로 남습니다. 점은 보조 기술에서 숨겨지므로 감싸는 버튼 이름에 안 읽은 것이 있다고 씁니다."
 />
 
 <Canvas of={CountBadgeStories.DontCountForTotals} />
